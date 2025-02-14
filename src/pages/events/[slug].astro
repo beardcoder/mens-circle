@@ -1,0 +1,34 @@
+---
+import EventLayout from '../../layouts/Event.astro'
+import EventDetail from '../../components/Events/Index.astro'
+import directus from '@/lib/directus'
+import { readItem, readItems } from '@directus/sdk'
+
+export async function getStaticPaths() {
+  const events = await directus.request(readItems('events'))
+
+  const paths = events.map((event) => ({
+    params: { slug: event.slug },
+  }))
+
+  return paths
+}
+
+const { slug } = Astro.params
+
+const event = await directus.request(
+  readItem('events', slug, {
+    fields: ['*'],
+  }),
+)
+
+export type EventItem = typeof event
+
+if (!event) {
+  throw new Error('Event nicht gefunden')
+}
+---
+
+<EventLayout title={event.title}>
+  <EventDetail event={event} />
+</EventLayout>

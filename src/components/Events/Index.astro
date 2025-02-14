@@ -1,0 +1,59 @@
+---
+// src/components/EventDetail.astro
+import type { EventItem } from '@/pages/events/[slug].astro'
+import ical, { ICalEventBusyStatus, ICalEventStatus } from 'ical-generator'
+import Features from '@/components/Features.astro'
+import Map from '@/components/Events/Map.astro'
+import dayjs from 'dayjs'
+
+import { writeFileSync } from 'node:fs'
+import { join } from 'node:path'
+import Header from './Header.astro'
+import { DIRECTUS_URL } from '@/lib/directus'
+
+interface Props {
+  event: EventItem
+}
+
+const { event } = Astro.props
+const calendar = ical({
+  name: event.title,
+})
+
+calendar.createEvent({
+  summary: event.title!,
+  start: dayjs(event.start_date).toDate(),
+  end: dayjs(event.start_date).toDate(),
+  description: event.description,
+  organizer: { name: 'Markus Sommer', email: 'hallo@mens-circle.de' },
+  location: {
+    title: event.place!,
+    address: `${event.address}, ${event.city}, ${event.zip}`,
+    geo: { lat: event.latitude!, lon: event.longitude! },
+  },
+  busystatus: ICalEventBusyStatus.BUSY,
+})
+
+writeFileSync(join('public/ical', `${event.slug}.ics`), calendar.toString())
+---
+
+<Header
+  title={event.title!}
+  image={`${DIRECTUS_URL}/assets/${event.image}`}
+  date={event.start_date!}
+  place={event.place!}
+  address={event.address!}
+  city={event.city!}
+  zip={event.zip!}
+>
+  <a slot="ical" href={`/ical/${event.slug}.ics`} class="text-primary-500 mt-4"> Kalendereintrag herunterladen </a>
+</Header>
+<Features />
+<Map
+  latitude={event.latitude!}
+  longitude={event.longitude!}
+  place={event.place!}
+  address={event.address!}
+  city={event.city!}
+  zip={event.zip!}
+/>

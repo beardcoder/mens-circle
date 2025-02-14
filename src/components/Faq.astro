@@ -1,0 +1,112 @@
+---
+const items = [
+  {
+    question: 'Ab welchem Alter kann ich im Kreis dabei sein?',
+    answer:
+      'Der Kreis richtet sich an Männer ab 18 Jahren. Falls du jünger bist, besuche gerne die Seite von <a href="https://www.meridian-initiation.de" rel="noopener noreferrer nofollow" target="_blank">https://www.meridian-initiation.de</a>. Das Projekt richtet sich genau an dich.',
+  },
+  {
+    question: 'Welche Ausbildung oder welches Training hast du gemacht?',
+    answer:
+      'Ich habe mein Training bei Alex Wirthl gemacht. <a href="https://www.receive-tribe.com/grow" rel="noopener noreferrer nofollow" target="_blank">https://www.receive-tribe.com/grow</a>',
+  },
+  {
+    question: 'Ist der Kreis eine Therapie?',
+    answer:
+      'Der Kreis ist kein Ersatz für eine professionelle Therapie. Falls du bei dir Anzeichen dafür entdeckt hast, melde dich bitte bei deinem Hausarzt.',
+  },
+  {
+    question: 'Bist du Coach oder machst du Einzel Coachings?',
+    answer:
+      'Ich bin kein Coach und kein Therapeut. Ich mache diese Arbeit aus meiner Erfahrung heraus und biete den Raum an, sich zu treffen und zu verbinden.',
+  },
+  {
+    question: 'Ich würde gerne Tiefer in die Männerarbeit einsteigen.',
+    answer:
+      'Perfekt! Melde dich bei meinem Lehrer Alex Wirthl, dieser bietet genau diese intensive Erfahrung an. <a href="https://www.receive-tribe.com/" rel="noopener noreferrer nofollow" target="_blank">https://www.receive-tribe.com/</a>',
+  },
+  {
+    question: 'Ich habe Beziehungsprobleme, kann ich diese im Kreis Besprechen.',
+    answer:
+      'Wir werden im Kreis auch auf die Frau:Mann Dynamik eingehen. Jedoch ist <a href="https://revolution-now.de/" rel="noopener noreferrer nofollow" target="_blank">Andres Renz</a> ein besserer Ansprechpartner hierfür.',
+  },
+  {
+    question: 'Kann ich mich im Vorfeld informieren was man im Kreis genau macht?',
+    answer:
+      'Sehr gerne. Komm in meine Telegram-Gruppe (<a href="https://t.me/+J8e6gcycMLs2YTIy" rel="noopener noreferrer nofollow" target="_blank">https://t.me/+J8e6gcycMLs2YTIy</a>). Dort kannst du mir deine Fragen persönlich stellen. Wenn du kein Telegram hast kannst du mir auch gerne eine E-Mail schicken an <a href="mailto:markus@mens-circle.de" rel="noopener noreferrer nofollow" target="">markus@mens-circle.de</a>',
+  },
+  {
+    question: 'Wie kann ich mich für einen Kreis Anmelden?',
+    answer:
+      'Benütze hierfür das <a href="/#contact" rel="noopener noreferrer nofollow" target="">Formular</a> auf der Webseite. Dann kommst du alle weiteren Informationen, sobald der nächste Kreis geplant ist.',
+  },
+  {
+    question: 'Wo und wie oft findet der Kreis statt?',
+    answer: 'Der Kreis findet einmal im Monat in Straubing statt.',
+  },
+  {
+    question: 'Darf ich als Frau mitmachen',
+    answer: 'Dieser Kreis richtet sich nur an Männer.',
+  },
+]
+---
+
+<section class="bg-black/5 py-32 dark:bg-white/5" id="faqs">
+  <div class="container mx-auto p-8">
+    <h2 class="mb-16 text-4xl font-bold md:text-center md:text-6xl">Fragen und Antworten</h2>
+    <div class="grid gap-x-4 gap-y-16 md:grid-cols-2" itemscope="itemscope" itemtype="https://schema.org/FAQPage">
+      {
+        items.map((item) => (
+          <div data-js="page-faqs-animation" itemprop="mainEntity" itemscope="" itemtype="https://schema.org/Question">
+            <div>
+              <h3 itemprop="name" class="flex items-start align-top text-lg font-bold md:text-xl">
+                <svg
+                  class="mt-0.5 mr-2 h-6 w-6 shrink-0 text-neutral-500"
+                  fill="currentColor"
+                  role="presentation"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+                {item.question}
+              </h3>
+              <div class="mt-6" itemprop="acceptedAnswer" itemscope="" itemtype="https://schema.org/Answer">
+                <div itemprop="text" class="prose dark:prose-invert">
+                  <p set:html={item.answer} />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { animate, stagger, inView } from 'motion'
+  document.addEventListener('DOMContentLoaded', () => {
+    inView(
+      '#faqs',
+      () => {
+        animate(
+          '[data-js="page-faqs-animation"]',
+          { opacity: [0, 1], x: [-200, 0] },
+          {
+            duration: 0.3,
+            delay: stagger(0.3),
+            ease: 'circOut',
+          },
+        )
+      },
+      {
+        margin: '-100px',
+      },
+    )
+  })
+</script>

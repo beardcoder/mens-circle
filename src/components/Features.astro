@@ -1,0 +1,71 @@
+---
+const features = [
+  {
+    title: 'Offene Kommunikation',
+    description:
+      'Ein Raum, in dem ein Mann seine Wahrheit über seine Gedanken, Gefühle, Schwierigkeiten und Freuden teilen kann.',
+  },
+  {
+    title: 'Weisheit und Erfahrung anderer',
+    description:
+      'Du wirst Geschichten von anderen Männern hören, wie sie mit ähnlichen Situationen umgehen, und gemeinsam nach den besten Lösungen suchen.',
+  },
+  {
+    title: 'Unterstützung',
+    description:
+      'Die Kommunikation basiert auf Offenheit, nicht auf Wettbewerb und dem Streben, besser zu sein. Jeder erhält ehrliches Feedback von anderen Männern.',
+  },
+  {
+    title: 'Spannungslinderung',
+    description:
+      'Zeit in einer Gruppe von Männern, die auf offener Kommunikation und gegenseitiger Unterstützung basiert, wird als therapeutisch angesehen.',
+  },
+  {
+    title: 'Akzeptanz und Verständnis',
+    description:
+      'Jeder bekommt seine Zeit und Gelegenheit zum Sprechen, wird zugehört, verstanden und ohne Urteil oder Wertung akzeptiert. Du bist frei, du selbst zu sein.',
+  },
+  {
+    title: 'Vertrauen und Anerkennung',
+    description:
+      'Durch Offenheit und das Teilen deiner Gefühle mit anderen Männern wirst du feststellen, dass du nicht allein in dem bist, was du erlebst und bewältigst.',
+  },
+]
+---
+
+<section class="bg-black/5 py-32 dark:bg-white/5" id="features">
+  <div class="container mx-auto p-8">
+    <h2 class="mb-16 text-4xl font-bold md:text-center md:text-6xl">
+      <span class="text-primary-500">Was erwartet dich</span> im Männerkreis
+    </h2>
+    <div class="grid gap-x-8 gap-y-16 md:grid-cols-3">
+      {
+        features.map((item) => (
+          <div data-js="page-feature-animation">
+            <h3 class="mb-4 text-xl font-bold md:text-3xl">{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { animate, stagger, inView } from 'motion'
+  document.addEventListener('DOMContentLoaded', () => {
+    inView(
+      '#features',
+      () => {
+        animate(
+          '[data-js="page-feature-animation"]',
+          { opacity: [0, 1], x: [-200, 0] },
+          { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
+        )
+      },
+      {
+        margin: '-100px',
+      },
+    )
+  })
+</script>

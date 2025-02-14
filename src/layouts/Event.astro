@@ -1,10 +1,11 @@
 ---
 import '../styles/global.css'
-import Footer from '../components/Footer.astro'
+import Footer from '@/components/Footer.astro'
 import '@fontsource-variable/jost'
+
+const { title } = Astro.props
 ---
 
-<!doctype html>
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
@@ -14,7 +15,7 @@ import '@fontsource-variable/jost'
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Männerkreis Niederbayern" />
     <link rel="manifest" href="/site.webmanifest" />
-    <title>Männerkreis Niederbayern</title>
+    <title>{title} Männerkreis Niederbayern</title>
   </head>
   <body class="font-jost bg-white text-black dark:bg-stone-900 dark:text-white">
     <slot />

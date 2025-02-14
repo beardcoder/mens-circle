@@ -1,0 +1,59 @@
+---
+import headerImage from '../assets/header.jpeg'
+import Button from './ui/Button.astro'
+import { Image } from 'astro:assets'
+---
+
+<header class="flex min-h-[600px] flex-col md:h-screen md:flex-row">
+  <div class="flex flex-col justify-center p-8 md:w-1/2">
+    <h1 class="text-5xl font-bold md:text-7xl">
+      <span class="block" data-js="page-header-animation">Ein Raum für</span>
+      <span class="block" data-js="page-header-animation">Austausch,</span>
+      <span class="block" data-js="page-header-animation">Entwicklung und Wachstum</span>
+    </h1>
+    <p class="mt-8 max-w-lg text-xl" data-js="page-header-animation">
+      Willkommen im Männerkreis Straubing, Niederbayern – Ein Ort für ehrlichen Austausch und persönliches Wachstum.
+      Hier teilen Männer ihre Geschichten, bieten Weisheit und unterstützen sich gegenseitig. In einer offenen
+      Atmosphäre findest du Akzeptanz, Verständnis und die Kraft, gemeinsam zu wachsen.
+    </p>
+    <div>
+      <Button data-js="page-header-animation" class="mt-6" size="l" href="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" class="mr-1 mb-0.5">
+          <path
+            fill="currentColor"
+            d="M4.9 15.8S1 15.4 1 10.1C1 6 4.1 3.6 4.1 3.6S5.4 5 6.4 5.5C7.4 6.1 7.8 0 7.8 0S15 3.9 15 9.8c0 6.1-4 5.9-4 5.9s1.8-2.4 1.8-5.2c0-3-3.9-6.7-3.9-6.7s-.5 4.4-2.1 5c-1.6-.9-2.5-2.3-2.5-2.3s-3.7 5.8.6 9.3"
+          >
+          </path>
+          <path
+            fill="currentColor"
+            d="M8.2 16.1c-2-.1-3.7-1.4-3.7-3.2s.7-2.6.7-2.6s.5 1 1.1 1.5s1.8.8 2.4.1c.6-.6.8-2.3.8-2.3s1.4 1.1 1.2 3c-.1 2-.9 3.5-2.5 3.5"
+          >
+          </path>
+        </svg> Sei mit dabei!</Button
+      >
+    </div>
+  </div>
+  <div class="flex md:w-1/2">
+    <Image
+      src={headerImage}
+      width={1280}
+      height={1440}
+      class="h-full w-full object-cover"
+      loading="eager"
+      priority
+      widths={[640, 768, 1024, 1280]}
+      alt="Männer stehen im Kreis und umarmen sich"
+    />
+  </div>
+</header>
+
+<script>
+  import { animate, stagger } from 'motion'
+  document.addEventListener('DOMContentLoaded', () => {
+    animate(
+      '[data-js="page-header-animation"]',
+      { opacity: [0, 1], x: [-200, 0] },
+      { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
+    )
+  })
+</script>

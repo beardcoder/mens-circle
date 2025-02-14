@@ -1,0 +1,45 @@
+---
+interface Props {
+  /** Wenn gesetzt, wird ein Link (<a>) gerendert, ansonsten ein Button (<button>) */
+  href?: string
+  /** Button-Typ (nur relevant, wenn kein href gesetzt ist) */
+  type?: 'button' | 'submit' | 'reset'
+  /** Größe: s, m oder l (Standard: m) */
+  size?: 's' | 'm' | 'l'
+  /** Zusätzliche CSS-Klassen */
+  class?: string
+  /** Alle weiteren Attribute werden weitergereicht */
+  [key: string]: any
+}
+
+const { href, type = 'button', size = 'm', class: customClass, ...props } = Astro.props
+
+/*
+  Basis-Klassen (ohne die größenabhängigen Klassen), basierend auf deiner Vorlage:
+  - Enthält Farben, Hover-, Fokus- und Dark-Mode-Klassen sowie weitere allgemeine Styles.
+*/
+const baseClasses =
+  'flex items-center text-white bg-primary-500 hover:text-white hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-center me-2 mb-2 uppercase transition-colors duration-200 cursor-pointer'
+
+// Definiere die größenabhängigen Klassen: Textgröße, Padding etc.
+const sizeClassesMap = {
+  s: 'text-xs px-4 py-2',
+  m: 'text-sm px-5 py-2.5',
+  l: 'text-base px-6 py-3',
+}
+
+const sizeClasses = sizeClassesMap[size] || sizeClassesMap.m
+const classes = `${baseClasses} ${sizeClasses} ${customClass ?? ''}`.trim()
+---
+
+{
+  href ? (
+    <a href={href} class={classes} {...props}>
+      <slot>Jetzt teilnehmen</slot>
+    </a>
+  ) : (
+    <button type={type} class={classes} {...props}>
+      <slot>Jetzt teilnehmen</slot>
+    </button>
+  )
+}
