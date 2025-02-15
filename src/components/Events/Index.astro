@@ -48,7 +48,7 @@ calendar.createEvent({
 >
   <a
     slot="ical"
-    href={`data:application/octet-stream;base64,${base64.encode(utf8.encode(calendar.toString()))}`}
+    href={`data:text/calendar;base64,${base64.encode(utf8.encode(calendar.toString()))}`}
     download={`${event.slug}.ics`}
     class="text-primary-500 mt-4"
   >
