@@ -8,6 +8,8 @@ import dayjs from 'dayjs'
 
 import { writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import base64 from 'base-64'
+import utf8 from 'utf8'
 import Header from './Header.astro'
 import { DIRECTUS_URL } from '@/lib/directus'
 
@@ -33,8 +35,6 @@ calendar.createEvent({
   },
   busystatus: ICalEventBusyStatus.BUSY,
 })
-
-writeFileSync(join('public/ical', `${event.slug}.ics`), calendar.toString())
 ---
 
 <Header
@@ -46,7 +46,14 @@ writeFileSync(join('public/ical', `${event.slug}.ics`), calendar.toString())
   city={event.city!}
   zip={event.zip!}
 >
-  <a slot="ical" href={`/ical/${event.slug}.ics`} class="text-primary-500 mt-4"> Kalendereintrag herunterladen </a>
+  <a
+    slot="ical"
+    href={`data:application/octet-stream;base64,${base64.encode(utf8.encode(calendar.toString()))}`}
+    download={`${event.slug}.ics`}
+    class="text-primary-500 mt-4"
+  >
+    Kalendereintrag herunterladen
+  </a>
 </Header>
 <Features />
 <Map
