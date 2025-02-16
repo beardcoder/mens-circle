@@ -1,5 +1,7 @@
+import clsx from 'clsx'
 import type { FunctionComponent } from 'preact'
 import type { HTMLAttributes } from 'preact/compat'
+import { classes } from './ButtonProps'
 
 export interface ButtonProps extends HTMLAttributes<HTMLElement> {
   /** Falls gesetzt, wird ein Link (<a>) gerendert, ansonsten ein Button (<button>) */
@@ -23,31 +25,20 @@ const Button: FunctionComponent<ButtonProps> = ({
   children,
   ...props
 }) => {
-  // Basis-Klassen, basierend auf deiner Vorlage
-  const baseClasses =
-    'text-white bg-primary-500 hover:text-white hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-center me-2 mb-2 uppercase transition-colors duration-200 cursor-pointer'
-
-  // Definition der größenabhängigen Klassen
-  const sizeClassesMap: Record<string, string> = {
-    s: 'text-xs px-4 py-2',
-    m: 'text-sm px-5 py-2.5',
-    l: 'text-lg px-6 py-3',
-  }
-
-  const sizeClasses = sizeClassesMap[size] || sizeClassesMap.m
-  const classes = `${baseClasses} ${sizeClasses} ${className}`.trim()
+  const sizeClasses = classes.sizes[size] || classes.sizes.m
+  const mergesClasses = clsx(classes.base, sizeClasses, className)
 
   // Falls href gesetzt ist, rendere einen Link, ansonsten einen Button
   if (href) {
     return (
-      <a href={href} className={classes} {...props}>
+      <a href={href} className={mergesClasses} {...props}>
         {children || 'Jetzt teilnehmen'}
       </a>
     )
   }
 
   return (
-    <button type={type} className={classes} {...props}>
+    <button type={type} className={mergesClasses} {...props}>
       {children || 'Jetzt teilnehmen'}
     </button>
   )
