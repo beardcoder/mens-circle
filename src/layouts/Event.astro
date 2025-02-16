@@ -2,8 +2,17 @@
 import '../styles/global.css'
 import Footer from '@/components/Footer.astro'
 import '@fontsource-variable/jost'
+import type { EventItem } from '@/pages/events/[slug].astro'
+import { Schema } from 'astro-seo-schema'
+import { DIRECTUS_URL } from '@/lib/directus'
+import { Seo } from 'astro-seo-meta'
+interface Props {
+  event: EventItem
+}
 
-const { title } = Astro.props
+const { event } = Astro.props
+
+const image = `${DIRECTUS_URL}/assets/${event.image}`
 ---
 
 <html lang="de">
@@ -15,7 +24,48 @@ const { title } = Astro.props
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Männerkreis Niederbayern" />
     <link rel="manifest" href="/site.webmanifest" />
-    <title>{title} Männerkreis Niederbayern</title>
+    <Seo
+      title={`${event.title} Männerkreis Niederbayern`}
+      description={event.description!}
+      facebook={{
+        image: image,
+        url: `https://mens-circle.de/events/${event.slug}`,
+        type: 'website',
+      }}
+      twitter={{
+        image: image,
+        card: 'summary',
+      }}
+    />
+
+    <Schema
+      item={{
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: event.title!,
+        startDate: event.start_date!,
+        endDate: event.end_date!,
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        location: {
+          '@type': 'Place',
+          name: event.place!,
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: event.address!,
+            addressLocality: event.city!,
+            postalCode: event.zip!,
+            addressCountry: 'DE',
+          },
+        },
+        image: `${image}`,
+        description: event.description!,
+        url: `https://mens-circle.de/events/${event.slug}`,
+        organizer: { '@type': 'Person', name: 'Markus Sommer', url: 'https://mens-circle.de/' },
+        performer: { '@type': 'Person', name: 'Markus Sommer', url: 'https://mens-circle.de/' },
+      }}
+    />
+    <link rel="canonical" href={`https://mens-circle.de/events/${event.slug}`} />
   </head>
   <body class="font-jost bg-white text-black dark:bg-stone-900 dark:text-white">
     <slot />
