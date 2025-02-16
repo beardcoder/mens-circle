@@ -4,9 +4,9 @@ import AboutImageSrc from '../assets/about.png'
 import About2ImageSrc from '../assets/about2.jpeg'
 ---
 
-<section class="bg-black/5 py-32 dark:bg-white/5" id="about">
-  <div class="mx-auto max-w-screen-xl items-center gap-16 px-4 lg:grid lg:grid-cols-2 lg:px-6 lg:py-16">
-    <div>
+<section class="relative bg-black/5 py-32 dark:bg-white/5" id="about">
+  <div class="mx-auto max-w-screen-2xl px-8">
+    <div class="md:w-1/2">
       <h2 class="mb-16 text-4xl font-bold md:text-6xl">
         <span class="block" data-js="page-about-animation">Männerkreis</span>
         <span class="block" data-js="page-about-animation">Moderator</span>
@@ -35,63 +35,65 @@ import About2ImageSrc from '../assets/about2.jpeg'
         </p>
       </div>
     </div>
-    <div class="about__images mt-8 flex pt-44">
-      <div class="-mr-52">
-        <Image
-          src={About2ImageSrc}
-          alt="Männerkreis Moderator Markus Sommer"
-          class="about__image about__image--1 z-10 -mt-44 object-fill"
-          format="webp"
-          layout="none"
-          width={400}
-          height={500}
-        />
-      </div>
-
-      <div>
-        <Image
-          src={AboutImageSrc}
-          alt="Männerkreis Moderator Markus Sommer"
-          class="about__image about__image--2 z-10 object-fill"
-          format="webp"
-          layout="none"
-          width={400}
-          height={500}
-        />
-      </div>
+  </div>
+  <div
+    class="about__images relative top-0 right-0 bottom-0 mx-8 mt-8 flex aspect-square min-h-80 max-w-screen-lg items-center overflow-hidden px-8 md:absolute md:left-1/2 md:ml-12 md:aspect-auto"
+  >
+    <div class="absolute left-0 w-3/5">
+      <Image
+        src={About2ImageSrc}
+        alt="Männerkreis Moderator Markus Sommer"
+        class="about__image about__image--1 z-10 object-fill"
+        format="webp"
+        layout="none"
+        width={800}
+        height={1000}
+      />
     </div>
 
-    <script>
-      import { animate, scroll, stagger, inView } from 'motion'
-      const isMobile = window.matchMedia('(max-width: 768px)').matches
-
-      const target = document.querySelector('.about__images')
-      if (target && !isMobile) {
-        scroll(animate('.about__image--1', { y: [-100, 100] }, { ease: 'linear' }), {
-          offset: ['start end', 'end end', 'start start', 'end start'],
-          target,
-        })
-        scroll(animate('.about__image--2', { y: [-200, 200] }, { ease: 'linear' }), {
-          offset: ['start end', 'end end', 'start start', 'end start'],
-          target,
-        })
-      }
-
-      document.addEventListener('DOMContentLoaded', () => {
-        inView(
-          '#about',
-          () => {
-            animate(
-              '[data-js="page-about-animation"]',
-              { opacity: [0, 1], x: [-200, 0] },
-              { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
-            )
-          },
-          {
-            margin: '-100px',
-          },
-        )
-      })
-    </script>
+    <div class="absolute right-0 w-3/5 pt-44">
+      <Image
+        src={AboutImageSrc}
+        alt="Männerkreis Moderator Markus Sommer"
+        class="about__image about__image--2 z-10 object-fill"
+        format="webp"
+        layout="none"
+        width={800}
+        height={1000}
+      />
+    </div>
   </div>
 </section>
+
+<script>
+  import { animate, scroll, stagger, inView } from 'motion'
+  document.addEventListener('DOMContentLoaded', () => {
+    inView(
+      '#about',
+      () => {
+        animate(
+          '.about__image',
+          { opacity: [0, 1], x: [200, 0] },
+          { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
+        )
+      },
+      {
+        margin: '-100px',
+      },
+    )
+
+    inView(
+      '#about',
+      () => {
+        animate(
+          '[data-js="page-about-animation"]',
+          { opacity: [0, 1], x: [-200, 0] },
+          { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
+        )
+      },
+      {
+        margin: '-100px',
+      },
+    )
+  })
+</script>
