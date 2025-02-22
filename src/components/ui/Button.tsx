@@ -12,6 +12,8 @@ export interface ButtonProps extends HTMLAttributes<HTMLElement> {
   size?: 's' | 'm' | 'l'
   /** Zusätzliche CSS-Klassen */
   className?: string
+
+  disabled: boolean
 }
 
 /**
