@@ -2,7 +2,7 @@ import clsx from 'clsx'
 
 export const classes = {
   base: clsx(
-    'text-white bg-primary-500 rounded-md hover:text-white hover:bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-center me-2 mb-2 uppercase transition-colors duration-200 cursor-pointer absolut flex items-center justify-center',
+    'text-white bg-primary-500 rounded-md hover:text-white hover:bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-center me-2 mb-2 uppercase transition-colors duration-200 cursor-pointer absolut inline-flex items-center justify-center',
   ),
 
   sizes: {

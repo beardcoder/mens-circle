@@ -8,11 +8,11 @@ import About2ImageSrc from '../assets/about2.jpeg'
   <div class="mx-auto max-w-screen-2xl px-8">
     <div class="md:w-1/2">
       <h2 class="mb-16 text-4xl font-bold md:text-6xl">
-        <span class="block" data-js="page-about-animation">Männerkreis</span>
-        <span class="block" data-js="page-about-animation">Moderator</span>
-        <span class="block" data-js="page-about-animation">Markus Sommer</span>
+        <span class="block" data-js="child-animation">Männerkreis</span>
+        <span class="block" data-js="child-animation">Moderator</span>
+        <span class="block" data-js="child-animation">Markus Sommer</span>
       </h2>
-      <div class="prose md:prose-lg dark:prose-invert" data-js="page-about-animation">
+      <div class="prose md:prose-lg dark:prose-invert" data-js="child-animation">
         <p>
           Als Familienvater von zwei wundervollen Söhnen begann ich mich intensiv mit Persönlichkeitsentwicklung zu
           beschäftigen, nachdem mein zweites Kind geboren wurde. Jahrelang suchte ich den Sinn meines Lebens im Äußeren,
@@ -37,7 +37,7 @@ import About2ImageSrc from '../assets/about2.jpeg'
     </div>
   </div>
   <div
-    class="about__images relative top-0 right-0 bottom-0 mx-8 mt-8 flex aspect-square min-h-80 max-w-screen-lg items-center overflow-hidden px-8 md:absolute md:left-1/2 md:ml-12 md:aspect-auto"
+    class="about__images relative top-0 right-0 bottom-0 mx-8 mt-8 flex aspect-square min-h-80 max-w-screen-lg items-center px-8 md:absolute md:left-1/2 md:ml-12 md:aspect-auto"
   >
     <div class="absolute left-0 w-3/5">
       <Image
@@ -66,34 +66,23 @@ import About2ImageSrc from '../assets/about2.jpeg'
 </section>
 
 <script>
-  import { animate, scroll, stagger, inView } from 'motion'
-  document.addEventListener('DOMContentLoaded', () => {
-    inView(
-      '#about',
-      () => {
-        animate(
-          '.about__image',
-          { opacity: [0, 1], x: [200, 0] },
-          { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
-        )
-      },
-      {
-        margin: '-100px',
-      },
-    )
+  import { animate, stagger, inView } from 'motion'
 
-    inView(
-      '#about',
-      () => {
-        animate(
-          '[data-js="page-about-animation"]',
-          { opacity: [0, 1], x: [-200, 0] },
-          { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
-        )
-      },
-      {
-        margin: '-100px',
-      },
-    )
-  })
+  inView(
+    '#about',
+    (element) => {
+      animate(
+        element.querySelectorAll('.about__image'),
+        { opacity: [0, 1], x: [200, 0] },
+        { type: 'spring', delay: stagger(0.3) },
+      )
+
+      animate(
+        element.querySelectorAll('[data-js="child-animation"]'),
+        { opacity: [0, 1], x: [-100, 0] },
+        { type: 'spring', delay: stagger(0.25, { startDelay: 0.25 }) },
+      )
+    },
+    { amount: 0.25 },
+  )
 </script>

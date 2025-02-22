@@ -41,7 +41,7 @@ const features = [
     <div class="grid gap-x-8 gap-y-16 md:grid-cols-3">
       {
         features.map((item) => (
-          <div data-js="page-feature-animation">
+          <div data-js="child-animation">
             <h3 class="mb-4 text-xl font-bold md:text-3xl">{item.title}</h3>
             <p>{item.description}</p>
           </div>
@@ -53,19 +53,16 @@ const features = [
 
 <script>
   import { animate, stagger, inView } from 'motion'
-  document.addEventListener('DOMContentLoaded', () => {
-    inView(
-      '#features',
-      () => {
-        animate(
-          '[data-js="page-feature-animation"]',
-          { opacity: [0, 1], x: [-200, 0] },
-          { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
-        )
-      },
-      {
-        margin: '-100px',
-      },
-    )
-  })
+
+  inView(
+    '#features',
+    (element) => {
+      animate(
+        element.querySelectorAll('[data-js="child-animation"]'),
+        { opacity: [0, 1], x: [-100, 0] },
+        { type: 'spring', delay: stagger(0.25, { startDelay: 0.25 }) },
+      )
+    },
+    { amount: 0.25 },
+  )
 </script>

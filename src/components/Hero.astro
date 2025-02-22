@@ -4,21 +4,21 @@ import Button from './ui/Button.astro'
 import { Image } from 'astro:assets'
 ---
 
-<header class="relative flex min-h-[600px] flex-col md:h-screen md:flex-row">
+<header class="relative flex min-h-[600px] flex-col md:h-screen md:flex-row" id="hero">
   <div class="mx-auto flex w-full max-w-screen-2xl">
     <div class="flex flex-col justify-center p-8 md:w-1/2">
       <h1 class="text-5xl font-bold md:text-7xl">
-        <span class="block" data-js="page-header-animation">Ein Raum für</span>
-        <span class="block" data-js="page-header-animation">Austausch,</span>
-        <span class="block" data-js="page-header-animation">Entwicklung und Wachstum</span>
+        <span class="block" data-js="child-animation">Ein Raum für</span>
+        <span class="block" data-js="child-animation">Austausch,</span>
+        <span class="block" data-js="child-animation">Entwicklung und Wachstum</span>
       </h1>
-      <p class="mt-8 max-w-lg text-xl" data-js="page-header-animation">
+      <p class="mt-8 max-w-lg text-xl" data-js="child-animation">
         Willkommen im Männerkreis Straubing, Niederbayern – Ein Ort für ehrlichen Austausch und persönliches Wachstum.
         Hier teilen Männer ihre Geschichten, bieten Weisheit und unterstützen sich gegenseitig. In einer offenen
         Atmosphäre findest du Akzeptanz, Verständnis und die Kraft, gemeinsam zu wachsen.
       </p>
       <div>
-        <Button data-js="page-header-animation" class="mt-6" size="l" href="">
+        <Button data-js="child-animation" class="mt-6" size="l" href="#events">
           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" class="mr-1 mb-0.5">
             <path
               fill="currentColor"
@@ -50,12 +50,17 @@ import { Image } from 'astro:assets'
 </header>
 
 <script>
-  import { animate, stagger } from 'motion'
-  document.addEventListener('DOMContentLoaded', () => {
-    animate(
-      '[data-js="page-header-animation"]',
-      { opacity: [0, 1], x: [-200, 0] },
-      { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
-    )
-  })
+  import { animate, stagger, inView } from 'motion'
+
+  inView(
+    '#hero',
+    (element) => {
+      animate(
+        element.querySelectorAll('[data-js="child-animation"]'),
+        { opacity: [0, 1], x: [-100, 0] },
+        { type: 'spring', delay: stagger(0.25, { startDelay: 0.25 }) },
+      )
+    },
+    { amount: 0.25 },
+  )
 </script>

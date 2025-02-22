@@ -15,7 +15,7 @@ const events = await getEvents()
       {
         events.map((event) => (
           <a
-            data-js="page-events-animation"
+            data-js="child-animation"
             href={`/events/${event.slug}`}
             class="bg-accent block overflow-hidden rounded-md border shadow-md transition-shadow hover:shadow-lg"
           >
@@ -48,19 +48,16 @@ const events = await getEvents()
 
 <script>
   import { animate, stagger, inView } from 'motion'
-  document.addEventListener('DOMContentLoaded', () => {
-    inView(
-      '#events',
-      () => {
-        animate(
-          '[data-js="page-events-animation"]',
-          { opacity: [0, 1], x: [-200, 0] },
-          { duration: 0.3, delay: stagger(0.3), ease: 'circOut' },
-        )
-      },
-      {
-        margin: '-100px',
-      },
-    )
-  })
+
+  inView(
+    '#events',
+    (element) => {
+      animate(
+        element.querySelectorAll('[data-js="child-animation"]'),
+        { opacity: [0, 1], x: [-100, 0] },
+        { type: 'spring', delay: stagger(0.25, { startDelay: 0.25 }) },
+      )
+    },
+    { amount: 0.25 },
+  )
 </script>
