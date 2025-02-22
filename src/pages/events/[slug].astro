@@ -4,6 +4,8 @@ import EventDetail from '../../components/Events/Index.astro'
 import directus from '@/lib/directus'
 import { readItem, readItems } from '@directus/sdk'
 
+export const prerender = true
+
 export async function getStaticPaths() {
   const events = await directus.request(readItems('events'))
 
