@@ -1,0 +1,80 @@
+---
+import { Image } from 'astro:assets'
+import dayjs from 'dayjs'
+import RegistratonForm from '@/components/Events/RegistrationForm.tsx'
+
+interface Props {
+  title: string
+  image: string
+  date: string
+  place: string
+  address: string
+  city: string
+  zip: string
+}
+
+const { title, image, date, place, address, city, zip } = Astro.props
+
+const eventDate = dayjs(date).format('DD.MM.YY HH:mm')
+---
+
+<header class="relative flex max-h-[1200px] min-h-[600px] flex-col md:h-screen md:flex-row" id="hero">
+  <div class="flex flex-col justify-center p-8 md:w-1/2">
+    <h1 class="text-6xl leading-none font-bold">
+      <span class="block" data-js="child-animation">Anmeldung</span>
+      <span class="block text-[0.6em]" data-js="child-animation">zum {title} am {eventDate}</span>
+    </h1>
+    <div class="mt-8 max-w-lg" data-js="child-animation">
+      <RegistratonForm client:load />
+    </div>
+    <div>
+      <h2 class="mt-6 mb-2 text-xl font-bold" data-js="child-animation">Veranstaltungsdaten:</h2>
+      <div data-js="child-animation">
+        <p><strong>Ort:</strong> {place}</p>
+        <p>
+          <strong>Adresse:</strong>
+          {address}
+        </p>
+        <p>
+          <strong>Stadt:</strong>
+          {city}
+        </p>
+        <p>
+          <strong>PLZ:</strong>
+          {zip}
+        </p>
+      </div>
+    </div>
+    <div data-js="child-animation">
+      <slot name="ical" />
+    </div>
+  </div>
+  <div class="flex md:w-1/2">
+    <Image
+      src={image}
+      width={1280}
+      height={1440}
+      class="h-full w-full object-cover"
+      loading="eager"
+      priority
+      widths={[640, 768, 1024, 1280]}
+      alt="Männer stehen im Kreis und umarmen sich"
+    />
+  </div>
+</header>
+
+<script>
+  import { animate, stagger, inView } from 'motion'
+
+  inView(
+    '#hero',
+    (element) => {
+      animate(
+        element.querySelectorAll('[data-js="child-animation"]'),
+        { opacity: [0, 1], x: [-100, 0] },
+        { type: 'spring', delay: stagger(0.25, { startDelay: 0.25 }) },
+      )
+    },
+    { amount: 0.25 },
+  )
+</script>

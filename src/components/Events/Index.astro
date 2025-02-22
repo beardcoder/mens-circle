@@ -1,7 +1,7 @@
 ---
 // src/components/EventDetail.astro
 import type { EventItem } from '@/pages/events/[slug].astro'
-import ical, { ICalEventBusyStatus, ICalEventStatus } from 'ical-generator'
+import ical, { ICalEventBusyStatus } from 'ical-generator'
 import Features from '@/components/Features.astro'
 import Map from '@/components/Events/Map.astro'
 import dayjs from 'dayjs'
@@ -10,7 +10,7 @@ import { writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import base64 from 'base-64'
 import utf8 from 'utf8'
-import Header from './Header.astro'
+import Hero from './Hero.astro'
 import { DIRECTUS_URL } from '@/lib/directus'
 
 interface Props {
@@ -37,7 +37,7 @@ calendar.createEvent({
 })
 ---
 
-<Header
+<Hero
   title={event.title!}
   image={`${DIRECTUS_URL}/assets/${event.image}`}
   date={event.start_date!}
@@ -54,7 +54,7 @@ calendar.createEvent({
   >
     Kalendereintrag herunterladen
   </a>
-</Header>
+</Hero>
 <Features />
 <Map
   latitude={event.latitude!}
