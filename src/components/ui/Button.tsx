@@ -1,19 +1,14 @@
 import clsx from 'clsx'
 import type { FunctionComponent } from 'preact'
-import type { HTMLAttributes } from 'preact/compat'
 import { classes } from './ButtonProps'
 
-export interface ButtonProps extends HTMLAttributes<HTMLElement> {
-  /** Falls gesetzt, wird ein Link (<a>) gerendert, ansonsten ein Button (<button>) */
+export interface ButtonProps {
   href?: string
-  /** Button-Typ (nur relevant, wenn kein href gesetzt ist) */
   type?: 'button' | 'submit' | 'reset'
-  /** Größe: s, m oder l (Standard: m) */
   size?: 's' | 'm' | 'l'
-  /** Zusätzliche CSS-Klassen */
   className?: string
-
-  disabled: boolean
+  disabled?: boolean
+  isLoading?: boolean
 }
 
 /**
@@ -24,6 +19,7 @@ const Button: FunctionComponent<ButtonProps> = ({
   type = 'button',
   size = 'm',
   className = '',
+  isLoading = false,
   children,
   ...props
 }) => {
@@ -34,14 +30,14 @@ const Button: FunctionComponent<ButtonProps> = ({
   if (href) {
     return (
       <a href={href} className={mergesClasses} {...props}>
-        {children || 'Jetzt teilnehmen'}
+        {isLoading ? 'Lädt...' : children || 'Jetzt teilnehmen'}
       </a>
     )
   }
 
   return (
-    <button type={type} className={mergesClasses} {...props}>
-      {children || 'Jetzt teilnehmen'}
+    <button type={type} className={mergesClasses} {...props} disabled={isLoading}>
+      {isLoading ? 'Lädt...' : children || 'Jetzt teilnehmen'}
     </button>
   )
 }

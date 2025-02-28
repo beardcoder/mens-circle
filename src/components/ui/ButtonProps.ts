@@ -2,7 +2,7 @@ import clsx from 'clsx'
 
 export const classes = {
   base: clsx(
-    'text-white bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-primary-300 dark:focus:ring-primary-800 shadow-lg shadow-primary-500/50 dark:shadow-lg dark:shadow-primary-800/80 font-medium rounded-lg text-center inline-flex justify-center items-center transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed',
+    'text-white bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-primary-300 dark:focus:ring-primary-800 shadow-lg shadow-primary-500/50 dark:shadow-lg dark:shadow-primary-800/80 font-medium rounded-lg text-center inline-flex justify-center items-center transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer',
   ),
 
   sizes: {
@@ -17,5 +17,6 @@ export interface ButtonProps {
   type?: 'button' | 'submit' | 'reset'
   size?: 's' | 'm' | 'l'
   class?: string
+  isLoading?: boolean
   [key: string]: any
 }
