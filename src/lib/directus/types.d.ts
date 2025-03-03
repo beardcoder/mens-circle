@@ -420,7 +420,7 @@ export type Events = {
   latitude?: number | null
   location: string
   longitude?: number | null
-  participants: any[] | EventsParticipants[]
+  participants: any[] | ParticipantsEvents[]
   place?: string | null
   slug: string
   start_date?: string | null
@@ -428,19 +428,19 @@ export type Events = {
   zip?: string | null
 }
 
-export type EventsParticipants = {
-  events_slug?: string | Events | null
-  id: number
-  participants_id?: string | Participants | null
-}
-
 export type Participants = {
   date_created?: string | null
-  email?: string | null
-  events: any[] | EventsParticipants[]
+  date_updated?: string | null
+  email: string
+  events: any[] | ParticipantsEvents[]
   first_name?: string | null
-  id: string
   last_name?: string | null
+}
+
+export type ParticipantsEvents = {
+  events_slug?: string | Events | null
+  id: number
+  participants_email?: string | Participants | null
 }
 
 export type CustomDirectusTypes = {
@@ -473,6 +473,6 @@ export type CustomDirectusTypes = {
   directus_versions: DirectusVersions[]
   directus_webhooks: DirectusWebhooks[]
   events: Events[]
-  events_participants: EventsParticipants[]
   participants: Participants[]
+  participants_events: ParticipantsEvents[]
 }

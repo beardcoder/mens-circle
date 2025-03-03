@@ -33,7 +33,7 @@ const ContactForm: FunctionComponent = () => {
       <div className="mx-auto w-full max-w-lg">
         {contactForm.response.value.status === 'success' && (
           <div
-            class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-stone-800 dark:text-green-400"
             role="alert"
           >
             <svg
@@ -51,7 +51,7 @@ const ContactForm: FunctionComponent = () => {
         )}
         {contactForm.response.value.status === 'error' && (
           <div
-            class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-stone-800 dark:text-red-400"
             role="alert"
           >
             <svg
