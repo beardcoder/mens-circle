@@ -18,25 +18,23 @@ const RegistrationForm: FunctionComponent<{ event: EventItem['slug'] }> = ({ eve
   const handleSubmit: SubmitHandler<RegisterForm> = async (values) => {
     try {
       const participants = await directus.request(
-        readItems('participants', {
+        readItems('Participant', {
           filter: { email: { _eq: values.email } },
-          fields: ['*', { events: ['events_slug'] }],
+          fields: ['*', { Event: ['Event'] }],
         }),
       )
       let participant = participants[0]
 
       if (participant) {
-        const eventExists = participant.events?.some((e) => e.events_slug === event)
+        const eventExists = participant.Event?.some((e) => e.events_slug === event)
         if (eventExists) {
           throw new FormError<RegisterForm>('Du bist bereits für dieses Event angemeldet.')
         }
       } else {
-        participant = await directus.request(createItem('participants', { ...values }))
+        participant = await directus.request(createItem('Participant', { ...values }))
       }
 
-      await directus.request(
-        createItem('participants_events', { events_slug: event, participants_email: participant.email }),
-      )
+      await directus.request(createItem('Registration', { Event: event, Participant: participant.id }))
 
       setResponse(registerForm, {
         status: 'success',

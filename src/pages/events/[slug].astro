@@ -7,7 +7,7 @@ import { readItem, readItems } from '@directus/sdk'
 export const prerender = true
 
 export async function getStaticPaths() {
-  const events = await directus.request(readItems('events'))
+  const events = await directus.request(readItems('Event'))
 
   const paths = events.map((event) => ({
     params: { slug: event.slug },
@@ -18,8 +18,9 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params
 
-const event = await directus.request(
-  readItem('events', slug, {
+const [event] = await directus.request(
+  readItems('Event', {
+    filter: { slug: { _eq: slug } },
     fields: ['*'],
   }),
 )

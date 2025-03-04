@@ -410,37 +410,39 @@ export type DirectusWebhooks = {
   was_active_before_deprecation: boolean
 }
 
-export type Events = {
+export type Event = {
   address?: string | null
   city?: string | null
   date: string
   description?: string | null
   end_date?: string | null
+  id: string
   image?: string | DirectusFiles | null
   latitude?: number | null
   location: string
   longitude?: number | null
-  participants: any[] | ParticipantsEvents[]
+  participants: any[] | Registration[]
   place?: string | null
-  slug: string
+  slug?: string | null
   start_date?: string | null
   title?: string | null
   zip?: string | null
 }
 
-export type Participants = {
+export type Participant = {
   date_created?: string | null
   date_updated?: string | null
-  email: string
-  events: any[] | ParticipantsEvents[]
+  email?: string | null
+  Event: any[] | Registration[]
   first_name?: string | null
+  id: string
   last_name?: string | null
 }
 
-export type ParticipantsEvents = {
-  events_slug?: string | Events | null
+export type Registration = {
+  Event?: string | Event | null
   id: number
-  participants_email?: string | Participants | null
+  Participant?: string | Participant | null
 }
 
 export type CustomDirectusTypes = {
@@ -472,7 +474,7 @@ export type CustomDirectusTypes = {
   directus_users: DirectusUsers[]
   directus_versions: DirectusVersions[]
   directus_webhooks: DirectusWebhooks[]
-  events: Events[]
-  participants: Participants[]
-  participants_events: ParticipantsEvents[]
+  Event: Event[]
+  Participant: Participant[]
+  Registration: Registration[]
 }

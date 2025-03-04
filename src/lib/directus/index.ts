@@ -5,10 +5,10 @@ export const DIRECTUS_URL = 'https://api.mens-circle.de'
 
 const directus = createDirectus<CustomDirectusTypes>(DIRECTUS_URL).with(rest())
 
-export const getEvents = async () => await directus.request(readItems('events', { sort: ['start_date'], limit: 3 }))
+export const getEvents = async () => await directus.request(readItems('Event', { sort: ['start_date'], limit: 3 }))
 export type GetEvents = ReturnType<typeof getEvents>
 
-export const getEvent = async (slug: string) => await directus.request(readItem('events', slug))
+export const getEvent = async (slug: string) => await directus.request(readItem('Event', slug))
 export type GetEvent = ReturnType<typeof getEvent>
 
 export const directusImage = (image: string | DirectusFile | DirectusFiles | Awaited<GetEvent>['image']) =>
