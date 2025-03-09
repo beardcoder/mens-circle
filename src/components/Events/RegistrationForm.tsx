@@ -12,7 +12,7 @@ type RegisterForm = {
   email: string
 }
 
-const RegistrationForm: FunctionComponent<{ event: EventItem['slug'] }> = ({ event }) => {
+const RegistrationForm: FunctionComponent<{ event: EventItem['id'] }> = ({ event }) => {
   const [registerForm, { Form, Field }] = useForm<RegisterForm>()
 
   const handleSubmit: SubmitHandler<RegisterForm> = async (values) => {
@@ -26,7 +26,7 @@ const RegistrationForm: FunctionComponent<{ event: EventItem['slug'] }> = ({ eve
       let participant = participants[0]
 
       if (participant) {
-        const eventExists = participant.Event?.some((e) => e.events_slug === event)
+        const eventExists = participant.Event?.some((e) => e.Event === event)
         if (eventExists) {
           throw new FormError<RegisterForm>('Du bist bereits für dieses Event angemeldet.')
         }

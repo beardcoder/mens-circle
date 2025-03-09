@@ -11,9 +11,9 @@ interface Props {
   address: string
   city: string
   zip: string
-  slug: string
+  event_id: string
 }
-const { title, image, date, place, address, city, zip, slug } = Astro.props
+const { title, image, date, place, address, city, zip, event_id } = Astro.props
 
 const eventDate = dayjs(date).format('DD.MM.YY HH:mm')
 ---
@@ -46,7 +46,7 @@ const eventDate = dayjs(date).format('DD.MM.YY HH:mm')
               <div>Dieses Event hat bereits stattgefunden.</div>
             </div>
           ) : (
-            <RegistratonForm event={slug} client:load />
+            <RegistratonForm event={event_id} client:load />
           )
         }
       </div>

@@ -6,8 +6,8 @@ import Features from '@/components/Features.astro'
 import Map from '@/components/Events/Map.astro'
 import dayjs from 'dayjs'
 
-import { writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 import base64 from 'base-64'
 import utf8 from 'utf8'
 import Hero from './Hero.astro'
@@ -21,11 +21,13 @@ const { event } = Astro.props
 const calendar = ical({
   name: event.title,
 })
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 calendar.createEvent({
   summary: event.title!,
-  start: dayjs(event.start_date).toDate(),
-  end: dayjs(event.start_date).toDate(),
+  start: dayjs(event.start_date).tz('Europe/Berlin').toDate(),
+  end: dayjs(event.end_date).tz('Europe/Berlin').toDate(),
   description: event.description,
   organizer: { name: 'Markus Sommer', email: 'hallo@mens-circle.de' },
   location: {
@@ -45,7 +47,7 @@ calendar.createEvent({
   address={event.address!}
   city={event.city!}
   zip={event.zip!}
-  slug={event.slug}
+  event_id={event.id}
 >
   <a
     slot="ical"
