@@ -445,6 +445,16 @@ export type Registration = {
   Participant?: string | Participant | null
 }
 
+export type Subscription = {
+  confirmed_at?: string | null
+  date_created?: string | null
+  email?: string | null
+  first_name?: string | null
+  id: string
+  last_name?: string | null
+  status: string
+}
+
 export type CustomDirectusTypes = {
   contact_requests: ContactRequests[]
   directus_access: DirectusAccess[]
@@ -477,4 +487,5 @@ export type CustomDirectusTypes = {
   Event: Event[]
   Participant: Participant[]
   Registration: Registration[]
+  Subscription: Subscription[]
 }

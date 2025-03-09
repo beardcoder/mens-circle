@@ -1,0 +1,50 @@
+---
+import NewsletterForm from './NewsletterForm'
+---
+
+<dialog
+  class="bg-background text-foreground backdrop:bg-background fixed inset-0 m-auto max-w-xl border-0 p-0 backdrop:opacity-50"
+  data-component="newsletter-modal"
+>
+  <button
+    class="bg-foreground text-background absolute top-4 right-4 h-8 w-8 rounded-full p-2"
+    data-action="close"
+    aria-label="Schließen"
+  >
+    <svg height="100%" viewBox="0 0 24 24" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"
+        fill="currentColor"></path>
+    </svg>
+  </button>
+
+  <section class="p-12">
+    <div class="c-newsletter__wrapper">
+      <div class="c-newsletter__inner">
+        <h2 class="mb-16 text-4xl font-bold md:text-6xl">
+          Bleibe auf dem Laufenden mit unserem <span class="text-primary-500">Newsletter</span>
+        </h2>
+        <NewsletterForm client:load />
+      </div>
+    </div>
+  </section>
+</dialog>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dialog = document.querySelector<HTMLDialogElement>('[data-component="newsletter-modal"]')
+    const closeButton = dialog?.querySelector<HTMLButtonElement>('[data-action="close"]')
+    const oneHour = 60 * 60 * 1000
+    const now = Date.now()
+    const lastShown = localStorage.getItem('newsletterModalLastShown')
+
+    if (!lastShown || now - parseInt(lastShown) > oneHour) {
+      closeButton?.addEventListener('click', () => dialog?.close())
+
+      setTimeout(() => {
+        dialog?.showModal()
+        localStorage.setItem('newsletterModalLastShown', now.toString())
+      }, 5000)
+    }
+  })
+</script>

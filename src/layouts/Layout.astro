@@ -3,6 +3,7 @@ import '../styles/global.css'
 import Footer from '../components/Footer.astro'
 import '@fontsource-variable/jost'
 import Navigation from '../components/Navigation.astro'
+import NewsletterModal from '@/components/ui/NewsletterModal.astro'
 ---
 
 <!doctype html>
@@ -21,5 +22,6 @@ import Navigation from '../components/Navigation.astro'
     <Navigation />
     <slot />
     <Footer />
+    <NewsletterModal />
   </body>
 </html>
