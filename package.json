@@ -18,6 +18,7 @@
     "@sentry/astro": "^9.5.0",
     "@tailwindcss/vite": "^4.0.12",
     "@unpic/astro": "^1.0.0",
+    "@vercel/speed-insights": "^1.2.0",
     "astro": "^5.4.2",
     "astro-seo-meta": "^5.1.0",
     "astro-seo-schema": "^5.0.0",

@@ -4,6 +4,7 @@ import Footer from '../components/Footer.astro'
 import '@fontsource-variable/jost'
 import Navigation from '../components/Navigation.astro'
 import NewsletterModal from '@/components/ui/NewsletterModal.astro'
+import SpeedInsights from '@vercel/speed-insights/astro'
 ---
 
 <!doctype html>
@@ -19,6 +20,7 @@ import NewsletterModal from '@/components/ui/NewsletterModal.astro'
     <title>Männerkreis Niederbayern</title>
   </head>
   <body class="font-jost bg-white text-black dark:bg-stone-900 dark:text-white">
+    <SpeedInsights />
     <Navigation />
     <slot />
     <Footer />
