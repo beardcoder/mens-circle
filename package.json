@@ -15,6 +15,7 @@
     "@fontsource-variable/jost": "^5.2.5",
     "@modular-forms/preact": "^0.12.1",
     "@preact/signals": "^2.0.1",
+    "@sentry/astro": "^9.5.0",
     "@tailwindcss/vite": "^4.0.12",
     "@unpic/astro": "^1.0.0",
     "astro": "^5.4.2",

@@ -1,9 +1,11 @@
 // @ts-check
+import vercel from '@astrojs/vercel/serverless'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
-import vercel from '@astrojs/vercel/serverless';
 
 import preact from '@astrojs/preact'
+
+import sentry from '@sentry/astro'
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,7 +17,15 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  integrations: [preact()],
+  integrations: [
+    preact(),
+    sentry({
+      sourceMapsUploadOptions: {
+        project: 'mens-circle',
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+      },
+    }),
+  ],
 
   output: 'server',
   adapter: vercel({}),
