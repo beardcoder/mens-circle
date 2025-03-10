@@ -20,6 +20,8 @@ export default defineConfig({
   integrations: [
     preact(),
     sentry({
+      dsn: 'https://0abd9376a58cd41a6e446ace623d3792@o4508569353977856.ingest.de.sentry.io/4508569413550160',
+      tracesSampleRate: 1.0,
       sourceMapsUploadOptions: {
         project: 'mens-circle',
         authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -28,5 +30,5 @@ export default defineConfig({
   ],
 
   output: 'server',
-  adapter: vercel({}),
+  adapter: vercel({ webAnalytics: { enabled: true } }),
 })
