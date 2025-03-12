@@ -29,7 +29,12 @@ export default defineConfig({
         authToken: process.env.SENTRY_AUTH_TOKEN,
       },
     }),
-    yeskunallumami({ id: '9384afba-8736-46df-a418-642b3ec39742', autotrack: true, domains: ['mens-circle.de'] }),
+    yeskunallumami({
+      id: '9384afba-8736-46df-a418-642b3ec39742',
+      endpointUrl: 'https://tracking.letsbenow.de',
+      autotrack: true,
+      domains: ['mens-circle.de'],
+    }),
   ],
 
   output: 'server',
