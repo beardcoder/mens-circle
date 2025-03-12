@@ -36,6 +36,8 @@ const RegistrationForm: FunctionComponent<{ event: EventItem['id'] }> = ({ event
 
       await directus.request(createItem('Registration', { Event: event, Participant: participant.id }))
 
+      window.umami?.track('Signup submit', { event })
+
       setResponse(registerForm, {
         status: 'success',
         message: 'Vielen Dank für deine Anmeldung',
@@ -150,7 +152,12 @@ const RegistrationForm: FunctionComponent<{ event: EventItem['id'] }> = ({ event
               )}
             </Field>
           </div>
-          <Button type="submit" className="w-full" disabled={registerForm.submitting.value}>
+          <Button
+            data-umami-event="Signup button"
+            type="submit"
+            className="w-full"
+            disabled={registerForm.submitting.value}
+          >
             {registerForm.submitting.value && (
               <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24" class="mr-2">
                 <path fill="currentColor" d="M18.364 5.636L16.95 7.05A7 7 0 1 0 19 12h2a9 9 0 1 1-2.636-6.364" />
