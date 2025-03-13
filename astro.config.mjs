@@ -9,8 +9,11 @@ import sentry from '@sentry/astro'
 
 import yeskunallumami from '@yeskunall/astro-umami'
 
+import sitemap from '@astrojs/sitemap'
+
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://mens-circle.de',
   experimental: {
     responsiveImages: true,
   },
@@ -35,6 +38,7 @@ export default defineConfig({
       autotrack: true,
       domains: ['mens-circle.de'],
     }),
+    sitemap(),
   ],
 
   output: 'server',

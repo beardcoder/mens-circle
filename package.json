@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@astrojs/preact": "^4.0.5",
+    "@astrojs/sitemap": "^3.2.1",
     "@astrojs/vercel": "^8.1.2",
     "@directus/sdk": "^19.0.1",
     "@fontsource-variable/jost": "^5.2.5",
