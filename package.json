@@ -16,11 +16,11 @@
     "@modular-forms/preact": "^0.12.1",
     "@preact/signals": "^2.0.1",
     "@sentry/astro": "^9.5.0",
-    "@tailwindcss/vite": "^4.0.13",
+    "@tailwindcss/vite": "^4.0.14",
     "@unpic/astro": "^1.0.0",
     "@vercel/speed-insights": "^1.2.0",
     "@yeskunall/astro-umami": "^0.0.4",
-    "astro": "^5.4.3",
+    "astro": "^5.5.1",
     "astro-seo-meta": "^5.1.0",
     "astro-seo-schema": "^5.0.0",
     "astro-svg-loaders": "^5.0.0",
@@ -35,7 +35,7 @@
     "schema-dts": "^1.1.5",
     "sharp": "^0.33.5",
     "tailwind-merge": "^3.0.2",
-    "tailwindcss": "^4.0.13",
+    "tailwindcss": "^4.0.14",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "utf8": "^3.0.0"
   },
-  "packageManager": "pnpm@10.6.2",
+  "packageManager": "pnpm@10.6.3",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
