@@ -7,7 +7,6 @@ import { Schema } from 'astro-seo-schema'
 import { DIRECTUS_URL } from '@/lib/directus'
 import { Seo } from 'astro-seo-meta'
 import Navigation from '@/components/Navigation.astro'
-import SpeedInsights from '@vercel/speed-insights/astro'
 interface Props {
   event: EventItem
 }
@@ -70,7 +69,6 @@ const image = `${DIRECTUS_URL}/assets/${event.image}`
     <link rel="canonical" href={`https://mens-circle.de/events/${event.slug}`} />
   </head>
   <body class="font-jost bg-white text-black dark:bg-stone-900 dark:text-white">
-    <SpeedInsights />
     <Navigation />
     <slot />
     <Footer />
