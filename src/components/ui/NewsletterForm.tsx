@@ -17,9 +17,9 @@ const NewsletterForm: FunctionComponent<{}> = ({}) => {
   const handleSubmit: SubmitHandler<NewsletterForm> = async (values) => {
     try {
       const subscriptions = await directus.request(
-        readItems('Subscription', {
+        readItems('NewsletterSubscription', {
           filter: { email: { _eq: values.email } },
-          fields: ['*', { Event: ['Event'] }],
+          fields: ['*'],
         }),
       )
       let subscription = subscriptions[0]
@@ -27,7 +27,7 @@ const NewsletterForm: FunctionComponent<{}> = ({}) => {
       if (subscription) {
         throw new FormError<NewsletterForm>('Du bist bereits für dieses Event angemeldet.')
       } else {
-        await directus.request(createItem('Subscription', { ...values }))
+        await directus.request(createItem('NewsletterSubscription', { ...values }))
       }
 
       setResponse(newsletterForm, {
