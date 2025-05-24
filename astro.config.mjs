@@ -1,14 +1,11 @@
 // @ts-check
-import tailwindcss from '@tailwindcss/vite'
-import { defineConfig } from 'astro/config'
-
+import node from '@astrojs/node'
 import preact from '@astrojs/preact'
-
-import sentry from '@sentry/astro'
-
-import yeskunallumami from '@yeskunall/astro-umami'
-
 import sitemap from '@astrojs/sitemap'
+import sentry from '@sentry/astro'
+import tailwindcss from '@tailwindcss/vite'
+import yeskunallumami from '@yeskunall/astro-umami'
+import { defineConfig } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
@@ -40,5 +37,7 @@ export default defineConfig({
     sitemap(),
   ],
 
-  output: 'static',
+  adapter: node({
+    mode: 'standalone',
+  }),
 })
