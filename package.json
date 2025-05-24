@@ -51,6 +51,9 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "utf8": "^3.0.0"
   },
+  "engines": {
+    "node": "23"
+  },
   "packageManager": "bun@1.2.14",
   "trustedDependencies": [
     "@sentry/cli",
