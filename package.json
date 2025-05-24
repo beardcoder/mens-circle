@@ -50,15 +50,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "utf8": "^3.0.0"
   },
-  "packageManager": "pnpm@10.11.0",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@sentry/cli",
-      "@tailwindcss/oxide",
-      "esbuild",
-      "sharp"
-    ]
-  },
+  "packageManager": "bun@1.2.14",
   "trustedDependencies": [
     "@sentry/cli",
     "@tailwindcss/oxide"
