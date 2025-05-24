@@ -1,5 +1,4 @@
 // @ts-check
-import node from '@astrojs/node'
 import preact from '@astrojs/preact'
 import sitemap from '@astrojs/sitemap'
 import sentry from '@sentry/astro'
@@ -36,8 +35,4 @@ export default defineConfig({
     }),
     sitemap(),
   ],
-
-  adapter: node({
-    mode: 'standalone',
-  }),
 })
