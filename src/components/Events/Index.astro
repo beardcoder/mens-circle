@@ -12,6 +12,7 @@ import base64 from 'base-64'
 import utf8 from 'utf8'
 import Hero from './Hero.astro'
 import { DIRECTUS_URL } from '@/lib/directus'
+import type { Location } from '@/lib/directus/types'
 
 interface Props {
   event: EventItem
@@ -31,9 +32,9 @@ calendar.createEvent({
   description: event.description,
   organizer: { name: 'Markus Sommer', email: 'hallo@mens-circle.de' },
   location: {
-    title: event.place!,
-    address: `${event.address}, ${event.city}, ${event.zip}`,
-    geo: { lat: event.latitude!, lon: event.longitude! },
+    title: (event.location as Location).place!,
+    address: `${(event.location as Location).address}, ${(event.location as Location).city}, ${(event.location as Location).zip}`,
+    geo: { lat: (event.location as Location).latitude!, lon: (event.location as Location).longitude! },
   },
   busystatus: ICalEventBusyStatus.BUSY,
 })
@@ -43,10 +44,10 @@ calendar.createEvent({
   title={event.title!}
   image={`${DIRECTUS_URL}/assets/${event.image}`}
   date={event.start_date!}
-  place={event.place!}
-  address={event.address!}
-  city={event.city!}
-  zip={event.zip!}
+  place={(event.location as Location).place!}
+  address={(event.location as Location).address!}
+  city={(event.location as Location).city!}
+  zip={(event.location as Location).zip!}
   event_id={event.id}
 >
   <a
@@ -60,10 +61,10 @@ calendar.createEvent({
 </Hero>
 <Features />
 <Map
-  latitude={event.latitude!}
-  longitude={event.longitude!}
-  place={event.place!}
-  address={event.address!}
-  city={event.city!}
-  zip={event.zip!}
+  latitude={(event.location as Location).latitude!}
+  longitude={(event.location as Location).longitude!}
+  place={(event.location as Location).place!}
+  address={(event.location as Location).address!}
+  city={(event.location as Location).city!}
+  zip={(event.location as Location).zip!}
 />

@@ -21,7 +21,7 @@ const { slug } = Astro.params
 const [event] = await directus.request(
   readItems('Event', {
     filter: { slug: { _eq: slug } },
-    fields: ['*'],
+    fields: ['*', { location: ['*'] }],
   }),
 )
 

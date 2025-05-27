@@ -5,7 +5,8 @@ export const DIRECTUS_URL = 'https://api.mens-circle.de'
 
 const directus = createDirectus<CustomDirectusTypes>(DIRECTUS_URL).with(rest())
 
-export const getEvents = async () => await directus.request(readItems('Event', { sort: ['start_date'], limit: 3 }))
+export const getEvents = async () =>
+  await directus.request(readItems('Event', { sort: ['start_date'], limit: 3, fields: ['*', { location: ['*'] }] }))
 export type GetEvents = ReturnType<typeof getEvents>
 
 export const getEvent = async (slug: string) => await directus.request(readItem('Event', slug))

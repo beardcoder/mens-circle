@@ -1,5 +1,6 @@
 ---
 import { getEvents, directusImage } from '@/lib/directus'
+import type { Location } from '@/lib/directus/types'
 import { Image } from 'astro:assets'
 import dayjs from 'dayjs'
 
@@ -29,7 +30,6 @@ const upcomingEvents = events.filter((event) => dayjs().isBefore(dayjs(event.sta
                     alt={event.title ?? 'Veranstaltungsbild'}
                     width={280}
                     height={200}
-                    layout="responsive"
                   />
                 </div>
                 <div class="z-20 -ml-20 p-6">
@@ -38,7 +38,7 @@ const upcomingEvents = events.filter((event) => dayjs().isBefore(dayjs(event.sta
                     <time datetime={event.date}>{dayjs(event.start_date).format('DD.MM.YY HH:mm')}</time>
                   </div>
                   <p>
-                    <strong>Ort:</strong> {event.place}
+                    <strong>Ort:</strong> {(event.location as Location).place}
                   </p>
                 </div>
               </div>
