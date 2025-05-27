@@ -4,10 +4,7 @@ import type { EventItem } from '@/pages/events/[slug].astro'
 import ical, { ICalEventBusyStatus } from 'ical-generator'
 import Features from '@/components/Features.astro'
 import Map from '@/components/Events/Map.astro'
-import dayjs from 'dayjs'
 
-import timezone from 'dayjs/plugin/timezone'
-import utc from 'dayjs/plugin/utc'
 import base64 from 'base-64'
 import utf8 from 'utf8'
 import Hero from './Hero.astro'
@@ -25,8 +22,8 @@ const calendar = ical({
 
 calendar.createEvent({
   summary: event.title!,
-  start: dayjs(event.start_date).toDate(),
-  end: dayjs(event.end_date).toDate(),
+  start: new Date(event.start_date!.replace('T', ' ').concat('Z')),
+  end: new Date(event.end_date!.replace('T', ' ').concat('Z')),
   description: event.description,
   organizer: { name: 'Markus Sommer', email: 'hallo@mens-circle.de' },
   location: {
