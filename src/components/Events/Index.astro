@@ -22,13 +22,11 @@ const { event } = Astro.props
 const calendar = ical({
   name: event.title,
 })
-dayjs.extend(utc)
-dayjs.extend(timezone)
 
 calendar.createEvent({
   summary: event.title!,
-  start: dayjs(event.start_date).tz('Europe/Berlin').toDate(),
-  end: dayjs(event.end_date).tz('Europe/Berlin').toDate(),
+  start: dayjs(event.start_date).toDate(),
+  end: dayjs(event.end_date).toDate(),
   description: event.description,
   organizer: { name: 'Markus Sommer', email: 'hallo@mens-circle.de' },
   location: {
