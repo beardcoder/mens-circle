@@ -4,6 +4,7 @@ import type { EventItem } from '@/pages/events/[slug].astro'
 import ical, { ICalEventBusyStatus } from 'ical-generator'
 import Features from '@/components/Features.astro'
 import Map from '@/components/Events/Map.astro'
+import { DateTime } from 'luxon'
 
 import base64 from 'base-64'
 import utf8 from 'utf8'
@@ -22,8 +23,9 @@ const calendar = ical({
 
 calendar.createEvent({
   summary: event.title!,
-  start: new Date(event.start_date!.replace('T', ' ').concat('Z')),
-  end: new Date(event.end_date!.replace('T', ' ').concat('Z')),
+  start: DateTime.fromISO(event.start_date!).setZone('Europe/Berlin'),
+  end: DateTime.fromISO(event.end_date!).setZone('Europe/Berlin'),
+  timezone: 'Europe/Berlin',
   description: event.description,
   organizer: { name: 'Markus Sommer', email: 'hallo@mens-circle.de' },
   location: {
