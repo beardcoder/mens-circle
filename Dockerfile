@@ -1,5 +1,5 @@
 # Build Stage: Install dependencies and build assets
-FROM node:22-alpine AS node-builder
+FROM node:24-alpine AS node-builder
 
 WORKDIR /app
 
