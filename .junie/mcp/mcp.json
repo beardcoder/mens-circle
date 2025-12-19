@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/opt/homebrew/Cellar/php-zts/8.5.0/bin/php",
+            "args": [
+                "/Users/markus.sommer/Projekte/Privat/mens-circle-design/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}

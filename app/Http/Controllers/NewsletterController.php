@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\NewsletterSubscription;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
+
+class NewsletterController extends Controller
+{
+    public function subscribe(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|max:255',
+        ], [
+            'email.required' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
+            'email.email' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        $existingSubscription = NewsletterSubscription::where('email', $request->email)->first();
+
+        if ($existingSubscription && $existingSubscription->status === 'active') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Diese E-Mail-Adresse ist bereits für den Newsletter angemeldet.',
+            ], 409);
+        }
+
+        if ($existingSubscription && $existingSubscription->status === 'unsubscribed') {
+            $existingSubscription->update([
+                'status' => 'active',
+                'subscribed_at' => now(),
+                'unsubscribed_at' => null,
+            ]);
+        } else {
+            NewsletterSubscription::create([
+                'email' => $request->email,
+                'status' => 'active',
+            ]);
+        }
+
+        // TODO: Send welcome email
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Vielen Dank! Du wurdest erfolgreich für den Newsletter angemeldet.',
+        ]);
+    }
+
+    public function unsubscribe(string $token): View
+    {
+        $subscription = NewsletterSubscription::where('token', $token)->firstOrFail();
+
+        if ($subscription->status === 'unsubscribed') {
+            return view('newsletter.unsubscribed', [
+                'message' => 'Diese E-Mail-Adresse wurde bereits vom Newsletter abgemeldet.',
+            ]);
+        }
+
+        $subscription->update([
+            'status' => 'unsubscribed',
+            'unsubscribed_at' => now(),
+        ]);
+
+        return view('newsletter.unsubscribed', [
+            'message' => 'Du wurdest erfolgreich vom Newsletter abgemeldet.',
+        ]);
+    }
+}
