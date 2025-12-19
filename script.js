@@ -3,7 +3,7 @@
  * Handles navigation, FAQ accordion, forms, animations, and calendar integration
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Initialize all components
   initNavigation();
   initScrollHeader();
@@ -22,7 +22,7 @@ function initNavigation() {
 
   if (!navToggle || !nav) return;
 
-  navToggle.addEventListener('click', function() {
+  navToggle.addEventListener('click', function () {
     nav.classList.toggle('open');
     navToggle.classList.toggle('active');
 
@@ -35,14 +35,14 @@ function initNavigation() {
   // Close nav when clicking on a link
   const navLinks = nav.querySelectorAll('.nav__link, .nav__cta');
   navLinks.forEach(link => {
-    link.addEventListener('click', function() {
+    link.addEventListener('click', function () {
       nav.classList.remove('open');
       navToggle.classList.remove('active');
     });
   });
 
   // Close nav when clicking outside
-  document.addEventListener('click', function(e) {
+  document.addEventListener('click', function (e) {
     if (!nav.contains(e.target) && !navToggle.contains(e.target)) {
       nav.classList.remove('open');
       navToggle.classList.remove('active');
@@ -59,7 +59,7 @@ function initScrollHeader() {
 
   let lastScroll = 0;
 
-  window.addEventListener('scroll', function() {
+  window.addEventListener('scroll', function () {
     const currentScroll = window.pageYOffset;
 
     if (currentScroll > 50) {
@@ -82,7 +82,7 @@ function initFAQ() {
     const question = item.querySelector('.faq-item__question');
     if (!question) return;
 
-    question.addEventListener('click', function() {
+    question.addEventListener('click', function () {
       const isActive = item.classList.contains('active');
 
       // Close all other items
@@ -107,7 +107,7 @@ function initForms() {
   // Newsletter Form
   const newsletterForm = document.getElementById('newsletterForm');
   if (newsletterForm) {
-    newsletterForm.addEventListener('submit', function(e) {
+    newsletterForm.addEventListener('submit', function (e) {
       e.preventDefault();
       handleNewsletterSubmit(this);
     });
@@ -116,7 +116,7 @@ function initForms() {
   // Registration Form
   const registrationForm = document.getElementById('registrationForm');
   if (registrationForm) {
-    registrationForm.addEventListener('submit', function(e) {
+    registrationForm.addEventListener('submit', function (e) {
       e.preventDefault();
       handleRegistrationSubmit(this);
     });
@@ -200,8 +200,11 @@ function showMessage(container, message, type) {
  */
 function initScrollAnimations() {
   const fadeElements = document.querySelectorAll('.fade-in');
+  const staggerElements = document.querySelectorAll('.stagger-children');
 
-  if (!fadeElements.length) return;
+  const allAnimatedElements = [...fadeElements, ...staggerElements];
+
+  if (!allAnimatedElements.length) return;
 
   // Check if IntersectionObserver is supported
   if ('IntersectionObserver' in window) {
@@ -217,10 +220,10 @@ function initScrollAnimations() {
       rootMargin: '0px 0px -50px 0px'
     });
 
-    fadeElements.forEach(el => observer.observe(el));
+    allAnimatedElements.forEach(el => observer.observe(el));
   } else {
     // Fallback: show all elements immediately
-    fadeElements.forEach(el => el.classList.add('visible'));
+    allAnimatedElements.forEach(el => el.classList.add('visible'));
   }
 }
 
@@ -246,7 +249,7 @@ function initCalendarIntegration() {
     endTime: '21:30'
   };
 
-  addToCalendarBtn.addEventListener('click', function() {
+  addToCalendarBtn.addEventListener('click', function () {
     if (calendarModal) {
       calendarModal.classList.add('open');
 
@@ -266,7 +269,7 @@ function initCalendarIntegration() {
 
   // Close modal when clicking outside
   if (calendarModal) {
-    calendarModal.addEventListener('click', function(e) {
+    calendarModal.addEventListener('click', function (e) {
       if (e.target === calendarModal) {
         calendarModal.classList.remove('open');
       }
@@ -323,7 +326,7 @@ function generateGoogleCalendarUrl(event) {
  * Smooth scroll for anchor links
  */
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
+  anchor.addEventListener('click', function (e) {
     const targetId = this.getAttribute('href');
     if (targetId === '#') return;
 
