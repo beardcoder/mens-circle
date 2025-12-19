@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mens-circle-app
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - APP_NAME=Männerkreis Straubing
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_URL=http://localhost
+      - APP_KEY=${APP_KEY}
+      - DB_CONNECTION=sqlite
+      - CACHE_STORE=database
+      - SESSION_DRIVER=database
+      - QUEUE_CONNECTION=database
+      - LOG_CHANNEL=stderr
+      - LOG_LEVEL=error
+      - OCTANE_SERVER=frankenphp
+      - OCTANE_HTTPS=false
+      - MIGRATE_ON_START=true
+      - FRANKENPHP_WORKERS=auto
+    volumes:
+      - app-storage:/app/storage
+      - app-database:/app/database
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  app-storage:
+  app-database:
