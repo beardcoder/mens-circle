@@ -43,7 +43,7 @@ RUN composer dump-autoload --optimize --no-dev
 
 
 # Production Stage: FrankenPHP
-FROM dunglas/frankenphp:latest-php8.4-alpine AS production
+FROM dunglas/frankenphp AS production
 
 # Set working directory
 WORKDIR /app
