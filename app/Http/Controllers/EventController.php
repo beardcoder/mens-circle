@@ -13,10 +13,13 @@ class EventController extends Controller
 {
     public function show(): View
     {
-        $event = Event::where('is_published', true)
-            ->where('event_date', '>=', now())
-            ->orderBy('event_date')
-            ->firstOrFail();
+        $event = cache()->remember('event.next', 600, function () {
+            return Event::where('is_published', true)
+                ->where('event_date', '>=', now())
+                ->orderBy('event_date')
+                ->with('confirmedRegistrations')
+                ->firstOrFail();
+        });
 
         return view('event', compact('event'));
     }
@@ -82,7 +85,8 @@ class EventController extends Controller
             'confirmed_at' => now(),
         ]);
 
-        // TODO: Send confirmation email
+        // Send confirmation email
+        \Mail::to($registration->email)->send(new \App\Mail\EventRegistrationConfirmation($registration, $event));
 
         return response()->json([
             'success' => true,

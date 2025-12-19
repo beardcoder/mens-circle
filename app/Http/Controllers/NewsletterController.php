@@ -41,14 +41,16 @@ class NewsletterController extends Controller
                 'subscribed_at' => now(),
                 'unsubscribed_at' => null,
             ]);
+            $subscription = $existingSubscription;
         } else {
-            NewsletterSubscription::create([
+            $subscription = NewsletterSubscription::create([
                 'email' => $request->email,
                 'status' => 'active',
             ]);
         }
 
-        // TODO: Send welcome email
+        // Send welcome email
+        \Mail::to($subscription->email)->send(new \App\Mail\NewsletterWelcome($subscription));
 
         return response()->json([
             'success' => true,
