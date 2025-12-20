@@ -15,10 +15,10 @@ chmod -R 775 /app/storage /app/bootstrap/cache
 
 # Ensure SQLite database exists (if using SQLite)
 if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
-    mkdir -p /app/database
-    touch /app/database/database.sqlite
-    chown www-data:www-data /app/database/database.sqlite
-    chmod 664 /app/database/database.sqlite
+    mkdir -p /app/storage/database
+    touch /app/storage/database/database.sqlite
+    chown www-data:www-data /app/storage/database/database.sqlite
+    chmod 664 /app/storage/database/database.sqlite
 fi
 
 # Generate app key if not set
