@@ -19,33 +19,64 @@ document.addEventListener('DOMContentLoaded', function () {
 function initNavigation() {
   const navToggle = document.getElementById('navToggle');
   const nav = document.getElementById('nav');
+  const body = document.body;
 
   if (!navToggle || !nav) return;
 
-  navToggle.addEventListener('click', function () {
-    nav.classList.toggle('open');
-    navToggle.classList.toggle('active');
+  function openNav() {
+    nav.classList.add('open');
+    navToggle.classList.add('active');
+    navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Menü schließen');
+    body.style.overflow = 'hidden';
+  }
 
-    // Update ARIA
-    const isOpen = nav.classList.contains('open');
-    navToggle.setAttribute('aria-expanded', isOpen);
-    navToggle.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
-  });
+  function closeNav() {
+    nav.classList.remove('open');
+    navToggle.classList.remove('active');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Menü öffnen');
+    body.style.overflow = '';
+  }
+
+  function toggleNav(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (nav.classList.contains('open')) {
+      closeNav();
+    } else {
+      openNav();
+    }
+  }
+
+  // Handle both click and touch events
+  navToggle.addEventListener('click', toggleNav);
+  navToggle.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    toggleNav(e);
+  }, { passive: false });
 
   // Close nav when clicking on a link
   const navLinks = nav.querySelectorAll('.nav__link, .nav__cta');
   navLinks.forEach(link => {
     link.addEventListener('click', function () {
-      nav.classList.remove('open');
-      navToggle.classList.remove('active');
+      closeNav();
     });
   });
 
   // Close nav when clicking outside
   document.addEventListener('click', function (e) {
-    if (!nav.contains(e.target) && !navToggle.contains(e.target)) {
-      nav.classList.remove('open');
-      navToggle.classList.remove('active');
+    if (nav.classList.contains('open') && !nav.contains(e.target) && !navToggle.contains(e.target)) {
+      closeNav();
+    }
+  });
+
+  // Close nav on escape key
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && nav.classList.contains('open')) {
+      closeNav();
+      navToggle.focus();
     }
   });
 }
