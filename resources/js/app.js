@@ -127,29 +127,56 @@ function handleNewsletterSubmit(form) {
   const messageContainer = document.getElementById('newsletterMessage');
   const emailInput = form.querySelector('input[type="email"]');
   const email = emailInput.value.trim();
+  const submitButton = form.querySelector('button[type="submit"]');
 
   if (!validateEmail(email)) {
     showMessage(messageContainer, 'Bitte gib eine gültige E-Mail-Adresse ein.', 'error');
     return;
   }
 
-  // Simulate successful submission
-  // In production, this would be an actual API call
-  showMessage(messageContainer, 'Vielen Dank! Du wurdest erfolgreich für den Newsletter angemeldet.', 'success');
-  form.reset();
+  // Disable button during submission
+  submitButton.disabled = true;
+  submitButton.textContent = 'Wird gesendet...';
 
-  // Optional: Send to backend
-  // sendToBackend('/api/newsletter', { email });
+  // Send to Laravel backend
+  fetch(window.routes.newsletter, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': window.routes.csrfToken,
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({ email })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showMessage(messageContainer, data.message, 'success');
+      form.reset();
+    } else {
+      showMessage(messageContainer, data.message || 'Ein Fehler ist aufgetreten.', 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showMessage(messageContainer, 'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.', 'error');
+  })
+  .finally(() => {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Anmelden';
+  });
 }
 
 function handleRegistrationSubmit(form) {
   const messageContainer = document.getElementById('registrationMessage');
   const formData = new FormData(form);
+  const submitButton = form.querySelector('button[type="submit"]');
 
-  const firstName = formData.get('firstName')?.trim();
-  const lastName = formData.get('lastName')?.trim();
+  const firstName = formData.get('first_name')?.trim();
+  const lastName = formData.get('last_name')?.trim();
   const email = formData.get('email')?.trim();
   const privacy = form.querySelector('input[name="privacy"]')?.checked;
+  const eventId = formData.get('event_id');
 
   // Validation
   if (!firstName || !lastName) {
@@ -167,16 +194,43 @@ function handleRegistrationSubmit(form) {
     return;
   }
 
-  // Simulate successful submission
-  showMessage(
-    messageContainer,
-    `Vielen Dank, ${firstName}! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.`,
-    'success'
-  );
-  form.reset();
+  // Disable button during submission
+  submitButton.disabled = true;
+  submitButton.textContent = 'Wird gesendet...';
 
-  // Optional: Send to backend
-  // sendToBackend('/api/registration', { firstName, lastName, email });
+  // Send to Laravel backend
+  fetch(window.routes.eventRegister, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': window.routes.csrfToken,
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+      event_id: eventId,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      privacy: privacy ? 1 : 0
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showMessage(messageContainer, data.message, 'success');
+      form.reset();
+    } else {
+      showMessage(messageContainer, data.message || 'Ein Fehler ist aufgetreten.', 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showMessage(messageContainer, 'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.', 'error');
+  })
+  .finally(() => {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Verbindlich anmelden';
+  });
 }
 
 function validateEmail(email) {
@@ -238,8 +292,8 @@ function initCalendarIntegration() {
 
   if (!addToCalendarBtn) return;
 
-  // Event data - update these values for each event
-  const eventData = {
+  // Get event data from window object (set in event.blade.php)
+  const eventData = window.eventData || {
     title: 'Männerkreis Straubing',
     description: 'Treffen des Männerkreis Straubing. Ein Raum für echte Begegnung unter Männern.',
     location: 'Straubing (genaue Adresse nach Anmeldung)',

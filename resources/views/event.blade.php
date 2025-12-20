@@ -202,3 +202,18 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+<script>
+    // Pass event data to JavaScript for calendar integration
+    window.eventData = {
+        title: '{{ $event->title }}',
+        description: '{{ strip_tags($event->description) }}',
+        location: '{{ $event->location }}',
+        startDate: '{{ $event->event_date->format('Y-m-d') }}',
+        startTime: '{{ $event->start_time->format('H:i') }}',
+        endDate: '{{ $event->event_date->format('Y-m-d') }}',
+        endTime: '{{ $event->end_time->format('H:i') }}'
+    };
+</script>
+@endpush

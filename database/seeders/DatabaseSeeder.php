@@ -32,63 +32,74 @@ class DatabaseSeeder extends Seeder
                 [
                     'type' => 'hero',
                     'data' => [
-                        'subtitle' => 'Straubing / Niederbayern',
-                        'title' => "Ein Raum für\nechte Begegnung",
+                        'label' => 'Straubing / Niederbayern',
+                        'title' => '<span class="hero__title-line">Ein Raum für</span><span class="hero__title-line"><span class="text-italic">echte</span> Begegnung</span>',
                         'description' => 'Der Männerkreis ist ein geschützter Ort, an dem du dich zeigen kannst, wie du wirklich bist. Authentischer Austausch. Ehrliche Gemeinschaft. Persönliches Wachstum.',
+                        'button_text' => 'Dabei sein',
+                        'button_link' => '/termin',
                     ],
                 ],
                 [
-                    'type' => 'text_section',
+                    'type' => 'intro',
                     'data' => [
-                        'eyebrow' => 'Über uns',
-                        'title' => 'Was ist der Männerkreis?',
-                        'content' => '<p>Der Männerkreis Straubing ist ein regelmäßiger Treffpunkt für Männer, die nach echtem Austausch und authentischer Verbindung suchen. In einer Welt, die oft von Oberflächlichkeit geprägt ist, schaffen wir einen geschützten Raum für tiefe Begegnungen.</p><p>Hier kannst du dich zeigen, wie du wirklich bist – mit deinen Stärken, Zweifeln, Freuden und Herausforderungen. Ohne Masken, ohne Bewertung, einfach echt.</p>',
-                    ],
-                ],
-                [
-                    'type' => 'value_items',
-                    'data' => [
-                        'eyebrow' => 'Unsere Werte',
-                        'title' => 'Was uns wichtig ist',
-                        'items' => [
+                        'eyebrow' => 'Was uns verbindet',
+                        'title' => 'Was ist ein<br><span class="text-italic">Männerkreis?</span>',
+                        'text' => 'Ein Männerkreis ist ein regelmäßiges Treffen von Männern, die sich in einem geschützten Rahmen begegnen möchten. Hier geht es nicht um Smalltalk oder Leistung – sondern um echte Verbindung, ehrliche Worte und das Gefühl, gehört und gesehen zu werden.',
+                        'quote' => '„Im Kreis sitzen Männer,<br>die sich trauen,<br>echt zu sein."',
+                        'values' => [
                             [
                                 'number' => '01',
-                                'title' => 'Authentizität',
-                                'description' => 'Sei du selbst, ohne Masken und Fassaden. Hier darfst du zeigen, wie es dir wirklich geht.',
+                                'title' => 'Authentischer Austausch',
+                                'description' => 'Hier darfst du sagen, was dich wirklich bewegt – ohne Maske, ohne Rolle.',
                             ],
                             [
                                 'number' => '02',
-                                'title' => 'Vertraulichkeit',
-                                'description' => 'Was im Kreis besprochen wird, bleibt im Kreis. Ein geschützter Raum für offene Worte.',
+                                'title' => 'Ehrliche Gemeinschaft',
+                                'description' => 'Verbindung entsteht, wenn wir uns gegenseitig wirklich zuhören.',
                             ],
                             [
                                 'number' => '03',
-                                'title' => 'Wertschätzung',
-                                'description' => 'Jeder wird gehört und respektiert. Keine Bewertung, keine Lösungen – nur echtes Zuhören.',
+                                'title' => 'Persönliches Wachstum',
+                                'description' => 'Durch Reflexion und Feedback entwickeln wir uns gemeinsam weiter.',
                             ],
                         ],
                     ],
                 ],
                 [
+                    'type' => 'moderator',
+                    'data' => [
+                        'eyebrow' => 'Dein Begleiter',
+                        'name' => 'Markus<br><span class="light">Sommer</span>',
+                        'bio' => '<p>Ich bin Markus, gebürtiger Niederbayer und Gründer des Männerkreises Straubing. Seit Jahren beschäftige ich mich mit der Frage, was es bedeutet, als Mann authentisch zu leben – jenseits von Rollenbildern und gesellschaftlichen Erwartungen.</p><p>Der Männerkreis ist für mich ein Herzensanliegen: Ein Ort, an dem wir uns gegenseitig stärken, herausfordern und unterstützen können.</p>',
+                        'quote' => '„Wahre Stärke zeigt sich nicht im Alleingang, sondern in der Bereitschaft, sich anderen zu öffnen."',
+                    ],
+                ],
+                [
                     'type' => 'journey_steps',
                     'data' => [
-                        'eyebrow' => 'Die Reise',
-                        'title' => 'So läuft ein Treffen ab',
+                        'eyebrow' => 'Der Weg',
+                        'title' => 'Die Reise <span class="text-italic">im Kreis</span>',
+                        'subtitle' => 'Jedes Treffen folgt einem natürlichen Rhythmus',
                         'steps' => [
                             [
                                 'number' => '1',
                                 'title' => 'Ankommen',
-                                'description' => 'Gemeinsam beginnen wir mit einer kurzen Einstimmung in den Raum.',
+                                'description' => 'Wir beginnen mit einer Runde des Ankommens. Jeder teilt kurz, wie er gerade da ist – körperlich, emotional, mental.',
                             ],
                             [
                                 'number' => '2',
-                                'title' => 'Austausch',
-                                'description' => 'Jeder bekommt Zeit, sich mitzuteilen. Du entscheidest, was du teilen möchtest.',
+                                'title' => 'Öffnen',
+                                'description' => 'Im geschützten Raum des Kreises öffnen wir uns. Themen, die uns bewegen, finden Raum und Gehör.',
                             ],
                             [
                                 'number' => '3',
-                                'title' => 'Integration',
-                                'description' => 'Wir schließen mit einem gemeinsamen Abschluss und Reflexion.',
+                                'title' => 'Wachsen',
+                                'description' => 'Durch ehrliches Feedback und Spiegelung entstehen neue Perspektiven. Wir lernen von und mit einander.',
+                            ],
+                            [
+                                'number' => '4',
+                                'title' => 'Integrieren',
+                                'description' => 'Zum Abschluss verankern wir das Erlebte. Was nehmen wir mit? Was setzen wir im Alltag um?',
                             ],
                         ],
                     ],
@@ -96,20 +107,33 @@ class DatabaseSeeder extends Seeder
                 [
                     'type' => 'faq',
                     'data' => [
-                        'eyebrow' => 'Häufige Fragen',
-                        'title' => 'Was du wissen solltest',
+                        'eyebrow' => 'Fragen & Antworten',
+                        'title' => 'Häufige<br><span class="text-italic">Fragen</span>',
+                        'intro' => 'Alles, was du wissen solltest, bevor du zum ersten Mal dabei bist.',
                         'items' => [
                             [
-                                'question' => 'Wer kann teilnehmen?',
-                                'answer' => 'Jeder Mann ist willkommen, unabhängig von Alter, Herkunft oder Lebenssituation. Es ist keine Vorerfahrung nötig.',
+                                'question' => 'Für wen ist der Männerkreis?',
+                                'answer' => 'Der Männerkreis ist offen für alle Männer, die sich nach authentischem Austausch und echten Verbindungen sehnen. Es spielt keine Rolle, ob du 25 oder 65 bist, ob du in einer Beziehung lebst oder Single bist. Wichtig ist nur die Bereitschaft, dich auf den Prozess einzulassen und anderen Männern ehrlich und respektvoll zu begegnen.',
+                            ],
+                            [
+                                'question' => 'Wo und wie oft trifft sich der Kreis?',
+                                'answer' => 'Wir treffen uns in Straubing – der genaue Ort wird bei der Anmeldung bekannt gegeben. Die Treffen finden regelmäßig statt, in der Regel alle zwei bis vier Wochen.',
+                            ],
+                            [
+                                'question' => 'Wie läuft ein Treffen ab?',
+                                'answer' => 'Ein Treffen dauert etwa 2-3 Stunden. Wir sitzen im Kreis – das ist mehr als nur eine Sitzordnung, es ist ein Symbol für Gleichwertigkeit. Der Ablauf folgt einem natürlichen Rhythmus: Ankommen, Öffnen, Wachsen, Integrieren. Es gibt keine starren Regeln, aber Leitlinien wie respektvolles Zuhören und Vertraulichkeit.',
                             ],
                             [
                                 'question' => 'Was kostet die Teilnahme?',
-                                'answer' => 'Die Teilnahme erfolgt auf Spendenbasis. Jeder gibt, was für ihn stimmig ist und möglich ist.',
+                                'answer' => 'Der Männerkreis funktioniert auf Spendenbasis. Das bedeutet: Jeder gibt, was er kann und was ihm die Erfahrung wert ist. Finanzielle Gründe sollen niemanden davon abhalten, Teil des Kreises zu werden.',
                             ],
                             [
-                                'question' => 'Wie oft finden die Treffen statt?',
-                                'answer' => 'Wir treffen uns in der Regel einmal im Monat. Die genauen Termine findest du auf der Event-Seite.',
+                                'question' => 'Ist alles vertraulich?',
+                                'answer' => 'Ja, absolut. Vertraulichkeit ist das Fundament des Männerkreises. Alles, was im Kreis geteilt wird, bleibt im Kreis.',
+                            ],
+                            [
+                                'question' => 'Ist das Therapie oder Coaching?',
+                                'answer' => 'Nein. Der Männerkreis ist weder Therapie noch Coaching. Es geht nicht darum, Probleme zu lösen oder Ratschläge zu geben. Stattdessen bietet der Kreis einen Raum des Zuhörens und der Verbindung. Bei therapeutischem Bedarf empfehle ich professionelle Hilfe.',
                             ],
                         ],
                     ],
@@ -117,9 +141,19 @@ class DatabaseSeeder extends Seeder
                 [
                     'type' => 'newsletter',
                     'data' => [
-                        'eyebrow' => 'Newsletter',
-                        'title' => 'Bleib auf dem Laufenden',
-                        'text' => 'Erhalte Infos zu kommenden Treffen und Inspirationen für deinen Weg.',
+                        'eyebrow' => 'In Verbindung bleiben',
+                        'title' => 'Bleib <span class="text-italic">verbunden</span>',
+                        'text' => 'Erhalte Informationen zu kommenden Treffen, Impulse zum Thema Männlichkeit und Neuigkeiten aus dem Männerkreis Straubing.',
+                    ],
+                ],
+                [
+                    'type' => 'cta',
+                    'data' => [
+                        'eyebrow' => 'Nächstes Treffen',
+                        'title' => 'Sei beim <span class="text-italic">nächsten</span><br>Mal dabei',
+                        'text' => 'Der nächste Männerkreis findet bald statt. Sichere dir deinen Platz und erlebe, was echte Männergemeinschaft bedeutet.',
+                        'button_text' => 'Zum Termin & Anmeldung',
+                        'button_link' => '/termin',
                     ],
                 ],
             ],
