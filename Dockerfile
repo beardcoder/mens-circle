@@ -96,9 +96,6 @@ RUN mkdir -p \
     /app/bootstrap/cache \
     /app/database
 
-# Create SQLite database file if using SQLite
-RUN touch /app/database/database.sqlite
-
 # Set permissions
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database
 RUN chmod -R 775 /app/storage /app/bootstrap/cache /app/database

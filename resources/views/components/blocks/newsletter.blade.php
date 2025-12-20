@@ -7,7 +7,7 @@
                 @endif
 
                 @if(!empty($block['title']))
-                    <h2 class="newsletter__title">{{ $block['title'] }}</h2>
+                    <h2 class="newsletter__title">{!! $block['title'] !!}</h2>
                 @endif
 
                 @if(!empty($block['text']))
