@@ -1,16 +1,16 @@
-<section class="section cta-section">
+<section class="section section--large cta-section">
     <div class="container">
-        <div class="cta-card fade-in">
+        <div class="cta__content fade-in">
             @if(!empty($block['eyebrow']))
-                <p class="section__eyebrow">{{ $block['eyebrow'] }}</p>
+                <p class="cta__eyebrow">{{ $block['eyebrow'] }}</p>
             @endif
 
             @if(!empty($block['title']))
-                <h2>{{ $block['title'] }}</h2>
+                <h2 class="cta__title">{!! $block['title'] !!}</h2>
             @endif
 
             @if(!empty($block['text']))
-                <p>{{ $block['text'] }}</p>
+                <p class="cta__text">{{ $block['text'] }}</p>
             @endif
 
             @if(!empty($block['button_text']) && !empty($block['button_link']))

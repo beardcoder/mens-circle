@@ -11,20 +11,22 @@
         </div>
 
         @if(!empty($block['items']) && is_array($block['items']))
-            <div class="values stagger-children">
+            <div class="intro__values stagger-children">
                 @foreach($block['items'] as $item)
                     <div class="value-item">
                         @if(!empty($item['number']))
                             <span class="value-item__number">{{ $item['number'] }}</span>
                         @endif
 
-                        @if(!empty($item['title']))
-                            <h3>{{ $item['title'] }}</h3>
-                        @endif
+                        <div class="value-item__content">
+                            @if(!empty($item['title']))
+                                <h4>{{ $item['title'] }}</h4>
+                            @endif
 
-                        @if(!empty($item['description']))
-                            <p>{{ $item['description'] }}</p>
-                        @endif
+                            @if(!empty($item['description']))
+                                <p>{{ $item['description'] }}</p>
+                            @endif
+                        </div>
                     </div>
                 @endforeach
             </div>
