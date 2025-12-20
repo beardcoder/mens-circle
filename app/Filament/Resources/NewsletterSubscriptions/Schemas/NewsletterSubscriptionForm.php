@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\NewsletterSubscriptions\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\DateTimePicker;
+use Filament\Schemas\Components\Select;
+use Filament\Schemas\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class NewsletterSubscriptionForm
@@ -17,8 +17,9 @@ class NewsletterSubscriptionForm
                     ->label('E-Mail')
                     ->email()
                     ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true),
+
                 Select::make('status')
                     ->label('Status')
                     ->options([
@@ -27,18 +28,16 @@ class NewsletterSubscriptionForm
                     ])
                     ->required()
                     ->default('active'),
-                TextInput::make('token')
-                    ->label('Token')
-                    ->disabled()
-                    ->dehydrated(false)
-                    ->helperText('Wird automatisch generiert'),
+
                 DateTimePicker::make('subscribed_at')
                     ->label('Angemeldet am')
                     ->disabled()
-                    ->dehydrated(false),
+                    ->displayFormat('d.m.Y H:i'),
+
                 DateTimePicker::make('unsubscribed_at')
                     ->label('Abgemeldet am')
-                    ->native(false),
+                    ->disabled()
+                    ->displayFormat('d.m.Y H:i'),
             ]);
     }
 }

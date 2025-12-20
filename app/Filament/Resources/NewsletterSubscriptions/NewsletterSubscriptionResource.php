@@ -18,7 +18,13 @@ class NewsletterSubscriptionResource extends Resource
 {
     protected static ?string $model = NewsletterSubscription::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
+
+    protected static ?string $navigationLabel = 'Newsletter Abonnenten';
+
+    protected static ?string $modelLabel = 'Abonnent';
+
+    protected static ?string $pluralModelLabel = 'Abonnenten';
 
     public static function form(Schema $schema): Schema
     {

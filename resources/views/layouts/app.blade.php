@@ -82,48 +82,61 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer__content">
+            <div class="footer__top">
                 <div class="footer__brand">
-                    <div class="logo">
-                        <span class="logo__symbol">M</span>
-                        <span>Männerkreis</span>
-                    </div>
-                    <p>Ein Raum für echte Begegnung</p>
+                    <div class="footer__logo">Männerkreis Straubing</div>
+                    <p class="footer__text">
+                        Ein Raum für echte Begegnung unter Männern.
+                        Authentischer Austausch, Gemeinschaft und persönliches Wachstum in Niederbayern.
+                    </p>
                 </div>
 
-                <div class="footer__links">
-                    <div class="footer__col">
-                        <h3>Navigation</h3>
-                        <ul>
-                            <li><a href="{{ route('home') }}#ueber">Über</a></li>
-                            <li><a href="{{ route('home') }}#reise">Die Reise</a></li>
-                            <li><a href="{{ route('home') }}#faq">Fragen</a></li>
-                            <li><a href="{{ route('event.show') }}">Nächster Termin</a></li>
-                        </ul>
-                    </div>
+                <div class="footer__nav">
+                    <h4 class="footer__heading">Navigation</h4>
+                    <ul class="footer__links">
+                        <li><a href="{{ route('home') }}#ueber">Über uns</a></li>
+                        <li><a href="{{ route('home') }}#reise">Die Reise</a></li>
+                        <li><a href="{{ route('home') }}#faq">FAQ</a></li>
+                        <li><a href="{{ route('event.show') }}">Nächster Termin</a></li>
+                    </ul>
+                </div>
 
-                    <div class="footer__col">
-                        <h3>Rechtliches</h3>
-                        <ul>
-                            <li><a href="{{ route('impressum') }}">Impressum</a></li>
-                            <li><a href="{{ route('datenschutz') }}">Datenschutz</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer__col">
-                        <h3>Kontakt</h3>
-                        <ul>
-                            <li><a href="mailto:hallo@mens-circle.de">hallo@mens-circle.de</a></li>
-                        </ul>
-                    </div>
+                <div class="footer__contact">
+                    <h4 class="footer__heading">Kontakt</h4>
+                    <ul class="footer__links">
+                        <li><a href="mailto:hallo@mens-circle.de">E-Mail schreiben</a></li>
+                        <li><a href="{{ route('home') }}#newsletter">Newsletter</a></li>
+                    </ul>
                 </div>
             </div>
 
             <div class="footer__bottom">
-                <p>&copy; {{ date('Y') }} Männerkreis Straubing. Alle Rechte vorbehalten.</p>
+                <p class="footer__copyright">
+                    &copy; {{ date('Y') }} Männerkreis Straubing
+                </p>
+                <div class="footer__legal">
+                    <a href="{{ route('impressum') }}">Impressum</a>
+                    <a href="{{ route('datenschutz') }}">Datenschutz</a>
+                </div>
             </div>
         </div>
     </footer>
+
+    <!-- Calendar Modal -->
+    <div class="calendar-modal" id="calendarModal">
+        <div class="calendar-modal__content">
+            <h3>In Kalender speichern</h3>
+            <p>Wähle deinen Kalender:</p>
+            <div class="calendar-modal__buttons">
+                <a href="#" id="calendarGoogle" class="btn btn--secondary" target="_blank" rel="noopener">
+                    Google Calendar
+                </a>
+                <a href="#" id="calendarICS" class="btn btn--secondary" download="maennerkreis-straubing.ics">
+                    Apple/Outlook (.ics)
+                </a>
+            </div>
+        </div>
+    </div>
 
     <script>
         window.routes = {
@@ -132,5 +145,6 @@
             csrfToken: '{{ csrf_token() }}'
         };
     </script>
+    @stack('scripts')
 </body>
 </html>

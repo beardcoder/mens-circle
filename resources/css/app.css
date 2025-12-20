@@ -629,7 +629,11 @@ a {
 .hero__scroll-line {
   width: 1px;
   height: 80px;
-  background: linear-gradient(to bottom, var(--color-terracotta), transparent);
+  background: linear-gradient(
+    to bottom,
+    var(--color-terracotta),
+    transparent
+  );
   animation: scrollPulse 2.5s ease-in-out infinite;
 }
 

@@ -1,43 +1,50 @@
 <?php
 
-namespace App\Filament\Resources\NewsletterSubscriptions\Tables;
+namespace App\Filament\Resources\Newsletters\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class NewsletterSubscriptionsTable
+class NewslettersTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('email')
-                    ->label('E-Mail')
+                TextColumn::make('subject')
+                    ->label('Betreff')
                     ->searchable()
                     ->sortable()
-                    ->copyable(),
+                    ->limit(50),
 
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'active' => 'success',
-                        'unsubscribed' => 'gray',
-                        default => 'warning',
+                        'sent' => 'success',
+                        'sending' => 'warning',
+                        'draft' => 'gray',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'active' => 'Aktiv',
-                        'unsubscribed' => 'Abgemeldet',
+                        'sent' => 'Versendet',
+                        'sending' => 'Wird versendet',
+                        'draft' => 'Entwurf',
                         default => $state,
                     })
                     ->sortable(),
 
-                TextColumn::make('subscribed_at')
-                    ->label('Angemeldet am')
+                TextColumn::make('recipient_count')
+                    ->label('Empfänger')
+                    ->numeric()
+                    ->sortable(),
+
+                TextColumn::make('sent_at')
+                    ->label('Versendet am')
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
 
@@ -51,13 +58,14 @@ class NewsletterSubscriptionsTable
                 SelectFilter::make('status')
                     ->label('Status')
                     ->options([
-                        'active' => 'Aktiv',
-                        'unsubscribed' => 'Abgemeldet',
+                        'draft' => 'Entwurf',
+                        'sending' => 'Wird versendet',
+                        'sent' => 'Versendet',
                     ]),
             ])
             ->defaultSort('created_at', 'desc')
             ->recordActions([
-                EditAction::make(),
+                ViewAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

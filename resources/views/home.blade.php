@@ -32,6 +32,8 @@
         @foreach($page->content_blocks as $block)
             @if($block['type'] === 'hero')
                 <x-blocks.hero :block="$block['data']" />
+            @elseif($block['type'] === 'intro')
+                <x-blocks.intro :block="$block['data']" />
             @elseif($block['type'] === 'text_section')
                 <x-blocks.text-section :block="$block['data']" />
             @elseif($block['type'] === 'value_items')
