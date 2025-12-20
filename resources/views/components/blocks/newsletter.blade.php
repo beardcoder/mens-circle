@@ -1,38 +1,36 @@
-<section class="section newsletter-section">
-    <div class="container container--narrow">
-        <div class="newsletter-card fade-in">
-            @if(!empty($block['eyebrow']))
-                <p class="section__eyebrow">{{ $block['eyebrow'] }}</p>
-            @endif
+<section class="section newsletter-section" id="newsletter">
+    <div class="container">
+        <div class="newsletter__layout fade-in">
+            <div class="newsletter__content">
+                @if(!empty($block['eyebrow']))
+                    <p class="newsletter__eyebrow">{{ $block['eyebrow'] }}</p>
+                @endif
 
-            @if(!empty($block['title']))
-                <h2>{{ $block['title'] }}</h2>
-            @endif
+                @if(!empty($block['title']))
+                    <h2 class="newsletter__title">{{ $block['title'] }}</h2>
+                @endif
 
-            @if(!empty($block['text']))
-                <p>{{ $block['text'] }}</p>
-            @endif
+                @if(!empty($block['text']))
+                    <p class="newsletter__text">{{ $block['text'] }}</p>
+                @endif
+            </div>
 
-            <form id="newsletterForm" class="newsletter-form">
-                <div class="form__group form__group--inline">
+            <div class="newsletter__form-wrapper">
+                <form id="newsletterForm" class="newsletter__form">
                     <input
                         type="email"
                         name="email"
                         placeholder="Deine E-Mail-Adresse"
                         required
+                        class="newsletter__input"
                         aria-label="E-Mail-Adresse"
                     >
                     <button type="submit" class="btn btn--primary">
                         Anmelden
                     </button>
-                </div>
-                <div id="newsletterMessage"></div>
-            </form>
-
-            <p class="newsletter-card__privacy">
-                Mit der Anmeldung akzeptierst du unsere
-                <a href="{{ route('datenschutz') }}">Datenschutzerklärung</a>.
-            </p>
+                    <div id="newsletterMessage"></div>
+                </form>
+            </div>
         </div>
     </div>
 </section>
