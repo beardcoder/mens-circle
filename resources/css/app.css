@@ -308,17 +308,16 @@ a {
   letter-spacing: -0.02em;
 }
 
-.logo__symbol {
+.logo__icon {
   width: 44px;
   height: 44px;
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.logo__text {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
 }
 
 .nav {
@@ -1612,9 +1611,19 @@ body.nav-open {
 
 .footer__logo {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   margin-bottom: var(--space-md);
   letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.footer__logo-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: var(--color-terracotta-light);
 }
 
 .footer__text {
