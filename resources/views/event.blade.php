@@ -54,6 +54,7 @@
             <div class="hero__circle hero__circle--1"></div>
             <div class="hero__circle hero__circle--2"></div>
             <div class="hero__circle hero__circle--3"></div>
+            <div class="hero__circle hero__circle--4"></div>
         </div>
 
         <div class="container">
@@ -62,114 +63,119 @@
                 <h1 class="hero__title fade-in fade-in-delay-1">
                     <span class="hero__title-line">{{ $event->title }}</span>
                 </h1>
+                <div class="hero__bottom fade-in fade-in-delay-2">
+                    <p class="hero__description">
+                        {{ $event->event_date->translatedFormat('l') }}, {{ $event->event_date->format('d.m.Y') }} · {{ $event->start_time->format('H:i') }} Uhr · {{ $event->location }}
+                    </p>
+                    <div class="hero__cta">
+                        <a href="#anmeldung" class="btn btn--primary btn--large">Jetzt anmelden</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Event Details -->
-    <section class="section event-section">
-        <div class="container">
-            <div class="event__layout">
-                <div class="event__main fade-in">
-                    <h2>Über dieses Treffen</h2>
+    <!-- Event Intro with Quote -->
+    <section class="event-intro-section">
+        <div class="event-intro__layout">
+            <div class="event-intro__left">
+                <p class="event-intro__eyebrow fade-in">Über das Treffen</p>
+                <h2 class="event-intro__title fade-in fade-in-delay-1">
+                    Ein Raum für <span class="text-italic">echte</span> Begegnung
+                </h2>
+                <div class="event-intro__text fade-in fade-in-delay-2">
                     {!! nl2br(e($event->description)) !!}
                 </div>
+            </div>
+            <div class="event-intro__right">
+                <div class="event-intro__quote-area">
+                    <div class="event-intro__circles"></div>
+                    <p class="event-intro__quote">
+                        »Gemeinsam <span class="text-italic">wachsen</span>,<br>
+                        einander <span class="text-italic">stärken</span>«
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="event__sidebar fade-in fade-in-delay-1">
-                    <div class="event__card event__details-card fade-in">
-                        <h3 class="event__card-title">Termine & Details</h3>
+    <!-- Event Details with large typography -->
+    <section class="section section--large event-details-section">
+        <div class="container">
+            <div class="event-details__header fade-in">
+                <p class="event-details__eyebrow">Auf einen Blick</p>
+                <h2 class="event-details__title">Termin & <span class="text-italic">Details</span></h2>
+            </div>
 
-                        <div class="event__info-item">
-                            <div class="event__info-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                </svg>
-                            </div>
-                            <div class="event__info-content">
-                                <h4>Datum</h4>
-                                <p>{{ $event->event_date->translatedFormat('l, d. F Y') }}</p>
-                            </div>
-                        </div>
-
-                        <div class="event__info-item">
-                            <div class="event__info-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12,6 12,12 16,14"></polyline>
-                                </svg>
-                            </div>
-                            <div class="event__info-content">
-                                <h4>Uhrzeit</h4>
-                                <p>{{ $event->start_time->format('H:i') }} – {{ $event->end_time->format('H:i') }} Uhr</p>
-                            </div>
-                        </div>
-
-                        <div class="event__info-item">
-                            <div class="event__info-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                            </div>
-                            <div class="event__info-content">
-                                <h4>Ort</h4>
-                                <p>{{ $event->location }}<br><small>Genaue Adresse nach Anmeldung</small></p>
-                            </div>
-                        </div>
-
-                        <div class="event__info-item">
-                            <div class="event__info-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                </svg>
-                            </div>
-                            <div class="event__info-content">
-                                <h4>Teilnehmer</h4>
-                                <p>Max. {{ $event->max_participants }} Männer</p>
-                            </div>
-                        </div>
-
-                        <div class="event__info-item">
-                            <div class="event__info-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                </svg>
-                            </div>
-                            <div class="event__info-content">
-                                <h4>Beitrag</h4>
-                                <p>{{ $event->cost_basis }}</p>
-                            </div>
-                        </div>
-
-                        <button type="button" class="btn event__calendar-btn" id="addToCalendar">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                                <line x1="12" y1="14" x2="12" y2="18"></line>
-                                <line x1="10" y1="16" x2="14" y2="16"></line>
-                            </svg>
-                            In Kalender speichern
-                        </button>
+            <div class="event-details__grid stagger-children">
+                <div class="event-detail-card">
+                    <span class="event-detail-card__number">01</span>
+                    <div class="event-detail-card__content">
+                        <h3>Datum</h3>
+                        <p class="event-detail-card__value">{{ $event->event_date->translatedFormat('l') }}</p>
+                        <p class="event-detail-card__sub">{{ $event->event_date->format('d. F Y') }}</p>
                     </div>
+                </div>
 
-                    <!-- Registration Form -->
-                    <div class="event__card event__form-card" id="anmeldung">
-                        <h3 class="event__form-title">Anmeldung</h3>
-                        <p class="event__form-intro">Sichere dir deinen Platz. Du erhältst eine Bestätigung per E-Mail.</p>
+                <div class="event-detail-card">
+                    <span class="event-detail-card__number">02</span>
+                    <div class="event-detail-card__content">
+                        <h3>Uhrzeit</h3>
+                        <p class="event-detail-card__value">{{ $event->start_time->format('H:i') }} Uhr</p>
+                        <p class="event-detail-card__sub">bis {{ $event->end_time->format('H:i') }} Uhr</p>
+                    </div>
+                </div>
 
-                        <form id="registrationForm">
-                            <input type="hidden" name="event_id" value="{{ $event->id }}">
+                <div class="event-detail-card">
+                    <span class="event-detail-card__number">03</span>
+                    <div class="event-detail-card__content">
+                        <h3>Ort</h3>
+                        <p class="event-detail-card__value">{{ $event->location }}</p>
+                        <p class="event-detail-card__sub">Genaue Adresse nach Anmeldung</p>
+                    </div>
+                </div>
 
+                <div class="event-detail-card">
+                    <span class="event-detail-card__number">04</span>
+                    <div class="event-detail-card__content">
+                        <h3>Teilnehmer</h3>
+                        <p class="event-detail-card__value">Max. {{ $event->max_participants }}</p>
+                        <p class="event-detail-card__sub">{{ $event->cost_basis }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-details__calendar fade-in">
+                <button type="button" class="btn btn--secondary" id="addToCalendar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                        <line x1="12" y1="14" x2="12" y2="18"></line>
+                        <line x1="10" y1="16" x2="14" y2="16"></line>
+                    </svg>
+                    In Kalender speichern
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration CTA Section -->
+    <section class="section section--large event-cta-section" id="anmeldung">
+        <div class="container">
+            <div class="event-cta__layout">
+                <div class="event-cta__content fade-in">
+                    <p class="event-cta__eyebrow">Sei dabei</p>
+                    <h2 class="event-cta__title">Sichere dir <span class="text-italic">deinen</span> Platz</h2>
+                    <p class="event-cta__text">Du erhältst eine Bestätigung per E-Mail mit allen weiteren Details.</p>
+                </div>
+
+                <div class="event-cta__form fade-in fade-in-delay-1">
+                    <form id="registrationForm" class="event-registration-form">
+                        <input type="hidden" name="event_id" value="{{ $event->id }}">
+
+                        <div class="form-row">
                             <div class="form-group">
                                 <label for="firstName">Vorname</label>
                                 <input type="text" id="firstName" name="first_name" placeholder="Dein Vorname" required>
@@ -179,24 +185,24 @@
                                 <label for="lastName">Nachname</label>
                                 <input type="text" id="lastName" name="last_name" placeholder="Dein Nachname" required>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="email">E-Mail</label>
-                                <input type="email" id="email" name="email" placeholder="deine@email.de" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="email">E-Mail</label>
+                            <input type="email" id="email" name="email" placeholder="deine@email.de" required>
+                        </div>
 
-                            <label class="form-checkbox">
-                                <input type="checkbox" name="privacy" required>
-                                <span>Ich habe die <a href="{{ route('datenschutz') }}" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
-                            </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" name="privacy" required>
+                            <span>Ich habe die <a href="{{ route('datenschutz') }}" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
+                        </label>
 
-                            <button type="submit" class="btn btn--primary event__submit-btn">
-                                Verbindlich anmelden
-                            </button>
+                        <button type="submit" class="btn btn--primary btn--large event__submit-btn">
+                            Verbindlich anmelden
+                        </button>
 
-                            <div id="registrationMessage"></div>
-                        </form>
-                    </div>
+                        <div id="registrationMessage"></div>
+                    </form>
                 </div>
             </div>
         </div>
