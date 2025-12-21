@@ -22,30 +22,59 @@ function initNavigation() {
 
   if (!navToggle || !nav) return;
 
-  navToggle.addEventListener('click', function () {
-    nav.classList.toggle('open');
-    navToggle.classList.toggle('active');
+  // Speichere die Scroll-Position
+  let scrollPosition = 0;
 
-    // Update ARIA
+  function openNav() {
+    scrollPosition = window.pageYOffset;
+    nav.classList.add('open');
+    navToggle.classList.add('active');
+    document.body.classList.add('nav-open');
+    document.body.style.top = `-${scrollPosition}px`;
+    navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Menü schließen');
+  }
+
+  function closeNav() {
+    nav.classList.remove('open');
+    navToggle.classList.remove('active');
+    document.body.classList.remove('nav-open');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollPosition);
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Menü öffnen');
+  }
+
+  navToggle.addEventListener('click', function () {
     const isOpen = nav.classList.contains('open');
-    navToggle.setAttribute('aria-expanded', isOpen);
-    navToggle.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
+    if (isOpen) {
+      closeNav();
+    } else {
+      openNav();
+    }
   });
 
   // Close nav when clicking on a link
   const navLinks = nav.querySelectorAll('.nav__link, .nav__cta');
   navLinks.forEach(link => {
     link.addEventListener('click', function () {
-      nav.classList.remove('open');
-      navToggle.classList.remove('active');
+      closeNav();
     });
   });
 
   // Close nav when clicking outside
   document.addEventListener('click', function (e) {
     if (!nav.contains(e.target) && !navToggle.contains(e.target)) {
-      nav.classList.remove('open');
-      navToggle.classList.remove('active');
+      if (nav.classList.contains('open')) {
+        closeNav();
+      }
+    }
+  });
+
+  // Close nav on Escape key
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && nav.classList.contains('open')) {
+      closeNav();
     }
   });
 }
