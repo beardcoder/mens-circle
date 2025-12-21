@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "awcodes/filament-gravatar": "*",
+        "awcodes/overlook": "^3.0",
         "filament/filament": "^4.0",
         "laravel/framework": "^12.0",
         "laravel/octane": "^2.13",
