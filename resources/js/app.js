@@ -40,7 +40,7 @@ function initNavigation() {
     navToggle.classList.remove('active');
     document.body.classList.remove('nav-open');
     document.body.style.top = '';
-    window.scrollTo(0, scrollPosition);
+    window.scrollTo({top: scrollPosition, left: 0, behavior: 'instant' });
     navToggle.setAttribute('aria-expanded', 'false');
     navToggle.setAttribute('aria-label', 'Menü öffnen');
   }
