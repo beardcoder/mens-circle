@@ -36,7 +36,7 @@ class Event extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom(fn ($model) => $model->event_date->format('Y-m-d'))
             ->saveSlugsTo('slug');
     }
 
