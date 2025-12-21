@@ -18,8 +18,12 @@ class EventController extends Controller
                 ->where('event_date', '>=', now())
                 ->orderBy('event_date')
                 ->with('confirmedRegistrations')
-                ->firstOrFail();
+                ->first();
         });
+
+        if (!$event) {
+            abort(404, 'Aktuell ist kein Event geplant. Bitte schauen Sie später wieder vorbei.');
+        }
 
         return view('event', compact('event'));
     }

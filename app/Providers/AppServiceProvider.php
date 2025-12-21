@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Page;
 use App\Observers\EventObserver;
 use App\Observers\PageObserver;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,5 +26,15 @@ class AppServiceProvider extends ServiceProvider
     {
         Page::observe(PageObserver::class);
         Event::observe(EventObserver::class);
+
+        View::composer('*', function ($view) {
+            $hasNextEvent = cache()->remember('has_next_event', 600, function () {
+                return Event::where('is_published', true)
+                    ->where('event_date', '>=', now())
+                    ->exists();
+            });
+
+            $view->with('hasNextEvent', $hasNextEvent);
+        });
     }
 }

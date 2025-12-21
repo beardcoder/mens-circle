@@ -62,7 +62,9 @@
                     <a href="{{ route('home') }}#ueber" class="nav__link">Über</a>
                     <a href="{{ route('home') }}#reise" class="nav__link">Die Reise</a>
                     <a href="{{ route('home') }}#faq" class="nav__link">Fragen</a>
-                    <a href="{{ route('event.show') }}" class="nav__cta">Nächster Termin</a>
+                    @if($hasNextEvent)
+                        <a href="{{ route('event.show') }}" class="nav__cta">Nächster Termin</a>
+                    @endif
                 </nav>
 
                 <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
@@ -97,7 +99,9 @@
                         <li><a href="{{ route('home') }}#ueber">Über uns</a></li>
                         <li><a href="{{ route('home') }}#reise">Die Reise</a></li>
                         <li><a href="{{ route('home') }}#faq">FAQ</a></li>
-                        <li><a href="{{ route('event.show') }}">Nächster Termin</a></li>
+                        @if($hasNextEvent)
+                            <li><a href="{{ route('event.show') }}">Nächster Termin</a></li>
+                        @endif
                     </ul>
                 </div>
 
