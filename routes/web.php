@@ -7,7 +7,8 @@ use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
-Route::get('/event', [EventController::class, 'show'])->name('event.show');
+Route::get('/event', [EventController::class, 'showNext'])->name('event.show');
+Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show.slug');
 Route::post('/event/register', [EventController::class, 'register'])->name('event.register');
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
