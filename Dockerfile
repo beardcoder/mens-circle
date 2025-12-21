@@ -57,7 +57,8 @@ RUN apk add --no-cache \
     libwebp \
     freetype \
     libzip \
-    oniguruma
+    oniguruma \
+    supervisor
 
 # Install PHP extensions
 RUN install-php-extensions \
@@ -102,6 +103,10 @@ RUN chmod -R 775 /app/storage /app/bootstrap/cache /app/database
 
 # Configure FrankenPHP Caddyfile
 COPY docker/Caddyfile /etc/caddy/Caddyfile
+
+# Configure Supervisor
+RUN mkdir -p /var/log/supervisor
+COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Set environment variables
 ENV APP_ENV=production
