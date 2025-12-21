@@ -46,9 +46,9 @@
   --border-on-dark: rgba(196, 180, 154, 0.15);
 
   /* Typography */
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-body: "DM Sans", "Segoe UI", sans-serif;
-  --font-accent: "Cormorant", Georgia, serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', 'Segoe UI', sans-serif;
+  --font-accent: 'Cormorant', Georgia, serif;
 
   /* Spacing */
   --space-xs: 0.5rem;
@@ -336,7 +336,7 @@ a {
 }
 
 .nav__link::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: -4px;
   left: 0;
@@ -426,20 +426,23 @@ a {
     gap: var(--space-md);
     opacity: 0;
     visibility: hidden;
-    transition: opacity var(--transition-medium), visibility var(--transition-medium);
+    transition:
+      opacity var(--transition-medium),
+      visibility var(--transition-medium);
     z-index: 1001;
     padding: var(--space-xl) var(--space-md);
   }
 
   /* Animated background gradient */
   .nav::before {
-    content: "";
+    content: '';
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg,
+    background: linear-gradient(
+      135deg,
       var(--color-earth-deep) 0%,
       var(--color-earth-dark) 50%,
       var(--color-earth-mid) 100%
@@ -451,7 +454,7 @@ a {
 
   /* Animated circles background */
   .nav::after {
-    content: "";
+    content: '';
     position: fixed;
     top: 50%;
     left: 50%;
@@ -516,7 +519,7 @@ a {
 
   /* Fancy underline on hover */
   .nav__link::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -8px;
     left: 50%;
@@ -582,7 +585,7 @@ body.nav-open {
 
 /* Texture overlay */
 .hero__bg::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -592,10 +595,11 @@ body.nav-open {
 
 /* Warm glow */
 .hero__bg::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       ellipse 80% 60% at 70% 30%,
       rgba(184, 111, 82, 0.15) 0%,
       transparent 50%
@@ -683,7 +687,7 @@ body.nav-open {
 }
 
 .hero__label::before {
-  content: "";
+  content: '';
   width: 50px;
   height: 1px;
   background: var(--color-terracotta);
@@ -745,11 +749,7 @@ body.nav-open {
 .hero__scroll-line {
   width: 1px;
   height: 80px;
-  background: linear-gradient(
-    to bottom,
-    var(--color-terracotta),
-    transparent
-  );
+  background: linear-gradient(to bottom, var(--color-terracotta), transparent);
   animation: scrollPulse 2.5s ease-in-out infinite;
 }
 
@@ -870,7 +870,7 @@ body.nav-open {
 }
 
 .btn--ghost::after {
-  content: " \2192";
+  content: ' \2192';
   transition: transform var(--transition-fast);
 }
 
@@ -923,7 +923,7 @@ body.nav-open {
 
 /* Earthy texture */
 .intro__image-area::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -951,7 +951,7 @@ body.nav-open {
 
 .intro__image-circles::before,
 .intro__image-circles::after {
-  content: "";
+  content: '';
   position: absolute;
   border: 1px solid var(--color-sand);
   border-radius: 50%;
@@ -1070,7 +1070,7 @@ body.nav-open {
 
 /* Large decorative text */
 .moderator-section::before {
-  content: "BEGLEITER";
+  content: 'BEGLEITER';
   position: absolute;
   top: 50%;
   left: -5%;
@@ -1105,7 +1105,7 @@ body.nav-open {
 }
 
 .moderator__photo::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -1231,7 +1231,7 @@ body.nav-open {
 }
 
 .journey-section::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -1239,7 +1239,7 @@ body.nav-open {
 }
 
 .journey-section::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background: radial-gradient(
@@ -1441,7 +1441,7 @@ body.nav-open {
 
 .faq-item__icon::before,
 .faq-item__icon::after {
-  content: "";
+  content: '';
   position: absolute;
   background: var(--color-earth-warm);
   transition: all var(--transition-medium);
@@ -1519,7 +1519,7 @@ body.nav-open {
 }
 
 .newsletter-section::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -1527,7 +1527,7 @@ body.nav-open {
 }
 
 .newsletter-section::after {
-  content: "";
+  content: '';
   position: absolute;
   top: -30%;
   right: -20%;
@@ -1626,7 +1626,7 @@ body.nav-open {
 }
 
 .cta-section::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1639,7 +1639,7 @@ body.nav-open {
 }
 
 .cta-section::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1895,7 +1895,7 @@ body.nav-open {
 }
 
 .event-intro__quote-area::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -1910,7 +1910,7 @@ body.nav-open {
 
 .event-intro__circles::before,
 .event-intro__circles::after {
-  content: "";
+  content: '';
   position: absolute;
   border: 1px solid var(--color-sand);
   border-radius: 50%;
@@ -1972,7 +1972,7 @@ body.nav-open {
 }
 
 .event-details-section::before {
-  content: "TERMIN";
+  content: 'TERMIN';
   position: absolute;
   top: var(--space-xl);
   right: var(--space-md);
@@ -2110,7 +2110,7 @@ body.nav-open {
 }
 
 .event-cta-section::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -2118,7 +2118,7 @@ body.nav-open {
 }
 
 .event-cta-section::after {
-  content: "";
+  content: '';
   position: absolute;
   top: -30%;
   right: -20%;
@@ -2197,8 +2197,8 @@ body.nav-open {
   margin-bottom: 0.5rem;
 }
 
-.event-registration-form .form-group input[type="text"],
-.event-registration-form .form-group input[type="email"] {
+.event-registration-form .form-group input[type='text'],
+.event-registration-form .form-group input[type='email'] {
   width: 100%;
   padding: 1rem 1.125rem;
   font-family: var(--font-body);
@@ -2403,7 +2403,7 @@ body.nav-open {
 }
 
 .event__form-card::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -2438,8 +2438,8 @@ body.nav-open {
   margin-bottom: 0.5rem;
 }
 
-.form-group input[type="text"],
-.form-group input[type="email"] {
+.form-group input[type='text'],
+.form-group input[type='email'] {
   width: 100%;
   padding: 1rem 1.125rem;
   font-family: var(--font-body);
@@ -2581,7 +2581,9 @@ body.nav-open {
 .fade-in {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
 }
 
 .fade-in.visible {
@@ -2605,7 +2607,9 @@ body.nav-open {
 .stagger-children > * {
   opacity: 0;
   transform: translateY(25px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 .stagger-children.visible > *:nth-child(1) {
@@ -2759,11 +2763,18 @@ body.nav-open {
   }
 
   /* Improve text contrast */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: var(--text-primary);
   }
 
-  p, li, span {
+  p,
+  li,
+  span {
     color: var(--text-secondary);
   }
 
@@ -2793,7 +2804,8 @@ body.nav-open {
     }
 
     .nav::before {
-      background: linear-gradient(135deg,
+      background: linear-gradient(
+        135deg,
         var(--dark-bg-base) 0%,
         var(--dark-bg-elevated) 50%,
         var(--dark-bg-section) 100%
@@ -3110,8 +3122,8 @@ body.nav-open {
     background: var(--bg-elevated);
   }
 
-  .form-group input[type="text"],
-  .form-group input[type="email"] {
+  .form-group input[type='text'],
+  .form-group input[type='email'] {
     background: var(--bg-input);
     border: 1px solid var(--border-light);
   }
