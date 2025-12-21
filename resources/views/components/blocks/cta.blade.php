@@ -14,9 +14,17 @@
             @endif
 
             @if(!empty($block['button_text']) && !empty($block['button_link']))
-                <a href="{{ $block['button_link'] }}" class="btn btn--primary btn--large">
-                    {{ $block['button_text'] }}
-                </a>
+                @php
+                    $isEventLink = str_contains($block['button_link'], route('event.show')) ||
+                                   str_contains($block['button_link'], '/event');
+                    $shouldShowButton = !$isEventLink || $hasNextEvent;
+                @endphp
+
+                @if($shouldShowButton)
+                    <a href="{{ $block['button_link'] }}" class="btn btn--primary btn--large">
+                        {{ $block['button_text'] }}
+                    </a>
+                @endif
             @endif
         </div>
     </div>

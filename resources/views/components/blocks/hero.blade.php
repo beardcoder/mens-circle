@@ -28,15 +28,23 @@
                 @endif
 
                 @if(!empty($block['button_text']) && !empty($block['button_link']))
-                    <div class="hero__cta">
-                        <a href="{{ $block['button_link'] }}" class="btn btn--primary btn--large">
-                            {{ $block['button_text'] }}
-                        </a>
-                        <div class="hero__scroll">
-                            <span>Entdecken</span>
-                            <div class="hero__scroll-line"></div>
+                    @php
+                        $isEventLink = str_contains($block['button_link'], route('event.show')) ||
+                                       str_contains($block['button_link'], '/event');
+                        $shouldShowButton = !$isEventLink || $hasNextEvent;
+                    @endphp
+
+                    @if($shouldShowButton)
+                        <div class="hero__cta">
+                            <a href="{{ $block['button_link'] }}" class="btn btn--primary btn--large">
+                                {{ $block['button_text'] }}
+                            </a>
+                            <div class="hero__scroll">
+                                <span>Entdecken</span>
+                                <div class="hero__scroll-line"></div>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 @endif
             </div>
         </div>
