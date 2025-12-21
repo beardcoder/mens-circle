@@ -11,7 +11,7 @@ class EventObserver
      */
     public function created(Event $event): void
     {
-        cache()->forget('event.next');
+        $this->clearEventCache();
     }
 
     /**
@@ -19,7 +19,7 @@ class EventObserver
      */
     public function updated(Event $event): void
     {
-        cache()->forget('event.next');
+        $this->clearEventCache();
     }
 
     /**
@@ -27,7 +27,7 @@ class EventObserver
      */
     public function deleted(Event $event): void
     {
-        cache()->forget('event.next');
+        $this->clearEventCache();
     }
 
     /**
@@ -35,7 +35,7 @@ class EventObserver
      */
     public function restored(Event $event): void
     {
-        cache()->forget('event.next');
+        $this->clearEventCache();
     }
 
     /**
@@ -43,6 +43,15 @@ class EventObserver
      */
     public function forceDeleted(Event $event): void
     {
+        $this->clearEventCache();
+    }
+
+    /**
+     * Clear all event-related cache.
+     */
+    protected function clearEventCache(): void
+    {
         cache()->forget('event.next');
+        cache()->forget('has_next_event');
     }
 }

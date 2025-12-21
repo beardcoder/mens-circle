@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class EventController extends Controller
 {
-    public function show(): View
+    public function showNext(): View
     {
         $event = cache()->remember('event.next', 600, function () {
             return Event::where('is_published', true)
@@ -24,6 +24,16 @@ class EventController extends Controller
         if (!$event) {
             abort(404, 'Aktuell ist kein Event geplant. Bitte schauen Sie später wieder vorbei.');
         }
+
+        return view('event', compact('event'));
+    }
+
+    public function show(string $slug): View
+    {
+        $event = Event::where('slug', $slug)
+            ->where('is_published', true)
+            ->with('confirmedRegistrations')
+            ->firstOrFail();
 
         return view('event', compact('event'));
     }
