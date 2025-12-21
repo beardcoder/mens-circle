@@ -100,7 +100,16 @@ class EventController extends Controller
         ]);
 
         // Send confirmation email
-        \Mail::to($registration->email)->send(new \App\Mail\EventRegistrationConfirmation($registration, $event));
+        try {
+            \Mail::to($registration->email)->send(new \App\Mail\EventRegistrationConfirmation($registration, $event));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send event registration confirmation email', [
+                'registration_id' => $registration->id,
+                'email' => $registration->email,
+                'error' => $e->getMessage(),
+            ]);
+            // Don't fail the registration if email fails
+        }
 
         return response()->json([
             'success' => true,

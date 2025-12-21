@@ -50,7 +50,16 @@ class NewsletterController extends Controller
         }
 
         // Send welcome email
-        \Mail::to($subscription->email)->send(new \App\Mail\NewsletterWelcome($subscription));
+        try {
+            \Mail::to($subscription->email)->send(new \App\Mail\NewsletterWelcome($subscription));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send newsletter welcome email', [
+                'subscription_id' => $subscription->id,
+                'email' => $subscription->email,
+                'error' => $e->getMessage(),
+            ]);
+            // Don't fail the subscription if email fails
+        }
 
         return response()->json([
             'success' => true,
