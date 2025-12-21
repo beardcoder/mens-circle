@@ -1,3 +1,761 @@
+# Men's Circle 2026 - AI Assistant Guide
+
+This document provides comprehensive guidance for AI assistants working on the Men's Circle 2026 (Männerkreis Straubing) application.
+
+---
+
+=== project overview ===
+
+## Project Description
+
+**Men's Circle 2026** is a professional German-language website for managing and organizing men's circle events. The application provides event management, newsletter subscriptions, online registrations, and CMS functionality for the Männerkreis Straubing community.
+
+**Primary Language:** German (de_DE locale)
+**Target Audience:** Men's circle participants in Straubing, Germany
+**Main Purpose:** Event coordination, community engagement, newsletter distribution
+
+---
+
+=== domain model ===
+
+## Core Data Models
+
+### Event
+**Purpose:** Represents men's circle gathering events
+
+**Key Fields:**
+- `title` - Event title (German)
+- `slug` - Auto-generated from `event_date` in format `YYYY-MM-DD`
+- `description` - Rich text event description
+- `event_date` - Date of the event (datetime)
+- `start_time`, `end_time` - Event duration
+- `location` - Venue name
+- `location_details` - Additional location information
+- `max_participants` - Capacity limit (default: 8)
+- `cost_basis` - Pricing information
+- `is_published` - Publication status (boolean)
+
+**Relationships:**
+- `hasMany(EventRegistration)` - All registrations
+- `confirmedRegistrations()` - Only confirmed registrations
+
+**Important Methods:**
+- `availableSpots()` - Returns remaining capacity
+- `isFull()` - Checks if event is at capacity
+- `getSlugOptions()` - Generates slug from event date
+
+**Traits:** `HasSlug`, `SoftDeletes`
+
+### EventRegistration
+**Purpose:** Tracks participant registrations for events
+
+**Key Fields:**
+- `event_id` - Foreign key to Event
+- `first_name`, `last_name`, `email` - Participant details
+- `privacy_accepted` - GDPR consent (boolean, required)
+- `status` - Registration status (default: 'confirmed')
+- `confirmed_at` - Timestamp of confirmation
+
+**Relationships:**
+- `belongsTo(Event)`
+
+**Business Logic:**
+- Duplicate registrations prevented (same email + event)
+- Automatic confirmation emails sent via `EventRegistrationConfirmation` mailable
+- Registration fails if event is full
+
+### Page
+**Purpose:** CMS for static and dynamic content pages
+
+**Key Fields:**
+- `title` - Page title
+- `slug` - URL-friendly identifier
+- `content_blocks` - JSON array of content blocks
+- `meta` - JSON array of SEO metadata
+- `is_published` - Publication status
+- `published_at` - Publication timestamp
+
+**Traits:** `HasSlug`, `SoftDeletes`
+
+**Special Pages:**
+- Impressum (legal imprint)
+- Datenschutz (privacy policy)
+- Custom content pages
+
+### Newsletter
+**Purpose:** Manages newsletter campaigns
+
+**Key Fields:**
+- `subject` - Email subject line
+- `content` - HTML email content
+- `sent_at` - Dispatch timestamp
+- `recipient_count` - Number of recipients
+- `status` - Campaign status ('draft', 'sending', 'sent')
+
+**Important Methods:**
+- `isSent()` - Check if newsletter has been sent
+- `isDraft()` - Check if newsletter is still in draft
+
+**Related Job:** `SendNewsletterJob` (queued for background dispatch)
+
+### NewsletterSubscription
+**Purpose:** Manages newsletter subscriber list
+
+**Key Fields:**
+- `email` - Subscriber email
+- `status` - Subscription status ('active', 'unsubscribed')
+- `token` - Unique 64-character unsubscribe token
+- `subscribed_at` - Subscription timestamp
+- `unsubscribed_at` - Unsubscription timestamp
+
+**Boot Method:**
+- Automatically generates unique token on creation
+- Sets `subscribed_at` to current timestamp
+
+**Mailables:**
+- `NewsletterWelcome` - Sent on new subscription
+- `NewsletterMail` - Campaign emails
+
+### User
+**Purpose:** Admin panel authentication
+
+**Standard Laravel user model for Filament admin access**
+
+---
+
+=== key features & workflows ===
+
+## Event Management Workflow
+
+1. **Event Creation** (Admin Panel)
+   - Admin creates event via Filament resource
+   - Slug auto-generated from `event_date` (YYYY-MM-DD format)
+   - Event can be saved as draft (`is_published = false`)
+   - EventObserver handles post-creation tasks
+
+2. **Event Publication**
+   - Admin sets `is_published = true`
+   - Event appears on public website
+   - Cache for `has_next_event` invalidated (600s TTL)
+
+3. **Participant Registration** (Public Website)
+   - User submits registration form via AJAX
+   - Controller validates: first_name, last_name, email, privacy_accepted
+   - System checks for duplicate registration (email + event)
+   - System verifies event has available spots
+   - Creates EventRegistration with status 'confirmed'
+   - Sends confirmation email (EventRegistrationConfirmation)
+   - Returns JSON response with success/error
+
+4. **Registration Management** (Admin Panel)
+   - View all registrations per event
+   - Track confirmed vs total registrations
+   - Monitor available spots in real-time
+
+## Newsletter System Workflow
+
+1. **Subscription** (Public Website)
+   - User submits email via newsletter form
+   - Unique 64-char token generated automatically
+   - `subscribed_at` timestamp recorded
+   - Welcome email sent (NewsletterWelcome)
+
+2. **Newsletter Creation** (Admin Panel)
+   - Admin creates newsletter in Filament
+   - Sets subject and HTML content
+   - Status defaults to 'draft'
+
+3. **Newsletter Dispatch** (Admin Panel)
+   - Admin navigates to custom "Send Newsletter" page
+   - Selects newsletter to send
+   - System dispatches SendNewsletterJob to queue
+   - Job iterates through active subscribers
+   - Each email includes unique unsubscribe link
+   - Updates newsletter status to 'sent'
+   - Records `recipient_count` and `sent_at`
+
+4. **Unsubscribe** (Public Website)
+   - User clicks unsubscribe link with token
+   - System validates token
+   - Updates status to 'unsubscribed'
+   - Records `unsubscribed_at` timestamp
+
+## CMS Content Workflow
+
+1. **Page Creation** (Admin Panel)
+   - Admin creates page via Filament
+   - Slug auto-generated from title
+   - Content stored as JSON blocks
+   - Meta data for SEO
+   - PageObserver handles updates
+
+2. **Page Publication**
+   - Set `is_published = true`
+   - Page accessible via `/{slug}` route
+
+3. **Special Pages**
+   - Impressum accessible at `/impressum`
+   - Datenschutz accessible at `/datenschutz`
+   - These have dedicated routes and controllers
+
+---
+
+=== frontend architecture ===
+
+## Technology Stack
+
+**CSS Framework:** Tailwind CSS 4.0.0
+**JavaScript:** Vanilla JavaScript (no framework)
+**Build Tool:** Vite 7.0.7
+**Reactive Components:** Livewire 3 (minimal usage)
+
+## CSS Architecture
+
+**File:** `resources/css/app.css` (2,977 lines)
+
+**Design System:**
+- CSS custom properties for theming
+- Earthy color palette:
+  - `--color-earth-deep` (deep brown)
+  - `--color-terracotta` (warm terracotta)
+  - `--color-sand` (light sand)
+  - `--color-sage` (muted green)
+  - `--color-clay` (rustic orange)
+- Dark mode support via `prefers-color-scheme: dark`
+- Mobile-first responsive design
+- Print styles included
+
+**Key Components:**
+- Hero section with animated circles
+- Split-layout intro section
+- Moderator showcase
+- Journey steps (4-column grid)
+- FAQ accordion
+- Newsletter signup section
+- Event detail cards
+- Event registration form
+
+## JavaScript Architecture
+
+**File:** `resources/js/app.js` (429 lines)
+
+**Component-Based Functions:**
+- `initNavigation()` - Mobile menu, scroll effects, header visibility
+- `initFAQ()` - Accordion interactions
+- `initNewsletterForm()` - Newsletter subscription handling
+- `initEventRegistration()` - Event registration form handling
+- `initScrollAnimations()` - Fade-in and stagger effects
+- `initCalendarLinks()` - ICS file generation, Google Calendar integration
+
+**Key Features:**
+- Fetch API for AJAX form submissions
+- CSRF token handling
+- IntersectionObserver for scroll animations
+- Email validation
+- Smooth scroll for anchor links
+- Scroll lock for mobile menu
+
+**No external JS frameworks** - Pure vanilla JavaScript for all interactions
+
+## View Structure
+
+**Main Layout:** `resources/views/layouts/app.blade.php`
+- Includes meta tags, Open Graph, Twitter Cards
+- Structured data stack
+- Navigation with dynamic `$hasNextEvent` flag
+- Footer
+- Vite asset loading
+
+**Blade Components:** `resources/views/components/blocks/`
+- Reusable content blocks
+- Each component accepts data and renders section
+- Used in page content builders
+
+**Email Templates:** `resources/views/emails/`
+- HTML email layouts
+- Responsive email design
+- Unsubscribe links included
+
+---
+
+=== project-specific conventions ===
+
+## Filament Resource Organization
+
+**Pattern:** Each Filament resource has a dedicated directory structure:
+
+```
+app/Filament/Resources/
+├── Events/
+│   ├── EventResource.php          # Main resource class
+│   ├── Schemas/
+│   │   └── EventForm.php          # Extracted form schema
+│   └── Tables/
+│       └── EventTable.php         # Extracted table definition
+```
+
+**Convention:**
+- Extract form schemas to dedicated `Schemas/` directory
+- Extract table definitions to `Tables/` directory
+- Keep resource class focused on configuration
+- Use namespaced classes for better organization
+
+**Example Form Schema:**
+```php
+namespace App\Filament\Resources\Events\Schemas;
+
+class EventForm
+{
+    public static function schema(): array
+    {
+        return [
+            // Filament form components
+        ];
+    }
+}
+```
+
+## Observer Pattern Usage
+
+**Location:** `app/Observers/`
+
+**Current Observers:**
+- `EventObserver` - Handles Event model lifecycle events
+- `PageObserver` - Handles Page model lifecycle events
+
+**Registration:** Observers are registered in `AppServiceProvider::boot()`
+
+```php
+Page::observe(PageObserver::class);
+Event::observe(EventObserver::class);
+```
+
+**Purpose:** Cache invalidation, slug generation, related data updates
+
+## View Composer Pattern
+
+**Global Data:** `AppServiceProvider` uses View Composer to share data across all views
+
+```php
+View::composer('*', function ($view) {
+    $hasNextEvent = cache()->remember('has_next_event', 600, function () {
+        return Event::where('is_published', true)
+            ->where('event_date', '>=', now())
+            ->exists();
+    });
+
+    $view->with('hasNextEvent', $hasNextEvent);
+});
+```
+
+**Purpose:** Conditional navigation links, header variations
+
+## Slug Generation Strategy
+
+**Events:** Slugs are auto-generated from `event_date` in `YYYY-MM-DD` format
+```php
+SlugOptions::create()
+    ->generateSlugsFrom(fn ($model) => $model->event_date->format('Y-m-d'))
+    ->saveSlugsTo('slug');
+```
+
+**Pages:** Slugs are auto-generated from `title` (Spatie default behavior)
+
+## Caching Strategy
+
+**Current Cache Usage:**
+- `has_next_event` - 600 second (10 minute) TTL
+- Driver: Database (configured in `.env`)
+
+**When to Invalidate:**
+- Event published/unpublished
+- Event date changed
+- Event deleted/restored
+
+## Queue Configuration
+
+**Driver:** Database (default for production)
+**Testing:** Sync queue for immediate execution
+
+**Queued Jobs:**
+- `SendNewsletterJob` - Dispatches newsletter emails
+- Implements `ShouldQueue` interface
+
+**Queue Worker:** Started via `composer run dev` script
+
+---
+
+=== routing conventions ===
+
+## Route Naming
+
+All routes use named routes for URL generation:
+
+**Pattern Routes:**
+- `home` - Homepage (/)
+- `event.show` - Next upcoming event (/event)
+- `event.show.slug` - Specific event by slug (/event/{slug})
+- `event.register` - Event registration (POST)
+- `newsletter.subscribe` - Newsletter subscription (POST)
+- `newsletter.unsubscribe` - Unsubscribe with token (GET)
+- `impressum` - Legal imprint (/impressum)
+- `datenschutz` - Privacy policy (/datenschutz)
+- `page.show` - Dynamic CMS pages (/{slug})
+
+**SEO Routes:**
+- `sitemap` - XML sitemap (/sitemap.xml)
+- `robots` - Robots.txt (/robots.txt)
+
+**Important:** Always use `route('name')` helper, never hardcode URLs
+
+**Catch-All Route:** `/{slug}` route MUST be last to avoid conflicts
+
+## Controller Methods
+
+**Pattern:** RESTful-style controller methods
+
+```php
+// Show resources
+public function show(string $slug): View
+public function showNext(): View
+
+// Store resources
+public function register(Request $request): JsonResponse
+public function subscribe(Request $request): JsonResponse
+
+// Update resources
+public function unsubscribe(string $token): RedirectResponse
+```
+
+**JSON Responses:** Event registration and newsletter subscription return JSON for AJAX handling
+
+---
+
+=== development workflows ===
+
+## Local Development Setup
+
+```bash
+# Initial setup
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+npm install && npm run build
+
+# Quick setup (uses composer script)
+composer run setup
+```
+
+## Development Server
+
+**Recommended:** Use the all-in-one dev script
+
+```bash
+composer run dev
+```
+
+**What it does:**
+- Starts PHP development server (localhost:8000)
+- Starts queue worker (with --tries=1)
+- Starts Laravel Pail (log viewer with --timeout=0)
+- Starts Vite dev server (HMR enabled)
+- Uses `concurrently` to run all in parallel
+- Color-coded output for each service
+- Kills all processes if one fails
+
+**Individual Commands:**
+```bash
+php artisan serve          # Server only
+php artisan queue:listen   # Queue worker only
+php artisan pail          # Logs only
+npm run dev               # Vite only
+```
+
+## Asset Building
+
+**Development:**
+```bash
+npm run dev  # Vite with HMR
+```
+
+**Production:**
+```bash
+npm run build  # Optimized bundle
+```
+
+**If frontend changes aren't visible:**
+- Ask user to run `npm run build` or `composer run dev`
+- Check Vite manifest file exists
+- Clear browser cache
+
+## Database Migrations
+
+**Running Migrations:**
+```bash
+php artisan migrate           # Run pending migrations
+php artisan migrate:fresh     # Drop all tables and re-migrate
+php artisan migrate --seed    # Run with seeders
+```
+
+**Creating Migrations:**
+```bash
+php artisan make:migration create_table_name --create=table_name
+php artisan make:migration add_column_to_table --table=table_name
+```
+
+## Code Formatting
+
+**CRITICAL:** Always run Pint before committing
+
+```bash
+vendor/bin/pint --dirty  # Format only changed files
+vendor/bin/pint          # Format all files
+```
+
+**Do not use:** `vendor/bin/pint --test` (only checks, doesn't fix)
+
+## Testing
+
+**Run all tests:**
+```bash
+php artisan test
+```
+
+**Run specific test file:**
+```bash
+php artisan test tests/Feature/EventTest.php
+```
+
+**Run filtered tests:**
+```bash
+php artisan test --filter=testEventRegistration
+```
+
+**Test Configuration:**
+- Database: In-memory SQLite
+- Session: Array driver
+- Cache: Array driver
+- Queue: Sync driver
+- Environment: `.env.testing` (if exists)
+
+---
+
+=== testing strategy ===
+
+## Test Organization
+
+**Location:**
+- `tests/Feature/` - Feature tests (HTTP, database, integration)
+- `tests/Unit/` - Unit tests (isolated logic)
+
+**Preference:** Most tests should be feature tests
+
+## Test Creation
+
+```bash
+# Feature test
+php artisan make:test EventRegistrationTest
+
+# Unit test
+php artisan make:test EventModelTest --unit
+```
+
+## Testing Best Practices
+
+1. **Test all paths:**
+   - Happy path (expected behavior)
+   - Failure path (validation errors, exceptions)
+   - Edge cases (boundary conditions, weird inputs)
+
+2. **Use factories:**
+   - Always use model factories in tests
+   - Check for custom factory states before manual setup
+   - Example: `Event::factory()->published()->create()`
+
+3. **Database handling:**
+   - Tests use in-memory SQLite (fast, isolated)
+   - Each test runs in transaction (auto-rollback)
+   - No need to manually clean database
+
+4. **Testing event registration:**
+```php
+public function test_user_can_register_for_event(): void
+{
+    $event = Event::factory()->published()->create();
+
+    $response = $this->postJson(route('event.register'), [
+        'event_id' => $event->id,
+        'first_name' => 'Max',
+        'last_name' => 'Mustermann',
+        'email' => 'max@example.com',
+        'privacy_accepted' => true,
+    ]);
+
+    $response->assertOk();
+    $this->assertDatabaseHas('event_registrations', [
+        'email' => 'max@example.com',
+        'event_id' => $event->id,
+    ]);
+}
+```
+
+5. **Testing newsletter subscription:**
+```php
+public function test_user_can_subscribe_to_newsletter(): void
+{
+    Mail::fake();
+
+    $response = $this->postJson(route('newsletter.subscribe'), [
+        'email' => 'subscriber@example.com',
+    ]);
+
+    $response->assertOk();
+    Mail::assertSent(NewsletterWelcome::class);
+    $this->assertDatabaseHas('newsletter_subscriptions', [
+        'email' => 'subscriber@example.com',
+        'status' => 'active',
+    ]);
+}
+```
+
+## After Tests Pass
+
+**Workflow:**
+1. Run specific test after making changes
+2. Verify test passes
+3. Ask user if they want to run full test suite
+4. Run `vendor/bin/pint --dirty` before committing
+
+---
+
+=== filament admin panel ===
+
+## Admin Panel Access
+
+**URL:** `/admin`
+**Authentication:** Standard Laravel authentication with User model
+
+## Custom Filament Pages
+
+**Location:** `app/Filament/Pages/`
+
+**Current Custom Pages:**
+- `SendNewsletter` - Custom interface for dispatching newsletter campaigns
+
+**View:** `resources/views/filament/pages/send-newsletter.blade.php`
+
+## Filament Resources
+
+**Pattern:** One resource per model
+
+**Available Resources:**
+- `EventResource` - CRUD for events
+- `EventRegistrationResource` - View registrations
+- `PageResource` - CMS page management
+- `NewsletterResource` - Newsletter campaigns
+- `NewsletterSubscriptionResource` - Subscriber management
+
+## Filament Configuration
+
+**Location:** `app/Providers/Filament/AdminPanelProvider.php`
+
+**Features:**
+- Gravatar integration for user avatars
+- Overlook plugin for dashboard widgets
+- Custom color scheme (if configured)
+- Navigation organization
+
+---
+
+=== important notes for ai assistants ===
+
+## Language Context
+
+**Primary Language:** German (Germany)
+- All user-facing content is in German
+- Email templates are in German
+- Validation messages should be in German
+- Admin panel can be English (Filament default)
+
+**When creating content:**
+- Use formal German ("Sie" form) for public website
+- Use appropriate German formatting (dates, numbers)
+- Follow German legal requirements (Impressum, Datenschutz)
+
+## GDPR Compliance
+
+**Requirements:**
+- Privacy acceptance required for event registrations
+- Unsubscribe links in all marketing emails
+- Data retention policies (soft deletes)
+- Clear data usage statements
+
+**Implementation:**
+- `privacy_accepted` field on EventRegistration (required)
+- Unique tokens for newsletter unsubscribe
+- Soft deletes on models for data recovery
+- Dedicated privacy policy page
+
+## Performance Considerations
+
+**Caching:**
+- Use cache for expensive queries
+- Set appropriate TTL (e.g., 600s for event queries)
+- Invalidate cache when data changes (use observers)
+
+**Eager Loading:**
+- Always eager load relationships to prevent N+1
+- Example: `Event::with('confirmedRegistrations')->get()`
+
+**Queue Usage:**
+- Queue time-consuming operations (email sending)
+- Use database queue for production
+- Test with sync queue
+
+## Security Best Practices
+
+**Already Implemented:**
+- CSRF token validation on all forms
+- Email validation
+- Soft deletes for data safety
+- Unique token generation for unsubscribe
+
+**Always Maintain:**
+- Validate all user input
+- Use Form Requests for complex validation
+- Sanitize output in views (Blade automatic escaping)
+- Follow Laravel security best practices
+
+## Common Tasks
+
+**Adding a new field to Event:**
+1. Create migration: `php artisan make:migration add_field_to_events --table=events`
+2. Update Event model `$fillable` array
+3. Add cast if needed (date, boolean, etc.)
+4. Update EventForm schema in Filament
+5. Update views if needed
+6. Run migration: `php artisan migrate`
+
+**Creating a new CMS page:**
+1. Use Filament admin panel (/admin)
+2. Navigate to Pages resource
+3. Create new page with title and content
+4. Slug auto-generated from title
+5. Set `is_published = true`
+6. Access via `/{slug}` route
+
+**Sending a newsletter:**
+1. Create newsletter in admin panel (Newsletters resource)
+2. Write subject and content (HTML)
+3. Navigate to "Send Newsletter" custom page
+4. Select newsletter from dropdown
+5. Click send button
+6. Job dispatched to queue
+7. Queue worker processes SendNewsletterJob
+
+---
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
