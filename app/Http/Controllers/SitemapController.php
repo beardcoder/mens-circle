@@ -21,7 +21,7 @@ class SitemapController extends Controller
         // Homepage
         $xml .= '<url>';
         $xml .= '<loc>' . route('home') . '</loc>';
-        $xml .= '<lastmod>' . now()->toAtomString() . '</lastmod>';
+        $xml .= '<lastmod>' . now()->toW3cString() . '</lastmod>';
         $xml .= '<changefreq>weekly</changefreq>';
         $xml .= '<priority>1.0</priority>';
         $xml .= '</url>';
@@ -29,7 +29,7 @@ class SitemapController extends Controller
         // Events
         $xml .= '<url>';
         $xml .= '<loc>' . route('event.show') . '</loc>';
-        $xml .= '<lastmod>' . ($events->first()?->updated_at ?? now())->toAtomString() . '</lastmod>';
+        $xml .= '<lastmod>' . ($events->first()?->updated_at ?? now())->toW3cString() . '</lastmod>';
         $xml .= '<changefreq>daily</changefreq>';
         $xml .= '<priority>0.9</priority>';
         $xml .= '</url>';
@@ -42,7 +42,7 @@ class SitemapController extends Controller
 
             $xml .= '<url>';
             $xml .= '<loc>' . route('page.show', $page->slug) . '</loc>';
-            $xml .= '<lastmod>' . $page->updated_at->toAtomString() . '</lastmod>';
+            $xml .= '<lastmod>' . $page->updated_at->toW3cString() . '</lastmod>';
             $xml .= '<changefreq>monthly</changefreq>';
             $xml .= '<priority>0.8</priority>';
             $xml .= '</url>';
@@ -51,14 +51,14 @@ class SitemapController extends Controller
         // Legal pages
         $xml .= '<url>';
         $xml .= '<loc>' . route('impressum') . '</loc>';
-        $xml .= '<lastmod>' . now()->toAtomString() . '</lastmod>';
+        $xml .= '<lastmod>' . now()->toW3cString() . '</lastmod>';
         $xml .= '<changefreq>yearly</changefreq>';
         $xml .= '<priority>0.3</priority>';
         $xml .= '</url>';
 
         $xml .= '<url>';
         $xml .= '<loc>' . route('datenschutz') . '</loc>';
-        $xml .= '<lastmod>' . now()->toAtomString() . '</lastmod>';
+        $xml .= '<lastmod>' . now()->toW3cString() . '</lastmod>';
         $xml .= '<changefreq>yearly</changefreq>';
         $xml .= '<priority>0.3</priority>';
         $xml .= '</url>';

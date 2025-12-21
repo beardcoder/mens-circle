@@ -9,10 +9,11 @@
 
             <h2>Angaben gemäß § 5 TMG</h2>
             <p>
+                <strong>WICHTIG: Vor Go-Live vervollständigen!</strong><br><br>
                 Markus Sommer<br>
                 Männerkreis Straubing<br>
-                [Adresse]<br>
-                [PLZ Ort]
+                Musterstraße 123<br>
+                94315 Straubing
             </p>
 
             <h2>Kontakt</h2>
