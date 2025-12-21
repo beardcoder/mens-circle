@@ -15,10 +15,10 @@ chmod -R 775 /app/storage /app/bootstrap/cache
 
 # Ensure SQLite database exists (if using SQLite)
 if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
-    mkdir -p /app/storage/database
-    touch /app/storage/database/database.sqlite
-    chown www-data:www-data /app/storage/database/database.sqlite
-    chmod 664 /app/storage/database/database.sqlite
+    mkdir -p /app/database
+    touch /app/database/database.sqlite
+    chown www-data:www-data /app/database/database.sqlite
+    chmod 664 /app/database/database.sqlite
 fi
 
 # Generate app key if not set
@@ -45,9 +45,6 @@ fi
 # Create storage symlink
 php artisan storage:link --force 2>/dev/null || true
 
-# Start Supervisor for queue workers
-echo "Starting Supervisor for queue workers..."
-/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
-
-# Execute the main command
-exec "$@"
+# Start Supervisor to manage all processes (FrankenPHP + queue workers)
+echo "Starting Supervisor to manage FrankenPHP and queue workers..."
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

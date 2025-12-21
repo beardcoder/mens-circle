@@ -3,13 +3,6 @@
     auto_https off
     admin :2019
 
-    frankenphp {
-        # Configure FrankenPHP
-        worker /app/public/frankenphp-worker.php {
-            num {$FRANKENPHP_WORKERS:auto}
-        }
-    }
-
     # Logging
     log {
         level ERROR

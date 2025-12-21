@@ -58,7 +58,8 @@ RUN apk add --no-cache \
     freetype \
     libzip \
     oniguruma \
-    supervisor
+    supervisor \
+    curl
 
 # Install PHP extensions
 RUN install-php-extensions \
@@ -127,6 +128,3 @@ COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-# Start FrankenPHP with Octane
-CMD ["php", "artisan", "octane:frankenphp", "--host=0.0.0.0", "--port=80", "--admin-port=2019"]
