@@ -47,6 +47,7 @@ function initNavigation() {
 
   navToggle.addEventListener('click', function () {
     const isOpen = nav.classList.contains('open');
+
     if (isOpen) {
       closeNav();
     } else {
@@ -56,7 +57,8 @@ function initNavigation() {
 
   // Close nav when clicking on a link
   const navLinks = nav.querySelectorAll('.nav__link, .nav__cta');
-  navLinks.forEach(link => {
+
+  navLinks.forEach((link) => {
     link.addEventListener('click', function () {
       closeNav();
     });
@@ -84,21 +86,26 @@ function initNavigation() {
  */
 function initScrollHeader() {
   const header = document.getElementById('header');
+
   if (!header) return;
 
   let lastScroll = 0;
 
-  window.addEventListener('scroll', function () {
-    const currentScroll = window.pageYOffset;
+  window.addEventListener(
+    'scroll',
+    function () {
+      const currentScroll = window.pageYOffset;
 
-    if (currentScroll > 50) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
+      if (currentScroll > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
 
-    lastScroll = currentScroll;
-  }, { passive: true });
+      lastScroll = currentScroll;
+    },
+    { passive: true }
+  );
 }
 
 /**
@@ -107,18 +114,21 @@ function initScrollHeader() {
 function initFAQ() {
   const faqItems = document.querySelectorAll('.faq-item');
 
-  faqItems.forEach(item => {
+  faqItems.forEach((item) => {
     const question = item.querySelector('.faq-item__question');
+
     if (!question) return;
 
     question.addEventListener('click', function () {
       const isActive = item.classList.contains('active');
 
       // Close all other items
-      faqItems.forEach(otherItem => {
+      faqItems.forEach((otherItem) => {
         if (otherItem !== item) {
           otherItem.classList.remove('active');
-          otherItem.querySelector('.faq-item__question').setAttribute('aria-expanded', 'false');
+          otherItem
+            .querySelector('.faq-item__question')
+            .setAttribute('aria-expanded', 'false');
         }
       });
 
@@ -135,6 +145,7 @@ function initFAQ() {
 function initForms() {
   // Newsletter Form
   const newsletterForm = document.getElementById('newsletterForm');
+
   if (newsletterForm) {
     newsletterForm.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -144,6 +155,7 @@ function initForms() {
 
   // Registration Form
   const registrationForm = document.getElementById('registrationForm');
+
   if (registrationForm) {
     registrationForm.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -159,7 +171,12 @@ function handleNewsletterSubmit(form) {
   const submitButton = form.querySelector('button[type="submit"]');
 
   if (!validateEmail(email)) {
-    showMessage(messageContainer, 'Bitte gib eine gültige E-Mail-Adresse ein.', 'error');
+    showMessage(
+      messageContainer,
+      'Bitte gib eine gültige E-Mail-Adresse ein.',
+      'error'
+    );
+
     return;
   }
 
@@ -173,27 +190,35 @@ function handleNewsletterSubmit(form) {
     headers: {
       'Content-Type': 'application/json',
       'X-CSRF-TOKEN': window.routes.csrfToken,
-      'Accept': 'application/json'
+      Accept: 'application/json',
     },
-    body: JSON.stringify({ email })
+    body: JSON.stringify({ email }),
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      showMessage(messageContainer, data.message, 'success');
-      form.reset();
-    } else {
-      showMessage(messageContainer, data.message || 'Ein Fehler ist aufgetreten.', 'error');
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    showMessage(messageContainer, 'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.', 'error');
-  })
-  .finally(() => {
-    submitButton.disabled = false;
-    submitButton.textContent = 'Anmelden';
-  });
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        showMessage(messageContainer, data.message, 'success');
+        form.reset();
+      } else {
+        showMessage(
+          messageContainer,
+          data.message || 'Ein Fehler ist aufgetreten.',
+          'error'
+        );
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      showMessage(
+        messageContainer,
+        'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.',
+        'error'
+      );
+    })
+    .finally(() => {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Anmelden';
+    });
 }
 
 function handleRegistrationSubmit(form) {
@@ -209,17 +234,32 @@ function handleRegistrationSubmit(form) {
 
   // Validation
   if (!firstName || !lastName) {
-    showMessage(messageContainer, 'Bitte fülle alle Pflichtfelder aus.', 'error');
+    showMessage(
+      messageContainer,
+      'Bitte fülle alle Pflichtfelder aus.',
+      'error'
+    );
+
     return;
   }
 
   if (!validateEmail(email)) {
-    showMessage(messageContainer, 'Bitte gib eine gültige E-Mail-Adresse ein.', 'error');
+    showMessage(
+      messageContainer,
+      'Bitte gib eine gültige E-Mail-Adresse ein.',
+      'error'
+    );
+
     return;
   }
 
   if (!privacy) {
-    showMessage(messageContainer, 'Bitte bestätige die Datenschutzerklärung.', 'error');
+    showMessage(
+      messageContainer,
+      'Bitte bestätige die Datenschutzerklärung.',
+      'error'
+    );
+
     return;
   }
 
@@ -233,37 +273,46 @@ function handleRegistrationSubmit(form) {
     headers: {
       'Content-Type': 'application/json',
       'X-CSRF-TOKEN': window.routes.csrfToken,
-      'Accept': 'application/json'
+      Accept: 'application/json',
     },
     body: JSON.stringify({
       event_id: eventId,
       first_name: firstName,
       last_name: lastName,
       email: email,
-      privacy: privacy ? 1 : 0
+      privacy: privacy ? 1 : 0,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        showMessage(messageContainer, data.message, 'success');
+        form.reset();
+      } else {
+        showMessage(
+          messageContainer,
+          data.message || 'Ein Fehler ist aufgetreten.',
+          'error'
+        );
+      }
     })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      showMessage(messageContainer, data.message, 'success');
-      form.reset();
-    } else {
-      showMessage(messageContainer, data.message || 'Ein Fehler ist aufgetreten.', 'error');
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    showMessage(messageContainer, 'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.', 'error');
-  })
-  .finally(() => {
-    submitButton.disabled = false;
-    submitButton.textContent = 'Verbindlich anmelden';
-  });
+    .catch((error) => {
+      console.error('Error:', error);
+      showMessage(
+        messageContainer,
+        'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.',
+        'error'
+      );
+    })
+    .finally(() => {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Verbindlich anmelden';
+    });
 }
 
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   return re.test(email);
 }
 
@@ -291,22 +340,25 @@ function initScrollAnimations() {
 
   // Check if IntersectionObserver is supported
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
 
-    allAnimatedElements.forEach(el => observer.observe(el));
+    allAnimatedElements.forEach((el) => observer.observe(el));
   } else {
     // Fallback: show all elements immediately
-    allAnimatedElements.forEach(el => el.classList.add('visible'));
+    allAnimatedElements.forEach((el) => el.classList.add('visible'));
   }
 }
 
@@ -324,12 +376,13 @@ function initCalendarIntegration() {
   // Get event data from window object (set in event.blade.php)
   const eventData = window.eventData || {
     title: 'Männerkreis Straubing',
-    description: 'Treffen des Männerkreis Straubing. Ein Raum für echte Begegnung unter Männern.',
+    description:
+      'Treffen des Männerkreis Straubing. Ein Raum für echte Begegnung unter Männern.',
     location: 'Straubing (genaue Adresse nach Anmeldung)',
     startDate: '2025-01-24',
     startTime: '19:00',
     endDate: '2025-01-24',
-    endTime: '21:30'
+    endTime: '21:30',
   };
 
   addToCalendarBtn.addEventListener('click', function () {
@@ -339,7 +392,10 @@ function initCalendarIntegration() {
       // Generate ICS file
       if (calendarICS) {
         const icsContent = generateICS(eventData);
-        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const blob = new Blob([icsContent], {
+          type: 'text/calendar;charset=utf-8',
+        });
+
         calendarICS.href = URL.createObjectURL(blob);
       }
 
@@ -363,12 +419,19 @@ function initCalendarIntegration() {
 function generateICS(event) {
   const formatDate = (date, time) => {
     const d = new Date(`${date}T${time}:00`);
-    return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+
+    return d
+      .toISOString()
+      .replace(/[-:]/g, '')
+      .replace(/\.\d{3}/, '');
   };
 
   const start = formatDate(event.startDate, event.startTime);
   const end = formatDate(event.endDate, event.endTime);
-  const now = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const now = new Date()
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}/, '');
 
   return `BEGIN:VCALENDAR
 VERSION:2.0
@@ -399,7 +462,7 @@ function generateGoogleCalendarUrl(event) {
     dates: `${formatGoogleDate(event.startDate, event.startTime)}/${formatGoogleDate(event.endDate, event.endTime)}`,
     details: event.description,
     location: event.location,
-    ctz: 'Europe/Berlin'
+    ctz: 'Europe/Berlin',
   });
 
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
@@ -408,20 +471,26 @@ function generateGoogleCalendarUrl(event) {
 /**
  * Smooth scroll for anchor links
  */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener('click', function (e) {
     const targetId = this.getAttribute('href');
+
     if (targetId === '#') return;
 
     const target = document.querySelector(targetId);
+
     if (target) {
       e.preventDefault();
       const headerHeight = document.getElementById('header')?.offsetHeight || 0;
-      const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+      const targetPosition =
+        target.getBoundingClientRect().top +
+        window.pageYOffset -
+        headerHeight -
+        20;
 
       window.scrollTo({
         top: targetPosition,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }
   });

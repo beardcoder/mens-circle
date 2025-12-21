@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->profile()
             ->defaultAvatarProvider(GravatarProvider::class)
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->plugins([
                 GravatarPlugin::make(),
                 OverlookPlugin::make()
@@ -48,7 +49,13 @@ class AdminPanelProvider extends PanelProvider
                     ]),
             ])
             ->colors([
-                'primary' => Color::Yellow,
+                'primary' => Color::hex('#b86f52'), // Terracotta
+                'secondary' => Color::hex('#7a6248'), // Earth Warm
+                'success' => Color::hex('#5c4a3a'), // Earth Mid
+                'danger' => Color::hex('#b85252'), // Warm Red
+                'warning' => Color::hex('#d4907a'), // Terracotta Light
+                'info' => Color::hex('#c4b49a'), // Sand
+                'gray' => Color::hex('#3d3224'), // Earth Dark
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
