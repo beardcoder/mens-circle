@@ -3,9 +3,6 @@
    Earthy Design System Integration
    ================================================ */
 
-@import '/css/app.css';
-
-/* Import Tailwind base for Filament */
 @import 'tailwindcss';
 
 /* Custom Filament Theme Variables */
