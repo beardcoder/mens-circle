@@ -1,7 +1,7 @@
 <section class="hero">
     <div class="hero__bg"
-        @if(!empty($block['background_image']))
-            style="background-image: url('{{ Storage::url($block['background_image']) }}'); background-size: cover; background-position: center;"
+        @if($block->hasMedia('images'))
+            style="background-image: url('{{ $block->getFirstMediaUrl('images', 'responsive') }}'); background-size: cover; background-position: center;"
         @endif
     ></div>
 
@@ -14,34 +14,34 @@
 
     <div class="container">
         <div class="hero__content">
-            @if(!empty($block['label']))
-                <p class="hero__label fade-in">{{ $block['label'] }}</p>
+            @if(!empty($block->data['label']))
+                <p class="hero__label fade-in">{{ $block->data['label'] }}</p>
             @endif
 
-            @if(!empty($block['title']))
+            @if(!empty($block->data['title']))
                 <h1 class="hero__title fade-in fade-in-delay-1">
-                    {!! $block['title'] !!}
+                    {!! $block->data['title'] !!}
                 </h1>
             @endif
 
             <div class="hero__bottom fade-in fade-in-delay-2">
-                @if(!empty($block['description']))
+                @if(!empty($block->data['description']))
                     <p class="hero__description">
-                        {{ $block['description'] }}
+                        {{ $block->data['description'] }}
                     </p>
                 @endif
 
-                @if(!empty($block['button_text']) && !empty($block['button_link']))
+                @if(!empty($block->data['button_text']) && !empty($block->data['button_link']))
                     @php
-                        $isEventLink = str_contains($block['button_link'], route('event.show')) ||
-                                       str_contains($block['button_link'], '/event');
+                        $isEventLink = str_contains($block->data['button_link'], route('event.show')) ||
+                                       str_contains($block->data['button_link'], '/event');
                         $shouldShowButton = !$isEventLink || $hasNextEvent;
                     @endphp
 
                     @if($shouldShowButton)
                         <div class="hero__cta">
-                            <a href="{{ $block['button_link'] }}" class="btn btn--primary btn--large">
-                                {{ $block['button_text'] }}
+                            <a href="{{ $block->data['button_link'] }}" class="btn btn--primary btn--large">
+                                {{ $block->data['button_text'] }}
                             </a>
                             <div class="hero__scroll">
                                 <span>Entdecken</span>
@@ -53,4 +53,11 @@
             </div>
         </div>
     </div>
+
+    @if($block->hasMedia('images'))
+        <picture style="display: none;">
+            <source srcset="{{ $block->getFirstMediaUrl('images', 'responsive-avif') }}" type="image/avif">
+            <source srcset="{{ $block->getFirstMediaUrl('images', 'responsive') }}" type="image/webp">
+        </picture>
+    @endif
 </section>

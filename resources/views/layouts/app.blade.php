@@ -133,8 +133,8 @@
                     &copy; {{ date('Y') }} Männerkreis Straubing
                 </p>
                 <div class="footer__legal">
-                    <a href="{{ route('impressum') }}">Impressum</a>
-                    <a href="{{ route('datenschutz') }}">Datenschutz</a>
+                    <a href="{{ route('page.show', 'impressum') }}">Impressum</a>
+                    <a href="{{ route('page.show', 'datenschutz') }}">Datenschutz</a>
                 </div>
             </div>
         </div>

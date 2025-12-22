@@ -2,16 +2,16 @@
     <div class="container">
         <div class="newsletter__layout fade-in">
             <div class="newsletter__content">
-                @if(!empty($block['eyebrow']))
-                    <p class="newsletter__eyebrow">{{ $block['eyebrow'] }}</p>
+                @if(!empty($block->data['eyebrow']))
+                    <p class="newsletter__eyebrow">{{ $block->data['eyebrow'] }}</p>
                 @endif
 
-                @if(!empty($block['title']))
-                    <h2 class="newsletter__title">{!! $block['title'] !!}</h2>
+                @if(!empty($block->data['title']))
+                    <h2 class="newsletter__title">{!! $block->data['title'] !!}</h2>
                 @endif
 
-                @if(!empty($block['text']))
-                    <p class="newsletter__text">{{ $block['text'] }}</p>
+                @if(!empty($block->data['text']))
+                    <p class="newsletter__text">{{ $block->data['text'] }}</p>
                 @endif
             </div>
 
