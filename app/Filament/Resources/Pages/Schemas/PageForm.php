@@ -53,7 +53,7 @@ class PageForm
                                     ->reactive()
                                     ->afterStateUpdated(fn ($state, callable $set) => $set('data', [])),
 
-                                // Eyebrow - used by: intro, text_section, value_items, moderator, journey_steps, faq, newsletter, cta
+                                // Eyebrow field
                                 TextInput::make('data.eyebrow')
                                     ->label('Überschrift (klein)')
                                     ->visible(fn (Get $get) => in_array($get('type'), [
@@ -67,67 +67,71 @@ class PageForm
                                         ContentBlockType::Cta->value,
                                     ])),
 
-                                // Label - used by: hero
+                                // Label field (Hero only)
                                 TextInput::make('data.label')
                                     ->label('Label (klein)')
                                     ->visible(fn (Get $get) => $get('type') === ContentBlockType::Hero->value),
 
-                                // Title as TextInput - used by: text_section, value_items
-                                TextInput::make('data.title')
-                                    ->label('Titel')
-                                    ->visible(fn (Get $get) => in_array($get('type'), [
-                                        ContentBlockType::TextSection->value,
-                                        ContentBlockType::ValueItems->value,
-                                    ])),
-
-                                // Title as Textarea (HTML) - used by: hero, intro, journey_steps, faq, newsletter, cta
+                                // Title field (all types that need title)
                                 Textarea::make('data.title')
-                                    ->label('Titel (HTML erlaubt)')
-                                    ->rows(2)
-                                    ->visible(fn (Get $get) => in_array($get('type'), [
+                                    ->label(fn (Get $get) => in_array($get('type'), [
                                         ContentBlockType::Hero->value,
                                         ContentBlockType::Intro->value,
                                         ContentBlockType::JourneySteps->value,
                                         ContentBlockType::Faq->value,
                                         ContentBlockType::Newsletter->value,
                                         ContentBlockType::Cta->value,
+                                    ]) ? 'Titel (HTML erlaubt)' : 'Titel')
+                                    ->rows(fn (Get $get) => in_array($get('type'), [
+                                        ContentBlockType::TextSection->value,
+                                        ContentBlockType::ValueItems->value,
+                                    ]) ? 1 : 2)
+                                    ->visible(fn (Get $get) => in_array($get('type'), [
+                                        ContentBlockType::Hero->value,
+                                        ContentBlockType::Intro->value,
+                                        ContentBlockType::TextSection->value,
+                                        ContentBlockType::ValueItems->value,
+                                        ContentBlockType::JourneySteps->value,
+                                        ContentBlockType::Faq->value,
+                                        ContentBlockType::Newsletter->value,
+                                        ContentBlockType::Cta->value,
                                     ])),
 
-                                // Name - used by: moderator
+                                // Name field (Moderator only)
                                 Textarea::make('data.name')
                                     ->label('Name (HTML erlaubt für <span class="light">)')
                                     ->rows(2)
                                     ->visible(fn (Get $get) => $get('type') === ContentBlockType::Moderator->value),
 
-                                // Description - used by: hero
+                                // Description field (Hero only)
                                 Textarea::make('data.description')
                                     ->label('Beschreibung')
                                     ->rows(3)
                                     ->visible(fn (Get $get) => $get('type') === ContentBlockType::Hero->value),
 
-                                // Text - used by: intro, newsletter, cta
+                                // Text field
                                 Textarea::make('data.text')
                                     ->label('Text')
-                                    ->rows(3)
+                                    ->rows(fn (Get $get) => $get('type') === ContentBlockType::Newsletter->value ? 2 : 3)
                                     ->visible(fn (Get $get) => in_array($get('type'), [
                                         ContentBlockType::Intro->value,
                                         ContentBlockType::Newsletter->value,
                                         ContentBlockType::Cta->value,
                                     ])),
 
-                                // Subtitle - used by: journey_steps
+                                // Subtitle field (JourneySteps only)
                                 Textarea::make('data.subtitle')
                                     ->label('Untertitel')
                                     ->rows(2)
                                     ->visible(fn (Get $get) => $get('type') === ContentBlockType::JourneySteps->value),
 
-                                // Intro - used by: faq
+                                // Intro field (FAQ only)
                                 Textarea::make('data.intro')
                                     ->label('Intro Text')
                                     ->rows(2)
                                     ->visible(fn (Get $get) => $get('type') === ContentBlockType::Faq->value),
 
-                                // Quote - used by: intro, moderator
+                                // Quote field
                                 Textarea::make('data.quote')
                                     ->label('Zitat')
                                     ->rows(fn (Get $get) => $get('type') === ContentBlockType::Intro->value ? 2 : 3)
@@ -137,17 +141,17 @@ class PageForm
                                         ContentBlockType::Moderator->value,
                                     ])),
 
-                                // Content (RichEditor) - used by: text_section, moderator (as bio)
+                                // Content field (TextSection only)
                                 RichEditor::make('data.content')
                                     ->label('Inhalt')
                                     ->visible(fn (Get $get) => $get('type') === ContentBlockType::TextSection->value),
 
-                                // Bio (RichEditor) - used by: moderator
+                                // Bio field (Moderator only)
                                 RichEditor::make('data.bio')
                                     ->label('Biografie')
                                     ->visible(fn (Get $get) => $get('type') === ContentBlockType::Moderator->value),
 
-                                // Button Text - used by: hero, cta
+                                // Button Text field
                                 TextInput::make('data.button_text')
                                     ->label('Button Text')
                                     ->visible(fn (Get $get) => in_array($get('type'), [
@@ -155,7 +159,7 @@ class PageForm
                                         ContentBlockType::Cta->value,
                                     ])),
 
-                                // Button Link - used by: hero, cta
+                                // Button Link field
                                 TextInput::make('data.button_link')
                                     ->label('Button Link')
                                     ->visible(fn (Get $get) => in_array($get('type'), [
@@ -163,7 +167,7 @@ class PageForm
                                         ContentBlockType::Cta->value,
                                     ])),
 
-                                // Images - used by: hero, moderator
+                                // Images field
                                 SpatieMediaLibraryFileUpload::make('images')
                                     ->label(fn (Get $get) => $get('type') === ContentBlockType::Hero->value ? 'Hintergrundbild' : 'Foto')
                                     ->collection('images')
@@ -174,7 +178,7 @@ class PageForm
                                         ContentBlockType::Moderator->value,
                                     ])),
 
-                                // Values repeater - used by: intro
+                                // Values repeater (Intro only)
                                 Repeater::make('data.values')
                                     ->label('Werte')
                                     ->schema([
@@ -190,7 +194,7 @@ class PageForm
                                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null)
                                     ->visible(fn (Get $get) => $get('type') === ContentBlockType::Intro->value),
 
-                                // Items repeater - used by: value_items
+                                // Items repeater (ValueItems and FAQ)
                                 Repeater::make('data.items')
                                     ->label(fn (Get $get) => $get('type') === ContentBlockType::Faq->value ? 'Fragen & Antworten' : 'Werte')
                                     ->schema(fn (Get $get) => $get('type') === ContentBlockType::Faq->value ? [
@@ -218,7 +222,7 @@ class PageForm
                                         ContentBlockType::Faq->value,
                                     ])),
 
-                                // Steps repeater - used by: journey_steps
+                                // Steps repeater (JourneySteps only)
                                 Repeater::make('data.steps')
                                     ->label('Schritte')
                                     ->schema([
