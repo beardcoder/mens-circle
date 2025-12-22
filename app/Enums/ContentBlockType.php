@@ -55,4 +55,93 @@ enum ContentBlockType: string
             ->mapWithKeys(fn (self $case) => [$case->value => $case->label()])
             ->all();
     }
+
+    public function hasEyebrow(): bool
+    {
+        return in_array($this, [
+            self::Intro,
+            self::TextSection,
+            self::ValueItems,
+            self::Moderator,
+            self::JourneySteps,
+            self::Faq,
+            self::Newsletter,
+            self::Cta,
+        ], true);
+    }
+
+    public function hasHtmlTitle(): bool
+    {
+        return in_array($this, [
+            self::Hero,
+            self::Intro,
+            self::JourneySteps,
+            self::Faq,
+            self::Newsletter,
+            self::Cta,
+        ], true);
+    }
+
+    public function hasTitle(): bool
+    {
+        return in_array($this, [
+            self::Hero,
+            self::Intro,
+            self::TextSection,
+            self::ValueItems,
+            self::JourneySteps,
+            self::Faq,
+            self::Newsletter,
+            self::Cta,
+        ], true);
+    }
+
+    public function hasSmallTitle(): bool
+    {
+        return in_array($this, [
+            self::TextSection,
+            self::ValueItems,
+        ], true);
+    }
+
+    public function hasText(): bool
+    {
+        return in_array($this, [
+            self::Intro,
+            self::Newsletter,
+            self::Cta,
+        ], true);
+    }
+
+    public function hasQuote(): bool
+    {
+        return in_array($this, [
+            self::Intro,
+            self::Moderator,
+        ], true);
+    }
+
+    public function hasButton(): bool
+    {
+        return in_array($this, [
+            self::Hero,
+            self::Cta,
+        ], true);
+    }
+
+    public function hasImage(): bool
+    {
+        return in_array($this, [
+            self::Hero,
+            self::Moderator,
+        ], true);
+    }
+
+    public function hasItemsRepeater(): bool
+    {
+        return in_array($this, [
+            self::ValueItems,
+            self::Faq,
+        ], true);
+    }
 }

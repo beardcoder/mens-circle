@@ -5,9 +5,8 @@ namespace App\Models;
 use App\Enums\ContentBlockType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
 
 class ContentBlock extends Model implements HasMedia
 {
@@ -38,27 +37,6 @@ class ContentBlock extends Model implements HasMedia
     {
         $this->addMediaCollection('images')
             ->singleFile()
-            ->registerMediaConversions(function (Media $media) {
-                $this
-                    ->addMediaConversion('thumb')
-                    ->width(200)
-                    ->height(200)
-                    ->format('webp')
-                    ->quality(85);
-
-                $this
-                    ->addMediaConversion('responsive')
-                    ->width(1200)
-                    ->format('webp')
-                    ->quality(85)
-                    ->performOnCollections('images');
-
-                $this
-                    ->addMediaConversion('responsive-avif')
-                    ->width(1200)
-                    ->format('avif')
-                    ->quality(85)
-                    ->performOnCollections('images');
-            });
+            ->withResponsiveImages();
     }
 }
