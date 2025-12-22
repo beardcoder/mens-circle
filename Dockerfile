@@ -99,8 +99,8 @@ RUN mkdir -p \
     /app/database
 
 # Set permissions
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database
-RUN chmod -R 775 /app/storage /app/bootstrap/cache /app/database
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database /app/public
+RUN chmod -R 775 /app/storage /app/bootstrap/cache /app/database /app/public
 
 # Configure FrankenPHP Caddyfile
 COPY docker/Caddyfile /etc/caddy/Caddyfile
