@@ -259,16 +259,18 @@ class PageForm
                             ])
                             ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
                                 // Stelle sicher, dass data als Array gespeichert wird
-                                if (!isset($data['data']) || !is_array($data['data'])) {
+                                if (! isset($data['data']) || ! is_array($data['data'])) {
                                     $data['data'] = [];
                                 }
+
                                 return $data;
                             })
                             ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
                                 // Stelle sicher, dass data als Array gespeichert wird
-                                if (!isset($data['data']) || !is_array($data['data'])) {
+                                if (! isset($data['data']) || ! is_array($data['data'])) {
                                     $data['data'] = [];
                                 }
+
                                 return $data;
                             })
                             ->collapsible()

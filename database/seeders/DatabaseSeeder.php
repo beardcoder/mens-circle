@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\ContentBlock;
 use App\Models\Event;
 use App\Models\Page;
 use App\Models\User;
