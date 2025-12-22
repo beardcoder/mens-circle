@@ -52,6 +52,7 @@ class PageForm
                                     ->label('Button Link'),
                                 FileUpload::make('background_image')
                                     ->label('Hintergrundbild')
+                                    ->disk('public')
                                     ->image(),
                             ]),
 
@@ -140,6 +141,7 @@ class PageForm
                                     ->rows(3),
                                 FileUpload::make('photo')
                                     ->label('Foto')
+                                    ->disk('public')
                                     ->image(),
                             ]),
 
