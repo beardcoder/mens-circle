@@ -10,8 +10,8 @@ mkdir -p /app/storage/logs
 mkdir -p /app/bootstrap/cache
 
 # Set permissions
-chown -R www-data:www-data /app/storage /app/bootstrap/cache
-chmod -R 775 /app/storage /app/bootstrap/cache
+chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/public
+chmod -R 775 /app/storage /app/bootstrap/cache /app/public
 
 # Ensure SQLite database exists (if using SQLite)
 if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
