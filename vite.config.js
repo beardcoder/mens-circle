@@ -11,6 +11,17 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    css: {
+        transformer: 'lightningcss',
+        lightningcss: {
+            targets: {
+                chrome: 100,
+                firefox: 100,
+                safari: 15,
+                edge: 100,
+            },
+        },
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
