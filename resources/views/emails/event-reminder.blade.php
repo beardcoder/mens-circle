@@ -29,7 +29,7 @@ dies ist eine freundliche Erinnerung, dass deine Veranstaltung **{{ $event->titl
 
 ## Fragen oder Absage?
 
-Falls du kurzfristig nicht teilnehmen kannst oder Fragen hast, schreib uns bitte so schnell wie möglich an [hallo@mens-circle.de](mailto:hallo@mens-circle.de).
+Falls du kurzfristig nicht teilnehmen kannst oder Fragen hast, schreib uns bitte so schnell wie möglich an [{{ $socialLinks['contact_email'] }}](mailto:{{ $socialLinks['contact_email'] }}).
 
 ---
 
@@ -37,6 +37,21 @@ Wir freuen uns auf dich!
 
 Herzliche Grüße,<br>
 **{{ config('app.name') }}**
+
+---
+
+**Bleib in Verbindung:**
+
+@if($socialLinks['website_url'])
+🌐 [Webseite]({{ $socialLinks['website_url'] }})
+@endif
+@if($socialLinks['whatsapp_url'])
+📱 [WhatsApp]({{ $socialLinks['whatsapp_url'] }})
+@endif
+@if($socialLinks['github_url'])
+💻 [GitHub]({{ $socialLinks['github_url'] }})
+@endif
+📧 [{{ $socialLinks['contact_email'] }}](mailto:{{ $socialLinks['contact_email'] }})
 
 <x-mail::subcopy>
 Diese Erinnerung wurde an {{ $registration->email }} gesendet, weil du für diese Veranstaltung angemeldet bist.

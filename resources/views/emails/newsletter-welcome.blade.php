@@ -32,6 +32,21 @@ Wir freuen uns, dass du dabei bist!
 Herzliche Grüße,<br>
 **{{ config('app.name') }}**
 
+---
+
+**Bleib in Verbindung:**
+
+@if($socialLinks['website_url'])
+🌐 [Webseite]({{ $socialLinks['website_url'] }})
+@endif
+@if($socialLinks['whatsapp_url'])
+📱 [WhatsApp]({{ $socialLinks['whatsapp_url'] }})
+@endif
+@if($socialLinks['github_url'])
+💻 [GitHub]({{ $socialLinks['github_url'] }})
+@endif
+📧 [{{ $socialLinks['contact_email'] }}](mailto:{{ $socialLinks['contact_email'] }})
+
 <x-mail::subcopy>
 Du erhältst diese E-Mail an {{ $subscription->email }}, weil du dich für unseren Newsletter angemeldet hast.
 Falls du den Newsletter nicht mehr erhalten möchtest, kannst du dich jederzeit [hier abmelden]({{ route('newsletter.unsubscribe', $subscription->token) }}).

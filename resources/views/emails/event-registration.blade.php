@@ -27,7 +27,7 @@ herzlich willkommen! Wir freuen uns sehr, dass du beim **{{ $event->title }}** d
 
 ## Fragen?
 
-Falls du Fragen hast oder aus wichtigen Gründen doch nicht teilnehmen kannst, schreib uns einfach eine E-Mail an [hallo@mens-circle.de](mailto:hallo@mens-circle.de).
+Falls du Fragen hast oder aus wichtigen Gründen doch nicht teilnehmen kannst, schreib uns einfach eine E-Mail an [{{ $socialLinks['contact_email'] }}](mailto:{{ $socialLinks['contact_email'] }}).
 
 ---
 
@@ -35,6 +35,21 @@ Wir freuen uns auf dich!
 
 Herzliche Grüße,<br>
 **{{ config('app.name') }}**
+
+---
+
+**Bleib in Verbindung:**
+
+@if($socialLinks['website_url'])
+🌐 [Webseite]({{ $socialLinks['website_url'] }})
+@endif
+@if($socialLinks['whatsapp_url'])
+📱 [WhatsApp]({{ $socialLinks['whatsapp_url'] }})
+@endif
+@if($socialLinks['github_url'])
+💻 [GitHub]({{ $socialLinks['github_url'] }})
+@endif
+📧 [{{ $socialLinks['contact_email'] }}](mailto:{{ $socialLinks['contact_email'] }})
 
 <x-mail::subcopy>
 Diese E-Mail wurde an {{ $registration->email }} gesendet, weil du dich für unsere Veranstaltung angemeldet hast.

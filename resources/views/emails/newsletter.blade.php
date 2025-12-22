@@ -11,4 +11,19 @@ Vom Newsletter abmelden
 
 Herzliche Grüße,<br>
 {{ config('app.name') }}
+
+---
+
+**Bleib in Verbindung:**
+
+@if($socialLinks['website_url'])
+🌐 [Webseite]({{ $socialLinks['website_url'] }})
+@endif
+@if($socialLinks['whatsapp_url'])
+📱 [WhatsApp]({{ $socialLinks['whatsapp_url'] }})
+@endif
+@if($socialLinks['github_url'])
+💻 [GitHub]({{ $socialLinks['github_url'] }})
+@endif
+📧 [{{ $socialLinks['contact_email'] }}](mailto:{{ $socialLinks['contact_email'] }})
 </x-mail::message>
