@@ -194,7 +194,7 @@
 
                         <label class="form-checkbox">
                             <input type="checkbox" name="privacy" required>
-                            <span>Ich habe die <a href="{{ route('datenschutz') }}" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
+                            <span>Ich habe die <a href="{{ route('page.show', 'datenschutz') }}" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
                         </label>
 
                         <button type="submit" class="btn btn--primary btn--large event__submit-btn">
