@@ -1101,6 +1101,13 @@ body.nav-open {
   overflow: hidden;
 }
 
+.moderator__photo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .moderator__photo::before {
   content: '';
   position: absolute;
