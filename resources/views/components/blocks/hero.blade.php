@@ -1,5 +1,9 @@
 <section class="hero">
-    <div class="hero__bg"></div>
+    <div class="hero__bg"
+        @if(!empty($block['background_image']))
+            style="background-image: url('{{ Storage::url($block['background_image']) }}'); background-size: cover; background-position: center;"
+        @endif
+    ></div>
 
     <div class="hero__circles" aria-hidden="true">
         <div class="hero__circle hero__circle--1"></div>
