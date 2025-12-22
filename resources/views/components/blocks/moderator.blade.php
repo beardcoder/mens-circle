@@ -3,8 +3,12 @@
         <div class="moderator__layout">
             <div class="moderator__photo-wrapper fade-in">
                 <div class="moderator__photo">
-                    @if(!empty($block['photo']))
-                        <img src="{{ Storage::url($block['photo']) }}" alt="{{ $block['name'] ?? 'Moderator' }}">
+                    @if($block->hasMedia('images'))
+                        <picture>
+                            <source srcset="{{ $block->getFirstMediaUrl('images', 'responsive-avif') }}" type="image/avif">
+                            <source srcset="{{ $block->getFirstMediaUrl('images', 'responsive') }}" type="image/webp">
+                            <img src="{{ $block->getFirstMediaUrl('images', 'responsive') }}" alt="{{ $block->data['name'] ?? 'Moderator' }}" loading="lazy">
+                        </picture>
                     @else
                         <div class="moderator__photo-placeholder">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -19,23 +23,23 @@
             </div>
 
             <div class="moderator__content fade-in fade-in-delay-1">
-                @if(!empty($block['eyebrow']))
-                    <p class="moderator__eyebrow">{{ $block['eyebrow'] }}</p>
+                @if(!empty($block->data['eyebrow']))
+                    <p class="moderator__eyebrow">{{ $block->data['eyebrow'] }}</p>
                 @endif
 
-                @if(!empty($block['name']))
-                    <h2 class="moderator__name">{!! $block['name'] !!}</h2>
+                @if(!empty($block->data['name']))
+                    <h2 class="moderator__name">{!! $block->data['name'] !!}</h2>
                 @endif
 
-                @if(!empty($block['bio']))
+                @if(!empty($block->data['bio']))
                     <div class="moderator__bio">
-                        {!! $block['bio'] !!}
+                        {!! $block->data['bio'] !!}
                     </div>
                 @endif
 
-                @if(!empty($block['quote']))
+                @if(!empty($block->data['quote']))
                     <blockquote class="moderator__quote">
-                        <p>{{ $block['quote'] }}</p>
+                        <p>{{ $block->data['quote'] }}</p>
                     </blockquote>
                 @endif
             </div>
