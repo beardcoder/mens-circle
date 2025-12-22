@@ -30,23 +30,23 @@
 @section('content')
     @if($page->contentBlocks->isNotEmpty())
         @foreach($page->contentBlocks as $block)
-            @if($block->type === 'hero')
+            @if($block->type === App\Enums\ContentBlockType::Hero)
                 <x-blocks.hero :block="$block" />
-            @elseif($block->type === 'intro')
+            @elseif($block->type === App\Enums\ContentBlockType::Intro)
                 <x-blocks.intro :block="$block" />
-            @elseif($block->type === 'text_section')
+            @elseif($block->type === App\Enums\ContentBlockType::TextSection)
                 <x-blocks.text-section :block="$block" />
-            @elseif($block->type === 'value_items')
+            @elseif($block->type === App\Enums\ContentBlockType::ValueItems)
                 <x-blocks.value-items :block="$block" />
-            @elseif($block->type === 'moderator')
+            @elseif($block->type === App\Enums\ContentBlockType::Moderator)
                 <x-blocks.moderator :block="$block" />
-            @elseif($block->type === 'journey_steps')
+            @elseif($block->type === App\Enums\ContentBlockType::JourneySteps)
                 <x-blocks.journey-steps :block="$block" />
-            @elseif($block->type === 'faq')
+            @elseif($block->type === App\Enums\ContentBlockType::Faq)
                 <x-blocks.faq :block="$block" />
-            @elseif($block->type === 'newsletter')
+            @elseif($block->type === App\Enums\ContentBlockType::Newsletter)
                 <x-blocks.newsletter :block="$block" />
-            @elseif($block->type === 'cta')
+            @elseif($block->type === App\Enums\ContentBlockType::Cta)
                 <x-blocks.cta :block="$block" />
             @endif
         @endforeach

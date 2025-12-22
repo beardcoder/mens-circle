@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ContentBlockType;
 use App\Models\ContentBlock;
 use App\Models\Event;
 use App\Models\Page;
@@ -37,7 +38,7 @@ class DatabaseSeeder extends Seeder
         // Create content blocks for homepage
         $contentBlocks = [
             [
-                'type' => 'hero',
+                'type' => ContentBlockType::Hero,
                 'data' => [
                     'label' => 'Straubing / Niederbayern',
                     'title' => '<span class="hero__title-line">Ein Raum für</span><span class="hero__title-line"><span class="text-italic">echte</span> Begegnung</span>',
@@ -48,7 +49,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 1,
             ],
             [
-                'type' => 'intro',
+                'type' => ContentBlockType::Intro,
                 'data' => [
                     'eyebrow' => 'Was uns verbindet',
                     'title' => 'Was ist ein<br><span class="text-italic">Männerkreis?</span>',
@@ -75,7 +76,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 2,
             ],
             [
-                'type' => 'moderator',
+                'type' => ContentBlockType::Moderator,
                 'data' => [
                     'eyebrow' => 'Dein Begleiter',
                     'name' => 'Markus<br><span class="light">Sommer</span>',
@@ -85,7 +86,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 3,
             ],
             [
-                'type' => 'journey_steps',
+                'type' => ContentBlockType::JourneySteps,
                 'data' => [
                     'eyebrow' => 'Der Weg',
                     'title' => 'Die Reise <span class="text-italic">im Kreis</span>',
@@ -116,7 +117,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 4,
             ],
             [
-                'type' => 'faq',
+                'type' => ContentBlockType::Faq,
                 'data' => [
                     'eyebrow' => 'Fragen & Antworten',
                     'title' => 'Häufige<br><span class="text-italic">Fragen</span>',
@@ -151,7 +152,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 5,
             ],
             [
-                'type' => 'newsletter',
+                'type' => ContentBlockType::Newsletter,
                 'data' => [
                     'eyebrow' => 'In Verbindung bleiben',
                     'title' => 'Bleib <span class="text-italic">verbunden</span>',
@@ -160,7 +161,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 6,
             ],
             [
-                'type' => 'cta',
+                'type' => ContentBlockType::Cta,
                 'data' => [
                     'eyebrow' => 'Nächstes Treffen',
                     'title' => 'Sei beim <span class="text-italic">nächsten</span><br>Mal dabei',
