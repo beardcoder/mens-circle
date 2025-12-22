@@ -2,18 +2,16 @@
 
 namespace App\Filament\Pages;
 
-use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
 
 class ClearCache extends Page
 {
-    protected static BackedEnum|string|null $navigationIcon = Heroicon::OutlinedTrash;
+    protected static ?string $navigationIcon = 'heroicon-o-trash';
 
-    protected string $view = 'filament.pages.clear-cache';
+    protected static string $view = 'filament.pages.clear-cache';
 
     protected static ?string $navigationLabel = 'Cache löschen';
 
@@ -26,7 +24,7 @@ class ClearCache extends Page
         return [
             Action::make('clearApplicationCache')
                 ->label('Anwendungs-Cache löschen')
-                ->icon(Heroicon::SolidBolt)
+                ->icon('heroicon-s-bolt')
                 ->color('warning')
                 ->requiresConfirmation()
                 ->modalHeading('Anwendungs-Cache löschen?')
@@ -52,7 +50,7 @@ class ClearCache extends Page
 
             Action::make('clearConfigCache')
                 ->label('Konfigurations-Cache löschen')
-                ->icon(Heroicon::SolidCog6Tooth)
+                ->icon('heroicon-s-cog-6-tooth')
                 ->color('info')
                 ->requiresConfirmation()
                 ->modalHeading('Konfigurations-Cache löschen?')
@@ -78,7 +76,7 @@ class ClearCache extends Page
 
             Action::make('clearRouteCache')
                 ->label('Routen-Cache löschen')
-                ->icon(Heroicon::SolidMap)
+                ->icon('heroicon-s-map')
                 ->color('info')
                 ->requiresConfirmation()
                 ->modalHeading('Routen-Cache löschen?')
@@ -104,7 +102,7 @@ class ClearCache extends Page
 
             Action::make('clearViewCache')
                 ->label('View-Cache löschen')
-                ->icon(Heroicon::SolidEye)
+                ->icon('heroicon-s-eye')
                 ->color('info')
                 ->requiresConfirmation()
                 ->modalHeading('View-Cache löschen?')
@@ -130,7 +128,7 @@ class ClearCache extends Page
 
             Action::make('clearAll')
                 ->label('Alle Caches löschen')
-                ->icon(Heroicon::SolidArrowPath)
+                ->icon('heroicon-s-arrow-path')
                 ->color('danger')
                 ->requiresConfirmation()
                 ->modalHeading('Alle Caches löschen?')
