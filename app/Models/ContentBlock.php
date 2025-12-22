@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ContentBlockType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
@@ -22,6 +23,7 @@ class ContentBlock extends Model implements HasMedia
     protected function casts(): array
     {
         return [
+            'type' => ContentBlockType::class,
             'data' => 'array',
             'order' => 'integer',
         ];
