@@ -7,7 +7,7 @@
                         <picture>
                             <source srcset="{{ $block->getFirstMediaUrl('images', 'responsive-avif') }}" type="image/avif">
                             <source srcset="{{ $block->getFirstMediaUrl('images', 'responsive') }}" type="image/webp">
-                            <img src="{{ $block->getFirstMediaUrl('images', 'responsive') }}" alt="{{ $block->data['name'] ?? 'Moderator' }}" loading="lazy">
+                            <img src="{{ $block->getFirstMediaUrl('images', 'responsive') }}" alt="{{ $block->data['name'] ?? 'Moderator' }}" class="moderator__photo-image" loading="lazy">
                         </picture>
                     @else
                         <div class="moderator__photo-placeholder">
