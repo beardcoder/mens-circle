@@ -65,7 +65,7 @@
                     <a href="{{ route('home') }}#reise" class="nav__link">Die Reise</a>
                     <a href="{{ route('home') }}#faq" class="nav__link">Fragen</a>
                     @if($hasNextEvent)
-                        <a href="{{ route('event.show') }}" class="nav__cta">Nächster Termin</a>
+                        <a href="{{ route('event.show') }}" class="btn btn--primary btn--large nav__cta">Nächster Termin</a>
                     @endif
                 </nav>
 

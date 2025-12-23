@@ -8,7 +8,7 @@
    ============================================ */
 .moderator-section {
   position: relative;
-  background: var(--color-parchment);
+  background: var(--bg-tertiary);
   overflow: hidden;
 }
 
@@ -187,6 +187,6 @@
   font-style: italic;
   line-height: 1.35;
   letter-spacing: -0.02em;
-  color: var(--bg-section-alt);
+  color: var(--text-accent);
 }
 

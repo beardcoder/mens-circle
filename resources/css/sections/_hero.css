@@ -10,11 +10,17 @@
   position: relative;
   display: flex;
   align-items: flex-end;
-  min-block-size: 100vh;
-  min-block-size: 100dvh;
+  min-block-size: 700px;
+    block-size: 100vh;
   padding-block-end: var(--space-xl);
   background: var(--bg-dark);
   overflow: hidden;
+}
+
+@media (width > 600px) {
+    .hero {
+        min-block-size: 1000px;
+    }
 }
 
 /* ============================================
@@ -231,7 +237,7 @@
 
 @media (max-width: 480px) {
   .hero__title {
-    font-size: clamp(2rem, 10vw, 3rem);
+    font-size: clamp(3rem, 10vw, 3rem);
   }
 
   .hero__label {

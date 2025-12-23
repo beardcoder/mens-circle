@@ -100,32 +100,6 @@
   inline-size: 100%;
 }
 
-/* Navigation CTA Button */
-.nav__cta {
-  padding: 0.75rem 1.5rem;
-  background: var(--accent-primary);
-  color: var(--color-bone) !important;
-  border-radius: var(--radius-full);
-  font-weight: 600;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  transition:
-    background-color var(--transition-medium),
-    color var(--transition-medium),
-    transform var(--transition-medium);
-}
-
-.nav__cta:hover {
-  background: var(--color-bone);
-  color: var(--text-primary) !important;
-  transform: scale(1.05);
-}
-
-.nav__cta::after {
-  display: none;
-}
-
 /* ============================================
    Mobile Navigation Toggle
    ============================================ */
@@ -276,19 +250,6 @@
 
   .nav.open .nav__link:nth-child(4) {
     transition-delay: 400ms;
-  }
-
-  .nav__cta {
-    margin-block-start: var(--space-md);
-    padding: 1rem 2.5rem;
-    font-size: 0.9rem;
-    opacity: 0;
-    transform: translateY(30px) scale(0.9);
-    transition:
-      background-color var(--transition-medium),
-      color var(--transition-medium),
-      opacity var(--transition-medium),
-      transform var(--transition-medium);
   }
 
   .nav.open .nav__cta {
