@@ -49,7 +49,7 @@ FROM dunglas/frankenphp:1-php8.5 AS production
 WORKDIR /app
 
 # Install system dependencies including libvips
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
     sqlite3 \
     libicu-dev \
     libpng-dev \
@@ -60,7 +60,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     supervisor \
     curl \
-    libvips42 && \
+    libvips42 libvips-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
@@ -73,7 +73,8 @@ RUN install-php-extensions \
     zip \
     bcmath \
     exif \
-    vips
+    vips \
+    ffi
 
 # Configure PHP for production
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
