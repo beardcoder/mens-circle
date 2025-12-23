@@ -105,16 +105,6 @@
                         {{ $siteDescription ?: 'Ein Raum für echte Begegnung unter Männern. Authentischer Austausch, Gemeinschaft und persönliches Wachstum in Niederbayern.' }}
                     </p>
                     @if(!empty($socialLinks))
-                        <div class="footer__social">
-                            @foreach($socialLinks as $link)
-                                <x-social-icon
-                                    :icon="$link['icon'] ?? null"
-                                    :type="$link['type'] ?? null"
-                                    :url="$link['value']"
-                                    :label="$link['label'] ?? ''"
-                                />
-                            @endforeach
-                        </div>
                         <ul class="footer__social-links">
                             @foreach($socialLinks as $link)
                                 <li>
