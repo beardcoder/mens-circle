@@ -30,26 +30,26 @@
      ============================================ */
 
   /* Base Earth Tones */
-  --color-earth-deep: oklch(22% 0.03 55);
-  --color-earth-dark: oklch(28% 0.035 55);
-  --color-earth-mid: oklch(38% 0.04 55);
-  --color-earth-warm: oklch(48% 0.06 55);
+  --color-earth-deep: oklch(18% 0.026 68);
+  --color-earth-dark: oklch(24% 0.033 68);
+  --color-earth-mid: oklch(35% 0.04 68);
+  --color-earth-warm: oklch(46% 0.05 68);
 
   /* Terracotta Accents */
-  --color-terracotta: oklch(58% 0.14 35);
-  --color-terracotta-light: oklch(68% 0.12 35);
+  --color-terracotta: oklch(58% 0.13 46);
+  --color-terracotta-light: oklch(70% 0.11 46);
 
   /* Neutral Sand Tones */
-  --color-sand: oklch(78% 0.03 80);
-  --color-sand-light: oklch(88% 0.02 80);
+  --color-sand: oklch(76% 0.04 75);
+  --color-sand-light: oklch(89% 0.02 75);
 
   /* Light Backgrounds */
-  --color-parchment: oklch(95% 0.01 85);
-  --color-bone: oklch(98% 0.005 85);
+  --color-parchment: oklch(95% 0.01 75);
+  --color-bone: oklch(98% 0.005 75);
 
   /* Dark Text */
-  --color-ink: oklch(15% 0.02 55);
-  --color-ink-soft: oklch(28% 0.02 55);
+  --color-ink: oklch(13% 0.01 68);
+  --color-ink-soft: oklch(24% 0.02 68);
 
   /* ============================================
      Semantic Color Tokens - Light Theme
@@ -150,10 +150,14 @@
      Shadows & Effects
      ============================================ */
   --shadow-sm: 0 1px 2px color-mix(in oklch, var(--color-ink) 5%, transparent);
-  --shadow-md: 0 4px 6px -1px color-mix(in oklch, var(--color-ink) 10%, transparent);
-  --shadow-lg: 0 10px 15px -3px color-mix(in oklch, var(--color-ink) 10%, transparent);
-  --shadow-xl: 0 20px 25px -5px color-mix(in oklch, var(--color-ink) 10%, transparent);
-  --shadow-2xl: 0 25px 50px -12px color-mix(in oklch, var(--color-ink) 25%, transparent);
+  --shadow-md: 0 4px 6px -1px
+    color-mix(in oklch, var(--color-ink) 10%, transparent);
+  --shadow-lg: 0 10px 15px -3px
+    color-mix(in oklch, var(--color-ink) 10%, transparent);
+  --shadow-xl: 0 20px 25px -5px
+    color-mix(in oklch, var(--color-ink) 10%, transparent);
+  --shadow-2xl: 0 25px 50px -12px
+    color-mix(in oklch, var(--color-ink) 25%, transparent);
 
   /* ============================================
      Border Radius
@@ -206,8 +210,16 @@
     --text-accent: var(--color-terracotta-light);
 
     /* Dark Theme Borders */
-    --border-light: color-mix(in oklch, var(--color-earth-mid) 30%, transparent);
-    --border-medium: color-mix(in oklch, var(--color-earth-mid) 30%, transparent);
+    --border-light: color-mix(
+      in oklch,
+      var(--color-earth-mid) 30%,
+      transparent
+    );
+    --border-medium: color-mix(
+      in oklch,
+      var(--color-earth-mid) 30%,
+      transparent
+    );
     --border-dark: var(--color-earth-warm);
     --border-on-dark: color-mix(in oklch, var(--color-sand) 25%, transparent);
 
@@ -231,4 +243,3 @@
     --duration-slower: 0ms;
   }
 }
-
