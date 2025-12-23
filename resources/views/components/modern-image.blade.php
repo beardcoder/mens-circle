@@ -8,81 +8,84 @@
 ])
 
 @php
+use Illuminate\Support\Facades\Cache;
 use Spatie\Image\Image;
-use Spatie\Image\Enums\Fit;
 
-// Get the full path to the image
 $imagePath = public_path('storage/' . ltrim($src, '/'));
+$imageExists = file_exists($imagePath);
+$formats = [];
 
-// Check if the image exists
-if (!file_exists($imagePath)) {
-    $imageExists = false;
-} else {
-    $imageExists = true;
+if ($imageExists) {
+    // Skip optimization for SVGs
+    if (strtolower(pathinfo($imagePath, PATHINFO_EXTENSION)) !== 'svg') {
+        // Cache the existence/generation of optimized formats to avoid disk I/O on every request
+        // Key includes filemtime to automatically regenerate if source image changes
+        $cacheKey = 'modern_image_' . md5($src . filemtime($imagePath));
 
-    // Generate paths for modern formats
-    $pathInfo = pathinfo($src);
-    $baseDir = $pathInfo['dirname'];
-    $filename = $pathInfo['filename'];
+        $formats = Cache::remember($cacheKey, now()->addMonth(), function () use ($src, $imagePath) {
+            $pathInfo = pathinfo($src);
+            $baseDir = $pathInfo['dirname'];
+            $filename = $pathInfo['filename'];
+            $results = [];
 
-    // Define conversion paths
-    $webpPath = $baseDir . '/' . $filename . '.webp';
-    $avifPath = $baseDir . '/' . $filename . '.avif';
+            $generate = function($format) use ($imagePath, $baseDir, $filename) {
+                $newPath = $baseDir . '/' . $filename . '.' . $format;
+                $fullPath = public_path('storage/' . ltrim($newPath, '/'));
+                
+                if (!file_exists($fullPath)) {
+                    try {
+                        if (!is_dir(dirname($fullPath))) {
+                            mkdir(dirname($fullPath), 0755, true);
+                        }
+                        Image::load($imagePath)->format($format)->save($fullPath);
+                    } catch (\Exception $e) {
+                        return null;
+                    }
+                }
+                return $newPath;
+            };
 
-    $webpFullPath = public_path('storage/' . ltrim($webpPath, '/'));
-    $avifFullPath = public_path('storage/' . ltrim($avifPath, '/'));
+            $results['webp'] = $generate('webp');
+            $results['avif'] = $generate('avif');
 
-    // Ensure the directory exists
-    $webpDir = dirname($webpFullPath);
-    if (!is_dir($webpDir)) {
-        mkdir($webpDir, 0755, true);
-    }
-
-    // Generate WebP if it doesn't exist
-    if (!file_exists($webpFullPath)) {
-        try {
-            Image::load($imagePath)
-                ->format('webp')
-                ->save($webpFullPath);
-        } catch (\Exception $e) {
-            // If conversion fails, we'll fall back to original
-            $webpPath = null;
-        }
-    }
-
-    // Generate AVIF if it doesn't exist
-    if (!file_exists($avifFullPath)) {
-        try {
-            Image::load($imagePath)
-                ->format('avif')
-                ->save($avifFullPath);
-        } catch (\Exception $e) {
-            // If conversion fails, we'll fall back to other formats
-            $avifPath = null;
-        }
+            return $results;
+        });
     }
 }
 @endphp
 
 @if($imageExists)
-<picture>
-    @if(isset($avifPath) && file_exists($avifFullPath))
-    <source srcset="{{ asset('storage/' . ltrim($avifPath, '/')) }}" type="image/avif">
-    @endif
+    @if(empty($formats))
+        <img
+            src="{{ asset('storage/' . ltrim($src, '/')) }}"
+            alt="{{ $alt }}"
+            decoding="async"
+            @if($class) class="{{ $class }}" @endif
+            @if($loading) loading="{{ $loading }}" @endif
+            @if($width) width="{{ $width }}" @endif
+            @if($height) height="{{ $height }}" @endif
+            {{ $attributes }}
+        >
+    @else
+        <picture>
+            @if(!empty($formats['avif']))
+            <source srcset="{{ asset('storage/' . ltrim($formats['avif'], '/')) }}" type="image/avif">
+            @endif
 
-    @if(isset($webpPath) && file_exists($webpFullPath))
-    <source srcset="{{ asset('storage/' . ltrim($webpPath, '/')) }}" type="image/webp">
-    @endif
+            @if(!empty($formats['webp']))
+            <source srcset="{{ asset('storage/' . ltrim($formats['webp'], '/')) }}" type="image/webp">
+            @endif
 
-    <img
-        src="{{ asset('storage/' . ltrim($src, '/')) }}"
-        alt="{{ $alt }}"
-        decoding="async"
-        @if($class) class="{{ $class }}" @endif
-        @if($loading) loading="{{ $loading }}" @endif
-        @if($width) width="{{ $width }}" @endif
-        @if($height) height="{{ $height }}" @endif
-        {{ $attributes }}
-    >
-</picture>
+            <img
+                src="{{ asset('storage/' . ltrim($src, '/')) }}"
+                alt="{{ $alt }}"
+                decoding="async"
+                @if($class) class="{{ $class }}" @endif
+                @if($loading) loading="{{ $loading }}" @endif
+                @if($width) width="{{ $width }}" @endif
+                @if($height) height="{{ $height }}" @endif
+                {{ $attributes }}
+            >
+        </picture>
+    @endif
 @endif
