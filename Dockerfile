@@ -53,9 +53,9 @@ RUN apt-get update && apt-get install -y \
     sqlite3 \
     libicu-dev \
     libpng-dev \
-    libjpeg62-turbo \
-    libwebp6 \
-    libfreetype6 \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    libfreetype6-dev \
     libzip-dev \
     libonig-dev \
     supervisor \
