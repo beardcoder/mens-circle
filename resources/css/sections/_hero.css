@@ -268,3 +268,22 @@
   font-size: 1.125rem;
 }
 
+
+/* Hero Background Image */
+.hero__bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0; /* Behind pseudo-elements but inside .hero__bg */
+}
+
+/* Ensure picture element fills the container */
+.hero__bg picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

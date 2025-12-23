@@ -1,9 +1,15 @@
 <section class="hero">
-    <div class="hero__bg"
+    <div class="hero__bg">
         @if(!empty($block['data']['background_image']))
-            style="background-image: url('{{ asset('storage/' . $block['data']['background_image']) }}'); background-size: cover; background-position: center;"
+            <x-modern-image
+                :src="$block['data']['background_image']"
+                alt=""
+                class="hero__bg-image"
+                loading="eager"
+                fetchpriority="high"
+            />
         @endif
-    ></div>
+    </div>
 
     <div class="hero__circles" aria-hidden="true">
         <div class="hero__circle hero__circle--1"></div>
