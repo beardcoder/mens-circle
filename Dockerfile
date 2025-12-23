@@ -48,7 +48,7 @@ FROM dunglas/frankenphp:1-php8.5-alpine AS production
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies including libvips
 RUN apk add --no-cache \
     sqlite \
     icu-libs \
@@ -59,7 +59,10 @@ RUN apk add --no-cache \
     libzip \
     oniguruma \
     supervisor \
-    curl
+    curl \
+    vips \
+    vips-dev \
+    vips-tools
 
 # Install PHP extensions
 RUN install-php-extensions \
@@ -70,7 +73,8 @@ RUN install-php-extensions \
     gd \
     zip \
     bcmath \
-    exif
+    exif \
+    vips
 
 # Configure PHP for production
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
