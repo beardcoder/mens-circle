@@ -1,5 +1,5 @@
 # Build Stage: Install dependencies and build assets
-FROM node:24-alpine AS node-builder
+FROM node:24 AS node-builder
 
 WORKDIR /app
 
@@ -43,26 +43,27 @@ RUN composer dump-autoload --optimize --no-dev
 
 
 # Production Stage: FrankenPHP
-FROM dunglas/frankenphp:1-php8.5-alpine AS production
+FROM dunglas/frankenphp:1-php8.5 AS production
 
 # Set working directory
 WORKDIR /app
 
 # Install system dependencies including libvips
-RUN apk add --no-cache \
-    sqlite \
-    icu-libs \
-    libpng \
-    libjpeg-turbo \
-    libwebp \
-    freetype \
-    libzip \
-    oniguruma \
+RUN apt-get update && apt-get install -y \
+    sqlite3 \
+    libicu-dev \
+    libpng-dev \
+    libjpeg62-turbo \
+    libwebp6 \
+    libfreetype6 \
+    libzip-dev \
+    libonig-dev \
     supervisor \
     curl \
-    vips \
-    vips-dev \
-    vips-tools
+    libvips42 \
+    libvips-dev \
+    libvips-tools && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN install-php-extensions \
