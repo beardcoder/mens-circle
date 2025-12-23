@@ -87,9 +87,9 @@
   /* ============================================
      Typography Scale
      ============================================ */
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
-  --font-accent: 'Cormorant', Georgia, serif;
+  --font-display: 'Playfair Display Variable', Georgia, serif;
+  --font-body: 'DM Sans Variable', system-ui, sans-serif;
+  --font-accent: 'Cormorant Variable', Georgia, serif;
 
   /* Fluid Type Scale using clamp() */
   --text-xs: clamp(0.625rem, 0.5rem + 0.25vw, 0.75rem);

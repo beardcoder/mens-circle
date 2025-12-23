@@ -24,6 +24,10 @@
 /* ============================================
    BASE
    ============================================ */
+@import '@fontsource-variable/playfair-display';
+@import '@fontsource-variable/dm-sans';
+@import '@fontsource-variable/cormorant';
+
 @import 'base/_variables.css';
 @import 'base/_reset.css';
 @import 'base/_typography.css';
