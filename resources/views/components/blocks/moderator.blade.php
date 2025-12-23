@@ -4,7 +4,12 @@
             <div class="moderator__photo-wrapper fade-in">
                 <div class="moderator__photo">
                     @if(!empty($block['data']['photo']))
-                        <img src="{{ asset('storage/' . $block['data']['photo']) }}" alt="{{ $block['data']['name'] ?? 'Moderator' }}" class="moderator__photo-image" loading="lazy">
+                        <x-modern-image
+                            :src="$block['data']['photo']"
+                            :alt="$block['data']['name'] ?? 'Moderator'"
+                            class="moderator__photo-image"
+                            loading="lazy"
+                        />
                     @else
                         <div class="moderator__photo-placeholder">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
