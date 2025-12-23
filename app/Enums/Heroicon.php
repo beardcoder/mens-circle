@@ -2605,8 +2605,20 @@ enum Heroicon: string
         return $this->value;
     }
 
+    public function getLabel(): string
+    {
+        return ucwords(str_replace(['-', '_'], ' ', $this->value));
+    }
+
     public static function fromName(string $name): ?self
     {
         return self::tryFrom($name);
+    }
+
+    public static function options(): array
+    {
+        return collect(self::cases())
+            ->mapWithKeys(fn (self $icon) => [$icon->value => $icon->getLabel()])
+            ->toArray();
     }
 }

@@ -108,7 +108,8 @@
                         <div class="footer__social">
                             @foreach($socialLinks as $link)
                                 <x-social-icon
-                                    :type="$link['type']"
+                                    :icon="$link['icon'] ?? null"
+                                    :type="$link['type'] ?? null"
                                     :url="$link['value']"
                                     :label="$link['label'] ?? ''"
                                 />
