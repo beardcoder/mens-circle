@@ -60,9 +60,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     supervisor \
     curl \
-    libvips42 \
-    libvips-dev \
-    libvips-tools && \
+    libvips42 && \
     rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
