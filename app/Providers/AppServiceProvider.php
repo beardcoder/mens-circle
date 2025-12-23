@@ -7,6 +7,7 @@ use App\Models\Page;
 use App\Observers\EventObserver;
 use App\Observers\PageObserver;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Configure Vite to prefetch assets
+        Vite::prefetch(concurrency: 3);
+
         Page::observe(PageObserver::class);
         Event::observe(EventObserver::class);
 
