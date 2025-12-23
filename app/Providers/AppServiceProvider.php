@@ -34,7 +34,19 @@ class AppServiceProvider extends ServiceProvider
                     ->exists();
             });
 
-            $view->with('hasNextEvent', $hasNextEvent);
+            $settings = settings();
+
+            $view->with([
+                'hasNextEvent' => $hasNextEvent,
+                'settings' => $settings,
+                'siteName' => $settings['site_name'] ?? 'Männerkreis Niederbayern',
+                'siteTagline' => $settings['site_tagline'] ?? '',
+                'siteDescription' => $settings['site_description'] ?? '',
+                'contactEmail' => $settings['contact_email'] ?? '',
+                'contactPhone' => $settings['contact_phone'] ?? '',
+                'socialLinks' => $settings['social_links'] ?? [],
+                'footerText' => $settings['footer_text'] ?? '© '.date('Y').' Männerkreis Niederbayern',
+            ]);
         });
     }
 }

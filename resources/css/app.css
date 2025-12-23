@@ -1731,6 +1731,43 @@ body.nav-open {
   opacity: 0.85;
 }
 
+.footer__social {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(196, 180, 154, 0.1);
+  color: var(--color-sand);
+  transition: all var(--transition-fast);
+}
+
+.social-icon:hover {
+  background: var(--color-terracotta);
+  color: var(--color-parchment);
+  transform: translateY(-2px);
+}
+
+.social-icon__svg {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icon__svg svg {
+  width: 100%;
+  height: 100%;
+}
+
 .footer__heading {
   font-family: var(--font-body);
   font-size: 0.65rem;
