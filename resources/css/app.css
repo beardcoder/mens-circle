@@ -1060,7 +1060,14 @@ body.nav-open {
 
 /* --- Section: Moderator --- */
 .moderator-section {
-  background: var(--color-parchment);
+  background: linear-gradient(
+    135deg,
+    var(--color-parchment) 0%,
+    #efe2d1 45%,
+    var(--color-bone) 100%
+  );
+  border-top: 2px solid var(--color-earth-mid);
+  border-bottom: 2px solid var(--color-earth-mid);
   overflow: hidden;
   position: relative;
 }
@@ -1069,16 +1076,32 @@ body.nav-open {
 .moderator-section::before {
   content: 'BEGLEITER';
   position: absolute;
-  top: 50%;
-  left: -5%;
+  top: 45%;
+  left: -6%;
   transform: translateY(-50%) rotate(-90deg);
   font-family: var(--font-display);
-  font-size: clamp(4rem, 12vw, 10rem);
-  color: var(--color-sand-light);
-  letter-spacing: 0.1em;
+  font-size: clamp(5rem, 16vw, 12rem);
+  color: var(--color-terracotta-light);
+  letter-spacing: 0.18em;
   white-space: nowrap;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.25;
+}
+
+.moderator-section::after {
+  content: '';
+  position: absolute;
+  top: -12vw;
+  right: -10vw;
+  width: 42vw;
+  height: 42vw;
+  background: radial-gradient(
+    circle at 40% 40%,
+    rgba(184, 111, 82, 0.28),
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0.8;
 }
 
 .moderator__layout {
@@ -1087,11 +1110,14 @@ body.nav-open {
   gap: var(--space-xl);
   align-items: center;
   min-height: 90vh;
-  padding: var(--space-xl) 0;
+  padding: var(--space-xl) 0 var(--space-2xl);
+  position: relative;
+  z-index: 1;
 }
 
 .moderator__photo-wrapper {
   position: relative;
+  transform: rotate(-1.5deg);
 }
 
 .moderator__photo {
@@ -1099,6 +1125,8 @@ body.nav-open {
   aspect-ratio: 3/4;
   background: var(--color-earth-mid);
   overflow: hidden;
+  border: 4px solid var(--color-earth-dark);
+  box-shadow: 18px 18px 0 rgba(184, 111, 82, 0.4);
 }
 
 .moderator__photo-image {
@@ -1106,6 +1134,7 @@ body.nav-open {
     height: 100%;
     object-fit: cover;
     display: block;
+    filter: saturate(1.05) contrast(1.05);
 }
 
 .moderator__photo::before {
@@ -1145,33 +1174,50 @@ body.nav-open {
 
 .moderator__photo-accent {
   position: absolute;
-  top: var(--space-md);
-  left: var(--space-md);
-  right: calc(var(--space-md) * -1);
-  bottom: calc(var(--space-md) * -1);
-  border: 1px solid var(--color-terracotta);
+  top: var(--space-sm);
+  left: var(--space-sm);
+  right: calc(var(--space-sm) * -1);
+  bottom: calc(var(--space-sm) * -1);
+  border: 2px solid var(--color-terracotta);
   z-index: -1;
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .moderator__content {
-  padding-left: var(--space-lg);
+  padding: var(--space-lg);
   position: relative;
+  background: var(--color-bone);
+  border: 2px solid var(--color-earth-mid);
+  box-shadow: 18px 18px 0 var(--color-sand);
+}
+
+.moderator__content::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  right: 24px;
+  width: 120px;
+  height: 10px;
+  background: var(--color-terracotta);
 }
 
 .moderator__eyebrow {
+  display: inline-block;
   font-size: 0.65rem;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: var(--color-terracotta);
-  margin-bottom: var(--space-sm);
-  font-weight: 600;
+  color: var(--color-parchment);
+  background: var(--color-earth-deep);
+  padding: 0.35rem 0.75rem;
+  margin-bottom: var(--space-md);
+  font-weight: 700;
 }
 
 .moderator__name {
-  font-size: clamp(3rem, 6vw, 5rem);
+  font-size: clamp(3.5rem, 8vw, 6rem);
   margin-bottom: var(--space-md);
   line-height: 0.95;
+  text-shadow: 6px 6px 0 var(--color-sand-light);
 }
 
 .moderator__name .light {
@@ -1181,26 +1227,40 @@ body.nav-open {
 }
 
 .moderator__bio {
-  font-size: 1.0625rem;
-  line-height: 1.9;
+  font-size: 1.125rem;
+  line-height: 1.8;
   color: var(--color-ink-soft);
-  margin-bottom: var(--space-md);
-  max-width: 520px;
+  margin-bottom: var(--space-lg);
+  max-width: 560px;
 }
 
 .moderator__quote {
   margin-top: var(--space-lg);
-  padding-left: var(--space-md);
-  border-left: 2px solid var(--color-terracotta);
-  max-width: 500px;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-earth-deep);
+  border: 0;
+  max-width: 620px;
+  position: relative;
+  box-shadow: 12px 12px 0 var(--color-terracotta);
+}
+
+.moderator__quote::before {
+  content: '“';
+  position: absolute;
+  top: -24px;
+  left: 18px;
+  font-family: var(--font-display);
+  font-size: 4.5rem;
+  color: var(--color-terracotta-light);
+  opacity: 0.6;
 }
 
 .moderator__quote p {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
   font-style: italic;
   line-height: 1.35;
-  color: var(--color-earth-mid);
+  color: var(--color-parchment);
   margin: 0;
   letter-spacing: -0.02em;
 }
@@ -1219,10 +1279,27 @@ body.nav-open {
   .moderator__photo-wrapper {
     max-width: 350px;
     margin: 0 auto;
+    transform: none;
   }
 
   .moderator__content {
-    padding-left: 0;
+    padding: var(--space-md);
+    box-shadow: 10px 10px 0 var(--color-sand);
+  }
+
+  .moderator__name {
+    text-shadow: 4px 4px 0 var(--color-sand-light);
+  }
+
+  .moderator__quote {
+    padding: var(--space-md);
+    box-shadow: 8px 8px 0 var(--color-terracotta);
+  }
+
+  .moderator__quote::before {
+    top: -18px;
+    left: 12px;
+    font-size: 4rem;
   }
 }
 
@@ -2906,24 +2983,71 @@ body.nav-open {
 
   /* Moderator Section */
   .moderator-section {
-    background: var(--bg-elevated);
+    background: linear-gradient(
+      135deg,
+      var(--bg-elevated) 0%,
+      var(--bg-primary) 55%,
+      var(--bg-secondary) 100%
+    );
+    border-top: 2px solid var(--border-on-dark);
+    border-bottom: 2px solid var(--border-on-dark);
   }
 
   .moderator-section::before {
-    color: var(--border-light);
-    opacity: 0.3;
+    color: var(--border-on-dark);
+    opacity: 0.2;
+  }
+
+  .moderator-section::after {
+    background: radial-gradient(
+      circle at 40% 40%,
+      rgba(184, 111, 82, 0.25),
+      transparent 70%
+    );
+    opacity: 0.9;
   }
 
   .moderator__photo {
     background: var(--bg-primary);
+    border-color: var(--border-dark);
+    box-shadow: 18px 18px 0 rgba(184, 111, 82, 0.25);
+  }
+
+  .moderator__photo-accent {
+    border-color: var(--border-on-dark);
+  }
+
+  .moderator__content {
+    background: var(--bg-primary);
+    border-color: var(--border-on-dark);
+    box-shadow: 18px 18px 0 rgba(122, 98, 72, 0.4);
+  }
+
+  .moderator__content::before {
+    background: var(--accent-primary);
+  }
+
+  .moderator__eyebrow {
+    background: var(--bg-dark);
+    color: var(--text-on-dark);
   }
 
   .moderator__bio {
     color: var(--text-secondary);
   }
 
+  .moderator__quote {
+    background: var(--bg-dark);
+    box-shadow: 12px 12px 0 rgba(184, 111, 82, 0.35);
+  }
+
+  .moderator__quote::before {
+    color: var(--accent-secondary);
+    opacity: 0.7;
+  }
+
   .moderator__quote p {
-    color: var(--text-accent);
+    color: var(--text-on-dark);
   }
 
   /* Journey Section */
