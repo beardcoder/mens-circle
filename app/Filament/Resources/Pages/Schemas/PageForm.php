@@ -2,19 +2,15 @@
 
 namespace App\Filament\Resources\Pages\Schemas;
 
-use App\Enums\ContentBlockType;
+use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Group;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
 class PageForm
@@ -35,70 +31,47 @@ class PageForm
                 DateTimePicker::make('published_at')
                     ->label('Veröffentlichungsdatum'),
 
-                Repeater::make('contentBlocks')
-                    ->relationship('contentBlocks')
-                    ->orderColumn('order')
-                    ->collapsible()
-                    ->collapsed()
+                Builder::make('content_blocks')
                     ->label('Inhaltsblöcke')
-                    ->schema([
-                        Select::make('type')
-                            ->label('Block-Typ')
-                            ->options([
-                                'hero' => 'Hero Bereich',
-                                'intro' => 'Intro Bereich',
-                                'text_section' => 'Text Bereich',
-                                'value_items' => 'Werte Liste',
-                                'moderator' => 'Moderator Bereich',
-                                'journey_steps' => 'Ablauf Schritte',
-                                'faq' => 'FAQ Bereich',
-                                'newsletter' => 'Newsletter Bereich',
-                                'cta' => 'Call-to-Action',
-                            ])
-                            ->required()
-                            ->reactive()
-                            ->afterStateUpdated(fn ($state, callable $set) => $set('data', [])),
-
-                        // Hero Block
-                        Group::make()
+                    ->blocks([
+                        Builder\Block::make('hero')
+                            ->label('Hero Bereich')
                             ->schema([
-                                TextInput::make('data.label')
+                                TextInput::make('label')
                                     ->label('Label (klein)'),
-                                Textarea::make('data.title')
+                                Textarea::make('title')
                                     ->label('Titel (HTML erlaubt)')
                                     ->required()
                                     ->rows(2),
-                                Textarea::make('data.description')
+                                Textarea::make('description')
                                     ->label('Beschreibung')
                                     ->rows(3),
-                                TextInput::make('data.button_text')
+                                TextInput::make('button_text')
                                     ->label('Button Text'),
-                                TextInput::make('data.button_link')
+                                TextInput::make('button_link')
                                     ->label('Button Link'),
-                                SpatieMediaLibraryFileUpload::make('images')
+                                FileUpload::make('background_image')
                                     ->label('Hintergrundbild')
-                                    ->collection('images')
-                                    ->image()
-                                    ->maxFiles(1),
-                            ])
-                            ->visible(fn (Get $get) => $get('type') === ContentBlockType::Hero->value),
+                                    ->disk('public')
+                                    ->image(),
+                            ]),
 
-                        // Intro Block
-                        Group::make()
+                        Builder\Block::make('intro')
+                            ->label('Intro Bereich')
                             ->schema([
-                                TextInput::make('data.eyebrow')
+                                TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
-                                Textarea::make('data.title')
+                                Textarea::make('title')
                                     ->label('Titel (HTML erlaubt)')
                                     ->required()
                                     ->rows(2),
-                                Textarea::make('data.text')
+                                Textarea::make('text')
                                     ->label('Text')
                                     ->rows(3),
-                                Textarea::make('data.quote')
+                                Textarea::make('quote')
                                     ->label('Zitat (HTML erlaubt)')
                                     ->rows(2),
-                                Repeater::make('data.values')
+                                Repeater::make('values')
                                     ->label('Werte')
                                     ->schema([
                                         TextInput::make('number')
@@ -112,31 +85,29 @@ class PageForm
                                     ])
                                     ->collapsible()
                                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
-                            ])
-                            ->visible(fn (Get $get) => $get('type') === ContentBlockType::Intro->value),
+                            ]),
 
-                        // Text Section Block
-                        Group::make()
+                        Builder\Block::make('text_section')
+                            ->label('Text Bereich')
                             ->schema([
-                                TextInput::make('data.eyebrow')
+                                TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
-                                TextInput::make('data.title')
+                                TextInput::make('title')
                                     ->label('Titel')
                                     ->required(),
-                                RichEditor::make('data.content')
+                                RichEditor::make('content')
                                     ->label('Inhalt')
                                     ->required(),
-                            ])
-                            ->visible(fn (Get $get) => $get('type') === ContentBlockType::TextSection->value),
+                            ]),
 
-                        // Value Items Block
-                        Group::make()
+                        Builder\Block::make('value_items')
+                            ->label('Werte Liste')
                             ->schema([
-                                TextInput::make('data.eyebrow')
+                                TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
-                                TextInput::make('data.title')
+                                TextInput::make('title')
                                     ->label('Titel'),
-                                Repeater::make('data.items')
+                                Repeater::make('items')
                                     ->label('Werte')
                                     ->schema([
                                         TextInput::make('number')
@@ -151,44 +122,41 @@ class PageForm
                                     ])
                                     ->collapsible()
                                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
-                            ])
-                            ->visible(fn (Get $get) => $get('type') === ContentBlockType::ValueItems->value),
+                            ]),
 
-                        // Moderator Block
-                        Group::make()
+                        Builder\Block::make('moderator')
+                            ->label('Moderator Bereich')
                             ->schema([
-                                TextInput::make('data.eyebrow')
+                                TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
-                                Textarea::make('data.name')
+                                Textarea::make('name')
                                     ->label('Name (HTML erlaubt für <span class="light">)')
                                     ->required()
                                     ->rows(2),
-                                RichEditor::make('data.bio')
+                                RichEditor::make('bio')
                                     ->label('Biografie')
                                     ->required(),
-                                Textarea::make('data.quote')
+                                Textarea::make('quote')
                                     ->label('Zitat')
                                     ->rows(3),
-                                SpatieMediaLibraryFileUpload::make('images')
+                                FileUpload::make('photo')
                                     ->label('Foto')
-                                    ->collection('images')
-                                    ->image()
-                                    ->maxFiles(1),
-                            ])
-                            ->visible(fn (Get $get) => $get('type') === ContentBlockType::Moderator->value),
+                                    ->disk('public')
+                                    ->image(),
+                            ]),
 
-                        // Journey Steps Block
-                        Group::make()
+                        Builder\Block::make('journey_steps')
+                            ->label('Ablauf Schritte')
                             ->schema([
-                                TextInput::make('data.eyebrow')
+                                TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
-                                Textarea::make('data.title')
+                                Textarea::make('title')
                                     ->label('Titel (HTML erlaubt)')
                                     ->rows(2),
-                                Textarea::make('data.subtitle')
+                                Textarea::make('subtitle')
                                     ->label('Untertitel')
                                     ->rows(2),
-                                Repeater::make('data.steps')
+                                Repeater::make('steps')
                                     ->label('Schritte')
                                     ->schema([
                                         TextInput::make('number')
@@ -203,21 +171,20 @@ class PageForm
                                     ])
                                     ->collapsible()
                                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
-                            ])
-                            ->visible(fn (Get $get) => $get('type') === ContentBlockType::JourneySteps->value),
+                            ]),
 
-                        // FAQ Block
-                        Group::make()
+                        Builder\Block::make('faq')
+                            ->label('FAQ Bereich')
                             ->schema([
-                                TextInput::make('data.eyebrow')
+                                TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
-                                Textarea::make('data.title')
+                                Textarea::make('title')
                                     ->label('Titel (HTML erlaubt)')
                                     ->rows(2),
-                                Textarea::make('data.intro')
+                                Textarea::make('intro')
                                     ->label('Intro Text')
                                     ->rows(2),
-                                Repeater::make('data.items')
+                                Repeater::make('items')
                                     ->label('Fragen & Antworten')
                                     ->schema([
                                         TextInput::make('question')
@@ -230,59 +197,43 @@ class PageForm
                                     ])
                                     ->collapsible()
                                     ->itemLabel(fn (array $state): ?string => $state['question'] ?? null),
-                            ])
-                            ->visible(fn (Get $get) => $get('type') === ContentBlockType::Faq->value),
+                            ]),
 
-                        // Newsletter Block
-                        Group::make()
+                        Builder\Block::make('newsletter')
+                            ->label('Newsletter Bereich')
                             ->schema([
-                                TextInput::make('data.eyebrow')
+                                TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
-                                Textarea::make('data.title')
+                                Textarea::make('title')
                                     ->label('Titel (HTML erlaubt)')
                                     ->required()
                                     ->rows(2),
-                                Textarea::make('data.text')
+                                Textarea::make('text')
                                     ->label('Text')
                                     ->rows(2),
-                            ])
-                            ->visible(fn (Get $get) => $get('type') === ContentBlockType::Newsletter->value),
+                            ]),
 
-                        // CTA Block
-                        Group::make()
+                        Builder\Block::make('cta')
+                            ->label('Call-to-Action')
                             ->schema([
-                                TextInput::make('data.eyebrow')
+                                TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
-                                Textarea::make('data.title')
+                                Textarea::make('title')
                                     ->label('Titel (HTML erlaubt)')
                                     ->required()
                                     ->rows(2),
-                                Textarea::make('data.text')
+                                Textarea::make('text')
                                     ->label('Text')
                                     ->rows(2),
-                                TextInput::make('data.button_text')
+                                TextInput::make('button_text')
                                     ->label('Button Text'),
-                                TextInput::make('data.button_link')
-                                    ->label('Button Link'),
-                            ])
-                            ->visible(fn (Get $get) => $get('type') === ContentBlockType::Cta->value),
+                                TextInput::make('button_link')
+                                    ->label('Button Link')
+                                    ->url(),
+                            ]),
                     ])
-                    ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => match ($state['type'] ?? null) {
-                        'hero' => '🎭 Hero Bereich',
-                        'intro' => '👋 Intro Bereich',
-                        'text_section' => '📝 Text Bereich',
-                        'value_items' => '⭐ Werte Liste',
-                        'moderator' => '👤 Moderator Bereich',
-                        'journey_steps' => '🚀 Ablauf Schritte',
-                        'faq' => '❓ FAQ Bereich',
-                        'newsletter' => '📧 Newsletter Bereich',
-                        'cta' => '📣 Call-to-Action',
-                        default => 'Unbekannter Block',
-                    })
                     ->columnSpanFull()
-                    ->reorderable()
-                    ->addActionLabel('Block hinzufügen'),
+                    ->collapsible(),
 
                 KeyValue::make('meta')
                     ->label('SEO Meta Tags')

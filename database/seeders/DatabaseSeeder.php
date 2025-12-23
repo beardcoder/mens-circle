@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Enums\ContentBlockType;
-use App\Models\ContentBlock;
 use App\Models\Event;
 use App\Models\Page;
 use App\Models\User;
@@ -24,21 +22,10 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        // Create homepage
-        $homePage = Page::create([
-            'title' => 'Home',
-            'slug' => 'home',
-            'is_published' => true,
-            'published_at' => now(),
-            'meta' => [
-                'description' => 'Männerkreis Straubing – Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.',
-            ],
-        ]);
-
         // Create content blocks for homepage
         $contentBlocks = [
             [
-                'type' => ContentBlockType::Hero,
+                'type' => 'hero',
                 'data' => [
                     'label' => 'Straubing / Niederbayern',
                     'title' => '<span class="hero__title-line">Ein Raum für</span><span class="hero__title-line"><span class="text-italic">echte</span> Begegnung</span>',
@@ -49,7 +36,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 1,
             ],
             [
-                'type' => ContentBlockType::Intro,
+                'type' => 'intro',
                 'data' => [
                     'eyebrow' => 'Was uns verbindet',
                     'title' => 'Was ist ein<br><span class="text-italic">Männerkreis?</span>',
@@ -76,7 +63,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 2,
             ],
             [
-                'type' => ContentBlockType::Moderator,
+                'type' => 'moderator',
                 'data' => [
                     'eyebrow' => 'Dein Begleiter',
                     'name' => 'Markus<br><span class="light">Sommer</span>',
@@ -86,7 +73,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 3,
             ],
             [
-                'type' => ContentBlockType::JourneySteps,
+                'type' => 'journey_steps',
                 'data' => [
                     'eyebrow' => 'Der Weg',
                     'title' => 'Die Reise <span class="text-italic">im Kreis</span>',
@@ -117,7 +104,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 4,
             ],
             [
-                'type' => ContentBlockType::Faq,
+                'type' => 'faq',
                 'data' => [
                     'eyebrow' => 'Fragen & Antworten',
                     'title' => 'Häufige<br><span class="text-italic">Fragen</span>',
@@ -152,7 +139,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 5,
             ],
             [
-                'type' => ContentBlockType::Newsletter,
+                'type' => 'newsletter',
                 'data' => [
                     'eyebrow' => 'In Verbindung bleiben',
                     'title' => 'Bleib <span class="text-italic">verbunden</span>',
@@ -161,7 +148,7 @@ class DatabaseSeeder extends Seeder
                 'order' => 6,
             ],
             [
-                'type' => ContentBlockType::Cta,
+                'type' => 'cta',
                 'data' => [
                     'eyebrow' => 'Nächstes Treffen',
                     'title' => 'Sei beim <span class="text-italic">nächsten</span><br>Mal dabei',
@@ -173,9 +160,20 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        foreach ($contentBlocks as $blockData) {
-            $homePage->contentBlocks()->create($blockData);
-        }
+        // Create homepage with content blocks
+        Page::create([
+            'title' => 'Home',
+            'slug' => 'home',
+            'is_published' => true,
+            'published_at' => now(),
+            'content_blocks' => $contentBlocks,
+            'meta' => [
+                'description' => 'Männerkreis Straubing – Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.',
+            ],
+        ]);
+
+        // Create legal pages
+        $this->call(PageSeeder::class);
 
         // Create sample event
         Event::create([

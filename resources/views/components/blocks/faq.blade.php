@@ -2,22 +2,22 @@
     <div class="container">
         <div class="faq__layout">
             <div class="faq__header fade-in">
-                @if(!empty($block->data['eyebrow']))
-                    <p class="faq__eyebrow">{{ $block->data['eyebrow'] }}</p>
+                @if(!empty($block['data']['eyebrow']))
+                    <p class="faq__eyebrow">{{ $block['data']['eyebrow'] }}</p>
                 @endif
 
-                @if(!empty($block->data['title']))
-                    <h2 class="faq__title">{!! $block->data['title'] !!}</h2>
+                @if(!empty($block['data']['title']))
+                    <h2 class="faq__title">{!! $block['data']['title'] !!}</h2>
                 @endif
 
-                @if(!empty($block->data['intro']))
-                    <p class="faq__intro">{{ $block->data['intro'] }}</p>
+                @if(!empty($block['data']['intro']))
+                    <p class="faq__intro">{{ $block['data']['intro'] }}</p>
                 @endif
             </div>
 
-            @if(!empty($block->data['items']) && is_array($block->data['items']))
+            @if(!empty($block['data']['items']) && is_array($block['data']['items']))
                 <div class="faq__list fade-in fade-in-delay-1">
-                    @foreach($block->data['items'] as $item)
+                    @foreach($block['data']['items'] as $item)
                         <div class="faq-item">
                             @if(!empty($item['question']))
                                 <button class="faq-item__question" aria-expanded="false">
