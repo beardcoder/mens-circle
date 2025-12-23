@@ -1,0 +1,270 @@
+/**
+ * Hero Section
+ * Full-screen hero with decorative elements
+ */
+
+/* ============================================
+   Hero Base
+   ============================================ */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+  padding-block-end: var(--space-xl);
+  background: var(--bg-dark);
+  overflow: hidden;
+}
+
+/* ============================================
+   Hero Background
+   ============================================ */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    var(--color-earth-deep) 0%,
+    var(--color-earth-dark) 100%
+  );
+}
+
+/* Noise texture */
+.hero__bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+}
+
+/* Warm glow */
+.hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 70% 30%,
+      color-mix(in oklch, var(--accent-primary) 15%, transparent) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 20% 80%,
+      color-mix(in oklch, var(--accent-primary) 8%, transparent) 0%,
+      transparent 40%
+    );
+}
+
+/* ============================================
+   Decorative Circles
+   ============================================ */
+.hero__circles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.hero__circle {
+  position: absolute;
+  border: 1px solid var(--color-sand);
+  border-radius: 50%;
+  animation: breathe 15s ease-in-out infinite;
+}
+
+.hero__circle--1 {
+  inline-size: 70vw;
+  block-size: 70vw;
+  inset-inline-end: -25vw;
+  inset-block-start: -15vw;
+}
+
+.hero__circle--2 {
+  inline-size: 50vw;
+  block-size: 50vw;
+  inset-inline-end: -15vw;
+  inset-block-start: -5vw;
+  animation-delay: -5s;
+}
+
+.hero__circle--3 {
+  inline-size: 35vw;
+  block-size: 35vw;
+  inset-inline-end: -8vw;
+  inset-block-start: 2vw;
+  animation-delay: -10s;
+}
+
+.hero__circle--4 {
+  inline-size: 90vw;
+  block-size: 90vw;
+  inset-inline-start: -45vw;
+  inset-block-end: -45vw;
+  opacity: 0.4;
+}
+
+/* ============================================
+   Hero Content
+   ============================================ */
+.hero__content {
+  position: relative;
+  z-index: 2;
+  inline-size: 100%;
+}
+
+.hero__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-block-end: var(--space-lg);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-secondary);
+}
+
+.hero__label::before {
+  content: '';
+  inline-size: 50px;
+  block-size: 1px;
+  background: var(--accent-primary);
+}
+
+.hero__title {
+  max-inline-size: 100%;
+  margin-block-end: var(--space-md);
+  font-size: clamp(2.75rem, 8vw + 1rem, 9rem);
+  line-height: 0.9;
+  color: var(--text-on-dark);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.hero__title .text-italic {
+  color: var(--accent-secondary);
+}
+
+.hero__title-line {
+  display: block;
+}
+
+/* ============================================
+   Hero Bottom Section
+   ============================================ */
+.hero__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-lg);
+  margin-block-start: var(--space-lg);
+}
+
+.hero__description {
+  max-inline-size: 480px;
+  font-size: clamp(1rem, 1.5vw + 0.5rem, 1.125rem);
+  line-height: 1.9;
+  color: var(--color-sand);
+}
+
+.hero__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-sm);
+}
+
+/* ============================================
+   Scroll Indicator
+   ============================================ */
+.hero__scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-block-start: var(--space-lg);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-sand);
+  writing-mode: vertical-rl;
+}
+
+.hero__scroll-line {
+  inline-size: 1px;
+  block-size: 80px;
+  background: linear-gradient(to bottom, var(--accent-primary), transparent);
+  animation: scroll-pulse 2.5s ease-in-out infinite;
+}
+
+/* ============================================
+   Hero Responsive
+   ============================================ */
+@media (max-width: 900px) {
+  .hero {
+    align-items: center;
+    padding-block-start: var(--space-3xl);
+  }
+
+  .hero__title {
+    font-size: clamp(2.25rem, 7vw + 0.5rem, 5rem);
+  }
+
+  .hero__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero__cta {
+    align-items: flex-start;
+  }
+
+  .hero__scroll {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__title {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .hero__label {
+    margin-block-end: var(--space-md);
+    font-size: 0.65rem;
+  }
+
+  .hero__description {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================
+   Event Hero Variant
+   ============================================ */
+.event-hero {
+  min-block-size: 70vh;
+  padding-block-start: 140px;
+  padding-block-end: var(--space-xl);
+  align-items: flex-end;
+}
+
+.event-hero .hero__title {
+  font-size: clamp(3.5rem, 12vw, 10rem);
+  line-height: 0.9;
+}
+
+.event-hero .hero__bottom {
+  margin-block-start: var(--space-lg);
+}
+
+.event-hero .hero__description {
+  max-inline-size: 600px;
+  font-size: 1.125rem;
+}
+

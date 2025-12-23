@@ -1,0 +1,192 @@
+/**
+ * Moderator Section
+ * Profile section with photo and bio
+ */
+
+/* ============================================
+   Moderator Section Base
+   ============================================ */
+.moderator-section {
+  position: relative;
+  background: var(--color-parchment);
+  overflow: hidden;
+}
+
+/* Decorative text */
+.moderator-section::before {
+  content: 'BEGLEITER';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: -5%;
+  transform: translateY(-50%) rotate(-90deg);
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 12vw, 10rem);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  color: var(--border-light);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .moderator-section::before {
+    display: none;
+  }
+}
+
+/* ============================================
+   Moderator Layout
+   ============================================ */
+.moderator__layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+  min-block-size: 90vh;
+  padding-block: var(--space-xl);
+}
+
+@media (max-width: 900px) {
+  .moderator__layout {
+    grid-template-columns: 1fr;
+    min-block-size: auto;
+    gap: var(--space-lg);
+  }
+}
+
+/* ============================================
+   Photo Area
+   ============================================ */
+.moderator__photo-wrapper {
+  position: relative;
+}
+
+@media (max-width: 900px) {
+  .moderator__photo-wrapper {
+    max-inline-size: 350px;
+    margin-inline: auto;
+  }
+}
+
+.moderator__photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-section-alt);
+  overflow: hidden;
+}
+
+/* Noise texture */
+.moderator__photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.moderator__photo-image {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.moderator__photo-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  color: var(--text-on-dark);
+}
+
+.moderator__photo-placeholder svg {
+  inline-size: 80px;
+  block-size: 80px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 0.5;
+  opacity: 0.3;
+}
+
+.moderator__photo-placeholder span {
+  font-family: var(--font-accent);
+  font-size: 1.25rem;
+  font-style: italic;
+  opacity: 0.5;
+}
+
+.moderator__photo-accent {
+  position: absolute;
+  inset-block-start: var(--space-md);
+  inset-inline-start: var(--space-md);
+  inset-inline-end: calc(var(--space-md) * -1);
+  inset-block-end: calc(var(--space-md) * -1);
+  border: 1px solid var(--accent-primary);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+/* ============================================
+   Content Area
+   ============================================ */
+.moderator__content {
+  position: relative;
+  padding-inline-start: var(--space-lg);
+}
+
+@media (max-width: 900px) {
+  .moderator__content {
+    padding-inline-start: 0;
+  }
+}
+
+.moderator__eyebrow {
+  margin-block-end: var(--space-sm);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+.moderator__name {
+  margin-block-end: var(--space-md);
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 0.95;
+}
+
+.moderator__name .light {
+  display: block;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.moderator__bio {
+  max-inline-size: 520px;
+  margin-block-end: var(--space-md);
+  font-size: 1.0625rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+}
+
+.moderator__quote {
+  max-inline-size: 500px;
+  margin-block-start: var(--space-lg);
+  padding-inline-start: var(--space-md);
+  border-inline-start: 2px solid var(--accent-primary);
+}
+
+.moderator__quote p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-style: italic;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--bg-section-alt);
+}
+

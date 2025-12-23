@@ -1,0 +1,234 @@
+/**
+ * CSS Custom Properties (Variables)
+ * Modern 2025 approach with @property for animatable values
+ * Using OKLCH for perceptually uniform colors
+ */
+
+/* Define animatable custom properties */
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --glow-opacity {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: false;
+}
+
+@property --circle-scale {
+  syntax: '<number>';
+  initial-value: 1;
+  inherits: false;
+}
+
+:root {
+  /* ============================================
+     Color Palette - Using OKLCH for 2025
+     OKLCH provides perceptually uniform colors
+     ============================================ */
+
+  /* Base Earth Tones */
+  --color-earth-deep: oklch(22% 0.03 55);
+  --color-earth-dark: oklch(28% 0.035 55);
+  --color-earth-mid: oklch(38% 0.04 55);
+  --color-earth-warm: oklch(48% 0.06 55);
+
+  /* Terracotta Accents */
+  --color-terracotta: oklch(58% 0.14 35);
+  --color-terracotta-light: oklch(68% 0.12 35);
+
+  /* Neutral Sand Tones */
+  --color-sand: oklch(78% 0.03 80);
+  --color-sand-light: oklch(88% 0.02 80);
+
+  /* Light Backgrounds */
+  --color-parchment: oklch(95% 0.01 85);
+  --color-bone: oklch(98% 0.005 85);
+
+  /* Dark Text */
+  --color-ink: oklch(15% 0.02 55);
+  --color-ink-soft: oklch(28% 0.02 55);
+
+  /* ============================================
+     Semantic Color Tokens - Light Theme
+     ============================================ */
+
+  /* Backgrounds */
+  --bg-primary: var(--color-bone);
+  --bg-secondary: var(--color-parchment);
+  --bg-tertiary: var(--color-sand-light);
+  --bg-dark: var(--color-earth-deep);
+  --bg-dark-alt: var(--color-earth-dark);
+  --bg-elevated: var(--color-parchment);
+  --bg-section-alt: var(--color-earth-mid);
+  --bg-input: color-mix(in oklch, var(--color-bone) 8%, transparent);
+  --bg-input-focus: color-mix(in oklch, var(--color-bone) 12%, transparent);
+  --bg-overlay: color-mix(in oklch, var(--color-ink) 70%, transparent);
+
+  /* Text */
+  --text-primary: var(--color-ink);
+  --text-secondary: var(--color-ink-soft);
+  --text-on-dark: var(--color-parchment);
+  --text-on-dark-secondary: var(--color-sand);
+  --text-accent: var(--color-earth-warm);
+
+  /* Accents */
+  --accent-primary: var(--color-terracotta);
+  --accent-secondary: var(--color-terracotta-light);
+
+  /* Borders */
+  --border-light: var(--color-sand-light);
+  --border-medium: color-mix(in oklch, var(--color-sand) 30%, transparent);
+  --border-dark: var(--color-earth-mid);
+  --border-on-dark: color-mix(in oklch, var(--color-sand) 15%, transparent);
+
+  /* ============================================
+     Typography Scale
+     ============================================ */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-accent: 'Cormorant', Georgia, serif;
+
+  /* Fluid Type Scale using clamp() */
+  --text-xs: clamp(0.625rem, 0.5rem + 0.25vw, 0.75rem);
+  --text-sm: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --text-xl: clamp(1.25rem, 1rem + 1vw, 2rem);
+  --text-2xl: clamp(1.5rem, 1rem + 2vw, 3rem);
+  --text-3xl: clamp(2rem, 1rem + 3vw, 4rem);
+  --text-4xl: clamp(2.5rem, 1rem + 5vw, 6rem);
+  --text-5xl: clamp(3rem, 1rem + 7vw, 8rem);
+  --text-6xl: clamp(4rem, 1rem + 10vw, 12rem);
+  --text-massive: clamp(5rem, 2rem + 15vw, 18rem);
+
+  /* ============================================
+     Spacing Scale
+     ============================================ */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.375rem;
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 8rem;
+  --space-2xl: 12rem;
+  --space-3xl: 16rem;
+
+  /* ============================================
+     Motion & Transitions
+     ============================================ */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 800ms;
+
+  --transition-fast: var(--duration-fast) var(--ease-out);
+  --transition-medium: var(--duration-normal) var(--ease-out);
+  --transition-slow: var(--duration-slower) var(--ease-out);
+
+  /* ============================================
+     Layout
+     ============================================ */
+  --container-width: 1400px;
+  --container-narrow: 900px;
+  --container-wide: 1800px;
+
+  /* Safe area insets for mobile */
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
+
+  /* ============================================
+     Shadows & Effects
+     ============================================ */
+  --shadow-sm: 0 1px 2px color-mix(in oklch, var(--color-ink) 5%, transparent);
+  --shadow-md: 0 4px 6px -1px color-mix(in oklch, var(--color-ink) 10%, transparent);
+  --shadow-lg: 0 10px 15px -3px color-mix(in oklch, var(--color-ink) 10%, transparent);
+  --shadow-xl: 0 20px 25px -5px color-mix(in oklch, var(--color-ink) 10%, transparent);
+  --shadow-2xl: 0 25px 50px -12px color-mix(in oklch, var(--color-ink) 25%, transparent);
+
+  /* ============================================
+     Border Radius
+     ============================================ */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ============================================
+     Z-Index Scale
+     ============================================ */
+  --z-base: 0;
+  --z-elevated: 10;
+  --z-sticky: 100;
+  --z-header: 1000;
+  --z-dropdown: 1100;
+  --z-modal-backdrop: 1200;
+  --z-modal: 1300;
+  --z-tooltip: 1400;
+  --z-toast: 1500;
+}
+
+/* ============================================
+   Dark Mode Theme
+   Using color-scheme for native dark mode support
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    /* Dark Theme Backgrounds */
+    --bg-primary: var(--color-ink);
+    --bg-secondary: var(--color-earth-deep);
+    --bg-tertiary: var(--color-earth-dark);
+    --bg-dark: var(--color-earth-deep);
+    --bg-dark-alt: var(--color-earth-dark);
+    --bg-elevated: var(--color-earth-deep);
+    --bg-section-alt: var(--color-earth-deep);
+    --bg-input: color-mix(in oklch, var(--color-ink) 50%, transparent);
+    --bg-input-focus: color-mix(in oklch, var(--color-ink) 70%, transparent);
+    --bg-overlay: color-mix(in oklch, var(--color-ink) 85%, transparent);
+
+    /* Dark Theme Text */
+    --text-primary: var(--color-parchment);
+    --text-secondary: var(--color-sand-light);
+    --text-on-dark: var(--color-parchment);
+    --text-on-dark-secondary: var(--color-sand-light);
+    --text-accent: var(--color-terracotta-light);
+
+    /* Dark Theme Borders */
+    --border-light: color-mix(in oklch, var(--color-earth-mid) 30%, transparent);
+    --border-medium: color-mix(in oklch, var(--color-earth-mid) 30%, transparent);
+    --border-dark: var(--color-earth-warm);
+    --border-on-dark: color-mix(in oklch, var(--color-sand) 25%, transparent);
+
+    /* Adjusted shadows for dark mode */
+    --shadow-sm: 0 1px 2px color-mix(in oklch, black 20%, transparent);
+    --shadow-md: 0 4px 6px -1px color-mix(in oklch, black 30%, transparent);
+    --shadow-lg: 0 10px 15px -3px color-mix(in oklch, black 30%, transparent);
+    --shadow-xl: 0 20px 25px -5px color-mix(in oklch, black 30%, transparent);
+    --shadow-2xl: 0 25px 50px -12px color-mix(in oklch, black 50%, transparent);
+  }
+}
+
+/* ============================================
+   Reduced Motion Preference
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+    --duration-slower: 0ms;
+  }
+}
+

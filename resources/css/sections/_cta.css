@@ -1,0 +1,76 @@
+/**
+ * CTA Section
+ * Call-to-action section
+ */
+
+/* ============================================
+   CTA Section Base
+   ============================================ */
+.cta-section {
+  position: relative;
+  background: var(--color-parchment);
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Decorative circles */
+.cta-section::before,
+.cta-section::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--color-sand);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cta-section::before {
+  inline-size: 50vw;
+  block-size: 50vw;
+  opacity: 0.3;
+}
+
+.cta-section::after {
+  inline-size: 35vw;
+  block-size: 35vw;
+  opacity: 0.2;
+}
+
+/* ============================================
+   CTA Content
+   ============================================ */
+.cta__content {
+  position: relative;
+  z-index: 1;
+  max-inline-size: 700px;
+  margin-inline: auto;
+}
+
+.cta__eyebrow {
+  margin-block-end: var(--space-sm);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+.cta__title {
+  margin-block-end: var(--space-sm);
+}
+
+.cta__title .text-italic {
+  display: block;
+  font-family: var(--font-accent);
+  font-style: italic;
+}
+
+.cta__text {
+  margin-block-end: var(--space-lg);
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
