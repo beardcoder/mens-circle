@@ -1,54 +1,40 @@
 @props(['icon' => null, 'type' => null, 'url' => '#', 'label' => '', 'variant' => 'icon'])
 
 @php
-use App\Enums\Heroicon as AppHeroicon;
+use App\Enums\Heroicon;
 use App\Enums\SocialLinkType;
 
-$socialType = null;
-if ($type instanceof SocialLinkType) {
-    $socialType = $type;
-} elseif (is_string($type)) {
-    $socialType = SocialLinkType::tryFrom($type);
-}
+// Resolve social type
+$socialType = $type instanceof SocialLinkType ? $type : SocialLinkType::tryFrom($type ?? '');
 
-$iconKey = is_string($icon) ? $icon : null;
-$heroicon = null;
-if ($icon instanceof AppHeroicon) {
-    $heroicon = $icon;
-} elseif (is_string($iconKey)) {
-    $heroicon = AppHeroicon::fromName($iconKey);
-}
+// Resolve heroicon
+$heroicon = $icon instanceof Heroicon ? $icon : (is_string($icon) ? Heroicon::fromName($icon) : null);
 
-$iconSvg = $heroicon?->getSvg(24) ?? $socialType?->getIcon() ?? AppHeroicon::LINK->getSvg(24);
-$title = $label;
-if ($title === '') {
-    $title = $socialType?->getLabel()
-        ?? $heroicon?->getLabel()
-        ?? 'Link';
-}
+// Get SVG and title
+$iconSvg = $heroicon?->getSvg(24) ?? $socialType?->getIcon() ?? Heroicon::LINK->getSvg(24);
+$title = $label ?: ($socialType?->getLabel() ?? $heroicon?->getLabel() ?? 'Link');
 
-// Prepare URL with mailto: or tel: prefix if needed
+// Determine link type and format URL
+$isInternal = str_starts_with($url, 'mailto:') || str_starts_with($url, 'tel:');
 $href = $url;
-$isInternal = false;
-if (str_starts_with($href, 'mailto:') || str_starts_with($href, 'tel:')) {
-    $isInternal = true;
-} else {
-    $isEmail = filter_var($href, FILTER_VALIDATE_EMAIL) !== false;
-    $isPhone = preg_match('/^\+?[0-9\s\-\(\)]+$/', $href) === 1;
-    $looksLikeEmailIcon = $iconKey && str_contains($iconKey, 'envelope');
-    $looksLikePhoneIcon = $iconKey && str_contains($iconKey, 'phone');
 
-    if ($socialType === SocialLinkType::EMAIL || $isEmail || $looksLikeEmailIcon) {
-        $href = 'mailto:' . $href;
+if (!$isInternal) {
+    $isEmail = filter_var($url, FILTER_VALIDATE_EMAIL);
+    $isPhone = preg_match('/^\+?[0-9\s\-\(\)]+$/', $url);
+
+    if ($isEmail) {
+        $href = 'mailto:' . $url;
         $isInternal = true;
-    } elseif ($socialType === SocialLinkType::PHONE || $isPhone || $looksLikePhoneIcon) {
-        $href = 'tel:' . str_replace([' ', '-', '(', ')'], '', $href);
+    } elseif ($isPhone) {
+        $href = 'tel:' . preg_replace('/[\s\-\(\)]/', '', $url);
         $isInternal = true;
     }
 }
-    $isTextVariant = $variant === 'link';
-    $linkClass = $isTextVariant ? 'social-link' : 'social-icon';
-    $iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
+
+// CSS classes based on variant
+$isTextVariant = $variant === 'link';
+$linkClass = $isTextVariant ? 'social-link' : 'social-icon';
+$iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
 @endphp
 
 <a href="{{ $href }}" title="{{ $title }}" target="{{ $isInternal ? '_self' : '_blank' }}" rel="{{ $isInternal ? '' : 'noopener noreferrer' }}" {{ $attributes->merge(['class' => $linkClass]) }}>
