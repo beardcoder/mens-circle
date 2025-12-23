@@ -213,13 +213,13 @@
 <script>
     // Pass event data to JavaScript for calendar integration
     window.eventData = {
-        title: '{{ $event->title }}',
-        description: '{{ strip_tags($event->description) }}',
-        location: '{{ $event->location }}',
-        startDate: '{{ $event->event_date->format('Y-m-d') }}',
-        startTime: '{{ $event->start_time->format('H:i') }}',
-        endDate: '{{ $event->event_date->format('Y-m-d') }}',
-        endTime: '{{ $event->end_time->format('H:i') }}'
+        title: @json($event->title),
+        description: @json(strip_tags($event->description)),
+        location: @json($event->location),
+        startDate: @json($event->event_date->format('Y-m-d')),
+        startTime: @json($event->start_time->format('H:i')),
+        endDate: @json($event->event_date->format('Y-m-d')),
+        endTime: @json($event->end_time->format('H:i'))
     };
 </script>
 @endpush
