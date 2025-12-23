@@ -62,7 +62,6 @@
 }
 
 .cta__title .text-italic {
-  display: block;
   font-family: var(--font-accent);
   font-style: italic;
 }

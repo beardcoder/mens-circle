@@ -1560,7 +1560,6 @@ a {
 .cta__title .text-italic {
   font-family: var(--font-accent);
   font-style: italic;
-  display: block;
 }
 
 .cta__text {
