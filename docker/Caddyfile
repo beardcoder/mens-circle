@@ -7,25 +7,64 @@
     log {
         level ERROR
     }
+
+    # Order matters - ensure static files are handled before PHP
+    order file_server before php_server
 }
 
 :80 {
     # Set root to public directory
     root * /app/public
 
-    # Enable compression
+    # Enable compression (Brotli is automatically used if client supports it)
     encode zstd gzip
 
-    # Serve static files directly
-    @static {
+    # Fonts - immutable, versioned files
+    @fonts {
         file
-        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.ttf *.eot *.webp *.avif
+        path *.woff *.woff2 *.ttf *.eot *.otf
     }
-    handle @static {
+    handle @fonts {
         file_server
         header {
             Cache-Control "public, max-age=31536000, immutable"
-            Expires "Thu, 31 Dec 2037 23:55:55 GMT"
+            Access-Control-Allow-Origin "*"
+        }
+    }
+
+    # Vite build assets - immutable, hash-based versioning
+    @vite_assets {
+        file
+        path /build/*
+    }
+    handle @vite_assets {
+        file_server
+        header {
+            Cache-Control "public, max-age=31536000, immutable"
+        }
+    }
+
+    # Images - long cache with revalidation
+    @images {
+        file
+        path *.jpg *.jpeg *.png *.gif *.webp *.avif *.svg *.ico
+    }
+    handle @images {
+        file_server
+        header {
+            Cache-Control "public, max-age=2592000, stale-while-revalidate=604800"
+        }
+    }
+
+    # CSS and JS (non-Vite) - medium cache with revalidation
+    @assets {
+        file
+        path *.css *.js
+    }
+    handle @assets {
+        file_server
+        header {
+            Cache-Control "public, max-age=604800, stale-while-revalidate=86400"
         }
     }
 
@@ -34,12 +73,18 @@
         resolve_root_symlink
     }
 
-    # Security headers
+    # Security headers (applied to all responses)
     header {
+        # Security
         X-Frame-Options "SAMEORIGIN"
         X-Content-Type-Options "nosniff"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
+
+        # Performance hints
+        X-DNS-Prefetch-Control "on"
+
+        # Remove server header
         -Server
     }
 

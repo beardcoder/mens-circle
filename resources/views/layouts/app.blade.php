@@ -37,6 +37,13 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="{{ asset('build/assets/dm-sans-latin-wght-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('build/assets/cormorant-latin-wght-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+
     <!-- Styles -->
     @vite(['resources/css/app.css'])
 
