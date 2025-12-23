@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
-use Intervention\Image\Drivers\Vips\Driver as VipsDriver;
 use Intervention\Image\ImageManager;
 
 class ImageServiceProvider extends ServiceProvider
@@ -17,10 +16,10 @@ class ImageServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(ImageManager::class, function ($app) {
-            $driver = match (config('image.driver', 'vips')) {
-                'gd' => new GdDriver(),
-                'imagick' => new ImagickDriver(),
-                default => new VipsDriver(),
+            $driver = match (config('image.driver', 'gd')) {
+                'gd' => new GdDriver,
+                'imagick' => new ImagickDriver,
+                default => new GdDriver,
             };
 
             return new ImageManager($driver);

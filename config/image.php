@@ -7,15 +7,15 @@ return [
     | Image Driver
     |--------------------------------------------------------------------------
     |
-    | Intervention Image supports "GD Library" and "Imagick" and "Vips" to
-    | process images. Depending on your PHP setup, you may choose one of
-    | them. By default, we use Vips for best performance.
+    | Intervention Image supports "GD Library" and "Imagick" to process images.
+    | Depending on your PHP setup, you may choose one of them.
+    | By default, we use GD for compatibility.
     |
-    | Supported: "gd", "imagick", "vips"
+    | Supported: "gd", "imagick"
     |
     */
 
-    'driver' => env('IMAGE_DRIVER', 'vips'),
+    'driver' => env('IMAGE_DRIVER', 'gd'),
 
     /*
     |--------------------------------------------------------------------------
