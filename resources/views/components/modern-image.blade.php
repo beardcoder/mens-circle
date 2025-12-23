@@ -77,6 +77,7 @@ if (!file_exists($imagePath)) {
     <img
         src="{{ asset('storage/' . ltrim($src, '/')) }}"
         alt="{{ $alt }}"
+        decoding="async"
         @if($class) class="{{ $class }}" @endif
         @if($loading) loading="{{ $loading }}" @endif
         @if($width) width="{{ $width }}" @endif
