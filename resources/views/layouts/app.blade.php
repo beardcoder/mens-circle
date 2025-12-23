@@ -115,6 +115,19 @@
                                 />
                             @endforeach
                         </div>
+                        <ul class="footer__social-links">
+                            @foreach($socialLinks as $link)
+                                <li>
+                                    <x-social-icon
+                                        variant="link"
+                                        :icon="$link['icon'] ?? null"
+                                        :type="$link['type'] ?? null"
+                                        :url="$link['value']"
+                                        :label="$link['label'] ?? ''"
+                                    />
+                                </li>
+                            @endforeach
+                        </ul>
                     @endif
                 </div>
 
