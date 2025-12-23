@@ -12,6 +12,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 
 class PageForm
 {
@@ -33,9 +34,12 @@ class PageForm
 
                 Builder::make('content_blocks')
                     ->label('Inhaltsblöcke')
+                    ->collapsible()
+                    ->collapsed()
                     ->blocks([
                         Builder\Block::make('hero')
                             ->label('Hero Bereich')
+                            ->icon(Heroicon::OutlinedSparkles)
                             ->schema([
                                 TextInput::make('label')
                                     ->label('Label (klein)'),
@@ -58,6 +62,7 @@ class PageForm
 
                         Builder\Block::make('intro')
                             ->label('Intro Bereich')
+                            ->icon(Heroicon::OutlinedInformationCircle)
                             ->schema([
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
@@ -89,6 +94,7 @@ class PageForm
 
                         Builder\Block::make('text_section')
                             ->label('Text Bereich')
+                            ->icon(Heroicon::OutlinedDocumentText)
                             ->schema([
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
@@ -102,6 +108,7 @@ class PageForm
 
                         Builder\Block::make('value_items')
                             ->label('Werte Liste')
+                            ->icon(Heroicon::OutlinedRectangleStack)
                             ->schema([
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
@@ -126,6 +133,7 @@ class PageForm
 
                         Builder\Block::make('moderator')
                             ->label('Moderator Bereich')
+                            ->icon(Heroicon::OutlinedUserCircle)
                             ->schema([
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
@@ -147,6 +155,7 @@ class PageForm
 
                         Builder\Block::make('journey_steps')
                             ->label('Ablauf Schritte')
+                            ->icon(Heroicon::OutlinedMap)
                             ->schema([
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
@@ -175,6 +184,7 @@ class PageForm
 
                         Builder\Block::make('faq')
                             ->label('FAQ Bereich')
+                            ->icon(Heroicon::OutlinedQuestionMarkCircle)
                             ->schema([
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
@@ -201,6 +211,7 @@ class PageForm
 
                         Builder\Block::make('newsletter')
                             ->label('Newsletter Bereich')
+                            ->icon(Heroicon::OutlinedEnvelope)
                             ->schema([
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
@@ -215,6 +226,7 @@ class PageForm
 
                         Builder\Block::make('cta')
                             ->label('Call-to-Action')
+                            ->icon(Heroicon::OutlinedCursorArrowRipple)
                             ->schema([
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
@@ -228,8 +240,7 @@ class PageForm
                                 TextInput::make('button_text')
                                     ->label('Button Text'),
                                 TextInput::make('button_link')
-                                    ->label('Button Link')
-                                    ->url(),
+                                    ->label('Button Link'),
                             ]),
                     ])
                     ->columnSpanFull()
