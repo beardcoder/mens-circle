@@ -8,7 +8,7 @@
    ============================================ */
 .cta-section {
   position: relative;
-  background: var(--color-parchment);
+  background: var(--bg-tertiary);
   text-align: center;
   overflow: hidden;
 }

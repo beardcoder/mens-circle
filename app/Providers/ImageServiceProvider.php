@@ -20,7 +20,6 @@ class ImageServiceProvider extends ServiceProvider
             $driver = match (config('image.driver', 'vips')) {
                 'gd' => new GdDriver(),
                 'imagick' => new ImagickDriver(),
-                'vips' => new VipsDriver(),
                 default => new VipsDriver(),
             };
 
