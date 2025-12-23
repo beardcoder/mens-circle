@@ -49,7 +49,7 @@ FROM dunglas/frankenphp:1-php8.5 AS production
 WORKDIR /app
 
 # Install system dependencies including libvips
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt-get update && apt-get install -y \
     sqlite3 \
     libicu-dev \
     libpng-dev \
@@ -60,8 +60,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libonig-dev \
     supervisor \
     curl \
-    libvips42 libvips-dev && \
+    libvips42 libpq-dev libffi-dev && \
     rm -rf /var/lib/apt/lists/*
+
+RUN apt-get install -y --no-install-recommends \
+    libvips42 
 
 # Install PHP extensions
 RUN install-php-extensions \
