@@ -1,4 +1,4 @@
-@props(['icon' => null, 'type' => null, 'url' => '#', 'label' => ''])
+@props(['icon' => null, 'type' => null, 'url' => '#', 'label' => '', 'variant' => 'icon'])
 
 @php
 use App\Enums\Heroicon as AppHeroicon;
@@ -46,9 +46,16 @@ if (str_starts_with($href, 'mailto:') || str_starts_with($href, 'tel:')) {
         $isInternal = true;
     }
 }
+    $isTextVariant = $variant === 'link';
+    $linkClass = $isTextVariant ? 'social-link' : 'social-icon';
+    $iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
 @endphp
 
-<a href="{{ $href }}" title="{{ $title }}" target="{{ $isInternal ? '_self' : '_blank' }}" rel="{{ $isInternal ? '' : 'noopener noreferrer' }}" {{ $attributes->merge(['class' => 'social-icon']) }}>
-    <span class="social-icon__svg">{!! $iconSvg !!}</span>
-    <span class="sr-only">{{ $title }}</span>
+<a href="{{ $href }}" title="{{ $title }}" target="{{ $isInternal ? '_self' : '_blank' }}" rel="{{ $isInternal ? '' : 'noopener noreferrer' }}" {{ $attributes->merge(['class' => $linkClass]) }}>
+    <span class="{{ $iconClass }}">{!! $iconSvg !!}</span>
+    @if($isTextVariant)
+        <span class="social-link__label">{{ $title }}</span>
+    @else
+        <span class="sr-only">{{ $title }}</span>
+    @endif
 </a>
