@@ -12,8 +12,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
-use Filament\Schemas\Schema;
 use Filament\Pages\Page;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 
 class SendNewsletter extends Page implements HasForms
@@ -65,6 +65,7 @@ class SendNewsletter extends Page implements HasForms
                 ->modalHeading('Newsletter versenden?')
                 ->modalDescription(function () {
                     $count = NewsletterSubscription::where('status', 'active')->count();
+
                     return "Der Newsletter wird an {$count} aktive Abonnenten versendet. Dies kann nicht rückgängig gemacht werden.";
                 })
                 ->modalSubmitActionLabel('Jetzt versenden')

@@ -12,7 +12,6 @@ class PageController extends Controller
         $page = cache()->remember('page.home', 3600, function () {
             return Page::where('slug', 'home')
                 ->where('is_published', true)
-                ->with('contentBlocks.media')
                 ->firstOrFail();
         });
 
@@ -24,7 +23,6 @@ class PageController extends Controller
         $page = cache()->remember("page.{$slug}", 3600, function () use ($slug) {
             return Page::where('slug', $slug)
                 ->where('is_published', true)
-                ->with('contentBlocks.media')
                 ->firstOrFail();
         });
 

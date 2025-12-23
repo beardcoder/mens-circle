@@ -40,7 +40,7 @@ class EventsTable
                 TextColumn::make('confirmedRegistrations')
                     ->label('Anmeldungen')
                     ->counts('confirmedRegistrations')
-                    ->formatStateUsing(fn ($record) => $record->confirmedRegistrations()->count() . ' / ' . $record->max_participants)
+                    ->formatStateUsing(fn ($record) => $record->confirmedRegistrations()->count().' / '.$record->max_participants)
                     ->badge()
                     ->color(fn ($record) => $record->isFull() ? 'danger' : 'success'),
                 IconColumn::make('is_published')

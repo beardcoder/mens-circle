@@ -21,7 +21,7 @@ class EventController extends Controller
                 ->first();
         });
 
-        if (!$event) {
+        if (! $event) {
             abort(404, 'Aktuell ist kein Event geplant. Bitte schauen Sie später wieder vorbei.');
         }
 
@@ -64,7 +64,7 @@ class EventController extends Controller
 
         $event = Event::findOrFail($request->event_id);
 
-        if (!$event->is_published) {
+        if (! $event->is_published) {
             return response()->json([
                 'success' => false,
                 'message' => 'Diese Veranstaltung ist nicht verfügbar.',
