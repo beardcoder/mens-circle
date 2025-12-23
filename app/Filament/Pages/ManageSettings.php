@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\SocialLinkType;
 use App\Models\Setting;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -90,19 +91,7 @@ class ManageSettings extends Page implements HasForms
                     ->schema([
                         Select::make('type')
                             ->label('Typ')
-                            ->options([
-                                'email' => 'E-Mail',
-                                'phone' => 'Telefon',
-                                'instagram' => 'Instagram',
-                                'facebook' => 'Facebook',
-                                'twitter' => 'Twitter (X)',
-                                'linkedin' => 'LinkedIn',
-                                'youtube' => 'YouTube',
-                                'whatsapp' => 'WhatsApp',
-                                'telegram' => 'Telegram',
-                                'website' => 'Website',
-                                'other' => 'Sonstiges',
-                            ])
+                            ->options(SocialLinkType::options())
                             ->required()
                             ->searchable(),
 
