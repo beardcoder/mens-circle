@@ -86,10 +86,11 @@ class ClearCache extends Page
                 ->action(function (): void {
                     try {
                         Artisan::call('route:clear');
+                        Artisan::call('route:cache');
 
                         Notification::make()
-                            ->title('Routen-Cache gelöscht')
-                            ->body('Der Routen-Cache wurde erfolgreich gelöscht.')
+                            ->title('Routen-Cache neu aufgebaut')
+                            ->body('Der Routen-Cache wurde gelöscht und neu aufgebaut.')
                             ->success()
                             ->send();
                     } catch (\Exception $e) {
@@ -112,10 +113,11 @@ class ClearCache extends Page
                 ->action(function (): void {
                     try {
                         Artisan::call('view:clear');
+                        Artisan::call('view:cache');
 
                         Notification::make()
-                            ->title('View-Cache gelöscht')
-                            ->body('Der View-Cache wurde erfolgreich gelöscht.')
+                            ->title('View-Cache neu aufgebaut')
+                            ->body('Der View-Cache wurde gelöscht und neu aufgebaut.')
                             ->success()
                             ->send();
                     } catch (\Exception $e) {
@@ -141,10 +143,12 @@ class ClearCache extends Page
                         Artisan::call('config:clear');
                         Artisan::call('route:clear');
                         Artisan::call('view:clear');
+                        Artisan::call('route:cache');
+                        Artisan::call('view:cache');
 
                         Notification::make()
                             ->title('Alle Caches gelöscht')
-                            ->body('Alle Caches wurden erfolgreich gelöscht.')
+                            ->body('Alle Caches wurden gelöscht. Routen- und View-Cache wurden neu aufgebaut.')
                             ->success()
                             ->send();
                     } catch (\Exception $e) {
