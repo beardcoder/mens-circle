@@ -1248,14 +1248,6 @@ enum Heroicon: string
     case VARIABLE_16_SOLID = 'variable-16-solid';
     case VARIABLE_20_SOLID = 'variable-20-solid';
     case VARIABLE_SOLID = 'variable-solid';
-    case VIDEO_CAMERA = 'video-camera';
-    case VIDEO_CAMERA_16_SOLID = 'video-camera-16-solid';
-    case VIDEO_CAMERA_20_SOLID = 'video-camera-20-solid';
-    case VIDEO_CAMERA_SLASH = 'video-camera-slash';
-    case VIDEO_CAMERA_SLASH_16_SOLID = 'video-camera-slash-16-solid';
-    case VIDEO_CAMERA_SLASH_20_SOLID = 'video-camera-slash-20-solid';
-    case VIDEO_CAMERA_SLASH_SOLID = 'video-camera-slash-solid';
-    case VIDEO_CAMERA_SOLID = 'video-camera-solid';
     case VIEW_COLUMNS = 'view-columns';
     case VIEW_COLUMNS_16_SOLID = 'view-columns-16-solid';
     case VIEW_COLUMNS_20_SOLID = 'view-columns-20-solid';

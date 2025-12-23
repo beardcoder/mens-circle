@@ -1,16 +1,16 @@
-# Image Integration with Intervention Image and libvips
+# Image Integration with Intervention Image and GD
 
-This application uses [Intervention Image v3](https://image.intervention.io/) with libvips driver for high-performance image processing and optimization.
+This application uses [Intervention Image v3](https://image.intervention.io/) with GD driver for image processing and optimization.
 
 ## Features
 
 - **Automatic format conversion** to WebP and AVIF for modern browsers
-- **libvips driver** for superior performance and memory efficiency
+- **GD driver** for broad compatibility and ease of deployment
 - **Responsive images** with `<picture>` element support
 - **Lazy loading** by default
 - **Image caching** to avoid regenerating optimized versions
 - **Configurable quality** settings per format
-- **Multiple driver support** (vips, imagick, gd)
+- **Multiple driver support** (gd, imagick)
 
 ## Configuration
 
@@ -20,8 +20,8 @@ Configuration file: `config/image.php`
 
 ```php
 return [
-    // Image driver: 'vips' (recommended), 'imagick', or 'gd'
-    'driver' => env('IMAGE_DRIVER', 'vips'),
+    // Image driver: 'gd' (default), or 'imagick'
+    'driver' => env('IMAGE_DRIVER', 'gd'),
 
     // Quality settings (0-100)
     'quality' => [
@@ -46,7 +46,7 @@ return [
 You can override these in your `.env` file:
 
 ```env
-IMAGE_DRIVER=vips
+IMAGE_DRIVER=gd
 IMAGE_QUALITY_WEBP=85
 IMAGE_QUALITY_AVIF=85
 IMAGE_QUALITY_JPEG=85
@@ -199,21 +199,14 @@ $image = image()->read(public_path('storage/images/photo.jpg'));
 
 3. **SVG Handling**: SVG files are served as-is without optimization
 
-## Performance Benefits
+## Performance Considerations
 
-### libvips vs. GD/Imagick
+### GD Driver
 
-- **Speed**: 4-8x faster than ImageMagick, 8-15x faster than GD
-- **Memory**: Uses streaming, processes images in chunks
-- **Quality**: Superior output quality, especially for WebP/AVIF
-- **Parallel Processing**: Multi-threaded by default
-
-### Benchmark Example
-
-Processing a 5MB JPEG to WebP:
-- **GD**: ~2.5s, 450MB RAM
-- **Imagick**: ~1.2s, 280MB RAM
-- **libvips**: ~0.3s, 45MB RAM
+- **Compatibility**: Built into PHP, available on all platforms
+- **Ease of deployment**: No additional system dependencies required
+- **Memory**: Reasonable memory usage for most image sizes
+- **Quality**: Good output quality for WebP/JPEG formats
 
 ## Common Patterns
 
@@ -255,15 +248,15 @@ $webp = $imageService->optimize($thumbnail, 'webp');
 
 1. Check storage permissions: `chmod -R 775 storage/app/public`
 2. Ensure symbolic link exists: `php artisan storage:link`
-3. Verify libvips is installed: `vips --version`
+3. Verify GD is installed: `php -m | grep gd`
 4. Check logs: `tail -f storage/logs/laravel.log`
 
-### libvips Not Available
+### Using Alternative Driver
 
-If libvips isn't available, fall back to imagick or gd:
+If you want to use Imagick instead of GD:
 
 ```env
-IMAGE_DRIVER=imagick  # or 'gd'
+IMAGE_DRIVER=imagick
 ```
 
 ### Cache Issues
@@ -282,17 +275,19 @@ image_service()->clearCache('images/photo.jpg');
 
 ## Docker Setup
 
-The Dockerfile includes libvips installation:
+The Dockerfile includes GD installation with required image libraries:
 
 ```dockerfile
-# Install system dependencies including libvips
-RUN apk add --no-cache \
-    vips \
-    vips-dev \
-    vips-tools
+# Install system dependencies for GD
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install PHP vips extension
-RUN install-php-extensions vips
+# Install PHP GD extension
+RUN install-php-extensions gd
 ```
 
 ## Testing
