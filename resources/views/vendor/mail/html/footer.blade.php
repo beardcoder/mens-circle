@@ -4,6 +4,7 @@
 <tr>
 <td class="content-cell" align="center" style="padding: 32px 32px 40px 32px;">
 @php
+    use App\Enums\Heroicon as AppHeroicon;
     $socialLinks = settings()['social_links'] ?? [];
 @endphp
 @if(!empty($socialLinks))
@@ -12,18 +13,37 @@
 @foreach($socialLinks as $link)
 @php
     use App\Enums\SocialLinkType;
-    $socialType = SocialLinkType::tryFrom($link['type']) ?? SocialLinkType::OTHER;
+    $socialType = isset($link['type']) && is_string($link['type'])
+        ? SocialLinkType::tryFrom($link['type'])
+        : null;
+    $iconKey = $link['icon'] ?? null;
+    $heroicon = is_string($iconKey) ? AppHeroicon::fromName($iconKey) : null;
+
     $href = $link['value'];
-    if ($socialType === SocialLinkType::EMAIL && !str_starts_with($href, 'mailto:')) {
-        $href = 'mailto:' . $href;
-    } elseif ($socialType === SocialLinkType::PHONE && !str_starts_with($href, 'tel:')) {
-        $href = 'tel:' . str_replace([' ', '-', '(', ')'], '', $href);
+    if (!str_starts_with($href, 'mailto:') && !str_starts_with($href, 'tel:')) {
+        $isEmail = filter_var($href, FILTER_VALIDATE_EMAIL) !== false;
+        $isPhone = preg_match('/^\+?[0-9\s\-\(\)]+$/', $href) === 1;
+        $looksLikeEmailIcon = is_string($iconKey) && str_contains($iconKey, 'envelope');
+        $looksLikePhoneIcon = is_string($iconKey) && str_contains($iconKey, 'phone');
+
+        if ($socialType === SocialLinkType::EMAIL || $isEmail || $looksLikeEmailIcon) {
+            $href = 'mailto:' . $href;
+        } elseif ($socialType === SocialLinkType::PHONE || $isPhone || $looksLikePhoneIcon) {
+            $href = 'tel:' . str_replace([' ', '-', '(', ')'], '', $href);
+        }
     }
-    $title = $link['label'] ?: $socialType->getLabel();
+
+    $title = $link['label']
+        ?? $socialType?->getLabel()
+        ?? $heroicon?->getLabel()
+        ?? 'Link';
+    $iconSvg = $heroicon?->getSvg(24)
+        ?? $socialType?->getIcon()
+        ?? AppHeroicon::LINK->getSvg(24);
 @endphp
 <td style="padding: 0 8px;">
 <a href="{{ $href }}" title="{{ $title }}" style="display: inline-block; width: 24px; height: 24px; color: #7a6248;">
-{!! $socialType->getIcon() !!}
+{!! $iconSvg !!}
 </a>
 </td>
 @endforeach

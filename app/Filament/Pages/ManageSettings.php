@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\Heroicon as SocialHeroicon;
 use App\Enums\SocialLinkType;
 use App\Models\Setting;
 use BackedEnum;
@@ -35,6 +36,32 @@ class ManageSettings extends Page implements HasForms
 
     public function mount(): void
     {
+        $socialLinks = Setting::get('social_links', []);
+
+        if (! is_array($socialLinks)) {
+            $socialLinks = [];
+        }
+
+        $socialLinks = collect($socialLinks)
+            ->map(function (array $link): array {
+                if (! empty($link['icon'])) {
+                    return $link;
+                }
+
+                if (empty($link['type']) || ! is_string($link['type'])) {
+                    return $link;
+                }
+
+                $heroiconName = SocialLinkType::tryFrom($link['type'])?->getHeroiconName();
+
+                if ($heroiconName) {
+                    $link['icon'] = $heroiconName;
+                }
+
+                return $link;
+            })
+            ->all();
+
         $this->form->fill([
             'site_name' => Setting::get('site_name', 'Männerkreis Niederbayern'),
             'site_tagline' => Setting::get('site_tagline', 'Ein Raum für echte Begegnung'),
@@ -42,7 +69,7 @@ class ManageSettings extends Page implements HasForms
             'contact_email' => Setting::get('contact_email', 'kontakt@mens-circle.de'),
             'contact_phone' => Setting::get('contact_phone', ''),
             'location' => Setting::get('location', 'Niederbayern'),
-            'social_links' => Setting::get('social_links', []),
+            'social_links' => $socialLinks,
             'footer_text' => Setting::get('footer_text', '© '.date('Y').' Männerkreis Niederbayern. Alle Rechte vorbehalten.'),
             'google_analytics_id' => Setting::get('google_analytics_id', ''),
             'event_default_max_participants' => Setting::get('event_default_max_participants', 8),
@@ -89,11 +116,12 @@ class ManageSettings extends Page implements HasForms
                 Repeater::make('social_links')
                     ->label('Social & Kontakt Links')
                     ->schema([
-                        Select::make('type')
-                            ->label('Typ')
-                            ->options(SocialLinkType::options())
+                        Select::make('icon')
+                            ->label('Heroicon')
+                            ->options(SocialHeroicon::options())
                             ->required()
-                            ->searchable(),
+                            ->searchable()
+                            ->helperText('Wähle ein Heroicon für den Link.'),
 
                         TextInput::make('label')
                             ->label('Beschriftung')
@@ -108,7 +136,23 @@ class ManageSettings extends Page implements HasForms
                     ])
                     ->collapsible()
                     ->collapsed()
-                    ->itemLabel(fn (array $state): ?string => ($state['type'] ?? 'Link').' - '.($state['label'] ?? $state['value'] ?? ''))
+                    ->itemLabel(function (array $state): ?string {
+                        $iconLabel = null;
+
+                        if (! empty($state['icon'])) {
+                            $iconLabel = SocialHeroicon::fromName($state['icon'])?->getLabel();
+                        } elseif (! empty($state['type']) && is_string($state['type'])) {
+                            $iconLabel = ucwords(str_replace(['-', '_'], ' ', $state['type']));
+                        }
+
+                        $detail = $state['label'] ?? $state['value'] ?? null;
+
+                        if ($detail) {
+                            return ($iconLabel ?? 'Link').' - '.$detail;
+                        }
+
+                        return $iconLabel ?? 'Link';
+                    })
                     ->addActionLabel('Link hinzufügen')
                     ->reorderable()
                     ->columnSpanFull(),
