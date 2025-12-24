@@ -9,9 +9,15 @@ herzlich willkommen! Wir freuen uns sehr, dass du beim **{{ $event->title }}** d
 
 **Datum:** {{ $event->event_date->format('d.m.Y') }}<br>
 **Uhrzeit:** {{ $event->start_time->format('H:i') }} – {{ $event->end_time->format('H:i') }} Uhr<br>
-**Ort:** {{ $event->location }}
+**Ort:** {{ $event->location }}<br>
+@if($event->getFullAddress())
+**Adresse:** {{ $event->getFullAddress() }}<br>
+@endif
+@if($event->location_details)
+**Hinweise:** {{ $event->location_details }}<br>
+@endif
 
-**Wichtig:** Die genauen Ortsangaben (Adresse & Treffpunkt) erhältst du einige Tage vor dem Termin in einer separaten E-Mail.
+**Tipp:** Im Anhang dieser E-Mail findest du eine iCal-Datei, mit der du den Termin direkt in deinen Kalender eintragen kannst.
 
 ## Was dich erwartet
 
