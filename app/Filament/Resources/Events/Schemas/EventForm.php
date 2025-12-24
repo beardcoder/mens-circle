@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Events\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
@@ -27,6 +28,14 @@ class EventForm
                     ->label('Beschreibung')
                     ->rows(4)
                     ->columnSpanFull(),
+                FileUpload::make('image')
+                    ->label('Event-Bild')
+                    ->image()
+                    ->directory('events')
+                    ->visibility('public')
+                    ->imageEditor()
+                    ->columnSpanFull()
+                    ->helperText('Optionales Bild für die Event-Detailseite (empfohlen: 16:9 Format)'),
                 DateTimePicker::make('event_date')
                     ->label('Veranstaltungsdatum')
                     ->required()

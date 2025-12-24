@@ -45,6 +45,7 @@ class EventController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'phone_number' => 'nullable|string|max:30',
             'privacy' => 'required|accepted',
         ], [
             'first_name.required' => 'Bitte gib deinen Vornamen ein.',
@@ -94,6 +95,7 @@ class EventController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
+            'phone_number' => $request->phone_number,
             'privacy_accepted' => true,
             'status' => 'confirmed',
             'confirmed_at' => now(),
