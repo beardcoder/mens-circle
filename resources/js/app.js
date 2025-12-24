@@ -229,6 +229,7 @@ function handleRegistrationSubmit(form) {
   const firstName = formData.get('first_name')?.trim();
   const lastName = formData.get('last_name')?.trim();
   const email = formData.get('email')?.trim();
+  const phoneNumber = formData.get('phone_number')?.trim() || null;
   const privacy = form.querySelector('input[name="privacy"]')?.checked;
   const eventId = formData.get('event_id');
 
@@ -280,6 +281,7 @@ function handleRegistrationSubmit(form) {
       first_name: firstName,
       last_name: lastName,
       email: email,
+      phone_number: phoneNumber,
       privacy: privacy ? 1 : 0,
     }),
   })
