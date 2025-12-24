@@ -4,7 +4,6 @@
 <tr>
 <td class="content-cell" align="center" style="padding: 32px 32px 40px 32px;">
 @php
-    use App\Enums\Heroicon as AppHeroicon;
     $socialLinks = settings()['social_links'] ?? [];
 @endphp
 @if(!empty($socialLinks))
@@ -12,12 +11,11 @@
 <tr>
 @foreach($socialLinks as $link)
 @php
-    use App\Enums\SocialLinkType;
     $socialType = isset($link['type']) && is_string($link['type'])
-        ? SocialLinkType::tryFrom($link['type'])
+        ? \App\Enums\SocialLinkType::tryFrom($link['type'])
         : null;
     $iconKey = $link['icon'] ?? null;
-    $heroicon = is_string($iconKey) ? AppHeroicon::fromName($iconKey) : null;
+    $heroicon = is_string($iconKey) ? \App\Enums\Heroicon::fromName($iconKey) : null;
 
     $href = $link['value'];
     if (!str_starts_with($href, 'mailto:') && !str_starts_with($href, 'tel:')) {
@@ -26,9 +24,9 @@
         $looksLikeEmailIcon = is_string($iconKey) && str_contains($iconKey, 'envelope');
         $looksLikePhoneIcon = is_string($iconKey) && str_contains($iconKey, 'phone');
 
-        if ($socialType === SocialLinkType::EMAIL || $isEmail || $looksLikeEmailIcon) {
+        if ($socialType === \App\Enums\SocialLinkType::EMAIL || $isEmail || $looksLikeEmailIcon) {
             $href = 'mailto:' . $href;
-        } elseif ($socialType === SocialLinkType::PHONE || $isPhone || $looksLikePhoneIcon) {
+        } elseif ($socialType === \App\Enums\SocialLinkType::PHONE || $isPhone || $looksLikePhoneIcon) {
             $href = 'tel:' . str_replace([' ', '-', '(', ')'], '', $href);
         }
     }
@@ -39,7 +37,7 @@
         ?? 'Link';
     $iconSvg = $heroicon?->getSvg(24)
         ?? $socialType?->getIcon()
-        ?? AppHeroicon::LINK->getSvg(24);
+        ?? \App\Enums\Heroicon::LINK->getSvg(24);
 @endphp
 <td style="padding: 0 8px;">
 <a href="{{ $href }}" title="{{ $title }}" style="display: inline-block; width: 24px; height: 24px; color: #7a6248;">
