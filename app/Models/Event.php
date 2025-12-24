@@ -22,6 +22,9 @@ class Event extends Model
         'start_time',
         'end_time',
         'location',
+        'street',
+        'postal_code',
+        'city',
         'location_details',
         'max_participants',
         'cost_basis',
@@ -60,5 +63,54 @@ class Event extends Model
     public function isFull(): bool
     {
         return $this->availableSpots() <= 0;
+    }
+
+    public function getFullAddress(): ?string
+    {
+        if (! $this->street || ! $this->city) {
+            return null;
+        }
+
+        $parts = array_filter([
+            $this->street,
+            $this->postal_code ? $this->postal_code.' '.$this->city : $this->city,
+        ]);
+
+        return implode(', ', $parts);
+    }
+
+    public function generateICalContent(): string
+    {
+        $startDateTime = $this->event_date->copy()
+            ->setTimeFrom($this->start_time)
+            ->format('Ymd\THis');
+
+        $endDateTime = $this->event_date->copy()
+            ->setTimeFrom($this->end_time)
+            ->format('Ymd\THis');
+
+        $now = now()->format('Ymd\THis\Z');
+
+        $location = $this->getFullAddress() ?? $this->location;
+        $description = strip_tags($this->description ?? '');
+        $description = str_replace(["\r\n", "\n", "\r"], '\n', $description);
+
+        $uid = $this->id.'@mens-circle.de';
+
+        $ical = "BEGIN:VCALENDAR\r\n";
+        $ical .= "VERSION:2.0\r\n";
+        $ical .= "PRODID:-//Männerkreis Straubing//Event//DE\r\n";
+        $ical .= "BEGIN:VEVENT\r\n";
+        $ical .= "UID:{$uid}\r\n";
+        $ical .= "DTSTAMP:{$now}\r\n";
+        $ical .= "DTSTART:{$startDateTime}\r\n";
+        $ical .= "DTEND:{$endDateTime}\r\n";
+        $ical .= "SUMMARY:{$this->title}\r\n";
+        $ical .= "DESCRIPTION:{$description}\r\n";
+        $ical .= "LOCATION:{$location}\r\n";
+        $ical .= "END:VEVENT\r\n";
+        $ical .= "END:VCALENDAR\r\n";
+
+        return $ical;
     }
 }
