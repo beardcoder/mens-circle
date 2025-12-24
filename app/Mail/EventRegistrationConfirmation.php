@@ -7,6 +7,7 @@ use App\Models\EventRegistration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -53,6 +54,12 @@ class EventRegistrationConfirmation extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $icalContent = $this->event->generateICalContent();
+        $filename = 'event-'.$this->event->slug.'.ics';
+
+        return [
+            Attachment::fromData(fn () => $icalContent, $filename)
+                ->withMime('text/calendar'),
+        ];
     }
 }

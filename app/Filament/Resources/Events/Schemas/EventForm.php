@@ -53,6 +53,16 @@ class EventForm
                     ->required()
                     ->default('Straubing')
                     ->maxLength(255),
+                TextInput::make('street')
+                    ->label('Straße & Hausnummer')
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+                TextInput::make('postal_code')
+                    ->label('PLZ')
+                    ->maxLength(10),
+                TextInput::make('city')
+                    ->label('Stadt')
+                    ->maxLength(255),
                 Textarea::make('location_details')
                     ->label('Ortsdetails (nach Anmeldung)')
                     ->rows(3)
