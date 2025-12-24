@@ -28,12 +28,16 @@ if [ -z "$APP_KEY" ]; then
 fi
 
 # Cache configuration for production
-if [ "$APP_ENV" = "production" ]; then
+if [ "$APP_ENV" = "production" ]; then 
+    echo "Clearing existing caches..."
+    php artisan optimize:clear
+
     echo "Caching configuration for production..."
     php artisan config:cache
     php artisan route:cache
     php artisan view:cache
     php artisan event:cache
+    php artisan optimize
 fi
 
 # Run migrations if MIGRATE_ON_START is set
@@ -44,6 +48,9 @@ fi
 
 # Create storage symlink
 php artisan storage:link --force 2>/dev/null || true
+
+# Generate Sitemap
+php artisan sitemap:generate
 
 # Start Supervisor to manage all processes (FrankenPHP + queue workers)
 echo "Starting Supervisor to manage FrankenPHP and queue workers..."
