@@ -106,6 +106,7 @@ RUN chmod -R 775 /app/storage /app/bootstrap/cache /app/database /app/public
 # Configure Supervisor
 RUN mkdir -p /var/log/supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/Caddyfile /app/Caddyfile
 
 # Set environment variables
 ENV APP_ENV=production
