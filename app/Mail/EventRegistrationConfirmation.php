@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\EventRegistration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -30,6 +31,7 @@ class EventRegistrationConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            to: [new Address($this->registration->email, $this->registration->first_name.' '.$this->registration->last_name)],
             subject: 'Anmeldebestätigung: '.$this->event->title,
         );
     }
