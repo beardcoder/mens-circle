@@ -9,7 +9,7 @@
                             :alt="$block['data']['name'] ?? 'Moderator'"
                             class="moderator__photo-image"
                             loading="lazy"
-                            sizes="(max-width: 768px) 348px, 756px"
+                            sizes="(max-width: 900px) 350px, 660px"
                         />
                     @else
                         <div class="moderator__photo-placeholder">
