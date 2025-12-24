@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "achyutn/filament-log-viewer": "^1.6",
         "awcodes/filament-gravatar": "*",
         "awcodes/overlook": "^3.0",
         "filament/filament": "^4.0",
