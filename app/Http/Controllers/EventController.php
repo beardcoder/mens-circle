@@ -101,14 +101,22 @@ class EventController extends Controller
             'confirmed_at' => now(),
         ]);
 
-        // Send confirmation email
+        // Send confirmation email (queued for better performance)
         try {
-            \Mail::to($registration->email)->send(new \App\Mail\EventRegistrationConfirmation($registration, $event));
-        } catch (\Exception $e) {
-            \Log::error('Failed to send event registration confirmation email', [
+            \Mail::to($registration->email)->queue(new \App\Mail\EventRegistrationConfirmation($registration, $event));
+
+            \Log::info('Event registration confirmation email queued', [
                 'registration_id' => $registration->id,
                 'email' => $registration->email,
+                'event_id' => $event->id,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to queue event registration confirmation email', [
+                'registration_id' => $registration->id,
+                'email' => $registration->email,
+                'event_id' => $event->id,
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
             // Don't fail the registration if email fails
         }
