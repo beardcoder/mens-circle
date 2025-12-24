@@ -22,3 +22,15 @@ Schedule::command('events:send-reminders')
 
 Schedule::command('backup:clean')->daily()->at('01:00');
 Schedule::command('backup:run')->daily()->at('01:30');
+
+// Sitemap Generation
+// Regenerates the sitemap daily at 02:00
+Schedule::command('sitemap:generate')
+    ->dailyAt('02:00')
+    ->timezone('Europe/Berlin')
+    ->onSuccess(function () {
+        info('Sitemap generated successfully');
+    })
+    ->onFailure(function () {
+        error('Sitemap generation failed');
+    });
