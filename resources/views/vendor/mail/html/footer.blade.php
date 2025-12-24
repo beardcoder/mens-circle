@@ -1,10 +1,13 @@
+@php
+    use App\Enums\Heroicon as AppHeroicon;
+    use App\Enums\SocialLinkType;
+@endphp
 <tr>
 <td>
 <table class="footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
 <td class="content-cell" align="center" style="padding: 32px 32px 40px 32px;">
 @php
-    use App\Enums\Heroicon as AppHeroicon;
     $socialLinks = settings()['social_links'] ?? [];
 @endphp
 @if(!empty($socialLinks))
@@ -12,7 +15,6 @@
 <tr>
 @foreach($socialLinks as $link)
 @php
-    use App\Enums\SocialLinkType;
     $socialType = isset($link['type']) && is_string($link['type'])
         ? SocialLinkType::tryFrom($link['type'])
         : null;
