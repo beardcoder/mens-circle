@@ -51,7 +51,9 @@ if (! function_exists('image_service')) {
 
 if (! function_exists('responsive_image')) {
     /**
-     * Generate a responsive image with multiple formats
+     * Generate a responsive image with multiple formats and srcset
+     *
+     * @param  array<string, mixed>  $attributes
      */
     function responsive_image(
         string $src,
@@ -60,9 +62,10 @@ if (! function_exists('responsive_image')) {
         string $loading = 'lazy',
         ?int $width = null,
         ?int $height = null,
-        array $attributes = []
+        array $attributes = [],
+        ?string $sizes = null
     ): string {
-        return image_service()->responsiveImage($src, $alt, $class, $loading, $width, $height, $attributes);
+        return image_service()->responsiveImage($src, $alt, $class, $loading, $width, $height, $attributes, $sizes);
     }
 }
 

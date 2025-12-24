@@ -59,4 +59,49 @@ return [
         'avif' => env('IMAGE_GENERATE_AVIF', true),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Responsive Image Widths
+    |--------------------------------------------------------------------------
+    |
+    | Define the widths to generate for responsive images (srcset).
+    | Images will be scaled proportionally to these widths.
+    | Set to empty array to disable srcset generation.
+    |
+    */
+
+    'responsive_widths' => [
+        320,   // Mobile small
+        480,   // Mobile large
+        768,   // Tablet
+        1024,  // Desktop small
+        1280,  // Desktop medium
+        1536,  // Desktop large
+        1920,  // Full HD
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Sizes Attribute
+    |--------------------------------------------------------------------------
+    |
+    | The default 'sizes' attribute for responsive images.
+    | This tells the browser how much space the image occupies at different viewports.
+    |
+    */
+
+    'default_sizes' => '(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 50vw',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Maximum Source Width
+    |--------------------------------------------------------------------------
+    |
+    | Only generate srcset variants smaller than or equal to the original image.
+    | If the original is 1200px wide, don't generate 1536px or 1920px versions.
+    |
+    */
+
+    'respect_original_size' => true,
+
 ];
