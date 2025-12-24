@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use Awcodes\Gravatar\GravatarPlugin;
 use Awcodes\Gravatar\GravatarProvider;
 use Filament\Http\Middleware\Authenticate;
@@ -32,6 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
                 GravatarPlugin::make(),
+                FilamentLogViewer::make(),
             ])
             ->colors([
                 'primary' => Color::hex('#b86f52'), // Terracotta
