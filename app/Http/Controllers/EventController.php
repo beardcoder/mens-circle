@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventRegistration;
+use App\Notifications\EventRegistered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
@@ -101,16 +103,24 @@ class EventController extends Controller
             'confirmed_at' => now(),
         ]);
 
-        // Send confirmation email
+        // Send confirmation notification (queued automatically)
         try {
-            \Mail::to($registration->email)->send(new \App\Mail\EventRegistrationConfirmation($registration, $event));
-        } catch (\Exception $e) {
-            \Log::error('Failed to send event registration confirmation email', [
+            $registration->notify(new EventRegistered($registration, $event));
+
+            Log::info('Event registration confirmation notification sent', [
                 'registration_id' => $registration->id,
                 'email' => $registration->email,
-                'error' => $e->getMessage(),
+                'event_id' => $event->id,
             ]);
-            // Don't fail the registration if email fails
+        } catch (\Exception $e) {
+            Log::error('Failed to send event registration confirmation notification', [
+                'registration_id' => $registration->id,
+                'email' => $registration->email,
+                'event_id' => $event->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            // Don't fail the registration if notification fails
         }
 
         return response()->json([
