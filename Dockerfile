@@ -103,9 +103,6 @@ RUN mkdir -p \
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database /app/public
 RUN chmod -R 775 /app/storage /app/bootstrap/cache /app/database /app/public
 
-# Configure FrankenPHP Caddyfile
-COPY docker/Caddyfile /etc/caddy/Caddyfile
-
 # Configure Supervisor
 RUN mkdir -p /var/log/supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
