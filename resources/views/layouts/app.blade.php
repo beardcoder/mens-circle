@@ -44,8 +44,12 @@
     @stack('structured_data')
 
     <!-- Umami Analytics -->
-    @if(config('services.umami.website_id') && config('services.umami.script_url'))
-        <script defer src="{{ config('services.umami.script_url') }}" data-website-id="{{ config('services.umami.website_id') }}"></script>
+    @php
+        $umamiWebsiteId = setting('umami_website_id') ?: config('services.umami.website_id');
+        $umamiScriptUrl = setting('umami_script_url') ?: config('services.umami.script_url');
+    @endphp
+    @if($umamiWebsiteId && $umamiScriptUrl)
+        <script defer src="{{ $umamiScriptUrl }}" data-website-id="{{ $umamiWebsiteId }}"></script>
     @endif
 </head>
 <body>

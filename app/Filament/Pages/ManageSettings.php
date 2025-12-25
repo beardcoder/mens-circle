@@ -73,6 +73,8 @@ class ManageSettings extends Page implements HasForms
             'social_links' => $socialLinks,
             'footer_text' => Setting::get('footer_text', '© '.date('Y').' Männerkreis Niederbayern. Alle Rechte vorbehalten.'),
             'google_analytics_id' => Setting::get('google_analytics_id', ''),
+            'umami_website_id' => Setting::get('umami_website_id', ''),
+            'umami_script_url' => Setting::get('umami_script_url', ''),
             'event_default_max_participants' => Setting::get('event_default_max_participants', 8),
         ]);
     }
@@ -175,6 +177,19 @@ class ManageSettings extends Page implements HasForms
                     ->maxLength(255)
                     ->helperText('Optional: GA4 Measurement ID (z.B. G-XXXXXXXXXX)')
                     ->placeholder('G-XXXXXXXXXX'),
+
+                TextInput::make('umami_website_id')
+                    ->label('Umami Website ID')
+                    ->maxLength(255)
+                    ->helperText('Optional: Umami Analytics Website ID')
+                    ->placeholder('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'),
+
+                TextInput::make('umami_script_url')
+                    ->label('Umami Script URL')
+                    ->url()
+                    ->maxLength(500)
+                    ->helperText('Optional: URL zum Umami Analytics Script (z.B. https://analytics.example.com/script.js)')
+                    ->placeholder('https://analytics.example.com/script.js'),
 
                 TextInput::make('event_default_max_participants')
                     ->label('Standard Teilnehmerzahl bei Events')
