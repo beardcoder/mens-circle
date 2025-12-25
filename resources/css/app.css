@@ -54,6 +54,7 @@
    ============================================ */
 @import 'sections/_hero.css';
 @import 'sections/_intro.css';
+@import 'sections/_text-section.css';
 @import 'sections/_moderator.css';
 @import 'sections/_journey.css';
 @import 'sections/_faq.css';
