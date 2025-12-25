@@ -30,14 +30,13 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->profile()
+            ->colors([
+                'primary' => Color::Lime,
+            ])
             ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
                 GravatarPlugin::make(),
                 FilamentLogViewer::make(),
-            ])
-            ->colors([
-                'primary' => Color::hex('#b86f52'), // Terracotta
-                'secondary' => Color::hex('#7a6248'), // Earth Warm
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

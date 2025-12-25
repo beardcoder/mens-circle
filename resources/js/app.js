@@ -3,7 +3,7 @@
  * Handles navigation, FAQ accordion, forms, animations, and calendar integration
  */
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   // Initialize all components
   initNavigation();
   initScrollHeader();
@@ -40,12 +40,12 @@ function initNavigation() {
     navToggle.classList.remove('active');
     document.body.classList.remove('nav-open');
     document.body.style.top = '';
-    window.scrollTo({top: scrollPosition, left: 0, behavior: 'instant' });
+    window.scrollTo({ top: scrollPosition, left: 0, behavior: 'instant' });
     navToggle.setAttribute('aria-expanded', 'false');
     navToggle.setAttribute('aria-label', 'Menü öffnen');
   }
 
-  navToggle.addEventListener('click', function () {
+  navToggle.addEventListener('click', () => {
     const isOpen = nav.classList.contains('open');
 
     if (isOpen) {
@@ -59,22 +59,24 @@ function initNavigation() {
   const navLinks = nav.querySelectorAll('.nav__link, .nav__cta');
 
   navLinks.forEach((link) => {
-    link.addEventListener('click', function () {
+    link.addEventListener('click', () => {
       closeNav();
     });
   });
 
   // Close nav when clicking outside
-  document.addEventListener('click', function (e) {
-    if (!nav.contains(e.target) && !navToggle.contains(e.target)) {
-      if (nav.classList.contains('open')) {
-        closeNav();
-      }
+  document.addEventListener('click', (e) => {
+    if (
+      !nav.contains(e.target) &&
+      !navToggle.contains(e.target) &&
+      nav.classList.contains('open')
+    ) {
+      closeNav();
     }
   });
 
   // Close nav on Escape key
-  document.addEventListener('keydown', function (e) {
+  document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && nav.classList.contains('open')) {
       closeNav();
     }
@@ -89,11 +91,9 @@ function initScrollHeader() {
 
   if (!header) return;
 
-  let lastScroll = 0;
-
   window.addEventListener(
     'scroll',
-    function () {
+    () => {
       const currentScroll = window.pageYOffset;
 
       if (currentScroll > 50) {
@@ -101,8 +101,6 @@ function initScrollHeader() {
       } else {
         header.classList.remove('scrolled');
       }
-
-      lastScroll = currentScroll;
     },
     { passive: true }
   );
@@ -119,7 +117,7 @@ function initFAQ() {
 
     if (!question) return;
 
-    question.addEventListener('click', function () {
+    question.addEventListener('click', () => {
       const isActive = item.classList.contains('active');
 
       // Close all other items
@@ -207,8 +205,7 @@ function handleNewsletterSubmit(form) {
         );
       }
     })
-    .catch((error) => {
-      console.error('Error:', error);
+    .catch(() => {
       showMessage(
         messageContainer,
         'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.',
@@ -280,7 +277,7 @@ function handleRegistrationSubmit(form) {
       event_id: eventId,
       first_name: firstName,
       last_name: lastName,
-      email: email,
+      email,
       phone_number: phoneNumber,
       privacy: privacy ? 1 : 0,
     }),
@@ -298,8 +295,7 @@ function handleRegistrationSubmit(form) {
         );
       }
     })
-    .catch((error) => {
-      console.error('Error:', error);
+    .catch(() => {
       showMessage(
         messageContainer,
         'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.',
@@ -387,30 +383,31 @@ function initCalendarIntegration() {
     endTime: '21:30',
   };
 
-  addToCalendarBtn.addEventListener('click', function () {
-    if (calendarModal) {
-      calendarModal.classList.add('open');
+  addToCalendarBtn.addEventListener('click', () => {
+    if (!calendarModal) {
+      return;
+    }
+    calendarModal.classList.add('open');
 
-      // Generate ICS file
-      if (calendarICS) {
-        const icsContent = generateICS(eventData);
-        const blob = new Blob([icsContent], {
-          type: 'text/calendar;charset=utf-8',
-        });
+    // Generate ICS file
+    if (calendarICS) {
+      const icsContent = generateICS(eventData);
+      const blob = new Blob([icsContent], {
+        type: 'text/calendar;charset=utf-8',
+      });
 
-        calendarICS.href = URL.createObjectURL(blob);
-      }
+      calendarICS.href = URL.createObjectURL(blob);
+    }
 
-      // Generate Google Calendar link
-      if (calendarGoogle) {
-        calendarGoogle.href = generateGoogleCalendarUrl(eventData);
-      }
+    // Generate Google Calendar link
+    if (calendarGoogle) {
+      calendarGoogle.href = generateGoogleCalendarUrl(eventData);
     }
   });
 
   // Close modal when clicking outside
   if (calendarModal) {
-    calendarModal.addEventListener('click', function (e) {
+    calendarModal.addEventListener('click', (e) => {
       if (e.target === calendarModal) {
         calendarModal.classList.remove('open');
       }
@@ -478,14 +475,16 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     const targetId = this.getAttribute('href');
 
     // Skip if empty anchor or not a valid selector (e.g., blob URLs)
-    if (targetId === '#' || !targetId.startsWith('#') || targetId.includes(':')) return;
+    if (targetId === '#' || !targetId.startsWith('#') || targetId.includes(':'))
+      return;
 
     try {
       const target = document.querySelector(targetId);
 
       if (target) {
         e.preventDefault();
-        const headerHeight = document.getElementById('header')?.offsetHeight || 0;
+        const headerHeight =
+          document.getElementById('header')?.offsetHeight || 0;
         const targetPosition =
           target.getBoundingClientRect().top +
           window.pageYOffset -
@@ -497,7 +496,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
           behavior: 'smooth',
         });
       }
-    } catch (error) {
+    } catch {
       // Invalid selector - ignore silently
     }
   });
