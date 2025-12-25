@@ -45,6 +45,11 @@
 
     <!-- Swetrix Analytics -->
     <script src="https://swetrix.org/swetrix.js" defer></script>
+
+    <!-- Additional Analytics (Production Only) -->
+    @production
+    <script defer src="https://stats.letsbenow.de/script.js"></script>
+    @endproduction
 </head>
 <body>
     <!-- Swetrix Analytics (No JavaScript Fallback) -->
