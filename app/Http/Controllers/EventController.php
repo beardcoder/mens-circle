@@ -24,7 +24,7 @@ class EventController extends Controller
         });
 
         if (! $event) {
-            abort(404, 'Aktuell ist kein Event geplant. Bitte schauen Sie später wieder vorbei.');
+            return view('no-event');
         }
 
         return view('event', compact('event'));
