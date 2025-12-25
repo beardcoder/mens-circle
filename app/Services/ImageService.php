@@ -7,9 +7,7 @@ use Intervention\Image\ImageManager;
 
 class ImageService
 {
-    public function __construct(protected ImageManager $manager)
-    {
-    }
+    public function __construct(protected ImageManager $manager) {}
 
     /**
      * Generate optimized image formats (WebP, AVIF) with responsive srcset
@@ -26,6 +24,12 @@ class ImageService
         array $attributes = [],
         ?string $sizes = null,
     ): string {
+        // Strip HTML tags from alt and title attributes
+        $alt = $this->stripHtmlTags($alt);
+        if (isset($attributes['title'])) {
+            $attributes['title'] = $this->stripHtmlTags($attributes['title']);
+        }
+
         $imagePath = public_path('storage/'.ltrim($src, '/'));
 
         if (! file_exists($imagePath)) {
@@ -104,6 +108,7 @@ class ImageService
                 $image->save($fullPath);
             } catch (\Exception $e) {
                 report($e);
+
                 return null;
             }
         }
@@ -481,6 +486,7 @@ class ImageService
                 $image->save($fullPath);
             } catch (\Exception $e) {
                 report($e);
+
                 return null;
             }
         }
@@ -499,5 +505,13 @@ class ImageService
             $cacheKey = 'responsive_image_'.md5($src.filemtime($imagePath));
             Cache::forget($cacheKey);
         }
+    }
+
+    /**
+     * Strip HTML tags from a string
+     */
+    protected function stripHtmlTags(string $text): string
+    {
+        return strip_tags($text);
     }
 }
