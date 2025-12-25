@@ -1,23 +1,3 @@
-# Build Stage: Install dependencies and build assets
-FROM node:24 AS node-builder
-
-WORKDIR /app
-
-# Copy package files
-COPY package.json package-lock.json* ./
-
-# Install npm dependencies
-RUN npm ci
-
-# Copy source files for build
-COPY resources/ resources/
-COPY vite.config.js ./
-COPY public/ public/
-
-# Build assets
-RUN npm run build
-
-
 # PHP Dependencies Stage
 FROM composer:2 AS composer-builder
 
@@ -41,6 +21,25 @@ COPY . .
 # Run composer scripts
 RUN composer dump-autoload --optimize --no-dev
 
+# Build Stage: Install dependencies and build assets
+FROM node:24 AS node-builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install npm dependencies
+RUN npm ci
+
+# Copy source files for build
+COPY --from=composer-builder /app/vendor /app/vendor
+COPY resources/ resources/
+COPY vite.config.js ./
+COPY public/ public/
+
+# Build assets
+RUN npm run build
 
 # Production Stage: FrankenPHP
 FROM dunglas/frankenphp:1-php8.5 AS production

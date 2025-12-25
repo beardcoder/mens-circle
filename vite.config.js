@@ -7,21 +7,11 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/css/filament/admin/theme.css',
             ],
             refresh: true,
         }),
     ],
-    css: {
-        transformer: 'lightningcss',
-        lightningcss: {
-            targets: {
-                chrome: 100,
-                firefox: 100,
-                safari: 15,
-                edge: 100,
-            },
-        },
-    },
     build: {
         // Production optimizations for better PageSpeed scores
         minify: 'esbuild', // Use esbuild for faster minification

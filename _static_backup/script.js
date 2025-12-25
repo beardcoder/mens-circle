@@ -63,11 +63,9 @@ function initScrollHeader() {
 
   if (!header) return;
 
-  let lastScroll = 0;
-
   window.addEventListener(
     'scroll',
-    function () {
+    () => {
       const currentScroll = window.pageYOffset;
 
       if (currentScroll > 50) {
@@ -75,8 +73,6 @@ function initScrollHeader() {
       } else {
         header.classList.remove('scrolled');
       }
-
-      lastScroll = currentScroll;
     },
     { passive: true }
   );
