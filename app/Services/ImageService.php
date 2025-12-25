@@ -372,10 +372,17 @@ class ImageService
 
         // Build original format srcset for the img tag
         $imgSrcset = '';
+        $smallestSrc = $src; // Default to original if no srcset
         if (! empty($imageData['srcset']['original'])) {
             $srcsetParts = [];
+            $smallestWidth = null;
             foreach ($imageData['srcset']['original'] as $w => $path) {
                 $srcsetParts[] = asset('storage/'.ltrim($path, '/')).' '.$w.'w';
+                // Track the smallest width image to use as default src
+                if ($smallestWidth === null || $w < $smallestWidth) {
+                    $smallestWidth = $w;
+                    $smallestSrc = $path;
+                }
             }
             if (! empty($srcsetParts)) {
                 $imgSrcset = implode(', ', $srcsetParts);
@@ -386,7 +393,7 @@ class ImageService
         $imgWidth = $width ?? $imageData['original_width'] ?? null;
         $imgHeight = $height ?? $imageData['original_height'] ?? null;
 
-        $img = $this->buildImgTagWithSrcset($src, $alt, $class, $loading, $imgWidth, $imgHeight, $attributes, $imgSrcset, $sizesAttr);
+        $img = $this->buildImgTagWithSrcset($smallestSrc, $alt, $class, $loading, $imgWidth, $imgHeight, $attributes, $imgSrcset, $sizesAttr);
 
         return '<picture>'.implode('', $sources).$img.'</picture>';
     }
