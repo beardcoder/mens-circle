@@ -69,6 +69,7 @@ class ManageSettings extends Page implements HasForms
             'contact_email' => Setting::get('contact_email', 'kontakt@mens-circle.de'),
             'contact_phone' => Setting::get('contact_phone', ''),
             'location' => Setting::get('location', 'Niederbayern'),
+            'whatsapp_community_link' => Setting::get('whatsapp_community_link', ''),
             'social_links' => $socialLinks,
             'footer_text' => Setting::get('footer_text', '© '.date('Y').' Männerkreis Niederbayern. Alle Rechte vorbehalten.'),
             'google_analytics_id' => Setting::get('google_analytics_id', ''),
@@ -112,6 +113,13 @@ class ManageSettings extends Page implements HasForms
                     ->label('Standort')
                     ->maxLength(255)
                     ->helperText('Hauptstandort (z.B. "Niederbayern", "Straubing")'),
+
+                TextInput::make('whatsapp_community_link')
+                    ->label('WhatsApp Community Link')
+                    ->url()
+                    ->maxLength(500)
+                    ->placeholder('https://chat.whatsapp.com/...')
+                    ->helperText('Einladungslink zur WhatsApp Community. Leer lassen um die Sektion auszublenden.'),
 
                 Repeater::make('social_links')
                     ->label('Social & Kontakt Links')

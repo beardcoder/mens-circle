@@ -1,0 +1,159 @@
+/**
+ * WhatsApp Community Section
+ * Community join section with WhatsApp branding
+ */
+
+/* ============================================
+   WhatsApp Section Base
+   ============================================ */
+.whatsapp-section {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    oklch(35% 0.08 145) 0%,
+    oklch(28% 0.06 150) 100%
+  );
+  color: var(--text-on-dark);
+  overflow: hidden;
+}
+
+/* Noise texture */
+.whatsapp-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* Gradient glow */
+.whatsapp-section::after {
+  content: '';
+  position: absolute;
+  inset-block-start: -30%;
+  inset-inline-start: -20%;
+  inline-size: 70%;
+  block-size: 160%;
+  background: radial-gradient(
+    ellipse at center,
+    oklch(50% 0.15 145 / 0.2) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+/* ============================================
+   WhatsApp Layout
+   ============================================ */
+.whatsapp__layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+@media (max-width: 800px) {
+  .whatsapp__layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    text-align: center;
+  }
+}
+
+/* ============================================
+   WhatsApp Content
+   ============================================ */
+.whatsapp__eyebrow {
+  margin-block-end: var(--space-sm);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: oklch(80% 0.12 145);
+}
+
+.whatsapp__title {
+  margin-block-end: var(--space-md);
+  color: var(--text-on-dark);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+.whatsapp__highlight {
+  color: oklch(75% 0.15 145);
+  white-space: nowrap;
+}
+
+.whatsapp__text {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: oklch(85% 0.03 145);
+  max-inline-size: 500px;
+}
+
+@media (max-width: 800px) {
+  .whatsapp__text {
+    margin-inline: auto;
+  }
+}
+
+/* ============================================
+   WhatsApp Action
+   ============================================ */
+.whatsapp__action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+@media (max-width: 800px) {
+  .whatsapp__action {
+    align-items: center;
+  }
+}
+
+.whatsapp__button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: oklch(60% 0.15 145);
+  color: white;
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-full, 9999px);
+  transition: all var(--transition-medium);
+  box-shadow:
+    0 4px 14px oklch(40% 0.1 145 / 0.3),
+    0 2px 6px oklch(40% 0.1 145 / 0.2);
+}
+
+.whatsapp__button:hover {
+  background: oklch(55% 0.16 145);
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 20px oklch(40% 0.1 145 / 0.4),
+    0 4px 10px oklch(40% 0.1 145 / 0.3);
+}
+
+.whatsapp__button:active {
+  transform: translateY(0);
+}
+
+.whatsapp__icon {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.whatsapp__hint {
+  font-size: 0.875rem;
+  color: oklch(70% 0.05 145);
+  margin: 0;
+}

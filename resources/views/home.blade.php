@@ -57,7 +57,12 @@
                 <x-blocks.newsletter :block="$block" />
             @elseif($block['type'] === 'cta')
                 <x-blocks.cta :block="$block" />
+            @elseif($block['type'] === 'whatsapp_community')
+                <x-blocks.whatsapp-community />
             @endif
         @endforeach
     @endif
+
+    {{-- WhatsApp Community section - shown when link is set in settings --}}
+    <x-blocks.whatsapp-community />
 @endsection

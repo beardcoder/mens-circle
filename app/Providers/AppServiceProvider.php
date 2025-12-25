@@ -50,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
                 'contactPhone' => $settings['contact_phone'] ?? '',
                 'socialLinks' => $settings['social_links'] ?? [],
                 'footerText' => $settings['footer_text'] ?? '© '.date('Y').' Männerkreis Niederbayern',
+                'whatsappCommunityLink' => $settings['whatsapp_community_link'] ?? '',
             ]);
         });
     }
