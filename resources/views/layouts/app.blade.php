@@ -42,6 +42,11 @@
 
     <!-- Structured Data -->
     @stack('structured_data')
+
+    <!-- Umami Analytics -->
+    @if(config('services.umami.website_id') && config('services.umami.script_url'))
+        <script defer src="{{ config('services.umami.script_url') }}" data-website-id="{{ config('services.umami.website_id') }}"></script>
+    @endif
 </head>
 <body>
     <!-- Skip Link -->
