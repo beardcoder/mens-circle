@@ -87,10 +87,11 @@ return [
     |
     | The default 'sizes' attribute for responsive images.
     | This tells the browser how much space the image occupies at different viewports.
+    | Set to 100vw for full-width images (like hero backgrounds).
     |
     */
 
-    'default_sizes' => '(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 50vw',
+    'default_sizes' => '100vw',
 
     /*
     |--------------------------------------------------------------------------
