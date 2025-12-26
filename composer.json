@@ -13,6 +13,7 @@
     "awcodes/filament-gravatar": "*",
     "awcodes/overlook": "^3.0",
     "filament/filament": "^4.0",
+    "filament/spatie-laravel-media-library-plugin": "^4.0",
     "filament/spatie-laravel-settings-plugin": "^4.0",
     "laravel/framework": "^12.0",
     "laravel/octane": "^2.13",
@@ -20,6 +21,7 @@
     "ralphjsmit/laravel-glide": "^2.0",
     "sentry/sentry-laravel": "^4.20",
     "spatie/laravel-backup": "^9.3",
+    "spatie/laravel-medialibrary": "^11.0",
     "spatie/laravel-settings": "^3.5",
     "spatie/laravel-sitemap": "^7.3",
     "spatie/laravel-sluggable": "^3.7"

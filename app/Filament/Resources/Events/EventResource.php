@@ -13,7 +13,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
@@ -50,11 +50,12 @@ class EventResource extends Resource
                     ->label('Beschreibung')
                     ->rows(4)
                     ->columnSpanFull(),
-                FileUpload::make('image')
+                SpatieMediaLibraryFileUpload::make('image')
                     ->label('Event-Bild')
                     ->image()
-                    ->directory('events')
-                    ->visibility('public')
+                    ->collection('event_image')
+                    ->disk('public')
+                    ->responsiveImages()
                     ->imageEditor()
                     ->columnSpanFull()
                     ->helperText('Optionales Bild für die Event-Detailseite (empfohlen: 16:9 Format)'),

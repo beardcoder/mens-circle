@@ -1,15 +1,27 @@
+@props([
+    'block',
+    'page' => null,
+])
+
+@php
+    $blockId = $block['data']['block_id'] ?? null;
+    $media = $page?->getBlockMedia($blockId, 'photo');
+
+    if ($media) {
+        $media->name = strip_tags($block['data']['name'] ?? 'Moderator');
+    }
+@endphp
+
 <section class="section moderator-section" id="moderator">
     <div class="container">
         <div class="moderator__layout">
             <div class="moderator__photo-wrapper fade-in">
                 <div class="moderator__photo">
-                    @if(!empty($block['data']['photo']))
-                        <x-modern-image
-                            :src="$block['data']['photo']"
-                            :alt="$block['data']['name'] ?? 'Moderator'"
-                            width="650"
-                            loading="lazy"
-                        />
+                    @if($media)
+                        {{ $media->img()->attributes([
+                            'loading' => 'lazy',
+                            'decoding' => 'async',
+                        ]) }}
                     @else
                         <div class="moderator__photo-placeholder">
                             <svg viewBox="0 0 24 24" aria-hidden="true">

@@ -50,14 +50,21 @@
     <!-- Event Hero -->
     <section class="hero event-hero">
         <div class="hero__bg">
-            @if($event->image)
-                <x-modern-image
-                    :src="$event->image"
-                    alt="{{ $event->title }}"
-                    class="hero__bg-image"
-                    loading="eager"
-                    fetchpriority="high"
-                />
+            @php
+                $eventMedia = $event->getFirstMedia('event_image');
+
+                if ($eventMedia) {
+                    $eventMedia->name = $event->title;
+                }
+            @endphp
+
+            @if($eventMedia)
+                {{ $eventMedia->img()->attributes([
+                    'class' => 'hero__bg-image',
+                    'loading' => 'eager',
+                    'fetchpriority' => 'high',
+                    'aria-hidden' => 'true',
+                ]) }}
             @endif
         </div>
         <div class="hero__circles" aria-hidden="true">
