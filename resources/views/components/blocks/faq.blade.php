@@ -20,7 +20,7 @@
                     @foreach($block['data']['items'] as $item)
                         <div class="faq-item">
                             @if(!empty($item['question']))
-                                <button class="faq-item__question" aria-expanded="false">
+                                <button class="faq-item__question" aria-expanded="false" data-m:click="action=faq_click;element=button;target=question;location=faq_section">
                                     <span>{{ $item['question'] }}</span>
                                     <span class="faq-item__icon"></span>
                                 </button>

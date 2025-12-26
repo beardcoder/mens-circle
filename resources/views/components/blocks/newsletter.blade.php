@@ -25,7 +25,7 @@
                         class="newsletter__input"
                         aria-label="E-Mail-Adresse"
                     >
-                    <button type="submit" class="btn btn--primary">
+                    <button type="submit" class="btn btn--primary" data-m:click="action=form_submit;element=button;target=newsletter_subscription;location=newsletter_section">
                         Anmelden
                     </button>
                     <div id="newsletterMessage"></div>
