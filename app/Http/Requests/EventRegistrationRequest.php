@@ -22,11 +22,11 @@ class EventRegistrationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'event_id' => 'required|exists:events,id',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'privacy' => 'required|accepted',
+            'event_id' => ['required', 'exists:events,id'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'privacy' => ['required', 'accepted'],
         ];
     }
 

@@ -152,7 +152,7 @@ class EventReminderTest extends TestCase
 
         Artisan::call('events:send-reminders');
 
-        Mail::assertQueued(EventReminder::class, function ($mail) use ($event, $registration) {
+        Mail::assertQueued(EventReminder::class, function ($mail) use ($event, $registration): bool {
             return $mail->event->id === $event->id
                 && $mail->registration->id === $registration->id
                 && $mail->hasTo($registration->email);

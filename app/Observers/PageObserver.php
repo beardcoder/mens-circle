@@ -51,7 +51,7 @@ class PageObserver
      */
     protected function clearCache(Page $page): void
     {
-        cache()->forget("page.{$page->slug}");
+        cache()->forget('page.'.$page->slug);
 
         if ($page->slug === 'home') {
             cache()->forget('page.home');

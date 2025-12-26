@@ -39,7 +39,7 @@ class EventFactory extends Factory
      */
     public function published(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'is_published' => true,
         ]);
     }
@@ -49,7 +49,7 @@ class EventFactory extends Factory
      */
     public function unpublished(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'is_published' => false,
         ]);
     }
@@ -61,7 +61,7 @@ class EventFactory extends Factory
     {
         $tomorrow = now()->addDay();
 
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'event_date' => $tomorrow,
             'start_time' => $tomorrow->copy()->setTime(19, 0),
             'end_time' => $tomorrow->copy()->setTime(21, 0),
@@ -73,7 +73,7 @@ class EventFactory extends Factory
      */
     public function onDate(\DateTime|\DateTimeInterface $date): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'event_date' => $date,
         ]);
     }

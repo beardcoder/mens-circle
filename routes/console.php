@@ -4,7 +4,7 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
+Artisan::command('inspire', function (): void {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
@@ -13,10 +13,10 @@ Artisan::command('inspire', function () {
 Schedule::command('events:send-reminders')
     ->dailyAt('10:00')
     ->timezone('Europe/Berlin')
-    ->onSuccess(function () {
+    ->onSuccess(function (): void {
         info('Event reminders sent successfully');
     })
-    ->onFailure(function () {
+    ->onFailure(function (): void {
         error('Event reminders failed to send');
     });
 
@@ -28,9 +28,9 @@ Schedule::command('backup:run')->daily()->at('01:30');
 Schedule::command('sitemap:generate')
     ->dailyAt('02:00')
     ->timezone('Europe/Berlin')
-    ->onSuccess(function () {
+    ->onSuccess(function (): void {
         info('Sitemap generated successfully');
     })
-    ->onFailure(function () {
+    ->onFailure(function (): void {
         error('Sitemap generation failed');
     });

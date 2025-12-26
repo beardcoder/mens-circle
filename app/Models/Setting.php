@@ -12,10 +12,6 @@ class Setting extends Model
         'value',
     ];
 
-    protected $casts = [
-        'value' => 'json',
-    ];
-
     protected static function booted(): void
     {
         static::saved(fn () => self::clearCache());
@@ -43,7 +39,14 @@ class Setting extends Model
 
         $settings = self::all();
         foreach ($settings as $setting) {
-            Cache::forget("setting.{$setting->key}");
+            Cache::forget('setting.'.$setting->key);
         }
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'value' => 'json',
+        ];
     }
 }

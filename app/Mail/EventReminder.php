@@ -13,7 +13,8 @@ use Illuminate\Queue\SerializesModels;
 
 class EventReminder extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public function __construct(
         public EventRegistration $registration,

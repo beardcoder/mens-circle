@@ -21,13 +21,16 @@ class EventRegistration extends Model
         'confirmed_at',
     ];
 
-    protected $casts = [
-        'privacy_accepted' => 'boolean',
-        'confirmed_at' => 'datetime',
-    ];
-
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'privacy_accepted' => 'boolean',
+            'confirmed_at' => 'datetime',
+        ];
     }
 }

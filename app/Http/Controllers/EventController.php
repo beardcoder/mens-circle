@@ -28,7 +28,7 @@ class EventController extends Controller
             return view('no-event');
         }
 
-        return view('event', compact('event'));
+        return view('event', ['event' => $event]);
     }
 
     public function show(string $slug): View
@@ -38,7 +38,7 @@ class EventController extends Controller
             ->with('confirmedRegistrations')
             ->firstOrFail();
 
-        return view('event', compact('event'));
+        return view('event', ['event' => $event]);
     }
 
     public function register(Request $request): JsonResponse
@@ -112,18 +112,18 @@ class EventController extends Controller
                 'email' => $registration->email,
                 'event_id' => $event->id,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             Log::error('Failed to send event registration confirmation', [
                 'registration_id' => $registration->id,
                 'email' => $registration->email,
                 'event_id' => $event->id,
-                'error' => $e->getMessage(),
+                'error' => $exception->getMessage(),
             ]);
         }
 
         return response()->json([
             'success' => true,
-            'message' => "Vielen Dank, {$request->first_name}! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.",
+            'message' => sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $request->first_name),
         ]);
     }
 }

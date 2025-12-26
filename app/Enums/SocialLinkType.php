@@ -53,7 +53,7 @@ enum SocialLinkType: string
     public static function options(): array
     {
         return collect(self::cases())
-            ->mapWithKeys(fn (self $type) => [$type->value => $type->getLabel()])
+            ->mapWithKeys(fn (self $type): array => [$type->value => $type->getLabel()])
             ->toArray();
     }
 }

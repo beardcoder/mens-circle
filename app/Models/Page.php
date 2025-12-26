@@ -9,7 +9,8 @@ use Spatie\Sluggable\SlugOptions;
 
 class Page extends Model
 {
-    use HasSlug, SoftDeletes;
+    use HasSlug;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -20,17 +21,20 @@ class Page extends Model
         'published_at',
     ];
 
-    protected $casts = [
-        'content_blocks' => 'array',
-        'meta' => 'array',
-        'is_published' => 'boolean',
-        'published_at' => 'datetime',
-    ];
-
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'content_blocks' => 'array',
+            'meta' => 'array',
+            'is_published' => 'boolean',
+            'published_at' => 'datetime',
+        ];
     }
 }
