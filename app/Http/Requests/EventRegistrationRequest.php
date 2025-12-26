@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class EventRegistrationRequest extends FormRequest
 {
@@ -26,6 +28,7 @@ class EventRegistrationRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
+            'phone_number' => ['nullable', 'string', 'max:30'],
             'privacy' => ['required', 'accepted'],
         ];
     }
@@ -45,5 +48,13 @@ class EventRegistrationRequest extends FormRequest
             'privacy.required' => 'Bitte bestätige die Datenschutzerklärung.',
             'privacy.accepted' => 'Bitte bestätige die Datenschutzerklärung.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => $validator->errors()->first(),
+        ], 422));
     }
 }

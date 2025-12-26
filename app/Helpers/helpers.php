@@ -5,7 +5,7 @@ use App\Settings\GeneralSettings;
 if (! function_exists('setting')) {
     function setting(string $key, mixed $default = null): mixed
     {
-        return cache()->remember('setting.'.$key, 3600, function () use ($key, $default) {
+        return cache()->flexible('setting.'.$key, [3600, 7200], function () use ($key, $default) {
             try {
                 $settings = resolve(GeneralSettings::class);
 
@@ -20,7 +20,7 @@ if (! function_exists('setting')) {
 if (! function_exists('settings')) {
     function settings(): array
     {
-        return cache()->remember('settings_all', 3600, function (): array {
+        return cache()->flexible('settings_all', [3600, 7200], function (): array {
             try {
                 $settings = resolve(GeneralSettings::class);
 
