@@ -46,9 +46,11 @@ FROM dunglas/frankenphp:1-php8.5 AS production
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies for GD
+# Install system dependencies for GD and PostgreSQL
 RUN apt-get update && apt-get install -y \
     sqlite3 \
+    postgresql-client \
+    libpq-dev \
     libicu-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -64,6 +66,8 @@ RUN apt-get update && apt-get install -y \
 RUN install-php-extensions \
     pcntl \
     pdo_sqlite \
+    pdo_pgsql \
+    pgsql \
     intl \
     opcache \
     gd \
