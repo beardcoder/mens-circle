@@ -38,22 +38,22 @@ class SendEventReminders extends Command
             $registrations = $event->confirmedRegistrations;
 
             if ($registrations->isEmpty()) {
-                $this->warn("Event '{$event->title}' has no confirmed registrations.");
+                $this->warn(sprintf("Event '%s' has no confirmed registrations.", $event->title));
 
                 continue;
             }
 
-            $this->info("Processing event: {$event->title} ({$event->event_date->format('d.m.Y H:i')})");
+            $this->info(sprintf('Processing event: %s (%s)', $event->title, $event->event_date->format('d.m.Y H:i')));
 
             foreach ($registrations as $registration) {
                 Mail::queue(new EventReminder($registration, $event));
                 $totalRemindersSent++;
-                $this->line("  -> Reminder sent to: {$registration->email}");
+                $this->line('  -> Reminder sent to: '.$registration->email);
             }
         }
 
         $this->newLine();
-        $this->info("Successfully sent {$totalRemindersSent} reminder(s) for {$upcomingEvents->count()} event(s).");
+        $this->info(sprintf('Successfully sent %d reminder(s) for %s event(s).', $totalRemindersSent, $upcomingEvents->count()));
 
         return self::SUCCESS;
     }

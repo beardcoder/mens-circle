@@ -50,7 +50,7 @@ class SendNewsletterJob implements ShouldQueue
         // Get all active subscribers and send emails in chunks
         NewsletterSubscription::query()
             ->where('status', 'active')
-            ->chunk(100, function ($subscriptions) use (&$recipientCount, &$failedRecipients) {
+            ->chunk(100, function ($subscriptions) use (&$recipientCount, &$failedRecipients): void {
                 foreach ($subscriptions as $subscription) {
                     try {
                         Mail::to($subscription->email)
@@ -77,7 +77,7 @@ class SendNewsletterJob implements ShouldQueue
         ]);
 
         // Log summary if there were failures
-        if (count($failedRecipients) > 0) {
+        if ($failedRecipients !== []) {
             \Log::warning('Newsletter sending completed with failures', [
                 'newsletter_id' => $this->newsletter->id,
                 'successful' => $recipientCount,

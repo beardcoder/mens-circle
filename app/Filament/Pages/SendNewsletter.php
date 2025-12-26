@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages;
 
-use App\Jobs\SendNewsletterJob;
 use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
 use BackedEnum;
@@ -63,13 +62,13 @@ class SendNewsletter extends Page implements HasForms
                 ->color('primary')
                 ->requiresConfirmation()
                 ->modalHeading('Newsletter versenden?')
-                ->modalDescription(function () {
+                ->modalDescription(function (): string {
                     $count = NewsletterSubscription::where('status', 'active')->count();
 
-                    return "Der Newsletter wird an {$count} aktive Abonnenten versendet. Dies kann nicht rückgängig gemacht werden.";
+                    return sprintf('Der Newsletter wird an %s aktive Abonnenten versendet. Dies kann nicht rückgängig gemacht werden.', $count);
                 })
                 ->modalSubmitActionLabel('Jetzt versenden')
-                ->action(function () {
+                ->action(function (): void {
                     $data = $this->form->getState();
 
                     $newsletter = Newsletter::create([
@@ -78,7 +77,7 @@ class SendNewsletter extends Page implements HasForms
                         'status' => 'draft',
                     ]);
 
-                    SendNewsletterJob::dispatch($newsletter);
+                    dispatch(new \App\Jobs\SendNewsletterJob($newsletter));
 
                     Notification::make()
                         ->title('Newsletter wird versendet')

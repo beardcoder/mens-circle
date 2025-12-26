@@ -34,7 +34,7 @@ class EventRegistrationFactory extends Factory
      */
     public function confirmed(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => 'confirmed',
             'confirmed_at' => now(),
         ]);
@@ -45,7 +45,7 @@ class EventRegistrationFactory extends Factory
      */
     public function pending(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'status' => 'pending',
             'confirmed_at' => null,
         ]);
@@ -56,7 +56,7 @@ class EventRegistrationFactory extends Factory
      */
     public function forEvent(Event $event): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'event_id' => $event->id,
         ]);
     }

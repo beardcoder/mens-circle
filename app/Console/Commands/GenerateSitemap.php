@@ -30,9 +30,9 @@ class GenerateSitemap extends Command
         // Add all published events
         Event::query()
             ->where('is_published', true)
-            ->orderBy('event_date', 'desc')
+            ->latest('event_date')
             ->get()
-            ->each(function (Event $event) use ($sitemap) {
+            ->each(function (Event $event) use ($sitemap): void {
                 $sitemap->add(
                     Url::create(route('event.show.slug', $event->slug))
                         ->setLastModificationDate($event->updated_at)
@@ -44,9 +44,9 @@ class GenerateSitemap extends Command
         // Add all published pages
         Page::query()
             ->where('is_published', true)
-            ->orderBy('published_at', 'desc')
+            ->latest('published_at')
             ->get()
-            ->each(function (Page $page) use ($sitemap) {
+            ->each(function (Page $page) use ($sitemap): void {
                 $sitemap->add(
                     Url::create(route('page.show', $page->slug))
                         ->setLastModificationDate($page->updated_at)
@@ -72,7 +72,7 @@ class GenerateSitemap extends Command
         $path = public_path('sitemap.xml');
         $sitemap->writeToFile($path);
 
-        $this->info("Sitemap generated successfully at: {$path}");
+        $this->info('Sitemap generated successfully at: '.$path);
 
         return self::SUCCESS;
     }

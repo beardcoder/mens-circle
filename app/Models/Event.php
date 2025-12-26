@@ -11,7 +11,9 @@ use Spatie\Sluggable\SlugOptions;
 
 class Event extends Model
 {
-    use HasFactory, HasSlug, SoftDeletes;
+    use HasFactory;
+    use HasSlug;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -29,13 +31,6 @@ class Event extends Model
         'max_participants',
         'cost_basis',
         'is_published',
-    ];
-
-    protected $casts = [
-        'event_date' => 'datetime',
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
-        'is_published' => 'boolean',
     ];
 
     public function getSlugOptions(): SlugOptions
@@ -109,8 +104,17 @@ class Event extends Model
         $ical .= "DESCRIPTION:{$description}\r\n";
         $ical .= "LOCATION:{$location}\r\n";
         $ical .= "END:VEVENT\r\n";
-        $ical .= "END:VCALENDAR\r\n";
 
-        return $ical;
+        return $ical."END:VCALENDAR\r\n";
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'event_date' => 'datetime',
+            'start_time' => 'datetime',
+            'end_time' => 'datetime',
+            'is_published' => 'boolean',
+        ];
     }
 }

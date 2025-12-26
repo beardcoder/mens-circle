@@ -14,7 +14,8 @@ use Illuminate\Queue\SerializesModels;
 
 class EventRegistrationConfirmation extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new message instance.
@@ -58,7 +59,7 @@ class EventRegistrationConfirmation extends Mailable
         $filename = 'event-'.$this->event->slug.'.ics';
 
         return [
-            Attachment::fromData(fn () => $icalContent, $filename)
+            Attachment::fromData(fn (): string => $icalContent, $filename)
                 ->withMime('text/calendar'),
         ];
     }

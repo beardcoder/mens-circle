@@ -15,17 +15,17 @@ class PageController extends Controller
                 ->firstOrFail();
         });
 
-        return view('home', compact('page'));
+        return view('home', ['page' => $page]);
     }
 
     public function show(string $slug): View
     {
-        $page = cache()->remember("page.{$slug}", 3600, function () use ($slug) {
+        $page = cache()->remember('page.'.$slug, 3600, function () use ($slug) {
             return Page::where('slug', $slug)
                 ->where('is_published', true)
                 ->firstOrFail();
         });
 
-        return view('home', compact('page'));
+        return view('home', ['page' => $page]);
     }
 }

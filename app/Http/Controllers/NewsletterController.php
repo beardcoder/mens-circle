@@ -52,11 +52,11 @@ class NewsletterController extends Controller
         // Send welcome email
         try {
             \Mail::to($subscription->email)->send(new \App\Mail\NewsletterWelcome($subscription));
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             \Log::error('Failed to send newsletter welcome email', [
                 'subscription_id' => $subscription->id,
                 'email' => $subscription->email,
-                'error' => $e->getMessage(),
+                'error' => $exception->getMessage(),
             ]);
             // Don't fail the subscription if email fails
         }

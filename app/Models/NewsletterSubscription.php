@@ -15,18 +15,21 @@ class NewsletterSubscription extends Model
         'unsubscribed_at',
     ];
 
-    protected $casts = [
-        'subscribed_at' => 'datetime',
-        'unsubscribed_at' => 'datetime',
-    ];
-
     protected static function boot()
     {
         parent::boot();
 
-        static::creating(function ($subscription) {
+        static::creating(function ($subscription): void {
             $subscription->token = Str::random(64);
             $subscription->subscribed_at = now();
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'subscribed_at' => 'datetime',
+            'unsubscribed_at' => 'datetime',
+        ];
     }
 }

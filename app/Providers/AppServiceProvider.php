@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         Page::observe(PageObserver::class);
         Event::observe(EventObserver::class);
 
-        View::composer('*', function ($view) {
+        View::composer('*', function ($view): void {
             $hasNextEvent = cache()->remember('has_next_event', 600, function () {
                 return Event::where('is_published', true)
                     ->where('event_date', '>=', now())
