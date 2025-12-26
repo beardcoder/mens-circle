@@ -24,17 +24,17 @@
     @if($isExternal)
         <img
             src="{{ $src }}"
-            alt="{{ $alt }}"
+            alt="{{ strip_tags($alt) }}"
             @if($class) class="{{ $class }}" @endif
             loading="{{ $loading }}"
-            {{ $attributes->except(['src', 'alt', 'loading', 'width', 'sizes']) }}
+            {{ $attributes->except(['src', 'alt', 'loading', 'sizes']) }}
         />
     @else
         <img
             {{ glide()->src($imagePath, $width, sizes: $sizes, lazy: $loading === 'lazy') }}
-            alt="{{ $alt }}"
+            alt="{{ strip_tags($alt) }}"
             @if($class) class="{{ $class }}" @endif
-            {{ $attributes->except(['src', 'alt', 'loading', 'width', 'sizes']) }}
+            {{ $attributes->except(['src', 'alt', 'loading', 'sizes']) }}
         />
     @endif
 @endif
