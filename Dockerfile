@@ -120,10 +120,6 @@ ENV OCTANE_SERVER=frankenphp
 # Expose port
 EXPOSE 80 443
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost/up || exit 1
-
 # Entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
