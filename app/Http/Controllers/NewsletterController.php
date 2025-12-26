@@ -2,31 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NewsletterSubscriptionRequest;
+use App\Mail\NewsletterWelcome;
 use App\Models\NewsletterSubscription;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class NewsletterController extends Controller
 {
-    public function subscribe(Request $request): JsonResponse
+    public function subscribe(NewsletterSubscriptionRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|max:255',
-        ], [
-            'email.required' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
-            'email.email' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first(),
-            ], 422);
-        }
-
-        $existingSubscription = NewsletterSubscription::where('email', $request->email)->first();
+        $validated = $request->validated();
+        $existingSubscription = NewsletterSubscription::where('email', $validated['email'])->first();
 
         if ($existingSubscription && $existingSubscription->status === 'active') {
             return response()->json([
@@ -44,16 +33,16 @@ class NewsletterController extends Controller
             $subscription = $existingSubscription;
         } else {
             $subscription = NewsletterSubscription::create([
-                'email' => $request->email,
+                'email' => $validated['email'],
                 'status' => 'active',
             ]);
         }
 
         // Send welcome email
         try {
-            \Mail::to($subscription->email)->send(new \App\Mail\NewsletterWelcome($subscription));
+            Mail::to($subscription->email)->send(new NewsletterWelcome($subscription));
         } catch (\Exception $exception) {
-            \Log::error('Failed to send newsletter welcome email', [
+            Log::error('Failed to send newsletter welcome email', [
                 'subscription_id' => $subscription->id,
                 'email' => $subscription->email,
                 'error' => $exception->getMessage(),

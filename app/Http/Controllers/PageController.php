@@ -9,7 +9,7 @@ class PageController extends Controller
 {
     public function home(): View
     {
-        $page = cache()->remember('page.home', 3600, function () {
+        $page = cache()->flexible('page.home', [3600, 7200], function () {
             return Page::where('slug', 'home')
                 ->where('is_published', true)
                 ->firstOrFail();
@@ -20,7 +20,7 @@ class PageController extends Controller
 
     public function show(string $slug): View
     {
-        $page = cache()->remember('page.'.$slug, 3600, function () use ($slug) {
+        $page = cache()->flexible('page.'.$slug, [3600, 7200], function () use ($slug) {
             return Page::where('slug', $slug)
                 ->where('is_published', true)
                 ->firstOrFail();

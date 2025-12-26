@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EventRegistrationRequest;
 use App\Mail\EventRegistrationConfirmation;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class EventController extends Controller
 {
     public function showNext(): View
     {
-        $event = cache()->remember('event.next', 600, function () {
+        $event = cache()->flexible('event.next', [300, 900], function () {
             return Event::where('is_published', true)
                 ->where('event_date', '>=', now())
                 ->orderBy('event_date')
-                ->with('confirmedRegistrations')
                 ->first();
         });
 
@@ -35,38 +33,15 @@ class EventController extends Controller
     {
         $event = Event::where('slug', $slug)
             ->where('is_published', true)
-            ->with('confirmedRegistrations')
             ->firstOrFail();
 
         return view('event', ['event' => $event]);
     }
 
-    public function register(Request $request): JsonResponse
+    public function register(EventRegistrationRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'event_id' => 'required|exists:events,id',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone_number' => 'nullable|string|max:30',
-            'privacy' => 'required|accepted',
-        ], [
-            'first_name.required' => 'Bitte gib deinen Vornamen ein.',
-            'last_name.required' => 'Bitte gib deinen Nachnamen ein.',
-            'email.required' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
-            'email.email' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
-            'privacy.required' => 'Bitte bestätige die Datenschutzerklärung.',
-            'privacy.accepted' => 'Bitte bestätige die Datenschutzerklärung.',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first(),
-            ], 422);
-        }
-
-        $event = Event::findOrFail($request->event_id);
+        $validated = $request->validated();
+        $event = Event::findOrFail($validated['event_id']);
 
         if (! $event->is_published) {
             return response()->json([
@@ -83,7 +58,7 @@ class EventController extends Controller
         }
 
         $existingRegistration = EventRegistration::where('event_id', $event->id)
-            ->where('email', $request->email)
+            ->where('email', $validated['email'])
             ->first();
 
         if ($existingRegistration) {
@@ -95,10 +70,10 @@ class EventController extends Controller
 
         $registration = EventRegistration::create([
             'event_id' => $event->id,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'phone_number' => $validated['phone_number'] ?? null,
             'privacy_accepted' => true,
             'status' => 'confirmed',
             'confirmed_at' => now(),
@@ -123,7 +98,7 @@ class EventController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $request->first_name),
+            'message' => sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $validated['first_name']),
         ]);
     }
 }

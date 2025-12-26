@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class NewsletterSubscriptionRequest extends FormRequest
 {
@@ -37,5 +39,13 @@ class NewsletterSubscriptionRequest extends FormRequest
             'email.required' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
             'email.email' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => $validator->errors()->first(),
+        ], 422));
     }
 }
