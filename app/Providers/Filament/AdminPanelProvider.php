@@ -13,6 +13,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -30,9 +31,13 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->profile()
+            ->brandLogo(asset('logo-color.svg'))
+            ->brandName('Männerkreis Niederbayern')
+            ->brandLogoHeight('40px')
             ->colors([
                 'primary' => Color::Lime,
             ])
+            ->renderHook(PanelsRenderHook::TOPBAR_END, fn() => view('filament.components.go-to-website'))
             ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
                 GravatarPlugin::make(),

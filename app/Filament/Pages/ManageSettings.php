@@ -74,7 +74,6 @@ class ManageSettings extends Page implements HasForms
             'whatsapp_community_link' => Setting::get('whatsapp_community_link', ''),
             'social_links' => $socialLinks,
             'footer_text' => Setting::get('footer_text', '© '.date('Y').' Männerkreis Niederbayern. Alle Rechte vorbehalten.'),
-            'google_analytics_id' => Setting::get('google_analytics_id', ''),
             'event_default_max_participants' => Setting::get('event_default_max_participants', 8),
         ]);
     }
@@ -171,12 +170,6 @@ class ManageSettings extends Page implements HasForms
                     ->label('Footer Text')
                     ->rows(2)
                     ->helperText('Copyright-Text im Footer'),
-
-                TextInput::make('google_analytics_id')
-                    ->label('Google Analytics ID')
-                    ->maxLength(255)
-                    ->helperText('Optional: GA4 Measurement ID (z.B. G-XXXXXXXXXX)')
-                    ->placeholder('G-XXXXXXXXXX'),
 
                 TextInput::make('event_default_max_participants')
                     ->label('Standard Teilnehmerzahl bei Events')

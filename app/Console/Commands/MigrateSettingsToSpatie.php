@@ -55,7 +55,6 @@ class MigrateSettingsToSpatie extends Command
             $settings->social_links = is_array($socialLinks) ? $socialLinks : [];
 
             $settings->footer_text = $oldSettings['footer_text'] ?? '© '.date('Y').' Männerkreis Niederbayern. Alle Rechte vorbehalten.';
-            $settings->google_analytics_id = $oldSettings['google_analytics_id'] ?? '';
             $settings->event_default_max_participants = (int) ($oldSettings['event_default_max_participants'] ?? 8);
 
             // Save all settings

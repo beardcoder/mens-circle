@@ -117,12 +117,6 @@ class ManageGeneralSettings extends SettingsPage
                     ->rows(2)
                     ->helperText('Copyright-Text im Footer'),
 
-                TextInput::make('google_analytics_id')
-                    ->label('Google Analytics ID')
-                    ->maxLength(255)
-                    ->helperText('Optional: GA4 Measurement ID (z.B. G-XXXXXXXXXX)')
-                    ->placeholder('G-XXXXXXXXXX'),
-
                 TextInput::make('event_default_max_participants')
                     ->label('Standard Teilnehmerzahl bei Events')
                     ->numeric()
