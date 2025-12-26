@@ -34,7 +34,6 @@ if (! function_exists('settings')) {
                     'whatsapp_community_link' => $settings->whatsapp_community_link,
                     'social_links' => $settings->social_links,
                     'footer_text' => $settings->footer_text,
-                    'google_analytics_id' => $settings->google_analytics_id,
                     'event_default_max_participants' => $settings->event_default_max_participants,
                 ];
             } catch (\Exception $exception) {

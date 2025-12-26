@@ -14,17 +14,15 @@ class GeneralSettings extends Settings
 
     public string $contact_email;
 
-    public string $contact_phone;
+    public string|null $contact_phone;
 
     public string $location;
 
-    public string $whatsapp_community_link;
+    public string|null $whatsapp_community_link;
 
-    public array $social_links;
+    public array|null $social_links;
 
     public string $footer_text;
-
-    public string $google_analytics_id;
 
     public int $event_default_max_participants;
 
