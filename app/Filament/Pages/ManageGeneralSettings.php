@@ -11,6 +11,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Schema;
+use Spatie\ResponseCache\Facades\ResponseCache;
 
 class ManageGeneralSettings extends SettingsPage
 {
@@ -125,5 +126,23 @@ class ManageGeneralSettings extends SettingsPage
                     ->maxValue(100)
                     ->helperText('Standard-Maximalzahl für neue Events'),
             ]);
+    }
+
+    /**
+     * Clear cache after settings are saved.
+     */
+    protected function afterSave(): void
+    {
+        // Clear application cache for settings
+        cache()->forget('settings_all');
+
+        // Clear all setting.* keys
+        $settings = settings()->all();
+        foreach (array_keys($settings) as $key) {
+            cache()->forget('setting.'.$key);
+        }
+
+        // Clear full HTTP response cache
+        ResponseCache::clear();
     }
 }

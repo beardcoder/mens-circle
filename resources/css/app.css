@@ -38,6 +38,7 @@
 @import 'utilities/_layout.css';
 @import 'utilities/_animations.css';
 @import 'utilities/_visual.css';
+@import 'utilities/_view-transitions.css';
 
 /* ============================================
    COMPONENTS

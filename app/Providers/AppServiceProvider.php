@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Event;
+use App\Models\EventRegistration;
 use App\Models\Page;
 use App\Observers\EventObserver;
+use App\Observers\EventRegistrationObserver;
 use App\Observers\PageObserver;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Vite;
@@ -30,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
 
         Page::observe(PageObserver::class);
         Event::observe(EventObserver::class);
+        EventRegistration::observe(EventRegistrationObserver::class);
 
         View::composer('*', function ($view): void {
             $hasNextEvent = cache()->flexible('has_next_event', [300, 900], function () {
