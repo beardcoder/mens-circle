@@ -27,8 +27,14 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force
 fi
 
+# Run migrations if MIGRATE_ON_START is set
+if [ "${MIGRATE_ON_START:-false}" = "true" ]; then
+    echo "Running database migrations..."
+    php artisan migrate --force
+fi
+
 # Cache configuration for production
-if [ "$APP_ENV" = "production" ]; then 
+if [ "$APP_ENV" = "production" ]; then
     echo "Clearing existing caches..."
     php artisan optimize:clear
 
@@ -38,12 +44,6 @@ if [ "$APP_ENV" = "production" ]; then
     php artisan view:cache
     php artisan event:cache
     php artisan optimize
-fi
-
-# Run migrations if MIGRATE_ON_START is set
-if [ "${MIGRATE_ON_START:-false}" = "true" ]; then
-    echo "Running database migrations..."
-    php artisan migrate --force
 fi
 
 # Create storage symlink
