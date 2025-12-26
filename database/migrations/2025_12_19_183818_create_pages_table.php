@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->json('content_blocks')->nullable();
-            $table->json('meta')->nullable();
+            $table->jsonb('content_blocks')->nullable();
+            $table->jsonb('meta')->nullable();
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
