@@ -1,12 +1,18 @@
 <?php
 
-use App\Models\Setting;
+use App\Settings\GeneralSettings;
 
 if (! function_exists('setting')) {
     function setting(string $key, mixed $default = null): mixed
     {
-        return cache()->remember("setting.{$key}", 3600, function () use ($key, $default) {
-            return Setting::get($key, $default);
+        return cache()->remember('setting.'.$key, 3600, function () use ($key, $default) {
+            try {
+                $settings = resolve(GeneralSettings::class);
+
+                return data_get($settings, $key, $default);
+            } catch (\Exception $exception) {
+                return $default;
+            }
         });
     }
 }
@@ -14,15 +20,33 @@ if (! function_exists('setting')) {
 if (! function_exists('settings')) {
     function settings(): array
     {
-        return cache()->remember('settings_all', 3600, function () {
-            $settings = Setting::all();
-            $result = [];
+        return cache()->remember('settings_all', 3600, function (): array {
+            try {
+                $settings = resolve(GeneralSettings::class);
 
-            foreach ($settings as $setting) {
-                $result[$setting->key] = $setting->value;
+                return [
+                    'site_name' => $settings->site_name,
+                    'site_tagline' => $settings->site_tagline,
+                    'site_description' => $settings->site_description,
+                    'contact_email' => $settings->contact_email,
+                    'contact_phone' => $settings->contact_phone,
+                    'location' => $settings->location,
+                    'whatsapp_community_link' => $settings->whatsapp_community_link,
+                    'social_links' => $settings->social_links,
+                    'footer_text' => $settings->footer_text,
+                    'google_analytics_id' => $settings->google_analytics_id,
+                    'event_default_max_participants' => $settings->event_default_max_participants,
+                ];
+            } catch (\Exception $exception) {
+                return [];
             }
-
-            return $result;
         });
+    }
+}
+
+if (! function_exists('app_settings')) {
+    function app_settings(): GeneralSettings
+    {
+        return resolve(GeneralSettings::class);
     }
 }
