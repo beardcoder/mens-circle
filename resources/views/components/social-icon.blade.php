@@ -1,20 +1,12 @@
-@props(['icon' => null, 'type' => null, 'url' => '#', 'label' => '', 'variant' => 'icon'])
+@props(['type' => null, 'url' => '#', 'label' => '', 'variant' => 'icon'])
 
 @php
-use App\Enums\Heroicon;
 use App\Enums\SocialLinkType;
 
-// Resolve social type
-$socialType = $type instanceof SocialLinkType ? $type : SocialLinkType::tryFrom($type ?? '');
+$socialType = $type instanceof SocialLinkType ? $type : SocialLinkType::tryFrom($type ?? '') ?? SocialLinkType::OTHER;
+$iconSvg = $socialType->getIcon(24);
+$title = $label ?: $socialType->getLabel();
 
-// Resolve heroicon
-$heroicon = $icon instanceof Heroicon ? $icon : (is_string($icon) ? Heroicon::fromName($icon) : null);
-
-// Get SVG and title
-$iconSvg = $heroicon?->getSvg(24) ?? $socialType?->getIcon() ?? Heroicon::LINK->getSvg(24);
-$title = $label ?: ($socialType?->getLabel() ?? $heroicon?->getLabel() ?? 'Link');
-
-// Determine link type and format URL
 $isInternal = str_starts_with($url, 'mailto:') || str_starts_with($url, 'tel:');
 $href = $url;
 
@@ -31,13 +23,11 @@ if (!$isInternal) {
     }
 }
 
-// CSS classes based on variant
 $isTextVariant = $variant === 'link';
 $linkClass = $isTextVariant ? 'social-link' : 'social-icon';
 $iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
 
-// Medama tracking attributes
-$trackingType = $isEmail ? 'email' : ($isPhone ? 'phone' : ($socialType?->value ?? 'social'));
+$trackingType = $socialType === SocialLinkType::EMAIL ? 'email' : ($socialType === SocialLinkType::PHONE ? 'phone' : 'social');
 $medamaClick = "action=social_click;element=link;type={$trackingType};location=footer";
 @endphp
 
