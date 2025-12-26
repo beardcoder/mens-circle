@@ -303,6 +303,7 @@ class PageForm
             ->collection('page_blocks')
             ->disk('public')
             ->image()
+            ->imageEditor()
             ->responsiveImages()
             ->customProperties(fn (Get $get): array => [
                 'block_id' => $get('block_id'),
