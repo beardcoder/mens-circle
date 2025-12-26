@@ -1,13 +1,26 @@
+@props([
+    'block',
+    'page' => null,
+])
+
+@php
+    $blockId = $block['data']['block_id'] ?? null;
+    $media = $page?->getBlockMedia($blockId, 'background_image');
+
+    if ($media) {
+        $media->name = '';
+    }
+@endphp
+
 <section class="hero">
     <div class="hero__bg">
-        @if(!empty($block['data']['background_image']))
-            <x-modern-image
-                :src="$block['data']['background_image']"
-                alt=""
-                class="hero__bg-image"
-                loading="eager"
-                fetchpriority="high"
-            />
+        @if($media)
+            {{ $media->img()->attributes([
+                'class' => 'hero__bg-image',
+                'loading' => 'eager',
+                'fetchpriority' => 'high',
+                'aria-hidden' => 'true',
+            ]) }}
         @endif
     </div>
 

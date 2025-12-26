@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Event extends Model
+class Event extends Model implements HasMedia
 {
     use HasFactory;
     use HasSlug;
+    use InteractsWithMedia;
     use SoftDeletes;
 
     protected $fillable = [
@@ -40,6 +43,13 @@ class Event extends Model
         return SlugOptions::create()
             ->generateSlugsFrom(fn ($model) => $model->event_date->format('Y-m-d'))
             ->saveSlugsTo('slug');
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('event_image')
+            ->singleFile()
+            ->useDisk('public');
     }
 
     public function registrations(): HasMany

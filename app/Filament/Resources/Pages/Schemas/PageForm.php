@@ -4,15 +4,19 @@ namespace App\Filament\Resources\Pages\Schemas;
 
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class PageForm
 {
@@ -36,11 +40,41 @@ class PageForm
                     ->label('Inhaltsblöcke')
                     ->collapsible()
                     ->collapsed()
+                    ->afterStateUpdated(function (Builder $component): void {
+                        $state = $component->getState();
+
+                        if (! is_array($state)) {
+                            return;
+                        }
+
+                        $seenBlockIds = [];
+                        $hasUpdates = false;
+
+                        foreach ($state as $key => $item) {
+                            $data = $item['data'] ?? [];
+                            $blockId = $data['block_id'] ?? null;
+
+                            if (! $blockId || array_key_exists($blockId, $seenBlockIds)) {
+                                $data['block_id'] = (string) Str::uuid();
+                                $item['data'] = $data;
+                                $state[$key] = $item;
+                                $hasUpdates = true;
+                                $blockId = $data['block_id'];
+                            }
+
+                            $seenBlockIds[$blockId] = true;
+                        }
+
+                        if ($hasUpdates) {
+                            $component->state($state);
+                        }
+                    })
                     ->blocks([
                         Builder\Block::make('hero')
                             ->label('Hero Bereich')
                             ->icon(Heroicon::OutlinedSparkles)
                             ->schema([
+                                self::blockIdField(),
                                 TextInput::make('label')
                                     ->label('Label (klein)'),
                                 Textarea::make('title')
@@ -54,16 +88,14 @@ class PageForm
                                     ->label('Button Text'),
                                 TextInput::make('button_link')
                                     ->label('Button Link'),
-                                FileUpload::make('background_image')
-                                    ->label('Hintergrundbild')
-                                    ->disk('public')
-                                    ->image(),
+                                self::blockImageUpload('background_image', 'Hintergrundbild'),
                             ]),
 
                         Builder\Block::make('intro')
                             ->label('Intro Bereich')
                             ->icon(Heroicon::OutlinedInformationCircle)
                             ->schema([
+                                self::blockIdField(),
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
                                 Textarea::make('title')
@@ -96,6 +128,7 @@ class PageForm
                             ->label('Text Bereich')
                             ->icon(Heroicon::OutlinedDocumentText)
                             ->schema([
+                                self::blockIdField(),
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
                                 TextInput::make('title')
@@ -110,6 +143,7 @@ class PageForm
                             ->label('Werte Liste')
                             ->icon(Heroicon::OutlinedRectangleStack)
                             ->schema([
+                                self::blockIdField(),
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
                                 TextInput::make('title')
@@ -135,6 +169,7 @@ class PageForm
                             ->label('Moderator Bereich')
                             ->icon(Heroicon::OutlinedUserCircle)
                             ->schema([
+                                self::blockIdField(),
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
                                 Textarea::make('name')
@@ -147,16 +182,14 @@ class PageForm
                                 Textarea::make('quote')
                                     ->label('Zitat')
                                     ->rows(3),
-                                FileUpload::make('photo')
-                                    ->label('Foto')
-                                    ->disk('public')
-                                    ->image(),
+                                self::blockImageUpload('photo', 'Foto'),
                             ]),
 
                         Builder\Block::make('journey_steps')
                             ->label('Ablauf Schritte')
                             ->icon(Heroicon::OutlinedMap)
                             ->schema([
+                                self::blockIdField(),
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
                                 Textarea::make('title')
@@ -186,6 +219,7 @@ class PageForm
                             ->label('FAQ Bereich')
                             ->icon(Heroicon::OutlinedQuestionMarkCircle)
                             ->schema([
+                                self::blockIdField(),
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
                                 Textarea::make('title')
@@ -213,6 +247,7 @@ class PageForm
                             ->label('Newsletter Bereich')
                             ->icon(Heroicon::OutlinedEnvelope)
                             ->schema([
+                                self::blockIdField(),
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
                                 Textarea::make('title')
@@ -228,6 +263,7 @@ class PageForm
                             ->label('Call-to-Action')
                             ->icon(Heroicon::OutlinedCursorArrowRipple)
                             ->schema([
+                                self::blockIdField(),
                                 TextInput::make('eyebrow')
                                     ->label('Überschrift (klein)'),
                                 Textarea::make('title')
@@ -252,5 +288,36 @@ class PageForm
                     ->valueLabel('Wert')
                     ->columnSpanFull(),
             ]);
+    }
+
+    private static function blockIdField(): Hidden
+    {
+        return Hidden::make('block_id')
+            ->default(fn (): string => (string) Str::uuid());
+    }
+
+    private static function blockImageUpload(string $name, string $label): SpatieMediaLibraryFileUpload
+    {
+        return SpatieMediaLibraryFileUpload::make($name)
+            ->label($label)
+            ->collection('page_blocks')
+            ->disk('public')
+            ->image()
+            ->responsiveImages()
+            ->customProperties(fn (Get $get): array => [
+                'block_id' => $get('block_id'),
+                'field' => $name,
+            ])
+            ->filterMediaUsing(function (Collection $media, Get $get) use ($name): Collection {
+                $blockId = $get('block_id');
+
+                if (! $blockId) {
+                    return $media->take(0);
+                }
+
+                return $media
+                    ->where('custom_properties.block_id', $blockId)
+                    ->where('custom_properties.field', $name);
+            });
     }
 }
