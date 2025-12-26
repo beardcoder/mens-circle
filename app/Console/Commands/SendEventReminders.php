@@ -2,36 +2,21 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\EventReminder;
 use App\Models\Event;
-use App\Notifications\EventReminderNotification;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
 
 class SendEventReminders extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'events:send-reminders';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Send reminder emails to participants for events happening in 24 hours';
 
-    /**
-     * Execute the console command.
-     */
     public function handle(): int
     {
         $this->info('Searching for events happening in 24 hours...');
 
-        // Finde alle Events, die in 23-25 Stunden stattfinden
-        // Das gibt uns eine 2-Stunden-Toleranz für die tägliche Ausführung
         $startWindow = now()->addHours(23);
         $endWindow = now()->addHours(25);
 
@@ -47,7 +32,7 @@ class SendEventReminders extends Command
             return self::SUCCESS;
         }
 
-        $totalNotificationsSent = 0;
+        $totalRemindersSent = 0;
 
         foreach ($upcomingEvents as $event) {
             $registrations = $event->confirmedRegistrations;
@@ -61,17 +46,14 @@ class SendEventReminders extends Command
             $this->info("Processing event: {$event->title} ({$event->event_date->format('d.m.Y H:i')})");
 
             foreach ($registrations as $registration) {
-                // Sende Notification an den Teilnehmer
-                Notification::route('mail', $registration->email)
-                    ->notify(new EventReminderNotification($registration, $event));
-
-                $totalNotificationsSent++;
-                $this->line("  → Reminder sent to: {$registration->email}");
+                Mail::queue(new EventReminder($registration, $event));
+                $totalRemindersSent++;
+                $this->line("  -> Reminder sent to: {$registration->email}");
             }
         }
 
         $this->newLine();
-        $this->info("✓ Successfully sent {$totalNotificationsSent} reminder(s) for {$upcomingEvents->count()} event(s).");
+        $this->info("Successfully sent {$totalRemindersSent} reminder(s) for {$upcomingEvents->count()} event(s).");
 
         return self::SUCCESS;
     }
