@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Page;
+use Spatie\ResponseCache\Facades\ResponseCache;
 
 class PageObserver
 {
@@ -56,5 +57,8 @@ class PageObserver
         if ($page->slug === 'home') {
             cache()->forget('page.home');
         }
+
+        // Clear full HTTP response cache
+        ResponseCache::clear();
     }
 }
