@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\LlmsController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/llms.txt', [LlmsController::class, 'show'])->name('llms.txt');
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/event', [EventController::class, 'showNext'])->name('event.show');
@@ -15,7 +18,6 @@ Route::middleware('doNotCacheResponse')->group(function () {
     Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
     Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 });
-
 
 // Dynamic pages (must be last to avoid conflicts)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
