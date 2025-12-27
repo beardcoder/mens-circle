@@ -59,6 +59,7 @@ php artisan cache:clear
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
+php artisan responsecache:clear
 
 # Optimize for production
 php artisan config:cache
@@ -423,6 +424,7 @@ php artisan cache:clear
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
+php artisan responsecache:clear
 
 # Restart Octane
 sudo systemctl restart octane
@@ -462,7 +464,14 @@ npm install && npm run build
 # Run migrations
 php artisan migrate --force
 
-# Clear and cache
+# Clear all caches
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan responsecache:clear
+
+# Optimize for production
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
