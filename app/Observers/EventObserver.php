@@ -54,6 +54,7 @@ class EventObserver
     {
         cache()->forget('event.next');
         cache()->forget('has_next_event');
+        cache()->forget('llms_txt');
 
         // Clear full HTTP response cache
         ResponseCache::clear();
