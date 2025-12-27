@@ -18,7 +18,7 @@ export default [
       'storage/**',
       'bootstrap/cache/**',
       '*.min.js',
-      'vite.config.js',
+      'vite.config.mjs',
     ],
   },
   js.configs.recommended,

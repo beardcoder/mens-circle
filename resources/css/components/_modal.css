@@ -7,16 +7,15 @@
    Base Modal
    ============================================ */
 .modal {
-  display: none;
   position: fixed;
   inset: 0;
   z-index: var(--z-modal-backdrop);
+  display: none;
   align-items: center;
   justify-content: center;
   padding: var(--space-md);
   background: var(--bg-overlay);
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
 }
 
 .modal.open {
@@ -25,8 +24,8 @@
 
 .modal__content {
   position: relative;
-  max-inline-size: 480px;
   inline-size: 100%;
+  max-inline-size: 480px;
   padding: var(--space-lg);
   background: var(--bg-primary);
   border-radius: var(--radius-lg);
@@ -39,6 +38,7 @@
     opacity: 0;
     transform: scale(0.95) translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -55,19 +55,19 @@
   inline-size: 32px;
   block-size: 32px;
   padding: 0;
+  color: var(--text-secondary);
+  cursor: pointer;
   background: none;
   border: none;
   border-radius: var(--radius-full);
-  color: var(--text-secondary);
-  cursor: pointer;
   transition:
     color var(--transition-fast),
     background-color var(--transition-fast);
 }
 
 .modal__close:hover {
-  background: var(--bg-tertiary);
   color: var(--text-primary);
+  background: var(--bg-tertiary);
 }
 
 .modal__close svg {
@@ -87,8 +87,8 @@
 }
 
 .modal__header p {
-  color: var(--text-secondary);
   font-size: 0.9375rem;
+  color: var(--text-secondary);
 }
 
 .modal__body {
@@ -105,15 +105,14 @@
    Calendar Modal (specific)
    ============================================ */
 .calendar-modal {
-  display: none;
   position: fixed;
   inset: 0;
   z-index: var(--z-modal-backdrop);
+  display: none;
   align-items: center;
   justify-content: center;
   background: var(--bg-overlay);
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
 }
 
 .calendar-modal.open {
@@ -122,11 +121,11 @@
 
 .calendar-modal__content {
   max-inline-size: 380px;
-  margin: var(--space-md);
   padding: var(--space-lg);
+  margin: var(--space-md);
+  text-align: center;
   background: var(--bg-primary);
   border-radius: var(--radius-lg);
-  text-align: center;
 }
 
 .calendar-modal__content h3 {
@@ -137,8 +136,8 @@
 
 .calendar-modal__content p {
   margin-block-end: var(--space-md);
-  color: var(--text-secondary);
   font-size: 0.9375rem;
+  color: var(--text-secondary);
 }
 
 .calendar-modal__buttons {
@@ -154,17 +153,16 @@
   position: absolute;
   inset-block-start: -100%;
   inset-inline-start: 50%;
-  transform: translateX(-50%);
   z-index: var(--z-toast);
   padding: 1rem 2rem;
-  background: var(--bg-section-alt);
-  color: var(--text-on-dark);
-  border-radius: var(--radius-full);
   font-size: 0.875rem;
+  color: var(--text-on-dark);
+  background: var(--bg-section-alt);
+  border-radius: var(--radius-full);
+  transform: translateX(-50%);
   transition: inset-block-start var(--transition-fast);
 }
 
 .skip-link:focus {
   inset-block-start: var(--space-sm);
 }
-

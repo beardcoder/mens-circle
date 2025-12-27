@@ -171,6 +171,7 @@ h3 {
   font-family: var(--font-accent);
   font-style: italic;
   font-weight: 400;
+    font-size: 1.1em;
 }
 
 .text-serif {

@@ -8,27 +8,27 @@
    ============================================ */
 .moderator-section {
   position: relative;
-  background: var(--bg-tertiary);
   overflow: hidden;
+  background: var(--bg-tertiary);
 }
 
 /* Decorative text */
 .moderator-section::before {
-  content: 'BEGLEITER';
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: -5%;
-  transform: translateY(-50%) rotate(-90deg);
   font-family: var(--font-display);
   font-size: clamp(4rem, 12vw, 10rem);
+  color: var(--border-light);
   letter-spacing: 0.1em;
   white-space: nowrap;
-  color: var(--border-light);
-  opacity: 0.5;
   pointer-events: none;
+  content: 'BEGLEITER';
+  opacity: 0.5;
+  transform: translateY(-50%) rotate(-90deg);
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .moderator-section::before {
     display: none;
   }
@@ -46,11 +46,11 @@
   padding-block: var(--space-xl);
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .moderator__layout {
     grid-template-columns: 1fr;
-    min-block-size: auto;
     gap: var(--space-lg);
+    min-block-size: auto;
   }
 }
 
@@ -61,7 +61,7 @@
   position: relative;
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .moderator__photo-wrapper {
     max-inline-size: 350px;
     margin-inline: auto;
@@ -75,13 +75,13 @@
 
 /* Noise texture */
 .moderator__photo::before {
-  content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.04;
   z-index: 1;
   pointer-events: none;
+  content: '';
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
 }
 
 /* Picture element wrapper for responsive images */
@@ -96,19 +96,19 @@
   inset: 0;
   display: flex;
   flex-direction: column;
+  gap: var(--space-sm);
   align-items: center;
   justify-content: center;
-  gap: var(--space-sm);
   color: var(--text-on-dark);
 }
 
 .moderator__photo-placeholder svg {
   inline-size: 80px;
   block-size: 80px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 0.5;
   opacity: 0.3;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 0.5;
 }
 
 .moderator__photo-placeholder span {
@@ -120,13 +120,11 @@
 
 .moderator__photo-accent {
   position: absolute;
-  inset-block-start: var(--space-md);
-  inset-inline-start: var(--space-md);
-  inset-inline-end: calc(var(--space-md) * -1);
-  inset-block-end: calc(var(--space-md) * -1);
+  inset-block: var(--space-md) calc(var(--space-md) * -1);
+  inset-inline: var(--space-md) calc(var(--space-md) * -1);
+  z-index: -1;
   border: 1px solid var(--accent-primary);
   opacity: 0.5;
-  z-index: -1;
 }
 
 /* ============================================
@@ -137,7 +135,7 @@
   padding-inline-start: var(--space-lg);
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .moderator__content {
     padding-inline-start: 0;
   }
@@ -167,8 +165,8 @@
 
 .moderator__quote {
   max-inline-size: 500px;
-  margin-block-start: var(--space-lg);
   padding-inline-start: var(--space-md);
+  margin-block-start: var(--space-lg);
   border-inline-start: 2px solid var(--accent-primary);
 }
 
@@ -178,6 +176,6 @@
   font-size: clamp(1.5rem, 2.5vw, 2.25rem);
   font-style: italic;
   line-height: 1.35;
-  letter-spacing: -0.02em;
   color: var(--text-accent);
+  letter-spacing: -0.02em;
 }

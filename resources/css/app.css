@@ -24,50 +24,49 @@
 /* ============================================
    BASE
    ============================================ */
-@import '@fontsource-variable/playfair-display';
-@import '@fontsource-variable/dm-sans';
-@import '@fontsource-variable/cormorant';
-
-@import 'base/_variables.css';
-@import 'base/_reset.css';
-@import 'base/_typography.css';
+@import url('@fontsource-variable/playfair-display');
+@import url('@fontsource-variable/dm-sans');
+@import url('@fontsource-variable/cormorant');
+@import url('base/_variables.css');
+@import url('base/_reset.css');
+@import url('base/_typography.css');
 
 /* ============================================
    UTILITIES
    ============================================ */
-@import 'utilities/_layout.css';
-@import 'utilities/_animations.css';
-@import 'utilities/_visual.css';
-@import 'utilities/_view-transitions.css';
+@import url('utilities/_layout.css');
+@import url('utilities/_animations.css');
+@import url('utilities/_visual.css');
+@import url('utilities/_view-transitions.css');
 
 /* ============================================
    COMPONENTS
    ============================================ */
-@import 'components/_buttons.css';
-@import 'components/_header.css';
-@import 'components/_footer.css';
-@import 'components/_cards.css';
-@import 'components/_forms.css';
-@import 'components/_modal.css';
+@import url('components/_buttons.css');
+@import url('components/_header.css');
+@import url('components/_footer.css');
+@import url('components/_cards.css');
+@import url('components/_forms.css');
+@import url('components/_modal.css');
 
 /* ============================================
    SECTIONS
    ============================================ */
-@import 'sections/_hero.css';
-@import 'sections/_intro.css';
-@import 'sections/_moderator.css';
-@import 'sections/_journey.css';
-@import 'sections/_testimonials.css';
-@import 'sections/_testimonial-form.css';
-@import 'sections/_faq.css';
-@import 'sections/_newsletter.css';
-@import 'sections/_whatsapp.css';
-@import 'sections/_cta.css';
-@import 'sections/_event.css';
-@import 'sections/_no-event.css';
-@import 'sections/_legal.css';
+@import url('sections/_hero.css');
+@import url('sections/_intro.css');
+@import url('sections/_moderator.css');
+@import url('sections/_journey.css');
+@import url('sections/_testimonials.css');
+@import url('sections/_testimonial-form.css');
+@import url('sections/_faq.css');
+@import url('sections/_newsletter.css');
+@import url('sections/_whatsapp.css');
+@import url('sections/_cta.css');
+@import url('sections/_event.css');
+@import url('sections/_no-event.css');
+@import url('sections/_legal.css');
 
 /* ============================================
    PRINT
    ============================================ */
-@import 'utilities/_print.css';
+@import url('utilities/_print.css');

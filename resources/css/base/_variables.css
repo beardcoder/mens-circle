@@ -30,30 +30,30 @@
      ============================================ */
 
   /* Base Earth Tones */
-  --color-earth-deep: oklch(18% 0.026 68);
-  --color-earth-dark: oklch(24% 0.033 68);
-  --color-earth-mid: oklch(35% 0.04 68);
-  --color-earth-warm: oklch(46% 0.05 68);
+  --color-earth-deep: oklch(18% 0.026 68deg);
+  --color-earth-dark: oklch(24% 0.033 68deg);
+  --color-earth-mid: oklch(35% 0.04 68deg);
+  --color-earth-warm: oklch(46% 0.05 68deg);
 
   /* Terracotta Accents */
-  --color-terracotta: oklch(58% 0.13 46);
-  --color-terracotta-light: oklch(70% 0.11 46);
+  --color-terracotta: oklch(58% 0.13 46deg);
+  --color-terracotta-light: oklch(70% 0.11 46deg);
 
   /* Neutral Sand Tones */
-  --color-sand: oklch(76% 0.04 75);
-  --color-sand-light: oklch(89% 0.02 75);
+  --color-sand: oklch(76% 0.04 75deg);
+  --color-sand-light: oklch(89% 0.02 75deg);
 
   /* Light Backgrounds */
-  --color-parchment: oklch(95% 0.01 75);
-  --color-bone: oklch(98% 0.005 75);
+  --color-parchment: oklch(95% 0.01 75deg);
+  --color-bone: oklch(98% 0.005 75deg);
 
   /* Dark Text */
-  --color-ink: oklch(13% 0.01 68);
-  --color-ink-soft: oklch(24% 0.02 68);
+  --color-ink: oklch(13% 0.01 68deg);
+  --color-ink-soft: oklch(24% 0.02 68deg);
 
   /* Additional Colors for Contrast */
-  --color-sage: oklch(45% 0.08 145);
-  --color-sage-light: oklch(55% 0.06 145);
+  --color-sage: oklch(45% 0.08 145deg);
+  --color-sage-light: oklch(55% 0.06 145deg);
 
   /* ============================================
      Semantic Color Tokens - Light Theme
@@ -74,7 +74,7 @@
   /* Text */
   --text-primary: var(--color-ink);
   --text-secondary: var(--color-ink-soft);
-  --text-muted: oklch(55% 0.02 68);
+  --text-muted: oklch(55% 0.02 68deg);
   --text-on-dark: var(--color-parchment);
   --text-on-dark-secondary: var(--color-sand);
   --text-accent: var(--color-earth-warm);
@@ -97,9 +97,9 @@
   /* ============================================
      Typography Scale
      ============================================ */
-  --font-display: 'Playfair Display Variable', Georgia, serif;
+  --font-display: 'Playfair Display Variable', georgia, serif;
   --font-body: 'DM Sans Variable', system-ui, sans-serif;
-  --font-accent: 'Cormorant Variable', Georgia, serif;
+  --font-accent: 'Cormorant Variable', georgia, serif;
 
   /* Fluid Type Scale using clamp() */
   --text-xs: clamp(0.625rem, 0.5rem + 0.25vw, 0.75rem);
@@ -133,12 +133,10 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 500ms;
   --duration-slower: 800ms;
-
   --transition-fast: var(--duration-fast) var(--ease-out);
   --transition-medium: var(--duration-normal) var(--ease-out);
   --transition-slow: var(--duration-slower) var(--ease-out);
@@ -210,13 +208,17 @@
     --bg-section-alt: var(--color-earth-deep);
     --bg-light: var(--color-earth-dark);
     --bg-input: color-mix(in oklch, var(--color-earth-dark) 80%, transparent);
-    --bg-input-focus: color-mix(in oklch, var(--color-earth-mid) 90%, transparent);
+    --bg-input-focus: color-mix(
+      in oklch,
+      var(--color-earth-mid) 90%,
+      transparent
+    );
     --bg-overlay: color-mix(in oklch, var(--color-ink) 85%, transparent);
 
     /* Dark Theme Text - Enhanced Contrast */
     --text-primary: var(--color-parchment);
-    --text-secondary: oklch(80% 0.02 75);
-    --text-muted: oklch(65% 0.02 75);
+    --text-secondary: oklch(80% 0.02 75deg);
+    --text-muted: oklch(65% 0.02 75deg);
     --text-on-dark: var(--color-parchment);
     --text-on-dark-secondary: var(--color-sand-light);
     --text-accent: var(--color-terracotta-light);

@@ -17,22 +17,6 @@
     backdrop-filter var(--transition-medium);
 }
 
-/* Scrolled state */
-.header.scrolled {
-  background: color-mix(in oklch, var(--bg-primary) 95%, transparent);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-
-.header.scrolled .logo,
-.header.scrolled .nav__link {
-  color: var(--text-primary);
-}
-
-.header.scrolled .nav-toggle span {
-  background: var(--text-primary);
-}
-
 .header__inner {
   display: flex;
   align-items: center;
@@ -43,21 +27,21 @@
    Logo
    ============================================ */
 .logo {
+  z-index: calc(var(--z-header) + 2);
   display: flex;
-  align-items: center;
   gap: var(--space-sm);
+  align-items: center;
   font-family: var(--font-display);
   font-size: 1.25rem;
   color: var(--color-bone);
   letter-spacing: -0.02em;
   transition: color var(--transition-medium);
-  z-index: calc(var(--z-header) + 2);
 }
 
 .logo__icon {
+  flex-shrink: 0;
   inline-size: 44px;
   block-size: 44px;
-  flex-shrink: 0;
 }
 
 .logo__text {
@@ -71,8 +55,8 @@
    ============================================ */
 .nav {
   display: flex;
-  align-items: center;
   gap: var(--space-lg);
+  align-items: center;
 }
 
 .nav__link {
@@ -86,12 +70,12 @@
 
 /* Underline effect */
 .nav__link::after {
-  content: '';
   position: absolute;
   inset-block-end: -4px;
   inset-inline-start: 0;
   inline-size: 0;
   block-size: 1px;
+  content: '';
   background: var(--accent-primary);
   transition: inline-size var(--transition-medium);
 }
@@ -104,14 +88,14 @@
    Mobile Navigation Toggle
    ============================================ */
 .nav-toggle {
+  z-index: calc(var(--z-header) + 2);
   display: none;
   flex-direction: column;
   gap: 6px;
   padding: 0.5rem;
+  cursor: pointer;
   background: none;
   border: none;
-  cursor: pointer;
-  z-index: calc(var(--z-header) + 2);
 }
 
 .nav-toggle span {
@@ -119,10 +103,26 @@
   inline-size: 28px;
   block-size: 2px;
   background: var(--color-bone);
+  transform-origin: center;
   transition:
     transform var(--transition-medium),
-    opacity var(--transition-medium);
-  transform-origin: center;
+    opacity var(--transition-medium),
+    background var(--transition-medium);
+}
+
+/* Scrolled state */
+.header.scrolled {
+  background: color-mix(in oklch, var(--bg-primary) 95%, transparent);
+  backdrop-filter: blur(20px);
+}
+
+.header.scrolled .logo,
+.header.scrolled .nav__link {
+  color: var(--text-primary);
+}
+
+.header.scrolled .nav-toggle span {
+  background: var(--text-primary);
 }
 
 .nav-toggle.active span:nth-child(1) {
@@ -141,7 +141,7 @@
 /* ============================================
    Mobile Navigation
    ============================================ */
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .nav-toggle {
     display: flex;
   }
@@ -150,14 +150,14 @@
     position: fixed;
     inset: 0;
     z-index: calc(var(--z-header) + 1);
+    visibility: hidden;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     gap: var(--space-md);
+    align-items: center;
+    justify-content: center;
     padding: var(--space-xl) var(--space-md);
     background: var(--bg-dark);
     opacity: 0;
-    visibility: hidden;
     transition:
       opacity var(--transition-medium),
       visibility var(--transition-medium);
@@ -165,38 +165,38 @@
 
   /* Gradient background */
   .nav::before {
-    content: '';
     position: fixed;
     inset: 0;
+    z-index: -2;
+    content: '';
     background: linear-gradient(
       135deg,
       var(--color-earth-deep) 0%,
       var(--color-earth-dark) 50%,
       var(--color-earth-mid) 100%
     );
-    z-index: -2;
     opacity: 0;
     transition: opacity var(--transition-medium);
   }
 
   /* Decorative circle */
   .nav::after {
-    content: '';
     position: fixed;
     inset-block-start: 50%;
     inset-inline-start: 50%;
+    z-index: -1;
     inline-size: 80vw;
     block-size: 80vw;
+    content: '';
     border: 1px solid var(--border-on-dark);
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
     transition: transform var(--transition-slow);
-    z-index: -1;
   }
 
   .nav.open {
-    opacity: 1;
     visibility: visible;
+    opacity: 1;
   }
 
   .nav.open::before {
@@ -265,9 +265,8 @@
 
 /* Body scroll lock when nav is open */
 body.nav-open {
-  overflow: hidden;
   position: fixed;
   inline-size: 100%;
   block-size: 100%;
+  overflow: hidden;
 }
-

@@ -8,8 +8,8 @@
    ============================================ */
 .footer {
   padding-block: var(--space-2xl) var(--space-lg);
-  background: var(--color-ink);
   color: var(--text-on-dark);
+  background: var(--color-ink);
 }
 
 /* ============================================
@@ -23,7 +23,7 @@
   border-block-end: 1px solid var(--border-on-dark);
 }
 
-@media (max-width: 800px) {
+@media (width <= 800px) {
   .footer__top {
     grid-template-columns: 1fr;
     gap: var(--space-lg);
@@ -39,8 +39,8 @@
 
 .footer__logo {
   display: flex;
-  align-items: center;
   gap: var(--space-sm);
+  align-items: center;
   margin-block-end: var(--space-md);
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -48,9 +48,9 @@
 }
 
 .footer__logo-icon {
+  flex-shrink: 0;
   inline-size: 40px;
   block-size: 40px;
-  flex-shrink: 0;
   color: var(--accent-secondary);
 }
 
@@ -79,8 +79,8 @@
 
 .social-link {
   display: inline-flex;
-  align-items: center;
   gap: 0.75rem;
+  align-items: center;
   font-size: 0.9375rem;
   color: var(--color-sand);
   opacity: 0.85;
@@ -121,9 +121,9 @@
   font-family: var(--font-body);
   font-size: 0.65rem;
   font-weight: 600;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
   color: var(--accent-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
 }
 
 .footer__links {
@@ -143,8 +143,22 @@
     opacity var(--transition-fast);
 }
 
+.footer__legal a {
+  font-size: 0.8125rem;
+  color: var(--color-sand);
+  opacity: 0.6;
+  transition:
+    color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
 .footer__links a:hover {
   color: var(--text-on-dark);
+  opacity: 1;
+}
+
+.footer__legal a:hover {
+  color: var(--accent-secondary);
   opacity: 1;
 }
 
@@ -153,14 +167,14 @@
    ============================================ */
 .footer__bottom {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
   gap: var(--space-sm);
+  align-items: center;
+  justify-content: space-between;
   padding-block-start: var(--space-lg);
 }
 
-@media (max-width: 800px) {
+@media (width <= 800px) {
   .footer__bottom {
     flex-direction: column;
     text-align: center;
@@ -177,18 +191,3 @@
   display: flex;
   gap: var(--space-md);
 }
-
-.footer__legal a {
-  font-size: 0.8125rem;
-  color: var(--color-sand);
-  opacity: 0.6;
-  transition:
-    color var(--transition-fast),
-    opacity var(--transition-fast);
-}
-
-.footer__legal a:hover {
-  color: var(--accent-secondary);
-  opacity: 1;
-}
-

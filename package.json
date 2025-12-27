@@ -7,7 +7,8 @@
         "dev": "vite",
         "lint": "eslint . --fix",
         "lint:check": "eslint .",
-        "format": "prettier --write \"resources/**/*.{js,css}\"",
+        "stylelint": "stylelint \"resources/**/*.css\"",
+        "format": "prettier --write \"resources/**/*.{js,css}\" && npm run stylelint -- --fix",
         "format:check": "prettier --check \"resources/**/*.{js,css}\""
     },
     "devDependencies": {
@@ -23,6 +24,11 @@
         "laravel-vite-plugin": "^2.0.1",
         "lightningcss": "^1.30.2",
         "prettier": "^3.7.4",
+        "stylelint": "^16.26.1",
+        "stylelint-config-recess-order": "^7.4.0",
+        "stylelint-config-standard": "^39.0.1",
+        "stylelint-order": "^7.0.0",
+        "stylelint-use-logical": "^2.1.2",
         "tailwindcss": "^4.1.18",
         "vite": "^7.3.0"
     },
