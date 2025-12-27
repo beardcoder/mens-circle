@@ -49,20 +49,10 @@
   }
 }
 
-.no-event-info__eyebrow {
-  margin-block-end: var(--space-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent-primary);
-}
+/* Uses .eyebrow from typography.css */
 
 .no-event-info__title {
   max-inline-size: 600px;
-  margin-block-end: var(--space-md);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  line-height: 1.1;
 }
 
 @media (max-width: 900px) {
@@ -71,12 +61,7 @@
   }
 }
 
-.no-event-info__title .text-italic {
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--color-earth-warm);
-}
+/* Uses .section-title .text-italic from typography.css */
 
 .no-event-info__text {
   max-inline-size: 540px;
@@ -142,27 +127,9 @@
   margin-inline: auto;
 }
 
-.no-event-cta__eyebrow {
-  margin-block-end: var(--space-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent-primary);
-}
+/* Uses .eyebrow from typography.css */
 
-.no-event-cta__title {
-  margin-block-end: var(--space-md);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  line-height: 1.1;
-}
-
-.no-event-cta__title .text-italic {
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--color-earth-warm);
-}
+/* Uses .section-title and .section-title .text-italic from typography.css */
 
 .no-event-cta__text {
   margin-block-end: var(--space-lg);
