@@ -116,19 +116,34 @@
   font-size: 1rem;
   line-height: 1.5;
   color: var(--text-dark);
-  background: var(--bg-light);
-  border: 2px solid color-mix(in oklch, var(--text-dark) 15%, transparent);
+  background: white;
+  border: 2px solid color-mix(in oklch, var(--text-dark) 25%, transparent);
   border-radius: 8px;
+  box-shadow: 0 1px 2px color-mix(in oklch, var(--text-dark) 3%, transparent);
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.form__input::placeholder,
+.form__textarea::placeholder {
+  color: color-mix(in oklch, var(--text-dark) 50%, transparent);
+}
+
+.form__input:hover,
+.form__textarea:hover {
+  border-color: color-mix(in oklch, var(--text-dark) 35%, transparent);
 }
 
 .form__input:focus,
 .form__textarea:focus {
   outline: none;
+  background: white;
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent-primary) 10%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in oklch, var(--accent-primary) 15%, transparent),
+    0 2px 4px color-mix(in oklch, var(--text-dark) 5%, transparent);
 }
 
 .form__textarea {
@@ -281,9 +296,26 @@
 
   .form__input,
   .form__textarea {
-    background: color-mix(in oklch, var(--text-dark) 15%, transparent);
-    border-color: color-mix(in oklch, var(--text-on-dark) 20%, transparent);
+    background: color-mix(in oklch, black 30%, transparent);
+    border-color: color-mix(in oklch, var(--text-on-dark) 30%, transparent);
     color: var(--text-on-dark);
+    box-shadow: 0 1px 3px color-mix(in oklch, black 20%, transparent);
+  }
+
+  .form__input::placeholder,
+  .form__textarea::placeholder {
+    color: color-mix(in oklch, var(--text-on-dark) 40%, transparent);
+  }
+
+  .form__input:hover,
+  .form__textarea:hover {
+    border-color: color-mix(in oklch, var(--text-on-dark) 40%, transparent);
+  }
+
+  .form__input:focus,
+  .form__textarea:focus {
+    background: color-mix(in oklch, black 35%, transparent);
+    border-color: var(--accent-primary);
   }
 
   .form__label,
