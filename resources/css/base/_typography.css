@@ -126,7 +126,7 @@ p:last-child {
 .text-italic {
   font-family: var(--font-accent);
   font-style: italic;
-  font-weight: 400;
+  font-size: 1.1em;
 }
 
 .text-serif {
@@ -199,6 +199,7 @@ p:last-child {
   font-family: var(--font-accent);
   font-style: italic;
   font-weight: 400;
+  font-size: 1.1em;
 }
 
 .mixed-headline .light {
@@ -262,6 +263,7 @@ p:last-child {
   font-family: var(--font-accent);
   font-style: italic;
   font-weight: 400;
+  font-size: 1.1em;
   color: var(--color-earth-warm);
 }
 
