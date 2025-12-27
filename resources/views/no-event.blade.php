@@ -42,8 +42,8 @@
         <div class="container">
             <div class="no-event-info__layout fade-in">
                 <div class="no-event-info__content">
-                    <p class="no-event-info__eyebrow">Was ist der Männerkreis?</p>
-                    <h2 class="no-event-info__title">
+                    <p class="eyebrow">Was ist der Männerkreis?</p>
+                    <h2 class="section-title no-event-info__title">
                         Ein Raum für <span class="text-italic">echte Begegnung</span>
                     </h2>
                     <p class="no-event-info__text">
@@ -74,8 +74,8 @@
         <div class="container">
             <div class="newsletter__layout fade-in">
                 <div class="newsletter__content">
-                    <p class="newsletter__eyebrow">Newsletter</p>
-                    <h2 class="newsletter__title">Bleib <span class="text-italic">informiert</span></h2>
+                    <p class="eyebrow eyebrow--secondary">Newsletter</p>
+                    <h2 class="section-title newsletter__title">Bleib <span class="text-italic">informiert</span></h2>
                     <p class="newsletter__text">
                         Erhalte als Erster Bescheid, wenn unser nächstes Treffen stattfindet.
                         Kein Spam, nur relevante Informationen zum Männerkreis.
@@ -109,8 +109,8 @@
     <section class="section no-event-cta-section">
         <div class="container">
             <div class="no-event-cta__content fade-in">
-                <p class="no-event-cta__eyebrow">Mehr erfahren</p>
-                <h2 class="no-event-cta__title">
+                <p class="eyebrow">Mehr erfahren</p>
+                <h2 class="section-title no-event-cta__title">
                     Entdecke den <span class="text-italic">Männerkreis</span>
                 </h2>
                 <p class="no-event-cta__text">

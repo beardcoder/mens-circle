@@ -2,11 +2,11 @@
     <div class="container">
         <div class="section__header fade-in">
             @if(!empty($block['data']['eyebrow']))
-                <p class="section__eyebrow">{{ $block['data']['eyebrow'] }}</p>
+                <p class="eyebrow">{{ $block['data']['eyebrow'] }}</p>
             @endif
 
             @if(!empty($block['data']['title']))
-                <h2>{{ $block['data']['title'] }}</h2>
+                <h2 class="section-title">{{ $block['data']['title'] }}</h2>
             @endif
         </div>
 

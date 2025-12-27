@@ -2,11 +2,11 @@
     <div class="intro__layout">
         <div class="intro__left">
             @if(!empty($block['data']['eyebrow']))
-                <p class="intro__eyebrow fade-in">{{ $block['data']['eyebrow'] }}</p>
+                <p class="eyebrow fade-in">{{ $block['data']['eyebrow'] }}</p>
             @endif
 
             @if(!empty($block['data']['title']))
-                <h2 class="intro__title fade-in fade-in-delay-1">
+                <h2 class="section-title intro__title fade-in fade-in-delay-1">
                     {!! $block['data']['title'] !!}
                 </h2>
             @endif
