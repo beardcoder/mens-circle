@@ -77,4 +77,18 @@ class EventFactory extends Factory
             'event_date' => $date,
         ]);
     }
+
+    /**
+     * Set the event to be in the past (yesterday).
+     */
+    public function past(): static
+    {
+        $yesterday = now()->subDay();
+
+        return $this->state(fn (array $attributes): array => [
+            'event_date' => $yesterday,
+            'start_time' => $yesterday->copy()->setTime(19, 0),
+            'end_time' => $yesterday->copy()->setTime(21, 0),
+        ]);
+    }
 }
