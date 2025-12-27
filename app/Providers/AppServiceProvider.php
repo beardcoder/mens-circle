@@ -27,8 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Configure Vite to prefetch assets
-        Vite::prefetch(concurrency: 3);
+        Vite::useAggressivePrefetching();
 
         Page::observe(PageObserver::class);
         Event::observe(EventObserver::class);
