@@ -8,22 +8,24 @@
    ============================================ */
 .testimonial-form-hero {
   position: relative;
+  block-size: 100vh;
   min-block-size: 50vh;
+  color: var(--text-on-dark);
   background: linear-gradient(
     135deg,
     var(--color-earth-deep) 0%,
-    color-mix(in oklch, var(--color-earth-deep) 90%, var(--color-terracotta)) 100%
+    color-mix(in oklch, var(--color-earth-deep) 90%, var(--color-terracotta))
+      100%
   );
-  color: var(--text-on-dark);
 }
 
 .testimonial-form-hero .hero__bg::before {
-  content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
+  content: '';
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   opacity: 0.04;
-  pointer-events: none;
 }
 
 /* ============================================
@@ -65,16 +67,9 @@
    Form Styles
    ============================================ */
 .testimonial-form {
-  padding: var(--space-xl);
   background: var(--bg-elevated);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-}
-
-@media (max-width: 600px) {
-  .testimonial-form {
-    padding: var(--space-lg);
-  }
 }
 
 /* Form groups */
@@ -129,6 +124,11 @@
   color: var(--text-muted);
 }
 
+.form__textarea {
+  min-block-size: 150px;
+  resize: vertical;
+}
+
 .form__input:hover,
 .form__textarea:hover {
   border-color: var(--border-dark);
@@ -139,12 +139,8 @@
   outline: none;
   background: var(--bg-primary);
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent-primary) 15%, transparent);
-}
-
-.form__textarea {
-  resize: vertical;
-  min-block-size: 150px;
+  box-shadow: 0 0 0 3px
+    color-mix(in oklch, var(--accent-primary) 15%, transparent);
 }
 
 /* Hints */
@@ -182,8 +178,8 @@
   inline-size: 20px;
   block-size: 20px;
   margin-block-start: 2px;
-  cursor: pointer;
   accent-color: var(--accent-primary);
+  cursor: pointer;
 }
 
 .form__checkbox-text {

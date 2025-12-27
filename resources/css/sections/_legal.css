@@ -17,31 +17,29 @@
    ============================================ */
 .legal-content {
   max-inline-size: 750px;
-  margin-inline: auto;
-  padding-inline: var(--space-md);
   padding-block-end: var(--space-xl);
+  padding-inline: var(--space-md);
+  margin-inline: auto;
 }
 
 /* Main title */
 .legal-content h1 {
-  margin-block-end: var(--space-xl);
   padding-block-end: var(--space-md);
-  border-block-end: 1px solid var(--border-light);
+  margin-block-end: var(--space-xl);
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   letter-spacing: -0.03em;
+  border-block-end: 1px solid var(--border-light);
 }
 
 /* Section headings */
 .legal-content h2 {
-  margin-block-start: var(--space-xl);
-  margin-block-end: var(--space-sm);
+  margin-block: var(--space-xl) var(--space-sm);
   font-size: 1.5rem;
   letter-spacing: -0.02em;
 }
 
 .legal-content h3 {
-  margin-block-start: var(--space-lg);
-  margin-block-end: var(--space-xs);
+  margin-block: var(--space-lg) var(--space-xs);
   font-size: 1.125rem;
 }
 
@@ -77,8 +75,8 @@
 
 /* Strong text */
 .legal-content strong {
-  color: var(--text-primary);
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 /* Tables (for legal documents) */
@@ -102,11 +100,11 @@
 
 /* Blockquote */
 .legal-content blockquote {
-  margin-block: var(--space-md);
   padding-inline-start: var(--space-md);
-  border-inline-start: 3px solid var(--accent-primary);
+  margin-block: var(--space-md);
   font-style: italic;
   color: var(--text-secondary);
+  border-inline-start: 3px solid var(--accent-primary);
 }
 
 /* Code blocks */
@@ -147,8 +145,8 @@
   }
 
   .legal-content h2 {
-    font-size: 18pt;
     margin-block-start: 2em;
+    font-size: 18pt;
   }
 
   .legal-content p,
@@ -156,4 +154,3 @@
     font-size: 11pt;
   }
 }
-

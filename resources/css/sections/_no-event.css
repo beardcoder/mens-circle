@@ -7,9 +7,9 @@
    No Event Hero Section
    ============================================ */
 .no-event-hero {
-  min-block-size: 80vh;
   display: flex;
   align-items: center;
+  min-block-size: 80vh;
   background: var(--bg-section-alt);
 }
 
@@ -18,8 +18,8 @@
    ============================================ */
 .no-event-info-section {
   position: relative;
-  background: var(--bg-primary);
   overflow: hidden;
+  background: var(--bg-primary);
 }
 
 .no-event-info__layout {
@@ -30,11 +30,11 @@
   min-block-size: 60vh;
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .no-event-info__layout {
     grid-template-columns: 1fr;
-    min-block-size: auto;
     gap: var(--space-lg);
+    min-block-size: auto;
   }
 }
 
@@ -42,7 +42,7 @@
   padding: var(--space-lg) 0;
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .no-event-info__content {
     order: 2;
     text-align: center;
@@ -55,7 +55,7 @@
   max-inline-size: 600px;
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .no-event-info__title {
     max-inline-size: 100%;
   }
@@ -70,7 +70,7 @@
   color: var(--text-secondary);
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .no-event-info__text {
     max-inline-size: 100%;
   }
@@ -82,12 +82,12 @@
   align-items: center;
   justify-content: center;
   min-block-size: 400px;
+  overflow: hidden;
   background: var(--bg-section-alt);
   border-radius: var(--radius-lg);
-  overflow: hidden;
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .no-event-info__visual {
     order: 1;
     min-block-size: 300px;
@@ -105,9 +105,9 @@
 
 /* Noise texture */
 .no-event-info__quote-area::before {
-  content: '';
   position: absolute;
   inset: 0;
+  content: '';
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   opacity: 0.05;
 }
@@ -118,8 +118,8 @@
 .no-event-cta-section {
   position: relative;
   padding: var(--space-2xl) 0;
-  background: var(--bg-primary);
   text-align: center;
+  background: var(--bg-primary);
 }
 
 .no-event-cta__content {

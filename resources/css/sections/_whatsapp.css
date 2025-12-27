@@ -8,39 +8,39 @@
    ============================================ */
 .whatsapp-section {
   position: relative;
+  overflow: hidden;
+  color: var(--text-on-dark);
   background: linear-gradient(
     135deg,
-    oklch(35% 0.08 145) 0%,
-    oklch(28% 0.06 150) 100%
+    oklch(35% 0.08 145deg) 0%,
+    oklch(28% 0.06 150deg) 100%
   );
-  color: var(--text-on-dark);
-  overflow: hidden;
 }
 
 /* Noise texture */
 .whatsapp-section::before {
-  content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
+  content: '';
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   opacity: 0.03;
-  pointer-events: none;
 }
 
 /* Gradient glow */
 .whatsapp-section::after {
-  content: '';
   position: absolute;
   inset-block-start: -30%;
   inset-inline-start: -20%;
   inline-size: 70%;
   block-size: 160%;
+  pointer-events: none;
+  content: '';
   background: radial-gradient(
     ellipse at center,
-    oklch(50% 0.15 145 / 0.2) 0%,
+    oklch(50% 0.15 145deg / 20%) 0%,
     transparent 50%
   );
-  pointer-events: none;
 }
 
 /* ============================================
@@ -55,7 +55,7 @@
   align-items: center;
 }
 
-@media (max-width: 800px) {
+@media (width <= 800px) {
   .whatsapp__layout {
     grid-template-columns: 1fr;
     gap: var(--space-lg);
@@ -66,31 +66,31 @@
 /* ============================================
    WhatsApp Content
    ============================================ */
+
 /* Extends .eyebrow with custom WhatsApp green */
 .whatsapp__eyebrow {
-  color: oklch(80% 0.12 145);
+  color: oklch(80% 0.12 145deg);
 }
 
 .whatsapp__title {
   margin-block-end: var(--space-md);
-  color: var(--text-on-dark);
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.2;
+  color: var(--text-on-dark);
 }
 
-.whatsapp__highlight {
-  color: oklch(75% 0.15 145);
-  white-space: nowrap;
+.whatsapp__title .text-italic {
+  color: oklch(75% 0.15 145deg);
 }
 
 .whatsapp__text {
+  max-inline-size: 500px;
   font-size: 1.0625rem;
   line-height: 1.8;
-  color: oklch(85% 0.03 145);
-  max-inline-size: 500px;
+  color: oklch(85% 0.03 145deg);
 }
 
-@media (max-width: 800px) {
+@media (width <= 800px) {
   .whatsapp__text {
     margin-inline: auto;
   }
@@ -102,11 +102,11 @@
 .whatsapp__action {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: var(--space-sm);
+  align-items: flex-start;
 }
 
-@media (max-width: 800px) {
+@media (width <= 800px) {
   .whatsapp__action {
     align-items: center;
   }
@@ -114,28 +114,28 @@
 
 .whatsapp__button {
   display: inline-flex;
-  align-items: center;
   gap: var(--space-xs);
+  align-items: center;
   padding: var(--space-sm) var(--space-md);
-  background: oklch(60% 0.15 145);
-  color: white;
   font-family: var(--font-body);
   font-size: 1.125rem;
   font-weight: 600;
+  color: white;
   text-decoration: none;
+  background: oklch(60% 0.15 145deg);
   border-radius: var(--radius-full, 9999px);
-  transition: all var(--transition-medium);
   box-shadow:
-    0 4px 14px oklch(40% 0.1 145 / 0.3),
-    0 2px 6px oklch(40% 0.1 145 / 0.2);
+    0 4px 14px oklch(40% 0.1 145deg / 30%),
+    0 2px 6px oklch(40% 0.1 145deg / 20%);
+  transition: all var(--transition-medium);
 }
 
 .whatsapp__button:hover {
-  background: oklch(55% 0.16 145);
-  transform: translateY(-2px);
+  background: oklch(55% 0.16 145deg);
   box-shadow:
-    0 6px 20px oklch(40% 0.1 145 / 0.4),
-    0 4px 10px oklch(40% 0.1 145 / 0.3);
+    0 6px 20px oklch(40% 0.1 145deg / 40%),
+    0 4px 10px oklch(40% 0.1 145deg / 30%);
+  transform: translateY(-2px);
 }
 
 .whatsapp__button:active {
@@ -143,13 +143,13 @@
 }
 
 .whatsapp__icon {
+  flex-shrink: 0;
   inline-size: 1.5rem;
   block-size: 1.5rem;
-  flex-shrink: 0;
 }
 
 .whatsapp__hint {
-  font-size: 0.875rem;
-  color: oklch(70% 0.05 145);
   margin: 0;
+  font-size: 0.875rem;
+  color: oklch(70% 0.05 145deg);
 }

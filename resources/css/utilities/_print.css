@@ -8,10 +8,10 @@
   *,
   *::before,
   *::after {
-    background: transparent !important;
     color: #000 !important;
-    box-shadow: none !important;
     text-shadow: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
   }
 
   /* Hide non-essential elements */
@@ -25,7 +25,7 @@
   .modal,
   .calendar-modal,
   .btn,
-  button:not([type="submit"]) {
+  button:not([type='submit']) {
     display: none !important;
   }
 
@@ -38,47 +38,47 @@
   /* Sections */
   .section {
     padding: 2rem 0;
-    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   /* Typography */
   h1 {
     font-size: 24pt;
-    page-break-after: avoid;
+    break-after: avoid;
   }
 
   h2 {
     font-size: 18pt;
-    page-break-after: avoid;
+    break-after: avoid;
   }
 
   h3 {
     font-size: 14pt;
-    page-break-after: avoid;
+    break-after: avoid;
   }
 
   p,
   li {
-    orphans: 3;
     widows: 3;
+    orphans: 3;
   }
 
   /* Links */
   a[href]::after {
-    content: " (" attr(href) ")";
     font-size: 0.8em;
     color: #666 !important;
+    content: ' (' attr(href) ')';
   }
 
-  a[href^="#"]::after,
-  a[href^="javascript:"]::after {
-    content: "";
+  a[href^='#']::after,
+  a[href^='javascript:']::after {
+    content: '';
   }
 
   /* Images */
   img {
-    max-width: 100% !important;
-    page-break-inside: avoid;
+    max-inline-size: 100% !important;
+    break-inside: avoid;
   }
 
   /* Tables */
@@ -88,8 +88,8 @@
 
   th,
   td {
-    border: 1px solid #ddd;
     padding: 8px;
+    border: 1px solid #ddd;
   }
 
   thead {
@@ -97,7 +97,7 @@
   }
 
   tr {
-    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   /* Page margins */
@@ -106,7 +106,6 @@
   }
 
   @page :first {
-    margin-top: 3cm;
+    margin-top: 3cm; /* stylelint-disable-line csstools/use-logical -- @page rules don't support logical properties */
   }
 }
-

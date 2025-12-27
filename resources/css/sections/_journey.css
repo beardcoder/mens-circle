@@ -8,32 +8,32 @@
    ============================================ */
 .journey-section {
   position: relative;
-  background: var(--bg-dark);
-  color: var(--text-on-dark);
   overflow: hidden;
+  color: var(--text-on-dark);
+  background: var(--bg-dark);
 }
 
 /* Noise texture */
 .journey-section::before {
-  content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
+  content: '';
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   opacity: 0.03;
-  pointer-events: none;
 }
 
 /* Gradient glow */
 .journey-section::after {
-  content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
+  content: '';
   background: radial-gradient(
     ellipse 80% 60% at 50% 100%,
     color-mix(in oklch, var(--accent-primary) 10%, transparent) 0%,
     transparent 50%
   );
-  pointer-events: none;
 }
 
 /* ============================================
@@ -44,6 +44,10 @@
   z-index: 1;
   padding-block-end: var(--space-lg);
   text-align: center;
+}
+
+.journey__header > * {
+  margin-inline: auto;
 }
 
 /* Uses .eyebrow.eyebrow--secondary from typography.css */
@@ -71,13 +75,13 @@
   grid-template-columns: repeat(4, 1fr);
 }
 
-@media (max-width: 1000px) {
+@media (width <= 1000px) {
   .journey__steps {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .journey__steps {
     grid-template-columns: 1fr;
   }
@@ -96,10 +100,10 @@
   border-inline-start: none;
 }
 
-@media (max-width: 1000px) {
+@media (width <= 1000px) {
   .journey__step {
-    border-inline-start: none;
     border-block-start: 1px solid var(--border-on-dark);
+    border-inline-start: none;
   }
 
   .journey__step:nth-child(-n + 2) {
@@ -107,7 +111,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .journey__step {
     border-block-start: 1px solid var(--border-on-dark);
   }
@@ -122,8 +126,8 @@
   font-family: var(--font-display);
   font-size: clamp(5rem, 10vw, 8rem);
   line-height: 0.8;
-  letter-spacing: -0.04em;
   color: var(--accent-primary);
+  letter-spacing: -0.04em;
   opacity: 0.25;
 }
 
@@ -131,8 +135,8 @@
   margin-block-end: var(--space-sm);
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 2vw, 2rem);
-  letter-spacing: -0.02em;
   color: var(--text-on-dark);
+  letter-spacing: -0.02em;
 }
 
 .journey__step-text {
@@ -142,4 +146,3 @@
   color: var(--color-sand);
   opacity: 0.9;
 }
-

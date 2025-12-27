@@ -26,8 +26,8 @@
 }
 
 .card.card--hover:hover {
-  transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
 }
 
 /* ============================================
@@ -36,28 +36,30 @@
 .card--dark {
   --card-bg: var(--bg-dark);
   --card-border: var(--border-on-dark);
+
   color: var(--text-on-dark);
 }
 
 .card--glass {
   --card-bg: color-mix(in oklch, var(--bg-primary) 85%, transparent);
+
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
 }
 
 .card--accent {
   --card-bg: var(--bg-section-alt);
+
   color: var(--text-on-dark);
 }
 
 .card--accent::before {
-  content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.03;
   pointer-events: none;
+  content: '';
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   border-radius: inherit;
+  opacity: 0.03;
 }
 
 /* ============================================
@@ -76,8 +78,8 @@
    ============================================ */
 .event__card {
   padding: var(--space-lg);
-  background: var(--bg-elevated);
   margin-block-end: var(--space-md);
+  background: var(--bg-elevated);
 }
 
 .event__card-title {
@@ -85,9 +87,9 @@
   font-family: var(--font-body);
   font-size: 0.65rem;
   font-weight: 600;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
   color: var(--accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
 }
 
 /* ============================================
@@ -106,21 +108,21 @@
 
 .event__info-icon {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   inline-size: 40px;
   block-size: 40px;
+  color: var(--text-on-dark);
   background: var(--bg-section-alt);
   border-radius: var(--radius-full);
-  color: var(--text-on-dark);
 }
 
 .event__info-icon svg {
   inline-size: 18px;
   block-size: 18px;
   fill: none;
-  stroke: currentColor;
+  stroke: currentcolor;
   stroke-width: 1.5;
 }
 
@@ -129,9 +131,9 @@
   font-family: var(--font-body);
   font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .event__info-content p {
@@ -155,9 +157,9 @@
   display: grid;
   grid-template-columns: 80px 1fr;
   gap: var(--space-md);
+  align-items: start;
   padding-block: var(--space-md);
   border-block-start: 1px solid var(--border-light);
-  align-items: start;
 }
 
 .value-item:last-child {
@@ -168,8 +170,8 @@
   font-family: var(--font-display);
   font-size: 3.5rem;
   line-height: 0.85;
-  letter-spacing: -0.04em;
   color: var(--accent-primary);
+  letter-spacing: -0.04em;
   opacity: 0.75;
 }
 
@@ -197,19 +199,19 @@
 
 .faq-item__question {
   display: flex;
+  gap: var(--space-md);
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-md);
   inline-size: 100%;
   padding-block: var(--space-md);
-  background: none;
-  border: none;
-  text-align: start;
   font-family: var(--font-display);
   font-size: var(--text-lg);
-  letter-spacing: -0.02em;
   color: var(--text-primary);
+  text-align: start;
+  letter-spacing: -0.02em;
   cursor: pointer;
+  background: none;
+  border: none;
   transition: color var(--transition-fast);
 }
 
@@ -219,9 +221,9 @@
 
 .faq-item__icon {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   inline-size: 28px;
   block-size: 28px;
   border: 1px solid var(--color-earth-warm);
@@ -233,8 +235,8 @@
 
 .faq-item__icon::before,
 .faq-item__icon::after {
-  content: '';
   position: absolute;
+  content: '';
   background: var(--color-earth-warm);
   transition:
     background-color var(--transition-medium),
@@ -291,4 +293,3 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-

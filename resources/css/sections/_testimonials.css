@@ -8,22 +8,22 @@
    ============================================ */
 .testimonials-section {
   position: relative;
+  overflow: hidden;
   background: linear-gradient(
     to bottom,
     var(--bg-secondary) 0%,
     color-mix(in oklch, var(--color-sage) 5%, var(--bg-secondary)) 100%
   );
-  overflow: hidden;
 }
 
 /* Subtle pattern overlay */
 .testimonials-section::before {
-  content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
+  content: '';
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234a5f4f' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   opacity: 0.4;
-  pointer-events: none;
 }
 
 /* ============================================
@@ -32,10 +32,10 @@
 .testimonials__header {
   position: relative;
   z-index: 1;
-  padding-block-end: var(--space-xl);
-  text-align: center;
   max-inline-size: 800px;
+  padding-block-end: var(--space-xl);
   margin-inline: auto;
+  text-align: center;
 }
 
 /* Uses .eyebrow.eyebrow--secondary from typography.css */
@@ -68,7 +68,7 @@
   gap: var(--space-lg);
 }
 
-@media (min-width: 1200px) {
+@media (width >= 1200px) {
   .testimonials__grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -91,8 +91,8 @@
 }
 
 .testimonial-card:hover {
-  transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
 }
 
 /* Quote icon */
@@ -110,13 +110,13 @@
 
 /* Quote text */
 .testimonial-card__quote {
+  flex-grow: 1;
   margin: 0 0 var(--space-lg) 0;
   font-family: var(--font-accent);
   font-size: 1.0625rem;
   font-style: italic;
   line-height: 1.7;
   color: var(--text-primary);
-  flex-grow: 1;
 }
 
 .testimonial-card__quote::before {
@@ -137,9 +137,9 @@
 }
 
 .testimonial-card__name {
+  font-size: 0.9375rem;
   font-style: normal;
   font-weight: 600;
-  font-size: 0.9375rem;
   color: var(--text-primary);
 }
 

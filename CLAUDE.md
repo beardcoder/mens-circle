@@ -217,42 +217,6 @@ This document provides comprehensive guidance for AI assistants working on the M
 
 The CSS follows a modular ITCSS-inspired architecture:
 
-```
-resources/css/
-├── app.css                 # Main entry point (imports all modules)
-├── base/
-│   ├── _variables.css      # CSS custom properties (design tokens)
-│   ├── _reset.css          # CSS reset and normalization
-│   └── _typography.css     # Font definitions and text styles
-├── utilities/
-│   ├── _layout.css         # Flexbox, grid, spacing utilities
-│   ├── _visual.css         # Backgrounds, borders, shadows
-│   ├── _animations.css     # Keyframes and animation classes
-│   ├── _view-transitions.css # View Transitions API styles
-│   └── _print.css          # Print-specific styles
-├── components/
-│   ├── _buttons.css        # Button components (BEM)
-│   ├── _forms.css          # Form elements and validation
-│   ├── _header.css         # Site header and navigation
-│   ├── _footer.css         # Site footer
-│   ├── _cards.css          # Card patterns
-│   └── _modal.css          # Modal/dialog components
-└── sections/
-    ├── _hero.css           # Hero sections
-    ├── _intro.css          # Intro/split layouts
-    ├── _event.css          # Event page sections
-    ├── _faq.css            # FAQ accordion
-    ├── _newsletter.css     # Newsletter signup
-    ├── _journey.css        # Journey steps section
-    ├── _moderator.css      # Moderator profile
-    ├── _testimonials.css   # Testimonials grid
-    ├── _testimonial-form.css # Testimonial submission
-    ├── _whatsapp.css       # WhatsApp community section
-    ├── _cta.css            # Call-to-action sections
-    ├── _no-event.css       # No event fallback page
-    └── _legal.css          # Legal pages (Impressum, etc.)
-```
-
 ## Design Tokens (CSS Custom Properties)
 
 ### Color System
@@ -536,51 +500,6 @@ Available utility classes (use sparingly, prefer component styles):
    ```
 
 7. **Consolidate noise textures** - Use the `.texture-noise` utility class instead of duplicating SVG backgrounds
-
-## JavaScript Architecture
-
-**File:** `resources/js/app.js` (429 lines)
-
-**Component-Based Functions:**
-- `initNavigation()` - Mobile menu, scroll effects, header visibility
-- `initFAQ()` - Accordion interactions
-- `initNewsletterForm()` - Newsletter subscription handling
-- `initEventRegistration()` - Event registration form handling
-- `initScrollAnimations()` - Fade-in and stagger effects
-- `initCalendarLinks()` - ICS file generation, Google Calendar integration
-
-**Key Features:**
-- Fetch API for AJAX form submissions
-- CSRF token handling
-- IntersectionObserver for scroll animations
-- Email validation
-- Smooth scroll for anchor links
-- Scroll lock for mobile menu
-
-**No external JS frameworks** - Pure vanilla JavaScript for all interactions
-
-## View Structure
-
-**Main Layout:** `resources/views/layouts/app.blade.php`
-- Includes meta tags, Open Graph, Twitter Cards
-- Structured data stack
-- Navigation with dynamic `$hasNextEvent` flag
-- Footer
-- Vite asset loading
-
-**Blade Components:** `resources/views/components/blocks/`
-- Reusable content blocks
-- Each component accepts data and renders section
-- Used in page content builders
-
-**Email Templates:** `resources/views/emails/`
-- HTML email layouts
-- Responsive email design
-- Unsubscribe links included
-
----
-
-=== project-specific conventions ===
 
 ## Filament Resource Organization
 
@@ -1028,35 +947,6 @@ public function test_user_can_subscribe_to_newsletter(): void
 - Use Form Requests for complex validation
 - Sanitize output in views (Blade automatic escaping)
 - Follow Laravel security best practices
-
-## Common Tasks
-
-**Adding a new field to Event:**
-1. Create migration: `php artisan make:migration add_field_to_events --table=events`
-2. Update Event model `$fillable` array
-3. Add cast if needed (date, boolean, etc.)
-4. Update EventForm schema in Filament
-5. Update views if needed
-6. Run migration: `php artisan migrate`
-
-**Creating a new CMS page:**
-1. Use Filament admin panel (/admin)
-2. Navigate to Pages resource
-3. Create new page with title and content
-4. Slug auto-generated from title
-5. Set `is_published = true`
-6. Access via `/{slug}` route
-
-**Sending a newsletter:**
-1. Create newsletter in admin panel (Newsletters resource)
-2. Write subject and content (HTML)
-3. Navigate to "Send Newsletter" custom page
-4. Select newsletter from dropdown
-5. Click send button
-6. Job dispatched to queue
-7. Queue worker processes SendNewsletterJob
-
----
 
 <laravel-boost-guidelines>
 === foundation rules ===

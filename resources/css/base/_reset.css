@@ -8,76 +8,71 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 /* Prevent font size inflation */
 html {
-  -moz-text-size-adjust: none;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
-  scroll-behavior: smooth;
-
-  /* Improve text rendering */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-
   /* Base font size for rem calculations */
   font-size: 16px;
+  text-rendering: optimizelegibility;
+  text-size-adjust: none;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (min-width: 1600px) {
+@media (width >= 1600px) {
   html {
     font-size: 18px;
   }
-}
-
-/* Remove default margin/padding */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
 }
 
 /* Set core body defaults */
 body {
   min-block-size: 100vh;
   min-block-size: 100dvh; /* Use dynamic viewport height */
-  line-height: 1.7;
+  overflow-x: hidden;
   font-family: var(--font-body);
   font-size: var(--text-base);
+  line-height: 1.7;
   color: var(--text-primary);
   background-color: var(--bg-primary);
-  overflow-x: hidden;
 }
 
 /* Remove list styles on ul, ol with a list role */
-:where(ul, ol)[role="list"] {
+:where(ul, ol)[role='list'] {
   list-style: none;
 }
 
 /* Set shorter line heights on headings and interactive elements */
-h1, h2, h3, h4, h5, h6,
-button, input, label {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+input,
+label {
   line-height: 1.1;
 }
 
 /* Balance text wrapping on headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-wrap: balance;
 }
 
 /* Improve paragraph readability */
 p {
-  text-wrap: pretty;
   max-inline-size: 75ch;
-}
-
-/* A elements that don't have a class get default styles */
-a:not([class]) {
-  text-decoration-skip-ink: auto;
-  color: currentColor;
+  text-wrap: pretty;
 }
 
 /* Links */
@@ -85,6 +80,12 @@ a {
   color: inherit;
   text-decoration: none;
   transition: color var(--transition-fast);
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  color: currentcolor;
+  text-decoration-skip-ink: auto;
 }
 
 /* Make images easier to work with */
@@ -119,10 +120,10 @@ textarea:not([rows]) {
 
 /* Remove default button styles */
 button {
+  color: inherit;
+  cursor: pointer;
   background: none;
   border: none;
-  cursor: pointer;
-  color: inherit;
 }
 
 /* Remove default fieldset styles */
@@ -143,14 +144,14 @@ fieldset {
 
 /* Selection styles */
 ::selection {
-  background-color: var(--accent-primary);
   color: var(--color-bone);
+  background-color: var(--accent-primary);
 }
 
 /* Ensure tables inherit font */
 table {
-  border-collapse: collapse;
   font: inherit;
+  border-collapse: collapse;
 }
 
 /* Hidden attribute support */
@@ -163,9 +164,9 @@ table {
   *,
   *::before,
   *::after {
+    transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
@@ -175,10 +176,9 @@ table {
   *,
   *::before,
   *::after {
-    background: transparent !important;
     color: #000 !important;
-    box-shadow: none !important;
     text-shadow: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
   }
 }
-
