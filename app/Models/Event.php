@@ -96,6 +96,11 @@ class Event extends Model implements HasMedia
         return $this->availableSpots() <= 0;
     }
 
+    public function isPast(): bool
+    {
+        return $this->event_date->endOfDay()->isPast();
+    }
+
     public function getFullAddress(): ?string
     {
         if (! $this->street || ! $this->city) {
