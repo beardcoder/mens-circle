@@ -53,6 +53,7 @@ class PageObserver
     protected function clearCache(Page $page): void
     {
         cache()->forget('page.'.$page->slug);
+        cache()->forget('llms_txt');
 
         if ($page->slug === 'home') {
             cache()->forget('page.home');
