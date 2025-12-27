@@ -48,23 +48,13 @@
   margin-inline: auto;
 }
 
-.cta__eyebrow {
-  margin-block-end: var(--space-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent-primary);
-}
+/* Uses .eyebrow from typography.css */
 
 .cta__title {
   margin-block-end: var(--space-sm);
 }
 
-.cta__title .text-italic {
-  font-family: var(--font-accent);
-  font-style: italic;
-}
+/* Uses .section-title .text-italic from typography.css */
 
 .cta__text {
   margin-block-end: var(--space-lg);

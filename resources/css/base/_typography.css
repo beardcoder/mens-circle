@@ -212,17 +212,56 @@ p:last-child {
 
 /* ============================================
    Eyebrow / Label Style
+   Reusable component for section labels
    ============================================ */
 .eyebrow {
+  display: block;
+  margin-block-end: var(--space-sm);
   font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--accent-primary);
-  margin-block-end: var(--space-sm);
 }
 
-.eyebrow--light {
+.eyebrow--secondary {
+  color: var(--accent-secondary);
+}
+
+.eyebrow--muted {
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   Section Title Pattern
+   Large display titles with italic accent
+   ============================================ */
+.section-title {
+  margin-block-end: var(--space-md);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+}
+
+.section-title--lg {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1;
+}
+
+.section-title--xl {
+  font-size: clamp(3rem, 7vw, 6rem);
+  line-height: 0.95;
+}
+
+.section-title .text-italic,
+.section-title .highlight {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-earth-warm);
+}
+
+.section-title--light .text-italic,
+.section-title--light .highlight {
   color: var(--accent-secondary);
 }
 

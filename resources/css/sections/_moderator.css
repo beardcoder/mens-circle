@@ -143,14 +143,7 @@
   }
 }
 
-.moderator__eyebrow {
-  margin-block-end: var(--space-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent-primary);
-}
+/* Uses .eyebrow from typography.css */
 
 .moderator__name {
   margin-block-end: var(--space-md);

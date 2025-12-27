@@ -38,14 +38,7 @@
   margin-inline: auto;
 }
 
-.testimonials__eyebrow {
-  margin-block-end: var(--space-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent-secondary);
-}
+/* Uses .eyebrow.eyebrow--secondary from typography.css */
 
 .testimonials__title {
   margin-block-end: var(--space-md);
