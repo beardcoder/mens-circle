@@ -66,12 +66,8 @@
 /* ============================================
    WhatsApp Content
    ============================================ */
+/* Extends .eyebrow with custom WhatsApp green */
 .whatsapp__eyebrow {
-  margin-block-end: var(--space-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
   color: oklch(80% 0.12 145);
 }
 

@@ -82,32 +82,20 @@
   animation-delay: -7s;
 }
 
+/* Extends .eyebrow.eyebrow--secondary with positioning */
 .event-register__eyebrow {
   position: relative;
   z-index: 1;
-  margin-block-end: var(--space-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent-secondary);
 }
 
 .event-register__title {
   position: relative;
   z-index: 1;
   margin-block-end: var(--space-lg);
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  line-height: 1;
   color: var(--text-on-dark);
 }
 
-.event-register__title .text-italic {
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--accent-secondary);
-}
+/* Uses .section-title--lg and .section-title--light .text-italic */
 
 .event-register__spots {
   position: relative;
@@ -385,28 +373,13 @@
   }
 }
 
-.event-about__eyebrow {
-  margin-block-end: var(--space-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent-primary);
-}
+/* Uses .eyebrow from typography.css */
 
 .event-about__title {
   max-inline-size: 700px;
-  margin-block-end: var(--space-md);
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  line-height: 1;
 }
 
-.event-about__title .text-italic {
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--color-earth-warm);
-}
+/* Uses .section-title--lg and .section-title .text-italic */
 
 .event-about__text {
   max-inline-size: 540px;
@@ -569,28 +542,14 @@
   z-index: 1;
 }
 
-.event-cta__eyebrow {
-  margin-block-end: var(--space-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent-secondary);
-}
+/* Uses .eyebrow.eyebrow--secondary from typography.css */
 
 .event-cta__title {
   margin-block-end: var(--space-lg);
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  line-height: 1;
   color: var(--text-on-dark);
 }
 
-.event-cta__title .text-italic {
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--accent-secondary);
-}
+/* Uses .section-title--lg and .section-title--light .text-italic */
 
 /* ============================================
    Form Enhancements for Event Registration
