@@ -37,6 +37,7 @@ fi
 if [ "$APP_ENV" = "production" ]; then
     echo "Clearing existing caches..."
     php artisan optimize:clear
+    php artisan responsecache:clear
 
     echo "Caching configuration for production..."
     php artisan config:cache
