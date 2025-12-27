@@ -50,6 +50,13 @@ class EventController extends Controller
             ], 404);
         }
 
+        if ($event->isPast()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Diese Veranstaltung hat bereits stattgefunden. Eine Anmeldung ist nicht mehr möglich.',
+            ], 410);
+        }
+
         if ($event->isFull()) {
             return response()->json([
                 'success' => false,

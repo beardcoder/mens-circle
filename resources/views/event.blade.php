@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Nächster Termin – Männerkreis Straubing')
-@section('meta_description', 'Melde dich jetzt für das nächste Treffen des Männerkreis Straubing an: ' . $event->title . ' am ' . $event->event_date->format('d.m.Y'))
+@php
+    $isPast = $event->isPast();
+@endphp
+
+@section('title', ($isPast ? 'Vergangenes Treffen' : 'Nächster Termin') . ' – Männerkreis Straubing')
+@section('meta_description', $isPast
+    ? 'Rückblick auf das Treffen des Männerkreis Straubing: ' . $event->title . ' am ' . $event->event_date->format('d.m.Y')
+    : 'Melde dich jetzt für das nächste Treffen des Männerkreis Straubing an: ' . $event->title . ' am ' . $event->event_date->format('d.m.Y'))
 @section('og_type', 'event')
 @section('og_title', $event->title . ' – Männerkreis Straubing')
 
@@ -14,7 +20,7 @@
     "description": "{{ strip_tags($event->description) }}",
     "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}",
     "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}",
-    "eventStatus": "https://schema.org/EventScheduled",
+    "eventStatus": "{{ $isPast ? 'https://schema.org/EventPostponed' : 'https://schema.org/EventScheduled' }}",
     "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
     "location": {
         "@@type": "Place",
@@ -76,7 +82,7 @@
 
         <div class="container">
             <div class="hero__content">
-                <p class="hero__label fade-in">Nächstes Treffen</p>
+                <p class="hero__label fade-in">{{ $isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
                 <h1 class="hero__title fade-in fade-in-delay-1">
                     <span class="hero__title-line">{{ $event->title }}</span>
                 </h1>
@@ -84,77 +90,112 @@
                     <p class="hero__description">
                         {{ $event->event_date->translatedFormat('l') }}, {{ $event->event_date->format('d.m.Y') }} · {{ $event->start_time->format('H:i') }} Uhr · {{ $event->location }}
                     </p>
-                    <div class="hero__cta">
-                        <a href="#anmeldung" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=registration;location=hero">Jetzt anmelden</a>
-                    </div>
+                    @unless($isPast)
+                        <div class="hero__cta">
+                            <a href="#anmeldung" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=registration;location=hero">Jetzt anmelden</a>
+                        </div>
+                    @endunless
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Registration Section - Prominent Placement -->
-    <section class="event-register-section" id="anmeldung">
-        <div class="event-register__layout">
-            <div class="event-register__content fade-in">
-                <div class="event-register__circles" aria-hidden="true">
-                    <div class="event-register__circle event-register__circle--1"></div>
-                    <div class="event-register__circle event-register__circle--2"></div>
+    @if($isPast)
+        <!-- Past Event Info Section -->
+        <section class="event-register-section" id="anmeldung">
+            <div class="event-register__layout">
+                <div class="event-register__content fade-in">
+                    <div class="event-register__circles" aria-hidden="true">
+                        <div class="event-register__circle event-register__circle--1"></div>
+                        <div class="event-register__circle event-register__circle--2"></div>
+                    </div>
+                    <p class="event-register__eyebrow">Rückblick</p>
+                    <h2 class="event-register__title">
+                        Dieses Treffen <br><span class="text-italic">hat stattgefunden</span>
+                    </h2>
+                    <p class="event-register__spots">
+                        <span>Am {{ $event->event_date->format('d.m.Y') }}</span>
+                    </p>
                 </div>
-                <p class="event-register__eyebrow">Sei dabei</p>
-                <h2 class="event-register__title">
-                    Sichere dir <br><span class="text-italic">deinen Platz</span>
-                </h2>
-                <p class="event-register__spots">
-                    @if($event->isFull())
-                        <span class="event-register__spots-full">Ausgebucht</span>
-                    @else
-                        <span class="event-register__spots-available">{{ $event->availableSpots() }}</span>
-                        <span>von {{ $event->max_participants }} Plätzen frei</span>
-                    @endif
-                </p>
+
+                <div class="event-register__form-wrap fade-in fade-in-delay-1">
+                    <div class="event-register__past-info">
+                        <p class="event-register__past-text">
+                            Dieses Treffen liegt in der Vergangenheit. Eine Anmeldung ist nicht mehr möglich.
+                        </p>
+                        <p class="event-register__past-text">
+                            Möchtest du beim nächsten Männerkreis dabei sein? Dann trag dich in unseren Newsletter ein, um über kommende Termine informiert zu werden.
+                        </p>
+                        <a href="{{ route('home') }}#newsletter" class="btn btn--primary btn--large">Zum Newsletter anmelden</a>
+                    </div>
+                </div>
             </div>
+        </section>
+    @else
+        <!-- Registration Section - Prominent Placement -->
+        <section class="event-register-section" id="anmeldung">
+            <div class="event-register__layout">
+                <div class="event-register__content fade-in">
+                    <div class="event-register__circles" aria-hidden="true">
+                        <div class="event-register__circle event-register__circle--1"></div>
+                        <div class="event-register__circle event-register__circle--2"></div>
+                    </div>
+                    <p class="event-register__eyebrow">Sei dabei</p>
+                    <h2 class="event-register__title">
+                        Sichere dir <br><span class="text-italic">deinen Platz</span>
+                    </h2>
+                    <p class="event-register__spots">
+                        @if($event->isFull())
+                            <span class="event-register__spots-full">Ausgebucht</span>
+                        @else
+                            <span class="event-register__spots-available">{{ $event->availableSpots() }}</span>
+                            <span>von {{ $event->max_participants }} Plätzen frei</span>
+                        @endif
+                    </p>
+                </div>
 
-            <div class="event-register__form-wrap fade-in fade-in-delay-1">
-                <form id="registrationForm" class="event-register__form" autocomplete="on">
-                    <input type="hidden" name="event_id" value="{{ $event->id }}">
+                <div class="event-register__form-wrap fade-in fade-in-delay-1">
+                    <form id="registrationForm" class="event-register__form" autocomplete="on">
+                        <input type="hidden" name="event_id" value="{{ $event->id }}">
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">Vorname</label>
-                            <input type="text" id="firstName" name="first_name" placeholder="Dein Vorname" required autocomplete="given-name">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">Vorname</label>
+                                <input type="text" id="firstName" name="first_name" placeholder="Dein Vorname" required autocomplete="given-name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lastName">Nachname</label>
+                                <input type="text" id="lastName" name="last_name" placeholder="Dein Nachname" required autocomplete="family-name">
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="lastName">Nachname</label>
-                            <input type="text" id="lastName" name="last_name" placeholder="Dein Nachname" required autocomplete="family-name">
+                            <label for="email">E-Mail</label>
+                            <input type="email" id="email" name="email" placeholder="deine@email.de" required autocomplete="email" inputmode="email">
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="email">E-Mail</label>
-                        <input type="email" id="email" name="email" placeholder="deine@email.de" required autocomplete="email" inputmode="email">
-                    </div>
+                        <div class="form-group">
+                            <label for="phone">Handynummer <span class="form-label-optional">(optional)</span></label>
+                            <input type="tel" id="phone" name="phone_number" placeholder="+49 170 1234567" autocomplete="tel" inputmode="tel">
+                            <span class="form-helper">Für Erinnerungen per SMS am Veranstaltungstag</span>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="phone">Handynummer <span class="form-label-optional">(optional)</span></label>
-                        <input type="tel" id="phone" name="phone_number" placeholder="+49 170 1234567" autocomplete="tel" inputmode="tel">
-                        <span class="form-helper">Für Erinnerungen per SMS am Veranstaltungstag</span>
-                    </div>
+                        <label class="form-checkbox">
+                            <input type="checkbox" name="privacy" required>
+                            <span>Ich habe die <a href="{{ route('page.show', 'datenschutz') }}" target="_blank" data-m:click="action=legal_click;element=link;target=datenschutz;location=registration_form">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
+                        </label>
 
-                    <label class="form-checkbox">
-                        <input type="checkbox" name="privacy" required>
-                        <span>Ich habe die <a href="{{ route('page.show', 'datenschutz') }}" target="_blank" data-m:click="action=legal_click;element=link;target=datenschutz;location=registration_form">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
-                    </label>
+                        <button type="submit" class="btn btn--primary btn--large event-register__submit" {{ $event->isFull() ? 'disabled' : '' }} data-m:click="action=form_submit;element=button;target=event_registration;location=registration_form">
+                            {{ $event->isFull() ? 'Ausgebucht' : 'Verbindlich anmelden' }}
+                        </button>
 
-                    <button type="submit" class="btn btn--primary btn--large event-register__submit" {{ $event->isFull() ? 'disabled' : '' }} data-m:click="action=form_submit;element=button;target=event_registration;location=registration_form">
-                        {{ $event->isFull() ? 'Ausgebucht' : 'Verbindlich anmelden' }}
-                    </button>
-
-                    <div id="registrationMessage"></div>
-                </form>
+                        <div id="registrationMessage"></div>
+                    </form>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
 
     <!-- Event Info Section with Large Typography -->
     <section class="event-info-section">
@@ -256,11 +297,19 @@
         </div>
         <div class="container">
             <div class="event-cta__content fade-in">
-                <p class="event-cta__eyebrow">Bereit?</p>
-                <h2 class="event-cta__title">
-                    Melde dich <span class="text-italic">jetzt</span> an
-                </h2>
-                <a href="#anmeldung" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=registration;location=event_cta">Zur Anmeldung</a>
+                @if($isPast)
+                    <p class="event-cta__eyebrow">Interesse geweckt?</p>
+                    <h2 class="event-cta__title">
+                        Bleib <span class="text-italic">informiert</span>
+                    </h2>
+                    <a href="{{ route('home') }}#newsletter" class="btn btn--primary btn--large">Newsletter abonnieren</a>
+                @else
+                    <p class="event-cta__eyebrow">Bereit?</p>
+                    <h2 class="event-cta__title">
+                        Melde dich <span class="text-italic">jetzt</span> an
+                    </h2>
+                    <a href="#anmeldung" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=registration;location=event_cta">Zur Anmeldung</a>
+                @endif
             </div>
         </div>
     </section>
