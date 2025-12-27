@@ -51,6 +51,10 @@
   --color-ink: oklch(13% 0.01 68);
   --color-ink-soft: oklch(24% 0.02 68);
 
+  /* Additional Colors for Contrast */
+  --color-sage: oklch(45% 0.08 145);
+  --color-sage-light: oklch(55% 0.06 145);
+
   /* ============================================
      Semantic Color Tokens - Light Theme
      ============================================ */
@@ -70,9 +74,15 @@
   /* Text */
   --text-primary: var(--color-ink);
   --text-secondary: var(--color-ink-soft);
+  --text-muted: oklch(55% 0.02 68);
   --text-on-dark: var(--color-parchment);
   --text-on-dark-secondary: var(--color-sand);
   --text-accent: var(--color-earth-warm);
+  --text-dark: var(--color-ink);
+  --text-light: var(--color-parchment);
+
+  /* Light mode specific */
+  --bg-light: var(--color-parchment);
 
   /* Accents */
   --accent-primary: var(--color-terracotta);
@@ -198,30 +208,34 @@
     --bg-dark-alt: var(--color-earth-dark);
     --bg-elevated: var(--color-earth-deep);
     --bg-section-alt: var(--color-earth-deep);
-    --bg-input: color-mix(in oklch, var(--color-ink) 50%, transparent);
-    --bg-input-focus: color-mix(in oklch, var(--color-ink) 70%, transparent);
+    --bg-light: var(--color-earth-dark);
+    --bg-input: color-mix(in oklch, var(--color-earth-dark) 80%, transparent);
+    --bg-input-focus: color-mix(in oklch, var(--color-earth-mid) 90%, transparent);
     --bg-overlay: color-mix(in oklch, var(--color-ink) 85%, transparent);
 
-    /* Dark Theme Text */
+    /* Dark Theme Text - Enhanced Contrast */
     --text-primary: var(--color-parchment);
-    --text-secondary: var(--color-sand-light);
+    --text-secondary: oklch(80% 0.02 75);
+    --text-muted: oklch(65% 0.02 75);
     --text-on-dark: var(--color-parchment);
     --text-on-dark-secondary: var(--color-sand-light);
     --text-accent: var(--color-terracotta-light);
+    --text-dark: var(--color-parchment);
+    --text-light: var(--color-ink);
 
     /* Dark Theme Borders */
     --border-light: color-mix(
       in oklch,
-      var(--color-earth-mid) 30%,
+      var(--color-earth-mid) 40%,
       transparent
     );
     --border-medium: color-mix(
       in oklch,
-      var(--color-earth-mid) 30%,
+      var(--color-earth-mid) 50%,
       transparent
     );
     --border-dark: var(--color-earth-warm);
-    --border-on-dark: color-mix(in oklch, var(--color-sand) 25%, transparent);
+    --border-on-dark: color-mix(in oklch, var(--color-sand) 30%, transparent);
 
     /* Adjusted shadows for dark mode */
     --shadow-sm: 0 1px 2px color-mix(in oklch, black 20%, transparent);

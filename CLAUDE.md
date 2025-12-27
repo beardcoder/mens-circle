@@ -209,31 +209,333 @@ This document provides comprehensive guidance for AI assistants working on the M
 **Build Tool:** Vite 7.0.7
 **Reactive Components:** Livewire 3 (minimal usage)
 
-## CSS Architecture
+---
 
-**File:** `resources/css/app.css` (2,977 lines)
+=== css architecture & guidelines ===
 
-**Design System:**
-- CSS custom properties for theming
-- Earthy color palette:
-  - `--color-earth-deep` (deep brown)
-  - `--color-terracotta` (warm terracotta)
-  - `--color-sand` (light sand)
-  - `--color-sage` (muted green)
-  - `--color-clay` (rustic orange)
-- Dark mode support via `prefers-color-scheme: dark`
-- Mobile-first responsive design
-- Print styles included
+## Directory Structure
 
-**Key Components:**
-- Hero section with animated circles
-- Split-layout intro section
-- Moderator showcase
-- Journey steps (4-column grid)
-- FAQ accordion
-- Newsletter signup section
-- Event detail cards
-- Event registration form
+The CSS follows a modular ITCSS-inspired architecture:
+
+```
+resources/css/
+├── app.css                 # Main entry point (imports all modules)
+├── base/
+│   ├── _variables.css      # CSS custom properties (design tokens)
+│   ├── _reset.css          # CSS reset and normalization
+│   └── _typography.css     # Font definitions and text styles
+├── utilities/
+│   ├── _layout.css         # Flexbox, grid, spacing utilities
+│   ├── _visual.css         # Backgrounds, borders, shadows
+│   ├── _animations.css     # Keyframes and animation classes
+│   ├── _view-transitions.css # View Transitions API styles
+│   └── _print.css          # Print-specific styles
+├── components/
+│   ├── _buttons.css        # Button components (BEM)
+│   ├── _forms.css          # Form elements and validation
+│   ├── _header.css         # Site header and navigation
+│   ├── _footer.css         # Site footer
+│   ├── _cards.css          # Card patterns
+│   └── _modal.css          # Modal/dialog components
+└── sections/
+    ├── _hero.css           # Hero sections
+    ├── _intro.css          # Intro/split layouts
+    ├── _event.css          # Event page sections
+    ├── _faq.css            # FAQ accordion
+    ├── _newsletter.css     # Newsletter signup
+    ├── _journey.css        # Journey steps section
+    ├── _moderator.css      # Moderator profile
+    ├── _testimonials.css   # Testimonials grid
+    ├── _testimonial-form.css # Testimonial submission
+    ├── _whatsapp.css       # WhatsApp community section
+    ├── _cta.css            # Call-to-action sections
+    ├── _no-event.css       # No event fallback page
+    └── _legal.css          # Legal pages (Impressum, etc.)
+```
+
+## Design Tokens (CSS Custom Properties)
+
+### Color System
+
+Uses OKLCH color space for perceptually uniform colors:
+
+```css
+/* Primitive Colors */
+--color-earth-deep: oklch(18% 0.04 55);    /* Deep brown */
+--color-terracotta: oklch(52% 0.14 35);    /* Warm terracotta */
+--color-sand: oklch(76% 0.04 75);          /* Light sand */
+--color-sage: oklch(45% 0.08 145);         /* Muted green */
+
+/* Semantic Tokens (Light Theme) */
+--text-primary: var(--color-ink);
+--text-secondary: var(--color-ink-soft);
+--text-muted: oklch(55% 0.02 68);
+--bg-primary: var(--color-bone);
+--bg-elevated: var(--bg-primary);
+--accent-primary: var(--color-terracotta);
+```
+
+### Spacing Scale
+
+Consistent 8px-based spacing scale:
+
+```css
+--space-xs: 0.5rem;   /* 8px */
+--space-sm: 0.75rem;  /* 12px */
+--space-md: 1rem;     /* 16px */
+--space-lg: 1.5rem;   /* 24px */
+--space-xl: 2rem;     /* 32px */
+--space-2xl: 4rem;    /* 64px */
+--space-3xl: 6rem;    /* 96px */
+```
+
+### Typography Scale
+
+Fluid typography using `clamp()`:
+
+```css
+--text-sm: 0.875rem;
+--text-base: 1rem;
+--text-lg: 1.125rem;
+--text-xl: 1.25rem;
+--text-2xl: clamp(1.5rem, 3vw, 2rem);
+--text-3xl: clamp(2rem, 4vw, 3rem);
+--text-4xl: clamp(2.5rem, 6vw, 4.5rem);
+```
+
+## Naming Conventions (BEM)
+
+Use BEM (Block Element Modifier) naming:
+
+```css
+/* Block */
+.testimonial-card { }
+
+/* Element (double underscore) */
+.testimonial-card__quote { }
+.testimonial-card__author { }
+
+/* Modifier (double dash) */
+.testimonial-card--featured { }
+.btn--primary { }
+.btn--lg { }
+```
+
+### Section Naming Pattern
+
+Sections follow a consistent pattern:
+
+```css
+/* Base section class */
+.newsletter-section { }
+
+/* Layout container */
+.newsletter__layout { }
+
+/* Content areas */
+.newsletter__content { }
+.newsletter__eyebrow { }
+.newsletter__title { }
+.newsletter__text { }
+```
+
+## Modern CSS Features (2025)
+
+This project uses cutting-edge CSS features:
+
+### Logical Properties
+
+Use logical properties for RTL support:
+
+```css
+/* ✓ Preferred */
+margin-inline-start: var(--space-md);
+padding-block: var(--space-lg);
+inset-block-start: 0;
+
+/* ✗ Avoid */
+margin-left: var(--space-md);
+padding-top: var(--space-lg);
+top: 0;
+```
+
+### Native CSS Nesting
+
+Use CSS nesting for component encapsulation:
+
+```css
+.faq__layout {
+  display: grid;
+
+  @media (width < 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+```
+
+### color-mix() Function
+
+Mix colors dynamically:
+
+```css
+background: color-mix(in oklch, var(--accent-primary) 15%, transparent);
+border-color: color-mix(in oklch, var(--text-primary) 20%, transparent);
+```
+
+### Container Queries
+
+For component-based responsive design (where applicable):
+
+```css
+.card {
+  container-type: inline-size;
+}
+
+@container (width < 300px) {
+  .card__content { flex-direction: column; }
+}
+```
+
+### Subgrid
+
+For aligned nested grids:
+
+```css
+.grid-parent {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-child {
+  display: grid;
+  grid-template-columns: subgrid;
+}
+```
+
+## Responsive Design
+
+### Mobile-First Breakpoints
+
+Use consolidated breakpoints:
+
+```css
+/* Mobile first - no media query needed */
+.element { /* Base mobile styles */ }
+
+/* Tablet (600px+) */
+@media (width >= 600px) { }
+
+/* Small Desktop (900px+) */
+@media (width >= 900px) { }
+
+/* Large Desktop (1200px+) */
+@media (width >= 1200px) { }
+```
+
+### Fluid Layouts
+
+Prefer fluid sizing over fixed breakpoints:
+
+```css
+/* ✓ Preferred - fluid */
+font-size: clamp(1.5rem, 3vw, 2.5rem);
+padding: clamp(1rem, 3vw, 2rem);
+
+/* ✓ Grid auto-fit for responsive columns */
+grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+```
+
+## Dark Mode
+
+Automatic dark mode via `prefers-color-scheme`:
+
+```css
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: var(--color-ink);
+    --text-primary: var(--color-parchment);
+    /* All semantic tokens redefined */
+  }
+}
+```
+
+**Important:** Use semantic tokens (`--text-primary`, `--bg-elevated`) instead of hardcoded colors so dark mode works automatically.
+
+## Accessibility
+
+### Reduced Motion
+
+Always respect user preferences:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  .animated-element {
+    animation: none;
+    transition: none;
+  }
+}
+```
+
+### Focus States
+
+Visible focus indicators:
+
+```css
+.btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+```
+
+### Screen Reader Only
+
+```css
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip: rect(0, 0, 0, 0);
+}
+```
+
+## Utility Classes
+
+Available utility classes (use sparingly, prefer component styles):
+
+```css
+/* Layout */
+.container, .flex, .grid, .hidden, .block
+
+/* Spacing */
+.mt-md, .mb-lg, .px-sm (margin/padding utilities)
+
+/* Text */
+.text-center, .text-primary, .font-display
+
+/* Visual */
+.rounded-lg, .shadow-md, .bg-elevated
+```
+
+## Best Practices
+
+1. **Use semantic variables** - Never use raw colors, always use `--text-primary`, `--bg-elevated`, etc.
+
+2. **Low specificity selectors** - Avoid deep nesting, prefer flat BEM selectors
+
+3. **Single responsibility** - Each CSS file handles one component/section
+
+4. **Mobile-first** - Write base styles for mobile, add complexity for larger screens
+
+5. **Avoid `!important`** - If needed, refactor the specificity chain
+
+6. **Comment section headers** - Use consistent section comment format:
+   ```css
+   /* ============================================
+      Section Name
+      ============================================ */
+   ```
+
+7. **Consolidate noise textures** - Use the `.texture-noise` utility class instead of duplicating SVG backgrounds
 
 ## JavaScript Architecture
 
