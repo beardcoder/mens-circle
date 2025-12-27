@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Testimonial extends Model
+{
+    /** @use HasFactory<\Database\Factories\TestimonialFactory> */
+    use HasFactory;
+
+    use SoftDeletes;
+
+    protected $fillable = [
+        'quote',
+        'author_name',
+        'role',
+        'is_published',
+        'published_at',
+        'sort_order',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+            'published_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Scope a query to only include published testimonials.
+     */
+    public function scopePublished(Builder $query): void
+    {
+        $query->where('is_published', true);
+    }
+
+    /**
+     * Default ordering by sort_order and created_at.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('order', function (Builder $builder) {
+            $builder->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
+        });
+    }
+}
