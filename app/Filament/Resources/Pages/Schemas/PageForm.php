@@ -215,6 +215,16 @@ class PageForm
                                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
                             ]),
 
+                        Builder\Block::make('testimonials')
+                            ->label('Testimonials Bereich')
+                            ->icon(Heroicon::OutlinedChatBubbleLeftRight)
+                            ->schema([
+                                self::blockIdField(),
+                                \Filament\Forms\Components\Placeholder::make('testimonials_info')
+                                    ->label('Automatische Anzeige')
+                                    ->content('Dieser Block zeigt automatisch alle veröffentlichten Testimonials aus der Datenbank an. Keine weiteren Einstellungen erforderlich.'),
+                            ]),
+
                         Builder\Block::make('faq')
                             ->label('FAQ Bereich')
                             ->icon(Heroicon::OutlinedQuestionMarkCircle)
