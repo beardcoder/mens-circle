@@ -30,7 +30,7 @@
    Form Section
    ============================================ */
 .testimonial-form-section {
-  background: var(--bg-light);
+  background: var(--bg-secondary);
 }
 
 .testimonial-form__wrapper {
@@ -47,7 +47,7 @@
   margin-block-end: var(--space-md);
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 4vw, 2.5rem);
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 .testimonial-form__intro p {
@@ -66,11 +66,9 @@
    ============================================ */
 .testimonial-form {
   padding: var(--space-xl);
-  background: white;
-  border-radius: 12px;
-  box-shadow:
-    0 1px 3px color-mix(in oklch, var(--text-dark) 5%, transparent),
-    0 4px 12px color-mix(in oklch, var(--text-dark) 3%, transparent);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
 @media (max-width: 600px) {
@@ -95,7 +93,7 @@
   margin-block-end: var(--space-xs);
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 .required {
@@ -115,35 +113,33 @@
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.5;
-  color: var(--text-dark);
-  background: white;
-  border: 2px solid color-mix(in oklch, var(--text-dark) 25%, transparent);
-  border-radius: 8px;
-  box-shadow: 0 1px 2px color-mix(in oklch, var(--text-dark) 3%, transparent);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .form__input::placeholder,
 .form__textarea::placeholder {
-  color: color-mix(in oklch, var(--text-dark) 50%, transparent);
+  color: var(--text-muted);
 }
 
 .form__input:hover,
 .form__textarea:hover {
-  border-color: color-mix(in oklch, var(--text-dark) 35%, transparent);
+  border-color: var(--border-dark);
 }
 
 .form__input:focus,
 .form__textarea:focus {
   outline: none;
-  background: white;
+  background: var(--bg-primary);
   border-color: var(--accent-primary);
-  box-shadow:
-    0 0 0 3px color-mix(in oklch, var(--accent-primary) 15%, transparent),
-    0 2px 4px color-mix(in oklch, var(--text-dark) 5%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent-primary) 15%, transparent);
 }
 
 .form__textarea {
@@ -193,13 +189,13 @@
 .form__checkbox-text {
   font-size: 0.9375rem;
   line-height: 1.6;
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 .form__checkbox-text .link {
   color: var(--accent-primary);
   text-decoration: underline;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--transition-fast);
 }
 
 .form__checkbox-text .link:hover {
@@ -212,7 +208,7 @@
   margin-block-end: var(--space-lg);
   font-size: 0.9375rem;
   line-height: 1.6;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .form__message.success {
@@ -288,43 +284,9 @@
   text-align: center;
 }
 
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  .testimonial-form {
-    background: color-mix(in oklch, var(--text-dark) 8%, transparent);
-  }
-
-  .form__input,
-  .form__textarea {
-    background: color-mix(in oklch, black 30%, transparent);
-    border-color: color-mix(in oklch, var(--text-on-dark) 30%, transparent);
-    color: var(--text-on-dark);
-    box-shadow: 0 1px 3px color-mix(in oklch, black 20%, transparent);
-  }
-
-  .form__input::placeholder,
-  .form__textarea::placeholder {
-    color: color-mix(in oklch, var(--text-on-dark) 40%, transparent);
-  }
-
-  .form__input:hover,
-  .form__textarea:hover {
-    border-color: color-mix(in oklch, var(--text-on-dark) 40%, transparent);
-  }
-
-  .form__input:focus,
-  .form__textarea:focus {
-    background: color-mix(in oklch, black 35%, transparent);
-    border-color: var(--accent-primary);
-  }
-
-  .form__label,
-  .form__checkbox-text {
-    color: var(--text-on-dark);
-  }
-}
-
-/* Reduced motion */
+/* ============================================
+   Reduced Motion
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
   .spinner,
   .spinner__path {
