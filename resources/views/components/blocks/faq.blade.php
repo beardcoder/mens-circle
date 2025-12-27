@@ -3,11 +3,11 @@
         <div class="faq__layout">
             <div class="faq__header fade-in">
                 @if(!empty($block['data']['eyebrow']))
-                    <p class="faq__eyebrow">{{ $block['data']['eyebrow'] }}</p>
+                    <p class="eyebrow">{{ $block['data']['eyebrow'] }}</p>
                 @endif
 
                 @if(!empty($block['data']['title']))
-                    <h2 class="faq__title">{!! $block['data']['title'] !!}</h2>
+                    <h2 class="section-title faq__title">{!! $block['data']['title'] !!}</h2>
                 @endif
 
                 @if(!empty($block['data']['intro']))

@@ -109,8 +109,8 @@
                         <div class="event-register__circle event-register__circle--1"></div>
                         <div class="event-register__circle event-register__circle--2"></div>
                     </div>
-                    <p class="event-register__eyebrow">Rückblick</p>
-                    <h2 class="event-register__title">
+                    <p class="eyebrow eyebrow--secondary">Rückblick</p>
+                    <h2 class="section-title section-title--lg section-title--light event-register__title">
                         Dieses Treffen <br><span class="text-italic">hat stattgefunden</span>
                     </h2>
                     <p class="event-register__spots">
@@ -140,8 +140,8 @@
                         <div class="event-register__circle event-register__circle--1"></div>
                         <div class="event-register__circle event-register__circle--2"></div>
                     </div>
-                    <p class="event-register__eyebrow">Sei dabei</p>
-                    <h2 class="event-register__title">
+                    <p class="eyebrow eyebrow--secondary">Sei dabei</p>
+                    <h2 class="section-title section-title--lg section-title--light event-register__title">
                         Sichere dir <br><span class="text-italic">deinen Platz</span>
                     </h2>
                     <p class="event-register__spots">
@@ -263,8 +263,8 @@
     <section class="event-about-section">
         <div class="event-about__layout">
             <div class="event-about__content fade-in">
-                <p class="event-about__eyebrow">Über das Treffen</p>
-                <h2 class="event-about__title">
+                <p class="eyebrow">Über das Treffen</p>
+                <h2 class="section-title section-title--lg event-about__title">
                     Ein Raum für <br><span class="text-italic">echte Begegnung</span>
                 </h2>
                 <div class="event-about__text">
@@ -298,14 +298,14 @@
         <div class="container">
             <div class="event-cta__content fade-in">
                 @if($isPast)
-                    <p class="event-cta__eyebrow">Interesse geweckt?</p>
-                    <h2 class="event-cta__title">
+                    <p class="eyebrow">Interesse geweckt?</p>
+                    <h2 class="section-title event-cta__title">
                         Bleib <span class="text-italic">informiert</span>
                     </h2>
                     <a href="{{ route('home') }}#newsletter" class="btn btn--primary btn--large">Newsletter abonnieren</a>
                 @else
-                    <p class="event-cta__eyebrow">Bereit?</p>
-                    <h2 class="event-cta__title">
+                    <p class="eyebrow">Bereit?</p>
+                    <h2 class="section-title event-cta__title">
                         Melde dich <span class="text-italic">jetzt</span> an
                     </h2>
                     <a href="#anmeldung" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=registration;location=event_cta">Zur Anmeldung</a>

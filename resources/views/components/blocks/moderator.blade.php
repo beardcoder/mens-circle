@@ -37,7 +37,7 @@
 
             <div class="moderator__content fade-in fade-in-delay-1">
                 @if(!empty($block['data']['eyebrow']))
-                    <p class="moderator__eyebrow">{{ $block['data']['eyebrow'] }}</p>
+                    <p class="eyebrow">{{ $block['data']['eyebrow'] }}</p>
                 @endif
 
                 @if(!empty($block['data']['name']))

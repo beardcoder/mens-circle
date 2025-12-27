@@ -7,8 +7,8 @@
 <section class="section section--large testimonials-section" id="stimmen">
     <div class="container">
         <div class="testimonials__header fade-in">
-            <p class="testimonials__eyebrow">Community Stimmen</p>
-            <h2 class="testimonials__title">Was <span class="highlight">Teilnehmer</span> sagen</h2>
+            <p class="eyebrow">Community Stimmen</p>
+            <h2 class="section-title testimonials__title">Was <span class="highlight">Teilnehmer</span> sagen</h2>
             <p class="testimonials__subtitle">
                 Authentische Einblicke von Männern, die den Kreis erleben
             </p>
