@@ -452,11 +452,13 @@ function validateEmail(email) {
 function showMessage(container, message, type) {
   if (!container) return;
 
+  container.style.display = 'block';
   container.innerHTML = `<div class="form-message form-message--${type}">${message}</div>`;
 
   // Auto-hide after 5 seconds
   setTimeout(() => {
     container.innerHTML = '';
+    container.style.display = 'none';
   }, 5000);
 }
 
