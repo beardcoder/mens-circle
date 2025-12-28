@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Event;
-use Spatie\ResponseCache\Facades\ResponseCache;
 
 class EventObserver
 {
@@ -55,8 +54,5 @@ class EventObserver
         cache()->forget('event.next');
         cache()->forget('has_next_event');
         cache()->forget('llms_txt');
-
-        // Clear full HTTP response cache
-        ResponseCache::clear();
     }
 }
