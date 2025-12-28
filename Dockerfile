@@ -100,6 +100,7 @@ RUN mkdir -p \
 # Supervisor + Caddy/FrankenPHP config
 RUN mkdir -p /var/log/supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/frankenphp/Caddyfile /app/Caddyfile
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
