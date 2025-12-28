@@ -27,7 +27,8 @@ WORKDIR /app
 # Composer (keeps PHP version aligned with final stage)
 RUN install-php-extensions @composer
 
-COPY composer.json composer.lock ./
+COPY . .
+
 RUN --mount=type=cache,target=/root/.composer/cache \
     composer install \
       --no-dev \
@@ -36,10 +37,6 @@ RUN --mount=type=cache,target=/root/.composer/cache \
       --prefer-dist \
       --ignore-platform-reqs \
       --optimize-autoloader
-
-# Copy the app source after vendor install so vendor layer stays cached
-COPY . .
-
 
 # ----------------------------
 # 3) Production image (FrankenPHP)
@@ -56,6 +53,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # PHP extensions
 RUN install-php-extensions \
+      @composer \
       pcntl \
       pdo_sqlite \
       pdo_pgsql \
