@@ -29,30 +29,40 @@ class AppServiceProvider extends ServiceProvider
 
         Vite::useAggressivePrefetching();
 
-        View::composer('*', function ($view): void {
-            $hasNextEvent = cache()->rememberForever('has_next_event', function () {
-                return Event::query()
-                    ->where('is_published', true)
-                    ->where('event_date', '>=', now())
-                    ->exists();
-            });
+        // Share data with all views using View::share() for better performance
+        // This runs once per request instead of once per view like View::composer()
+        $this->shareGlobalViewData();
+    }
 
-            $settings = cache()->rememberForever('view_composer_settings', function () {
-                return settings();
-            });
-
-            $view->with([
-                'hasNextEvent' => $hasNextEvent,
-                'settings' => $settings,
-                'siteName' => $settings['site_name'] ?? 'Männerkreis Niederbayern',
-                'siteTagline' => $settings['site_tagline'] ?? '',
-                'siteDescription' => $settings['site_description'] ?? '',
-                'contactEmail' => $settings['contact_email'] ?? '',
-                'contactPhone' => $settings['contact_phone'] ?? '',
-                'socialLinks' => $settings['social_links'] ?? [],
-                'footerText' => $settings['footer_text'] ?? '© '.date('Y').' Männerkreis Niederbayern',
-                'whatsappCommunityLink' => $settings['whatsapp_community_link'] ?? '',
-            ]);
+    /**
+     * Share global data with all views.
+     * Uses forever caching with event-based invalidation for optimal performance.
+     */
+    protected function shareGlobalViewData(): void
+    {
+        // Cache check for next event (invalidated via EventObserver)
+        $hasNextEvent = cache()->rememberForever('has_next_event', function () {
+            return Event::query()
+                ->where('is_published', true)
+                ->where('event_date', '>=', now())
+                ->exists();
         });
+
+        // Get settings (Spatie Settings handles caching internally - no double caching needed)
+        $settings = app_settings();
+
+        // Share all data at once using View::share() - faster than View::composer()
+        View::share([
+            'hasNextEvent' => $hasNextEvent,
+            'settings' => $settings,
+            'siteName' => $settings->site_name,
+            'siteTagline' => $settings->site_tagline,
+            'siteDescription' => $settings->site_description,
+            'contactEmail' => $settings->contact_email,
+            'contactPhone' => $settings->contact_phone,
+            'socialLinks' => $settings->social_links ?? [],
+            'footerText' => $settings->footer_text,
+            'whatsappCommunityLink' => $settings->whatsapp_community_link,
+        ]);
     }
 }
