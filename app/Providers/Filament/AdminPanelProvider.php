@@ -35,13 +35,14 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Männerkreis Niederbayern')
             ->brandLogoHeight('40px')
             ->colors([
-                'primary' => Color::Lime,
+                'primary' => Color::Amber,
             ])
             ->renderHook(PanelsRenderHook::TOPBAR_END, fn () => view('filament.components.go-to-website'))
             ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
                 GravatarPlugin::make(),
                 FilamentLogViewer::make(),
+                PasskeysPlugin::make(),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
