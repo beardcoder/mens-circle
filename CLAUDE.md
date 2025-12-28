@@ -553,23 +553,27 @@ Event::observe(EventObserver::class);
 
 **Purpose:** Cache invalidation, slug generation, related data updates
 
-## View Composer Pattern
+## View Data Sharing Pattern
 
-**Global Data:** `AppServiceProvider` uses View Composer to share data across all views
+**Global Data:** `AppServiceProvider` uses `View::share()` to share data across all views
 
-```php
-View::composer('*', function ($view) {
-    $hasNextEvent = cache()->remember('has_next_event', 600, function () {
-        return Event::where('is_published', true)
-            ->where('event_date', '>=', now())
-            ->exists();
-    });
+**Implementation:** Data is shared via `shareGlobalViewData()` method which runs once per request (more efficient than View Composer which runs per view).
 
-    $view->with('hasNextEvent', $hasNextEvent);
-});
-```
+**Shared Data:**
+- `hasNextEvent` - Boolean indicating if upcoming events exist (cached forever, invalidated via EventObserver)
+- `settings` - GeneralSettings object (cached internally by Spatie Laravel Settings)
+- Individual setting properties extracted for convenience (`siteName`, `contactEmail`, etc.)
 
-**Purpose:** Conditional navigation links, header variations
+**Caching Strategy:**
+- `hasNextEvent`: Forever cache with event-based invalidation via `EventObserver`
+- Settings: Cached internally by Spatie Settings (config: `settings.cache.enabled = true`)
+- No double caching - relies on framework-level caching
+
+**Purpose:**
+- Conditional navigation links (event CTAs)
+- Header/footer content (site name, contact info)
+- SEO metadata
+- Social links
 
 ## Slug Generation Strategy
 
@@ -585,13 +589,29 @@ SlugOptions::create()
 ## Caching Strategy
 
 **Current Cache Usage:**
-- `has_next_event` - 600 second (10 minute) TTL
+- `has_next_event` - Forever cache with event-based invalidation (EventObserver)
+- `settings.*` - Forever cache via Spatie Settings internal caching
 - Driver: Database (configured in `.env`)
 
-**When to Invalidate:**
-- Event published/unpublished
-- Event date changed
-- Event deleted/restored
+**Cache Invalidation:**
+
+**Events Cache (`has_next_event`):**
+- Invalidated via `EventObserver` when:
+  - Event created
+  - Event updated (if `is_published` or `event_date` changed)
+  - Event deleted
+  - Event restored
+
+**Settings Cache:**
+- Invalidated automatically by Spatie Laravel Settings
+- `ClearSettingsCache` listener registered but Spatie handles cache clearing
+- No manual cache management needed
+
+**Performance Benefits:**
+- Forever caching eliminates TTL checks
+- Event-based invalidation ensures data freshness
+- Single cache key per data type (no cache key proliferation)
+- Spatie Settings uses optimized caching internally
 
 ## Queue Configuration
 
