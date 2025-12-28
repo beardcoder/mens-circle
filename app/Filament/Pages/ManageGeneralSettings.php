@@ -11,7 +11,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Schema;
-use Spatie\ResponseCache\Facades\ResponseCache;
 
 class ManageGeneralSettings extends SettingsPage
 {
@@ -141,8 +140,5 @@ class ManageGeneralSettings extends SettingsPage
         foreach (array_keys($settings) as $key) {
             cache()->forget('setting.'.$key);
         }
-
-        // Clear full HTTP response cache
-        ResponseCache::clear();
     }
 }
