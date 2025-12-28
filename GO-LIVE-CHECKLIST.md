@@ -25,8 +25,8 @@ Vor dem Produktivstart **MÜSSEN** folgende Punkte abgeschlossen sein:
 
 ### 4. Assets bauen
 ```bash
-npm install
-npm run build
+bun install
+bun run build
 ```
 
 ### 5. Datenbank & Caches

@@ -8,7 +8,7 @@
         "lint": "eslint . --fix",
         "lint:check": "eslint .",
         "stylelint": "stylelint \"resources/**/*.css\"",
-        "format": "prettier --write \"resources/**/*.{js,css}\" && npm run stylelint -- --fix",
+        "format": "prettier --write \"resources/**/*.{js,css}\" && bun run stylelint -- --fix",
         "format:check": "prettier --check \"resources/**/*.{js,css}\""
     },
     "devDependencies": {

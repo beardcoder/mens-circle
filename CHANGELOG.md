@@ -34,7 +34,7 @@
 1. Create OG-Image: `/public/images/og-image.jpg` (1200x630px)
 2. Complete Impressum with real address
 3. Configure production `.env` file
-4. Build frontend assets: `npm run build`
+4. Build frontend assets: `bun run build`
 5. Set up queue worker as system service
 
 ## Notes
