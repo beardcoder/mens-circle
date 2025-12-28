@@ -1,127 +1,122 @@
-# Build Stage: Install dependencies and build assets
-FROM node:24 AS node-builder
+# syntax=docker/dockerfile:1.7-labs
 
+ARG NODE_IMAGE=node:24-bookworm-slim
+ARG PHP_IMAGE=dunglas/frankenphp:1-php8.5
+
+# ----------------------------
+# 1) Frontend build (Vite)
+# ----------------------------
+FROM ${NODE_IMAGE} AS assets
 WORKDIR /app
 
-# Copy package files
 COPY package.json package-lock.json* ./
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --no-audit --no-fund
 
-# Install npm dependencies
-RUN npm ci
-
-# Copy source files for build
 COPY resources/ resources/
 COPY vite.config.mjs ./
 COPY public/ public/
-
-# Build assets
 RUN npm run build
 
-# PHP Dependencies Stage
-FROM composer:2 AS composer-builder
 
+# ----------------------------
+# 2) PHP dependencies (Composer) using same PHP as prod
+# ----------------------------
+FROM ${PHP_IMAGE} AS vendor
 WORKDIR /app
 
-# Copy composer files
+# Composer (keeps PHP version aligned with final stage)
+RUN install-php-extensions @composer
+
 COPY composer.json composer.lock ./
+RUN --mount=type=cache,target=/root/.composer/cache \
+    composer install \
+      --no-dev \
+      --no-interaction \
+      --no-progress \
+      --prefer-dist \
+      --optimize-autoloader
 
-# Install PHP dependencies without dev packages
-RUN composer install \
-    --no-dev \
-    --no-scripts \
-    --no-interaction \
-    --prefer-dist \
-    --optimize-autoloader \
-    --ignore-platform-reqs
-
-# Copy application code for post-install scripts
+# Copy the app source after vendor install so vendor layer stays cached
 COPY . .
 
-# Run composer scripts
-RUN composer dump-autoload --optimize --no-dev
+# Make autoloader as fast as possible in production
+RUN composer dump-autoload \
+      --no-dev \
+      --classmap-authoritative \
+      --no-interaction
 
-# Production Stage: FrankenPHP
-FROM dunglas/frankenphp:1-php8.5 AS production
 
-# Set working directory
+# ----------------------------
+# 3) Production image (FrankenPHP)
+# ----------------------------
+FROM ${PHP_IMAGE} AS production
 WORKDIR /app
 
-# Install system dependencies for GD and PostgreSQL
-RUN apt-get update && apt-get install -y \
-    sqlite3 \
-    postgresql-client \
-    libpq-dev \
-    libicu-dev \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libwebp-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    libonig-dev \
-    supervisor \
-    curl && \
-    rm -rf /var/lib/apt/lists/*
+# Only runtime OS deps (keep it slim)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      sqlite3 \
+      postgresql-client \
+      supervisor \
+      curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
+# PHP extensions
 RUN install-php-extensions \
-    pcntl \
-    pdo_sqlite \
-    pdo_pgsql \
-    pgsql \
-    intl \
-    opcache \
-    gd \
-    zip \
-    bcmath \
-    exif
+      pcntl \
+      pdo_sqlite \
+      pdo_pgsql \
+      pgsql \
+      intl \
+      opcache \
+      gd \
+      zip \
+      bcmath \
+      exif
 
-# Configure PHP for production
+# PHP config
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-
-# Copy PHP configuration
-COPY docker/php/php.ini "$PHP_INI_DIR/conf.d/99-custom.ini"
+COPY docker/php/php.ini     "$PHP_INI_DIR/conf.d/99-custom.ini"
 COPY docker/php/opcache.ini "$PHP_INI_DIR/conf.d/opcache.ini"
 
-# Copy application from composer stage
-COPY --from=composer-builder /app/vendor /app/vendor
+# App + vendor from vendor stage (already contains vendor/)
+# Use --chown to avoid heavy chown layers later
+COPY --from=vendor --chown=www-data:www-data /app /app
 
-# Copy application code
-COPY . /app
+# Built assets overlay
+COPY --from=assets --chown=www-data:www-data /app/public/build /app/public/build
 
-# Copy built assets from node stage
-COPY --from=node-builder /app/public/build /app/public/build
-
-# Create required directories
+# Ensure runtime dirs exist (do it once at build time)
 RUN mkdir -p \
-    /app/storage/app/public \
-    /app/storage/framework/cache/data \
-    /app/storage/framework/sessions \
-    /app/storage/framework/views \
-    /app/storage/logs \
-    /app/bootstrap/cache \
-    /app/database
+      /app/storage/app/public \
+      /app/storage/framework/cache/data \
+      /app/storage/framework/sessions \
+      /app/storage/framework/views \
+      /app/storage/logs \
+      /app/bootstrap/cache \
+      /app/database \
+    && chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database /app/public \
+    && chmod -R 775 /app/storage /app/bootstrap/cache /app/database
 
-# Set permissions
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database /app/public
-RUN chmod -R 775 /app/storage /app/bootstrap/cache /app/database /app/public
-
-# Configure Supervisor
+# Supervisor + Caddy/FrankenPHP config
 RUN mkdir -p /var/log/supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/Caddyfile /app/Caddyfile
 
-# Set environment variables
-ENV APP_ENV=production
-ENV APP_DEBUG=false
-ENV LOG_CHANNEL=stderr
-ENV LOG_LEVEL=error
-ENV OCTANE_SERVER=frankenphp
+ENV APP_ENV=production \
+    APP_DEBUG=false \
+    LOG_CHANNEL=stderr \
+    LOG_LEVEL=error \
+    OCTANE_SERVER=frankenphp
 
-# Expose port
-EXPOSE 80 443
+EXPOSE 80
 
-# Entrypoint script
+# Entrypoint
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Simple healthcheck (adjust path to your health route if you have one)
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
+  CMD curl -fsS http://127.0.0.1:80/up || exit 1
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

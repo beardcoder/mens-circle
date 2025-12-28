@@ -1,57 +1,75 @@
 #!/bin/sh
-set -e
+set -eu
 
-# Ensure storage directories exist and have correct permissions
-mkdir -p /app/storage/app/public
-mkdir -p /app/storage/framework/cache/data
-mkdir -p /app/storage/framework/sessions
-mkdir -p /app/storage/framework/views
-mkdir -p /app/storage/logs
-mkdir -p /app/bootstrap/cache
+ARTISAN="php artisan"
 
-# Set permissions
-chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/public
-chmod -R 775 /app/storage /app/bootstrap/cache /app/public
+# Ensure expected dirs exist (no recursive chmod/chown every boot)
+mkdir -p \
+  /app/storage/app/public \
+  /app/storage/framework/cache/data \
+  /app/storage/framework/sessions \
+  /app/storage/framework/views \
+  /app/storage/logs \
+  /app/bootstrap/cache \
+  /app/database
 
-# Ensure SQLite database exists (if using SQLite)
-if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
-    mkdir -p /app/database
-    touch /app/database/database.sqlite
-    chown www-data:www-data /app/database/database.sqlite
-    chmod 664 /app/database/database.sqlite
+# SQLite bootstrap (optional)
+if [ "${DB_CONNECTION:-}" = "sqlite" ] || [ -z "${DB_CONNECTION:-}" ]; then
+  : "${DB_DATABASE:=/app/database/database.sqlite}"
+  mkdir -p "$(dirname "$DB_DATABASE")"
+  [ -f "$DB_DATABASE" ] || touch "$DB_DATABASE"
+  chown www-data:www-data "$DB_DATABASE" || true
+  chmod 664 "$DB_DATABASE" || true
 fi
 
-# Generate app key if not set
-if [ -z "$APP_KEY" ]; then
-    echo "Warning: APP_KEY is not set. Generating a new key..."
-    php artisan key:generate --force
+# APP_KEY handling:
+# - In production: fail fast if missing (runtime generation breaks scaling)
+# - In non-prod: generate if missing
+if [ -z "${APP_KEY:-}" ]; then
+  if [ "${APP_ENV:-production}" = "production" ]; then
+    echo >&2 "ERROR: APP_KEY is not set. Refusing to start in production."
+    exit 1
+  else
+    echo "APP_KEY missing; generating for non-production..."
+    $ARTISAN key:generate --force --no-interaction
+  fi
 fi
 
-# Run migrations if MIGRATE_ON_START is set
+# Optional: run migrations (OFF by default)
 if [ "${MIGRATE_ON_START:-false}" = "true" ]; then
-    echo "Running database migrations..."
-    php artisan migrate --force
+  echo "Running database migrations..."
+  $ARTISAN migrate --force --no-interaction
 fi
 
-# Cache configuration for production
-if [ "$APP_ENV" = "production" ]; then
-    echo "Clearing existing caches..."
-    php artisan optimize:clear
+# Production caching:
+# Do NOT clear/rebuild every boot by default (fast deploys).
+# Rebuild only if caches are missing OR if explicitly forced.
+if [ "${APP_ENV:-production}" = "production" ]; then
+  if [ "${FORCE_OPTIMIZE_CLEAR:-false}" = "true" ]; then
+    echo "Clearing caches (forced)..."
+    $ARTISAN optimize:clear --no-interaction || true
+  fi
 
-    echo "Caching configuration for production..."
-    php artisan config:cache
-    php artisan route:cache
-    php artisan view:cache
-    php artisan event:cache
-    php artisan optimize
+  if [ "${OPTIMIZE_ON_START:-true}" = "true" ]; then
+    if [ ! -f /app/bootstrap/cache/config.php ] || [ "${FORCE_OPTIMIZE_REBUILD:-false}" = "true" ]; then
+      echo "Building caches..."
+      $ARTISAN optimize --force --no-interaction
+    else
+      echo "Caches already present; skipping optimize."
+    fi
+  fi
 fi
 
-# Create storage symlink
-php artisan storage:link --force 2>/dev/null || true
+# Storage symlink (only if missing)
+if [ ! -L /app/public/storage ]; then
+  $ARTISAN storage:link --force --no-interaction 2>/dev/null || true
+fi
 
-# Generate Sitemap
-php artisan sitemap:generate
+# Optional: sitemap generation (OFF by default; can be expensive)
+if [ "${GENERATE_SITEMAP_ON_START:-false}" = "true" ]; then
+  echo "Generating sitemap..."
+  $ARTISAN sitemap:generate --no-interaction
+fi
 
-# Start Supervisor to manage all processes (FrankenPHP + queue workers)
-echo "Starting Supervisor to manage FrankenPHP and queue workers..."
+echo "Starting Supervisor..."
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
