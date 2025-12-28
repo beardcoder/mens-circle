@@ -40,29 +40,34 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function shareGlobalViewData(): void
     {
-        // Cache check for next event (invalidated via EventObserver)
-        $hasNextEvent = cache()->rememberForever('has_next_event', function () {
-            return Event::query()
-                ->where('is_published', true)
-                ->where('event_date', '>=', now())
-                ->exists();
-        });
+        try {
+            // Cache check for next event (invalidated via EventObserver)
+            $hasNextEvent = cache()->rememberForever('has_next_event', function () {
+                return Event::query()
+                    ->where('is_published', true)
+                    ->where('event_date', '>=', now())
+                    ->exists();
+            });
 
-        // Get settings (Spatie Settings handles caching internally - no double caching needed)
-        $settings = app_settings();
+            // Get settings (Spatie Settings handles caching internally - no double caching needed)
+            $settings = app_settings();
 
-        // Share all data at once using View::share() - faster than View::composer()
-        View::share([
-            'hasNextEvent' => $hasNextEvent,
-            'settings' => $settings,
-            'siteName' => $settings->site_name,
-            'siteTagline' => $settings->site_tagline,
-            'siteDescription' => $settings->site_description,
-            'contactEmail' => $settings->contact_email,
-            'contactPhone' => $settings->contact_phone,
-            'socialLinks' => $settings->social_links ?? [],
-            'footerText' => $settings->footer_text,
-            'whatsappCommunityLink' => $settings->whatsapp_community_link,
-        ]);
+            // Share all data at once using View::share() - faster than View::composer()
+            View::share([
+                'hasNextEvent' => $hasNextEvent,
+                'settings' => $settings,
+                'siteName' => $settings->site_name,
+                'siteTagline' => $settings->site_tagline,
+                'siteDescription' => $settings->site_description,
+                'contactEmail' => $settings->contact_email,
+                'contactPhone' => $settings->contact_phone,
+                'socialLinks' => $settings->social_links ?? [],
+                'footerText' => $settings->footer_text,
+                'whatsappCommunityLink' => $settings->whatsapp_community_link,
+            ]);
+        } catch (\Exception $e) {
+            // During build time or when database is unavailable, skip view data sharing
+            // This prevents "could not find driver" errors during composer dump-autoload
+        }
     }
 }
