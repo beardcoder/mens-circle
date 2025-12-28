@@ -14,13 +14,10 @@ Route::get('/event', [EventController::class, 'showNext'])->name('event.show');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show.slug');
 Route::get('/teile-deine-erfahrung', [TestimonialSubmissionController::class, 'show'])->name('testimonial.form');
 
-// Non-cached routes
-Route::middleware('doNotCacheResponse')->group(function () {
-    Route::post('/event/register', [EventController::class, 'register'])->name('event.register');
-    Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
-    Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
-    Route::post('/testimonial/submit', [TestimonialSubmissionController::class, 'submit'])->name('testimonial.submit');
-});
+Route::post('/event/register', [EventController::class, 'register'])->name('event.register');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+Route::post('/testimonial/submit', [TestimonialSubmissionController::class, 'submit'])->name('testimonial.submit');
 
 // Dynamic pages (must be last to avoid conflicts)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
