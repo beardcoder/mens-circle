@@ -53,7 +53,7 @@ if [ "${APP_ENV:-production}" = "production" ]; then
   if [ "${OPTIMIZE_ON_START:-true}" = "true" ]; then
     if [ ! -f /app/bootstrap/cache/config.php ] || [ "${FORCE_OPTIMIZE_REBUILD:-false}" = "true" ]; then
       echo "Building caches..."
-      $ARTISAN optimize --force --no-interaction
+      $ARTISAN optimize --no-interaction
     else
       echo "Caches already present; skipping optimize."
     fi
@@ -62,7 +62,7 @@ fi
 
 # Storage symlink (only if missing)
 if [ ! -L /app/public/storage ]; then
-  $ARTISAN storage:link --force --no-interaction 2>/dev/null || true
+  $ARTISAN storage:link --no-interaction 2>/dev/null || true
 fi
 
 # Optional: sitemap generation (OFF by default; can be expensive)
