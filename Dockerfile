@@ -34,6 +34,7 @@ RUN --mount=type=cache,target=/root/.composer/cache \
       --no-interaction \
       --no-progress \
       --prefer-dist \
+      --ignore-platform-req \
       --optimize-autoloader
 
 # Copy the app source after vendor install so vendor layer stays cached
