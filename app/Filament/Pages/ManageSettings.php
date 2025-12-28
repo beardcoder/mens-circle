@@ -200,8 +200,6 @@ class ManageSettings extends Page implements HasForms
             Setting::set($key, $value);
         }
 
-        cache()->forget('settings');
-
         Notification::make()
             ->success()
             ->title('Einstellungen gespeichert')
