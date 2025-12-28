@@ -1,22 +1,21 @@
 # syntax=docker/dockerfile:1.7-labs
 
-ARG NODE_IMAGE=node:24-bookworm-slim
 ARG PHP_IMAGE=dunglas/frankenphp:1-php8.5
 
 # ----------------------------
-# 1) Frontend build (Vite)
+# 1) Frontend build (Vite) with Bun
 # ----------------------------
-FROM ${NODE_IMAGE} AS assets
+FROM oven/bun:1-slim AS assets
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci --no-audit --no-fund
+COPY package.json bun.lockb* ./
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install --frozen-lockfile
 
 COPY resources/ resources/
 COPY vite.config.mjs ./
 COPY public/ public/
-RUN npm run build
+RUN bun run build
 
 
 # ----------------------------

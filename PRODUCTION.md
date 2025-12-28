@@ -92,7 +92,7 @@ chown -R www-data:www-data storage bootstrap/cache
 
 ```bash
 composer install --optimize-autoloader --no-dev
-npm install && npm run build
+bun install && bun run build
 ```
 
 ### 2. Start Octane Server
@@ -223,7 +223,7 @@ CREATE INDEX idx_newsletter_email ON newsletter_subscriptions(email);
 Vite automatically optimizes assets in production:
 
 ```bash
-npm run build
+bun run build
 ```
 
 This will:
@@ -457,7 +457,7 @@ git pull origin main
 
 # Install dependencies
 composer install --optimize-autoloader --no-dev
-npm install && npm run build
+bun install && bun run build
 
 # Run migrations
 php artisan migrate --force

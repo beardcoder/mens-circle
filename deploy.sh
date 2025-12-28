@@ -8,7 +8,7 @@ git pull origin main
 
 # Install dependencies
 composer install --optimize-autoloader --no-dev
-npm install && npm run build
+bun install && bun run build
 
 # Run migrations
 php artisan migrate --force
