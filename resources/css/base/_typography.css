@@ -125,8 +125,8 @@ p:last-child {
    ============================================ */
 .text-italic {
   font-family: var(--font-accent);
-  font-style: italic;
   font-size: 1.2em;
+  font-style: italic;
 }
 
 .text-serif {
@@ -197,9 +197,9 @@ p:last-child {
 
 .mixed-headline .italic {
   font-family: var(--font-accent);
+  font-size: 1.2em;
   font-style: italic;
   font-weight: 400;
-  font-size: 1.2em;
 }
 
 .mixed-headline .light {
@@ -261,9 +261,9 @@ p:last-child {
 .section-title .text-italic,
 .section-title .highlight {
   font-family: var(--font-accent);
+  font-size: 1.2em;
   font-style: italic;
   font-weight: 400;
-  font-size: 1.2em;
   color: var(--color-earth-warm);
 }
 
