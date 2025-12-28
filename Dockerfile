@@ -25,7 +25,7 @@ FROM ${PHP_IMAGE} AS vendor
 WORKDIR /app
 
 # Composer (keeps PHP version aligned with final stage)
-RUN install-php-extensions @composer
+RUN install-php-extensions @composer zip
 
 COPY . .
 
