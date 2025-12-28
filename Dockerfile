@@ -40,13 +40,6 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 # Copy the app source after vendor install so vendor layer stays cached
 COPY . .
 
-# Make autoloader as fast as possible in production
-RUN composer dump-autoload \
-      --no-dev \
-      --ignore-platform-reqs \
-      --classmap-authoritative \
-      --no-interaction
-
 
 # ----------------------------
 # 3) Production image (FrankenPHP)
@@ -85,6 +78,13 @@ COPY --from=vendor --chown=www-data:www-data /app /app
 
 # Built assets overlay
 COPY --from=assets --chown=www-data:www-data /app/public/build /app/public/build
+
+# Update and Optimize autoloader
+RUN composer dump-autoload \
+      --no-dev \
+      --ignore-platform-reqs \
+      --classmap-authoritative \
+      --no-interaction
 
 # Ensure runtime dirs exist (do it once at build time)
 RUN mkdir -p \
