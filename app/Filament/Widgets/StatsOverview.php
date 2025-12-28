@@ -24,6 +24,7 @@ class StatsOverview extends StatsOverviewWidget
 
         $nextEvent = Event::where('is_published', true)
             ->where('event_date', '>=', now())
+            ->withCount('confirmedRegistrations')
             ->orderBy('event_date')
             ->first();
 
