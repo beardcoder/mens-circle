@@ -101,22 +101,16 @@ RUN mkdir -p \
 # Supervisor + Caddy/FrankenPHP config
 RUN mkdir -p /var/log/supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY docker/Caddyfile /app/Caddyfile
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
-    LOG_LEVEL=error \
-    OCTANE_SERVER=frankenphp
+    LOG_LEVEL=error
 
 EXPOSE 80
 
 # Entrypoint
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# Simple healthcheck (adjust path to your health route if you have one)
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
-  CMD curl -fsS http://127.0.0.1:80/up || exit 1
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
