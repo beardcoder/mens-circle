@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Event;
+use App\Models\EventRegistration;
 use App\Observers\EventObserver;
+use App\Observers\EventRegistrationObserver;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -18,10 +20,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Event::observe(EventObserver::class);
+        EventRegistration::observe(EventRegistrationObserver::class);
         Vite::useAggressivePrefetching();
 
         View::composer('*', function ($view): void {
-            $hasNextEvent = cache()->remember('has_next_event', 600, function () {
+            $hasNextEvent = cache()->rememberForever('has_next_event', function () {
                 return Event::query()
                     ->where('is_published', true)
                     ->where('event_date', '>=', now())
