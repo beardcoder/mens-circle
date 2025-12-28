@@ -63,14 +63,6 @@ class MigrateSettingsToSpatie extends Command
             $this->info('Migration completed successfully!');
             $this->info('Migrated '.count($oldSettings).' settings.');
 
-            // Clear cache
-            cache()->forget('settings_all');
-            foreach (array_keys($oldSettings) as $key) {
-                cache()->forget('setting.'.$key);
-            }
-
-            $this->info('Cache cleared.');
-
             return self::SUCCESS;
         } catch (\Exception $exception) {
             $this->error('Migration failed: '.$exception->getMessage());

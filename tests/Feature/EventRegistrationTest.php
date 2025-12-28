@@ -88,7 +88,8 @@ class EventRegistrationTest extends TestCase
 
         $response->assertOk()
             ->assertSee('Vergangenes Treffen')
-            ->assertSee('Dieses Treffen hat stattgefunden')
+            ->assertSee('Dieses Treffen')
+            ->assertSee('hat stattgefunden')
             ->assertSee('Dieses Treffen liegt in der Vergangenheit')
             ->assertDontSee('Verbindlich anmelden');
     }

@@ -15,12 +15,11 @@ class EventController extends Controller
 {
     public function showNext(): View
     {
-        $event = cache()->flexible('event.next', [300, 900], function () {
-            return Event::where('is_published', true)
-                ->where('event_date', '>=', now())
-                ->orderBy('event_date')
-                ->first();
-        });
+        $event = Event::query()
+            ->where('is_published', true)
+            ->where('event_date', '>=', now())
+            ->orderBy('event_date')
+            ->first();
 
         if (! $event) {
             return view('no-event');

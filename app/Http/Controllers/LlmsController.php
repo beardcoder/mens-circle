@@ -10,11 +10,7 @@ class LlmsController extends Controller
 {
     public function show(): Response
     {
-        $content = cache()->flexible('llms_txt', [3600, 7200], function () {
-            return $this->generateLlmsTxt();
-        });
-
-        return response($content, 200, [
+        return response($this->generateLlmsTxt(), 200, [
             'Content-Type' => 'text/plain; charset=utf-8',
         ]);
     }
@@ -27,19 +23,13 @@ class LlmsController extends Controller
 
         $lines = [];
 
-        // H1: Project name
         $lines[] = "# {$siteName}";
         $lines[] = '';
-
-        // Blockquote: Project description
         $lines[] = "> {$siteDescription}";
         $lines[] = '';
-
-        // Main information section
         $lines[] = 'Der Männerkreis Niederbayern ist eine Gemeinschaft für Männer, die sich regelmäßig zu Veranstaltungen treffen. Die Website bietet Informationen zu kommenden Events, Anmeldung zu Veranstaltungen und einen Newsletter-Service.';
         $lines[] = '';
 
-        // Events section
         $lines[] = '## Veranstaltungen';
         $upcomingEvents = Event::query()
             ->where('is_published', true)
@@ -59,7 +49,6 @@ class LlmsController extends Controller
         }
         $lines[] = '';
 
-        // Past events section (limited)
         $pastEvents = Event::query()
             ->where('is_published', true)
             ->where('event_date', '<', now())
@@ -77,7 +66,6 @@ class LlmsController extends Controller
             $lines[] = '';
         }
 
-        // Pages section
         $lines[] = '## Seiten';
         $lines[] = '- [Startseite]('.route('home').'): Hauptseite mit Überblick über den Männerkreis';
 
@@ -93,13 +81,11 @@ class LlmsController extends Controller
         }
         $lines[] = '';
 
-        // Legal section
         $lines[] = '## Rechtliches';
         $lines[] = '- [Impressum]('.route('page.show', 'impressum').'): Rechtliche Angaben und Anbieterkennzeichnung';
         $lines[] = '- [Datenschutz]('.route('page.show', 'datenschutz').'): Datenschutzerklärung gemäß DSGVO';
         $lines[] = '';
 
-        // Contact/Actions section
         $lines[] = '## Aktionen';
         $lines[] = '- Newsletter-Anmeldung: Über das Formular auf der Startseite können sich Interessierte für den Newsletter anmelden';
         $lines[] = '- Veranstaltungsanmeldung: Über die jeweilige Veranstaltungsseite können sich Teilnehmer registrieren';

@@ -126,19 +126,4 @@ class ManageGeneralSettings extends SettingsPage
                     ->helperText('Standard-Maximalzahl für neue Events'),
             ]);
     }
-
-    /**
-     * Clear cache after settings are saved.
-     */
-    protected function afterSave(): void
-    {
-        // Clear application cache for settings
-        cache()->forget('settings_all');
-
-        // Clear all setting.* keys
-        $settings = settings()->all();
-        foreach (array_keys($settings) as $key) {
-            cache()->forget('setting.'.$key);
-        }
-    }
 }
