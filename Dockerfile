@@ -25,7 +25,7 @@ FROM ${PHP_IMAGE} AS vendor
 WORKDIR /app
 
 # Composer (keeps PHP version aligned with final stage)
-RUN install-php-extensions @composer zip
+RUN install-php-extensions @composer
 
 COPY . .
 
@@ -34,6 +34,7 @@ RUN --mount=type=cache,target=/root/.composer/cache \
       --no-dev \
       --no-interaction \
       --no-progress \
+      --no-scripts \
       --prefer-dist \
       --ignore-platform-reqs \
       --optimize-autoloader
