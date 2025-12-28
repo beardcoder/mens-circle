@@ -34,7 +34,7 @@ RUN --mount=type=cache,target=/root/.composer/cache \
       --no-interaction \
       --no-progress \
       --prefer-dist \
-      --ignore-platform-req \
+      --ignore-platform-reqs \
       --optimize-autoloader
 
 # Copy the app source after vendor install so vendor layer stays cached
@@ -43,6 +43,7 @@ COPY . .
 # Make autoloader as fast as possible in production
 RUN composer dump-autoload \
       --no-dev \
+      --ignore-platform-reqs \
       --classmap-authoritative \
       --no-interaction
 
@@ -55,7 +56,6 @@ WORKDIR /app
 
 # Only runtime OS deps (keep it slim)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      sqlite3 \
       postgresql-client \
       supervisor \
       curl \
