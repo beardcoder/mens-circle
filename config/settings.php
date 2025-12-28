@@ -64,7 +64,7 @@ return [
         'enabled' => env('SETTINGS_CACHE_ENABLED', true),
         'store' => env('SETTINGS_CACHE_STORE', 'database'),
         'prefix' => 'settings',
-        'ttl' => 3600, // 1 hour (same as before)
+        'ttl' => null, // Forever - cache invalidated by SettingsSavedListener
     ],
 
     /*
