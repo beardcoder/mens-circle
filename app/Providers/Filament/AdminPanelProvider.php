@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
-use Andreia\FilamentNordTheme\FilamentNordThemePlugin;
 use Awcodes\Gravatar\GravatarPlugin;
 use Awcodes\Gravatar\GravatarProvider;
 use Filament\Http\Middleware\Authenticate;
@@ -45,7 +44,6 @@ class AdminPanelProvider extends PanelProvider
                 GravatarPlugin::make(),
                 FilamentLogViewer::make(),
                 PasskeysPlugin::make(),
-                FilamentNordThemePlugin::make(),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

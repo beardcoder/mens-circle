@@ -10,7 +10,6 @@
   "require": {
     "php": "^8.5",
     "achyutn/filament-log-viewer": "^1.6",
-    "andreia/filament-nord-theme": "^2.0",
     "awcodes/filament-gravatar": "*",
     "awcodes/overlook": "^3.0",
     "filament/filament": "^4.0",
