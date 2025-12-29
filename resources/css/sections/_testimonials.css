@@ -33,7 +33,7 @@
   position: relative;
   z-index: 1;
   max-inline-size: 800px;
-  padding-block-end: var(--space-xl);
+  padding-block-end: var(--space-lg);
   margin-inline: auto;
   text-align: center;
 }
@@ -81,7 +81,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: var(--space-lg);
+  padding: var(--space-sm);
   background: var(--bg-elevated);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
