@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Enums\Heroicon as SocialHeroicon;
 use App\Settings\GeneralSettings;
+use BackedEnum;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -16,7 +17,7 @@ class ManageGeneralSettings extends SettingsPage
 {
     protected static string $settings = GeneralSettings::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
     protected static ?string $title = 'Einstellungen';
 
