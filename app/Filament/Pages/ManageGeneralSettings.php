@@ -6,11 +6,11 @@ use App\Enums\Heroicon as SocialHeroicon;
 use App\Settings\GeneralSettings;
 use BackedEnum;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class ManageGeneralSettings extends SettingsPage
