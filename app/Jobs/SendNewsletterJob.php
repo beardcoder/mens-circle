@@ -7,9 +7,13 @@ namespace App\Jobs;
 use App\Mail\NewsletterMail;
 use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
+use Log;
+use PhpStaticAnalysis\Attributes\Type;
+use Throwable;
 
 class SendNewsletterJob implements ShouldQueue
 {
@@ -17,16 +21,14 @@ class SendNewsletterJob implements ShouldQueue
 
     /**
      * The number of times the job may be attempted.
-     *
-     * @var int
      */
+    #[Type('int')]
     public $tries = 3;
 
     /**
      * The number of seconds to wait before retrying the job.
-     *
-     * @var int
      */
+    #[Type('int')]
     public $backoff = 60;
 
     /**
@@ -59,8 +61,8 @@ class SendNewsletterJob implements ShouldQueue
                             ->send(new NewsletterMail($this->newsletter, $subscription));
 
                         $recipientCount++;
-                    } catch (\Exception $e) {
-                        \Log::error('Failed to send newsletter to subscriber', [
+                    } catch (Exception $e) {
+                        Log::error('Failed to send newsletter to subscriber', [
                             'newsletter_id' => $this->newsletter->id,
                             'subscription_id' => $subscription->id,
                             'email' => $subscription->email,
@@ -80,7 +82,7 @@ class SendNewsletterJob implements ShouldQueue
 
         // Log summary if there were failures
         if ($failedRecipients !== []) {
-            \Log::warning('Newsletter sending completed with failures', [
+            Log::warning('Newsletter sending completed with failures', [
                 'newsletter_id' => $this->newsletter->id,
                 'successful' => $recipientCount,
                 'failed' => count($failedRecipients),
@@ -91,9 +93,9 @@ class SendNewsletterJob implements ShouldQueue
     /**
      * Handle a job failure.
      */
-    public function failed(\Throwable $exception): void
+    public function failed(Throwable $exception): void
     {
-        \Log::error('Newsletter job failed completely', [
+        Log::error('Newsletter job failed completely', [
             'newsletter_id' => $this->newsletter->id,
             'error' => $exception->getMessage(),
         ]);

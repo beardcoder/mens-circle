@@ -7,6 +7,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use PhpStaticAnalysis\Attributes\Returns;
 
 class TestimonialSubmissionRequest extends FormRequest
 {
@@ -20,9 +21,8 @@ class TestimonialSubmissionRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+    #[Returns('array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>')]
     public function rules(): array
     {
         return [
@@ -36,9 +36,8 @@ class TestimonialSubmissionRequest extends FormRequest
 
     /**
      * Get custom error messages for validation rules.
-     *
-     * @return array<string, string>
      */
+    #[Returns('array<string, string>')]
     public function messages(): array
     {
         return [

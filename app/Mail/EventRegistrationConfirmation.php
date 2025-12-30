@@ -13,15 +13,13 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use PhpStaticAnalysis\Attributes\Returns;
 
 class EventRegistrationConfirmation extends Mailable
 {
     use Queueable;
     use SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
     public function __construct(
         public EventRegistration $registration,
         public Event $event
@@ -29,9 +27,6 @@ class EventRegistrationConfirmation extends Mailable
         //
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -40,9 +35,6 @@ class EventRegistrationConfirmation extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
@@ -50,11 +42,7 @@ class EventRegistrationConfirmation extends Mailable
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
+    #[Returns('array<int, \Illuminate\Mail\Mailables\Attachment>')]
     public function attachments(): array
     {
         $icalContent = $this->event->generateICalContent();

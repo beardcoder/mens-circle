@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpStaticAnalysis\RectorRule\Set\PhpStaticAnalysisAnnotationsToAttributesSetList;
 use Rector\Config\RectorConfig;
 use Rector\ValueObject\PhpVersion;
 use RectorLaravel\Set\LaravelSetProvider;
@@ -25,6 +26,10 @@ return RectorConfig::configure()
         __DIR__.'/vendor',
     ])
     ->withSetProviders(LaravelSetProvider::class)
+    ->withSets([
+        PhpStaticAnalysisAnnotationsToAttributesSetList::ANNOTATIONS_TO_ATTRIBUTES
+    ])
+    ->withImportNames(removeUnusedImports: true)
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,

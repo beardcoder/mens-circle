@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use PhpStaticAnalysis\Attributes\Returns;
+use PhpStaticAnalysis\Attributes\TemplateExtends;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Testimonial>
- */
+#[TemplateExtends('\Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Testimonial>')]
 class TestimonialFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array<string, mixed>
      */
+    #[Returns('array<string, mixed>')]
     public function definition(): array
     {
         $quotes = [

@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use PhpStaticAnalysis\Attributes\TemplateUse;
 
+#[TemplateUse('HasFactory<\Database\Factories\TestimonialFactory>')]
 class Testimonial extends Model
 {
-    /** @use HasFactory<\Database\Factories\TestimonialFactory> */
     use HasFactory;
 
     use SoftDeletes;
@@ -36,7 +38,7 @@ class Testimonial extends Model
     /**
      * Scope a query to only include published testimonials.
      */
-    #[\Illuminate\Database\Eloquent\Attributes\Scope]
+    #[Scope]
     protected function published(Builder $query): void
     {
         $query->where('is_published', true);

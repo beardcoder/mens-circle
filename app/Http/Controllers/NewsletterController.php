@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\NewsletterSubscriptionRequest;
 use App\Mail\NewsletterWelcome;
 use App\Models\NewsletterSubscription;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -43,7 +44,7 @@ class NewsletterController extends Controller
         // Send welcome email
         try {
             Mail::to($subscription->email)->queue(new NewsletterWelcome($subscription));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::error('Failed to send newsletter welcome email', [
                 'subscription_id' => $subscription->id,
                 'email' => $subscription->email,

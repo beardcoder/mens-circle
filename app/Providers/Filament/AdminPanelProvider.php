@@ -16,6 +16,8 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -40,7 +42,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->renderHook(PanelsRenderHook::TOPBAR_END, fn (): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View => view('filament.components.go-to-website'))
+            ->renderHook(PanelsRenderHook::TOPBAR_END, fn (): Factory|View => view('filament.components.go-to-website'))
             ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
                 GravatarPlugin::make(),
