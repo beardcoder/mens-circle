@@ -36,7 +36,8 @@ class Testimonial extends Model
     /**
      * Scope a query to only include published testimonials.
      */
-    public function scopePublished(Builder $query): void
+    #[\Illuminate\Database\Eloquent\Attributes\Scope]
+    protected function published(Builder $query): void
     {
         $query->where('is_published', true);
     }
@@ -46,7 +47,7 @@ class Testimonial extends Model
      */
     protected static function booted(): void
     {
-        static::addGlobalScope('order', function (Builder $builder) {
+        static::addGlobalScope('order', function (Builder $builder): void {
             $builder->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
         });
     }

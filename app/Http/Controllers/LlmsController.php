@@ -25,9 +25,9 @@ class LlmsController extends Controller
 
         $lines = [];
 
-        $lines[] = "# {$siteName}";
+        $lines[] = '# ' . $siteName;
         $lines[] = '';
-        $lines[] = "> {$siteDescription}";
+        $lines[] = '> ' . $siteDescription;
         $lines[] = '';
         $lines[] = 'Der Männerkreis Niederbayern ist eine Gemeinschaft für Männer, die sich regelmäßig zu Veranstaltungen treffen. Die Website bietet Informationen zu kommenden Events, Anmeldung zu Veranstaltungen und einen Newsletter-Service.';
         $lines[] = '';
@@ -45,10 +45,11 @@ class LlmsController extends Controller
             foreach ($upcomingEvents as $event) {
                 $date = $event->event_date->format('d.m.Y');
                 $url = route('event.show.slug', $event->slug);
-                $description = $event->location ? "Veranstaltung am {$date} in {$event->location}" : "Veranstaltung am {$date}";
-                $lines[] = "- [{$event->title}]({$url}): {$description}";
+                $description = $event->location ? sprintf('Veranstaltung am %s in %s', $date, $event->location) : 'Veranstaltung am ' . $date;
+                $lines[] = sprintf('- [%s](%s): %s', $event->title, $url, $description);
             }
         }
+
         $lines[] = '';
 
         $pastEvents = Event::query()
@@ -63,8 +64,9 @@ class LlmsController extends Controller
             foreach ($pastEvents as $event) {
                 $date = $event->event_date->format('d.m.Y');
                 $url = route('event.show.slug', $event->slug);
-                $lines[] = "- [{$event->title}]({$url}): Stattgefunden am {$date}";
+                $lines[] = sprintf('- [%s](%s): Stattgefunden am %s', $event->title, $url, $date);
             }
+
             $lines[] = '';
         }
 
@@ -79,8 +81,9 @@ class LlmsController extends Controller
 
         foreach ($pages as $page) {
             $url = route('page.show', $page->slug);
-            $lines[] = "- [{$page->title}]({$url}): Informationsseite";
+            $lines[] = sprintf('- [%s](%s): Informationsseite', $page->title, $url);
         }
+
         $lines[] = '';
 
         $lines[] = '## Rechtliches';

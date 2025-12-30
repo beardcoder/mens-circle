@@ -67,7 +67,7 @@ class AppServiceProvider extends ServiceProvider
                 'footerText' => $settings->footer_text,
                 'whatsappCommunityLink' => $settings->whatsapp_community_link,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // During build time or when database is unavailable, skip view data sharing
             // This prevents "could not find driver" errors during composer dump-autoload
         }

@@ -40,7 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->renderHook(PanelsRenderHook::TOPBAR_END, fn () => view('filament.components.go-to-website'))
+            ->renderHook(PanelsRenderHook::TOPBAR_END, fn (): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View => view('filament.components.go-to-website'))
             ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
                 GravatarPlugin::make(),
