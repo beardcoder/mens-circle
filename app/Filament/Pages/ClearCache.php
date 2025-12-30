@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use BackedEnum;
+use Exception;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -12,7 +14,7 @@ use Illuminate\Support\Facades\Artisan;
 
 class ClearCache extends Page
 {
-    protected static string|\BackedEnum|null $navigationIcon = Heroicon::Trash;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Trash;
 
     protected string $view = 'filament.pages.clear-cache';
 
@@ -42,7 +44,7 @@ class ClearCache extends Page
                             ->body('Der Anwendungs-Cache wurde erfolgreich gelöscht.')
                             ->success()
                             ->send();
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         Notification::make()
                             ->title('Fehler beim Löschen des Caches')
                             ->body($exception->getMessage())
@@ -68,7 +70,7 @@ class ClearCache extends Page
                             ->body('Der Konfigurations-Cache wurde erfolgreich gelöscht.')
                             ->success()
                             ->send();
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         Notification::make()
                             ->title('Fehler beim Löschen des Caches')
                             ->body($exception->getMessage())
@@ -95,7 +97,7 @@ class ClearCache extends Page
                             ->body('Der Routen-Cache wurde gelöscht und neu aufgebaut.')
                             ->success()
                             ->send();
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         Notification::make()
                             ->title('Fehler beim Löschen des Caches')
                             ->body($exception->getMessage())
@@ -122,7 +124,7 @@ class ClearCache extends Page
                             ->body('Der View-Cache wurde gelöscht und neu aufgebaut.')
                             ->success()
                             ->send();
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         Notification::make()
                             ->title('Fehler beim Löschen des Caches')
                             ->body($exception->getMessage())
@@ -153,7 +155,7 @@ class ClearCache extends Page
                             ->body('Alle Caches wurden gelöscht. Routen- und View-Cache wurden neu aufgebaut.')
                             ->success()
                             ->send();
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         Notification::make()
                             ->title('Fehler beim Löschen der Caches')
                             ->body($exception->getMessage())

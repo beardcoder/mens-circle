@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Observers\EventObserver;
 use App\Observers\EventRegistrationObserver;
+use Exception;
 use Illuminate\Support\Facades\Event as EventFacade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Vite;
@@ -67,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
                 'footerText' => $settings->footer_text,
                 'whatsappCommunityLink' => $settings->whatsapp_community_link,
             ]);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             // During build time or when database is unavailable, skip view data sharing
             // This prevents "could not find driver" errors during composer dump-autoload
         }

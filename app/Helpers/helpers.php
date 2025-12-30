@@ -12,7 +12,7 @@ if (! function_exists('setting')) {
     {
         try {
             return data_get(app_settings(), $key, $default);
-        } catch (\Exception) {
+        } catch (Exception) {
             return $default;
         }
     }
@@ -39,7 +39,7 @@ if (! function_exists('settings')) {
                 'footer_text' => $settings->footer_text,
                 'event_default_max_participants' => $settings->event_default_max_participants,
             ];
-        } catch (\Exception) {
+        } catch (Exception) {
             return [];
         }
     }

@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use DateTime;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use PhpStaticAnalysis\Attributes\Returns;
+use PhpStaticAnalysis\Attributes\TemplateExtends;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
- */
+#[TemplateExtends('\Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>')]
 class EventFactory extends Factory
 {
     /**
      * Define the model's default state.
-     *
-     * @return array<string, mixed>
      */
+    #[Returns('array<string, mixed>')]
     public function definition(): array
     {
         $eventDate = fake()->dateTimeBetween('+1 week', '+3 months');
@@ -73,7 +74,7 @@ class EventFactory extends Factory
     /**
      * Set the event date to a specific date.
      */
-    public function onDate(\DateTime|\DateTimeInterface $date): static
+    public function onDate(DateTime|DateTimeInterface $date): static
     {
         return $this->state(fn (array $attributes): array => [
             'event_date' => $date,

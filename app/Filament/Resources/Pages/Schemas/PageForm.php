@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Filament\Resources\Pages\Schemas;
 
 use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -72,7 +74,7 @@ class PageForm
                         }
                     })
                     ->blocks([
-                        Builder\Block::make('hero')
+                        Block::make('hero')
                             ->label('Hero Bereich')
                             ->icon(Heroicon::OutlinedSparkles)
                             ->schema([
@@ -93,7 +95,7 @@ class PageForm
                                 self::blockImageUpload('background_image', 'Hintergrundbild'),
                             ]),
 
-                        Builder\Block::make('intro')
+                        Block::make('intro')
                             ->label('Intro Bereich')
                             ->icon(Heroicon::OutlinedInformationCircle)
                             ->schema([
@@ -126,7 +128,7 @@ class PageForm
                                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
                             ]),
 
-                        Builder\Block::make('text_section')
+                        Block::make('text_section')
                             ->label('Text Bereich')
                             ->icon(Heroicon::OutlinedDocumentText)
                             ->schema([
@@ -141,7 +143,7 @@ class PageForm
                                     ->required(),
                             ]),
 
-                        Builder\Block::make('value_items')
+                        Block::make('value_items')
                             ->label('Werte Liste')
                             ->icon(Heroicon::OutlinedRectangleStack)
                             ->schema([
@@ -167,7 +169,7 @@ class PageForm
                                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
                             ]),
 
-                        Builder\Block::make('moderator')
+                        Block::make('moderator')
                             ->label('Moderator Bereich')
                             ->icon(Heroicon::OutlinedUserCircle)
                             ->schema([
@@ -187,7 +189,7 @@ class PageForm
                                 self::blockImageUpload('photo', 'Foto'),
                             ]),
 
-                        Builder\Block::make('journey_steps')
+                        Block::make('journey_steps')
                             ->label('Ablauf Schritte')
                             ->icon(Heroicon::OutlinedMap)
                             ->schema([
@@ -217,17 +219,17 @@ class PageForm
                                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
                             ]),
 
-                        Builder\Block::make('testimonials')
+                        Block::make('testimonials')
                             ->label('Testimonials Bereich')
                             ->icon(Heroicon::OutlinedChatBubbleLeftRight)
                             ->schema([
                                 self::blockIdField(),
-                                \Filament\Forms\Components\Placeholder::make('testimonials_info')
+                                Placeholder::make('testimonials_info')
                                     ->label('Automatische Anzeige')
                                     ->content('Dieser Block zeigt automatisch alle veröffentlichten Testimonials aus der Datenbank an. Keine weiteren Einstellungen erforderlich.'),
                             ]),
 
-                        Builder\Block::make('faq')
+                        Block::make('faq')
                             ->label('FAQ Bereich')
                             ->icon(Heroicon::OutlinedQuestionMarkCircle)
                             ->schema([
@@ -255,7 +257,7 @@ class PageForm
                                     ->itemLabel(fn (array $state): ?string => $state['question'] ?? null),
                             ]),
 
-                        Builder\Block::make('newsletter')
+                        Block::make('newsletter')
                             ->label('Newsletter Bereich')
                             ->icon(Heroicon::OutlinedEnvelope)
                             ->schema([
@@ -271,7 +273,7 @@ class PageForm
                                     ->rows(2),
                             ]),
 
-                        Builder\Block::make('cta')
+                        Block::make('cta')
                             ->label('Call-to-Action')
                             ->icon(Heroicon::OutlinedCursorArrowRipple)
                             ->schema([

@@ -10,6 +10,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use PhpStaticAnalysis\Attributes\Returns;
 
 class NewsletterWelcome extends Mailable
 {
@@ -47,9 +48,8 @@ class NewsletterWelcome extends Mailable
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
+    #[Returns('array<int, \Illuminate\Mail\Mailables\Attachment>')]
     public function attachments(): array
     {
         return [];

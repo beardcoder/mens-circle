@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\Setting;
 use App\Settings\GeneralSettings;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -66,7 +66,7 @@ class MigrateSettingsToSpatie extends Command
             $this->info('Migrated '.count($oldSettings).' settings.');
 
             return self::SUCCESS;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->error('Migration failed: '.$exception->getMessage());
 
             return self::FAILURE;

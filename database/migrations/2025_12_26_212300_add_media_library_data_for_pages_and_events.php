@@ -68,6 +68,7 @@ return new class () extends Migration {
                         if (! is_string($path)) {
                             continue;
                         }
+
                         if ($path === '') {
                             continue;
                         }
@@ -119,13 +120,14 @@ return new class () extends Migration {
                 if (! is_string($path)) {
                     continue;
                 }
+
                 if ($path === '') {
                     continue;
                 }
 
                 $path = $this->normalizePublicPath($path);
 
-                if ($event->getFirstMedia('event_image') instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
+                if ($event->getFirstMedia('event_image') instanceof Media) {
                     continue;
                 }
 

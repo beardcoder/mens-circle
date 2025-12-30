@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TestimonialSubmissionRequest;
 use App\Models\Testimonial;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -52,7 +53,7 @@ class TestimonialSubmissionController extends Controller
                 'success' => true,
                 'message' => $message,
             ]);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::error('Failed to submit testimonial', [
                 'email' => $validated['email'],
                 'error' => $exception->getMessage(),

@@ -11,6 +11,8 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use PhpStaticAnalysis\Attributes\Returns;
+use PhpStaticAnalysis\Attributes\Type;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
 use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 
@@ -22,9 +24,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasPasske
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var list<string>
      */
+    #[Type('list<string>')]
     protected $fillable = [
         'name',
         'email',
@@ -33,9 +34,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasPasske
 
     /**
      * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
      */
+    #[Type('list<string>')]
     protected $hidden = [
         'password',
         'remember_token',
@@ -43,9 +43,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasPasske
 
     /**
      * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
      */
+    #[Returns('array<string, string>')]
     protected function casts(): array
     {
         return [

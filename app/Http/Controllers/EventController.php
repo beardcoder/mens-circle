@@ -8,6 +8,7 @@ use App\Http\Requests\EventRegistrationRequest;
 use App\Mail\EventRegistrationConfirmation;
 use App\Models\Event;
 use App\Models\EventRegistration;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -95,7 +96,7 @@ class EventController extends Controller
                 'email' => $registration->email,
                 'event_id' => $event->id,
             ]);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::error('Failed to send event registration confirmation', [
                 'registration_id' => $registration->id,
                 'email' => $registration->email,

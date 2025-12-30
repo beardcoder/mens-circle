@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Jobs\SendNewsletterJob;
 use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
 use BackedEnum;
@@ -79,7 +80,7 @@ class SendNewsletter extends Page implements HasForms
                         'status' => 'draft',
                     ]);
 
-                    dispatch(new \App\Jobs\SendNewsletterJob($newsletter));
+                    dispatch(new SendNewsletterJob($newsletter));
 
                     Notification::make()
                         ->title('Newsletter wird versendet')
