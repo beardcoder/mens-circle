@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -23,7 +22,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void {}
+    public function down(): void
+    {
+    }
 
     private function migratePages(): void
     {
