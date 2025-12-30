@@ -7,13 +7,12 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Spatie\LaravelPasskeys\Support\Config;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     public function up()
     {
         $authenticatableClass = Config::getAuthenticatableModel();
 
-        $authenticatableTableName = (new $authenticatableClass)->getTable();
+        $authenticatableTableName = (new $authenticatableClass())->getTable();
 
         Schema::create('passkeys', function (Blueprint $table) use ($authenticatableTableName, $authenticatableClass) {
             $table->id();

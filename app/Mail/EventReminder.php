@@ -21,7 +21,8 @@ class EventReminder extends Mailable
     public function __construct(
         public EventRegistration $registration,
         public Event $event
-    ) {}
+    ) {
+    }
 
     public function envelope(): Envelope
     {
