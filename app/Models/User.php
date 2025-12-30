@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -15,8 +17,8 @@ use Spatie\LaravelPasskeys\Models\Concerns\InteractsWithPasskeys;
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasPasskeys
 {
     use HasFactory;
-    use Notifiable;
     use InteractsWithPasskeys;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
