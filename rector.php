@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use RectorLaravel\Set\LaravelSetList;
+use RectorLaravel\Set\LaravelSetProvider;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -16,17 +16,13 @@ return RectorConfig::configure()
         __DIR__.'/routes',
         __DIR__.'/tests',
     ])
+    ->withComposerBased(laravel: true)
     ->withSkip([
         __DIR__.'/bootstrap/cache',
         __DIR__.'/storage',
         __DIR__.'/vendor',
     ])
-    ->withSets([
-        LaravelSetList::LARAVEL_110,
-        LaravelSetList::LARAVEL_120,
-        LaravelSetList::LARAVEL_CODE_QUALITY,
-        LaravelSetList::LARAVEL_ARRAY_STR_FUNCTION_TO_STATIC_CALL,
-    ])
+    ->withSetProviders(LaravelSetProvider::class)
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
