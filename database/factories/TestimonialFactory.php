@@ -44,7 +44,7 @@ class TestimonialFactory extends Factory
      */
     public function unpublished(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'is_published' => false,
             'published_at' => null,
         ]);
@@ -55,7 +55,7 @@ class TestimonialFactory extends Factory
      */
     public function anonymous(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'author_name' => null,
             'role' => null,
         ]);

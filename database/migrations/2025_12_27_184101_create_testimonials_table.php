@@ -12,7 +12,7 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('testimonials', function (Blueprint $table) {
+        Schema::create('testimonials', function (Blueprint $table): void {
             $table->id();
             $table->text('quote');
             $table->string('author_name')->nullable();

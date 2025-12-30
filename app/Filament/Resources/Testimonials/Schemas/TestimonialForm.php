@@ -44,7 +44,7 @@ class TestimonialForm
                     ->default(false)
                     ->helperText('Testimonial auf der Website anzeigen.')
                     ->reactive()
-                    ->afterStateUpdated(function ($state, callable $set) {
+                    ->afterStateUpdated(function ($state, callable $set): void {
                         if ($state) {
                             $set('published_at', now());
                         }

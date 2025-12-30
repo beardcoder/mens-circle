@@ -39,7 +39,7 @@ class LlmsTxtTest extends TestCase
 
     public function test_llms_txt_lists_upcoming_published_events(): void
     {
-        $event = Event::factory()->published()->tomorrow()->create([
+        Event::factory()->published()->tomorrow()->create([
             'title' => 'Test Männerkreis Event',
             'location' => 'Straubing',
         ]);
@@ -47,6 +47,7 @@ class LlmsTxtTest extends TestCase
         $response = $this->get('/llms.txt');
 
         $response->assertStatus(200);
+
         $content = $response->getContent();
 
         $this->assertStringContainsString('## Veranstaltungen', $content);
@@ -76,6 +77,7 @@ class LlmsTxtTest extends TestCase
         $response = $this->get('/llms.txt');
 
         $response->assertStatus(200);
+
         $content = $response->getContent();
 
         $this->assertStringContainsString('## Vergangene Veranstaltungen', $content);
@@ -95,6 +97,7 @@ class LlmsTxtTest extends TestCase
         $response = $this->get('/llms.txt');
 
         $response->assertStatus(200);
+
         $content = $response->getContent();
 
         $this->assertStringContainsString('## Seiten', $content);
@@ -121,6 +124,7 @@ class LlmsTxtTest extends TestCase
         $response = $this->get('/llms.txt');
 
         $response->assertStatus(200);
+
         $content = $response->getContent();
 
         $this->assertStringContainsString('## Rechtliches', $content);
@@ -133,6 +137,7 @@ class LlmsTxtTest extends TestCase
         $response = $this->get('/llms.txt');
 
         $response->assertStatus(200);
+
         $content = $response->getContent();
 
         $this->assertStringContainsString('## Aktionen', $content);
@@ -148,6 +153,7 @@ class LlmsTxtTest extends TestCase
         $response = $this->get('/llms.txt');
 
         $response->assertStatus(200);
+
         $content = $response->getContent();
 
         // Check for proper markdown link format: [text](url)

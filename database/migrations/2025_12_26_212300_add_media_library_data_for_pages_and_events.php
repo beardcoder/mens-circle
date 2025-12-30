@@ -65,8 +65,10 @@ return new class () extends Migration {
 
                     foreach ($fields as $field) {
                         $path = $data[$field] ?? null;
-
-                        if (! is_string($path) || $path === '') {
+                        if (! is_string($path)) {
+                            continue;
+                        }
+                        if ($path === '') {
                             continue;
                         }
 
@@ -114,14 +116,16 @@ return new class () extends Migration {
         Event::query()->chunkById(50, function ($events): void {
             foreach ($events as $event) {
                 $path = $event->image;
-
-                if (! is_string($path) || $path === '') {
+                if (! is_string($path)) {
+                    continue;
+                }
+                if ($path === '') {
                     continue;
                 }
 
                 $path = $this->normalizePublicPath($path);
 
-                if ($event->getFirstMedia('event_image')) {
+                if ($event->getFirstMedia('event_image') instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media) {
                     continue;
                 }
 
