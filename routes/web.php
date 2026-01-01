@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\LlmsController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;
@@ -21,6 +22,13 @@ Route::post('/event/register', [EventController::class, 'register'])->name('even
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 Route::post('/testimonial/submit', [TestimonialSubmissionController::class, 'submit'])->name('testimonial.submit');
+
+// Health checks (protected routes)
+Route::middleware(['web'])->group(function () {
+    Route::get('/health', [HealthController::class, 'show'])->name('health.show');
+    Route::get('/health/json', [HealthController::class, 'json'])->name('health.json');
+    Route::post('/health/run', [HealthController::class, 'run'])->name('health.run');
+});
 
 // Dynamic pages (must be last to avoid conflicts)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
