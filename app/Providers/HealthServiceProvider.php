@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\HealthChecks\PerformanceHealthCheck;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Health\Checks\Checks\DatabaseCheck;
 use Spatie\Health\Checks\Checks\DebugModeCheck;
@@ -25,6 +26,9 @@ class HealthServiceProvider extends ServiceProvider
             QueueCheck::new(),
             ScheduleCheck::new(),
             OptimizedAppCheck::new(),
+            PerformanceHealthCheck::new()
+                ->warningThreshold(1000)
+                ->failureThreshold(2000),
             UsedDiskSpaceCheck::new()
                 ->warnWhenUsedSpaceIsAbovePercentage(90)
                 ->failWhenUsedSpaceIsAbovePercentage(95),
