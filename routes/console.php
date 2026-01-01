@@ -25,6 +25,17 @@ Schedule::command('events:send-reminders')
 Schedule::command('backup:clean')->daily()->at('01:00');
 Schedule::command('backup:run')->daily()->at('01:30');
 
+// Health Checks
+// Runs health checks every hour to monitor application health
+Schedule::command('health:check')
+    ->hourly()
+    ->onSuccess(function (): void {
+        info('Health checks completed successfully');
+    })
+    ->onFailure(function (): void {
+        error('Health checks failed to complete');
+    });
+
 // Sitemap Generation
 // Regenerates the sitemap daily at 02:00
 Schedule::command('sitemap:generate')
