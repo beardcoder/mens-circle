@@ -8,7 +8,7 @@
     "framework"
   ],
   "require": {
-    "php": "^8.5",
+    "php": "^8.4",
     "achyutn/filament-log-viewer": "^1.6",
     "awcodes/filament-gravatar": "*",
     "awcodes/overlook": "^3.0",
@@ -23,6 +23,7 @@
     "ralphjsmit/laravel-glide": "^2.0",
     "sentry/sentry-laravel": "^4.20",
     "spatie/laravel-backup": "^9.3",
+    "spatie/laravel-health": "^1.34",
     "spatie/laravel-medialibrary": "^11.0",
     "spatie/laravel-settings": "^3.5",
     "spatie/laravel-sitemap": "^7.3",
