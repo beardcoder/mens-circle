@@ -16,7 +16,7 @@ class HealthController extends Controller
         $checkResults = app(ResultStore::class)->latestResults();
 
         return view('health', [
-            'lastRanAt' => new \DateTimeImmutable($checkResults?->finishedAt?->toDateTimeString() ?? 'now'),
+            'lastRanAt' => $checkResults?->finishedAt ?? now(),
             'checkResults' => $checkResults,
         ]);
     }
