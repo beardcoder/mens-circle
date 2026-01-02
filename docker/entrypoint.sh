@@ -2,15 +2,24 @@
 set -eu
 
 ARTISAN="php artisan"
-APP_DIR="/var/www/html"
 
-cd "$APP_DIR"
+# Ensure expected dirs exist (no recursive chmod/chown every boot)
+mkdir -p \
+  /app/storage/app/public \
+  /app/storage/framework/cache/data \
+  /app/storage/framework/sessions \
+  /app/storage/framework/views \
+  /app/storage/logs \
+  /app/bootstrap/cache \
+  /app/database
 
 # SQLite bootstrap (optional)
 if [ "${DB_CONNECTION:-}" = "sqlite" ] || [ -z "${DB_CONNECTION:-}" ]; then
-  : "${DB_DATABASE:=$APP_DIR/database/database.sqlite}"
+  : "${DB_DATABASE:=/app/database/database.sqlite}"
   mkdir -p "$(dirname "$DB_DATABASE")"
   [ -f "$DB_DATABASE" ] || touch "$DB_DATABASE"
+  chown www-data:www-data "$DB_DATABASE" || true
+  chmod 664 "$DB_DATABASE" || true
 fi
 
 # APP_KEY handling:
@@ -32,7 +41,9 @@ if [ "${MIGRATE_ON_START:-false}" = "true" ]; then
   $ARTISAN migrate --force --no-interaction
 fi
 
-# Production caching
+# Production caching:
+# Do NOT clear/rebuild every boot by default (fast deploys).
+# Rebuild only if caches are missing OR if explicitly forced.
 if [ "${APP_ENV:-production}" = "production" ]; then
   if [ "${FORCE_OPTIMIZE_CLEAR:-false}" = "true" ]; then
     echo "Clearing caches (forced)..."
@@ -40,7 +51,7 @@ if [ "${APP_ENV:-production}" = "production" ]; then
   fi
 
   if [ "${OPTIMIZE_ON_START:-true}" = "true" ]; then
-    if [ ! -f "$APP_DIR/bootstrap/cache/config.php" ] || [ "${FORCE_OPTIMIZE_REBUILD:-false}" = "true" ]; then
+    if [ ! -f /app/bootstrap/cache/config.php ] || [ "${FORCE_OPTIMIZE_REBUILD:-false}" = "true" ]; then
       echo "Building caches..."
       $ARTISAN optimize --no-interaction
     else
@@ -50,14 +61,15 @@ if [ "${APP_ENV:-production}" = "production" ]; then
 fi
 
 # Storage symlink (only if missing)
-if [ ! -L "$APP_DIR/public/storage" ]; then
+if [ ! -L /app/public/storage ]; then
   $ARTISAN storage:link --no-interaction 2>/dev/null || true
 fi
 
-# Optional: sitemap generation (OFF by default)
+# Optional: sitemap generation (OFF by default; can be expensive)
 if [ "${GENERATE_SITEMAP_ON_START:-false}" = "true" ]; then
   echo "Generating sitemap..."
   $ARTISAN sitemap:generate --no-interaction
 fi
 
-echo "Laravel initialization complete."
+echo "Starting Supervisor..."
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
