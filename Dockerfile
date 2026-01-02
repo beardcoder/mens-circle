@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7-labs
 
-ARG PHP_IMAGE=dunglas/frankenphp:1-php8.5
+ARG PHP_IMAGE=serversideup/php:8.5-fpm-nginx
 
 # ----------------------------
 # 1) Frontend build (Vite) with Bun
@@ -19,15 +19,17 @@ RUN bun run build
 
 
 # ----------------------------
-# 2) PHP dependencies (Composer) using same PHP as prod
+# 2) PHP dependencies (Composer)
 # ----------------------------
 FROM ${PHP_IMAGE} AS vendor
-WORKDIR /app
+WORKDIR /var/www/html
 
-# Composer (keeps PHP version aligned with final stage)
+USER root
+
+# Install composer
 RUN install-php-extensions @composer
 
-COPY . .
+COPY --chown=www-data:www-data . .
 
 RUN --mount=type=cache,target=/root/.composer/cache \
     composer install \
@@ -39,84 +41,89 @@ RUN --mount=type=cache,target=/root/.composer/cache \
       --ignore-platform-reqs \
       --optimize-autoloader
 
+
 # ----------------------------
-# 3) Production image (FrankenPHP)
+# 3) Production image
 # ----------------------------
 FROM ${PHP_IMAGE} AS production
-WORKDIR /app
+WORKDIR /var/www/html
 
-# Only runtime OS deps (keep it slim)
-# Install PostgreSQL 18 client from official PostgreSQL repository
+USER root
+
+# Install PostgreSQL 18 client from official repository
 RUN apt-get update && apt-get install -y --no-install-recommends \
       gnupg \
       lsb-release \
-      supervisor \
       curl \
     && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends postgresql-client-18 \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # PHP extensions
 RUN install-php-extensions \
-      @composer \
       pcntl \
       pdo_sqlite \
       pdo_pgsql \
       pgsql \
       intl \
-      opcache \
       gd \
       zip \
       bcmath \
       exif
 
-# PHP config
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-COPY docker/php/php.ini     "$PHP_INI_DIR/conf.d/99-custom.ini"
-COPY docker/php/opcache.ini "$PHP_INI_DIR/conf.d/opcache.ini"
+# Custom PHP configuration
+COPY docker/php/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
-# App + vendor from vendor stage (already contains vendor/)
-# Use --chown to avoid heavy chown layers later
-COPY --from=vendor --chown=www-data:www-data /app /app
+# Nginx configuration for asset caching
+COPY docker/nginx/cache.conf /etc/nginx/server-opts.d/cache.conf
+
+# App from vendor stage (already contains vendor/)
+COPY --from=vendor --chown=www-data:www-data /var/www/html /var/www/html
 
 # Built assets overlay
-COPY --from=assets --chown=www-data:www-data /app/public/build /app/public/build
+COPY --from=assets --chown=www-data:www-data /app/public/build /var/www/html/public/build
 
-# Update and Optimize autoloader
+# Optimize autoloader
 RUN composer dump-autoload \
       --no-dev \
       --ignore-platform-reqs \
       --classmap-authoritative \
       --no-interaction
 
-# Ensure runtime dirs exist (do it once at build time)
+# Ensure runtime dirs exist with correct ownership
 RUN mkdir -p \
-      /app/storage/app/public \
-      /app/storage/framework/cache/data \
-      /app/storage/framework/sessions \
-      /app/storage/framework/views \
-      /app/storage/logs \
-      /app/bootstrap/cache \
-      /app/database \
-    && chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database /app/public \
-    && chmod -R 775 /app/storage /app/bootstrap/cache /app/database
+      /var/www/html/storage/app/public \
+      /var/www/html/storage/framework/cache/data \
+      /var/www/html/storage/framework/sessions \
+      /var/www/html/storage/framework/views \
+      /var/www/html/storage/logs \
+      /var/www/html/bootstrap/cache \
+      /var/www/html/database \
+    && chown -R www-data:www-data \
+      /var/www/html/storage \
+      /var/www/html/bootstrap/cache \
+      /var/www/html/database \
+      /var/www/html/public \
+    && chmod -R 775 \
+      /var/www/html/storage \
+      /var/www/html/bootstrap/cache \
+      /var/www/html/database
 
-# Supervisor + Caddy/FrankenPHP config
-RUN mkdir -p /var/log/supervisor
-COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY docker/frankenphp/Caddyfile /app/Caddyfile
+# Laravel startup script (runs after default scripts)
+COPY --chmod=755 docker/entrypoint.d/ /etc/entrypoint.d/
 
+# Environment configuration
 ENV APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
-    LOG_LEVEL=error
+    LOG_LEVEL=error \
+    PHP_OPCACHE_ENABLE=1 \
+    SSL_MODE=off
 
-EXPOSE 8000
+# Switch back to www-data for security
+USER www-data
 
-# Entrypoint
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+EXPOSE 8080
