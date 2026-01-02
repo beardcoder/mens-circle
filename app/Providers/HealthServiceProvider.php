@@ -23,8 +23,10 @@ class HealthServiceProvider extends ServiceProvider
             DebugModeCheck::new(),
             EnvironmentCheck::new(),
             DatabaseCheck::new(),
-            QueueCheck::new(),
-            ScheduleCheck::new(),
+            QueueCheck::new()
+                ->useCacheStore('health_checks'),
+            ScheduleCheck::new()
+                ->useCacheStore('health_checks'),
             OptimizedAppCheck::new(),
             PerformanceHealthCheck::new()
                 ->warningThreshold(1000)
