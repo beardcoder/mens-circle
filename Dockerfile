@@ -115,6 +115,9 @@ RUN mkdir -p \
 # Laravel startup script (runs after default scripts)
 COPY --chmod=755 docker/entrypoint.d/ /etc/entrypoint.d/
 
+# S6 Overlay service for queue worker
+COPY --chmod=755 docker/s6-overlay/ /etc/s6-overlay/
+
 # Environment configuration
 ENV APP_ENV=production \
     APP_DEBUG=false \
