@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7-labs
 
-ARG PHP_IMAGE=dunglas/frankenphp:1-php8.5
+ARG PHP_IMAGE=serversideup/php:8.5-frankenphp
 
 # ----------------------------
 # 1) Frontend build (Vite) with Bun
@@ -24,9 +24,7 @@ RUN bun run build
 FROM ${PHP_IMAGE} AS vendor
 WORKDIR /app
 
-# Composer (keeps PHP version aligned with final stage)
-RUN install-php-extensions @composer
-
+# Note: serversideup/php images come with Composer pre-installed
 COPY . .
 
 RUN --mount=type=cache,target=/root/.composer/cache \
@@ -43,10 +41,12 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 # 3) Production image (FrankenPHP)
 # ----------------------------
 FROM ${PHP_IMAGE} AS production
-WORKDIR /app
+
+# Switch to root for installation tasks
+USER root
 
 # Only runtime OS deps (keep it slim)
-# Install PostgreSQL 18 client from official PostgreSQL repository
+# Install PostgreSQL 18 client and supervisor
 RUN apt-get update && apt-get install -y --no-install-recommends \
       gnupg \
       lsb-release \
@@ -58,24 +58,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get install -y --no-install-recommends postgresql-client-18 \
     && rm -rf /var/lib/apt/lists/*
 
-# PHP extensions
+# Note: serversideup/php images include many common extensions by default
+# We only install what's missing (most are already included)
 RUN install-php-extensions \
-      @composer \
-      pcntl \
       pdo_sqlite \
       pdo_pgsql \
-      pgsql \
-      intl \
-      opcache \
-      gd \
-      zip \
-      bcmath \
-      exif
+      pgsql
 
-# PHP config
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-COPY docker/php/php.ini     "$PHP_INI_DIR/conf.d/99-custom.ini"
-COPY docker/php/opcache.ini "$PHP_INI_DIR/conf.d/opcache.ini"
+# PHP config (serversideup uses /usr/local/etc/php)
+COPY docker/php/php.ini     /usr/local/etc/php/conf.d/99-custom.ini
+COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # App + vendor from vendor stage (already contains vendor/)
 # Use --chown to avoid heavy chown layers later
@@ -85,6 +77,7 @@ COPY --from=vendor --chown=www-data:www-data /app /app
 COPY --from=assets --chown=www-data:www-data /app/public/build /app/public/build
 
 # Update and Optimize autoloader
+WORKDIR /app
 RUN composer dump-autoload \
       --no-dev \
       --ignore-platform-reqs \
@@ -103,20 +96,28 @@ RUN mkdir -p \
     && chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database /app/public \
     && chmod -R 775 /app/storage /app/bootstrap/cache /app/database
 
-# Supervisor + Caddy/FrankenPHP config
+# Supervisor config for queue workers
 RUN mkdir -p /var/log/supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY docker/frankenphp/Caddyfile /app/Caddyfile
 
+# Note: Laravel Octane provides its own Caddyfile
+# We'll use Octane's built-in configuration instead of a custom Caddyfile
+
+# Environment defaults for production
 ENV APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
-    LOG_LEVEL=error
+    LOG_LEVEL=error \
+    OCTANE_SERVER=frankenphp
 
-EXPOSE 8000
+# Expose port 8080 (serversideup uses non-privileged ports)
+EXPOSE 8080
 
 # Entrypoint
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Note: We keep root user for supervisor to manage processes
+# Individual programs in supervisord.conf run as www-data
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
