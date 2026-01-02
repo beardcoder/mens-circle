@@ -61,13 +61,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Note: serversideup/php images include many common extensions by default
 # We only install what's missing (most are already included)
 RUN install-php-extensions \
-      pdo_sqlite \
       pdo_pgsql \
       pgsql
 
-# PHP config (serversideup uses /usr/local/etc/php)
-COPY docker/php/php.ini     /usr/local/etc/php/conf.d/99-custom.ini
-COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY --chmod=755 ./entrypoint.d/ /etc/entrypoint.d/
+
+USER www-data
+WORKDIR /app
+
+# Environment defaults for production
+ENV APP_ENV=production \
+    APP_DEBUG=false \
+    LOG_CHANNEL=stderr \
+    LOG_LEVEL=error \
+    OCTANE_SERVER=frankenphp \
+    CADDY_SERVER_ROOT=/app/public
 
 # App + vendor from vendor stage (already contains vendor/)
 # Use --chown to avoid heavy chown layers later
@@ -77,7 +85,6 @@ COPY --from=vendor --chown=www-data:www-data /app /app
 COPY --from=assets --chown=www-data:www-data /app/public/build /app/public/build
 
 # Update and Optimize autoloader
-WORKDIR /app
 RUN composer dump-autoload \
       --no-dev \
       --ignore-platform-reqs \
@@ -91,33 +98,4 @@ RUN mkdir -p \
       /app/storage/framework/sessions \
       /app/storage/framework/views \
       /app/storage/logs \
-      /app/bootstrap/cache \
-      /app/database \
-    && chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database /app/public \
-    && chmod -R 775 /app/storage /app/bootstrap/cache /app/database
-
-# Supervisor config for queue workers
-RUN mkdir -p /var/log/supervisor
-COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Note: Laravel Octane provides its own Caddyfile
-# We'll use Octane's built-in configuration instead of a custom Caddyfile
-
-# Environment defaults for production
-ENV APP_ENV=production \
-    APP_DEBUG=false \
-    LOG_CHANNEL=stderr \
-    LOG_LEVEL=error \
-    OCTANE_SERVER=frankenphp
-
-# Expose port 8080 (serversideup uses non-privileged ports)
-EXPOSE 8080
-
-# Entrypoint
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# Note: We keep root user for supervisor to manage processes
-# Individual programs in supervisord.conf run as www-data
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+      /app/bootstrap/cache
