@@ -11,10 +11,10 @@ return [
     'result_stores' => [
         /*
          * Using cache-based storage instead of database to avoid migration issues
-         * and improve performance. Results are stored in the file cache.
+         * and improve performance. Results are stored in a dedicated health_checks cache.
          */
         Spatie\Health\ResultStores\CacheHealthResultStore::class => [
-            'store' => 'file',
+            'store' => 'health_checks',
         ],
 
         /*
