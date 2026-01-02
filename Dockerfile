@@ -42,6 +42,14 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 # ----------------------------
 FROM ${PHP_IMAGE} AS production
 
+ENV APP_ENV=production \
+    APP_DEBUG=false \
+    LOG_CHANNEL=stderr \
+    LOG_LEVEL=error \
+    OCTANE_SERVER=frankenphp \
+    CADDY_SERVER_ROOT=/app/public \
+    APP_BASE_DIR=/app
+
 # Switch to root for installation tasks
 USER root
 
@@ -68,12 +76,6 @@ USER www-data
 WORKDIR /app
 
 # Environment defaults for production
-ENV APP_ENV=production \
-    APP_DEBUG=false \
-    LOG_CHANNEL=stderr \
-    LOG_LEVEL=error \
-    OCTANE_SERVER=frankenphp \
-    CADDY_SERVER_ROOT=/app/public
 
 # App + vendor from vendor stage (already contains vendor/)
 # Use --chown to avoid heavy chown layers later
@@ -97,3 +99,6 @@ RUN mkdir -p \
       /app/storage/framework/views \
       /app/storage/logs \
       /app/bootstrap/cache
+
+CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--port=8080"]
+
