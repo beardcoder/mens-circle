@@ -100,5 +100,5 @@ RUN mkdir -p \
       /app/storage/logs \
       /app/bootstrap/cache
 
-CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--port=8080"]
+CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--port=8080", "--host=0.0.0.0"]
 
