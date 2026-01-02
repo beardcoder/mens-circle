@@ -6,7 +6,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Spatie\CpuLoadHealthCheck\CpuLoadCheck;
-use Spatie\Health\Checks\Checks\BackupHealthCheck;
+use Spatie\Health\Checks\Checks\BackupsCheck;
 use Spatie\Health\Checks\Checks\CacheCheck;
 use Spatie\Health\Checks\Checks\DatabaseCheck;
 use Spatie\Health\Checks\Checks\DatabaseConnectionCountCheck;
@@ -64,8 +64,8 @@ class HealthServiceProvider extends ServiceProvider
                 ->cacheResultsForMinutes(60 * 24), // Cache for 24 hours
 
             // Backup Monitoring
-            BackupHealthCheck::new()
-                ->locatedAt(config('backup.backup.destination.disks')[0] ?? 'local'),
+            BackupsCheck::new()
+                ->locatedAt(storage_path('app/backups/*')),
         ]);
     }
 }
