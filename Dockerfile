@@ -96,12 +96,12 @@ RUN mkdir -p \
     && chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database /app/public \
     && chmod -R 775 /app/storage /app/bootstrap/cache /app/database
 
-# Supervisor config for queue workers
+# Supervisor config (only for queue workers - FrankenPHP runs as main process)
 RUN mkdir -p /var/log/supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Note: Laravel Octane provides its own Caddyfile
-# We'll use Octane's built-in configuration instead of a custom Caddyfile
+# Note: FrankenPHP is started directly via entrypoint.sh, not through supervisor
+# Laravel Octane provides its own Caddyfile with worker mode support
 
 # Environment defaults for production
 ENV APP_ENV=production \

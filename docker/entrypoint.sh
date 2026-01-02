@@ -71,5 +71,10 @@ if [ "${GENERATE_SITEMAP_ON_START:-false}" = "true" ]; then
   $ARTISAN sitemap:generate --no-interaction
 fi
 
-echo "Starting Supervisor..."
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+# Start supervisor in background for queue workers
+echo "Starting Supervisor for queue workers..."
+/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+
+# Start FrankenPHP/Octane as main process
+echo "Starting Laravel Octane with FrankenPHP..."
+exec php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8080

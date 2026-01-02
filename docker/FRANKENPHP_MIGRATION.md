@@ -34,19 +34,23 @@ The serversideup image uses non-privileged ports:
 
 ### 3. Supervisor Configuration
 
-The supervisor now uses Laravel Octane command directly:
+Supervisor is now used **only for queue workers**, not for FrankenPHP:
 
 **Before:**
 ```ini
-command=php /app/artisan octane:start --server=frankenphp --host=127.0.0.1 --port=8000 --caddyfile=/app/Caddyfile
+[program:frankenphp]
+command=php /app/artisan octane:start --server=frankenphp --host=127.0.0.1 --port=8000
 ```
 
 **After:**
-```ini
-command=php /app/artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8080
-```
+- FrankenPHP program removed from supervisor
+- FrankenPHP runs as the main container process via entrypoint.sh
+- Supervisor manages queue workers only
 
-**Note:** No custom Caddyfile is specified - Laravel Octane provides its own built-in Caddyfile with worker support.
+**Architecture:**
+1. Entrypoint runs setup tasks (migrations, cache, etc.)
+2. Supervisor starts in background for queue workers
+3. FrankenPHP/Octane runs as the main foreground process
 
 ### 4. Caddyfile
 
@@ -100,6 +104,9 @@ ports:
 **New environment variables:**
 ```yaml
 environment:
+  # Caddy/FrankenPHP Configuration
+  - CADDY_SERVER_ROOT=/app/public
+
   # PHP Configuration
   - PHP_OPCACHE_ENABLE=1
   - PHP_MEMORY_LIMIT=256M
@@ -111,8 +118,29 @@ environment:
 **Updated health check:**
 ```yaml
 healthcheck:
-  test: ["CMD", "curl", "-f", "http://localhost:8080/up"]
+  test: ["CMD", "healthcheck-octane"]  # Built-in Octane health check
 ```
+
+## Process Architecture
+
+The new architecture separates concerns more clearly:
+
+```
+Container Start
+    ↓
+Entrypoint (entrypoint.sh)
+    ├─ Database migrations (if MIGRATE_ON_START=true)
+    ├─ Cache optimization (if OPTIMIZE_ON_START=true)
+    ├─ Storage symlink setup
+    ├─ Start Supervisor (background) → Queue Workers (2 processes)
+    └─ Start FrankenPHP/Octane (foreground, PID 1) → Web Server + Worker Mode
+```
+
+**Key Points:**
+- **FrankenPHP** runs as the main process (receives signals, handles container lifecycle)
+- **Supervisor** runs in background managing only queue workers
+- **No custom supervisor config for FrankenPHP** - it runs directly via Octane command
+- Uses Laravel Octane's built-in Caddyfile with worker support
 
 ## Migration Steps
 
@@ -217,9 +245,14 @@ ports:
 
 ### Custom Caddyfile not working
 
-1. Ensure `docker/frankenphp/Caddyfile` is properly configured
-2. Update supervisor config to include `--caddyfile=/app/Caddyfile`
+The application now uses Laravel Octane's built-in Caddyfile by default.
+
+**To use a custom Caddyfile:**
+1. Edit `docker/frankenphp/Caddyfile`
+2. Update `docker/entrypoint.sh` line 80 to include `--caddyfile=/app/Caddyfile`
 3. Rebuild the container
+
+**Note:** Custom Caddyfiles may override Laravel Octane's worker mode configuration.
 
 ### Worker mode issues
 

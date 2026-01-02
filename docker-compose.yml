@@ -32,6 +32,9 @@ services:
       # FrankenPHP Worker Configuration
       - FRANKENPHP_WORKERS=auto
 
+      # Caddy/FrankenPHP Configuration
+      - CADDY_SERVER_ROOT=/app/public
+
       # PHP Configuration (optional, uses defaults from php.ini)
       - PHP_OPCACHE_ENABLE=1
       - PHP_MEMORY_LIMIT=256M
@@ -40,7 +43,7 @@ services:
       - app-database:/app/database
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/up"]
+      test: ["CMD", "healthcheck-octane"]
       interval: 30s
       timeout: 5s
       retries: 3
