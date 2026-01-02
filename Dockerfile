@@ -98,5 +98,4 @@ EXPOSE 8080
 
 CMD ["php", "/app/artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8080"]
 
-HEALTHCHECK --start-period=60s --start-interval=3s --interval=10s --timeout=3s --retries=3 \
-    CMD [ "healthcheck-octane" ]
+HEALTHCHECK --start-period=10s CMD [ "healthcheck-octane" ]
