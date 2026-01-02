@@ -64,7 +64,7 @@ RUN install-php-extensions \
       pdo_pgsql \
       pgsql
 
-COPY --chmod=755 ./entrypoint.d/ /etc/entrypoint.d/
+COPY --chmod=755 docker/entrypoint.d/ /etc/entrypoint.d/
 
 USER www-data
 WORKDIR /app
