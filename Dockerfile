@@ -96,5 +96,5 @@ RUN mkdir -p \
 
 EXPOSE 8080
 
-CMD ["php", "/app/artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8000"]
+CMD ["php", "/app/artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8080"]
 
