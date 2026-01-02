@@ -66,12 +66,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get install -y --no-install-recommends postgresql-client-18 \
     && rm -rf /var/lib/apt/lists/*
 
-# Note: serversideup/php images include many common extensions by default
-# We only install what's missing (most are already included)
-RUN install-php-extensions \
-      pdo_pgsql \
-      pgsql
-
 USER www-data
 WORKDIR /app
 
