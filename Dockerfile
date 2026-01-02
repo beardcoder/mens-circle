@@ -46,10 +46,16 @@ FROM ${PHP_IMAGE} AS production
 WORKDIR /app
 
 # Only runtime OS deps (keep it slim)
+# Install PostgreSQL 18 client from official PostgreSQL repository
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      postgresql-client \
+      gnupg \
+      lsb-release \
       supervisor \
       curl \
+    && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends postgresql-client-18 \
     && rm -rf /var/lib/apt/lists/*
 
 # PHP extensions
