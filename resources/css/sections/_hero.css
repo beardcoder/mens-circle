@@ -78,7 +78,7 @@
   position: absolute;
   border: 1px solid var(--color-sand);
   border-radius: 50%;
-  animation: breathe 10s ease-in-out infinite;
+  animation: breathe 550ms ease-in-out infinite;
 }
 
 .hero__circle--1 {
