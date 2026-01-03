@@ -34,16 +34,16 @@
     <div class="container">
         <div class="hero__content">
             @if(!empty($block['data']['label']))
-                <p class="hero__label fade-in">{{ $block['data']['label'] }}</p>
+                <p class="hero__label">{{ $block['data']['label'] }}</p>
             @endif
 
             @if(!empty($block['data']['title']))
-                <h1 class="hero__title fade-in fade-in-delay-1">
+                <h1 class="hero__title">
                     {!! $block['data']['title'] !!}
                 </h1>
             @endif
 
-            <div class="hero__bottom fade-in fade-in-delay-2">
+            <div class="hero__bottom">
                 @if(!empty($block['data']['description']))
                     <p class="hero__description">
                         {{ $block['data']['description'] }}
