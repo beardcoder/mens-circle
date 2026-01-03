@@ -40,6 +40,11 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
+    <!-- Resource Hints for Performance -->
+    <link rel="preconnect" href="https://stats.letsbenow.de" crossorigin>
+    <link rel="dns-prefetch" href="https://stats.letsbenow.de">
+    <link rel="dns-prefetch" href="https://static.cloudflareinsights.com">
+
     <!-- Styles -->
     @vite(['resources/css/app.css'])
 
