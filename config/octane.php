@@ -131,6 +131,7 @@ return [
 
     'warm' => [
         ...Octane::defaultServicesToWarm(),
+        \App\Settings\GeneralSettings::class,
     ],
 
     'flush' => [

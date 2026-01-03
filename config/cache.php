@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('CACHE_STORE', 'database'),
+    'default' => env('CACHE_STORE', 'octane'),
 
     /*
     |--------------------------------------------------------------------------
@@ -102,8 +102,8 @@ return [
         'failover' => [
             'driver' => 'failover',
             'stores' => [
-                'database',
-                'array',
+                'octane',
+                'file',
             ],
         ],
 

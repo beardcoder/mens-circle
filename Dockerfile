@@ -50,22 +50,6 @@ ENV APP_ENV=production \
     CADDY_SERVER_ROOT=/app/public \
     APP_BASE_DIR=/app
 
-# Switch to root for installation tasks
-USER root
-
-# Only runtime OS deps (keep it slim)
-# Install PostgreSQL 18 client and supervisor
-RUN apt-get update && apt-get install -y --no-install-recommends \
-      gnupg \
-      lsb-release \
-      supervisor \
-      curl \
-    && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg \
-    && echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends postgresql-client-18 \
-    && rm -rf /var/lib/apt/lists/*
-
 USER www-data
 WORKDIR /app
 
