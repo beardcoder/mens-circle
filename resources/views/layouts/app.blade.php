@@ -43,7 +43,13 @@
     <!-- Resource Hints for Performance -->
     <link rel="preconnect" href="https://stats.letsbenow.de" crossorigin>
     <link rel="dns-prefetch" href="https://stats.letsbenow.de">
-    <link rel="dns-prefetch" href="https://static.cloudflareinsights.com">
+
+    <!-- Preload Critical Fonts (Latin subset for German content) -->
+    {!! \App\Helpers\ViteHelper::preloadFonts([
+        'node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2',
+        'node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2',
+        'node_modules/@fontsource-variable/cormorant/files/cormorant-latin-wght-normal.woff2',
+    ]) !!}
 
     <!-- Styles -->
     @vite(['resources/css/app.css'])
