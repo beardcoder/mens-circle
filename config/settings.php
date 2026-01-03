@@ -71,9 +71,9 @@ return [
      */
     'cache' => [
         'enabled' => env('SETTINGS_CACHE_ENABLED', true),
-        'store' => env('SETTINGS_CACHE_STORE', 'database'),
+        'store' => env('SETTINGS_CACHE_STORE', null),
         'prefix' => 'settings',
-        'ttl' => null, // Forever - cache invalidated by SettingsSavedListener
+        'ttl' => null,
     ],
 
     /*
