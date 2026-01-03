@@ -46,21 +46,8 @@ class HealthServiceProvider extends ServiceProvider
             QueueCheck::new(),
             ScheduleCheck::new(),
 
-            // Database Table Size Monitoring
-            DatabaseTableSizeCheck::new()
-                ->table('users', maxSizeInMb: 100)
-                ->table('events', maxSizeInMb: 50)
-                ->table('event_registrations', maxSizeInMb: 100)
-                ->table('pages', maxSizeInMb: 50)
-                ->table('newsletters', maxSizeInMb: 100)
-                ->table('newsletter_subscriptions', maxSizeInMb: 100)
-                ->table('media', maxSizeInMb: 500),
-
             // Security Checks
-            SecurityAdvisoriesCheck::new()
-                ->cacheResultsForMinutes(60 * 24), // Cache for 24 hours
-
-            BackupsCheck::new(),
+            SecurityAdvisoriesCheck::new(),
         ]);
     }
 }
