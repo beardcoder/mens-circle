@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 return [
     /*
      * A result store is responsible for saving the results of the checks. The
@@ -9,19 +7,15 @@ return [
      * can use multiple stores at the same time.
      */
     'result_stores' => [
-        /*
-         * Using cache-based storage instead of database to avoid migration issues
-         * and improve performance. Results are stored in a dedicated health_checks cache.
-         */
-        Spatie\Health\ResultStores\CacheHealthResultStore::class => [
-            'store' => 'health_checks',
-        ],
-
-        /*
         Spatie\Health\ResultStores\EloquentHealthResultStore::class => [
             'connection' => env('HEALTH_DB_CONNECTION', env('DB_CONNECTION')),
             'model' => Spatie\Health\Models\HealthCheckResultHistoryItem::class,
             'keep_history_for_days' => 5,
+        ],
+
+        /*
+        Spatie\Health\ResultStores\CacheHealthResultStore::class => [
+            'store' => 'file',
         ],
 
         Spatie\Health\ResultStores\JsonFileHealthResultStore::class => [
@@ -64,7 +58,7 @@ return [
         'throttle_notifications_key' => 'health:latestNotificationSentAt:',
 
         'mail' => [
-            'to' => env('HEALTH_EMAIL', 'hallo@mens-circle.de'),
+            'to' => env('MAIL_ADMIN_ADDRESS', 'hallo@mens-circle.de'),
 
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
@@ -135,7 +129,7 @@ return [
      * - light: light mode
      * - dark: dark mode
      */
-    'theme' => 'light',
+    'theme' => 'dark',
 
     /*
      * When enabled, completed `HealthQueueJob`s will be displayed
