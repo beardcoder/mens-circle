@@ -1,18 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
-use Spatie\Backup\Notifications\Notifiable;
-use Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification;
-use Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification;
-use Spatie\Backup\Notifications\Notifications\CleanupHasFailedNotification;
-use Spatie\Backup\Notifications\Notifications\CleanupWasSuccessfulNotification;
-use Spatie\Backup\Notifications\Notifications\HealthyBackupWasFoundNotification;
-use Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFoundNotification;
-use Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy;
-use Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays;
-use Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes;
-
 return [
 
     'backup' => [
@@ -209,22 +196,22 @@ return [
      */
     'notifications' => [
         'notifications' => [
-            BackupHasFailedNotification::class => ['mail'],
-            UnhealthyBackupWasFoundNotification::class => ['mail'],
-            CleanupHasFailedNotification::class => ['mail'],
-            BackupWasSuccessfulNotification::class => ['mail'],
-            HealthyBackupWasFoundNotification::class => ['mail'],
-            CleanupWasSuccessfulNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFoundNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\CleanupHasFailedNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFoundNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessfulNotification::class => ['mail'],
         ],
 
         /*
          * Here you can specify the notifiable to which the notifications should be sent. The default
          * notifiable will use the variables specified in this config file.
          */
-        'notifiable' => Notifiable::class,
+        'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
         'mail' => [
-            'to' => env('HEALTH_EMAIL', 'hallo@mens-circle.de'),
+            'to' => env('MAIL_ADMIN_ADDRESS', 'hallo@mens-circle.de'),
 
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
@@ -270,8 +257,8 @@ return [
             'name' => env('APP_NAME', 'laravel-backup'),
             'disks' => ['local'],
             'health_checks' => [
-                MaximumAgeInDays::class => 1,
-                MaximumStorageInMegabytes::class => 5000,
+                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
+                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
             ],
         ],
 
@@ -297,39 +284,39 @@ return [
          * No matter how you configure it the default strategy will never
          * delete the newest backup.
          */
-        'strategy' => DefaultStrategy::class,
+        'strategy' => \Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy::class,
 
         'default_strategy' => [
             /*
              * The number of days for which backups must be kept.
              */
-            'keep_all_backups_for_days' => 4,
+            'keep_all_backups_for_days' => 7,
 
             /*
              * After the "keep_all_backups_for_days" period is over, the most recent backup
              * of that day will be kept. Older backups within the same day will be removed.
              * If you create backups only once a day, no backups will be removed yet.
              */
-            'keep_daily_backups_for_days' => 7,
+            'keep_daily_backups_for_days' => 16,
 
             /*
              * After the "keep_daily_backups_for_days" period is over, the most recent backup
              * of that week will be kept. Older backups within the same week will be removed.
              * If you create backups only once a week, no backups will be removed yet.
              */
-            'keep_weekly_backups_for_weeks' => 4,
+            'keep_weekly_backups_for_weeks' => 8,
 
             /*
              * After the "keep_weekly_backups_for_weeks" period is over, the most recent backup
              * of that month will be kept. Older backups within the same month will be removed.
              */
-            'keep_monthly_backups_for_months' => 2,
+            'keep_monthly_backups_for_months' => 4,
 
             /*
              * After the "keep_monthly_backups_for_months" period is over, the most recent backup
              * of that year will be kept. Older backups within the same year will be removed.
              */
-            'keep_yearly_backups_for_years' => 1,
+            'keep_yearly_backups_for_years' => 2,
 
             /*
              * After cleaning up the backups remove the oldest backup until

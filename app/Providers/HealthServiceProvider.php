@@ -43,11 +43,8 @@ class HealthServiceProvider extends ServiceProvider
                 ->failWhenLoadIsHigherInTheLast5Minutes(2.0)
                 ->failWhenLoadIsHigherInTheLast15Minutes(1.5),
 
-            // Job & Scheduling Checks
-            QueueCheck::new()
-                ->useCacheStore('health_checks'),
-            ScheduleCheck::new()
-                ->useCacheStore('health_checks'),
+            QueueCheck::new(),
+            ScheduleCheck::new(),
 
             // Database Table Size Monitoring
             DatabaseTableSizeCheck::new()
@@ -63,9 +60,7 @@ class HealthServiceProvider extends ServiceProvider
             SecurityAdvisoriesCheck::new()
                 ->cacheResultsForMinutes(60 * 24), // Cache for 24 hours
 
-            // Backup Monitoring
-            BackupsCheck::new()
-                ->locatedAt(storage_path('app/backups/*')),
+            BackupsCheck::new(),
         ]);
     }
 }
