@@ -146,7 +146,7 @@
 .footer__legal a {
   font-size: 0.8125rem;
   color: var(--color-sand);
-  opacity: 0.6;
+  opacity: 0.9;
   transition:
     color var(--transition-fast),
     opacity var(--transition-fast);
@@ -184,7 +184,7 @@
 .footer__copyright {
   font-size: 0.8125rem;
   color: var(--color-sand);
-  opacity: 0.6;
+  opacity: 0.9;
 }
 
 .footer__legal {
