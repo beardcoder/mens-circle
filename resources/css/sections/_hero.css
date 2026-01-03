@@ -72,13 +72,13 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.25;
 }
 
 .hero__circle {
   position: absolute;
   border: 1px solid var(--color-sand);
   border-radius: 50%;
+  opacity: 0.4;
   animation: breathe 15s ease-in-out infinite;
 }
 
@@ -110,7 +110,6 @@
   inset-inline-start: -45vw;
   inline-size: 90vw;
   block-size: 90vw;
-  opacity: 0.4;
 }
 
 /* ============================================
