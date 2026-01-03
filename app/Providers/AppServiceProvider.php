@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Observers\EventObserver;
 use App\Observers\EventRegistrationObserver;
+use App\Settings\GeneralSettings;
 use Exception;
 use Illuminate\Support\Facades\Event as EventFacade;
 use Illuminate\Support\Facades\View;
@@ -30,10 +31,6 @@ class AppServiceProvider extends ServiceProvider
 
         EventFacade::listen(SettingsSaved::class, ClearSettingsCache::class);
 
-        Vite::useAggressivePrefetching();
-
-        // Share data with all views using View::share() for better performance
-        // This runs once per request instead of once per view like View::composer()
         $this->shareGlobalViewData();
     }
 
@@ -52,21 +49,10 @@ class AppServiceProvider extends ServiceProvider
                     ->exists();
             });
 
-            // Get settings (Spatie Settings handles caching internally - no double caching needed)
-            $settings = app_settings();
-
             // Share all data at once using View::share() - faster than View::composer()
             View::share([
                 'hasNextEvent' => $hasNextEvent,
-                'settings' => $settings,
-                'siteName' => $settings->site_name,
-                'siteTagline' => $settings->site_tagline,
-                'siteDescription' => $settings->site_description,
-                'contactEmail' => $settings->contact_email,
-                'contactPhone' => $settings->contact_phone,
-                'socialLinks' => $settings->social_links ?? [],
-                'footerText' => $settings->footer_text,
-                'whatsappCommunityLink' => $settings->whatsapp_community_link,
+                'settings' => app(GeneralSettings::class),
             ]);
         } catch (Exception $exception) {
             // During build time or when database is unavailable, skip view data sharing
