@@ -176,13 +176,13 @@
 @keyframes breathe {
   0%,
   100% {
-    opacity: 0.25;
+    opacity: 0.4;
     transform: scale(1);
   }
 
   50% {
-    opacity: 0.4;
-    transform: scale(1.02);
+    opacity: 0.7;
+    transform: scale(1.05);
   }
 }
 
@@ -215,8 +215,8 @@
   }
 
   50% {
-    opacity: 0.4;
-    transform: scaleY(0.5);
+    opacity: 0.3;
+    transform: scaleY(0.3);
   }
 }
 
