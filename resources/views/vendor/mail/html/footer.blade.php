@@ -4,12 +4,12 @@
 <tr>
 <td class="content-cell" align="center" style="padding: 32px 32px 40px 32px;">
 @php
-    $socialLinks = settings()['social_links'] ?? [];
+    $social_links = settings()['social_links'] ?? [];
 @endphp
-@if(!empty($socialLinks))
+@if(!empty($social_links))
 <table cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom: 20px;">
 <tr>
-@foreach($socialLinks as $link)
+@foreach($social_links as $link)
 @php
     $socialType = isset($link['type']) && is_string($link['type'])
         ? \App\Enums\SocialLinkType::tryFrom($link['type'])
