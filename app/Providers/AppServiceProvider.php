@@ -14,6 +14,10 @@ use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
+    private ?bool $hasNextEvent = null;
+
+    private ?GeneralSettings $settings = null;
+
     public function register(): void
     {
     }
@@ -22,17 +26,20 @@ class AppServiceProvider extends ServiceProvider
     {
         Event::observe(EventObserver::class);
 
-        View::composer('layouts.*', function (ViewContract $view): void {
+        View::composer('*', function (ViewContract $view): void {
             try {
+                $this->hasNextEvent ??= cache()->rememberForever(
+                    'has_next_event',
+                    fn (): bool => Event::query()
+                        ->where('is_published', true)
+                        ->where('event_date', '>=', now())
+                        ->exists()
+                );
+                $this->settings ??= app(GeneralSettings::class);
+
                 $view->with([
-                    'hasNextEvent' => cache()->rememberForever(
-                        'has_next_event',
-                        fn (): bool => Event::query()
-                            ->where('is_published', true)
-                            ->where('event_date', '>=', now())
-                            ->exists()
-                    ),
-                    'settings' => app(GeneralSettings::class),
+                    'hasNextEvent' => $this->hasNextEvent,
+                    'settings' => $this->settings,
                 ]);
             } catch (Throwable) {
                 $view->with([
