@@ -8,7 +8,6 @@ use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TestimonialSubmissionController;
 use Illuminate\Support\Facades\Route;
-use Spatie\Health\Http\Controllers\SimpleHealthCheckController;
 
 Route::passkeys();
 Route::get('/llms.txt', [LlmsController::class, 'show'])->name('llms.txt');
@@ -22,8 +21,6 @@ Route::post('/event/register', [EventController::class, 'register'])->name('even
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 Route::post('/testimonial/submit', [TestimonialSubmissionController::class, 'submit'])->name('testimonial.submit');
-
-Route::get('health', SimpleHealthCheckController::class);
 
 // Dynamic pages (must be last to avoid conflicts)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
