@@ -4,27 +4,32 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\Event;
+use App\Models\Page;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
-class EventObserver
+class PageObserver
 {
-    public function created(Event $event): void
+    public function created(Page $page): void
     {
         $this->invalidateCache();
     }
 
-    public function updated(Event $event): void
+    public function updated(Page $page): void
     {
         $this->invalidateCache();
     }
 
-    public function deleted(Event $event): void
+    public function deleted(Page $page): void
     {
         $this->invalidateCache();
     }
 
-    public function restored(Event $event): void
+    public function restored(Page $page): void
+    {
+        $this->invalidateCache();
+    }
+
+    public function forceDeleted(Page $page): void
     {
         $this->invalidateCache();
     }

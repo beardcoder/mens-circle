@@ -11,6 +11,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
+use Spatie\ResponseCache\Facades\ResponseCache;
 
 class ClearCache extends Page
 {
@@ -47,6 +48,32 @@ class ClearCache extends Page
                     } catch (Exception $exception) {
                         Notification::make()
                             ->title('Fehler beim Löschen des Caches')
+                            ->body($exception->getMessage())
+                            ->danger()
+                            ->send();
+                    }
+                }),
+
+            Action::make('clearResponseCache')
+                ->label('Response-Cache löschen')
+                ->icon('heroicon-s-globe-alt')
+                ->color('warning')
+                ->requiresConfirmation()
+                ->modalHeading('Response-Cache löschen?')
+                ->modalDescription('Dies löscht den Response-Cache (gecachte HTTP-Antworten). Die Seiten werden beim nächsten Aufruf neu generiert.')
+                ->modalSubmitActionLabel('Jetzt löschen')
+                ->action(function (): void {
+                    try {
+                        ResponseCache::clear();
+
+                        Notification::make()
+                            ->title('Response-Cache gelöscht')
+                            ->body('Der Response-Cache wurde erfolgreich gelöscht.')
+                            ->success()
+                            ->send();
+                    } catch (Exception $exception) {
+                        Notification::make()
+                            ->title('Fehler beim Löschen des Response-Caches')
                             ->body($exception->getMessage())
                             ->danger()
                             ->send();
@@ -139,11 +166,12 @@ class ClearCache extends Page
                 ->color('danger')
                 ->requiresConfirmation()
                 ->modalHeading('Alle Caches löschen?')
-                ->modalDescription('Dies löscht alle Caches. Diese Aktion kann nicht rückgängig gemacht werden.')
+                ->modalDescription('Dies löscht alle Caches (Anwendung, Response, Konfiguration, Routen, Views). Diese Aktion kann nicht rückgängig gemacht werden.')
                 ->modalSubmitActionLabel('Alle löschen')
                 ->action(function (): void {
                     try {
                         Artisan::call('cache:clear');
+                        ResponseCache::clear();
                         Artisan::call('config:clear');
                         Artisan::call('route:clear');
                         Artisan::call('view:clear');

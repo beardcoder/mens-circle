@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
+use Spatie\ResponseCache\Facades\ResponseCache;
 
 class EventController extends Controller
 {
@@ -87,6 +88,9 @@ class EventController extends Controller
             'status' => 'confirmed',
             'confirmed_at' => now(),
         ]);
+
+        // Clear response cache to update available spots on event pages
+        ResponseCache::clear();
 
         try {
             Mail::queue(new EventRegistrationConfirmation($registration, $event));
