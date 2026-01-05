@@ -12,7 +12,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -41,11 +41,11 @@ class NewsletterResource extends Resource
                     ->label('Betreff')
                     ->disabled()
                     ->dehydrated(false),
-                Textarea::make('content')
+                RichEditor::make('content')
                     ->label('Inhalt')
                     ->disabled()
                     ->dehydrated(false)
-                    ->rows(10),
+                    ->toolbarButtons([]),
                 TextInput::make('status')
                     ->label('Status')
                     ->disabled()
