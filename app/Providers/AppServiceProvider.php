@@ -37,11 +37,13 @@ class AppServiceProvider extends ServiceProvider
                 $view->with([
                     'hasNextEvent' => $hasNextEvent,
                     'settings' => $settings,
+                    'whatsappCommunityLink' => $settings->whatsapp_community_link,
                 ]);
             } catch (Throwable) {
                 $view->with([
                     'hasNextEvent' => false,
                     'settings' => null,
+                    'whatsappCommunityLink' => null,
                 ]);
             }
         });
