@@ -21,6 +21,7 @@ class EventController extends Controller
     public function showNext(): View|RedirectResponse
     {
         $event = Event::query()
+            ->select('id', 'slug', 'event_date')
             ->where('is_published', true)
             ->where('event_date', '>=', now())
             ->orderBy('event_date')
@@ -35,8 +36,12 @@ class EventController extends Controller
 
     public function show(string $slug): View
     {
-        $event = Event::where('slug', $slug)
+        $event = Event::query()
+            ->where('slug', $slug)
             ->where('is_published', true)
+            ->withCount([
+                'confirmedRegistrations as confirmed_registrations_count',
+            ])
             ->firstOrFail();
 
         return view('event', ['event' => $event]);
@@ -45,7 +50,10 @@ class EventController extends Controller
     public function register(EventRegistrationRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $event = Event::findOrFail($validated['event_id']);
+        $event = Event::query()
+            ->select('id', 'event_date', 'is_published', 'max_participants')
+            ->withCount(['confirmedRegistrations as confirmed_registrations_count'])
+            ->findOrFail($validated['event_id']);
 
         if (! $event->is_published) {
             return response()->json([
@@ -68,11 +76,12 @@ class EventController extends Controller
             ], 409);
         }
 
-        $existingRegistration = EventRegistration::where('event_id', $event->id)
+        $hasExistingRegistration = EventRegistration::query()
+            ->where('event_id', $event->id)
             ->where('email', $validated['email'])
-            ->first();
+            ->exists();
 
-        if ($existingRegistration) {
+        if ($hasExistingRegistration) {
             return response()->json([
                 'success' => false,
                 'message' => 'Du bist bereits für diese Veranstaltung angemeldet.',
