@@ -69,7 +69,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
             ->statePath('data');
     }
 
-    protected function getFormActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Action::make('sendNewsletter')
