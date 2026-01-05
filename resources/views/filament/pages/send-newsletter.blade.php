@@ -1,5 +1,5 @@
 <x-filament-panels::page>
-    <form wire:submit="send">
+    <div>
         {{ $this->form }}
 
         <div class="mt-6">
@@ -7,5 +7,7 @@
                 {{ $action }}
             @endforeach
         </div>
-    </form>
+    </div>
+    
+    <x-filament-actions::modals />
 </x-filament-panels::page>
