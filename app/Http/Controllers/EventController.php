@@ -10,6 +10,7 @@ use App\Models\Event;
 use App\Models\EventRegistration;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
@@ -17,7 +18,7 @@ use Spatie\ResponseCache\Facades\ResponseCache;
 
 class EventController extends Controller
 {
-    public function showNext(): View
+    public function showNext(): View|RedirectResponse
     {
         $event = Event::query()
             ->where('is_published', true)
@@ -29,7 +30,7 @@ class EventController extends Controller
             return view('no-event');
         }
 
-        return view('event', ['event' => $event]);
+        return redirect()->route('event.show.slug', ['slug' => $event->slug]);
     }
 
     public function show(string $slug): View
