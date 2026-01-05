@@ -42,6 +42,11 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 # ----------------------------
 FROM ${PHP_IMAGE} AS production
 
+# Install PHP intl extension (required by Filament)
+USER root
+RUN install-php-extensions intl
+USER www-data
+
 ENV APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
@@ -49,8 +54,6 @@ ENV APP_ENV=production \
     OCTANE_SERVER=frankenphp \
     CADDY_SERVER_ROOT=/app/public \
     APP_BASE_DIR=/app
-
-USER www-data
 WORKDIR /app
 
 # Environment defaults for production
