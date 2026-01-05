@@ -3,11 +3,9 @@
         {{ $this->form }}
 
         <div class="mt-6">
-            @foreach($this->getFormActions() as $action)
-                {{ $action }}
-            @endforeach
+            <x-filament-panels::form.actions :actions="$this->getFormActions()" />
         </div>
     </div>
-    
+
     <x-filament-actions::modals />
 </x-filament-panels::page>
