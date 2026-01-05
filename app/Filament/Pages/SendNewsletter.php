@@ -9,7 +9,7 @@ use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
 use BackedEnum;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -47,10 +47,19 @@ class SendNewsletter extends Page implements HasForms
                     ->maxLength(255)
                     ->placeholder('z.B. Nächstes Treffen am 24. Januar'),
 
-                Textarea::make('content')
+                RichEditor::make('content')
                     ->label('Nachricht')
                     ->required()
-                    ->rows(10)
+                    ->toolbarButtons([
+                        'bold',
+                        'italic',
+                        'link',
+                        'heading',
+                        'bulletList',
+                        'orderedList',
+                        'undo',
+                        'redo',
+                    ])
                     ->placeholder('Schreibe deine Newsletter-Nachricht hier...'),
             ])
             ->statePath('data');
