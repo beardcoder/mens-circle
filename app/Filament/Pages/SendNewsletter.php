@@ -9,6 +9,8 @@ use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -18,8 +20,9 @@ use Filament\Pages\Page;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 
-class SendNewsletter extends Page implements HasForms
+class SendNewsletter extends Page implements HasActions, HasForms
 {
+    use InteractsWithActions;
     use InteractsWithForms;
 
     protected static BackedEnum|string|null $navigationIcon = Heroicon::OutlinedPaperAirplane;
@@ -69,7 +72,7 @@ class SendNewsletter extends Page implements HasForms
     protected function getFormActions(): array
     {
         return [
-            Action::make('send')
+            Action::make('sendNewsletter')
                 ->label('Newsletter versenden')
                 ->icon(Heroicon::OutlinedPaperAirplane)
                 ->color('primary')
