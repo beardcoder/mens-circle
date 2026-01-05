@@ -84,25 +84,28 @@ class SendNewsletter extends Page implements HasActions, HasForms
                     return sprintf('Der Newsletter wird an %s aktive Abonnenten versendet. Dies kann nicht rückgängig gemacht werden.', $count);
                 })
                 ->modalSubmitActionLabel('Jetzt versenden')
-                ->action(function (): void {
-                    $data = $this->form->getState();
-
-                    $newsletter = Newsletter::create([
-                        'subject' => $data['subject'],
-                        'content' => $data['content'],
-                        'status' => 'draft',
-                    ]);
-
-                    dispatch(new SendNewsletterJob($newsletter));
-
-                    Notification::make()
-                        ->title('Newsletter wird versendet')
-                        ->body('Der Newsletter wird im Hintergrund an alle Abonnenten versendet.')
-                        ->success()
-                        ->send();
-
-                    $this->form->fill();
-                }),
+                ->action($this->sendNewsletterAction(...)),
         ];
+    }
+
+    public function sendNewsletterAction(): void
+    {
+        $data = $this->form->getState();
+
+        $newsletter = Newsletter::create([
+            'subject' => $data['subject'],
+            'content' => $data['content'],
+            'status' => 'draft',
+        ]);
+
+        dispatch(new SendNewsletterJob($newsletter));
+
+        Notification::make()
+            ->title('Newsletter wird versendet')
+            ->body('Der Newsletter wird im Hintergrund an alle Abonnenten versendet.')
+            ->success()
+            ->send();
+
+        $this->form->fill();
     }
 }
