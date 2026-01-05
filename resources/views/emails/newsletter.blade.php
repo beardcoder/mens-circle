@@ -1,5 +1,5 @@
 <x-mail::message>
-{!! nl2br(e($newsletter->content)) !!}
+{!! $newsletter->content !!}
 
 <x-mail::panel>
 Du erhältst diese E-Mail, weil du dich für den Newsletter von Männerkreis Straubing angemeldet hast.
