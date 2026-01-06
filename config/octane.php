@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Settings\GeneralSettings;
 use Laravel\Octane\Contracts\OperationTerminated;
 use Laravel\Octane\Events\RequestHandled;
 use Laravel\Octane\Events\RequestReceived;
@@ -131,11 +132,10 @@ return [
 
     'warm' => [
         ...Octane::defaultServicesToWarm(),
-        \App\Settings\GeneralSettings::class,
+        GeneralSettings::class,
     ],
 
     'flush' => [
-        \Barryvdh\Debugbar\LaravelDebugbar::class,
     ],
 
     /*

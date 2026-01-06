@@ -212,7 +212,8 @@
 .form-message--error {
   color: var(--color-bone);
   background: var(--accent-primary);
-  border: 1px solid color-mix(in oklch, var(--accent-primary) 80%, var(--color-earth-deep));
+  border: 1px solid
+    color-mix(in oklch, var(--accent-primary) 80%, var(--color-earth-deep));
 }
 
 .form-message--info {
