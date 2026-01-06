@@ -20,7 +20,7 @@
     "description": "{{ strip_tags($event->description) }}",
     "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}",
     "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}",
-    "eventStatus": "{{ $isPast ? 'https://schema.org/EventCancelled' : ($event->isFull() ? 'https://schema.org/EventScheduled' : 'https://schema.org/EventScheduled') }}",
+    "eventStatus": "{{ $isPast ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled' }}",
     "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
     "location": {
         "@@type": "Place",
