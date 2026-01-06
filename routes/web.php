@@ -15,6 +15,8 @@ Route::get('/llms.txt', [LlmsController::class, 'show'])->name('llms.txt');
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/event', [EventController::class, 'showNext'])->name('event.show');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show.slug');
+Route::redirect('/events', '/event', 301);
+Route::redirect('/events/{slug}', '/event/{slug}', 301);
 Route::get('/teile-deine-erfahrung', [TestimonialSubmissionController::class, 'show'])->name('testimonial.form');
 
 Route::post('/event/register', [EventController::class, 'register'])->name('event.register');
