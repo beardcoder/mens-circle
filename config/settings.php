@@ -71,7 +71,7 @@ return [
      */
     'cache' => [
         'enabled' => env('SETTINGS_CACHE_ENABLED', true),
-        'store' => env('SETTINGS_CACHE_STORE', null),
+        'store' => env('SETTINGS_CACHE_STORE'),
         'prefix' => 'settings',
         'ttl' => null,
     ],
