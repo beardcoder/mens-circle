@@ -25,29 +25,38 @@ class AppServiceProvider extends ServiceProvider
         Event::observe(EventObserver::class);
         Page::observe(PageObserver::class);
 
-        View::composer([
-            'errors.404',
-            'layouts.app',
-            'components.blocks.cta',
-            'components.blocks.hero',
-            'components.blocks.whatsapp-community',
-        ], function (ViewContract $view): void {
+        View::composer('*', function (ViewContract $view): void {
             try {
                 $settings = app(GeneralSettings::class);
 
                 $view->with([
-                    'hasNextEvent' => cache()->remember('has_next_event', 300, fn () => Event::query()
-                        ->where('is_published', true)
-                        ->where('event_date', '>=', now())
-                        ->exists()),
                     'settings' => $settings,
                     'socialLinks' => $settings->social_links ?? [],
                 ]);
             } catch (Throwable) {
                 $view->with([
-                    'hasNextEvent' => false,
                     'settings' => null,
                     'socialLinks' => [],
+                ]);
+            }
+        });
+
+        View::composer([
+            'errors.404',
+            'layouts.app',
+            'components.blocks.cta',
+            'components.blocks.hero',
+        ], function (ViewContract $view): void {
+            try {
+                $view->with([
+                    'hasNextEvent' => cache()->remember('has_next_event', 300, fn () => Event::query()
+                        ->where('is_published', true)
+                        ->where('event_date', '>=', now())
+                        ->exists()),
+                ]);
+            } catch (Throwable) {
+                $view->with([
+                    'hasNextEvent' => false,
                 ]);
             }
         });
