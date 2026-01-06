@@ -20,14 +20,14 @@
     "description": "{{ strip_tags($event->description) }}",
     "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}",
     "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}",
-    "eventStatus": "{{ $isPast ? 'https://schema.org/EventPostponed' : 'https://schema.org/EventScheduled' }}",
+    "eventStatus": "{{ $isPast ? 'https://schema.org/EventCancelled' : ($event->isFull() ? 'https://schema.org/EventScheduled' : 'https://schema.org/EventScheduled') }}",
     "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
     "location": {
         "@@type": "Place",
         "name": "{{ $event->location }}",
         "address": {
             "@@type": "PostalAddress",
-            "addressLocality": "{{ $event->location }}",
+            "addressLocality": "{{ $event->city ?? $event->location }}",
             "addressRegion": "Bayern",
             "addressCountry": "DE"
         }
@@ -40,14 +40,14 @@
     },
     "offers": {
         "@@type": "Offer",
-        "url": "{{ route('event.show') }}",
+        "url": "{{ route('event.show.slug', $event->slug) }}",
         "price": "0",
         "priceCurrency": "EUR",
         "availability": "{{ $event->isFull() ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock' }}",
         "validFrom": "{{ now()->format('Y-m-d') }}"
     },
     "maximumAttendeeCapacity": {{ $event->max_participants }},
-    "remainingAttendeeCapacity": {{ $event->availableSpots() }}
+    "remainingAttendeeCapacity": {{ max(0, $event->availableSpots()) }}
 }
 </script>
 @endpush

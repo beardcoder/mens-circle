@@ -38,8 +38,6 @@ class Event extends Model implements HasMedia
         'is_published',
     ];
 
-    protected ?int $confirmedRegistrationsCountCache = null;
-
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
@@ -66,26 +64,7 @@ class Event extends Model implements HasMedia
 
     public function confirmedRegistrationsCount(): int
     {
-        if ($this->confirmedRegistrationsCountCache !== null) {
-            return $this->confirmedRegistrationsCountCache;
-        }
-
-        if ($this->relationLoaded('confirmedRegistrations')) {
-            $this->confirmedRegistrationsCountCache = $this->confirmedRegistrations->count();
-
-            return $this->confirmedRegistrationsCountCache;
-        }
-
-        $count = $this->getAttribute('confirmed_registrations_count');
-        if ($count !== null) {
-            $this->confirmedRegistrationsCountCache = (int) $count;
-
-            return $this->confirmedRegistrationsCountCache;
-        }
-
-        $this->confirmedRegistrationsCountCache = $this->confirmedRegistrations()->count();
-
-        return $this->confirmedRegistrationsCountCache;
+        return (int) ($this->confirmed_registrations_count ?? $this->confirmedRegistrations()->count());
     }
 
     public function availableSpots(): int
