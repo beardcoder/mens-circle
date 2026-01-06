@@ -64,7 +64,4 @@
             @endif
         @endforeach
     @endif
-
-    {{-- WhatsApp Community section - shown when link is set in settings --}}
-    <x-blocks.whatsapp-community />
 @endsection

@@ -25,25 +25,23 @@ class AppServiceProvider extends ServiceProvider
         Event::observe(EventObserver::class);
         Page::observe(PageObserver::class);
 
-        View::composer('*', function (ViewContract $view): void {
+        View::composer(['layouts.app', 'components.blocks.whatsapp-community'], function (ViewContract $view): void {
             try {
-                $hasNextEvent = Event::query()
-                    ->where('is_published', true)
-                    ->where('event_date', '>=', now())
-                    ->exists();
-
                 $settings = app(GeneralSettings::class);
 
                 $view->with([
-                    'hasNextEvent' => $hasNextEvent,
+                    'hasNextEvent' => cache()->remember('has_next_event', 300, fn () => Event::query()
+                        ->where('is_published', true)
+                        ->where('event_date', '>=', now())
+                        ->exists()),
                     'settings' => $settings,
-                    'whatsappCommunityLink' => $settings->whatsapp_community_link,
+                    'socialLinks' => $settings->social_links ?? [],
                 ]);
             } catch (Throwable) {
                 $view->with([
                     'hasNextEvent' => false,
                     'settings' => null,
-                    'whatsappCommunityLink' => null,
+                    'socialLinks' => [],
                 ]);
             }
         });
