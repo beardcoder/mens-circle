@@ -25,7 +25,13 @@ class AppServiceProvider extends ServiceProvider
         Event::observe(EventObserver::class);
         Page::observe(PageObserver::class);
 
-        View::composer(['layouts.app', 'components.blocks.whatsapp-community'], function (ViewContract $view): void {
+        View::composer([
+            'errors.404',
+            'layouts.app',
+            'components.blocks.cta',
+            'components.blocks.hero',
+            'components.blocks.whatsapp-community',
+        ], function (ViewContract $view): void {
             try {
                 $settings = app(GeneralSettings::class);
 
