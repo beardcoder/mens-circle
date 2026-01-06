@@ -32,5 +32,6 @@ class EventObserver
     protected function invalidateCache(): void
     {
         ResponseCache::clear();
+        cache()->forget('has_next_event');
     }
 }
