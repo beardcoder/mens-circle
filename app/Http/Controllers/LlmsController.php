@@ -19,7 +19,7 @@ class LlmsController extends Controller
 
     private function generateLlmsTxt(): string
     {
-        $settings = settings();
+        $settings = app_settings();
         $siteName = $settings['site_name'] ?? 'Männerkreis Niederbayern';
         $siteDescription = $settings['site_description'] ?? 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.';
 
