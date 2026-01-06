@@ -31,6 +31,7 @@ class GenerateSitemap extends Command
 
         // Add all published events
         Event::query()
+            ->select('slug', 'updated_at')
             ->where('is_published', true)
             ->latest('event_date')
             ->get()
@@ -45,6 +46,7 @@ class GenerateSitemap extends Command
 
         // Add all published pages
         Page::query()
+            ->select('slug', 'updated_at')
             ->where('is_published', true)
             ->latest('published_at')
             ->get()
@@ -57,20 +59,6 @@ class GenerateSitemap extends Command
                 );
             });
 
-        // Add static pages (Impressum & Datenschutz)
-        $sitemap->add(
-            Url::create(route('page.show', 'impressum'))
-                ->setPriority(0.5)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-        );
-
-        $sitemap->add(
-            Url::create(route('page.show', 'datenschutz'))
-                ->setPriority(0.5)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-        );
-
-        // Write sitemap to public directory
         $path = public_path('sitemap.xml');
         $sitemap->writeToFile($path);
 
