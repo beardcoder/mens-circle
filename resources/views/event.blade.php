@@ -18,6 +18,12 @@
     "@@type": "Event",
     "name": "{{ $event->title }}",
     "description": "{{ strip_tags($event->description) }}",
+    "image": {
+        "@@type": "ImageObject",
+        "url": "{{ asset('logo.jpg') }}",
+        "width": 512,
+        "height": 512
+    },
     "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}",
     "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}",
     "eventStatus": "{{ $isPast ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled' }}",
@@ -37,6 +43,11 @@
         "name": "Männerkreis Niederbayern/ Straubing",
         "url": "{{ url('/') }}",
         "email": "hallo@mens-circle.de"
+    },
+    "performer": {
+        "@@type": "Organization",
+        "name": "Männerkreis Niederbayern/ Straubing",
+        "url": "{{ url('/') }}"
     },
     "offers": {
         "@@type": "Offer",
