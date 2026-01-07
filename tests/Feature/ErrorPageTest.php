@@ -33,6 +33,6 @@ class ErrorPageTest extends TestCase
         $response = $this->get('/another-non-existent-page');
 
         $response->assertStatus(404);
-        $response->assertViewHas('errors.404');
+        $response->assertViewIs('errors.404');
     }
 }
