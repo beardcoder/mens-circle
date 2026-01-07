@@ -1,5 +1,5 @@
 /**
- * Männerkreis Straubing - JavaScript
+ * Männerkreis Niederbayern/ Straubing - JavaScript
  * Handles navigation, FAQ accordion, forms, animations, and calendar integration
  */
 
@@ -510,9 +510,9 @@ function initCalendarIntegration() {
 
   // Get event data from window object (set in event.blade.php)
   const eventData = window.eventData || {
-    title: 'Männerkreis Straubing',
+    title: 'Männerkreis Niederbayern/ Straubing',
     description:
-      'Treffen des Männerkreis Straubing. Ein Raum für echte Begegnung unter Männern.',
+      'Treffen des Männerkreis Niederbayern/ Straubing. Ein Raum für echte Begegnung unter Männern.',
     location: 'Straubing (genaue Adresse nach Anmeldung)',
     startDate: '2025-01-24',
     startTime: '19:00',
@@ -571,7 +571,7 @@ function generateICS(event) {
 
   return `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Männerkreis Straubing//DE
+PRODID:-//Männerkreis Niederbayern/ Straubing//DE
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT

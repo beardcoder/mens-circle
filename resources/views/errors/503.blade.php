@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Wartungsarbeiten – Männerkreis Straubing')
+@section('title', 'Wartungsarbeiten – Männerkreis Niederbayern/ Straubing')
 @section('robots', 'noindex, nofollow')
 
 @section('content')

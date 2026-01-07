@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Newsletter abgemeldet – Männerkreis Straubing')
+@section('title', 'Newsletter abgemeldet – Männerkreis Niederbayern/ Straubing')
 
 @section('content')
     <section class="section">

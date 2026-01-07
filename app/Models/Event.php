@@ -116,7 +116,7 @@ class Event extends Model implements HasMedia
 
         $ical = "BEGIN:VCALENDAR\r\n";
         $ical .= "VERSION:2.0\r\n";
-        $ical .= "PRODID:-//Männerkreis Straubing//Event//DE\r\n";
+        $ical .= "PRODID:-//Männerkreis Niederbayern/ Straubing//Event//DE\r\n";
         $ical .= "BEGIN:VEVENT\r\n";
         $ical .= "UID:{$uid}\r\n";
         $ical .= "DTSTAMP:{$now}\r\n";

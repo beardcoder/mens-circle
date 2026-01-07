@@ -1,9 +1,9 @@
 <x-mail::message>
-# Willkommen beim Männerkreis Straubing!
+# Willkommen beim Männerkreis Niederbayern/ Straubing!
 
 Hallo und herzlich willkommen,
 
-schön, dass du dich für den **Männerkreis Straubing Newsletter** angemeldet hast!
+schön, dass du dich für den **Männerkreis Niederbayern/ Straubing Newsletter** angemeldet hast!
 
 ## Was dich erwartet
 
@@ -23,7 +23,7 @@ Nächste Termine ansehen
 
 ## Über uns
 
-Der Männerkreis Straubing ist ein Raum für echte Begegnung. Hier können Männer in einer vertrauensvollen Atmosphäre authentisch sein, sich austauschen und gemeinsam wachsen.
+Der Männerkreis Niederbayern/ Straubing ist ein Raum für echte Begegnung. Hier können Männer in einer vertrauensvollen Atmosphäre authentisch sein, sich austauschen und gemeinsam wachsen.
 
 ---
 

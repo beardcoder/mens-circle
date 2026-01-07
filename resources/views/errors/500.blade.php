@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Serverfehler – Männerkreis Straubing')
+@section('title', 'Serverfehler – Männerkreis Niederbayern/ Straubing')
 @section('robots', 'noindex, nofollow')
 
 @section('content')
