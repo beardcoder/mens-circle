@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Teile deine Erfahrung – Männerkreis Straubing')
-@section('meta_description', 'Teile deine Erfahrung mit dem Männerkreis Straubing. Hilf anderen Männern zu verstehen, was der Kreis bedeuten kann.')
-@section('og_title', 'Teile deine Erfahrung – Männerkreis Straubing')
+@section('title', 'Teile deine Erfahrung – Männerkreis Niederbayern/ Straubing')
+@section('meta_description', 'Teile deine Erfahrung mit dem Männerkreis Niederbayern/ Straubing. Hilf anderen Männern zu verstehen, was der Kreis bedeuten kann.')
+@section('og_title', 'Teile deine Erfahrung – Männerkreis Niederbayern/ Straubing')
 
 @push('structured_data')
 <script type="application/ld+json">
@@ -10,7 +10,7 @@
     "@@context": "https://schema.org",
     "@@type": "WebPage",
     "name": "Teile deine Erfahrung",
-    "description": "Teile deine Erfahrung mit dem Männerkreis Straubing",
+    "description": "Teile deine Erfahrung mit dem Männerkreis Niederbayern/ Straubing",
     "url": "{{ route('testimonial.form') }}"
 }
 </script>

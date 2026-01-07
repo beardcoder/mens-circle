@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Impressum – Männerkreis Straubing')
+@section('title', 'Impressum – Männerkreis Niederbayern/ Straubing')
 
 @section('content')
     <section class="section">
@@ -11,7 +11,7 @@
             <p>
                 <strong>WICHTIG: Vor Go-Live vervollständigen!</strong><br><br>
                 Markus Sommer<br>
-                Männerkreis Straubing<br>
+                Männerkreis Niederbayern/ Straubing<br>
                 Musterstraße 123<br>
                 94315 Straubing
             </p>

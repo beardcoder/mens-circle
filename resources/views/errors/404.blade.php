@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Seite nicht gefunden – Männerkreis Straubing')
+@section('title', 'Seite nicht gefunden – Männerkreis Niederbayern/ Straubing')
 @section('robots', 'noindex, nofollow')
 
 @section('content')
@@ -20,11 +20,6 @@
                     <a href="{{ route('home') }}" class="btn btn--primary">
                         Zur Startseite
                     </a>
-                    @if($hasNextEvent)
-                        <a href="{{ route('event.show') }}" class="btn btn--secondary">
-                            Nächster Termin
-                        </a>
-                    @endif
                 </div>
             </div>
         </div>

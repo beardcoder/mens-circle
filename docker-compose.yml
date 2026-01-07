@@ -9,7 +9,7 @@ services:
       - "443:8443"
     environment:
       # Laravel Environment
-      - APP_NAME=Männerkreis Straubing
+      - APP_NAME=Männerkreis Niederbayern/ Straubing
       - APP_ENV=production
       - APP_DEBUG=false
       - APP_URL=http://localhost

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Datenschutz – Männerkreis Straubing')
+@section('title', 'Datenschutz – Männerkreis Niederbayern/ Straubing')
 
 @section('content')
     <section class="section">

@@ -2,7 +2,7 @@
 {!! $newsletter->content !!}
 
 <x-mail::panel>
-Du erhältst diese E-Mail, weil du dich für den Newsletter von Männerkreis Straubing angemeldet hast.
+Du erhältst diese E-Mail, weil du dich für den Newsletter von Männerkreis Niederbayern/ Straubing angemeldet hast.
 </x-mail::panel>
 
 <x-mail::button :url="route('newsletter.unsubscribe', ['token' => $subscription->token])">

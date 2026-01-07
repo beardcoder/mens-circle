@@ -32,7 +32,7 @@ class NewsletterWelcome extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Willkommen beim Männerkreis Straubing Newsletter',
+            subject: 'Willkommen beim Männerkreis Niederbayern/ Straubing Newsletter',
         );
     }
 

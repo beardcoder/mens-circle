@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Aktuell kein Termin – Männerkreis Straubing')
+@section('title', 'Aktuell kein Termin – Männerkreis Niederbayern/ Straubing')
 @section('meta_description', 'Derzeit ist kein Männerkreis-Treffen geplant. Melde dich für unseren Newsletter an, um über kommende Termine informiert zu werden.')
 
 @section('content')
@@ -15,7 +15,7 @@
 
         <div class="container">
             <div class="hero__content">
-                <p class="hero__label fade-in">Männerkreis Straubing</p>
+                <p class="hero__label fade-in">Männerkreis Niederbayern/ Straubing</p>
                 <h1 class="hero__title fade-in fade-in-delay-1">
                     <span class="hero__title-line">Aktuell ist kein</span>
                     <span class="hero__title-line"><span class="text-italic">Termin</span> geplant</span>
@@ -47,7 +47,7 @@
                         Ein Raum für <span class="text-italic">echte Begegnung</span>
                     </h2>
                     <p class="no-event-info__text">
-                        Der Männerkreis Straubing bietet dir einen geschützten Raum, in dem du dich mit anderen Männern
+                        Der Männerkreis Niederbayern/ Straubing bietet dir einen geschützten Raum, in dem du dich mit anderen Männern
                         austauschen, wachsen und echte Verbindungen aufbauen kannst. Unsere Treffen finden regelmäßig statt –
                         sobald der nächste Termin feststeht, informieren wir dich.
                     </p>

@@ -145,7 +145,7 @@ class DatabaseSeeder extends Seeder
                 'data' => [
                     'eyebrow' => 'In Verbindung bleiben',
                     'title' => 'Bleib <span class="text-italic">verbunden</span>',
-                    'text' => 'Erhalte Informationen zu kommenden Treffen, Impulse zum Thema Männlichkeit und Neuigkeiten aus dem Männerkreis Straubing.',
+                    'text' => 'Erhalte Informationen zu kommenden Treffen, Impulse zum Thema Männlichkeit und Neuigkeiten aus dem Männerkreis Niederbayern/ Straubing.',
                 ],
                 'order' => 6,
             ],
@@ -170,7 +170,7 @@ class DatabaseSeeder extends Seeder
             'published_at' => now(),
             'content_blocks' => $contentBlocks,
             'meta' => [
-                'description' => 'Männerkreis Straubing – Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.',
+                'description' => 'Männerkreis Niederbayern/ Straubing – Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.',
             ],
         ]);
 
@@ -179,7 +179,7 @@ class DatabaseSeeder extends Seeder
 
         // Create sample event
         Event::create([
-            'title' => 'Männerkreis Straubing – Januar 2025',
+            'title' => 'Männerkreis Niederbayern/ Straubing – Januar 2025',
             'slug' => 'maennerkreis-januar-2025',
             'description' => "Der Männerkreis ist ein regelmäßiges Treffen von Männern, die sich nach echtem Austausch und authentischer Verbindung sehnen. In einem geschützten Rahmen teilen wir unsere Erfahrungen, Herausforderungen und Erkenntnisse.\n\nEs ist keine Vorerfahrung nötig – bringe einfach dich selbst mit, so wie du gerade bist. Wir freuen uns auf dich!",
             'event_date' => now()->addDays(14),
