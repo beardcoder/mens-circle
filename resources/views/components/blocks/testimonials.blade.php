@@ -4,11 +4,40 @@
 @endphp
 
 @if($testimonials->isNotEmpty())
-<section class="section section--large testimonials-section" id="stimmen">
+@push('structured_data')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "ItemList",
+    "name": "Teilnehmerstimmen",
+    "description": "Authentische Einblicke von Männern, die den Männerkreis erleben",
+    "numberOfItems": {{ $testimonials->count() }},
+    "itemListElement": [
+        @foreach($testimonials as $index => $testimonial)
+        {
+            "@@type": "Review",
+            "position": {{ $index + 1 }},
+            "reviewBody": "{{ e($testimonial->quote) }}",
+            "author": {
+                "@@type": "Person",
+                "name": "{{ e($testimonial->author_name ?: 'Anonymer Teilnehmer') }}"
+            },
+            "itemReviewed": {
+                "@@type": "Organization",
+                "@@id": "{{ url('/') }}#organization"
+            }
+        }@if(!$loop->last),@endif
+        @endforeach
+    ]
+}
+</script>
+@endpush
+
+<section class="section section--large testimonials-section" id="stimmen" aria-labelledby="testimonials-title">
     <div class="container">
         <div class="testimonials__header fade-in">
             <p class="eyebrow">Community Stimmen</p>
-            <h2 class="section-title testimonials__title">Was <span class="highlight">Teilnehmer</span> sagen</h2>
+            <h2 class="section-title testimonials__title" id="testimonials-title">Was <span class="highlight">Teilnehmer</span> sagen</h2>
             <p class="testimonials__subtitle">
                 Authentische Einblicke von Männern, die den Kreis erleben
             </p>

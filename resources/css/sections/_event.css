@@ -300,16 +300,6 @@
   transform: scale(1.1);
 }
 
-.event-info__card-number {
-  display: block;
-  margin-block-end: var(--space-md);
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--accent-primary);
-  letter-spacing: 0.1em;
-}
-
 .event-info__card h3 {
   margin-block-end: var(--space-xs);
   font-size: 0.65rem;
@@ -541,6 +531,10 @@
 
 .event-cta__content {
   position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   z-index: 1;
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,21 +12,34 @@
     <meta name="author" content="Markus Sommer">
     <link rel="canonical" href="@yield('canonical', url()->current())">
 
+    <!-- Language & Locale -->
+    <link rel="alternate" hreflang="de" href="@yield('canonical', url()->current())">
+    <link rel="alternate" hreflang="x-default" href="@yield('canonical', url()->current())">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3d2817">
+    <meta name="color-scheme" content="light">
+    <meta name="msapplication-TileColor" content="#3d2817">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="@yield('og_title', $settings->site_name)">
     <meta property="og:description" content="@yield('og_description', $settings->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
-    <meta property="og:image" content="@yield('og_image', asset('images/og-image.jpg'))">
+    <meta property="og:image" content="@yield('og_image', asset('images/logo-color.png'))">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="@yield('og_image_alt', 'Männerkreis Niederbayern/ Straubing - Gemeinschaft für Männer')">
     <meta property="og:locale" content="de_DE">
     <meta property="og:site_name" content="{{ $settings->site_name }}">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="@yield('twitter_title', $settings->site_name)">
-    <meta property="twitter:description" content="@yield('twitter_description', $settings->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
-    <meta property="twitter:image" content="@yield('twitter_image', asset('images/og-image.jpg'))">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="@yield('twitter_title', $settings->site_name)">
+    <meta name="twitter:description" content="@yield('twitter_description', $settings->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
+    <meta name="twitter:image" content="@yield('twitter_image', asset('images/logo-color.png'))">
+    <meta name="twitter:image:alt" content="@yield('twitter_image_alt', 'Männerkreis Niederbayern/ Straubing')">
 
     <!-- Security -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -36,9 +49,12 @@
 
     <!-- Robots -->
     <meta name="robots" content="@yield('robots', 'index, follow')">
+    <meta name="googlebot" content="@yield('robots', 'index, follow')">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
 
     <!-- Resource Hints for Performance -->
     <link rel="preconnect" href="https://stats.letsbenow.de" crossorigin>

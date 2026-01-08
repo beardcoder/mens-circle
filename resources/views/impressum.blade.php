@@ -1,6 +1,18 @@
 @extends('layouts.app')
 
 @section('title', 'Impressum – Männerkreis Niederbayern/ Straubing')
+@section('meta_description', 'Impressum und rechtliche Angaben des Männerkreis Niederbayern/ Straubing gemäß § 5 TMG.')
+@section('robots', 'index, follow')
+
+<x-seo.breadcrumb-schema :items="[
+    ['name' => 'Startseite', 'url' => route('home')],
+    ['name' => 'Impressum', 'url' => route('page.show', 'impressum')],
+]" />
+
+<x-seo.webpage-schema
+    title="Impressum"
+    description="Impressum und rechtliche Angaben des Männerkreis Niederbayern/ Straubing gemäß § 5 TMG."
+/>
 
 @section('content')
     <section class="section">
