@@ -19,6 +19,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Prüfe ob die content_blocks Spalte überhaupt existiert
+        if (!Schema::hasColumn('pages', 'content_blocks')) {
+            // Spalte existiert bereits nicht mehr, nichts zu tun
+            return;
+        }
+
+        // Prüfe ob die content_blocks Tabelle existiert und die page_id Spalte hat
+        if (!Schema::hasTable('content_blocks') || !Schema::hasColumn('content_blocks', 'page_id')) {
+            throw new \Exception(
+                "Die content_blocks Tabelle oder page_id Spalte existiert nicht! " .
+                "Bitte führe erst die vorherigen Migrationen aus."
+            );
+        }
+
         // Sicherheits-Check: Validiere dass alle Pages ContentBlocks haben
         $pagesWithContentBlocks = Page::whereHas('contentBlocks')->count();
         $totalPages = Page::count();
