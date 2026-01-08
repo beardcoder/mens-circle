@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('pages', function (Blueprint $table) {
-            $table->dropColumn('content_blocks');
-        });
+        // WICHTIG: Diese Spalte NICHT sofort in Produktion löschen!
+        // Erst nach erfolgreicher Migration und Test-Phase manuell ausführen:
+        // Schema::table('pages', function (Blueprint $table) {
+        //     $table->dropColumn('content_blocks');
+        // });
+
+        // Für lokale Entwicklung kannst du das Löschen aktivieren,
+        // aber in Produktion solltest du die Spalte als Backup behalten.
     }
 
     /**

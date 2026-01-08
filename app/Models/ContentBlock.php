@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -15,8 +15,7 @@ class ContentBlock extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $fillable = [
-        'contentable_type',
-        'contentable_id',
+        'page_id',
         'type',
         'data',
         'block_id',
@@ -24,11 +23,11 @@ class ContentBlock extends Model implements HasMedia
     ];
 
     /**
-     * Polymorphe Beziehung zum Parent (z.B. Page, Event)
+     * Beziehung zur Page
      */
-    public function contentable(): MorphTo
+    public function page(): BelongsTo
     {
-        return $this->morphTo();
+        return $this->belongsTo(Page::class);
     }
 
     /**

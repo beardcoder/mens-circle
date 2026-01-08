@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -36,10 +35,9 @@ class Page extends Model implements HasMedia
     /**
      * Content Blocks Beziehung (sortiert)
      */
-    public function contentBlocks(): MorphMany
+    public function contentBlocks()
     {
-        return $this->morphMany(ContentBlock::class, 'contentable')
-            ->orderBy('order');
+        return $this->hasMany(ContentBlock::class)->orderBy('order');
     }
 
     public function registerMediaCollections(): void
