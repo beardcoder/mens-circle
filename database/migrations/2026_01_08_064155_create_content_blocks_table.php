@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('content_blocks', function (Blueprint $table) {
             $table->id();
-            $table->morphs('contentable'); // polymorphe Beziehung (contentable_type, contentable_id)
+            $table->foreignId('page_id')->constrained()->cascadeOnDelete();
             $table->string('type'); // z.B. 'hero', 'intro', 'text_section'
             $table->jsonb('data'); // Alle block-spezifischen Daten
             $table->string('block_id')->unique(); // UUID für Media Library
             $table->unsignedInteger('order')->default(0); // Sortierreihenfolge
             $table->timestamps();
 
-            $table->index(['contentable_type', 'contentable_id', 'order']);
+            $table->index(['page_id', 'order']);
         });
     }
 

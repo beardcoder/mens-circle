@@ -3,9 +3,7 @@
 use App\Models\ContentBlock;
 use App\Models\Page;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 return new class extends Migration
@@ -16,14 +14,14 @@ return new class extends Migration
     public function up(): void
     {
         // Migriere bestehende content_blocks JSON Daten zu ContentBlock Models
-        DB::table('pages')
-            ->whereNotNull('content_blocks')
+        Page::whereNotNull('content_blocks')
             ->orderBy('id')
-            ->each(function ($page) {
-                // Dekodiere JSON-String
-                $contentBlocks = json_decode($page->content_blocks, true);
+            ->each(function (Page $page) {
+                $contentBlocks = is_string($page->content_blocks)
+                    ? json_decode($page->content_blocks, true)
+                    : $page->content_blocks;
 
-                if (empty($contentBlocks) || !is_array($contentBlocks)) {
+                if (empty($contentBlocks) || ! is_array($contentBlocks)) {
                     return;
                 }
 
@@ -35,8 +33,7 @@ return new class extends Migration
                     unset($blockData['block_id']);
 
                     $contentBlock = ContentBlock::create([
-                        'contentable_type' => Page::class,
-                        'contentable_id' => $page->id,
+                        'page_id' => $page->id,
                         'type' => $block['type'],
                         'data' => $blockData,
                         'block_id' => $blockId ?? \Illuminate\Support\Str::uuid(),
@@ -64,22 +61,12 @@ return new class extends Migration
     public function down(): void
     {
         // Migriere ContentBlock Models zurück zu JSON
-        DB::table('pages')->orderBy('id')->each(function ($page) {
-            $contentBlocks = [];
+        Page::orderBy('id')->each(function (Page $page) {
+            $pageId = $page->id;
 
-            $blocks = ContentBlock::where('contentable_type', '=', Page::class)
-                ->where('contentable_id', '=', $page->id)
-                ->orderBy('order')
-                ->get();
-
-            foreach ($blocks as $block) {
+            $contentBlocks = $page->contentBlocks->map(function (ContentBlock $block) use ($pageId) {
                 $data = $block->data;
                 $data['block_id'] = $block->block_id;
-
-                $contentBlocks[] = [
-                    'type' => $block->type,
-                    'data' => $data,
-                ];
 
                 // Migriere Media Library Zuordnungen zurück
                 Media::where('model_type', ContentBlock::class)
@@ -87,19 +74,22 @@ return new class extends Migration
                     ->where('collection_name', 'page_blocks')
                     ->update([
                         'model_type' => Page::class,
-                        'model_id' => $page->id,
+                        'model_id' => $pageId,
                     ]);
-            }
 
-            // Update als JSON-String
+                return [
+                    'type' => $block->type,
+                    'data' => $data,
+                ];
+            })->toArray();
+
+            // Update als JSON via DB facade (content_blocks ist nicht mehr in fillable)
             DB::table('pages')
-                ->where('id', $page->id)
+                ->where('id', $pageId)
                 ->update(['content_blocks' => json_encode($contentBlocks)]);
 
             // Lösche ContentBlock Einträge
-            ContentBlock::where('contentable_type', '=', Page::class)
-                ->where('contentable_id', '=', $page->id)
-                ->delete();
+            $page->contentBlocks()->delete();
         });
     }
 };
