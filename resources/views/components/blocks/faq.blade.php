@@ -27,22 +27,19 @@
             @if(!empty($faqItems) && is_array($faqItems))
                 <div class="faq__list fade-in fade-in-delay-1">
                     @foreach($faqItems as $item)
-                        <div class="faq-item">
-                            @if(!empty($item['question']))
-                                <button class="faq-item__question" aria-expanded="false" aria-controls="faq-answer-{{ $loop->index }}" data-m:click="action=faq_click;element=button;target=question;location=faq_section">
+                        @if(!empty($item['question']) && !empty($item['answer']))
+                            <details class="faq-item" name="faq-accordion" data-m:toggle="action=faq_toggle;element=details;target=question;location=faq_section">
+                                <summary class="faq-item__question">
                                     <span>{{ $item['question'] }}</span>
                                     <span class="faq-item__icon" aria-hidden="true"></span>
-                                </button>
-                            @endif
-
-                            @if(!empty($item['answer']))
-                                <div class="faq-item__answer" id="faq-answer-{{ $loop->index }}" role="region">
+                                </summary>
+                                <div class="faq-item__answer">
                                     <div class="faq-item__answer-inner">
                                         {!! $item['answer'] !!}
                                     </div>
                                 </div>
-                            @endif
-                        </div>
+                            </details>
+                        @endif
                     @endforeach
                 </div>
             @endif
