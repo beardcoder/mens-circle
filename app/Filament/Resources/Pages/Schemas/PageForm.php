@@ -292,6 +292,16 @@ class PageForm
                                 TextInput::make('button_link')
                                     ->label('Button Link'),
                             ]),
+
+                        Block::make('whatsapp_community')
+                            ->label('WhatsApp Community')
+                            ->icon(Heroicon::OutlinedChatBubbleLeftRight)
+                            ->schema([
+                                self::blockIdField(),
+                                Placeholder::make('whatsapp_info')
+                                    ->label('Automatische Anzeige')
+                                    ->content('Dieser Block zeigt die WhatsApp Community Sektion an. Die WhatsApp Community URL wird in den allgemeinen Einstellungen konfiguriert.'),
+                            ]),
                     ])
                     ->columnSpanFull()
                     ->collapsible(),
