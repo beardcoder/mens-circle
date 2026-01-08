@@ -1,6 +1,18 @@
 @extends('layouts.app')
 
 @section('title', 'Datenschutz – Männerkreis Niederbayern/ Straubing')
+@section('meta_description', 'Datenschutzerklärung des Männerkreis Niederbayern/ Straubing. Informationen zur Verarbeitung Ihrer personenbezogenen Daten.')
+@section('robots', 'index, follow')
+
+<x-seo.breadcrumb-schema :items="[
+    ['name' => 'Startseite', 'url' => route('home')],
+    ['name' => 'Datenschutz', 'url' => route('page.show', 'datenschutz')],
+]" />
+
+<x-seo.webpage-schema
+    title="Datenschutzerklärung"
+    description="Datenschutzerklärung des Männerkreis Niederbayern/ Straubing. Informationen zur Verarbeitung Ihrer personenbezogenen Daten."
+/>
 
 @section('content')
     <section class="section">

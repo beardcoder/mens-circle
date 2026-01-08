@@ -8,11 +8,11 @@
     $media = $block->getFieldMedia('background_image');
 
     if ($media) {
-        $media->name = '';
+        $media->name = $data['title'] ?? 'Männerkreis Niederbayern/ Straubing';
     }
 @endphp
 
-<section class="hero">
+<section class="hero" role="banner">
     <div class="hero__bg">
         @if($media)
             {{ $media->img()->attributes([
@@ -59,12 +59,12 @@
 
                     @if($shouldShowButton)
                         <div class="hero__cta">
-                            <a href="{{ $data['button_link'] }}" class="btn btn--primary btn--large">
+                            <a href="{{ $data['button_link'] }}" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=hero_cta;location=hero">
                                 {{ $data['button_text'] }}
                             </a>
                             <div class="hero__scroll">
                                 <span>Entdecken</span>
-                                <div class="hero__scroll-line"></div>
+                                <div class="hero__scroll-line" aria-hidden="true"></div>
                             </div>
                         </div>
                     @endif

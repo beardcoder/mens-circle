@@ -1,8 +1,32 @@
 @php
     $data = $block->data;
+    $steps = $data['steps'] ?? [];
 @endphp
 
-<section class="section section--large journey-section" id="reise">
+@if(!empty($steps) && is_array($steps))
+@push('structured_data')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "HowTo",
+    "name": "{{ strip_tags($data['title'] ?? 'Deine Reise zum Männerkreis') }}",
+    "description": "{{ $data['subtitle'] ?? 'Wie du Teil des Männerkreis wirst' }}",
+    "step": [
+        @foreach($steps as $step)
+        {
+            "@@type": "HowToStep",
+            "position": {{ $loop->iteration }},
+            "name": "{{ e($step['title'] ?? '') }}",
+            "text": "{{ e($step['description'] ?? '') }}"
+        }@if(!$loop->last),@endif
+        @endforeach
+    ]
+}
+</script>
+@endpush
+@endif
+
+<section class="section section--large journey-section" id="reise" aria-labelledby="journey-title">
     <div class="container">
         <div class="journey__header fade-in">
             @if(!empty($data['eyebrow']))
@@ -10,7 +34,7 @@
             @endif
 
             @if(!empty($data['title']))
-                <h2 class="section-title journey__title">{!! $data['title'] !!}</h2>
+                <h2 class="section-title journey__title" id="journey-title">{!! $data['title'] !!}</h2>
             @endif
 
             @if(!empty($data['subtitle']))
@@ -18,12 +42,12 @@
             @endif
         </div>
 
-        @if(!empty($data['steps']) && is_array($data['steps']))
+        @if(!empty($steps) && is_array($steps))
             <div class="journey__steps stagger-children">
-                @foreach($data['steps'] as $step)
+                @foreach($steps as $step)
                     <div class="journey__step">
                         @if(!empty($step['number']))
-                            <div class="journey__step-number">{{ $step['number'] }}</div>
+                            <div class="journey__step-number" aria-hidden="true">{{ $step['number'] }}</div>
                         @endif
 
                         @if(!empty($step['title']))

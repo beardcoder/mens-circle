@@ -2,7 +2,7 @@
     $data = $block->data;
 @endphp
 
-<section class="intro-section" id="ueber">
+<section class="intro-section" id="ueber" aria-labelledby="intro-title">
     <div class="intro__layout">
         <div class="intro__left">
             @if(!empty($data['eyebrow']))
@@ -10,7 +10,7 @@
             @endif
 
             @if(!empty($data['title']))
-                <h2 class="section-title intro__title fade-in fade-in-delay-1">
+                <h2 class="section-title intro__title fade-in fade-in-delay-1" id="intro-title">
                     {!! $data['title'] !!}
                 </h2>
             @endif

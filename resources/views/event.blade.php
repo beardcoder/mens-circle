@@ -4,12 +4,20 @@
     $isPast = $event->isPast();
 @endphp
 
-@section('title', $event->title . 'am' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
+@section('title', $event->title . ' am ' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
 @section('meta_description', $isPast
     ? 'Rückblick auf das Treffen des Männerkreis Niederbayern/ Straubing: ' . $event->title . ' am ' . $event->event_date->format('d.m.Y')
     : 'Melde dich jetzt für das nächste Treffen des Männerkreis Niederbayern/ Straubing an: ' . $event->title . ' am ' . $event->event_date->format('d.m.Y'))
 @section('og_type', 'event')
-@section('og_title', $event->title . 'am' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
+@section('og_title', $event->title . ' am ' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
+@section('og_description', 'Treffen des Männerkreis Niederbayern/ Straubing am ' . $event->event_date->format('d.m.Y') . ' in ' . $event->location)
+@section('canonical', route('event.show.slug', $event->slug))
+
+<x-seo.breadcrumb-schema :items="[
+    ['name' => 'Startseite', 'url' => route('home')],
+    ['name' => 'Veranstaltungen', 'url' => route('event.show')],
+    ['name' => $event->title, 'url' => route('event.show.slug', $event->slug)],
+]" />
 
 @push('structured_data')
 <script type="application/ld+json">
@@ -17,48 +25,48 @@
     "@@context": "https://schema.org",
     "@@type": "Event",
     "name": "{{ $event->title }}",
-    "description": "{{ strip_tags($event->description) }}",
+    "description": "{{ e(strip_tags($event->description)) }}",
     "image": {
         "@@type": "ImageObject",
-        "url": "{{ asset('logo.jpg') }}",
+        "url": "{{ asset('images/logo-color.png') }}",
         "width": 512,
         "height": 512
     },
-    "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}",
-    "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}",
-    "eventStatus": "{{ $isPast ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled' }}",
+    "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}:00+01:00",
+    "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}:00+01:00",
+    "eventStatus": "{{ $isPast ? 'https://schema.org/EventPostponed' : 'https://schema.org/EventScheduled' }}",
     "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
     "location": {
         "@@type": "Place",
         "name": "{{ $event->location }}",
         "address": {
             "@@type": "PostalAddress",
-            "addressLocality": "{{ $event->city ?? $event->location }}",
+            "addressLocality": "{{ $event->city ?? 'Straubing' }}",
             "addressRegion": "Bayern",
             "addressCountry": "DE"
         }
     },
     "organizer": {
         "@@type": "Organization",
+        "@@id": "{{ url('/') }}#organization",
         "name": "Männerkreis Niederbayern/ Straubing",
-        "url": "{{ url('/') }}",
-        "email": "hallo@mens-circle.de"
+        "url": "{{ url('/') }}"
     },
     "performer": {
         "@@type": "Organization",
-        "name": "Männerkreis Niederbayern/ Straubing",
-        "url": "{{ url('/') }}"
+        "@@id": "{{ url('/') }}#organization"
     },
     "offers": {
         "@@type": "Offer",
         "url": "{{ route('event.show.slug', $event->slug) }}",
         "price": "0",
         "priceCurrency": "EUR",
-        "availability": "{{ $event->isFull() ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock' }}",
+        "availability": "{{ $isPast ? 'https://schema.org/SoldOut' : ($event->isFull() ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock') }}",
         "validFrom": "{{ now()->format('Y-m-d') }}"
     },
     "maximumAttendeeCapacity": {{ $event->max_participants }},
-    "remainingAttendeeCapacity": {{ max(0, $event->availableSpots()) }}
+    "remainingAttendeeCapacity": {{ max(0, $event->availableSpots()) }},
+    "inLanguage": "de"
 }
 </script>
 @endpush
@@ -215,7 +223,6 @@
             <div class="event-info__grid stagger-children">
                 <div class="event-info__card event-info__card--date">
                     <div class="event-info__card-circle" aria-hidden="true"></div>
-                    <span class="event-info__card-number">01</span>
                     <div class="event-info__card-content">
                         <h3>Datum</h3>
                         <p class="event-info__card-value">{{ $event->event_date->translatedFormat('l') }}</p>
@@ -225,7 +232,6 @@
 
                 <div class="event-info__card event-info__card--time">
                     <div class="event-info__card-circle" aria-hidden="true"></div>
-                    <span class="event-info__card-number">02</span>
                     <div class="event-info__card-content">
                         <h3>Uhrzeit</h3>
                         <p class="event-info__card-value">{{ $event->start_time->format('H:i') }} Uhr</p>
@@ -235,7 +241,6 @@
 
                 <div class="event-info__card event-info__card--location">
                     <div class="event-info__card-circle" aria-hidden="true"></div>
-                    <span class="event-info__card-number">03</span>
                     <div class="event-info__card-content">
                         <h3>Ort</h3>
                         <p class="event-info__card-value">{{ $event->location }}</p>
@@ -245,7 +250,6 @@
 
                 <div class="event-info__card event-info__card--participants">
                     <div class="event-info__card-circle" aria-hidden="true"></div>
-                    <span class="event-info__card-number">04</span>
                     <div class="event-info__card-content">
                         <h3>Teilnehmer</h3>
                         <p class="event-info__card-value">Max. {{ $event->max_participants }}</p>

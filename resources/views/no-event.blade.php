@@ -2,6 +2,18 @@
 
 @section('title', 'Aktuell kein Termin – Männerkreis Niederbayern/ Straubing')
 @section('meta_description', 'Derzeit ist kein Männerkreis-Treffen geplant. Melde dich für unseren Newsletter an, um über kommende Termine informiert zu werden.')
+@section('og_title', 'Aktuell kein Termin – Männerkreis Niederbayern/ Straubing')
+@section('og_description', 'Derzeit ist kein Männerkreis-Treffen geplant. Melde dich für unseren Newsletter an!')
+
+<x-seo.breadcrumb-schema :items="[
+    ['name' => 'Startseite', 'url' => route('home')],
+    ['name' => 'Veranstaltungen', 'url' => route('event.show')],
+]" />
+
+<x-seo.webpage-schema
+    title="Aktuell kein Termin"
+    description="Derzeit ist kein Männerkreis-Treffen geplant. Melde dich für unseren Newsletter an, um über kommende Termine informiert zu werden."
+/>
 
 @section('content')
     <!-- Hero Section -->
