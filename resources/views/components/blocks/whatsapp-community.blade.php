@@ -1,4 +1,4 @@
-@if($settings && !empty($settings->whatsapp_community_link))
+@if(!empty($settings->whatsapp_community_link))
 <section class="section whatsapp-section" id="whatsapp-community">
     <div class="container">
         <div class="whatsapp__layout fade-in">
