@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\ContentBlock;
+declare(strict_types=1);
+
 use App\Models\Page;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -27,7 +27,7 @@ return new class extends Migration
 
         // Prüfe ob die content_blocks Tabelle existiert und die page_id Spalte hat
         if (!Schema::hasTable('content_blocks') || !Schema::hasColumn('content_blocks', 'page_id')) {
-            throw new \Exception(
+            throw new Exception(
                 "Die content_blocks Tabelle oder page_id Spalte existiert nicht! " .
                 "Bitte führe erst die vorherigen Migrationen aus."
             );
@@ -38,15 +38,15 @@ return new class extends Migration
         $totalPages = Page::count();
 
         if ($pagesWithContentBlocks < $totalPages) {
-            throw new \Exception(
+            throw new Exception(
                 "WARNUNG: Nicht alle Pages haben ContentBlocks! " .
-                "({$pagesWithContentBlocks}/{$totalPages}). " .
+                sprintf('(%s/%s). ', $pagesWithContentBlocks, $totalPages) .
                 "Bitte überprüfe die Datenmigration bevor du die Spalte löschst."
             );
         }
 
         // Lösche die content_blocks Spalte
-        Schema::table('pages', function (Blueprint $table) {
+        Schema::table('pages', function (Blueprint $table): void {
             $table->dropColumn('content_blocks');
         });
     }
@@ -56,7 +56,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pages', function (Blueprint $table) {
+        Schema::table('pages', function (Blueprint $table): void {
             $table->jsonb('content_blocks')->nullable()->after('slug');
         });
 

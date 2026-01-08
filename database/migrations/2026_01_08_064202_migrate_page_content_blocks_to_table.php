@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\ContentBlock;
 use App\Models\Page;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,7 +18,7 @@ return new class extends Migration
         // Migriere bestehende content_blocks JSON Daten zu ContentBlock Models
         Page::whereNotNull('content_blocks')
             ->orderBy('id')
-            ->each(function (Page $page) {
+            ->each(function (Page $page): void {
                 $contentBlocks = is_string($page->content_blocks)
                     ? json_decode($page->content_blocks, true)
                     : $page->content_blocks;
@@ -36,7 +38,7 @@ return new class extends Migration
                         'page_id' => $page->id,
                         'type' => $block['type'],
                         'data' => $blockData,
-                        'block_id' => $blockId ?? \Illuminate\Support\Str::uuid(),
+                        'block_id' => $blockId ?? Str::uuid(),
                         'order' => $index,
                     ]);
 
@@ -61,10 +63,10 @@ return new class extends Migration
     public function down(): void
     {
         // Migriere ContentBlock Models zurück zu JSON
-        Page::orderBy('id')->each(function (Page $page) {
+        Page::orderBy('id')->each(function (Page $page): void {
             $pageId = $page->id;
 
-            $contentBlocks = $page->contentBlocks->map(function (ContentBlock $block) use ($pageId) {
+            $contentBlocks = $page->contentBlocks->map(function (ContentBlock $block) use ($pageId): array {
                 $data = $block->data;
                 $data['block_id'] = $block->block_id;
 

@@ -36,7 +36,8 @@ class ContentBlock extends Model implements HasMedia
     public function getFieldMedia(string $field): ?Media
     {
         return $this->getMedia('page_blocks')
-            ->first(fn (Media $media): bool =>
+            ->first(
+                fn (Media $media): bool =>
                 $media->getCustomProperty('block_id') === $this->block_id
                 && $media->getCustomProperty('field') === $field
             );

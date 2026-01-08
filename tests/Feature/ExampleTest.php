@@ -22,7 +22,6 @@ class ExampleTest extends TestCase
             'slug' => 'home',
             'is_published' => true,
             'published_at' => now(),
-            'content_blocks' => [],
         ]);
 
         $response = $this->get('/');

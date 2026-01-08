@@ -27,9 +27,7 @@ class Page extends Model implements HasMedia
 
     public function getSlugOptions(): SlugOptions
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('title')
-            ->saveSlugsTo('slug');
+        return SlugOptions::create()->generateSlugsFrom('title')->saveSlugsTo('slug');
     }
 
     /**
@@ -42,8 +40,7 @@ class Page extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('page_blocks')
-            ->useDisk('public');
+        $this->addMediaCollection('page_blocks')->useDisk('public');
     }
 
     protected function casts(): array

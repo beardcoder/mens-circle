@@ -11,6 +11,8 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class EditPage extends EditRecord
 {
@@ -33,7 +35,7 @@ class EditPage extends EditRecord
         $contentBlocks = $this->record->contentBlocks()
             ->orderBy('order')
             ->get()
-            ->map(function (ContentBlock $block) {
+            ->map(function (ContentBlock $block): array {
                 $blockData = $block->data;
                 $blockData['block_id'] = $block->block_id;
 
@@ -66,7 +68,7 @@ class EditPage extends EditRecord
         // Erstelle neue ContentBlocks
         foreach ($contentBlocksData as $index => $blockData) {
             $data = $blockData['data'] ?? [];
-            $blockId = $data['block_id'] ?? \Illuminate\Support\Str::uuid();
+            $blockId = $data['block_id'] ?? Str::uuid();
             unset($data['block_id']);
 
             $contentBlock = $record->contentBlocks()->create([
@@ -78,7 +80,7 @@ class EditPage extends EditRecord
 
             // Migriere Media Library Zuordnungen
             if (isset($blockData['data']['block_id'])) {
-                \Spatie\MediaLibrary\MediaCollections\Models\Media::where('model_type', get_class($record))
+                Media::where('model_type', get_class($record))
                     ->where('model_id', $record->id)
                     ->where('collection_name', 'page_blocks')
                     ->where('custom_properties->block_id', $blockData['data']['block_id'])
