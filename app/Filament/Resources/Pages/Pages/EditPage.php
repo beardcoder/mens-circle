@@ -79,16 +79,14 @@ class EditPage extends EditRecord
             ]);
 
             // Migriere Media Library Zuordnungen
-            if (isset($blockData['data']['block_id'])) {
-                Media::where('model_type', get_class($record))
-                    ->where('model_id', $record->id)
-                    ->where('collection_name', 'page_blocks')
-                    ->where('custom_properties->block_id', $blockData['data']['block_id'])
-                    ->update([
-                        'model_type' => ContentBlock::class,
-                        'model_id' => $contentBlock->id,
-                    ]);
-            }
+            Media::where('model_type', get_class($record))
+                ->where('model_id', $record->id)
+                ->where('collection_name', 'page_blocks')
+                ->where('custom_properties->block_id', $blockId)
+                ->update([
+                    'model_type' => ContentBlock::class,
+                    'model_id' => $contentBlock->id,
+                ]);
         }
 
         return $record;
