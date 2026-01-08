@@ -13,7 +13,7 @@ RUN --mount=type=cache,target=/root/.bun/install/cache \
     bun install --frozen-lockfile
 
 COPY resources/ resources/
-COPY vite.config.mjs ./
+COPY vite.config.ts ./
 COPY public/ public/
 RUN bun run build
 

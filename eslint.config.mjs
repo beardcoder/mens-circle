@@ -5,10 +5,11 @@ import { fileURLToPath } from 'node:url';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 import stylistic from '@stylistic/eslint-plugin';
+import tseslint from 'typescript-eslint';
 
 const gitignorePath = fileURLToPath(new URL('.gitignore', import.meta.url));
 
-export default [
+export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   {
     ignores: [
@@ -18,13 +19,13 @@ export default [
       'storage/**',
       'bootstrap/cache/**',
       '*.min.js',
-      'vite.config.mjs',
     ],
   },
   js.configs.recommended,
   stylistic.configs.recommended,
+  ...tseslint.configs.recommended,
   {
-    files: ['**/*.{js,mjs,cjs,jsx}'],
+    files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
     plugins: {
       prettier: prettierPlugin,
       stylistic,
@@ -39,7 +40,8 @@ export default [
     },
     rules: {
       ...prettierConfig.rules,
-      'no-unused-vars': 'warn',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
       'no-console': 'warn',
       semi: ['error', 'always'],
       quotes: ['error', 'single'],
@@ -56,5 +58,5 @@ export default [
         },
       ],
     },
-  },
-];
+  }
+);
