@@ -191,7 +191,7 @@
         };
     </script>
 
-    @vite(['resources/js/app.js'])
+    @vite(['resources/js/app.ts'])
     @stack('scripts')
 </body>
 </html>
