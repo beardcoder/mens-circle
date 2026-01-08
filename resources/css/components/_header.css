@@ -200,7 +200,9 @@ body:not(:has(.hero)) .nav-toggle span {
     position: fixed;
     inset: 0;
     z-index: calc(var(--z-header) + 1);
+    min-block-size: 100dvh;
     visibility: hidden;
+    pointer-events: none;
     flex-direction: column;
     gap: var(--space-md);
     align-items: center;
@@ -212,7 +214,6 @@ body:not(:has(.hero)) .nav-toggle span {
     backdrop-filter: blur(0px);
     transition:
       opacity var(--transition-slow),
-      visibility var(--transition-medium),
       transform var(--transition-slow),
       backdrop-filter var(--transition-slow);
   }
@@ -257,6 +258,7 @@ body:not(:has(.hero)) .nav-toggle span {
   .nav.open {
     visibility: visible;
     opacity: 1;
+    pointer-events: auto;
     transform: translateY(0) scale(1);
     backdrop-filter: blur(16px);
   }

@@ -9,26 +9,29 @@ export function initFAQ(): void {
 
     if (!question || !answer) return;
 
-    const setAnswerHeight = (target: HTMLElement, expanded: boolean): void => {
-      target.style.maxHeight =
-        expanded || target.style.maxHeight === 'none'
-          ? `${target.scrollHeight}px`
-          : target.style.maxHeight;
+    const openAnswer = (target: HTMLElement): void => {
+      target.style.maxHeight = `${target.scrollHeight}px`;
 
-      if (expanded) {
-        const handleTransitionEnd = (event: TransitionEvent): void => {
-          if (event.propertyName === 'max-height') {
-            target.style.maxHeight = 'none';
-            target.removeEventListener('transitionend', handleTransitionEnd);
-          }
-        };
+      const handleTransitionEnd = (event: TransitionEvent): void => {
+        if (event.propertyName !== 'max-height') {
+          return;
+        }
 
-        target.addEventListener('transitionend', handleTransitionEnd);
-      } else {
-        requestAnimationFrame(() => {
-          target.style.maxHeight = '0px';
-        });
-      }
+        target.style.maxHeight = 'none';
+        target.removeEventListener('transitionend', handleTransitionEnd);
+      };
+
+      target.addEventListener('transitionend', handleTransitionEnd);
+    };
+
+    const closeAnswer = (target: HTMLElement): void => {
+      // Ensure we can animate from the current content height
+      const currentHeight = target.scrollHeight;
+      target.style.maxHeight = `${currentHeight}px`;
+
+      requestAnimationFrame(() => {
+        target.style.maxHeight = '0px';
+      });
     };
 
     question.addEventListener('click', () => {
@@ -45,10 +48,7 @@ export function initFAQ(): void {
             otherItem.querySelector<HTMLElement>('.faq-item__answer');
 
           if (otherAnswer) {
-            otherAnswer.style.maxHeight = `${otherAnswer.scrollHeight}px`;
-            requestAnimationFrame(() => {
-              otherAnswer.style.maxHeight = '0px';
-            });
+            closeAnswer(otherAnswer);
           }
         }
       });
@@ -57,7 +57,11 @@ export function initFAQ(): void {
       item.classList.toggle('active');
       question.setAttribute('aria-expanded', String(!isActive));
 
-      setAnswerHeight(answer, !isActive);
+      if (!isActive) {
+        openAnswer(answer);
+      } else {
+        closeAnswer(answer);
+      }
     });
   });
 }
