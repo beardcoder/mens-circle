@@ -1,23 +1,27 @@
+@php
+    $data = $block->data;
+@endphp
+
 <section class="section section--large faq-section" id="faq">
     <div class="container">
         <div class="faq__layout">
             <div class="faq__header fade-in">
-                @if(!empty($block['data']['eyebrow']))
-                    <p class="eyebrow">{{ $block['data']['eyebrow'] }}</p>
+                @if(!empty($data['eyebrow']))
+                    <p class="eyebrow">{{ $data['eyebrow'] }}</p>
                 @endif
 
-                @if(!empty($block['data']['title']))
-                    <h2 class="section-title faq__title">{!! $block['data']['title'] !!}</h2>
+                @if(!empty($data['title']))
+                    <h2 class="section-title faq__title">{!! $data['title'] !!}</h2>
                 @endif
 
-                @if(!empty($block['data']['intro']))
-                    <p class="faq__intro">{{ $block['data']['intro'] }}</p>
+                @if(!empty($data['intro']))
+                    <p class="faq__intro">{{ $data['intro'] }}</p>
                 @endif
             </div>
 
-            @if(!empty($block['data']['items']) && is_array($block['data']['items']))
+            @if(!empty($data['items']) && is_array($data['items']))
                 <div class="faq__list fade-in fade-in-delay-1">
-                    @foreach($block['data']['items'] as $item)
+                    @foreach($data['items'] as $item)
                         <div class="faq-item">
                             @if(!empty($item['question']))
                                 <button class="faq-item__question" aria-expanded="false" data-m:click="action=faq_click;element=button;target=question;location=faq_section">

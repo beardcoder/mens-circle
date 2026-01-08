@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -21,7 +21,6 @@ class Page extends Model implements HasMedia
     protected $fillable = [
         'title',
         'slug',
-        'content_blocks',
         'meta',
         'is_published',
         'published_at',
@@ -34,15 +33,13 @@ class Page extends Model implements HasMedia
             ->saveSlugsTo('slug');
     }
 
-    public function getBlockMedia(?string $blockId, string $field): ?Media
+    /**
+     * Content Blocks Beziehung (sortiert)
+     */
+    public function contentBlocks(): MorphMany
     {
-        if (! $blockId) {
-            return null;
-        }
-
-        return $this->getMedia('page_blocks')
-            ->first(fn (Media $media): bool => $media->getCustomProperty('block_id') === $blockId
-                && $media->getCustomProperty('field') === $field);
+        return $this->morphMany(ContentBlock::class, 'contentable')
+            ->orderBy('order');
     }
 
     public function registerMediaCollections(): void
@@ -54,7 +51,6 @@ class Page extends Model implements HasMedia
     protected function casts(): array
     {
         return [
-            'content_blocks' => 'array',
             'meta' => 'array',
             'is_published' => 'boolean',
             'published_at' => 'datetime',

@@ -37,29 +37,29 @@
 @endpush
 
 @section('content')
-    @if($page->content_blocks && is_array($page->content_blocks))
-        @foreach($page->content_blocks as $block)
-            @if($block['type'] === 'hero')
+    @if($page->contentBlocks->isNotEmpty())
+        @foreach($page->contentBlocks as $block)
+            @if($block->type === 'hero')
                 <x-blocks.hero :block="$block" :page="$page" />
-            @elseif($block['type'] === 'intro')
+            @elseif($block->type === 'intro')
                 <x-blocks.intro :block="$block" />
-            @elseif($block['type'] === 'text_section')
+            @elseif($block->type === 'text_section')
                 <x-blocks.text-section :block="$block" />
-            @elseif($block['type'] === 'value_items')
+            @elseif($block->type === 'value_items')
                 <x-blocks.value-items :block="$block" />
-            @elseif($block['type'] === 'moderator')
+            @elseif($block->type === 'moderator')
                 <x-blocks.moderator :block="$block" :page="$page" />
-            @elseif($block['type'] === 'journey_steps')
+            @elseif($block->type === 'journey_steps')
                 <x-blocks.journey-steps :block="$block" />
-            @elseif($block['type'] === 'testimonials')
+            @elseif($block->type === 'testimonials')
                 <x-blocks.testimonials />
-            @elseif($block['type'] === 'faq')
+            @elseif($block->type === 'faq')
                 <x-blocks.faq :block="$block" />
-            @elseif($block['type'] === 'newsletter')
+            @elseif($block->type === 'newsletter')
                 <x-blocks.newsletter :block="$block" />
-            @elseif($block['type'] === 'cta')
+            @elseif($block->type === 'cta')
                 <x-blocks.cta :block="$block" />
-            @elseif($block['type'] === 'whatsapp_community')
+            @elseif($block->type === 'whatsapp_community')
                 <x-blocks.whatsapp-community />
             @endif
         @endforeach
