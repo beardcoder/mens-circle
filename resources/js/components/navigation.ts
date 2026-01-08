@@ -89,17 +89,46 @@ export function initScrollHeader(): void {
 
   if (!header) return;
 
-  window.addEventListener(
-    'scroll',
-    () => {
-      const currentScroll = window.pageYOffset;
+  const hasHero = Boolean(document.querySelector('.hero'));
 
-      if (currentScroll > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    },
-    { passive: true }
-  );
+  document.body.classList.toggle('has-hero', hasHero);
+  document.body.classList.toggle('no-hero', !hasHero);
+
+  const updateScrollState = (): void => {
+    const currentScroll = window.pageYOffset;
+
+    if (currentScroll > 50 || !hasHero) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  };
+
+  updateScrollState();
+
+  window.addEventListener('scroll', updateScrollState, { passive: true });
+
+  if (hasHero) {
+    const hero = document.querySelector<HTMLElement>('.hero');
+
+    if (hero) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.15) {
+              header.classList.add('header--on-hero');
+            } else {
+              header.classList.remove('header--on-hero');
+            }
+          });
+        },
+        {
+          threshold: [0, 0.15, 0.35, 0.5],
+          rootMargin: '-10% 0px 0px 0px',
+        }
+      );
+
+      observer.observe(hero);
+    }
+  }
 }

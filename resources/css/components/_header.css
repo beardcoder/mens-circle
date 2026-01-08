@@ -23,6 +23,55 @@
   justify-content: space-between;
 }
 
+.header--on-hero:not(.scrolled) {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--bg-dark) 12%, transparent) 0%,
+    transparent 85%
+  );
+}
+
+.header--on-hero:not(.scrolled) .logo,
+.header--on-hero:not(.scrolled) .nav__link {
+  color: var(--color-bone);
+}
+
+.header--on-hero:not(.scrolled) .nav-toggle span {
+  background: var(--color-bone);
+}
+
+body:not(:has(.hero)) .header {
+  background: color-mix(in oklch, var(--bg-primary) 94%, transparent);
+  backdrop-filter: blur(18px);
+  border-block-end: 1px solid var(--border-light);
+}
+
+body:not(:has(.hero)) .logo,
+body:not(:has(.hero)) .nav__link {
+  color: var(--text-primary);
+}
+
+body:not(:has(.hero)) .nav-toggle span {
+  background: var(--text-primary);
+}
+
+@supports not selector(body:has(.hero)) {
+  body.no-hero .header {
+    background: color-mix(in oklch, var(--bg-primary) 94%, transparent);
+    backdrop-filter: blur(18px);
+    border-block-end: 1px solid var(--border-light);
+  }
+
+  body.no-hero .logo,
+  body.no-hero .nav__link {
+    color: var(--text-primary);
+  }
+
+  body.no-hero .nav-toggle span {
+    background: var(--text-primary);
+  }
+}
+
 /* ============================================
    Logo
    ============================================ */
@@ -114,6 +163,7 @@
 .header.scrolled {
   background: color-mix(in oklch, var(--bg-primary) 95%, transparent);
   backdrop-filter: blur(20px);
+  box-shadow: 0 18px 40px color-mix(in oklch, var(--color-ink) 8%, transparent);
 }
 
 .header.scrolled .logo,
@@ -156,11 +206,15 @@
     align-items: center;
     justify-content: center;
     padding: var(--space-xl) var(--space-md);
-    background: var(--bg-dark);
+    background: color-mix(in oklch, var(--bg-dark) 90%, transparent);
     opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+    backdrop-filter: blur(0px);
     transition:
-      opacity var(--transition-medium),
-      visibility var(--transition-medium);
+      opacity var(--transition-slow),
+      visibility var(--transition-medium),
+      transform var(--transition-slow),
+      backdrop-filter var(--transition-slow);
   }
 
   /* Gradient background */
@@ -176,7 +230,10 @@
       var(--color-earth-mid) 100%
     );
     opacity: 0;
-    transition: opacity var(--transition-medium);
+    transform: scale(0.95);
+    transition:
+      opacity var(--transition-medium),
+      transform var(--transition-slow);
   }
 
   /* Decorative circle */
@@ -190,21 +247,29 @@
     content: '';
     border: 1px solid var(--border-on-dark);
     border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    transition: transform var(--transition-slow);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.6);
+    transition:
+      transform var(--transition-slow),
+      opacity var(--transition-medium);
   }
 
   .nav.open {
     visibility: visible;
     opacity: 1;
+    transform: translateY(0) scale(1);
+    backdrop-filter: blur(16px);
   }
 
   .nav.open::before {
     opacity: 1;
+    transform: scale(1);
   }
 
   .nav.open::after {
+    opacity: 0.4;
     transform: translate(-50%, -50%) scale(1);
+    animation: navPulse 1600ms ease-out forwards;
   }
 
   .nav__link {
@@ -213,11 +278,13 @@
     color: var(--text-on-dark);
     letter-spacing: -0.02em;
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(24px) scale(0.98);
+    filter: blur(2px);
     transition:
       color var(--transition-fast),
-      opacity var(--transition-medium),
-      transform var(--transition-medium);
+      opacity var(--transition-slow),
+      transform var(--transition-slow),
+      filter var(--transition-medium);
   }
 
   .nav__link::after {
@@ -227,39 +294,65 @@
   }
 
   .nav__link:hover::after {
-    inline-size: 60%;
+    inline-size: 70%;
+  }
+
+  .nav__cta {
+    opacity: 0;
+    transform: translateY(32px) scale(0.96);
+    transition:
+      opacity var(--transition-slow),
+      transform var(--transition-slow);
   }
 
   /* Staggered animation for links */
   .nav.open .nav__link {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    filter: blur(0);
   }
 
   .nav.open .nav__link:nth-child(1) {
-    transition-delay: 100ms;
+    transition-delay: 80ms;
   }
 
   .nav.open .nav__link:nth-child(2) {
-    transition-delay: 200ms;
+    transition-delay: 160ms;
   }
 
   .nav.open .nav__link:nth-child(3) {
-    transition-delay: 300ms;
+    transition-delay: 240ms;
   }
 
   .nav.open .nav__link:nth-child(4) {
-    transition-delay: 400ms;
+    transition-delay: 320ms;
   }
 
   .nav.open .nav__cta {
     opacity: 1;
     transform: translateY(0) scale(1);
-    transition-delay: 500ms;
+    transition-delay: 420ms;
   }
 
   .nav.open .nav__cta:hover {
     transform: translateY(0) scale(1.05);
+  }
+}
+
+@keyframes navPulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent-primary) 25%, transparent);
+    opacity: 0.35;
+  }
+
+  60% {
+    box-shadow: 0 0 0 24px color-mix(in oklch, var(--accent-primary) 0%, transparent);
+    opacity: 0.12;
+  }
+
+  100% {
+    box-shadow: 0 0 0 32px transparent;
+    opacity: 0;
   }
 }
 
