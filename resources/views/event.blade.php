@@ -4,12 +4,12 @@
     $isPast = $event->isPast();
 @endphp
 
-@section('title', ($isPast ? 'Vergangenes Treffen' : 'Nächster Termin') . ' – Männerkreis Niederbayern/ Straubing')
+@section('title', $event->title . 'am' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
 @section('meta_description', $isPast
     ? 'Rückblick auf das Treffen des Männerkreis Niederbayern/ Straubing: ' . $event->title . ' am ' . $event->event_date->format('d.m.Y')
     : 'Melde dich jetzt für das nächste Treffen des Männerkreis Niederbayern/ Straubing an: ' . $event->title . ' am ' . $event->event_date->format('d.m.Y'))
 @section('og_type', 'event')
-@section('og_title', $event->title . ' – Männerkreis Niederbayern/ Straubing')
+@section('og_title', $event->title . 'am' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
 
 @push('structured_data')
 <script type="application/ld+json">
