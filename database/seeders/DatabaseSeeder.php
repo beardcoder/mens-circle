@@ -9,6 +9,7 @@ use App\Models\Page;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -179,7 +180,7 @@ class DatabaseSeeder extends Seeder
             $homepage->contentBlocks()->create([
                 'type' => $block['type'],
                 'data' => $blockData,
-                'block_id' => \Illuminate\Support\Str::uuid(),
+                'block_id' => Str::uuid(),
                 'order' => $index,
             ]);
         }

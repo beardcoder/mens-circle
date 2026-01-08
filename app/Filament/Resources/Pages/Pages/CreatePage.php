@@ -8,6 +8,8 @@ use App\Filament\Resources\Pages\PageResource;
 use App\Models\ContentBlock;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class CreatePage extends CreateRecord
 {
@@ -27,7 +29,7 @@ class CreatePage extends CreateRecord
         // Erstelle ContentBlocks
         foreach ($contentBlocksData as $index => $blockData) {
             $data = $blockData['data'] ?? [];
-            $blockId = $data['block_id'] ?? \Illuminate\Support\Str::uuid();
+            $blockId = $data['block_id'] ?? Str::uuid();
             unset($data['block_id']);
 
             $contentBlock = $record->contentBlocks()->create([
@@ -39,7 +41,7 @@ class CreatePage extends CreateRecord
 
             // Migriere Media Library Zuordnungen falls vorhanden
             if (isset($blockData['data']['block_id'])) {
-                \Spatie\MediaLibrary\MediaCollections\Models\Media::where('model_type', get_class($record))
+                Media::where('model_type', get_class($record))
                     ->where('model_id', $record->id)
                     ->where('collection_name', 'page_blocks')
                     ->where('custom_properties->block_id', $blockData['data']['block_id'])
