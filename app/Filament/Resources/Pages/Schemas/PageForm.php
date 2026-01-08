@@ -295,7 +295,7 @@ class PageForm
 
                         Block::make('whatsapp_community')
                             ->label('WhatsApp Community')
-                            ->icon(Heroicon::OutlinedChatBubbleLeftRight)
+                            ->icon(Heroicon::OutlinedDevicePhoneMobile)
                             ->schema([
                                 self::blockIdField(),
                                 Placeholder::make('whatsapp_info')
