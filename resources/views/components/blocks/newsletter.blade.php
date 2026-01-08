@@ -1,17 +1,21 @@
+@php
+    $data = $block->data;
+@endphp
+
 <section class="section newsletter-section" id="newsletter">
     <div class="container">
         <div class="newsletter__layout fade-in">
             <div class="newsletter__content">
-                @if(!empty($block['data']['eyebrow']))
-                    <p class="eyebrow eyebrow--secondary">{{ $block['data']['eyebrow'] }}</p>
+                @if(!empty($data['eyebrow']))
+                    <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>
                 @endif
 
-                @if(!empty($block['data']['title']))
-                    <h2 class="section-title newsletter__title">{!! $block['data']['title'] !!}</h2>
+                @if(!empty($data['title']))
+                    <h2 class="section-title newsletter__title">{!! $data['title'] !!}</h2>
                 @endif
 
-                @if(!empty($block['data']['text']))
-                    <p class="newsletter__text">{{ $block['data']['text'] }}</p>
+                @if(!empty($data['text']))
+                    <p class="newsletter__text">{{ $data['text'] }}</p>
                 @endif
             </div>
 

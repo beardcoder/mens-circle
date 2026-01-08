@@ -13,7 +13,8 @@ class PageController extends Controller
     {
         $page = Page::where('slug', 'home')
             ->where('is_published', true)
-            ->select('id', 'slug', 'title', 'meta', 'content_blocks')
+            ->with('contentBlocks')
+            ->select('id', 'slug', 'title', 'meta')
             ->firstOrFail();
 
         return view('home', ['page' => $page]);
@@ -23,7 +24,8 @@ class PageController extends Controller
     {
         $page = Page::where('slug', $slug)
             ->where('is_published', true)
-            ->select('id', 'slug', 'title', 'meta', 'content_blocks')
+            ->with('contentBlocks')
+            ->select('id', 'slug', 'title', 'meta')
             ->firstOrFail();
 
         return view('home', ['page' => $page]);

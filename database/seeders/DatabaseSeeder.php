@@ -163,16 +163,26 @@ class DatabaseSeeder extends Seeder
         ];
 
         // Create homepage with content blocks
-        Page::create([
+        $homepage = Page::create([
             'title' => 'Home',
             'slug' => 'home',
             'is_published' => true,
             'published_at' => now(),
-            'content_blocks' => $contentBlocks,
             'meta' => [
                 'description' => 'Männerkreis Niederbayern/ Straubing – Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.',
             ],
         ]);
+
+        // Create ContentBlocks for homepage
+        foreach ($contentBlocks as $index => $block) {
+            $blockData = $block['data'];
+            $homepage->contentBlocks()->create([
+                'type' => $block['type'],
+                'data' => $blockData,
+                'block_id' => \Illuminate\Support\Str::uuid(),
+                'order' => $index,
+            ]);
+        }
 
         // Create legal pages
         $this->call(PageSeeder::class);

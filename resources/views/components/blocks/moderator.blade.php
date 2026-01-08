@@ -4,11 +4,11 @@
 ])
 
 @php
-    $blockId = $block['data']['block_id'] ?? null;
-    $media = $page?->getBlockMedia($blockId, 'photo');
+    $data = $block->data;
+    $media = $block->getFieldMedia('photo');
 
     if ($media) {
-        $media->name = strip_tags($block['data']['name'] ?? 'Moderator');
+        $media->name = strip_tags($data['name'] ?? 'Moderator');
     }
 @endphp
 
@@ -36,23 +36,23 @@
             </div>
 
             <div class="moderator__content fade-in fade-in-delay-1">
-                @if(!empty($block['data']['eyebrow']))
-                    <p class="eyebrow">{{ $block['data']['eyebrow'] }}</p>
+                @if(!empty($data['eyebrow']))
+                    <p class="eyebrow">{{ $data['eyebrow'] }}</p>
                 @endif
 
-                @if(!empty($block['data']['name']))
-                    <h2 class="moderator__name">{!! $block['data']['name'] !!}</h2>
+                @if(!empty($data['name']))
+                    <h2 class="moderator__name">{!! $data['name'] !!}</h2>
                 @endif
 
-                @if(!empty($block['data']['bio']))
+                @if(!empty($data['bio']))
                     <div class="moderator__bio">
-                        {!! $block['data']['bio'] !!}
+                        {!! $data['bio'] !!}
                     </div>
                 @endif
 
-                @if(!empty($block['data']['quote']))
+                @if(!empty($data['quote']))
                     <blockquote class="moderator__quote">
-                        <p>{{ $block['data']['quote'] }}</p>
+                        <p>{{ $data['quote'] }}</p>
                     </blockquote>
                 @endif
             </div>

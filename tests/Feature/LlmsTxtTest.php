@@ -91,7 +91,6 @@ class LlmsTxtTest extends TestCase
             'slug' => 'ueber-uns',
             'is_published' => true,
             'published_at' => now(),
-            'content_blocks' => [],
         ]);
 
         $response = $this->get('/llms.txt');
@@ -110,7 +109,6 @@ class LlmsTxtTest extends TestCase
             'title' => 'Draft Page',
             'slug' => 'draft-page',
             'is_published' => false,
-            'content_blocks' => [],
         ]);
 
         $response = $this->get('/llms.txt');

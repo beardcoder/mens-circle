@@ -1,25 +1,29 @@
+@php
+    $data = $block->data;
+@endphp
+
 <section class="intro-section" id="ueber">
     <div class="intro__layout">
         <div class="intro__left">
-            @if(!empty($block['data']['eyebrow']))
-                <p class="eyebrow fade-in">{{ $block['data']['eyebrow'] }}</p>
+            @if(!empty($data['eyebrow']))
+                <p class="eyebrow fade-in">{{ $data['eyebrow'] }}</p>
             @endif
 
-            @if(!empty($block['data']['title']))
+            @if(!empty($data['title']))
                 <h2 class="section-title intro__title fade-in fade-in-delay-1">
-                    {!! $block['data']['title'] !!}
+                    {!! $data['title'] !!}
                 </h2>
             @endif
 
-            @if(!empty($block['data']['text']))
+            @if(!empty($data['text']))
                 <p class="intro__text fade-in fade-in-delay-2">
-                    {{ $block['data']['text'] }}
+                    {{ $data['text'] }}
                 </p>
             @endif
 
-            @if(!empty($block['data']['values']) && is_array($block['data']['values']))
+            @if(!empty($data['values']) && is_array($data['values']))
                 <div class="intro__values stagger-children">
-                    @foreach($block['data']['values'] as $value)
+                    @foreach($data['values'] as $value)
                         <div class="value-item">
                             @if(!empty($value['number']))
                                 <span class="value-item__number">{{ $value['number'] }}</span>
@@ -41,9 +45,9 @@
         <div class="intro__right">
             <div class="intro__image-area">
                 <div class="intro__image-circles"></div>
-                @if(!empty($block['data']['quote']))
+                @if(!empty($data['quote']))
                     <p class="intro__image-text">
-                        {!! $block['data']['quote'] !!}
+                        {!! $data['quote'] !!}
                     </p>
                 @endif
             </div>

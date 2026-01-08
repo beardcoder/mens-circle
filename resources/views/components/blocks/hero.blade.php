@@ -4,8 +4,8 @@
 ])
 
 @php
-    $blockId = $block['data']['block_id'] ?? null;
-    $media = $page?->getBlockMedia($blockId, 'background_image');
+    $data = $block->data;
+    $media = $block->getFieldMedia('background_image');
 
     if ($media) {
         $media->name = '';
@@ -33,34 +33,34 @@
 
     <div class="container">
         <div class="hero__content">
-            @if(!empty($block['data']['label']))
-                <p class="hero__label">{{ $block['data']['label'] }}</p>
+            @if(!empty($data['label']))
+                <p class="hero__label">{{ $data['label'] }}</p>
             @endif
 
-            @if(!empty($block['data']['title']))
+            @if(!empty($data['title']))
                 <h1 class="hero__title">
-                    {!! $block['data']['title'] !!}
+                    {!! $data['title'] !!}
                 </h1>
             @endif
 
             <div class="hero__bottom">
-                @if(!empty($block['data']['description']))
+                @if(!empty($data['description']))
                     <p class="hero__description">
-                        {{ $block['data']['description'] }}
+                        {{ $data['description'] }}
                     </p>
                 @endif
 
-                @if(!empty($block['data']['button_text']) && !empty($block['data']['button_link']))
+                @if(!empty($data['button_text']) && !empty($data['button_link']))
                     @php
-                        $isEventLink = str_contains($block['data']['button_link'], route('event.show')) ||
-                                       str_contains($block['data']['button_link'], '/event');
+                        $isEventLink = str_contains($data['button_link'], route('event.show')) ||
+                                       str_contains($data['button_link'], '/event');
                         $shouldShowButton = !$isEventLink || $hasNextEvent;
                     @endphp
 
                     @if($shouldShowButton)
                         <div class="hero__cta">
-                            <a href="{{ $block['data']['button_link'] }}" class="btn btn--primary btn--large">
-                                {{ $block['data']['button_text'] }}
+                            <a href="{{ $data['button_link'] }}" class="btn btn--primary btn--large">
+                                {{ $data['button_text'] }}
                             </a>
                             <div class="hero__scroll">
                                 <span>Entdecken</span>

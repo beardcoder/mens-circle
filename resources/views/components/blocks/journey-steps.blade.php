@@ -1,22 +1,26 @@
+@php
+    $data = $block->data;
+@endphp
+
 <section class="section section--large journey-section" id="reise">
     <div class="container">
         <div class="journey__header fade-in">
-            @if(!empty($block['data']['eyebrow']))
-                <p class="eyebrow">{{ $block['data']['eyebrow'] }}</p>
+            @if(!empty($data['eyebrow']))
+                <p class="eyebrow">{{ $data['eyebrow'] }}</p>
             @endif
 
-            @if(!empty($block['data']['title']))
-                <h2 class="section-title journey__title">{!! $block['data']['title'] !!}</h2>
+            @if(!empty($data['title']))
+                <h2 class="section-title journey__title">{!! $data['title'] !!}</h2>
             @endif
 
-            @if(!empty($block['data']['subtitle']))
-                <p class="journey__subtitle">{{ $block['data']['subtitle'] }}</p>
+            @if(!empty($data['subtitle']))
+                <p class="journey__subtitle">{{ $data['subtitle'] }}</p>
             @endif
         </div>
 
-        @if(!empty($block['data']['steps']) && is_array($block['data']['steps']))
+        @if(!empty($data['steps']) && is_array($data['steps']))
             <div class="journey__steps stagger-children">
-                @foreach($block['data']['steps'] as $step)
+                @foreach($data['steps'] as $step)
                     <div class="journey__step">
                         @if(!empty($step['number']))
                             <div class="journey__step-number">{{ $step['number'] }}</div>
