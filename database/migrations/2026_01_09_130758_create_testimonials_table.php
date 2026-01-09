@@ -16,6 +16,7 @@ return new class () extends Migration {
             $table->id();
             $table->text('quote');
             $table->string('author_name')->nullable();
+            $table->string('email');
             $table->string('role')->nullable();
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();

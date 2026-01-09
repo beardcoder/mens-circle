@@ -12,32 +12,22 @@ class PageController extends Controller
 {
     public function home(): View
     {
-        $query = Page::where('slug', 'home')
-            ->where('is_published', true)
-            ->select('id', 'slug', 'title', 'meta');
-
-        // Nur contentBlocks laden wenn die Tabelle korrekt strukturiert ist
-        if (Schema::hasTable('content_blocks') && Schema::hasColumn('content_blocks', 'page_id')) {
-            $query->with('contentBlocks');
-        }
-
-        $page = $query->firstOrFail();
+        $page = Page::published()
+            ->where('slug', 'home')
+            ->select('id', 'slug', 'title', 'meta')
+            ->with(['contentBlocks.media'])
+            ->firstOrFail();
 
         return view('home', ['page' => $page]);
     }
 
     public function show(string $slug): View
     {
-        $query = Page::where('slug', $slug)
-            ->where('is_published', true)
-            ->select('id', 'slug', 'title', 'meta');
-
-        // Nur contentBlocks laden wenn die Tabelle korrekt strukturiert ist
-        if (Schema::hasTable('content_blocks') && Schema::hasColumn('content_blocks', 'page_id')) {
-            $query->with('contentBlocks');
-        }
-
-        $page = $query->firstOrFail();
+        $page = Page::published()
+            ->where('slug', $slug)
+            ->select('id', 'slug', 'title', 'meta')
+            ->with(['contentBlocks.media'])
+            ->firstOrFail();
 
         return view('home', ['page' => $page]);
     }

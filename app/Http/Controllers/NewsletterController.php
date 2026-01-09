@@ -18,22 +18,22 @@ class NewsletterController extends Controller
     public function subscribe(NewsletterSubscriptionRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $existingSubscription = NewsletterSubscription::where('email', $validated['email'])->first();
+        $subscription = NewsletterSubscription::withTrashed()->where('email', $validated['email'])->first();
 
-        if ($existingSubscription && $existingSubscription->status === 'active') {
+        if ($subscription && $subscription->status === 'active') {
             return response()->json([
                 'success' => false,
                 'message' => 'Diese E-Mail-Adresse ist bereits für den Newsletter angemeldet.',
             ], 409);
         }
 
-        if ($existingSubscription && $existingSubscription->status === 'unsubscribed') {
-            $existingSubscription->update([
+        if ($subscription) {
+            $subscription->update([
                 'status' => 'active',
                 'subscribed_at' => now(),
                 'unsubscribed_at' => null,
+                'deleted_at' => null, // Restore if soft deleted
             ]);
-            $subscription = $existingSubscription;
         } else {
             $subscription = NewsletterSubscription::create([
                 'email' => $validated['email'],

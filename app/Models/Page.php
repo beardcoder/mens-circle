@@ -51,4 +51,9 @@ class Page extends Model implements HasMedia
             'published_at' => 'datetime',
         ];
     }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
 }

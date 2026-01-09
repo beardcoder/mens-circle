@@ -28,6 +28,12 @@ class TestimonialForm
                     ->maxLength(255)
                     ->helperText('Optional: Name des Teilnehmers. Leer lassen für anonyme Zitate.'),
 
+                TextInput::make('email')
+                    ->label('E-Mail')
+                    ->email()
+                    ->maxLength(255)
+                    ->helperText('Wird nicht veröffentlicht, nur für Rückfragen.'),
+
                 TextInput::make('role')
                     ->label('Rolle/Beschreibung')
                     ->maxLength(255)

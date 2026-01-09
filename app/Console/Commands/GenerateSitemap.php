@@ -30,9 +30,8 @@ class GenerateSitemap extends Command
         );
 
         // Add all published events
-        Event::query()
+        Event::published()
             ->select('slug', 'updated_at')
-            ->where('is_published', true)
             ->latest('event_date')
             ->get()
             ->each(function (Event $event) use ($sitemap): void {
@@ -45,9 +44,8 @@ class GenerateSitemap extends Command
             });
 
         // Add all published pages
-        Page::query()
+        Page::published()
             ->select('slug', 'updated_at')
-            ->where('is_published', true)
             ->latest('published_at')
             ->get()
             ->each(function (Page $page) use ($sitemap): void {
