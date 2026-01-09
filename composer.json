@@ -21,6 +21,7 @@
     "marcelweidum/filament-passkeys": "^2.0",
     "php-static-analysis/attributes": "^0.5.0",
     "sentry/sentry-laravel": "^4.20",
+    "seven.io/api": "^8.0",
     "spatie/laravel-medialibrary": "^11.0",
     "spatie/laravel-responsecache": "^7.7",
     "spatie/laravel-settings": "^3.5",
