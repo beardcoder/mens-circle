@@ -21,7 +21,7 @@
 
             <div class="newsletter__form-wrapper">
                 <form id="newsletterForm" class="newsletter__form" aria-label="Newsletter-Anmeldung">
-                    <label for="newsletter-email" class="visually-hidden">E-Mail-Adresse</label>
+                    <label for="newsletter-email" class="sr-only">E-Mail-Adresse</label>
                     <input
                         type="email"
                         id="newsletter-email"
