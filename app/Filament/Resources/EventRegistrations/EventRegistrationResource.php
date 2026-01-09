@@ -52,6 +52,10 @@ class EventRegistrationResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
+                TextInput::make('phone_number')
+                    ->label('Telefonnummer')
+                    ->tel()
+                    ->maxLength(30),
                 Toggle::make('privacy_accepted')
                     ->label('Datenschutz akzeptiert')
                     ->default(false),
@@ -91,6 +95,12 @@ class EventRegistrationResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->copyable(),
+                TextColumn::make('phone_number')
+                    ->label('Telefon')
+                    ->searchable()
+                    ->sortable()
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()

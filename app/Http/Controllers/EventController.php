@@ -8,6 +8,7 @@ use App\Http\Requests\EventRegistrationRequest;
 use App\Mail\EventRegistrationConfirmation;
 use App\Models\Event;
 use App\Models\EventRegistration;
+use App\Services\SmsService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -102,6 +103,7 @@ class EventController extends Controller
         // Clear response cache to update available spots on event pages
         ResponseCache::clear();
 
+        // Send email confirmation
         try {
             Mail::queue(new EventRegistrationConfirmation($registration, $event));
 
@@ -117,6 +119,21 @@ class EventController extends Controller
                 'event_id' => $event->id,
                 'error' => $exception->getMessage(),
             ]);
+        }
+
+        // Send SMS confirmation if phone number provided
+        if ($registration->phone_number) {
+            try {
+                $smsService = app(SmsService::class);
+                $smsService->sendRegistrationConfirmation($registration, $event);
+            } catch (Exception $exception) {
+                Log::error('Failed to send SMS registration confirmation', [
+                    'registration_id' => $registration->id,
+                    'phone_number' => $registration->phone_number,
+                    'event_id' => $event->id,
+                    'error' => $exception->getMessage(),
+                ]);
+            }
         }
 
         return response()->json([
