@@ -70,30 +70,19 @@ class SmsService
 
     protected function buildRegistrationMessage(EventRegistration $registration, Event $event): string
     {
-        $template = config('sevenio.templates.registration_confirmation');
-
-        return strtr($template, [
-            ':first_name' => $registration->first_name,
-            ':event_title' => $event->title,
-            ':event_date' => $event->event_date->locale('de')->isoFormat('DD.MM.YYYY'),
-            ':start_time' => $event->start_time->format('H:i'),
-            ':location' => $event->location,
-            ':site_name' => config('app.name'),
-        ]);
+        return sprintf(
+            'Hallo %s! Deine Anmeldung für "%s" ist bestätigt. Details per E-Mail. Männerkreis',
+            $registration->first_name,
+            $event->title
+        );
     }
 
     protected function buildReminderMessage(EventRegistration $registration, Event $event): string
     {
-        $template = config('sevenio.templates.event_reminder');
-
-        return strtr($template, [
-            ':first_name' => $registration->first_name,
-            ':event_title' => $event->title,
-            ':event_date' => $event->event_date->locale('de')->isoFormat('DD.MM.YYYY'),
-            ':start_time' => $event->start_time->format('H:i'),
-            ':location' => $event->location,
-            ':site_name' => config('app.name'),
-        ]);
+        return sprintf(
+            'Erinnerung: "%s" findet morgen statt. Details per E-Mail. Bis bald! - Männerkreis',
+            $event->title
+        );
     }
 
     protected function sendSms(string $phoneNumber, string $message, array $context = []): bool
