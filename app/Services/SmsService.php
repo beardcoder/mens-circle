@@ -76,6 +76,8 @@ class SmsService
             ':first_name' => $registration->first_name,
             ':event_title' => $event->title,
             ':event_date' => $event->event_date->locale('de')->isoFormat('DD.MM.YYYY'),
+            ':start_time' => $event->start_time->format('H:i'),
+            ':location' => $event->location,
             ':site_name' => config('app.name'),
         ]);
     }
@@ -88,7 +90,7 @@ class SmsService
             ':first_name' => $registration->first_name,
             ':event_title' => $event->title,
             ':event_date' => $event->event_date->locale('de')->isoFormat('DD.MM.YYYY'),
-            ':start_time' => $event->start_time,
+            ':start_time' => $event->start_time->format('H:i'),
             ':location' => $event->location,
             ':site_name' => config('app.name'),
         ]);
