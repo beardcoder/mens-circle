@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Mail\EventReminder;
 use App\Models\Event;
+use App\Services\SmsService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -13,7 +14,13 @@ class SendEventReminders extends Command
 {
     protected $signature = 'events:send-reminders';
 
-    protected $description = 'Send reminder emails to participants for events happening in 24 hours';
+    protected $description = 'Send reminder emails and SMS to participants for events happening in 24 hours';
+
+    public function __construct(
+        private readonly SmsService $smsService
+    ) {
+        parent::__construct();
+    }
 
     public function handle(): int
     {
@@ -34,7 +41,8 @@ class SendEventReminders extends Command
             return self::SUCCESS;
         }
 
-        $totalRemindersSent = 0;
+        $totalEmailsSent = 0;
+        $totalSmsSent = 0;
 
         foreach ($upcomingEvents as $event) {
             $registrations = $event->confirmedRegistrations;
@@ -48,14 +56,24 @@ class SendEventReminders extends Command
             $this->info(sprintf('Processing event: %s (%s)', $event->title, $event->event_date->format('d.m.Y H:i')));
 
             foreach ($registrations as $registration) {
+                // Send email reminder
                 Mail::queue(new EventReminder($registration, $event));
-                $totalRemindersSent++;
-                $this->line('  -> Reminder sent to: '.$registration->email);
+                $totalEmailsSent++;
+                $this->line('  -> Email reminder sent to: '.$registration->email);
+
+                // Send SMS reminder if phone number is provided
+                if ($registration->phone_number) {
+                    $smsSent = $this->smsService->sendEventReminder($registration, $event);
+                    if ($smsSent) {
+                        $totalSmsSent++;
+                        $this->line('  -> SMS reminder sent to: '.$registration->phone_number);
+                    }
+                }
             }
         }
 
         $this->newLine();
-        $this->info(sprintf('Successfully sent %d reminder(s) for %s event(s).', $totalRemindersSent, $upcomingEvents->count()));
+        $this->info(sprintf('Successfully sent %d email(s) and %d SMS for %s event(s).', $totalEmailsSent, $totalSmsSent, $upcomingEvents->count()));
 
         return self::SUCCESS;
     }
