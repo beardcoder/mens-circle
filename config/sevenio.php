@@ -30,13 +30,16 @@ return [
     | SMS Templates
     |--------------------------------------------------------------------------
     |
-    | Template texts for different SMS notifications
+    | Template texts are now hardcoded in SmsService for simplicity
+    | and to ensure messages fit within single SMS length (160 chars)
     |
     */
     'templates' => [
-        'registration_confirmation' => 'Hallo :first_name! ":event_title" am :event_date, :start_time in :location - Anmeldung bestätigt. Details per E-Mail. Männerkreis',
+        // Hardcoded in SmsService::buildRegistrationMessage()
+        // "Hallo {Name}! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis"
 
-        'event_reminder' => 'Erinnerung: ":event_title" morgen am :event_date um :start_time in :location. Bis bald! - Männerkreis',
+        // Hardcoded in SmsService::buildReminderMessage()
+        // "Erinnerung: Männerkreis findet morgen statt. Details per E-Mail. Bis bald!"
     ],
 
     /*

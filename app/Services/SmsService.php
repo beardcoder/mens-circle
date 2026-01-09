@@ -71,18 +71,14 @@ class SmsService
     protected function buildRegistrationMessage(EventRegistration $registration, Event $event): string
     {
         return sprintf(
-            'Hallo %s! Deine Anmeldung für "%s" ist bestätigt. Details per E-Mail. Männerkreis',
-            $registration->first_name,
-            $event->title
+            'Hallo %s! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis',
+            $registration->first_name
         );
     }
 
     protected function buildReminderMessage(EventRegistration $registration, Event $event): string
     {
-        return sprintf(
-            'Erinnerung: "%s" findet morgen statt. Details per E-Mail. Bis bald! - Männerkreis',
-            $event->title
-        );
+        return 'Erinnerung: Männerkreis findet morgen statt. Details per E-Mail. Bis bald!';
     }
 
     protected function sendSms(string $phoneNumber, string $message, array $context = []): bool
