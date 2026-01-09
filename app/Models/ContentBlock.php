@@ -23,7 +23,7 @@ class ContentBlock extends Model implements HasMedia
     ];
 
     /**
-     * Beziehung zur Page
+     * Relationship to Page
      */
     public function page(): BelongsTo
     {
@@ -31,11 +31,12 @@ class ContentBlock extends Model implements HasMedia
     }
 
     /**
-     * Hole ein spezifisches Media-Objekt für ein Feld
+     * Get specific media object for a field
      */
     public function getFieldMedia(string $field): ?Media
     {
-        return $this->getMedia('page_blocks')
+        // Media is stored on the Page model
+        return $this->page->getMedia('page_blocks')
             ->first(
                 fn (Media $media): bool =>
                 $media->getCustomProperty('block_id') === $this->block_id
@@ -44,7 +45,7 @@ class ContentBlock extends Model implements HasMedia
     }
 
     /**
-     * Media Collections registrieren
+     * Register Media Collections
      */
     public function registerMediaCollections(): void
     {

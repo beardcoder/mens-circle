@@ -16,17 +16,17 @@ class CreatePage extends CreateRecord
     protected static string $resource = PageResource::class;
 
     /**
-     * Speichere ContentBlocks nach dem Erstellen der Page
+     * Save ContentBlocks after Page creation
      */
     protected function handleRecordCreation(array $data): Model
     {
         $contentBlocksData = $data['content_blocks'] ?? [];
         unset($data['content_blocks']);
 
-        // Erstelle Page ohne content_blocks
+        // Create Page without content_blocks
         $record = static::getModel()::create($data);
 
-        // Erstelle ContentBlocks
+        // Create ContentBlocks
         foreach ($contentBlocksData as $index => $blockData) {
             $data = $blockData['data'] ?? [];
             $blockId = $data['block_id'] ?? Str::uuid();
@@ -38,16 +38,6 @@ class CreatePage extends CreateRecord
                 'block_id' => $blockId,
                 'order' => $index,
             ]);
-
-            // Migriere Media Library Zuordnungen falls vorhanden
-            Media::where('model_type', get_class($record))
-                ->where('model_id', $record->id)
-                ->where('collection_name', 'page_blocks')
-                ->where('custom_properties->block_id', $blockId)
-                ->update([
-                    'model_type' => ContentBlock::class,
-                    'model_id' => $contentBlock->id,
-                ]);
         }
 
         return $record;
