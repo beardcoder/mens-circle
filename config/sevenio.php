@@ -34,7 +34,7 @@ return [
     |
     */
     'templates' => [
-        'registration_confirmation' => 'Hallo :first_name! Deine Anmeldung für ":event_title" am :event_date wurde bestätigt. Wir freuen uns auf dich! - :site_name',
+        'registration_confirmation' => 'Hallo :first_name! Herzlich willkommen - deine Anmeldung ist bestätigt! ":event_title" am :event_date um :start_time in :location. Details per E-Mail. Wir freuen uns auf dich!',
 
         'event_reminder' => 'Erinnerung: ":event_title" findet morgen am :event_date um :start_time statt. Ort: :location. Bis bald! - :site_name',
     ],
