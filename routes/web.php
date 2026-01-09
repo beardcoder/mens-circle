@@ -10,19 +10,31 @@ use App\Http\Controllers\TestimonialSubmissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::passkeys();
+
 Route::get('/llms.txt', [LlmsController::class, 'show'])->name('llms.txt');
 
-Route::get('/', [PageController::class, 'home'])->name('home');
-Route::get('/event', [EventController::class, 'showNext'])->name('event.show');
-Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show.slug');
+Route::controller(PageController::class)->group(function () {
+    Route::get('/', 'home')->name('home');
+});
+
+Route::controller(EventController::class)->group(function () {
+    Route::get('/event', 'showNext')->name('event.show');
+    Route::get('/event/{slug}', 'show')->name('event.show.slug');
+    Route::post('/event/register', 'register')->name('event.register');
+});
+
 Route::redirect('/events', '/event', 301);
 Route::redirect('/events/{slug}', '/event/{slug}', 301);
-Route::get('/teile-deine-erfahrung', [TestimonialSubmissionController::class, 'show'])->name('testimonial.form');
 
-Route::post('/event/register', [EventController::class, 'register'])->name('event.register');
-Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
-Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
-Route::post('/testimonial/submit', [TestimonialSubmissionController::class, 'submit'])->name('testimonial.submit');
+Route::controller(TestimonialSubmissionController::class)->group(function () {
+    Route::get('/teile-deine-erfahrung', 'show')->name('testimonial.form');
+    Route::post('/testimonial/submit', 'submit')->name('testimonial.submit');
+});
+
+Route::controller(NewsletterController::class)->group(function () {
+    Route::post('/newsletter/subscribe', 'subscribe')->name('newsletter.subscribe');
+    Route::get('/newsletter/unsubscribe/{token}', 'unsubscribe')->name('newsletter.unsubscribe');
+});
 
 // Dynamic pages (must be last to avoid conflicts)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');

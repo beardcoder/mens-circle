@@ -21,10 +21,9 @@ class EventController extends Controller
 {
     public function showNext(): View|RedirectResponse
     {
-        $event = Event::query()
+        $event = Event::published()
+            ->upcoming()
             ->select('id', 'slug', 'event_date')
-            ->where('is_published', true)
-            ->where('event_date', '>=', now())
             ->orderBy('event_date')
             ->first();
 
@@ -37,12 +36,10 @@ class EventController extends Controller
 
     public function show(string $slug): View
     {
-        $event = Event::query()
+        $event = Event::published()
             ->where('slug', $slug)
-            ->where('is_published', true)
-            ->withCount([
-                'confirmedRegistrations as confirmed_registrations_count',
-            ])
+            ->with(['media'])
+            ->withCount('confirmedRegistrations')
             ->firstOrFail();
 
         return view('event', ['event' => $event]);
@@ -51,9 +48,8 @@ class EventController extends Controller
     public function register(EventRegistrationRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $event = Event::query()
-            ->select('id', 'event_date', 'is_published', 'max_participants')
-            ->withCount(['confirmedRegistrations as confirmed_registrations_count'])
+        $event = Event::select('id', 'event_date', 'is_published', 'max_participants')
+            ->withCount('confirmedRegistrations')
             ->findOrFail($validated['event_id']);
 
         if (! $event->is_published) {

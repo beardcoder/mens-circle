@@ -29,8 +29,7 @@ class SendEventReminders extends Command
         $startWindow = now()->addHours(23);
         $endWindow = now()->addHours(25);
 
-        $upcomingEvents = Event::query()
-            ->where('is_published', true)
+        $upcomingEvents = Event::published()
             ->whereBetween('event_date', [$startWindow, $endWindow])
             ->with('confirmedRegistrations')
             ->get();

@@ -19,7 +19,7 @@ class LlmsController extends Controller
 
     private function generateLlmsTxt(): string
     {
-        $settings = app_settings();
+        $settings = app(GeneralSettings::class);
         $siteName = $settings->site_name ?? 'Männerkreis Niederbayern';
         $siteDescription = $settings->site_description ?? 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.';
 
@@ -33,9 +33,8 @@ class LlmsController extends Controller
         $lines[] = '';
 
         $lines[] = '## Veranstaltungen';
-        $upcomingEvents = Event::query()
-            ->where('is_published', true)
-            ->where('event_date', '>=', now())
+        $upcomingEvents = Event::published()
+            ->upcoming()
             ->orderBy('event_date')
             ->get();
 
@@ -52,8 +51,7 @@ class LlmsController extends Controller
 
         $lines[] = '';
 
-        $pastEvents = Event::query()
-            ->where('is_published', true)
+        $pastEvents = Event::published()
             ->where('event_date', '<', now())
             ->orderByDesc('event_date')
             ->limit(5)
@@ -73,8 +71,7 @@ class LlmsController extends Controller
         $lines[] = '## Seiten';
         $lines[] = '- [Startseite]('.route('home').'): Hauptseite mit Überblick über den Männerkreis';
 
-        $pages = Page::query()
-            ->where('is_published', true)
+        $pages = Page::published()
             ->whereNotIn('slug', ['home', 'impressum', 'datenschutz'])
             ->orderBy('title')
             ->get();

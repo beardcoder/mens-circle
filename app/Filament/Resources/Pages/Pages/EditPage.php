@@ -78,7 +78,6 @@ class EditPage extends EditRecord
                 'order' => $index,
             ]);
 
-            // Migriere Media Library Zuordnungen
             Media::where('model_type', get_class($record))
                 ->where('model_id', $record->id)
                 ->where('collection_name', 'page_blocks')

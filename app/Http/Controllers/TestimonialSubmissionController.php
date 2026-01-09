@@ -32,6 +32,7 @@ class TestimonialSubmissionController extends Controller
             $testimonial = Testimonial::create([
                 'quote' => $validated['quote'],
                 'author_name' => $validated['author_name'] ?? null,
+                'email' => $validated['email'],
                 'role' => $validated['role'] ?? null,
                 'is_published' => false, // Needs admin approval
                 'published_at' => null,

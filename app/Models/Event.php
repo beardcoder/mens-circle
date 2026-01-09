@@ -139,4 +139,14 @@ class Event extends Model implements HasMedia
             'is_published' => 'boolean',
         ];
     }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
+
+    public function scopeUpcoming($query)
+    {
+        return $query->where('event_date', '>=', now());
+    }
 }

@@ -31,16 +31,12 @@
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.16",
     "driftingly/rector-laravel": "^2.1",
-    "fakerphp/faker": "^1.23",
     "kitloong/laravel-migrations-generator": "^7.2",
     "laravel/boost": "^1.8",
     "laravel/pail": "^1.2.2",
     "laravel/pint": "^1.24",
     "laravel/sail": "^1.41",
-    "mockery/mockery": "^1.6",
-    "nunomaduro/collision": "^8.6",
-    "php-static-analysis/rector-rule": "^0.5.0",
-    "phpunit/phpunit": "^11.5.3"
+    "php-static-analysis/rector-rule": "^0.5.0"
   },
   "minimum-stability": "stable",
   "prefer-stable": true,
@@ -49,19 +45,10 @@
       "App\\": "app/",
       "Database\\Factories\\": "database/factories/",
       "Database\\Seeders\\": "database/seeders/"
-    },
-    "files": [
-      "app/Helpers/helpers.php"
-    ]
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
     }
   },
   "config": {
     "allow-plugins": {
-      "pestphp/pest-plugin": true,
       "php-http/discovery": true
     },
     "optimize-autoloader": true,
@@ -110,10 +97,6 @@
       "@php artisan migrate --force",
       "bun install",
       "bun run build"
-    ],
-    "test": [
-      "@php artisan config:clear --ansi",
-      "@php artisan test"
     ]
   }
 }

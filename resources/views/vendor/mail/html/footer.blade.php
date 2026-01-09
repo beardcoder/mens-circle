@@ -4,7 +4,7 @@
 <tr>
 <td class="content-cell" align="center" style="padding: 32px 32px 40px 32px;">
 @php
-    $social_links = app_settings()->social_links ?? [];
+    $social_links = app(\App\Settings\GeneralSettings::class)->social_links ?? [];
 @endphp
 @if(!empty($social_links))
 <table cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom: 20px;">

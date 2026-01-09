@@ -49,9 +49,8 @@ class AppServiceProvider extends ServiceProvider
         ], function (ViewContract $view): void {
             try {
                 $view->with([
-                    'hasNextEvent' => cache()->remember('has_next_event', 300, fn () => Event::query()
-                        ->where('is_published', true)
-                        ->where('event_date', '>=', now())
+                    'hasNextEvent' => cache()->remember('has_next_event', 300, fn () => Event::published()
+                        ->upcoming()
                         ->exists()),
                 ]);
             } catch (Throwable) {
