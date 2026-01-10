@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Clusters\Events\Resources\Events\RelationManagers;
 
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
+use Filament\Fields\DateTimePicker;
+use Filament\Fields\Select;
+use Filament\Fields\TextInput;
+use Filament\Fields\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -26,10 +26,10 @@ class RegistrationsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'email';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->fields([
                 TextInput::make('first_name')
                     ->label('Vorname')
                     ->required()
