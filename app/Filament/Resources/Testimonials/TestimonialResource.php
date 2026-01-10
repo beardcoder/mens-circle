@@ -24,11 +24,13 @@ class TestimonialResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
 
-    protected static ?string $navigationLabel = 'Testimonials';
+    protected static ?string $navigationLabel = 'Erfahrungsberichte';
 
-    protected static ?string $modelLabel = 'Testimonial';
+    protected static ?string $modelLabel = 'Erfahrungsbericht';
 
-    protected static ?string $pluralModelLabel = 'Testimonials';
+    protected static ?string $pluralModelLabel = 'Erfahrungsberichte';
+
+    protected static ?int $navigationSort = 40;
 
     public static function form(Schema $schema): Schema
     {
