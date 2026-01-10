@@ -191,6 +191,58 @@ class ClearCache extends Page
                             ->send();
                     }
                 }),
+
+            Action::make('optimizeApplication')
+                ->label('Laravel optimieren')
+                ->icon('heroicon-s-rocket-launch')
+                ->color('success')
+                ->requiresConfirmation()
+                ->modalHeading('Laravel optimieren?')
+                ->modalDescription('Dies führt den Laravel Optimize-Befehl aus und cached Konfiguration, Routen, Views und Events für maximale Performance.')
+                ->modalSubmitActionLabel('Jetzt optimieren')
+                ->action(function (): void {
+                    try {
+                        Artisan::call('optimize');
+
+                        Notification::make()
+                            ->title('Laravel optimiert')
+                            ->body('Die Anwendung wurde erfolgreich optimiert. Konfiguration, Routen, Views und Events wurden gecached.')
+                            ->success()
+                            ->send();
+                    } catch (Exception $exception) {
+                        Notification::make()
+                            ->title('Fehler bei der Optimierung')
+                            ->body($exception->getMessage())
+                            ->danger()
+                            ->send();
+                    }
+                }),
+
+            Action::make('clearOptimization')
+                ->label('Optimierung zurücksetzen')
+                ->icon('heroicon-s-x-circle')
+                ->color('gray')
+                ->requiresConfirmation()
+                ->modalHeading('Optimierung zurücksetzen?')
+                ->modalDescription('Dies löscht alle durch Laravel Optimize erstellten Caches. Nützlich während der Entwicklung.')
+                ->modalSubmitActionLabel('Zurücksetzen')
+                ->action(function (): void {
+                    try {
+                        Artisan::call('optimize:clear');
+
+                        Notification::make()
+                            ->title('Optimierung zurückgesetzt')
+                            ->body('Alle Optimierungs-Caches wurden gelöscht.')
+                            ->success()
+                            ->send();
+                    } catch (Exception $exception) {
+                        Notification::make()
+                            ->title('Fehler beim Zurücksetzen')
+                            ->body($exception->getMessage())
+                            ->danger()
+                            ->send();
+                    }
+                }),
         ];
     }
 }
