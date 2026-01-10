@@ -72,6 +72,7 @@ class EventTable
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('event_date', 'desc');
     }
 }

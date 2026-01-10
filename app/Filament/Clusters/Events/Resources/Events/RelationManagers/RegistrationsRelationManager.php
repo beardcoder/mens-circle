@@ -2,29 +2,73 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Clusters\Events\Resources\EventRegistrations\Tables;
+namespace App\Filament\Clusters\Events\Resources\Events\RelationManagers;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class EventRegistrationTable
+class RegistrationsRelationManager extends RelationManager
 {
-    public static function configure(Table $table): Table
+    protected static string $relationship = 'registrations';
+
+    protected static ?string $title = 'Anmeldungen';
+
+    protected static ?string $recordTitleAttribute = 'email';
+
+    public function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                TextInput::make('first_name')
+                    ->label('Vorname')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('last_name')
+                    ->label('Nachname')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('email')
+                    ->label('E-Mail')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('phone_number')
+                    ->label('Handynummer')
+                    ->tel()
+                    ->maxLength(255),
+                Toggle::make('privacy_accepted')
+                    ->label('Datenschutz akzeptiert')
+                    ->default(false),
+                Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'confirmed' => 'Bestätigt',
+                        'cancelled' => 'Abgesagt',
+                        'waitlist' => 'Warteliste',
+                    ])
+                    ->default('confirmed')
+                    ->required(),
+                DateTimePicker::make('confirmed_at')
+                    ->label('Bestätigt am')
+                    ->native(false),
+            ]);
+    }
+
+    public function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('event.event_date')
-                    ->label('Event-Datum')
-                    ->dateTime('d.m.Y')
-                    ->sortable(),
-                TextColumn::make('event.title')
-                    ->label('Veranstaltung')
-                    ->searchable()
-                    ->sortable(),
                 TextColumn::make('first_name')
                     ->label('Vorname')
                     ->searchable()
@@ -64,11 +108,6 @@ class EventRegistrationTable
                     ->label('Angemeldet am')
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
-                TextColumn::make('updated_at')
-                    ->label('Aktualisiert')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -78,11 +117,9 @@ class EventRegistrationTable
                         'cancelled' => 'Abgesagt',
                         'waitlist' => 'Warteliste',
                     ]),
-                SelectFilter::make('event')
-                    ->label('Veranstaltung')
-                    ->relationship('event', 'title')
-                    ->searchable()
-                    ->preload(),
+            ])
+            ->headerActions([
+                CreateAction::make(),
             ])
             ->actions([
                 EditAction::make(),
@@ -92,6 +129,6 @@ class EventRegistrationTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('event.event_date', 'desc');
+            ->defaultSort('created_at', 'desc');
     }
 }
