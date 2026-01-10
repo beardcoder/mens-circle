@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Clusters\Content;
 
+use BackedEnum;
 use Filament\Clusters\Cluster;
 
 class ContentCluster extends Cluster
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?string $navigationLabel = 'Inhalte';
 
