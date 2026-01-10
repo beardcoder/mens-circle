@@ -33,6 +33,8 @@ class SendNewsletter extends Page implements HasActions, HasForms
 
     protected static ?string $title = 'Newsletter versenden';
 
+    protected static ?int $navigationSort = 70;
+
     public ?array $data = [];
 
     public function mount(): void

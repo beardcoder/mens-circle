@@ -28,6 +28,8 @@ class NewsletterSubscriptionResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Abonnenten';
 
+    protected static ?int $navigationSort = 60;
+
     public static function form(Schema $schema): Schema
     {
         return NewsletterSubscriptionForm::configure($schema);
