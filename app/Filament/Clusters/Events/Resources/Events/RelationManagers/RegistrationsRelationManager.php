@@ -29,7 +29,7 @@ class RegistrationsRelationManager extends RelationManager
     public function form(Schema $schema): Schema
     {
         return $schema
-            ->fields([
+            ->components([
                 TextInput::make('first_name')
                     ->label('Vorname')
                     ->required()
