@@ -8,6 +8,7 @@ use App\Filament\Clusters\Events\EventsCluster;
 use App\Filament\Clusters\Events\Resources\Events\Pages\CreateEvent;
 use App\Filament\Clusters\Events\Resources\Events\Pages\EditEvent;
 use App\Filament\Clusters\Events\Resources\Events\Pages\ListEvents;
+use App\Filament\Clusters\Events\Resources\Events\RelationManagers\RegistrationsRelationManager;
 use App\Filament\Clusters\Events\Resources\Events\Schemas\EventForm;
 use App\Filament\Clusters\Events\Resources\Events\Tables\EventTable;
 use App\Models\Event;
@@ -35,7 +36,9 @@ class EventResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RegistrationsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
