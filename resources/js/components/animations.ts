@@ -1,39 +1,11 @@
 /**
- * Scroll Animations Component
- * Handles fade-in and stagger animations using IntersectionObserver
+ * Animation Components
+ *
+ * Scroll animations are now handled purely via CSS using
+ * animation-timeline: view() - no JavaScript needed!
+ *
+ * This file only contains smooth scroll functionality.
  */
-export function initScrollAnimations(): void {
-  const fadeElements = document.querySelectorAll<HTMLElement>('.fade-in');
-  const staggerElements =
-    document.querySelectorAll<HTMLElement>('.stagger-children');
-
-  const allAnimatedElements = [...fadeElements, ...staggerElements];
-
-  if (!allAnimatedElements.length) return;
-
-  // Check if IntersectionObserver is supported
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px',
-      }
-    );
-
-    allAnimatedElements.forEach((el) => observer.observe(el));
-  } else {
-    // Fallback: show all elements immediately
-    allAnimatedElements.forEach((el) => el.classList.add('visible'));
-  }
-}
 
 /**
  * Smooth Scroll Component
@@ -79,4 +51,13 @@ export function initSmoothScroll(): void {
         }
       });
     });
+}
+
+/**
+ * @deprecated Scroll animations are now CSS-only using animation-timeline: view()
+ * This function is kept for backwards compatibility but does nothing.
+ */
+export function initScrollAnimations(): void {
+  // CSS scroll-driven animations handle this automatically
+  // No JavaScript needed - this is a no-op for backwards compatibility
 }
