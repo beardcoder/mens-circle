@@ -1,6 +1,10 @@
 /**
- * Animation Utilities
- * Modern CSS animations
+ * Modern CSS-Only Animations (2025)
+ * Using CSS Scroll-Driven Animations API
+ * No JavaScript required - Pure CSS solution
+ *
+ * Browser Support: Chrome 115+, Safari 17.5+, Edge 115+
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline
  */
 
 /* ============================================
@@ -52,134 +56,187 @@
 }
 
 /* ============================================
-   Fade In Animations
+   CSS Scroll-Driven Animations
+   Using animation-timeline: view()
+   No JavaScript needed!
    ============================================ */
-.fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  transition:
-    opacity var(--duration-slow) var(--ease-out),
-    transform var(--duration-slow) var(--ease-out);
+
+/* Keyframe for fade-in-up effect */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Base fade-in class using scroll-driven animations */
+.fade-in {
+  /* Animation runs once when element enters viewport */
+  animation: fade-in-up linear forwards;
+  animation-timeline: view();
+  /* Start animation when 10% of element is visible, complete at 25% */
+  animation-range: entry 0% entry 35%;
 }
 
 .fade-in-up {
-  opacity: 0;
-  transform: translateY(40px);
+  animation: fade-in-up linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
 }
 
 .fade-in-down {
-  opacity: 0;
-  transform: translateY(-40px);
+  animation: fade-in-down linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
 }
 
 .fade-in-left {
-  opacity: 0;
-  transform: translateX(-40px);
+  animation: fade-in-left linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
 }
 
 .fade-in-right {
-  opacity: 0;
-  transform: translateX(40px);
+  animation: fade-in-right linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
 }
 
 .fade-in-scale {
-  opacity: 0;
-  transform: scale(0.95);
+  animation: fade-in-scale linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
 }
 
 /* ============================================
-   Animation Delays
+   Animation Delays using animation-range
    ============================================ */
-.delay-1 {
-  transition-delay: 100ms;
-  animation-delay: 100ms;
+.delay-1,
+.fade-in-delay-1 {
+  animation-range: entry 5% entry 40%;
 }
 
-.delay-2 {
-  transition-delay: 200ms;
-  animation-delay: 200ms;
+.delay-2,
+.fade-in-delay-2 {
+  animation-range: entry 10% entry 45%;
 }
 
-.delay-3 {
-  transition-delay: 300ms;
-  animation-delay: 300ms;
+.delay-3,
+.fade-in-delay-3 {
+  animation-range: entry 15% entry 50%;
 }
 
-.delay-4 {
-  transition-delay: 400ms;
-  animation-delay: 400ms;
+.delay-4,
+.fade-in-delay-4 {
+  animation-range: entry 20% entry 55%;
 }
 
-.delay-5 {
-  transition-delay: 500ms;
-  animation-delay: 500ms;
+.delay-5,
+.fade-in-delay-5 {
+  animation-range: entry 25% entry 60%;
 }
 
 /* ============================================
    Stagger Children Animation
+   Pure CSS with nth-child selectors
    ============================================ */
 .stagger-children > * {
-  opacity: 0;
-  transform: translateY(25px);
-  transition:
-    opacity var(--duration-slow) var(--ease-out),
-    transform var(--duration-slow) var(--ease-out);
+  animation: fade-in-up linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 40%;
 }
 
-.stagger-children.visible > * {
-  opacity: 1;
-  transform: translateY(0);
+/* Stagger using animation-range offsets */
+.stagger-children > *:nth-child(1) {
+  animation-range: entry 0% entry 35%;
 }
 
-.stagger-children.visible > *:nth-child(1) {
-  transition-delay: 80ms;
+.stagger-children > *:nth-child(2) {
+  animation-range: entry 3% entry 38%;
 }
 
-.stagger-children.visible > *:nth-child(2) {
-  transition-delay: 160ms;
+.stagger-children > *:nth-child(3) {
+  animation-range: entry 6% entry 41%;
 }
 
-.stagger-children.visible > *:nth-child(3) {
-  transition-delay: 240ms;
+.stagger-children > *:nth-child(4) {
+  animation-range: entry 9% entry 44%;
 }
 
-.stagger-children.visible > *:nth-child(4) {
-  transition-delay: 320ms;
+.stagger-children > *:nth-child(5) {
+  animation-range: entry 12% entry 47%;
 }
 
-.stagger-children.visible > *:nth-child(5) {
-  transition-delay: 400ms;
+.stagger-children > *:nth-child(6) {
+  animation-range: entry 15% entry 50%;
 }
 
-.stagger-children.visible > *:nth-child(6) {
-  transition-delay: 480ms;
+.stagger-children > *:nth-child(7) {
+  animation-range: entry 18% entry 53%;
 }
 
-.stagger-children.visible > *:nth-child(7) {
-  transition-delay: 560ms;
-}
-
-.stagger-children.visible > *:nth-child(8) {
-  transition-delay: 640ms;
+.stagger-children > *:nth-child(8) {
+  animation-range: entry 21% entry 56%;
 }
 
 /* ============================================
-   Keyframe Animations
+   Continuous/Looping Keyframe Animations
    ============================================ */
 
 /* Breathing / Pulsing animation */
 @keyframes breathe {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.25;
     transform: scale(0.85);
   }
-
   50% {
     opacity: 0.4;
     transform: scale(1.3);
@@ -192,11 +249,9 @@
 
 /* Subtle pulse */
 @keyframes pulse {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 1;
   }
-
   50% {
     opacity: 0.5;
   }
@@ -208,12 +263,10 @@
 
 /* Scroll indicator pulse */
 @keyframes scroll-pulse {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 1;
     transform: scaleY(1);
   }
-
   50% {
     opacity: 0.3;
     transform: scaleY(0.3);
@@ -237,12 +290,10 @@
 
 /* Bounce */
 @keyframes bounce {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(-25%);
     animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
-
   50% {
     transform: translateY(0);
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
@@ -255,11 +306,9 @@
 
 /* Float */
 @keyframes float {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0);
   }
-
   50% {
     transform: translateY(-10px);
   }
@@ -293,8 +342,7 @@
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 30px
-    color-mix(in oklch, var(--accent-primary) 30%, transparent);
+  box-shadow: 0 0 30px color-mix(in oklch, var(--accent-primary) 30%, transparent);
 }
 
 /* ============================================
@@ -309,7 +357,17 @@
 }
 
 /* ============================================
+   Performance Optimization
+   Use content-visibility for off-screen content
+   ============================================ */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* ============================================
    Reduced Motion
+   Respects user preference for less motion
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
   .fade-in,
@@ -317,16 +375,21 @@
   .fade-in-down,
   .fade-in-left,
   .fade-in-right,
-  .fade-in-scale {
+  .fade-in-scale,
+  .fade-in-delay-1,
+  .fade-in-delay-2,
+  .fade-in-delay-3,
+  .fade-in-delay-4,
+  .fade-in-delay-5 {
+    animation: none;
     opacity: 1;
     transform: none;
-    transition: none;
   }
 
   .stagger-children > * {
+    animation: none;
     opacity: 1;
     transform: none;
-    transition: none;
   }
 
   .animate-breathe,
@@ -340,6 +403,35 @@
 
   .hover-lift:hover,
   .hover-scale:hover {
+    transform: none;
+  }
+}
+
+/* ============================================
+   Fallback for browsers without scroll-driven animations
+   Uses @supports to detect feature support
+   ============================================ */
+@supports not (animation-timeline: view()) {
+  /* Fallback: Show content immediately without animation */
+  .fade-in,
+  .fade-in-up,
+  .fade-in-down,
+  .fade-in-left,
+  .fade-in-right,
+  .fade-in-scale,
+  .fade-in-delay-1,
+  .fade-in-delay-2,
+  .fade-in-delay-3,
+  .fade-in-delay-4,
+  .fade-in-delay-5 {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .stagger-children > * {
+    animation: none;
+    opacity: 1;
     transform: none;
   }
 }
