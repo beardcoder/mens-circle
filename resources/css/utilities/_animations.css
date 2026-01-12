@@ -1,10 +1,14 @@
 /**
- * Modern CSS-Only Animations (2025)
- * Using CSS Scroll-Driven Animations API
- * No JavaScript required - Pure CSS solution
+ * Animation Utilities (2025)
+ * Using Motion.dev for scroll-triggered animations
  *
- * Browser Support: Chrome 115+, Safari 17.5+, Edge 115+
- * @see https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline
+ * This file provides:
+ * - Transition utilities for hover/focus states
+ * - Continuous/looping keyframe animations
+ * - Reduced motion support
+ *
+ * Scroll-triggered animations are handled by Motion.dev's inView function
+ * @see https://motion.dev/docs/inview
  */
 
 /* ============================================
@@ -56,175 +60,56 @@
 }
 
 /* ============================================
-   CSS Scroll-Driven Animations
-   Using animation-timeline: view()
-   No JavaScript needed!
+   Scroll-Triggered Animation Classes
+   Initial states - Motion.dev handles the animation
    ============================================ */
 
-/* Keyframe for fade-in-up effect */
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/**
+ * These classes mark elements for scroll-triggered animations.
+ * Motion.dev's inView function detects these classes and applies
+ * the appropriate animation when elements enter the viewport.
+ *
+ * Usage:
+ *   <div class="fade-in">Fades in from bottom</div>
+ *   <div class="fade-in-left fade-in-delay-2">Fades from left with delay</div>
+ *   <div class="stagger-children">
+ *     <div>Child 1</div>
+ *     <div>Child 2</div>
+ *   </div>
+ */
 
-@keyframes fade-in-down {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fade-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fade-in-scale {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Base fade-in class using scroll-driven animations */
-.fade-in {
-  /* Animation runs once when element enters viewport */
-  animation: fade-in-up linear forwards;
-  animation-timeline: view();
-  /* Start animation when 10% of element is visible, complete at 25% */
-  animation-range: entry 0% entry 35%;
-}
-
-.fade-in-up {
-  animation: fade-in-up linear forwards;
-  animation-timeline: view();
-  animation-range: entry 0% entry 35%;
-}
-
-.fade-in-down {
-  animation: fade-in-down linear forwards;
-  animation-timeline: view();
-  animation-range: entry 0% entry 35%;
-}
-
-.fade-in-left {
-  animation: fade-in-left linear forwards;
-  animation-timeline: view();
-  animation-range: entry 0% entry 35%;
-}
-
-.fade-in-right {
-  animation: fade-in-right linear forwards;
-  animation-timeline: view();
-  animation-range: entry 0% entry 35%;
-}
-
+/* Marker classes for Motion.dev - no CSS animation needed */
+.fade-in,
+.fade-in-up,
+.fade-in-down,
+.fade-in-left,
+.fade-in-right,
 .fade-in-scale {
-  animation: fade-in-scale linear forwards;
-  animation-timeline: view();
-  animation-range: entry 0% entry 35%;
+  /* Initial state set by JavaScript for smooth loading */
+  will-change: opacity, transform;
 }
 
-/* ============================================
-   Animation Delays using animation-range
-   ============================================ */
+/* Delay classes - handled by Motion.dev */
 .delay-1,
-.fade-in-delay-1 {
-  animation-range: entry 5% entry 40%;
-}
-
 .delay-2,
-.fade-in-delay-2 {
-  animation-range: entry 10% entry 45%;
-}
-
 .delay-3,
-.fade-in-delay-3 {
-  animation-range: entry 15% entry 50%;
-}
-
 .delay-4,
-.fade-in-delay-4 {
-  animation-range: entry 20% entry 55%;
-}
-
 .delay-5,
+.fade-in-delay-1,
+.fade-in-delay-2,
+.fade-in-delay-3,
+.fade-in-delay-4,
 .fade-in-delay-5 {
-  animation-range: entry 25% entry 60%;
+  /* Delays are applied programmatically by Motion.dev */
 }
 
-/* ============================================
-   Stagger Children Animation
-   Pure CSS with nth-child selectors
-   ============================================ */
+/* Stagger container - children animate with staggered timing */
+.stagger-children {
+  /* Container marker for Motion.dev stagger effect */
+}
+
 .stagger-children > * {
-  animation: fade-in-up linear forwards;
-  animation-timeline: view();
-  animation-range: entry 0% entry 40%;
-}
-
-/* Stagger using animation-range offsets */
-.stagger-children > *:nth-child(1) {
-  animation-range: entry 0% entry 35%;
-}
-
-.stagger-children > *:nth-child(2) {
-  animation-range: entry 3% entry 38%;
-}
-
-.stagger-children > *:nth-child(3) {
-  animation-range: entry 6% entry 41%;
-}
-
-.stagger-children > *:nth-child(4) {
-  animation-range: entry 9% entry 44%;
-}
-
-.stagger-children > *:nth-child(5) {
-  animation-range: entry 12% entry 47%;
-}
-
-.stagger-children > *:nth-child(6) {
-  animation-range: entry 15% entry 50%;
-}
-
-.stagger-children > *:nth-child(7) {
-  animation-range: entry 18% entry 53%;
-}
-
-.stagger-children > *:nth-child(8) {
-  animation-range: entry 21% entry 56%;
+  will-change: opacity, transform;
 }
 
 /* ============================================
@@ -318,6 +203,62 @@
   animation: float 3s ease-in-out infinite;
 }
 
+/* Fade in animation for programmatic use */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* ============================================
    Hover Animations
    ============================================ */
@@ -381,15 +322,14 @@
   .fade-in-delay-3,
   .fade-in-delay-4,
   .fade-in-delay-5 {
-    animation: none;
-    opacity: 1;
-    transform: none;
+    /* Motion.dev handles reduced motion, but ensure visibility */
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .stagger-children > * {
-    animation: none;
-    opacity: 1;
-    transform: none;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .animate-breathe,
@@ -408,30 +348,16 @@
 }
 
 /* ============================================
-   Fallback for browsers without scroll-driven animations
-   Uses @supports to detect feature support
+   No-JS Fallback
+   Show content if JavaScript is disabled
    ============================================ */
-@supports not (animation-timeline: view()) {
-  /* Fallback: Show content immediately without animation */
-  .fade-in,
-  .fade-in-up,
-  .fade-in-down,
-  .fade-in-left,
-  .fade-in-right,
-  .fade-in-scale,
-  .fade-in-delay-1,
-  .fade-in-delay-2,
-  .fade-in-delay-3,
-  .fade-in-delay-4,
-  .fade-in-delay-5 {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-
-  .stagger-children > * {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
+.no-js .fade-in,
+.no-js .fade-in-up,
+.no-js .fade-in-down,
+.no-js .fade-in-left,
+.no-js .fade-in-right,
+.no-js .fade-in-scale,
+.no-js .stagger-children > * {
+  opacity: 1;
+  transform: none;
 }
