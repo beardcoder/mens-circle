@@ -1,7 +1,9 @@
 /**
  * Animation Components using Motion.dev
  *
+ * Optimized for natural, smooth animations with spring-like easing.
  * Uses Motion's inView function for performant scroll-triggered animations.
+ *
  * @see https://motion.dev/docs/inview
  */
 
@@ -9,69 +11,96 @@ import { animate, inView } from 'motion';
 
 /**
  * Animation configuration for different animation types
+ * Using smaller translate values for subtler, more elegant motion
  */
 interface AnimationConfig {
   initial: {
     opacity: number;
-    transform: string;
+    y?: number;
+    x?: number;
+    scale?: number;
   };
   animate: {
     opacity: number;
-    transform: string;
+    y?: number;
+    x?: number;
+    scale?: number;
   };
 }
 
 const ANIMATION_CONFIGS: Record<string, AnimationConfig> = {
   'fade-in': {
-    initial: { opacity: 0, transform: 'translateY(30px)' },
-    animate: { opacity: 1, transform: 'translateY(0px)' },
+    initial: { opacity: 0, y: 24 },
+    animate: { opacity: 1, y: 0 },
   },
   'fade-in-up': {
-    initial: { opacity: 0, transform: 'translateY(30px)' },
-    animate: { opacity: 1, transform: 'translateY(0px)' },
+    initial: { opacity: 0, y: 24 },
+    animate: { opacity: 1, y: 0 },
   },
   'fade-in-down': {
-    initial: { opacity: 0, transform: 'translateY(-30px)' },
-    animate: { opacity: 1, transform: 'translateY(0px)' },
+    initial: { opacity: 0, y: -24 },
+    animate: { opacity: 1, y: 0 },
   },
   'fade-in-left': {
-    initial: { opacity: 0, transform: 'translateX(-30px)' },
-    animate: { opacity: 1, transform: 'translateX(0px)' },
+    initial: { opacity: 0, x: -24 },
+    animate: { opacity: 1, x: 0 },
   },
   'fade-in-right': {
-    initial: { opacity: 0, transform: 'translateX(30px)' },
-    animate: { opacity: 1, transform: 'translateX(0px)' },
+    initial: { opacity: 0, x: 24 },
+    animate: { opacity: 1, x: 0 },
   },
   'fade-in-scale': {
-    initial: { opacity: 0, transform: 'scale(0.95)' },
-    animate: { opacity: 1, transform: 'scale(1)' },
+    initial: { opacity: 0, scale: 0.96 },
+    animate: { opacity: 1, scale: 1 },
   },
 };
 
 /**
- * Custom ease-out easing curve as a tuple
+ * Easing curves optimized for natural, organic motion
+ *
+ * These bezier curves simulate spring-like physics:
+ * - Quick initial movement
+ * - Smooth deceleration with slight overshoot feel
  */
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const EASING = {
+  // Spring-like easing - quick start, smooth settle (slight overshoot feel)
+  spring: [0.22, 1.2, 0.36, 1] as [number, number, number, number],
+  // Smooth ease-out - natural deceleration
+  smooth: [0.25, 1, 0.5, 1] as [number, number, number, number],
+  // Natural deceleration for opacity
+  decelerate: [0, 0, 0.2, 1] as [number, number, number, number],
+  // Gentle spring - more bounce
+  gentle: [0.34, 1.56, 0.64, 1] as [number, number, number, number],
+};
 
 /**
- * Default animation duration in seconds
+ * Timing configuration
  */
-const DURATION = 0.6;
+const TIMING = {
+  // Duration for transform animations
+  transformDuration: 0.7,
+  // Duration for opacity (faster than transform)
+  opacityDuration: 0.45,
+  // Stagger delay between children
+  staggerDelay: 0.08,
+  // Viewport trigger amount
+  viewportAmount: 0.15,
+};
 
 /**
  * Delay values for staggered animations (in seconds)
  */
 const DELAY_VALUES: Record<string, number> = {
   'fade-in-delay-1': 0.1,
-  'fade-in-delay-2': 0.2,
-  'fade-in-delay-3': 0.3,
-  'fade-in-delay-4': 0.4,
-  'fade-in-delay-5': 0.5,
+  'fade-in-delay-2': 0.18,
+  'fade-in-delay-3': 0.26,
+  'fade-in-delay-4': 0.34,
+  'fade-in-delay-5': 0.42,
   'delay-1': 0.1,
-  'delay-2': 0.2,
-  'delay-3': 0.3,
-  'delay-4': 0.4,
-  'delay-5': 0.5,
+  'delay-2': 0.18,
+  'delay-3': 0.26,
+  'delay-4': 0.34,
+  'delay-5': 0.42,
 };
 
 /**
@@ -110,31 +139,35 @@ function getDelay(element: Element): number {
 }
 
 /**
+ * Build transform string from config
+ */
+function buildTransform(
+  config: AnimationConfig['initial' | 'animate']
+): string {
+  const transforms: string[] = [];
+
+  if (config.y !== undefined) {
+    transforms.push(`translateY(${config.y}px)`);
+  }
+
+  if (config.x !== undefined) {
+    transforms.push(`translateX(${config.x}px)`);
+  }
+
+  if (config.scale !== undefined) {
+    transforms.push(`scale(${config.scale})`);
+  }
+
+  return transforms.length > 0 ? transforms.join(' ') : 'none';
+}
+
+/**
  * Initialize scroll-triggered animations using Motion's inView
  */
 export function initScrollAnimations(): void {
   // Skip if user prefers reduced motion
   if (prefersReducedMotion()) {
-    // Show all elements immediately without animation
-    const animatedElements = document.querySelectorAll(
-      '.fade-in, .fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right, .fade-in-scale'
-    );
-
-    animatedElements.forEach((el) => {
-      (el as HTMLElement).style.opacity = '1';
-      (el as HTMLElement).style.transform = 'none';
-    });
-
-    const staggerContainers = document.querySelectorAll('.stagger-children');
-
-    staggerContainers.forEach((container) => {
-      const children = container.children;
-
-      for (let i = 0; i < children.length; i++) {
-        (children[i] as HTMLElement).style.opacity = '1';
-        (children[i] as HTMLElement).style.transform = 'none';
-      }
-    });
+    showAllElementsImmediately();
 
     return;
   }
@@ -144,6 +177,31 @@ export function initScrollAnimations(): void {
 
   // Initialize staggered children animations
   initStaggerAnimations();
+}
+
+/**
+ * Show all animated elements immediately (for reduced motion)
+ */
+function showAllElementsImmediately(): void {
+  const animatedElements = document.querySelectorAll(
+    '.fade-in, .fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right, .fade-in-scale'
+  );
+
+  animatedElements.forEach((el) => {
+    (el as HTMLElement).style.opacity = '1';
+    (el as HTMLElement).style.transform = 'none';
+  });
+
+  const staggerContainers = document.querySelectorAll('.stagger-children');
+
+  staggerContainers.forEach((container) => {
+    const children = container.children;
+
+    for (let i = 0; i < children.length; i++) {
+      (children[i] as HTMLElement).style.opacity = '1';
+      (children[i] as HTMLElement).style.transform = 'none';
+    }
+  });
 }
 
 /**
@@ -166,27 +224,36 @@ function initFadeAnimations(): void {
 
     // Set initial state
     element.style.opacity = String(config.initial.opacity);
-    element.style.transform = config.initial.transform;
+    element.style.transform = buildTransform(config.initial);
 
     // Trigger animation when element enters viewport
     inView(
       element,
       () => {
+        // Animate opacity with smooth deceleration (faster)
         animate(
           element,
+          { opacity: config.animate.opacity },
           {
-            opacity: config.animate.opacity,
-            transform: config.animate.transform,
-          },
-          {
-            duration: DURATION,
+            duration: TIMING.opacityDuration,
             delay,
-            ease: EASE_OUT,
+            ease: EASING.decelerate,
+          }
+        );
+
+        // Animate transform with spring-like easing (natural motion)
+        animate(
+          element,
+          { transform: buildTransform(config.animate) },
+          {
+            duration: TIMING.transformDuration,
+            delay,
+            ease: EASING.spring,
           }
         );
       },
       {
-        amount: 0.1, // Trigger when 10% of element is visible
+        amount: TIMING.viewportAmount,
       }
     );
   });
@@ -207,7 +274,7 @@ function initStaggerAnimations(): void {
     // Set initial state for all children
     children.forEach((child) => {
       child.style.opacity = '0';
-      child.style.transform = 'translateY(30px)';
+      child.style.transform = 'translateY(20px)';
     });
 
     // Trigger staggered animation when container enters viewport
@@ -216,22 +283,33 @@ function initStaggerAnimations(): void {
       () => {
         // Animate each child with staggered delay
         children.forEach((child, index) => {
+          const delay = index * TIMING.staggerDelay;
+
+          // Animate opacity with smooth deceleration
           animate(
             child,
+            { opacity: 1 },
             {
-              opacity: 1,
-              transform: 'translateY(0px)',
-            },
+              duration: TIMING.opacityDuration,
+              delay,
+              ease: EASING.decelerate,
+            }
+          );
+
+          // Animate transform with gentle spring-like easing
+          animate(
+            child,
+            { transform: 'translateY(0px)' },
             {
-              duration: DURATION,
-              delay: index * 0.1, // 100ms stagger between children
-              ease: EASE_OUT,
+              duration: TIMING.transformDuration,
+              delay,
+              ease: EASING.gentle,
             }
           );
         });
       },
       {
-        amount: 0.1, // Trigger when 10% of container is visible
+        amount: TIMING.viewportAmount,
       }
     );
   });
@@ -248,7 +326,7 @@ export function initSmoothScroll(): void {
       anchor.addEventListener('click', function (e: Event) {
         const targetId = this.getAttribute('href');
 
-        // Skip if empty anchor or not a valid selector (e.g., blob URLs)
+        // Skip if empty anchor or not a valid selector
         if (
           !targetId ||
           targetId === '#' ||
