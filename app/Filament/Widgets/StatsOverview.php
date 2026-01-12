@@ -14,8 +14,8 @@ class StatsOverview extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
-        $upcomingEvents = Event::where('is_published', true)
-            ->where('event_date', '>=', now())
+        $upcomingEvents = Event::published()
+            ->upcoming()
             ->count();
 
         $totalRegistrations = EventRegistration::where('status', 'confirmed')
@@ -24,8 +24,8 @@ class StatsOverview extends StatsOverviewWidget
         $activeSubscribers = NewsletterSubscription::where('status', 'active')
             ->count();
 
-        $nextEvent = Event::where('is_published', true)
-            ->where('event_date', '>=', now())
+        $nextEvent = Event::published()
+            ->upcoming()
             ->withCount('confirmedRegistrations')
             ->orderBy('event_date')
             ->first();

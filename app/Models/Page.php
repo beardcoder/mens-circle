@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -32,10 +34,7 @@ class Page extends Model implements HasMedia
         return SlugOptions::create()->generateSlugsFrom('title')->saveSlugsTo('slug');
     }
 
-    /**
-     * Content Blocks Beziehung (sortiert)
-     */
-    public function contentBlocks()
+    public function contentBlocks(): HasMany
     {
         return $this->hasMany(ContentBlock::class)->orderBy('order');
     }
@@ -54,7 +53,7 @@ class Page extends Model implements HasMedia
         ];
     }
 
-    public function scopePublished($query)
+    public function scopePublished(Builder $query): Builder
     {
         return $query->where('is_published', true);
     }
@@ -76,7 +75,7 @@ class Page extends Model implements HasMedia
                 $data = $blockData['data'] ?? [];
                 // Block ID comes from the data array (hidden field)
                 $blockId = $data['block_id'] ?? Str::uuid()->toString();
-                
+
                 // Remove block_id from data payload as it's stored in a separate column
                 unset($data['block_id']);
 

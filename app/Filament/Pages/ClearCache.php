@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Pages;
 
 use BackedEnum;
+use Closure;
 use Exception;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -28,221 +29,157 @@ class ClearCache extends Page
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('clearApplicationCache')
-                ->label('Anwendungs-Cache löschen')
-                ->icon('heroicon-s-bolt')
-                ->color('warning')
-                ->requiresConfirmation()
-                ->modalHeading('Anwendungs-Cache löschen?')
-                ->modalDescription('Dies löscht den Anwendungs-Cache.')
-                ->modalSubmitActionLabel('Jetzt löschen')
-                ->action(function (): void {
-                    try {
-                        Artisan::call('cache:clear');
+            $this->makeCacheAction(
+                name: 'clearApplicationCache',
+                label: 'Anwendungs-Cache löschen',
+                icon: 'heroicon-s-bolt',
+                color: 'warning',
+                modalHeading: 'Anwendungs-Cache löschen?',
+                modalDescription: 'Dies löscht den Anwendungs-Cache.',
+                successTitle: 'Anwendungs-Cache gelöscht',
+                successBody: 'Der Anwendungs-Cache wurde erfolgreich gelöscht.',
+                action: fn () => Artisan::call('cache:clear'),
+            ),
 
-                        Notification::make()
-                            ->title('Anwendungs-Cache gelöscht')
-                            ->body('Der Anwendungs-Cache wurde erfolgreich gelöscht.')
-                            ->success()
-                            ->send();
-                    } catch (Exception $exception) {
-                        Notification::make()
-                            ->title('Fehler beim Löschen des Caches')
-                            ->body($exception->getMessage())
-                            ->danger()
-                            ->send();
-                    }
-                }),
+            $this->makeCacheAction(
+                name: 'clearResponseCache',
+                label: 'Response-Cache löschen',
+                icon: 'heroicon-s-globe-alt',
+                color: 'warning',
+                modalHeading: 'Response-Cache löschen?',
+                modalDescription: 'Dies löscht den Response-Cache (gecachte HTTP-Antworten). Die Seiten werden beim nächsten Aufruf neu generiert.',
+                successTitle: 'Response-Cache gelöscht',
+                successBody: 'Der Response-Cache wurde erfolgreich gelöscht.',
+                action: fn () => ResponseCache::clear(),
+            ),
 
-            Action::make('clearResponseCache')
-                ->label('Response-Cache löschen')
-                ->icon('heroicon-s-globe-alt')
-                ->color('warning')
-                ->requiresConfirmation()
-                ->modalHeading('Response-Cache löschen?')
-                ->modalDescription('Dies löscht den Response-Cache (gecachte HTTP-Antworten). Die Seiten werden beim nächsten Aufruf neu generiert.')
-                ->modalSubmitActionLabel('Jetzt löschen')
-                ->action(function (): void {
-                    try {
-                        ResponseCache::clear();
+            $this->makeCacheAction(
+                name: 'clearConfigCache',
+                label: 'Konfigurations-Cache löschen',
+                icon: 'heroicon-s-cog-6-tooth',
+                color: 'info',
+                modalHeading: 'Konfigurations-Cache löschen?',
+                modalDescription: 'Dies löscht den Konfigurations-Cache.',
+                successTitle: 'Konfigurations-Cache gelöscht',
+                successBody: 'Der Konfigurations-Cache wurde erfolgreich gelöscht.',
+                action: fn () => Artisan::call('config:clear'),
+            ),
 
-                        Notification::make()
-                            ->title('Response-Cache gelöscht')
-                            ->body('Der Response-Cache wurde erfolgreich gelöscht.')
-                            ->success()
-                            ->send();
-                    } catch (Exception $exception) {
-                        Notification::make()
-                            ->title('Fehler beim Löschen des Response-Caches')
-                            ->body($exception->getMessage())
-                            ->danger()
-                            ->send();
-                    }
-                }),
+            $this->makeCacheAction(
+                name: 'clearRouteCache',
+                label: 'Routen-Cache löschen',
+                icon: 'heroicon-s-map',
+                color: 'info',
+                modalHeading: 'Routen-Cache löschen?',
+                modalDescription: 'Dies löscht den Routen-Cache.',
+                successTitle: 'Routen-Cache neu aufgebaut',
+                successBody: 'Der Routen-Cache wurde gelöscht und neu aufgebaut.',
+                action: function (): void {
+                    Artisan::call('route:clear');
+                    Artisan::call('route:cache');
+                },
+            ),
 
-            Action::make('clearConfigCache')
-                ->label('Konfigurations-Cache löschen')
-                ->icon('heroicon-s-cog-6-tooth')
-                ->color('info')
-                ->requiresConfirmation()
-                ->modalHeading('Konfigurations-Cache löschen?')
-                ->modalDescription('Dies löscht den Konfigurations-Cache.')
-                ->modalSubmitActionLabel('Jetzt löschen')
-                ->action(function (): void {
-                    try {
-                        Artisan::call('config:clear');
+            $this->makeCacheAction(
+                name: 'clearViewCache',
+                label: 'View-Cache löschen',
+                icon: 'heroicon-s-eye',
+                color: 'info',
+                modalHeading: 'View-Cache löschen?',
+                modalDescription: 'Dies löscht den View-Cache.',
+                successTitle: 'View-Cache neu aufgebaut',
+                successBody: 'Der View-Cache wurde gelöscht und neu aufgebaut.',
+                action: function (): void {
+                    Artisan::call('view:clear');
+                    Artisan::call('view:cache');
+                },
+            ),
 
-                        Notification::make()
-                            ->title('Konfigurations-Cache gelöscht')
-                            ->body('Der Konfigurations-Cache wurde erfolgreich gelöscht.')
-                            ->success()
-                            ->send();
-                    } catch (Exception $exception) {
-                        Notification::make()
-                            ->title('Fehler beim Löschen des Caches')
-                            ->body($exception->getMessage())
-                            ->danger()
-                            ->send();
-                    }
-                }),
+            $this->makeCacheAction(
+                name: 'clearAll',
+                label: 'Alle Caches löschen',
+                icon: 'heroicon-s-arrow-path',
+                color: 'danger',
+                modalHeading: 'Alle Caches löschen?',
+                modalDescription: 'Dies löscht alle Caches (Anwendung, Response, Konfiguration, Routen, Views). Diese Aktion kann nicht rückgängig gemacht werden.',
+                successTitle: 'Alle Caches gelöscht',
+                successBody: 'Alle Caches wurden gelöscht. Routen- und View-Cache wurden neu aufgebaut.',
+                submitLabel: 'Alle löschen',
+                action: function (): void {
+                    Artisan::call('cache:clear');
+                    ResponseCache::clear();
+                    Artisan::call('config:clear');
+                    Artisan::call('route:clear');
+                    Artisan::call('view:clear');
+                    Artisan::call('route:cache');
+                    Artisan::call('view:cache');
+                },
+            ),
 
-            Action::make('clearRouteCache')
-                ->label('Routen-Cache löschen')
-                ->icon('heroicon-s-map')
-                ->color('info')
-                ->requiresConfirmation()
-                ->modalHeading('Routen-Cache löschen?')
-                ->modalDescription('Dies löscht den Routen-Cache.')
-                ->modalSubmitActionLabel('Jetzt löschen')
-                ->action(function (): void {
-                    try {
-                        Artisan::call('route:clear');
-                        Artisan::call('route:cache');
+            $this->makeCacheAction(
+                name: 'optimizeApplication',
+                label: 'Laravel optimieren',
+                icon: 'heroicon-s-rocket-launch',
+                color: 'success',
+                modalHeading: 'Laravel optimieren?',
+                modalDescription: 'Dies führt den Laravel Optimize-Befehl aus und cached Konfiguration, Routen, Views und Events für maximale Performance.',
+                successTitle: 'Laravel optimiert',
+                successBody: 'Die Anwendung wurde erfolgreich optimiert. Konfiguration, Routen, Views und Events wurden gecached.',
+                submitLabel: 'Jetzt optimieren',
+                action: fn () => Artisan::call('optimize'),
+            ),
 
-                        Notification::make()
-                            ->title('Routen-Cache neu aufgebaut')
-                            ->body('Der Routen-Cache wurde gelöscht und neu aufgebaut.')
-                            ->success()
-                            ->send();
-                    } catch (Exception $exception) {
-                        Notification::make()
-                            ->title('Fehler beim Löschen des Caches')
-                            ->body($exception->getMessage())
-                            ->danger()
-                            ->send();
-                    }
-                }),
-
-            Action::make('clearViewCache')
-                ->label('View-Cache löschen')
-                ->icon('heroicon-s-eye')
-                ->color('info')
-                ->requiresConfirmation()
-                ->modalHeading('View-Cache löschen?')
-                ->modalDescription('Dies löscht den View-Cache.')
-                ->modalSubmitActionLabel('Jetzt löschen')
-                ->action(function (): void {
-                    try {
-                        Artisan::call('view:clear');
-                        Artisan::call('view:cache');
-
-                        Notification::make()
-                            ->title('View-Cache neu aufgebaut')
-                            ->body('Der View-Cache wurde gelöscht und neu aufgebaut.')
-                            ->success()
-                            ->send();
-                    } catch (Exception $exception) {
-                        Notification::make()
-                            ->title('Fehler beim Löschen des Caches')
-                            ->body($exception->getMessage())
-                            ->danger()
-                            ->send();
-                    }
-                }),
-
-            Action::make('clearAll')
-                ->label('Alle Caches löschen')
-                ->icon('heroicon-s-arrow-path')
-                ->color('danger')
-                ->requiresConfirmation()
-                ->modalHeading('Alle Caches löschen?')
-                ->modalDescription('Dies löscht alle Caches (Anwendung, Response, Konfiguration, Routen, Views). Diese Aktion kann nicht rückgängig gemacht werden.')
-                ->modalSubmitActionLabel('Alle löschen')
-                ->action(function (): void {
-                    try {
-                        Artisan::call('cache:clear');
-                        ResponseCache::clear();
-                        Artisan::call('config:clear');
-                        Artisan::call('route:clear');
-                        Artisan::call('view:clear');
-                        Artisan::call('route:cache');
-                        Artisan::call('view:cache');
-
-                        Notification::make()
-                            ->title('Alle Caches gelöscht')
-                            ->body('Alle Caches wurden gelöscht. Routen- und View-Cache wurden neu aufgebaut.')
-                            ->success()
-                            ->send();
-                    } catch (Exception $exception) {
-                        Notification::make()
-                            ->title('Fehler beim Löschen der Caches')
-                            ->body($exception->getMessage())
-                            ->danger()
-                            ->send();
-                    }
-                }),
-
-            Action::make('optimizeApplication')
-                ->label('Laravel optimieren')
-                ->icon('heroicon-s-rocket-launch')
-                ->color('success')
-                ->requiresConfirmation()
-                ->modalHeading('Laravel optimieren?')
-                ->modalDescription('Dies führt den Laravel Optimize-Befehl aus und cached Konfiguration, Routen, Views und Events für maximale Performance.')
-                ->modalSubmitActionLabel('Jetzt optimieren')
-                ->action(function (): void {
-                    try {
-                        Artisan::call('optimize');
-
-                        Notification::make()
-                            ->title('Laravel optimiert')
-                            ->body('Die Anwendung wurde erfolgreich optimiert. Konfiguration, Routen, Views und Events wurden gecached.')
-                            ->success()
-                            ->send();
-                    } catch (Exception $exception) {
-                        Notification::make()
-                            ->title('Fehler bei der Optimierung')
-                            ->body($exception->getMessage())
-                            ->danger()
-                            ->send();
-                    }
-                }),
-
-            Action::make('clearOptimization')
-                ->label('Optimierung zurücksetzen')
-                ->icon('heroicon-s-x-circle')
-                ->color('gray')
-                ->requiresConfirmation()
-                ->modalHeading('Optimierung zurücksetzen?')
-                ->modalDescription('Dies löscht alle durch Laravel Optimize erstellten Caches. Nützlich während der Entwicklung.')
-                ->modalSubmitActionLabel('Zurücksetzen')
-                ->action(function (): void {
-                    try {
-                        Artisan::call('optimize:clear');
-
-                        Notification::make()
-                            ->title('Optimierung zurückgesetzt')
-                            ->body('Alle Optimierungs-Caches wurden gelöscht.')
-                            ->success()
-                            ->send();
-                    } catch (Exception $exception) {
-                        Notification::make()
-                            ->title('Fehler beim Zurücksetzen')
-                            ->body($exception->getMessage())
-                            ->danger()
-                            ->send();
-                    }
-                }),
+            $this->makeCacheAction(
+                name: 'clearOptimization',
+                label: 'Optimierung zurücksetzen',
+                icon: 'heroicon-s-x-circle',
+                color: 'gray',
+                modalHeading: 'Optimierung zurücksetzen?',
+                modalDescription: 'Dies löscht alle durch Laravel Optimize erstellten Caches. Nützlich während der Entwicklung.',
+                successTitle: 'Optimierung zurückgesetzt',
+                successBody: 'Alle Optimierungs-Caches wurden gelöscht.',
+                submitLabel: 'Zurücksetzen',
+                action: fn () => Artisan::call('optimize:clear'),
+            ),
         ];
+    }
+
+    private function makeCacheAction(
+        string $name,
+        string $label,
+        string $icon,
+        string $color,
+        string $modalHeading,
+        string $modalDescription,
+        string $successTitle,
+        string $successBody,
+        Closure $action,
+        string $submitLabel = 'Jetzt löschen',
+    ): Action {
+        return Action::make($name)
+            ->label($label)
+            ->icon($icon)
+            ->color($color)
+            ->requiresConfirmation()
+            ->modalHeading($modalHeading)
+            ->modalDescription($modalDescription)
+            ->modalSubmitActionLabel($submitLabel)
+            ->action(function () use ($action, $successTitle, $successBody): void {
+                try {
+                    $action();
+
+                    Notification::make()
+                        ->title($successTitle)
+                        ->body($successBody)
+                        ->success()
+                        ->send();
+                } catch (Exception $exception) {
+                    Notification::make()
+                        ->title('Fehler')
+                        ->body($exception->getMessage())
+                        ->danger()
+                        ->send();
+                }
+            });
     }
 }

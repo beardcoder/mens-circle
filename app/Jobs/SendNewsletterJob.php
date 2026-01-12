@@ -10,34 +10,21 @@ use App\Models\NewsletterSubscription;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Log;
-use PhpStaticAnalysis\Attributes\Type;
 use Throwable;
 
 class SendNewsletterJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * The number of times the job may be attempted.
-     */
-    #[Type('int')]
-    public $tries = 3;
+    public int $tries = 3;
 
-    /**
-     * The number of seconds to wait before retrying the job.
-     */
-    #[Type('int')]
-    public $backoff = 60;
+    public int $backoff = 60;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(
         public Newsletter $newsletter
     ) {
-        //
     }
 
     /**
