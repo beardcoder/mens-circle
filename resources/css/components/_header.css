@@ -42,8 +42,8 @@
 
 body:not(:has(.hero)) .header {
   background: color-mix(in oklch, var(--bg-primary) 94%, transparent);
-  backdrop-filter: blur(18px);
   border-block-end: 1px solid var(--border-light);
+  backdrop-filter: blur(18px);
 }
 
 body:not(:has(.hero)) .logo,
@@ -58,8 +58,8 @@ body:not(:has(.hero)) .nav-toggle span {
 @supports not selector(body:has(.hero)) {
   body.no-hero .header {
     background: color-mix(in oklch, var(--bg-primary) 94%, transparent);
-    backdrop-filter: blur(18px);
     border-block-end: 1px solid var(--border-light);
+    backdrop-filter: blur(18px);
   }
 
   body.no-hero .logo,
@@ -162,8 +162,8 @@ body:not(:has(.hero)) .nav-toggle span {
 /* Scrolled state */
 .header.scrolled {
   background: color-mix(in oklch, var(--bg-primary) 95%, transparent);
-  backdrop-filter: blur(20px);
   box-shadow: 0 18px 40px color-mix(in oklch, var(--color-ink) 8%, transparent);
+  backdrop-filter: blur(20px);
 }
 
 .header.scrolled .logo,
@@ -200,18 +200,18 @@ body:not(:has(.hero)) .nav-toggle span {
     position: fixed;
     inset: 0;
     z-index: calc(var(--z-header) + 1);
-    min-block-size: 100dvh;
     visibility: hidden;
-    pointer-events: none;
     flex-direction: column;
     gap: var(--space-md);
     align-items: center;
     justify-content: center;
+    min-block-size: 100dvh;
     padding: var(--space-xl) var(--space-md);
+    pointer-events: none;
     background: color-mix(in oklch, var(--bg-dark) 90%, transparent);
     opacity: 0;
+    backdrop-filter: blur(0);
     transform: translateY(-12px) scale(0.98);
-    backdrop-filter: blur(0px);
     transition:
       opacity var(--transition-slow),
       transform var(--transition-slow),
@@ -257,10 +257,10 @@ body:not(:has(.hero)) .nav-toggle span {
 
   .nav.open {
     visibility: visible;
-    opacity: 1;
     pointer-events: auto;
-    transform: translateY(0) scale(1);
+    opacity: 1;
     backdrop-filter: blur(16px);
+    transform: translateY(0) scale(1);
   }
 
   .nav.open::before {
@@ -280,8 +280,8 @@ body:not(:has(.hero)) .nav-toggle span {
     color: var(--text-on-dark);
     letter-spacing: -0.02em;
     opacity: 0;
-    transform: translateY(24px) scale(0.98);
     filter: blur(2px);
+    transform: translateY(24px) scale(0.98);
     transition:
       color var(--transition-fast),
       opacity var(--transition-slow),
@@ -310,8 +310,8 @@ body:not(:has(.hero)) .nav-toggle span {
   /* Staggered animation for links */
   .nav.open .nav__link {
     opacity: 1;
-    transform: translateY(0) scale(1);
     filter: blur(0);
+    transform: translateY(0) scale(1);
   }
 
   .nav.open .nav__link:nth-child(1) {
