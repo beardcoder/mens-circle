@@ -8,25 +8,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
     /**
+     * The tables to add soft deletes to.
+     */
+    private array $tables = [
+        'pages',
+        'testimonials',
+        'events',
+        'newsletter_subscriptions',
+    ];
+
+    /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('pages', function (Blueprint $table): void {
-            $table->softDeletes();
-        });
-
-        Schema::table('testimonials', function (Blueprint $table): void {
-            $table->softDeletes();
-        });
-
-        Schema::table('events', function (Blueprint $table): void {
-            $table->softDeletes();
-        });
-
-        Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
-            $table->softDeletes();
-        });
+        foreach ($this->tables as $table) {
+            Schema::table($table, function (Blueprint $table): void {
+                $table->softDeletes();
+            });
+        }
     }
 
     /**
@@ -34,20 +34,10 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::table('pages', function (Blueprint $table): void {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('testimonials', function (Blueprint $table): void {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('events', function (Blueprint $table): void {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
-            $table->dropSoftDeletes();
-        });
+        foreach ($this->tables as $table) {
+            Schema::table($table, function (Blueprint $table): void {
+                $table->dropSoftDeletes();
+            });
+        }
     }
 };
