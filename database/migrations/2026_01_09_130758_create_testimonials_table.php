@@ -22,6 +22,7 @@ return new class () extends Migration {
             $table->timestamp('published_at')->nullable();
             $table->integer('sort_order')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

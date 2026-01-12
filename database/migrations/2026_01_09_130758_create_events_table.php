@@ -26,6 +26,7 @@ return new class () extends Migration {
             $table->string('cost_basis')->default('Auf Spendenbasis');
             $table->boolean('is_published')->default(false);
             $table->timestamps();
+            $table->softDeletes();
             $table->string('image')->nullable();
             $table->string('street')->nullable();
             $table->string('postal_code')->nullable();
