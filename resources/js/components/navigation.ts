@@ -1,3 +1,5 @@
+import { animate } from 'motion';
+
 class MobileNavigation {
   private readonly navToggle: HTMLElement;
   private readonly nav: HTMLElement;
@@ -9,7 +11,7 @@ class MobileNavigation {
     this.bindEvents();
   }
 
-  private openNav(): void {
+  private async openNav(): Promise<void> {
     this.scrollPosition = window.pageYOffset;
     this.nav.classList.add('open');
     this.navToggle.classList.add('active');
@@ -17,16 +19,51 @@ class MobileNavigation {
     document.body.style.top = `-${this.scrollPosition}px`;
     this.navToggle.setAttribute('aria-expanded', 'true');
     this.navToggle.setAttribute('aria-label', 'Menu schliessen');
+
+    // Animate navigation links with Motion.dev
+    const navLinks = this.nav.querySelectorAll<HTMLElement>('.nav__link, .nav__cta');
+
+    navLinks.forEach((link, index) => {
+      const delay = index * 0.06;
+
+      // Fade in with staggered timing
+      animate(
+        link,
+        { opacity: [0, 1], transform: ['translateY(-12px)', 'translateY(0)'] },
+        {
+          duration: 0.4,
+          delay,
+          ease: [0.34, 1.56, 0.64, 1], // Gentle spring
+        }
+      );
+    });
   }
 
-  private closeNav(): void {
-    this.nav.classList.remove('open');
-    this.navToggle.classList.remove('active');
-    document.body.classList.remove('nav-open');
-    document.body.style.top = '';
-    window.scrollTo({ top: this.scrollPosition, left: 0, behavior: 'instant' });
-    this.navToggle.setAttribute('aria-expanded', 'false');
-    this.navToggle.setAttribute('aria-label', 'Menu oeffnen');
+  private async closeNav(): Promise<void> {
+    // Animate out before removing classes
+    const navLinks = this.nav.querySelectorAll<HTMLElement>('.nav__link, .nav__cta');
+
+    navLinks.forEach((link) => {
+      animate(
+        link,
+        { opacity: 0, transform: 'translateY(-8px)' },
+        {
+          duration: 0.2,
+          ease: [0.32, 0.72, 0, 1], // Smooth deceleration
+        }
+      );
+    });
+
+    // Wait for animation to complete before cleanup
+    setTimeout(() => {
+      this.nav.classList.remove('open');
+      this.navToggle.classList.remove('active');
+      document.body.classList.remove('nav-open');
+      document.body.style.top = '';
+      window.scrollTo({ top: this.scrollPosition, left: 0, behavior: 'instant' });
+      this.navToggle.setAttribute('aria-expanded', 'false');
+      this.navToggle.setAttribute('aria-label', 'Menu oeffnen');
+    }, 200);
   }
 
   private toggleNav(): void {

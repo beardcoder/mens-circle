@@ -34,18 +34,18 @@
     <div class="container">
         <div class="hero__content">
             @if(!empty($data['label']))
-                <p class="hero__label">{{ $data['label'] }}</p>
+                <p class="hero__label fade-in">{{ $data['label'] }}</p>
             @endif
 
             @if(!empty($data['title']))
-                <h1 class="hero__title">
+                <h1 class="hero__title fade-in-delay-1">
                     {!! $data['title'] !!}
                 </h1>
             @endif
 
             <div class="hero__bottom">
                 @if(!empty($data['description']))
-                    <p class="hero__description">
+                    <p class="hero__description fade-in-delay-2">
                         {{ $data['description'] }}
                     </p>
                 @endif
@@ -58,11 +58,11 @@
                     @endphp
 
                     @if($shouldShowButton)
-                        <div class="hero__cta">
+                        <div class="hero__cta fade-in-delay-3">
                             <a href="{{ $data['button_link'] }}" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=hero_cta;location=hero">
                                 {{ $data['button_text'] }}
                             </a>
-                            <div class="hero__scroll">
+                            <div class="hero__scroll fade-in-delay-4">
                                 <span>Entdecken</span>
                                 <div class="hero__scroll-line" aria-hidden="true"></div>
                             </div>

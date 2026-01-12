@@ -116,7 +116,11 @@
    Continuous/Looping Keyframe Animations
    ============================================ */
 
-/* Breathing / Pulsing animation */
+/* Breathing / Pulsing animation
+ * NOTE: Decorative circle breathing animations are now handled by Motion.dev
+ * for smoother, more natural motion. See breathing-animation.ts
+ * This CSS animation is kept as a fallback for no-JS environments.
+ */
 @keyframes breathe {
   0%, 100% {
     opacity: 0.25;
