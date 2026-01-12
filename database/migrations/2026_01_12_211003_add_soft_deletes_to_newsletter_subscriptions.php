@@ -12,14 +12,7 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('pages', function (Blueprint $table): void {
-            $table->id();
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->jsonb('meta')->nullable();
-            $table->boolean('is_published')->default(false);
-            $table->timestamp('published_at')->nullable();
-            $table->timestamps();
+        Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
             $table->softDeletes();
         });
     }
@@ -29,6 +22,8 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('pages');
+        Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
+            $table->dropSoftDeletes();
+        });
     }
 };
