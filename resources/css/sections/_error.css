@@ -8,9 +8,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    padding-block: 4rem;
     min-block-size: 60vh;
+    padding-block: 4rem;
+    text-align: center;
 }
 
 .error-page__content {
@@ -19,25 +19,25 @@
 }
 
 .error-page__code {
+    margin-block-end: 1rem;
     font-size: clamp(4rem, 15vw, 6rem);
     font-weight: 600;
-    color: var(--color-earth-deep);
-    margin-block-end: 1rem;
     line-height: 1;
+    color: var(--color-earth-deep);
 }
 
 .error-page__title {
+    margin-block-end: 1.5rem;
     font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: 500;
-    margin-block-end: 1.5rem;
     color: var(--color-earth-deep);
 }
 
 .error-page__text {
-    font-size: 1.125rem;
-    color: var(--color-text-muted, #6b7280);
     margin-block-end: 2rem;
+    font-size: 1.125rem;
     line-height: 1.6;
+    color: var(--color-text-muted, #6b7280);
 }
 
 .error-page__text a {
@@ -53,15 +53,15 @@
 
 .error-page__actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
-    flex-wrap: wrap;
 }
 
 .error-page__contact {
+    margin-block-start: 2rem;
     font-size: 1rem;
     color: var(--color-text-light, #9ca3af);
-    margin-block-start: 2rem;
 }
 
 .error-page__contact a {
