@@ -2,19 +2,43 @@
  * Accordion Component with Motion.dev Animations
  *
  * Provides smooth, performant accordion animations using Motion.dev
+ * with spring-like easing for natural, organic motion.
+ *
  * Works with native <details>/<summary> elements
  *
- * @see https://motion.dev/docs/inview
+ * @see https://motion.dev/docs/animate
  */
 
 import { animate } from 'motion';
 
 /**
- * Animation configuration
+ * Easing curves optimized for natural accordion motion
+ *
+ * These bezier curves simulate spring-like physics
  */
-const ANIMATION_CONFIG = {
-  duration: 0.4,
-  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+const EASING = {
+  // Spring-like expansion - quick start, smooth settle with slight overshoot
+  expand: [0.22, 1.2, 0.36, 1] as [number, number, number, number],
+  // Smooth collapse - natural deceleration
+  collapse: [0.32, 0.72, 0, 1] as [number, number, number, number],
+  // Content reveal - gentle spring feel
+  content: [0.34, 1.56, 0.64, 1] as [number, number, number, number],
+  // Quick fade - smooth deceleration
+  fade: [0, 0, 0.2, 1] as [number, number, number, number],
+  // Quick fade out
+  fadeOut: [0.4, 0, 1, 1] as [number, number, number, number],
+};
+
+/**
+ * Timing configuration
+ */
+const TIMING = {
+  // Duration for height animation
+  heightDuration: 0.5,
+  // Duration for opacity animation
+  fadeDuration: 0.35,
+  // Content reveal delay
+  contentDelay: 0.06,
 };
 
 /**
@@ -25,48 +49,71 @@ function prefersReducedMotion(): boolean {
 }
 
 /**
- * Animate accordion open
+ * Animate accordion open with smooth spring-like motion
  */
 function animateOpen(content: HTMLElement, inner: HTMLElement): Promise<void> {
   return new Promise((resolve) => {
     // Get the natural height of the content
     const height = inner.offsetHeight;
 
-    // Animate height and opacity
+    // Start with content invisible
+    inner.style.opacity = '0';
+    inner.style.transform = 'translateY(-8px)';
+
+    // Animate height with spring-like easing for smooth expansion
+    const heightAnimation = animate(
+      content,
+      { height: ['0px', `${height}px`] },
+      {
+        duration: TIMING.heightDuration,
+        ease: EASING.expand,
+      }
+    );
+
+    // Fade in container
     animate(
       content,
+      { opacity: [0, 1] },
       {
-        height: ['0px', `${height}px`],
-        opacity: [0, 1],
-      },
-      {
-        duration: ANIMATION_CONFIG.duration,
-        ease: ANIMATION_CONFIG.ease,
+        duration: TIMING.fadeDuration,
+        ease: EASING.fade,
       }
-    ).then(() => {
-      // Remove fixed height after animation to allow content reflow
+    );
+
+    // Animate inner content with slight delay for stagger effect
+    setTimeout(() => {
+      // Fade in inner content
+      animate(
+        inner,
+        { opacity: [0, 1] },
+        {
+          duration: TIMING.fadeDuration,
+          ease: EASING.fade,
+        }
+      );
+
+      // Spring the inner content into place
+      animate(
+        inner,
+        { transform: ['translateY(-8px)', 'translateY(0px)'] },
+        {
+          duration: TIMING.heightDuration * 0.9,
+          ease: EASING.content,
+        }
+      );
+    }, TIMING.contentDelay * 1000);
+
+    // Resolve when height animation completes
+    heightAnimation.then(() => {
+      // Remove fixed height to allow content reflow
       content.style.height = 'auto';
       resolve();
     });
-
-    // Animate inner content with slight delay for stagger effect
-    animate(
-      inner,
-      {
-        opacity: [0, 1],
-        transform: ['translateY(-10px)', 'translateY(0px)'],
-      },
-      {
-        duration: ANIMATION_CONFIG.duration * 0.8,
-        delay: ANIMATION_CONFIG.duration * 0.2,
-        ease: ANIMATION_CONFIG.ease,
-      }
-    );
   });
 }
 
 /**
- * Animate accordion close
+ * Animate accordion close with smooth motion
  */
 function animateClose(
   details: HTMLDetailsElement,
@@ -80,32 +127,47 @@ function animateClose(
     // Set explicit height for animation
     content.style.height = `${height}px`;
 
-    // Force reflow (void to satisfy linter)
+    // Force reflow
     void content.offsetHeight;
 
-    // Animate inner content first
+    // Fade out inner content first (quick)
     animate(
       inner,
+      { opacity: [1, 0] },
       {
-        opacity: [1, 0],
-        transform: ['translateY(0px)', 'translateY(-10px)'],
-      },
-      {
-        duration: ANIMATION_CONFIG.duration * 0.6,
-        ease: ANIMATION_CONFIG.ease,
+        duration: TIMING.fadeDuration * 0.6,
+        ease: EASING.fadeOut,
       }
     );
 
-    // Animate height and opacity
+    // Slide inner content up slightly
+    animate(
+      inner,
+      { transform: ['translateY(0px)', 'translateY(-6px)'] },
+      {
+        duration: TIMING.fadeDuration * 0.7,
+        ease: EASING.fadeOut,
+      }
+    );
+
+    // Fade out container
     animate(
       content,
+      { opacity: [1, 0] },
       {
-        height: [`${height}px`, '0px'],
-        opacity: [1, 0],
-      },
+        duration: TIMING.fadeDuration,
+        delay: TIMING.fadeDuration * 0.15,
+        ease: EASING.fadeOut,
+      }
+    );
+
+    // Animate height with smooth collapse
+    animate(
+      content,
+      { height: [`${height}px`, '0px'] },
       {
-        duration: ANIMATION_CONFIG.duration,
-        ease: ANIMATION_CONFIG.ease,
+        duration: TIMING.heightDuration * 0.85,
+        ease: EASING.collapse,
       }
     ).then(() => {
       // Actually close the details element after animation
@@ -173,40 +235,56 @@ function initAccordionItem(details: HTMLDetailsElement): void {
     content.style.height = 'auto';
     content.style.opacity = '1';
     inner.style.opacity = '1';
+    inner.style.transform = 'translateY(0)';
   } else {
     content.style.height = '0';
     content.style.opacity = '0';
     inner.style.opacity = '0';
+    inner.style.transform = 'translateY(-8px)';
   }
 }
 
 /**
- * Initialize accordion animations for reduced motion users
+ * Initialize accordion for reduced motion users
  */
 function initAccordionItemReducedMotion(details: HTMLDetailsElement): void {
   const content = details.querySelector<HTMLElement>(
     '.accordion-item__content, .faq-item__answer'
   );
+  const inner = details.querySelector<HTMLElement>(
+    '.accordion-item__body, .faq-item__answer-inner'
+  );
 
   if (!content) return;
 
-  // For reduced motion, just show/hide without animation
-  if (details.open) {
-    content.style.height = 'auto';
-    content.style.display = 'block';
-  } else {
-    content.style.height = '0';
-    content.style.display = 'none';
-  }
-
-  details.addEventListener('toggle', () => {
-    if (details.open) {
+  // Set initial state
+  const setVisibility = (open: boolean) => {
+    if (open) {
       content.style.height = 'auto';
+      content.style.opacity = '1';
       content.style.display = 'block';
+
+      if (inner) {
+        inner.style.opacity = '1';
+        inner.style.transform = 'none';
+      }
     } else {
       content.style.height = '0';
+      content.style.opacity = '0';
       content.style.display = 'none';
+
+      if (inner) {
+        inner.style.opacity = '0';
+      }
     }
+  };
+
+  // Apply initial state
+  setVisibility(details.open);
+
+  // Listen for toggle events
+  details.addEventListener('toggle', () => {
+    setVisibility(details.open);
   });
 }
 
