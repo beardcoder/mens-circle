@@ -30,27 +30,27 @@ interface AnimationConfig {
 
 const ANIMATION_CONFIGS: Record<string, AnimationConfig> = {
   'fade-in': {
-    initial: { opacity: 0, y: 24 },
+    initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
   },
   'fade-in-up': {
-    initial: { opacity: 0, y: 24 },
+    initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
   },
   'fade-in-down': {
-    initial: { opacity: 0, y: -24 },
+    initial: { opacity: 0, y: -20 },
     animate: { opacity: 1, y: 0 },
   },
   'fade-in-left': {
-    initial: { opacity: 0, x: -24 },
+    initial: { opacity: 0, x: -20 },
     animate: { opacity: 1, x: 0 },
   },
   'fade-in-right': {
-    initial: { opacity: 0, x: 24 },
+    initial: { opacity: 0, x: 20 },
     animate: { opacity: 1, x: 0 },
   },
   'fade-in-scale': {
-    initial: { opacity: 0, scale: 0.96 },
+    initial: { opacity: 0, scale: 0.95 },
     animate: { opacity: 1, scale: 1 },
   },
 };
@@ -74,17 +74,17 @@ const EASING = {
 };
 
 /**
- * Timing configuration
+ * Timing configuration - optimized for smooth, natural motion
  */
 const TIMING = {
-  // Duration for transform animations
-  transformDuration: 0.7,
-  // Duration for opacity (faster than transform)
-  opacityDuration: 0.45,
-  // Stagger delay between children
-  staggerDelay: 0.08,
-  // Viewport trigger amount
-  viewportAmount: 0.15,
+  // Duration for transform animations (slightly faster for snappier feel)
+  transformDuration: 0.6,
+  // Duration for opacity (faster than transform for instant visibility)
+  opacityDuration: 0.4,
+  // Stagger delay between children (reduced for faster sequence)
+  staggerDelay: 0.06,
+  // Viewport trigger amount (increased for earlier triggers)
+  viewportAmount: 0.1,
 };
 
 /**

@@ -46,7 +46,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer__top">
+            <div class="footer__top stagger-children">
                 <div class="footer__brand">
                     <a href="{{ route('home') }}" class="footer__logo" data-m:click="action=nav_click;element=logo;location=footer">
                         <svg class="footer__logo-icon" viewBox="0 0 512 512" aria-hidden="true">
@@ -102,7 +102,7 @@
                 </div>
             </div>
 
-            <div class="footer__bottom">
+            <div class="footer__bottom fade-in">
                 <p class="footer__copyright">
                     {{ $settings->footer_text }}
                 </p>

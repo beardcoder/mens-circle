@@ -13,6 +13,7 @@
   --btn-hover-bg: var(--bg-dark);
   --btn-hover-color: var(--color-bone);
 
+  position: relative;
   display: inline-flex;
   gap: 0.75rem;
   align-items: center;
@@ -31,6 +32,7 @@
   background: var(--btn-bg);
   border: 1.5px solid var(--btn-border);
   border-radius: var(--radius-full);
+  overflow: hidden;
   transition:
     background-color var(--transition-medium),
     color var(--transition-medium),
@@ -39,15 +41,29 @@
     box-shadow var(--transition-medium);
 }
 
+.btn::before {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: radial-gradient(circle at center, color-mix(in oklch, var(--btn-hover-bg) 30%, transparent) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
 .btn:hover {
   color: var(--btn-hover-color);
   background: var(--btn-hover-bg);
   box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.btn:hover::before {
+  opacity: 1;
 }
 
 .btn:active {
-  transform: translateY(0);
+  transform: translateY(-1px) scale(0.98);
+  transition-duration: 0.05s;
 }
 
 .btn:focus-visible {
@@ -210,6 +226,7 @@
    Social / Icon Buttons
    ============================================ */
 .social-icon {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -218,16 +235,36 @@
   color: var(--color-sand);
   background: color-mix(in oklch, var(--color-sand) 10%, transparent);
   border-radius: var(--radius-full);
+  overflow: hidden;
   transition:
     background-color var(--transition-fast),
     color var(--transition-fast),
-    transform var(--transition-fast);
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.social-icon::before {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: radial-gradient(circle at center, var(--accent-primary) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
 }
 
 .social-icon:hover {
   color: var(--text-on-dark);
   background: var(--accent-primary);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in oklch, var(--accent-primary) 30%, transparent);
+  transform: translateY(-3px) scale(1.05);
+}
+
+.social-icon:hover::before {
+  opacity: 0.3;
+}
+
+.social-icon:active {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .social-icon svg {
