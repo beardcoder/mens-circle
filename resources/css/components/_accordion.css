@@ -192,13 +192,11 @@
    ============================================ */
 .accordion-item__body,
 .faq-item__answer-inner {
-  padding-block: 0 var(--space-md);
+  padding-block: var(--space-md);
   padding-inline: var(--space-md);
-  margin-inline-start: var(--space-sm);
   font-size: 1rem;
   line-height: 1.8;
   color: var(--text-secondary);
-  border-inline-start: 1px solid var(--border-light);
 }
 
 .accordion-item__body p:last-child,

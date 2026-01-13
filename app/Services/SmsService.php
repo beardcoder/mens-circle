@@ -83,7 +83,7 @@ class SmsService
 
     protected function sendSms(string $phoneNumber, string $message, array $context = []): bool
     {
-        if (! $this->smsResource) {
+        if (!$this->smsResource instanceof SmsResource) {
             Log::warning('Cannot send SMS - Seven.io API key not configured', $context);
 
             return false;

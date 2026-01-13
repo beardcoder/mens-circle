@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -141,12 +142,14 @@ class Event extends Model implements HasMedia
         ];
     }
 
-    public function scopePublished(Builder $query): Builder
+    #[Scope]
+    protected function published(Builder $query): Builder
     {
         return $query->where('is_published', true);
     }
 
-    public function scopeUpcoming(Builder $query): Builder
+    #[Scope]
+    protected function upcoming(Builder $query): Builder
     {
         return $query->where('event_date', '>=', now());
     }
