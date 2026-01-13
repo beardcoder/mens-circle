@@ -104,7 +104,6 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht alle Caches (Anwendung, Response, Konfiguration, Routen, Views). Diese Aktion kann nicht rückgängig gemacht werden.',
                 successTitle: 'Alle Caches gelöscht',
                 successBody: 'Alle Caches wurden gelöscht. Routen- und View-Cache wurden neu aufgebaut.',
-                submitLabel: 'Alle löschen',
                 action: function (): void {
                     Artisan::call('cache:clear');
                     ResponseCache::clear();
@@ -114,6 +113,7 @@ class ClearCache extends Page
                     Artisan::call('route:cache');
                     Artisan::call('view:cache');
                 },
+                submitLabel: 'Alle löschen',
             ),
 
             $this->makeCacheAction(
@@ -125,8 +125,8 @@ class ClearCache extends Page
                 modalDescription: 'Dies führt den Laravel Optimize-Befehl aus und cached Konfiguration, Routen, Views und Events für maximale Performance.',
                 successTitle: 'Laravel optimiert',
                 successBody: 'Die Anwendung wurde erfolgreich optimiert. Konfiguration, Routen, Views und Events wurden gecached.',
-                submitLabel: 'Jetzt optimieren',
                 action: fn () => Artisan::call('optimize'),
+                submitLabel: 'Jetzt optimieren',
             ),
 
             $this->makeCacheAction(
@@ -138,8 +138,8 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht alle durch Laravel Optimize erstellten Caches. Nützlich während der Entwicklung.',
                 successTitle: 'Optimierung zurückgesetzt',
                 successBody: 'Alle Optimierungs-Caches wurden gelöscht.',
-                submitLabel: 'Zurücksetzen',
                 action: fn () => Artisan::call('optimize:clear'),
+                submitLabel: 'Zurücksetzen',
             ),
         ];
     }

@@ -13,11 +13,11 @@ Route::passkeys();
 
 Route::get('/llms.txt', [LlmsController::class, 'show'])->name('llms.txt');
 
-Route::controller(PageController::class)->group(function () {
+Route::controller(PageController::class)->group(function (): void {
     Route::get('/', 'home')->name('home');
 });
 
-Route::controller(EventController::class)->group(function () {
+Route::controller(EventController::class)->group(function (): void {
     Route::get('/event', 'showNext')->name('event.show');
     Route::get('/event/{slug}', 'show')->name('event.show.slug');
     Route::post('/event/register', 'register')->name('event.register');
@@ -26,12 +26,12 @@ Route::controller(EventController::class)->group(function () {
 Route::redirect('/events', '/event', 301);
 Route::redirect('/events/{slug}', '/event/{slug}', 301);
 
-Route::controller(TestimonialSubmissionController::class)->group(function () {
+Route::controller(TestimonialSubmissionController::class)->group(function (): void {
     Route::get('/teile-deine-erfahrung', 'show')->name('testimonial.form');
     Route::post('/testimonial/submit', 'submit')->name('testimonial.submit');
 });
 
-Route::controller(NewsletterController::class)->group(function () {
+Route::controller(NewsletterController::class)->group(function (): void {
     Route::post('/newsletter/subscribe', 'subscribe')->name('newsletter.subscribe');
     Route::get('/newsletter/unsubscribe/{token}', 'unsubscribe')->name('newsletter.unsubscribe');
 });

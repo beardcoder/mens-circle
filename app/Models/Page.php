@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use PhpStaticAnalysis\Attributes\Param;
+use PhpStaticAnalysis\Attributes\Returns;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
@@ -53,7 +56,8 @@ class Page extends Model implements HasMedia
         ];
     }
 
-    public function scopePublished(Builder $query): Builder
+    #[Scope]
+    protected function published(Builder $query): Builder
     {
         return $query->where('is_published', true);
     }
@@ -61,13 +65,12 @@ class Page extends Model implements HasMedia
     /**
      * Sync content blocks for this page.
      * Handles creation, update, and deletion of blocks and their media.
-     *
-     * @param array $contentBlocksData
-     * @return void
      */
+    #[Param(contentBlocksData: 'array')]
+    #[Returns('void')]
     public function saveContentBlocks(array $contentBlocksData): void
     {
-        DB::transaction(function () use ($contentBlocksData) {
+        DB::transaction(function () use ($contentBlocksData): void {
             $existingBlocks = $this->contentBlocks()->get()->keyBy('block_id');
             $processedBlockIds = [];
 
@@ -92,11 +95,11 @@ class Page extends Model implements HasMedia
             }
 
             // Cleanup removed blocks
-            $existingBlocks->each(function (ContentBlock $block) use ($processedBlockIds) {
+            $existingBlocks->each(function (ContentBlock $block) use ($processedBlockIds): void {
                 if (!in_array($block->block_id, $processedBlockIds)) {
                     // Delete associated media on the Page
                     $this->getMedia('page_blocks')
-                        ->filter(fn ($media) => $media->getCustomProperty('block_id') === $block->block_id)
+                        ->filter(fn ($media): bool => $media->getCustomProperty('block_id') === $block->block_id)
                         ->each(fn ($media) => $media->delete());
 
                     $block->delete();

@@ -17,7 +17,6 @@ return RectorConfig::configure()
         __DIR__.'/public',
         __DIR__.'/resources',
         __DIR__.'/routes',
-        __DIR__.'/tests',
     ])
     ->withComposerBased(laravel: true)
     ->withSkip([

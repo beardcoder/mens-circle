@@ -32,8 +32,8 @@ class EditPage extends EditRecord
     protected function mutateFormDataBeforeFill(array $data): array
     {
         // Fix: Ensure media is attached to the Page, not the ContentBlock
-        $this->record->contentBlocks->each(function (ContentBlock $block) {
-            $block->getMedia('page_blocks')->each(function (Media $media) {
+        $this->record->contentBlocks->each(function (ContentBlock $block): void {
+            $block->getMedia('page_blocks')->each(function (Media $media): void {
                 $media->update([
                     'model_type' => get_class($this->record),
                     'model_id' => $this->record->id,
