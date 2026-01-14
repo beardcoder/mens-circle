@@ -35,6 +35,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->spa()
+            ->unsavedChangesAlerts()
             ->profile()
             ->brandLogo(asset('logo-color.svg'))
             ->brandName('Männerkreis Niederbayern')
