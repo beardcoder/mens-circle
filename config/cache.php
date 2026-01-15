@@ -97,6 +97,7 @@ return [
             'driver' => 'failover',
             'stores' => [
                 'octane',
+                'database',
                 'file',
             ],
         ],
