@@ -149,29 +149,76 @@ export function useForm(
 }
 
 /**
- * Modern toast notifications
+ * Modern toast notifications with enhanced design
  */
 export function showToast(
-  type: 'success' | 'error' | 'info',
-  message: string
+  type: 'success' | 'error' | 'info' | 'warning',
+  message: string,
+  title?: string
 ): void {
-  const toast = document.createElement('div');
+  // Icon symbols for each type
+  const icons = {
+    success: '✓',
+    error: '✕',
+    info: 'i',
+    warning: '!',
+  };
 
+  // Default titles if none provided
+  const defaultTitles = {
+    success: 'Erfolg',
+    error: 'Fehler',
+    info: 'Information',
+    warning: 'Warnung',
+  };
+
+  // Create toast container
+  const toast = document.createElement('div');
   toast.className = `toast toast--${type}`;
-  toast.textContent = message;
   toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'polite');
+
+  // Create icon element
+  const icon = document.createElement('div');
+  icon.className = 'toast__icon';
+  icon.textContent = icons[type];
+  icon.setAttribute('aria-hidden', 'true');
+
+  // Create content container
+  const content = document.createElement('div');
+  content.className = 'toast__content';
+
+  // Create title element
+  const titleEl = document.createElement('div');
+  titleEl.className = 'toast__title';
+  titleEl.textContent = title ?? defaultTitles[type];
+
+  // Create message element
+  const messageEl = document.createElement('div');
+  messageEl.className = 'toast__message';
+  messageEl.textContent = message;
+
+  // Assemble the toast
+  content.appendChild(titleEl);
+  content.appendChild(messageEl);
+  toast.appendChild(icon);
+  toast.appendChild(content);
 
   document.body.appendChild(toast);
 
+  // Animate in
   animate(
     toast,
-    { opacity: [0, 1], y: [-20, 0] } as any,
-    { duration: 0.3, easing: 'ease-out' } as any
+    { opacity: [0, 1], y: [-20, 0], scale: [0.95, 1] } as any,
+    { duration: 0.4, easing: [0.16, 1, 0.3, 1] } as any
   );
 
+  // Auto-dismiss after 5 seconds
   setTimeout(() => {
-    animate(toast, { opacity: 0, y: -20 }, { duration: 0.3 }).finished.then(
-      () => toast.remove()
-    );
+    animate(
+      toast,
+      { opacity: 0, y: -20, scale: 0.95 } as any,
+      { duration: 0.3, easing: 'ease-in' } as any
+    ).finished.then(() => toast.remove());
   }, 5000);
 }
