@@ -14,6 +14,7 @@ bun install && bun run build
 php artisan migrate --force
 
 # Clear all caches
+php artisan responsecache:clear
 php artisan cache:clear
 php artisan config:clear
 php artisan route:clear
