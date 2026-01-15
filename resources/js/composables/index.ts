@@ -175,31 +175,3 @@ export function showToast(
     );
   }, 5000);
 }
-
-/**
- * Lazy loading images with Intersection Observer
- */
-export function useLazyImages(): void {
-  const images = document.querySelectorAll<HTMLImageElement>('img[data-src]');
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const img = entry.target as HTMLImageElement;
-          const src = img.dataset.src;
-
-          if (src) {
-            img.src = src;
-            img.removeAttribute('data-src');
-            animate(img, { opacity: [0, 1] }, { duration: 0.3 });
-            observer.unobserve(img);
-          }
-        }
-      });
-    },
-    { rootMargin: '50px' }
-  );
-
-  images.forEach((img) => observer.observe(img));
-}
