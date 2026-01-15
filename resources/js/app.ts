@@ -4,10 +4,14 @@
  */
 
 import './types';
-import { initNavigation, initScrollHeader } from '@/components/navigation';
-import { initFAQ } from '@/components/faq';
-import { initForms } from '@/components/forms';
-import { initCalendarIntegration } from '@/components/calendar';
+import { useNavigation, useScrollHeader } from '@/components/navigation';
+import { useFAQ } from '@/components/faq';
+import {
+  useNewsletterForm,
+  useRegistrationForm,
+  useTestimonialForm,
+} from '@/components/forms';
+import { useCalendarIntegration } from '@/components/calendar';
 import {
   useIntersectionObserver,
   useSmoothScroll,
@@ -21,14 +25,18 @@ import {
  * Initialize all application features when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', () => {
-  // Legacy components (to be gradually refactored)
-  initNavigation();
-  initScrollHeader();
-  initFAQ();
-  initForms();
-  initCalendarIntegration();
+  // Navigation and header
+  useNavigation();
+  useScrollHeader();
 
-  // Modern composables for better performance and UX
+  // Interactive components
+  useFAQ();
+  useNewsletterForm();
+  useRegistrationForm();
+  useTestimonialForm();
+  useCalendarIntegration();
+
+  // Enhanced UX composables
   useIntersectionObserver({ threshold: 0.1, amount: 0.3 });
   useSmoothScroll();
   useParallax();
@@ -58,4 +66,3 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
     });
   });
 }
-

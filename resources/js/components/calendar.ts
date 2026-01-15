@@ -1,18 +1,26 @@
+/**
+ * Calendar Composables - Modern Functional Pattern
+ * Handles calendar integration for ICS and Google Calendar export
+ */
+
 import type { EventData } from '@/types';
 
-export function initCalendarIntegration(): void {
+/**
+ * Calendar integration composable
+ * Provides calendar export functionality for events
+ */
+export function useCalendarIntegration(): void {
   const addToCalendarBtn = document.getElementById('addToCalendar');
   const calendarModal = document.getElementById('calendarModal');
   const calendarICS = document.getElementById(
     'calendarICS'
-  ) as HTMLAnchorElement | null;
+  ) as HTMLAnchorElement;
   const calendarGoogle = document.getElementById(
     'calendarGoogle'
-  ) as HTMLAnchorElement | null;
+  ) as HTMLAnchorElement;
 
   if (!addToCalendarBtn) return;
 
-  // Get event data from window object (set in event.blade.php)
   const eventData: EventData = window.eventData ?? {
     title: 'Männerkreis Niederbayern/ Straubing',
     description:
@@ -29,7 +37,6 @@ export function initCalendarIntegration(): void {
 
     calendarModal.classList.add('open');
 
-    // Generate ICS file
     if (calendarICS) {
       const icsContent = generateICS(eventData);
       const blob = new Blob([icsContent], {
@@ -39,13 +46,11 @@ export function initCalendarIntegration(): void {
       calendarICS.href = URL.createObjectURL(blob);
     }
 
-    // Generate Google Calendar link
     if (calendarGoogle) {
       calendarGoogle.href = generateGoogleCalendarUrl(eventData);
     }
   });
 
-  // Close modal when clicking outside
   if (calendarModal) {
     calendarModal.addEventListener('click', (e) => {
       if (e.target === calendarModal) {
@@ -56,7 +61,7 @@ export function initCalendarIntegration(): void {
 }
 
 /**
- * Generates an ICS file content for calendar import
+ * Generate ICS file content for calendar import
  */
 function generateICS(event: EventData): string {
   const formatDate = (date: string, time: string): string => {
@@ -94,7 +99,7 @@ END:VCALENDAR`;
 }
 
 /**
- * Generates a Google Calendar URL for the event
+ * Generate Google Calendar URL for the event
  */
 function generateGoogleCalendarUrl(event: EventData): string {
   const formatGoogleDate = (date: string, time: string): string => {
