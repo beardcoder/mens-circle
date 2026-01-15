@@ -43,7 +43,7 @@ class RecentEvents extends TableWidget
 
                 TextColumn::make('available_spots')
                     ->label('Freie Plätze')
-                    ->getStateUsing(fn (Event $record): int => $record->availableSpots())
+                    ->getStateUsing(fn (Event $record): int => $record->availableSpots)
                     ->badge()
                     ->color(fn (int $state): string => match (true) {
                         $state === 0 => 'danger',

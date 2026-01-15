@@ -10,8 +10,8 @@ herzlich willkommen! Wir freuen uns sehr, dass du beim **{{ $event->title }}** d
 **Datum:** {{ $event->event_date->format('d.m.Y') }}<br>
 **Uhrzeit:** {{ $event->start_time->format('H:i') }} – {{ $event->end_time->format('H:i') }} Uhr<br>
 **Ort:** {{ $event->location }}<br>
-@if($event->getFullAddress())
-**Adresse:** {{ $event->getFullAddress() }}<br>
+@if($event->fullAddress)
+**Adresse:** {{ $event->fullAddress }}<br>
 @endif
 @if($event->location_details)
 **Hinweise:** {{ $event->location_details }}<br>

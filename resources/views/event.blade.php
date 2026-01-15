@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $isPast = $event->isPast();
+    $isPast = $event->isPast;
 @endphp
 
 @section('title', $event->title . ' am ' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
@@ -61,11 +61,11 @@
         "url": "{{ route('event.show.slug', $event->slug) }}",
         "price": "0",
         "priceCurrency": "EUR",
-        "availability": "{{ $isPast ? 'https://schema.org/SoldOut' : ($event->isFull() ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock') }}",
+        "availability": "{{ $isPast ? 'https://schema.org/SoldOut' : ($event->isFull ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock') }}",
         "validFrom": "{{ now()->format('Y-m-d') }}"
     },
     "maximumAttendeeCapacity": {{ $event->max_participants }},
-    "remainingAttendeeCapacity": {{ max(0, $event->availableSpots()) }},
+    "remainingAttendeeCapacity": {{ max(0, $event->availableSpots) }},
     "inLanguage": "de"
 }
 </script>
@@ -164,10 +164,10 @@
                         Sichere dir <br><span class="text-italic">deinen Platz</span>
                     </h2>
                     <p class="event-register__spots">
-                        @if($event->isFull())
+                        @if($event->isFull)
                             <span class="event-register__spots-full">Ausgebucht</span>
                         @else
-                            <span class="event-register__spots-available">{{ $event->availableSpots() }}</span>
+                            <span class="event-register__spots-available">{{ $event->availableSpots }}</span>
                             <span>von {{ $event->max_participants }} Plätzen frei</span>
                         @endif
                     </p>
@@ -205,8 +205,8 @@
                             <span>Ich habe die <a href="{{ route('page.show', 'datenschutz') }}" target="_blank" data-m:click="action=legal_click;element=link;target=datenschutz;location=registration_form">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
                         </label>
 
-                        <button type="submit" class="btn btn--primary btn--large event-register__submit" {{ $event->isFull() ? 'disabled' : '' }} data-m:click="action=form_submit;element=button;target=event_registration;location=registration_form">
-                            {{ $event->isFull() ? 'Ausgebucht' : 'Verbindlich anmelden' }}
+                        <button type="submit" class="btn btn--primary btn--large event-register__submit" {{ $event->isFull ? 'disabled' : '' }} data-m:click="action=form_submit;element=button;target=event_registration;location=registration_form">
+                            {{ $event->isFull ? 'Ausgebucht' : 'Verbindlich anmelden' }}
                         </button>
 
                         <div id="registrationMessage"></div>
