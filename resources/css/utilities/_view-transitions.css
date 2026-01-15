@@ -24,7 +24,7 @@
 }
 
 ::view-transition-new(root) {
-  animation-name: fade-in-slide-up;
+  animation-name: fade-in;
 }
 
 /* Animation keyframes */
@@ -38,171 +38,12 @@
   }
 }
 
-@keyframes fade-in-slide-up {
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(20px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
   }
-}
-
-/* Preserve header and footer position during transitions */
-@supports (view-transition-name: header) {
-  header {
-    view-transition-name: header;
-  }
-
-  footer {
-    view-transition-name: footer;
-  }
-
-  ::view-transition-old(header),
-  ::view-transition-new(header),
-  ::view-transition-old(footer),
-  ::view-transition-new(footer) {
-    animation-name: none;
-    animation-duration: 0.2s;
-  }
-}
-
-/* Smooth content transitions */
-@supports (view-transition-name: main-content) {
-  main {
-    view-transition-name: main-content;
-  }
-
-  ::view-transition-old(main-content) {
-    animation-name: slide-out-fade;
-    animation-duration: 0.3s;
-  }
-
-  ::view-transition-new(main-content) {
-    animation-name: slide-in-fade;
-    animation-duration: 0.4s;
-    animation-delay: 0.1s;
-  }
-
-  @keyframes slide-out-fade {
-    from {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    to {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-  }
-
-  @keyframes slide-in-fade {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-}
-
-/* Directional navigation animations */
-@supports (view-transition-name: main-content) {
-  /* Back/forward navigation - slide from left */
-  :active-view-transition-type(back-forward) {
-    &::view-transition-old(main-content) {
-      animation-name: slide-out-right;
-    }
-
-    &::view-transition-new(main-content) {
-      animation-name: slide-in-left;
-    }
-  }
-
-  /* Forward navigation - slide from right (default) */
-  :active-view-transition-type(forward) {
-    &::view-transition-old(main-content) {
-      animation-name: slide-out-left;
-    }
-
-    &::view-transition-new(main-content) {
-      animation-name: slide-in-right;
-    }
-  }
-
-  @keyframes slide-out-left {
-    from {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    to {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-  }
-
-  @keyframes slide-in-right {
-    from {
-      opacity: 0;
-      transform: translateX(20px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes slide-out-right {
-    from {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    to {
-      opacity: 0;
-      transform: translateX(20px);
-    }
-  }
-
-  @keyframes slide-in-left {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-}
-
-/* Reduce motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root),
-  ::view-transition-old(main-content),
-  ::view-transition-new(main-content) {
-    animation-duration: 0.05s !important;
-    animation-delay: 0s !important;
-  }
-}
-
-/* Fix for potential flicker */
-::view-transition-image-pair(root) {
-  isolation: isolate;
-}
-
-/* Smooth color transitions */
-::view-transition-old(root),
-::view-transition-new(root) {
-  mix-blend-mode: normal;
-  backface-visibility: hidden;
 }
