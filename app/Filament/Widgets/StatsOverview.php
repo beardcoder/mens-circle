@@ -30,7 +30,7 @@ class StatsOverview extends StatsOverviewWidget
             ->orderBy('event_date')
             ->first();
 
-        $nextEventSpots = $nextEvent ? $nextEvent->availableSpots() : 0;
+        $nextEventSpots = $nextEvent ? $nextEvent->availableSpots : 0;
 
         return [
             Stat::make('Kommende Events', $upcomingEvents)
