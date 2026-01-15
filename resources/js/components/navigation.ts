@@ -1,6 +1,6 @@
 /**
- * Navigation Component - Modern Implementation
- * Handles mobile navigation with smooth animations using Motion One
+ * Navigation Composables - Modern Functional Pattern
+ * Handles mobile navigation and header scroll with smooth animations
  */
 
 import { animate } from 'motion';
@@ -10,56 +10,24 @@ interface NavigationState {
   scrollPosition: number;
 }
 
-class MobileNavigation {
-  private readonly navToggle: HTMLElement;
-  private readonly nav: HTMLElement;
-  private state: NavigationState = {
+/**
+ * Mobile navigation composable
+ * Handles mobile menu with smooth animations and accessibility
+ */
+export function useNavigation(): void {
+  const navToggle = document.getElementById('navToggle');
+  const nav = document.getElementById('nav');
+
+  if (!navToggle || !nav) return;
+
+  const state: NavigationState = {
     isOpen: false,
     scrollPosition: 0,
   };
 
-  constructor(navToggle: HTMLElement, nav: HTMLElement) {
-    this.navToggle = navToggle;
-    this.nav = nav;
-    this.bindEvents();
-  }
-
-  private async openNav(): Promise<void> {
-    this.state.scrollPosition = window.scrollY;
-    this.state.isOpen = true;
-
-    this.nav.classList.add('open');
-    this.navToggle.classList.add('active');
-    document.body.classList.add('nav-open');
-    document.body.style.top = `-${this.state.scrollPosition}px`;
-
-    this.updateAriaAttributes(true);
-    await this.animateNavLinks('in');
-  }
-
-  private async closeNav(): Promise<void> {
-    this.state.isOpen = false;
-    await this.animateNavLinks('out');
-
-    setTimeout(() => {
-      this.nav.classList.remove('open');
-      this.navToggle.classList.remove('active');
-      document.body.classList.remove('nav-open');
-      document.body.style.top = '';
-      
-      window.scrollTo({
-        top: this.state.scrollPosition,
-        left: 0,
-        behavior: 'instant',
-      });
-
-      this.updateAriaAttributes(false);
-    }, 200);
-  }
-
-  private async animateNavLinks(direction: 'in' | 'out'): Promise<void> {
+  const animateLinks = async (direction: 'in' | 'out'): Promise<void> => {
     const navLinks = Array.from(
-      this.nav.querySelectorAll<HTMLElement>('.nav__link, .nav__cta')
+      nav.querySelectorAll<HTMLElement>('.nav__link, .nav__cta')
     );
 
     if (direction === 'in') {
@@ -86,75 +54,102 @@ class MobileNavigation {
         );
       });
     }
-  }
+  };
 
-  private updateAriaAttributes(isOpen: boolean): void {
-    this.navToggle.setAttribute('aria-expanded', String(isOpen));
-    this.navToggle.setAttribute(
+  const updateAriaAttributes = (isOpen: boolean): void => {
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+    navToggle.setAttribute(
       'aria-label',
       isOpen ? 'Menü schließen' : 'Menü öffnen'
     );
-  }
+  };
 
-  private toggleNav(): void {
-    this.state.isOpen ? this.closeNav() : this.openNav();
-  }
+  const open = async (): Promise<void> => {
+    state.scrollPosition = window.scrollY;
+    state.isOpen = true;
 
-  private bindEvents(): void {
-    this.navToggle.addEventListener('click', () => this.toggleNav());
+    nav.classList.add('open');
+    navToggle.classList.add('active');
+    document.body.classList.add('nav-open');
+    document.body.style.top = `-${state.scrollPosition}px`;
 
-    const navLinks = this.nav.querySelectorAll<HTMLAnchorElement>(
-      '.nav__link, .nav__cta'
-    );
-    navLinks.forEach((link) => {
-      link.addEventListener('click', () => this.closeNav());
-    });
+    updateAriaAttributes(true);
+    await animateLinks('in');
+  };
 
-    document.addEventListener('click', (e) => {
-      if (
-        this.state.isOpen &&
-        !this.nav.contains(e.target as Node) &&
-        !this.navToggle.contains(e.target as Node)
-      ) {
-        this.closeNav();
-      }
-    });
+  const close = async (): Promise<void> => {
+    state.isOpen = false;
+    await animateLinks('out');
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.state.isOpen) {
-        this.closeNav();
-      }
-    });
-  }
-}
+    setTimeout(() => {
+      nav.classList.remove('open');
+      navToggle.classList.remove('active');
+      document.body.classList.remove('nav-open');
+      document.body.style.top = '';
 
-export function initNavigation(): void {
-  const navToggle = document.getElementById('navToggle');
-  const nav = document.getElementById('nav');
+      window.scrollTo({
+        top: state.scrollPosition,
+        left: 0,
+        behavior: 'instant',
+      });
 
-  if (!navToggle || !nav) return;
+      updateAriaAttributes(false);
+    }, 200);
+  };
 
-  try {
-    new MobileNavigation(navToggle, nav);
-  } catch (error) {
-    console.error('Navigation initialization failed:', error);
-  }
+  const toggle = (): void => {
+    if (state.isOpen) {
+      close();
+    } else {
+      open();
+    }
+  };
+
+  // Event listeners
+  navToggle.addEventListener('click', toggle);
+
+  const navLinks = nav.querySelectorAll<HTMLAnchorElement>(
+    '.nav__link, .nav__cta'
+  );
+
+  navLinks.forEach((link) => {
+    link.addEventListener('click', () => close());
+  });
+
+  document.addEventListener('click', (e) => {
+    if (
+      state.isOpen &&
+      !nav.contains(e.target as Node) &&
+      !navToggle.contains(e.target as Node)
+    ) {
+      close();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && state.isOpen) {
+      close();
+    }
+  });
 }
 
 /**
- * Header Scroll Effect
+ * Header scroll effect composable
  * Updates header appearance based on scroll position and hero presence
  */
-export function initScrollHeader(): void {
+export function useScrollHeader(): void {
   const header = document.getElementById('header');
+
   if (!header) return;
 
   const hasHero = Boolean(document.querySelector('.hero'));
+
   document.body.classList.toggle('has-hero', hasHero);
   document.body.classList.toggle('no-hero', !hasHero);
 
   const updateScrollState = (): void => {
     const scrolled = window.scrollY > 50 || !hasHero;
+
     header.classList.toggle('scrolled', scrolled);
   };
 
@@ -162,29 +157,25 @@ export function initScrollHeader(): void {
   window.addEventListener('scroll', updateScrollState, { passive: true });
 
   if (hasHero) {
-    initHeroObserver(header);
+    const hero = document.querySelector<HTMLElement>('.hero');
+
+    if (!hero) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          header.classList.toggle(
+            'header--on-hero',
+            entry.isIntersecting && entry.intersectionRatio > 0.15
+          );
+        });
+      },
+      {
+        threshold: [0, 0.15, 0.35, 0.5],
+        rootMargin: '-10% 0px 0px 0px',
+      }
+    );
+
+    observer.observe(hero);
   }
 }
-
-function initHeroObserver(header: HTMLElement): void {
-  const hero = document.querySelector<HTMLElement>('.hero');
-  if (!hero) return;
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        header.classList.toggle(
-          'header--on-hero',
-          entry.isIntersecting && entry.intersectionRatio > 0.15
-        );
-      });
-    },
-    {
-      threshold: [0, 0.15, 0.35, 0.5],
-      rootMargin: '-10% 0px 0px 0px',
-    }
-  );
-
-  observer.observe(hero);
-}
-

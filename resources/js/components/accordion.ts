@@ -1,12 +1,9 @@
 /**
- * Accordion Component with Motion.dev Animations
- *
- * Provides smooth, performant accordion animations using Motion.dev
- * with spring-like easing for natural, organic motion.
+ * Accordion Composables - Modern Functional Pattern
+ * Smooth, performant accordion animations using Motion.dev
+ * with spring-like easing for natural, organic motion
  *
  * Works with native <details>/<summary> elements
- *
- * @see https://motion.dev/docs/animate
  */
 
 import { animate } from 'motion';
@@ -179,9 +176,9 @@ function animateClose(
 }
 
 /**
- * Initialize accordion animations for a single details element
+ * Set up accordion animations for a single details element
  */
-function initAccordionItem(details: HTMLDetailsElement): void {
+function setupAccordionItem(details: HTMLDetailsElement): void {
   const summary = details.querySelector('summary');
   const content = details.querySelector<HTMLElement>(
     '.accordion-item__content, .faq-item__answer'
@@ -245,9 +242,9 @@ function initAccordionItem(details: HTMLDetailsElement): void {
 }
 
 /**
- * Initialize accordion for reduced motion users
+ * Set up accordion for reduced motion users
  */
-function initAccordionItemReducedMotion(details: HTMLDetailsElement): void {
+function setupAccordionItemReducedMotion(details: HTMLDetailsElement): void {
   const content = details.querySelector<HTMLElement>(
     '.accordion-item__content, .faq-item__answer'
   );
@@ -289,9 +286,10 @@ function initAccordionItemReducedMotion(details: HTMLDetailsElement): void {
 }
 
 /**
- * Initialize all accordions on the page
+ * Accordion composable
+ * Sets up all accordions on the page with animations
  */
-export function initAccordions(): void {
+export function useAccordions(): void {
   const accordions = document.querySelectorAll<HTMLDetailsElement>(
     '.accordion-item, .faq-item'
   );
@@ -302,17 +300,9 @@ export function initAccordions(): void {
 
   accordions.forEach((details) => {
     if (reduceMotion) {
-      initAccordionItemReducedMotion(details);
+      setupAccordionItemReducedMotion(details);
     } else {
-      initAccordionItem(details);
+      setupAccordionItem(details);
     }
   });
-}
-
-/**
- * Initialize FAQ component
- * Alias for initAccordions for backwards compatibility
- */
-export function initFAQ(): void {
-  initAccordions();
 }
