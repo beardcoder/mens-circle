@@ -123,79 +123,32 @@ export function useParallax(): void {
 }
 
 /**
- * View Transitions API support - Modern page transitions
+ * Enhanced navigation direction detection for View Transitions
+ * Adds directional classes for more sophisticated animations
  */
 export function useViewTransitions(): void {
   // Check browser support
-  if (!('startViewTransition' in document)) {
-    console.debug('View Transitions API not supported');
+  if (!('pageswap' in window) && !('pagereveal' in window)) {
+    console.debug('View Transitions navigation events not supported');
     return;
   }
 
-  // Intercept same-origin navigation
-  window.addEventListener('click', (e) => {
-    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('a');
-    
-    // Skip if not a valid link for transition
-    if (!shouldTransition(link)) {
-      return;
+  // Track navigation direction using pageswap event
+  window.addEventListener('pageswap', (e: any) => {
+    if (!e.viewTransition) return;
+
+    // Determine navigation direction
+    const navigationType = e.activation?.navigationType || 'push';
+
+    // Add direction type to transition for CSS to use
+    if (navigationType === 'traverse') {
+      // Back/forward navigation
+      e.viewTransition.types.add('back-forward');
+    } else if (navigationType === 'push' || navigationType === 'replace') {
+      // Normal navigation
+      e.viewTransition.types.add('forward');
     }
-
-    e.preventDefault();
-    
-    const url = link!.href;
-    
-    // Start view transition
-    (document as any).startViewTransition(async () => {
-      // Fetch new page
-      const response = await fetch(url);
-      const html = await response.text();
-      
-      // Parse the new HTML
-      const parser = new DOMParser();
-      const newDoc = parser.parseFromString(html, 'text/html');
-      
-      // Update page title
-      document.title = newDoc.title;
-      
-      // Update main content
-      const main = document.querySelector('main');
-      const newMain = newDoc.querySelector('main');
-      if (main && newMain) {
-        main.innerHTML = newMain.innerHTML;
-      }
-      
-      // Update page URL
-      window.history.pushState({}, '', url);
-      
-      // Reinitialize scripts for new content
-      window.dispatchEvent(new Event('content-updated'));
-    });
   });
-}
-
-function shouldTransition(link: HTMLAnchorElement | null): boolean {
-  if (!link) return false;
-  
-  // Check if it's a valid link
-  if (!link.href || link.target === '_blank') return false;
-  
-  // Check if it's same origin
-  if (link.origin !== location.origin) return false;
-  
-  // Check for no-transition attribute
-  if (link.hasAttribute('data-no-transition')) return false;
-  
-  // Check for download attribute
-  if (link.hasAttribute('download')) return false;
-  
-  // Skip hash links (anchor navigation)
-  if (link.getAttribute('href')?.startsWith('#')) return false;
-  
-  // Skip mailto and tel links
-  if (link.href.startsWith('mailto:') || link.href.startsWith('tel:')) return false;
-  
-  return true;
 }
 
 /**
