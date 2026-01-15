@@ -14,7 +14,6 @@ import {
 import { useCalendarIntegration } from '@/components/calendar';
 import {
   useIntersectionObserver,
-  useSmoothScroll,
   useParallax,
   useLazyImages,
 } from '@/composables';
@@ -36,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Enhanced UX composables
   useIntersectionObserver({ threshold: 0.1, amount: 0.3 });
-  useSmoothScroll();
   useParallax();
   useLazyImages();
 });
