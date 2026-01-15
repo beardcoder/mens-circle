@@ -12,7 +12,8 @@ readonly class EventRegistrationData
         public string $lastName,
         public string $email,
         public ?string $phoneNumber = null,
-    ) {}
+    ) {
+    }
 
     public static function fromRequest(array $data): self
     {

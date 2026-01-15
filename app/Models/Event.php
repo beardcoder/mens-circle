@@ -68,21 +68,21 @@ class Event extends Model implements HasMedia
     protected function confirmedRegistrationsCount(): Attribute
     {
         return Attribute::make(
-            get: fn () => (int) ($this->confirmed_registrations_count ?? $this->confirmedRegistrations()->count())
+            get: fn (): int => (int) ($this->confirmed_registrations_count ?? $this->confirmedRegistrations()->count())
         );
     }
 
     protected function availableSpots(): Attribute
     {
         return Attribute::make(
-            get: fn () => max(0, $this->max_participants - $this->confirmedRegistrationsCount)
+            get: fn (): float|int => max(0, $this->max_participants - $this->confirmedRegistrationsCount)
         );
     }
 
     protected function isFull(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->availableSpots <= 0
+            get: fn (): bool => $this->availableSpots <= 0
         );
     }
 
@@ -103,7 +103,7 @@ class Event extends Model implements HasMedia
 
                 $parts = array_filter([
                     $this->street,
-                    $this->postal_code ? "{$this->postal_code} {$this->city}" : $this->city,
+                    $this->postal_code ? sprintf('%s %s', $this->postal_code, $this->city) : $this->city,
                 ]);
 
                 return implode(', ', $parts);
@@ -129,7 +129,7 @@ class Event extends Model implements HasMedia
             strip_tags($this->description ?? '')
         );
 
-        $uid = "{$this->id}@mens-circle.de";
+        $uid = $this->id . '@mens-circle.de';
 
         return <<<ICAL
             BEGIN:VCALENDAR\r

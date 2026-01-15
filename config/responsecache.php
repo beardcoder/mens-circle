@@ -34,9 +34,8 @@ return [
     /*
      * When using the default CacheRequestFilter this setting controls the
      * default number of seconds responses must be cached.
-     * Set to 1 year (365 days) for maximum caching duration.
      */
-    'cache_lifetime_in_seconds' => (int) env('RESPONSE_CACHE_LIFETIME', 60 * 60 * 24 * 365),
+    'cache_lifetime_in_seconds' => (int) env('RESPONSE_CACHE_LIFETIME', 60 * 60 * 24 * 7),
 
     /*
      * This setting determines if a http header named with the cache time
@@ -69,9 +68,8 @@ return [
      * Here you may define the cache store that should be used to store
      * requests. This can be the name of any store that is
      * configured in app/config/cache.php
-     * Uses default Laravel cache store (null = default)
      */
-    'cache_store' => env('RESPONSE_CACHE_DRIVER'),
+    'cache_store' => env('RESPONSE_CACHE_DRIVER', 'file'),
 
     /*
      * Here you may define replacers that dynamically replace content from the response.
@@ -88,7 +86,7 @@ return [
      *
      * You may use a string or an array here.
      */
-    'cache_tag' => 'responsecache',
+    'cache_tag' => '',
 
     /*
      * This class is responsible for generating a hash for a request. This hash

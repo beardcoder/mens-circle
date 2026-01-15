@@ -49,7 +49,7 @@ class EventController extends Controller
         $data = EventRegistrationData::fromRequest($request->validated());
         $event = $this->loadEventForRegistration($data->eventId);
 
-        if ($error = $this->validateEventAvailability($event, $data->email)) {
+        if (($error = $this->validateEventAvailability($event, $data->email)) instanceof JsonResponse) {
             return $error;
         }
 
@@ -60,7 +60,7 @@ class EventController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => "Vielen Dank, {$data->firstName}! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.",
+            'message' => sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $data->firstName),
         ]);
     }
 
