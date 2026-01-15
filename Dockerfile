@@ -86,5 +86,3 @@ RUN mkdir -p \
 EXPOSE 8080
 
 CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--port=8080"]
-
-HEALTHCHECK CMD ["/bin/sh", "-c", "exit 0"]
