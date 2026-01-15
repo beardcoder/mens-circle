@@ -4,18 +4,18 @@
   inset-block-start: var(--space-md);
   inset-inline-end: var(--space-md);
   z-index: var(--z-toast);
-  max-inline-size: 420px;
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
   min-inline-size: 320px;
+  max-inline-size: 420px;
   padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-body);
   pointer-events: auto;
+  border: 1px solid var(--border-medium);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2xl);
   backdrop-filter: blur(12px);
-  border: 1px solid var(--border-medium);
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-sm);
-  font-family: var(--font-body);
   transition: transform var(--transition-fast);
 }
 
@@ -24,20 +24,20 @@
 }
 
 .toast__icon {
-  flex-shrink: 0;
-  inline-size: 24px;
-  block-size: 24px;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
-  font-weight: 700;
+  inline-size: 24px;
+  block-size: 24px;
   font-size: var(--text-sm);
+  font-weight: 700;
+  border-radius: var(--radius-full);
 }
 
 .toast__content {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space-3xs);
 }
@@ -46,8 +46,8 @@
   font-family: var(--font-accent);
   font-size: var(--text-base);
   font-weight: 600;
-  letter-spacing: -0.01em;
   line-height: 1.4;
+  letter-spacing: -0.01em;
 }
 
 .toast__message {
@@ -58,14 +58,18 @@
 
 /* Success Toast */
 .toast--success {
-  background: color-mix(in oklch, var(--color-sage-light) 15%, var(--bg-elevated));
-  border-inline-start: 3px solid var(--color-success);
   color: var(--text-primary);
+  background: color-mix(
+    in oklch,
+    var(--color-sage-light) 15%,
+    var(--bg-elevated)
+  );
+  border-inline-start: 3px solid var(--color-success);
 }
 
 .toast--success .toast__icon {
-  background: var(--color-success);
   color: white;
+  background: var(--color-success);
 }
 
 .toast--success .toast__title {
@@ -74,14 +78,14 @@
 
 /* Error Toast */
 .toast--error {
+  color: var(--text-primary);
   background: color-mix(in oklch, var(--color-error) 12%, var(--bg-elevated));
   border-inline-start: 3px solid var(--color-error);
-  color: var(--text-primary);
 }
 
 .toast--error .toast__icon {
-  background: var(--color-error);
   color: white;
+  background: var(--color-error);
 }
 
 .toast--error .toast__title {
@@ -90,14 +94,14 @@
 
 /* Info Toast */
 .toast--info {
+  color: var(--text-primary);
   background: color-mix(in oklch, var(--color-info) 10%, var(--bg-elevated));
   border-inline-start: 3px solid var(--color-terracotta);
-  color: var(--text-primary);
 }
 
 .toast--info .toast__icon {
-  background: var(--color-terracotta);
   color: white;
+  background: var(--color-terracotta);
 }
 
 .toast--info .toast__title {
@@ -106,14 +110,14 @@
 
 /* Warning Toast */
 .toast--warning {
+  color: var(--text-primary);
   background: color-mix(in oklch, var(--color-warning) 12%, var(--bg-elevated));
   border-inline-start: 3px solid var(--color-warning);
-  color: var(--text-primary);
 }
 
 .toast--warning .toast__icon {
-  background: var(--color-warning);
   color: var(--color-ink);
+  background: var(--color-warning);
 }
 
 .toast--warning .toast__title {
@@ -128,7 +132,11 @@
   }
 
   .toast--success {
-    background: color-mix(in oklch, var(--color-success) 18%, var(--bg-elevated));
+    background: color-mix(
+      in oklch,
+      var(--color-success) 18%,
+      var(--bg-elevated)
+    );
   }
 
   .toast--success .toast__title {
@@ -144,7 +152,11 @@
   }
 
   .toast--info {
-    background: color-mix(in oklch, var(--color-terracotta) 18%, var(--bg-elevated));
+    background: color-mix(
+      in oklch,
+      var(--color-terracotta) 18%,
+      var(--bg-elevated)
+    );
   }
 
   .toast--info .toast__title {
@@ -152,7 +164,11 @@
   }
 
   .toast--warning {
-    background: color-mix(in oklch, var(--color-warning) 15%, var(--bg-elevated));
+    background: color-mix(
+      in oklch,
+      var(--color-warning) 15%,
+      var(--bg-elevated)
+    );
   }
 
   .toast--warning .toast__title {
@@ -165,8 +181,8 @@
   .toast {
     inset-block-start: var(--space-sm);
     inset-inline: var(--space-sm);
-    max-inline-size: none;
     min-inline-size: auto;
+    max-inline-size: none;
   }
 }
 

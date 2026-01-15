@@ -12,10 +12,7 @@ import {
   useTestimonialForm,
 } from '@/components/forms';
 import { useCalendarIntegration } from '@/components/calendar';
-import {
-  useIntersectionObserver,
-  useParallax,
-} from '@/composables';
+import { useIntersectionObserver, useParallax } from '@/composables';
 
 /**
  * Initialize all application features when DOM is ready
