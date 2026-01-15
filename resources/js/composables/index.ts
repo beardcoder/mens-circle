@@ -123,36 +123,6 @@ export function useParallax(): void {
 }
 
 /**
- * Enhanced navigation direction detection for View Transitions
- * Adds directional classes for more sophisticated animations
- */
-export function useViewTransitions(): void {
-  // Check browser support
-  if (!('pageswap' in window) && !('pagereveal' in window)) {
-    console.debug('View Transitions navigation events not supported');
-
-    return;
-  }
-
-  // Track navigation direction using pageswap event
-  window.addEventListener('pageswap', (e: any) => {
-    if (!e.viewTransition) return;
-
-    // Determine navigation direction
-    const navigationType = e.activation?.navigationType || 'push';
-
-    // Add direction type to transition for CSS to use
-    if (navigationType === 'traverse') {
-      // Back/forward navigation
-      e.viewTransition.types.add('back-forward');
-    } else if (navigationType === 'push' || navigationType === 'replace') {
-      // Normal navigation
-      e.viewTransition.types.add('forward');
-    }
-  });
-}
-
-/**
  * Enhanced form handling with better UX
  */
 export interface FormOptions {
@@ -260,23 +230,4 @@ export function useLazyImages(): void {
   );
 
   images.forEach((img) => observer.observe(img));
-}
-
-/**
- * Prefetch links on hover for better perceived performance
- */
-export function usePrefetch(): void {
-  const links = document.querySelectorAll<HTMLAnchorElement>(
-    'a[href^="/"][data-prefetch]'
-  );
-
-  links.forEach((link) => {
-    link.addEventListener('mouseenter', () => {
-      const prefetchLink = document.createElement('link');
-
-      prefetchLink.rel = 'prefetch';
-      prefetchLink.href = link.href;
-      document.head.appendChild(prefetchLink);
-    });
-  });
 }
