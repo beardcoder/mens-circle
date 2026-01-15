@@ -21,7 +21,9 @@ class MobileNavigation {
     this.navToggle.setAttribute('aria-label', 'Menu schliessen');
 
     // Animate navigation links with Motion.dev
-    const navLinks = this.nav.querySelectorAll<HTMLElement>('.nav__link, .nav__cta');
+    const navLinks = this.nav.querySelectorAll<HTMLElement>(
+      '.nav__link, .nav__cta'
+    );
 
     navLinks.forEach((link, index) => {
       const delay = index * 0.06;
@@ -41,7 +43,9 @@ class MobileNavigation {
 
   private async closeNav(): Promise<void> {
     // Animate out before removing classes
-    const navLinks = this.nav.querySelectorAll<HTMLElement>('.nav__link, .nav__cta');
+    const navLinks = this.nav.querySelectorAll<HTMLElement>(
+      '.nav__link, .nav__cta'
+    );
 
     navLinks.forEach((link) => {
       animate(
@@ -60,7 +64,11 @@ class MobileNavigation {
       this.navToggle.classList.remove('active');
       document.body.classList.remove('nav-open');
       document.body.style.top = '';
-      window.scrollTo({ top: this.scrollPosition, left: 0, behavior: 'instant' });
+      window.scrollTo({
+        top: this.scrollPosition,
+        left: 0,
+        behavior: 'instant',
+      });
       this.navToggle.setAttribute('aria-expanded', 'false');
       this.navToggle.setAttribute('aria-label', 'Menu oeffnen');
     }, 200);
@@ -114,7 +122,11 @@ export function initNavigation(): void {
 
   if (!navToggle || !nav) return;
 
-  new MobileNavigation(navToggle, nav);
+  try {
+    new MobileNavigation(navToggle, nav);
+  } catch (error) {
+    console.error('Error initializing MobileNavigation:', error);
+  }
 }
 
 /**
