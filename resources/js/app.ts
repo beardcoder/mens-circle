@@ -16,9 +16,7 @@ import {
   useIntersectionObserver,
   useSmoothScroll,
   useParallax,
-  useViewTransitions,
   useLazyImages,
-  usePrefetch,
 } from '@/composables';
 
 /**
@@ -40,9 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   useIntersectionObserver({ threshold: 0.1, amount: 0.3 });
   useSmoothScroll();
   useParallax();
-  useViewTransitions();
   useLazyImages();
-  usePrefetch();
 });
 
 // Performance monitoring

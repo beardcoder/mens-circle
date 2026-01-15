@@ -1,9 +1,7 @@
 /**
  * Navigation Composables - Modern Functional Pattern
- * Handles mobile navigation and header scroll with smooth animations
+ * Handles mobile navigation with CSS-only animations
  */
-
-import { animate } from 'motion';
 
 interface NavigationState {
   isOpen: boolean;
@@ -12,7 +10,7 @@ interface NavigationState {
 
 /**
  * Mobile navigation composable
- * Handles mobile menu with smooth animations and accessibility
+ * Handles mobile menu with CSS-only animations and accessibility
  */
 export function useNavigation(): void {
   const navToggle = document.getElementById('navToggle');
@@ -25,37 +23,6 @@ export function useNavigation(): void {
     scrollPosition: 0,
   };
 
-  const animateLinks = async (direction: 'in' | 'out'): Promise<void> => {
-    const navLinks = Array.from(
-      nav.querySelectorAll<HTMLElement>('.nav__link, .nav__cta')
-    );
-
-    if (direction === 'in') {
-      navLinks.forEach((link, index) => {
-        animate(
-          link,
-          {
-            opacity: [0, 1],
-            transform: ['translateY(-12px)', 'translateY(0)'],
-          } as any,
-          {
-            duration: 0.4,
-            delay: index * 0.06,
-            easing: [0.34, 1.56, 0.64, 1],
-          } as any
-        );
-      });
-    } else {
-      navLinks.forEach((link) => {
-        animate(
-          link,
-          { opacity: 0, transform: 'translateY(-8px)' } as any,
-          { duration: 0.2, easing: [0.32, 0.72, 0, 1] } as any
-        );
-      });
-    }
-  };
-
   const updateAriaAttributes = (isOpen: boolean): void => {
     navToggle.setAttribute('aria-expanded', String(isOpen));
     navToggle.setAttribute(
@@ -64,7 +31,7 @@ export function useNavigation(): void {
     );
   };
 
-  const open = async (): Promise<void> => {
+  const open = (): void => {
     state.scrollPosition = window.scrollY;
     state.isOpen = true;
 
@@ -74,27 +41,23 @@ export function useNavigation(): void {
     document.body.style.top = `-${state.scrollPosition}px`;
 
     updateAriaAttributes(true);
-    await animateLinks('in');
   };
 
-  const close = async (): Promise<void> => {
+  const close = (): void => {
     state.isOpen = false;
-    await animateLinks('out');
 
-    setTimeout(() => {
-      nav.classList.remove('open');
-      navToggle.classList.remove('active');
-      document.body.classList.remove('nav-open');
-      document.body.style.top = '';
+    nav.classList.remove('open');
+    navToggle.classList.remove('active');
+    document.body.classList.remove('nav-open');
+    document.body.style.top = '';
 
-      window.scrollTo({
-        top: state.scrollPosition,
-        left: 0,
-        behavior: 'instant',
-      });
+    window.scrollTo({
+      top: state.scrollPosition,
+      left: 0,
+      behavior: 'instant',
+    });
 
-      updateAriaAttributes(false);
-    }, 200);
+    updateAriaAttributes(false);
   };
 
   const toggle = (): void => {
