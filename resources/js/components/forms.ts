@@ -1,24 +1,21 @@
-import { validateEmail } from '@/utils/helpers';
-import { useForm, showToast } from '@/composables';
-import type { ApiResponse } from '@/types';
+/**
+ * Form Composables - Modern Functional Pattern
+ * Handles all form interactions with validation and submission
+ */
 
-export function initForms(): void {
-  initNewsletterForm();
-  initRegistrationForm();
-  initTestimonialForm();
-}
+import { validateEmail } from '@/utils/helpers';
+import { useForm } from '@/composables';
 
 /**
- * Newsletter Form Handler
+ * Newsletter form composable
+ * Handles newsletter subscription with validation
  */
-function initNewsletterForm(): void {
-  const newsletterForm = document.getElementById(
-    'newsletterForm'
-  ) as HTMLFormElement | null;
+export function useNewsletterForm(): void {
+  const form = document.getElementById('newsletterForm') as HTMLFormElement;
 
-  if (!newsletterForm) return;
+  if (!form) return;
 
-  useForm(newsletterForm, {
+  useForm(form, {
     onSubmit: async (formData) => {
       const email = formData.get('email') as string;
 
@@ -40,27 +37,26 @@ function initNewsletterForm(): void {
 }
 
 /**
- * Registration Form Handler
+ * Event registration form composable
+ * Handles event registration with validation
  */
-function initRegistrationForm(): void {
-  const registrationForm = document.getElementById(
-    'registrationForm'
-  ) as HTMLFormElement | null;
+export function useRegistrationForm(): void {
+  const form = document.getElementById('registrationForm') as HTMLFormElement;
 
-  if (!registrationForm) return;
+  if (!form) return;
 
-  useForm(registrationForm, {
+  useForm(form, {
     onSubmit: async (formData) => {
       const firstName = (formData.get('first_name') as string)?.trim();
       const lastName = (formData.get('last_name') as string)?.trim();
       const email = (formData.get('email') as string)?.trim();
-      const phoneNumber = (formData.get('phone_number') as string)?.trim() || null;
-      const privacy = registrationForm.querySelector<HTMLInputElement>(
+      const phoneNumber =
+        (formData.get('phone_number') as string)?.trim() || null;
+      const privacy = form.querySelector<HTMLInputElement>(
         'input[name="privacy"]'
       )?.checked;
       const eventId = formData.get('event_id') as string;
 
-      // Validation
       if (!firstName || !lastName) {
         throw new Error('Bitte fülle alle Pflichtfelder aus.');
       }
@@ -94,18 +90,15 @@ function initRegistrationForm(): void {
 }
 
 /**
- * Testimonial Form Handler
+ * Testimonial form composable
+ * Handles testimonial submission with character counter
  */
-function initTestimonialForm(): void {
-  const testimonialForm = document.getElementById(
-    'testimonialForm'
-  ) as HTMLFormElement | null;
+export function useTestimonialForm(): void {
+  const form = document.getElementById('testimonialForm') as HTMLFormElement;
 
-  if (!testimonialForm) return;
+  if (!form) return;
 
-  // Character counter
-  const quoteTextarea =
-    testimonialForm.querySelector<HTMLTextAreaElement>('#quote');
+  const quoteTextarea = form.querySelector<HTMLTextAreaElement>('#quote');
   const charCount = document.getElementById('charCount');
 
   if (quoteTextarea && charCount) {
@@ -114,19 +107,19 @@ function initTestimonialForm(): void {
     });
   }
 
-  const submitUrl = testimonialForm.getAttribute('data-submit-url') ?? '';
+  const submitUrl = form.getAttribute('data-submit-url') ?? '';
 
-  useForm(testimonialForm, {
+  useForm(form, {
     onSubmit: async (formData) => {
       const quote = (formData.get('quote') as string)?.trim();
-      const authorName = (formData.get('author_name') as string)?.trim() || null;
+      const authorName =
+        (formData.get('author_name') as string)?.trim() || null;
       const role = (formData.get('role') as string)?.trim() || null;
       const email = (formData.get('email') as string)?.trim();
-      const privacy = testimonialForm.querySelector<HTMLInputElement>(
+      const privacy = form.querySelector<HTMLInputElement>(
         'input[name="privacy"]'
       )?.checked;
 
-      // Validation
       if (!quote || quote.length < 10) {
         throw new Error(
           'Bitte teile deine Erfahrung mit uns (mindestens 10 Zeichen).'
@@ -158,12 +151,9 @@ function initTestimonialForm(): void {
       });
     },
     onSuccess: () => {
-      // Reset character counter
-      const charCount = document.getElementById('charCount');
       if (charCount) {
         charCount.textContent = '0';
       }
     },
   });
 }
-

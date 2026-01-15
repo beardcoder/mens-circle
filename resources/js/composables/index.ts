@@ -14,15 +14,14 @@ export interface AnimationOptions {
 /**
  * Modern Intersection Observer wrapper using Motion One
  */
-export function useIntersectionObserver(
-  options: AnimationOptions = {}
-): void {
+export function useIntersectionObserver(options: AnimationOptions = {}): void {
   const { threshold = 0.1, amount = 0.3 } = options;
 
   // Fade in animations for sections
   const sections = document.querySelectorAll<HTMLElement>(
     '[data-animate="fade-in"]'
   );
+
   sections.forEach((section) => {
     inView(
       section,
@@ -38,10 +37,13 @@ export function useIntersectionObserver(
   });
 
   // Staggered animations for lists
-  const staggeredLists =
-    document.querySelectorAll<HTMLElement>('[data-animate="stagger"]');
+  const staggeredLists = document.querySelectorAll<HTMLElement>(
+    '[data-animate="stagger"]'
+  );
+
   staggeredLists.forEach((list) => {
     const items = list.querySelectorAll<HTMLElement>('[data-animate-item]');
+
     inView(
       list,
       () => {
@@ -59,6 +61,7 @@ export function useIntersectionObserver(
   const scaleElements = document.querySelectorAll<HTMLElement>(
     '[data-animate="scale"]'
   );
+
   scaleElements.forEach((el) => {
     inView(
       el,
@@ -86,20 +89,18 @@ export function useSmoothScroll(): void {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const targetId = link.getAttribute('href');
+
       if (!targetId) return;
 
       const target = document.querySelector<HTMLElement>(targetId);
+
       if (!target) return;
 
-      animate(
-        window.scrollY,
-        target.offsetTop - 80,
-        {
-          duration: 0.8,
-          easing: [0.25, 0.1, 0.25, 1] as any,
-          onUpdate: (value: number) => window.scrollTo(0, value),
-        } as any
-      );
+      animate(window.scrollY, target.offsetTop - 80, {
+        duration: 0.8,
+        easing: [0.25, 0.1, 0.25, 1] as any,
+        onUpdate: (value: number) => window.scrollTo(0, value),
+      } as any);
     });
   });
 }
@@ -108,9 +109,8 @@ export function useSmoothScroll(): void {
  * Parallax scroll effects using Motion One
  */
 export function useParallax(): void {
-  const parallaxElements = document.querySelectorAll<HTMLElement>(
-    '[data-parallax]'
-  );
+  const parallaxElements =
+    document.querySelectorAll<HTMLElement>('[data-parallax]');
 
   parallaxElements.forEach((el) => {
     const speed = parseFloat(el.dataset.parallax || '0.5');
@@ -130,6 +130,7 @@ export function useViewTransitions(): void {
   // Check browser support
   if (!('pageswap' in window) && !('pagereveal' in window)) {
     console.debug('View Transitions navigation events not supported');
+
     return;
   }
 
@@ -213,6 +214,7 @@ export function showToast(
   message: string
 ): void {
   const toast = document.createElement('div');
+
   toast.className = `toast toast--${type}`;
   toast.textContent = message;
   toast.setAttribute('role', 'alert');
@@ -271,6 +273,7 @@ export function usePrefetch(): void {
   links.forEach((link) => {
     link.addEventListener('mouseenter', () => {
       const prefetchLink = document.createElement('link');
+
       prefetchLink.rel = 'prefetch';
       prefetchLink.href = link.href;
       document.head.appendChild(prefetchLink);

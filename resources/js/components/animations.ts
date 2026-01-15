@@ -81,6 +81,7 @@ function getDelay(element: Element): number {
   const delayClass = Object.keys(DELAY_MAP).find((cls) =>
     element.classList.contains(cls)
   );
+
   return delayClass ? DELAY_MAP[delayClass] : 0;
 }
 
@@ -97,6 +98,7 @@ function buildTransform(config: Record<string, number>): string {
 export function initScrollAnimations(): void {
   if (prefersReducedMotion()) {
     showAllElementsImmediately();
+
     return;
   }
 
@@ -123,6 +125,7 @@ function initFadeAnimations(): void {
 
   document.querySelectorAll<HTMLElement>(selectors).forEach((element) => {
     const animationType = getAnimationType(element);
+
     if (!animationType) return;
 
     const config = ANIMATION_CONFIGS[animationType];
@@ -164,6 +167,7 @@ function initStaggerAnimations(): void {
     .querySelectorAll<HTMLElement>('.stagger-children')
     .forEach((container) => {
       const children = Array.from(container.children) as HTMLElement[];
+
       if (children.length === 0) return;
 
       children.forEach((child) => {
@@ -220,13 +224,17 @@ export function initSmoothScroll(): void {
 
         try {
           const target = document.querySelector<HTMLElement>(targetId);
+
           if (!target) return;
 
           e.preventDefault();
           const headerHeight =
             document.getElementById('header')?.offsetHeight ?? 0;
           const targetPosition =
-            target.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
+            target.getBoundingClientRect().top +
+            window.scrollY -
+            headerHeight -
+            20;
 
           window.scrollTo({
             top: targetPosition,
@@ -238,4 +246,3 @@ export function initSmoothScroll(): void {
       });
     });
 }
-

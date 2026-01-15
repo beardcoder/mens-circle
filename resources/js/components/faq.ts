@@ -1,8 +1,7 @@
 /**
- * FAQ Component
- *
- * Re-exports the accordion initialization for backwards compatibility.
- * The actual implementation is in accordion.ts using Motion.dev animations.
+ * FAQ Composables
+ * Re-exports accordion composable for semantic naming
+ * The actual implementation is in accordion.ts
  */
 
-export { initFAQ } from './accordion';
+export { useAccordions as useFAQ } from './accordion';
