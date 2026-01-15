@@ -17,7 +17,7 @@ readonly class EventRegistrationData
     public static function fromRequest(array $data): self
     {
         return new self(
-            eventId: $data['event_id'],
+            eventId: (int) $data['event_id'],
             firstName: $data['first_name'],
             lastName: $data['last_name'],
             email: $data['email'],
