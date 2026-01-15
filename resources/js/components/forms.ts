@@ -69,11 +69,11 @@ export function useRegistrationForm(): void {
         throw new Error('Bitte bestätige die Datenschutzerklärung.');
       }
 
-      return fetch(window.routes.eventRegister, {
+      return fetch((globalThis as any).routes.eventRegister, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': window.routes.csrfToken,
+          'X-CSRF-TOKEN': (globalThis as any).routes.csrfToken,
           Accept: 'application/json',
         },
         body: JSON.stringify({
@@ -107,7 +107,7 @@ export function useTestimonialForm(): void {
     });
   }
 
-  const submitUrl = form.getAttribute('data-submit-url') ?? '';
+  const submitUrl = form.dataset.submitUrl ?? '';
 
   useForm(form, {
     onSubmit: async (formData) => {

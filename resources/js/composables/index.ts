@@ -78,34 +78,6 @@ export function useIntersectionObserver(options: AnimationOptions = {}): void {
 }
 
 /**
- * Smooth scroll with Motion One
- */
-export function useSmoothScroll(): void {
-  const links = document.querySelectorAll<HTMLAnchorElement>(
-    'a[href^="#"]:not([href="#"])'
-  );
-
-  links.forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href');
-
-      if (!targetId) return;
-
-      const target = document.querySelector<HTMLElement>(targetId);
-
-      if (!target) return;
-
-      animate(window.scrollY, target.offsetTop - 80, {
-        duration: 0.8,
-        easing: [0.25, 0.1, 0.25, 1] as any,
-        onUpdate: (value: number) => window.scrollTo(0, value),
-      } as any);
-    });
-  });
-}
-
-/**
  * Parallax scroll effects using Motion One
  */
 export function useParallax(): void {
@@ -113,7 +85,7 @@ export function useParallax(): void {
     document.querySelectorAll<HTMLElement>('[data-parallax]');
 
   parallaxElements.forEach((el) => {
-    const speed = parseFloat(el.dataset.parallax || '0.5');
+    const speed = Number.parseFloat(el.dataset.parallax || '0.5');
 
     scroll(animate(el, { y: [0, -100 * speed] } as any), {
       target: el,
