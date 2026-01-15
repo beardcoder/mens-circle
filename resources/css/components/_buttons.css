@@ -20,6 +20,7 @@
   justify-content: center;
   padding-block: 1rem;
   padding-inline: 2rem;
+  overflow: hidden;
   font-family: var(--font-body);
   font-size: 0.8rem;
   font-weight: 600;
@@ -32,7 +33,6 @@
   background: var(--btn-bg);
   border: 1.5px solid var(--btn-border);
   border-radius: var(--radius-full);
-  overflow: hidden;
   transition:
     background-color var(--transition-medium),
     color var(--transition-medium),
@@ -45,7 +45,11 @@
   position: absolute;
   inset: 0;
   content: '';
-  background: radial-gradient(circle at center, color-mix(in oklch, var(--btn-hover-bg) 30%, transparent) 0%, transparent 70%);
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--btn-hover-bg) 30%, transparent) 0%,
+    transparent 70%
+  );
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -232,10 +236,10 @@
   justify-content: center;
   inline-size: 40px;
   block-size: 40px;
+  overflow: hidden;
   color: var(--color-sand);
   background: color-mix(in oklch, var(--color-sand) 10%, transparent);
   border-radius: var(--radius-full);
-  overflow: hidden;
   transition:
     background-color var(--transition-fast),
     color var(--transition-fast),
@@ -247,7 +251,11 @@
   position: absolute;
   inset: 0;
   content: '';
-  background: radial-gradient(circle at center, var(--accent-primary) 0%, transparent 70%);
+  background: radial-gradient(
+    circle at center,
+    var(--accent-primary) 0%,
+    transparent 70%
+  );
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -255,7 +263,8 @@
 .social-icon:hover {
   color: var(--text-on-dark);
   background: var(--accent-primary);
-  box-shadow: 0 4px 12px color-mix(in oklch, var(--accent-primary) 30%, transparent);
+  box-shadow: 0 4px 12px
+    color-mix(in oklch, var(--accent-primary) 30%, transparent);
   transform: translateY(-3px) scale(1.05);
 }
 

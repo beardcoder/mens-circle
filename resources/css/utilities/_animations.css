@@ -122,7 +122,8 @@
  * This CSS animation is kept as a fallback for no-JS environments.
  */
 @keyframes breathe {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.25;
     transform: scale(0.85);
   }
@@ -139,7 +140,8 @@
 
 /* Subtle pulse */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
 
@@ -154,7 +156,8 @@
 
 /* Scroll indicator pulse */
 @keyframes scroll-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scaleY(1);
   }
@@ -182,7 +185,8 @@
 
 /* Bounce */
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(-25%);
     animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
@@ -199,7 +203,8 @@
 
 /* Float */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
 
@@ -297,7 +302,8 @@
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 30px color-mix(in oklch, var(--accent-primary) 30%, transparent);
+  box-shadow: 0 0 30px
+    color-mix(in oklch, var(--accent-primary) 30%, transparent);
 }
 
 /* ============================================
