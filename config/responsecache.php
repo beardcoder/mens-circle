@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Spatie\ResponseCache\CacheProfiles\CacheAllSuccessfulGetRequests;
+use App\Support\ResponseCache\OctaneCacheProfile;
 use Spatie\ResponseCache\Hasher\DefaultHasher;
 use Spatie\ResponseCache\Replacers\CsrfTokenReplacer;
 use Spatie\ResponseCache\Serializers\DefaultSerializer;
@@ -20,7 +20,7 @@ return [
      *  You can provide your own class given that it implements the
      *  CacheProfile interface.
      */
-    'cache_profile' => CacheAllSuccessfulGetRequests::class,
+    'cache_profile' => OctaneCacheProfile::class,
 
     /*
      *  Optionally, you can specify a header that will force a cache bypass.
@@ -42,7 +42,7 @@ return [
      * should be added to a cached response. This can be handy when
      * debugging.
      */
-    'add_cache_time_header' => env('APP_DEBUG', false),
+    'add_cache_time_header' => env('RESPONSE_CACHE_HEADER', env('APP_DEBUG', false)),
 
     /*
      * This setting determines the name of the http header that contains
@@ -56,7 +56,7 @@ return [
      * debugging.
      * ONLY works when "add_cache_time_header" is also active!
      */
-    'add_cache_age_header' => env('RESPONSE_CACHE_AGE_HEADER', false),
+    'add_cache_age_header' => env('RESPONSE_CACHE_AGE_HEADER', true),
 
     /*
      * This setting determines the name of the http header that contains
@@ -69,7 +69,7 @@ return [
      * requests. This can be the name of any store that is
      * configured in app/config/cache.php
      */
-    'cache_store' => env('RESPONSE_CACHE_DRIVER', 'file'),
+    'cache_store' => env('RESPONSE_CACHE_DRIVER', 'failover'),
 
     /*
      * Here you may define replacers that dynamically replace content from the response.

@@ -136,6 +136,7 @@ return [
     ],
 
     'flush' => [
+        'spatie.responsecache',
     ],
 
     /*
