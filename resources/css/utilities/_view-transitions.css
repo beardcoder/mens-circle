@@ -1,63 +1,57 @@
 /* ============================================
-   VIEW TRANSITIONS
+   VIEW TRANSITIONS API
    ============================================
 
-   Modern View Transition API support for smooth page navigation.
+   Modern View Transition API for smooth page navigation.
+   Provides smooth crossfade and slide animations between pages.
    Falls back gracefully for browsers that don't support it.
    ============================================ */
 
-/* Enable view transitions for supported browsers */
-@supports (view-transition-name: auto) {
-  :root {
-    view-transition-name: none;
+/* Enable view transitions */
+@view-transition {
+  navigation: auto;
+}
+
+/* Root transition - crossfade by default */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(root) {
+  animation-name: fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: fade-in-slide-up;
+}
+
+/* Animation keyframes */
+@keyframes fade-out {
+  from {
+    opacity: 1;
   }
 
-  /* Smooth transitions for page navigation */
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 0.3s;
-    animation-timing-function: ease-in-out;
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
 
-  /* Crossfade between old and new pages */
-  ::view-transition-old(root) {
-    animation-name: fade-out;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  ::view-transition-new(root) {
-    animation-name: fade-in;
-  }
-
-  /* Custom animations for view transitions */
-  @keyframes fade-out {
-    from {
-      opacity: 1;
-    }
-
-    to {
-      opacity: 0;
-    }
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  /* Faster transitions for users who prefer reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-      animation-duration: 0.1s;
-    }
-  }
-
-  /* Specific transitions for different elements */
+/* Preserve header and footer position during transitions */
+@supports (view-transition-name: header) {
   header {
     view-transition-name: header;
   }
@@ -66,29 +60,30 @@
     view-transition-name: footer;
   }
 
+  ::view-transition-old(header),
+  ::view-transition-new(header),
+  ::view-transition-old(footer),
+  ::view-transition-new(footer) {
+    animation-duration: 0.2s;
+    animation-name: none;
+  }
+}
+
+/* Smooth content transitions */
+@supports (view-transition-name: main-content) {
   main {
     view-transition-name: main-content;
   }
 
-  /* Smooth header transitions */
-  ::view-transition-old(header),
-  ::view-transition-new(header) {
-    animation-duration: 0.2s;
-  }
-
-  /* Smooth footer transitions */
-  ::view-transition-old(footer),
-  ::view-transition-new(footer) {
-    animation-duration: 0.2s;
-  }
-
-  /* Main content slides and fades */
   ::view-transition-old(main-content) {
     animation-name: slide-out-fade;
+    animation-duration: 0.3s;
   }
 
   ::view-transition-new(main-content) {
     animation-name: slide-in-fade;
+    animation-duration: 0.4s;
+    animation-delay: 0.1s;
   }
 
   @keyframes slide-out-fade {
@@ -99,14 +94,14 @@
 
     to {
       opacity: 0;
-      transform: translateY(-20px);
+      transform: translateY(-10px);
     }
   }
 
   @keyframes slide-in-fade {
     from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(10px);
     }
 
     to {
@@ -114,4 +109,27 @@
       transform: translateY(0);
     }
   }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(main-content),
+  ::view-transition-new(main-content) {
+    animation-duration: 0.05s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* Fix for potential flicker */
+::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+
+/* Smooth color transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  backface-visibility: hidden;
 }

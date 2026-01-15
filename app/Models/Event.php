@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -64,38 +65,50 @@ class Event extends Model implements HasMedia
         return $this->registrations()->where('status', 'confirmed');
     }
 
-    public function confirmedRegistrationsCount(): int
+    protected function confirmedRegistrationsCount(): Attribute
     {
-        return (int) ($this->confirmed_registrations_count ?? $this->confirmedRegistrations()->count());
+        return Attribute::make(
+            get: fn () => (int) ($this->confirmed_registrations_count ?? $this->confirmedRegistrations()->count())
+        );
     }
 
-    public function availableSpots(): int
+    protected function availableSpots(): Attribute
     {
-        return $this->max_participants - $this->confirmedRegistrationsCount();
+        return Attribute::make(
+            get: fn () => max(0, $this->max_participants - $this->confirmedRegistrationsCount)
+        );
     }
 
-    public function isFull(): bool
+    protected function isFull(): Attribute
     {
-        return $this->availableSpots() <= 0;
+        return Attribute::make(
+            get: fn () => $this->availableSpots <= 0
+        );
     }
 
-    public function isPast(): bool
+    protected function isPast(): Attribute
     {
-        return $this->event_date->endOfDay()->isPast();
+        return Attribute::make(
+            get: fn () => $this->event_date->endOfDay()->isPast()
+        );
     }
 
-    public function getFullAddress(): ?string
+    protected function fullAddress(): Attribute
     {
-        if (! $this->street || ! $this->city) {
-            return null;
-        }
+        return Attribute::make(
+            get: function (): ?string {
+                if (! $this->street || ! $this->city) {
+                    return null;
+                }
 
-        $parts = array_filter([
-            $this->street,
-            $this->postal_code ? $this->postal_code.' '.$this->city : $this->city,
-        ]);
+                $parts = array_filter([
+                    $this->street,
+                    $this->postal_code ? "{$this->postal_code} {$this->city}" : $this->city,
+                ]);
 
-        return implode(', ', $parts);
+                return implode(', ', $parts);
+            }
+        );
     }
 
     public function generateICalContent(): string
@@ -109,27 +122,31 @@ class Event extends Model implements HasMedia
             ->format('Ymd\THis');
 
         $now = now()->format('Ymd\THis\Z');
+        $location = $this->fullAddress ?? $this->location;
+        $description = str_replace(
+            ["\r\n", "\n", "\r"],
+            '\n',
+            strip_tags($this->description ?? '')
+        );
 
-        $location = $this->getFullAddress() ?? $this->location;
-        $description = strip_tags($this->description ?? '');
-        $description = str_replace(["\r\n", "\n", "\r"], '\n', $description);
+        $uid = "{$this->id}@mens-circle.de";
 
-        $uid = $this->id.'@mens-circle.de';
+        return <<<ICAL
+            BEGIN:VCALENDAR\r
+            VERSION:2.0\r
+            PRODID:-//Männerkreis Niederbayern/ Straubing//Event//DE\r
+            BEGIN:VEVENT\r
+            UID:{$uid}\r
+            DTSTAMP:{$now}\r
+            DTSTART:{$startDateTime}\r
+            DTEND:{$endDateTime}\r
+            SUMMARY:{$this->title}\r
+            DESCRIPTION:{$description}\r
+            LOCATION:{$location}\r
+            END:VEVENT\r
+            END:VCALENDAR\r
 
-        $ical = "BEGIN:VCALENDAR\r\n";
-        $ical .= "VERSION:2.0\r\n";
-        $ical .= "PRODID:-//Männerkreis Niederbayern/ Straubing//Event//DE\r\n";
-        $ical .= "BEGIN:VEVENT\r\n";
-        $ical .= "UID:{$uid}\r\n";
-        $ical .= "DTSTAMP:{$now}\r\n";
-        $ical .= "DTSTART:{$startDateTime}\r\n";
-        $ical .= "DTEND:{$endDateTime}\r\n";
-        $ical .= "SUMMARY:{$this->title}\r\n";
-        $ical .= "DESCRIPTION:{$description}\r\n";
-        $ical .= "LOCATION:{$location}\r\n";
-        $ical .= "END:VEVENT\r\n";
-
-        return $ical."END:VCALENDAR\r\n";
+            ICAL;
     }
 
     protected function casts(): array
