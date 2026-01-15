@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Performance monitoring
-if ('PerformanceObserver' in window) {
+if ('PerformanceObserver' in globalThis) {
   const perfObserver = new PerformanceObserver((list) => {
     list.getEntries().forEach((entry) => {
       if (entry.entryType === 'largest-contentful-paint') {
@@ -48,13 +48,4 @@ if ('PerformanceObserver' in window) {
   });
 
   perfObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-}
-
-// Service Worker registration for PWA capabilities (optional future enhancement)
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {
-      // Silent fail - SW is optional
-    });
-  });
 }
