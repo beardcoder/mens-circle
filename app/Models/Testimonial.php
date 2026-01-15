@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\ClearsResponseCache;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +16,7 @@ use PhpStaticAnalysis\Attributes\TemplateUse;
 class Testimonial extends Model
 {
     use HasFactory;
-
+    use ClearsResponseCache;
     use SoftDeletes;
 
     protected $fillable = [
