@@ -64,8 +64,8 @@
   ::view-transition-new(header),
   ::view-transition-old(footer),
   ::view-transition-new(footer) {
-    animation-duration: 0.2s;
     animation-name: none;
+    animation-duration: 0.2s;
   }
 }
 
