@@ -2,8 +2,8 @@
     "agents": [
         "claude_code",
         "codex",
-        "opencode",
-        "phpstorm"
+        "copilot",
+        "opencode"
     ],
     "editors": [
         "claude_code",
@@ -12,5 +12,7 @@
         "phpstorm",
         "vscode"
     ],
-    "guidelines": []
+    "guidelines": [
+        "filament/filament"
+    ]
 }
