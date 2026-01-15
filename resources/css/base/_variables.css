@@ -88,6 +88,12 @@
   --accent-primary: var(--color-terracotta);
   --accent-secondary: var(--color-terracotta-light);
 
+  /* Status Colors */
+  --color-success: oklch(58% 0.15 145deg);
+  --color-error: oklch(55% 0.18 25deg);
+  --color-info: oklch(60% 0.12 240deg);
+  --color-warning: oklch(68% 0.16 75deg);
+
   /* Borders */
   --border-light: var(--color-sand-light);
   --border-medium: color-mix(in oklch, var(--color-sand) 30%, transparent);

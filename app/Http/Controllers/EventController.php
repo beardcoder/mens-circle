@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\DTOs\EventRegistrationData;
 use App\Http\Requests\EventRegistrationRequest;
 use App\Mail\EventRegistrationConfirmation;
 use App\Models\Event;
@@ -27,11 +28,9 @@ class EventController extends Controller
             ->orderBy('event_date')
             ->first();
 
-        if (! $event) {
-            return view('no-event');
-        }
-
-        return redirect()->route('event.show.slug', ['slug' => $event->slug]);
+        return $event
+            ? redirect()->route('event.show.slug', ['slug' => $event->slug])
+            : view('no-event');
     }
 
     public function show(string $slug): View
@@ -47,59 +46,73 @@ class EventController extends Controller
 
     public function register(EventRegistrationRequest $request): JsonResponse
     {
-        $validated = $request->validated();
-        $event = Event::select('id', 'event_date', 'is_published', 'max_participants')
-            ->withCount('confirmedRegistrations')
-            ->findOrFail($validated['event_id']);
+        $data = EventRegistrationData::fromRequest($request->validated());
+        $event = $this->loadEventForRegistration($data->eventId);
 
-        if (! $event->is_published) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Diese Veranstaltung ist nicht verfügbar.',
-            ], 404);
+        if ($error = $this->validateEventAvailability($event, $data->email)) {
+            return $error;
         }
 
-        if ($event->isPast()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Diese Veranstaltung hat bereits stattgefunden. Eine Anmeldung ist nicht mehr möglich.',
-            ], 410);
-        }
-
-        if ($event->isFull()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Diese Veranstaltung ist leider bereits ausgebucht.',
-            ], 409);
-        }
-
-        $hasExistingRegistration = EventRegistration::query()
-            ->where('event_id', $event->id)
-            ->where('email', $validated['email'])
-            ->exists();
-
-        if ($hasExistingRegistration) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Du bist bereits für diese Veranstaltung angemeldet.',
-            ], 409);
-        }
-
-        $registration = EventRegistration::create([
-            'event_id' => $event->id,
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'phone_number' => $validated['phone_number'] ?? null,
-            'privacy_accepted' => true,
-            'status' => 'confirmed',
-            'confirmed_at' => now(),
-        ]);
-
-        // Clear response cache to update available spots on event pages
+        $registration = EventRegistration::create($data->toArray());
         ResponseCache::clear();
 
-        // Send email confirmation
+        $this->sendConfirmations($registration, $event);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Vielen Dank, {$data->firstName}! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.",
+        ]);
+    }
+
+    private function loadEventForRegistration(int $eventId): Event
+    {
+        return Event::select('id', 'title', 'event_date', 'is_published', 'max_participants', 'start_time', 'end_time', 'location', 'street', 'postal_code', 'city')
+            ->withCount('confirmedRegistrations')
+            ->findOrFail($eventId);
+    }
+
+    private function validateEventAvailability(Event $event, string $email): ?JsonResponse
+    {
+        return match (true) {
+            ! $event->is_published => response()->json([
+                'success' => false,
+                'message' => 'Diese Veranstaltung ist nicht verfügbar.',
+            ], 404),
+            $event->isPast => response()->json([
+                'success' => false,
+                'message' => 'Diese Veranstaltung hat bereits stattgefunden. Eine Anmeldung ist nicht mehr möglich.',
+            ], 410),
+            $event->isFull => response()->json([
+                'success' => false,
+                'message' => 'Diese Veranstaltung ist leider bereits ausgebucht.',
+            ], 409),
+            $this->hasExistingRegistration($event->id, $email) => response()->json([
+                'success' => false,
+                'message' => 'Du bist bereits für diese Veranstaltung angemeldet.',
+            ], 409),
+            default => null,
+        };
+    }
+
+    private function hasExistingRegistration(int $eventId, string $email): bool
+    {
+        return EventRegistration::query()
+            ->where('event_id', $eventId)
+            ->where('email', $email)
+            ->exists();
+    }
+
+    private function sendConfirmations(EventRegistration $registration, Event $event): void
+    {
+        $this->sendEmailConfirmation($registration, $event);
+
+        if ($registration->phone_number) {
+            $this->sendSmsConfirmation($registration, $event);
+        }
+    }
+
+    private function sendEmailConfirmation(EventRegistration $registration, Event $event): void
+    {
         try {
             Mail::queue(new EventRegistrationConfirmation($registration, $event));
 
@@ -116,25 +129,19 @@ class EventController extends Controller
                 'error' => $exception->getMessage(),
             ]);
         }
+    }
 
-        // Send SMS confirmation if phone number provided
-        if ($registration->phone_number) {
-            try {
-                $smsService = app(SmsService::class);
-                $smsService->sendRegistrationConfirmation($registration, $event);
-            } catch (Exception $exception) {
-                Log::error('Failed to send SMS registration confirmation', [
-                    'registration_id' => $registration->id,
-                    'phone_number' => $registration->phone_number,
-                    'event_id' => $event->id,
-                    'error' => $exception->getMessage(),
-                ]);
-            }
+    private function sendSmsConfirmation(EventRegistration $registration, Event $event): void
+    {
+        try {
+            app(SmsService::class)->sendRegistrationConfirmation($registration, $event);
+        } catch (Exception $exception) {
+            Log::error('Failed to send SMS registration confirmation', [
+                'registration_id' => $registration->id,
+                'phone_number' => $registration->phone_number,
+                'event_id' => $event->id,
+                'error' => $exception->getMessage(),
+            ]);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $validated['first_name']),
-        ]);
     }
 }
