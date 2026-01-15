@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\ClearsResponseCache;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +24,7 @@ class Page extends Model implements HasMedia
     use HasSlug;
     use InteractsWithMedia;
     use SoftDeletes;
+    use ClearsResponseCache;
 
     protected $fillable = [
         'title',
