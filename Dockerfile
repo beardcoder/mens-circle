@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7-labs
 
-ARG PHP_IMAGE=serversideup/php:8.5-fpm-nginx
+ARG PHP_IMAGE=serversideup/php:8.5-frankenphp
 
 # ----------------------------
 # 1) Frontend build (Vite) with Bun
@@ -51,11 +51,10 @@ ENV APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
     LOG_LEVEL=error \
-    NGINX_WEBROOT=/app/public \
+    OCTANE_SERVER=frankenphp \
     PHP_MEMORY_LIMIT=512M \
     PHP_OPCACHE_ENABLE=1 \
-    NGINX_FASTCGI_BUFFERS="16 16k" \
-    NGINX_FASTCGI_BUFFER_SIZE="32k" \
+    CADDY_SERVER_ROOT=/app/public \
     APP_BASE_DIR=/app
 WORKDIR /app
 
@@ -85,3 +84,7 @@ RUN mkdir -p \
       /app/bootstrap/cache
 
 EXPOSE 8080
+
+CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--port=8080"]
+
+HEALTHCHECK CMD ["/bin/sh", "-c", "exit 0"]
