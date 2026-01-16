@@ -30,68 +30,78 @@ class LlmsController extends Controller
         $lines[] = '';
         $lines[] = '> ' . $siteDescription;
         $lines[] = '';
-        $lines[] = 'Der Männerkreis Niederbayern ist eine Gemeinschaft für Männer, die sich regelmäßig zu Veranstaltungen treffen. Die Website bietet Informationen zu kommenden Events, Anmeldung zu Veranstaltungen und einen Newsletter-Service.';
+
+        $lines[] = '## Structured Data API';
+        $lines[] = '';
+        $lines[] = 'This site provides structured JSON endpoints for AI systems to reliably discover and understand content.';
+        $lines[] = '';
+        $lines[] = '### Site Structure';
+        $lines[] = 'GET ' . route('ai.site');
+        $lines[] = 'Returns: site metadata, contact info, content types, capabilities';
+        $lines[] = '';
+        $lines[] = '### All Pages';
+        $lines[] = 'GET ' . route('ai.pages');
+        $lines[] = 'Returns: all published pages with structured content blocks (hero, intro, text, FAQ, testimonials, etc.)';
+        $lines[] = '';
+        $lines[] = '### All Events';
+        $lines[] = 'GET ' . route('ai.events');
+        $lines[] = 'Returns: upcoming and past events with dates, location, registration status, available spots';
         $lines[] = '';
 
-        $lines[] = '## Veranstaltungen';
+        $lines[] = '## How to Interpret This Site';
+        $lines[] = '';
+        $lines[] = '### Content Types';
+        $lines[] = '- **Pages**: Dynamic content with flexible blocks (text, FAQ, calls-to-action, testimonials)';
+        $lines[] = '- **Events**: Community gatherings with date, time, location, and registration management';
+        $lines[] = '- **Language**: All content is in German (de)';
+        $lines[] = '';
+        $lines[] = '### User Actions';
+        $lines[] = '- Event registration: requires first_name, last_name, email, phone_number';
+        $lines[] = '- Newsletter subscription: requires email';
+        $lines[] = '- Both actions available via web forms on respective pages';
+        $lines[] = '';
+
+        $lines[] = '## Content Overview';
+        $lines[] = '';
+        $lines[] = '### Upcoming Events';
         $upcomingEvents = Event::published()
             ->upcoming()
+            ->withCount('confirmedRegistrations as confirmed_registrations_count')
             ->orderBy('event_date')
             ->get();
 
         if ($upcomingEvents->isEmpty()) {
-            $lines[] = 'Aktuell sind keine kommenden Veranstaltungen geplant.';
+            $lines[] = 'No upcoming events scheduled';
         } else {
             foreach ($upcomingEvents as $event) {
-                $date = $event->event_date->format('d.m.Y');
+                $date = $event->event_date->format('Y-m-d');
+                $time = $event->start_time->format('H:i');
                 $url = route('event.show.slug', $event->slug);
-                $description = $event->location ? sprintf('Veranstaltung am %s in %s', $date, $event->location) : 'Veranstaltung am ' . $date;
-                $lines[] = sprintf('- [%s](%s): %s', $event->title, $url, $description);
+                $spots = $event->max_participants - $event->confirmedRegistrationsCount;
+                $status = $spots > 0 ? "{$spots} spots available" : 'fully booked';
+                $lines[] = sprintf('- [%s](%s): %s at %s in %s (%s)', $event->title, $url, $date, $time, $event->location, $status);
             }
         }
 
         $lines[] = '';
 
-        $pastEvents = Event::published()
-            ->where('event_date', '<', now())
-            ->orderByDesc('event_date')
-            ->limit(5)
-            ->get();
-
-        if ($pastEvents->isNotEmpty()) {
-            $lines[] = '## Vergangene Veranstaltungen';
-            foreach ($pastEvents as $event) {
-                $date = $event->event_date->format('d.m.Y');
-                $url = route('event.show.slug', $event->slug);
-                $lines[] = sprintf('- [%s](%s): Stattgefunden am %s', $event->title, $url, $date);
-            }
-
-            $lines[] = '';
-        }
-
-        $lines[] = '## Seiten';
-        $lines[] = '- [Startseite]('.route('home').'): Hauptseite mit Überblick über den Männerkreis';
-
+        $lines[] = '### Pages';
         $pages = Page::published()
-            ->whereNotIn('slug', ['home', 'impressum', 'datenschutz'])
             ->orderBy('title')
             ->get();
 
         foreach ($pages as $page) {
-            $url = route('page.show', $page->slug);
-            $lines[] = sprintf('- [%s](%s): Informationsseite', $page->title, $url);
+            $url = $page->slug === 'home' ? route('home') : route('page.show', $page->slug);
+            $lines[] = sprintf('- [%s](%s)', $page->title, $url);
         }
 
         $lines[] = '';
 
-        $lines[] = '## Rechtliches';
-        $lines[] = '- [Impressum]('.route('page.show', 'impressum').'): Rechtliche Angaben und Anbieterkennzeichnung';
-        $lines[] = '- [Datenschutz]('.route('page.show', 'datenschutz').'): Datenschutzerklärung gemäß DSGVO';
-        $lines[] = '';
-
-        $lines[] = '## Aktionen';
-        $lines[] = '- Newsletter-Anmeldung: Über das Formular auf der Startseite können sich Interessierte für den Newsletter anmelden';
-        $lines[] = '- Veranstaltungsanmeldung: Über die jeweilige Veranstaltungsseite können sich Teilnehmer registrieren';
+        $lines[] = '## Data Freshness';
+        $lines[] = '- Site structure: cached 12 hours';
+        $lines[] = '- Pages: cached 6 hours';
+        $lines[] = '- Events: cached 15 minutes';
+        $lines[] = '- This llms.txt: cached with response cache';
 
         return implode("\n", $lines);
     }
