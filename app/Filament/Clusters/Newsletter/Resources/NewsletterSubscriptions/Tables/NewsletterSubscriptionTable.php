@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Clusters\Newsletter\Resources\NewsletterSubscriptions\Tables;
 
+use App\Enums\NewsletterSubscriptionStatus;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -25,16 +26,8 @@ class NewsletterSubscriptionTable
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'active' => 'success',
-                        'unsubscribed' => 'gray',
-                        default => 'warning',
-                    })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'active' => 'Aktiv',
-                        'unsubscribed' => 'Abgemeldet',
-                        default => $state,
-                    })
+                    ->color(fn (string $state): string => NewsletterSubscriptionStatus::tryFrom($state)?->getColor() ?? 'warning')
+                    ->formatStateUsing(fn (string $state): string => NewsletterSubscriptionStatus::tryFrom($state)?->getLabel() ?? $state)
                     ->sortable(),
                 TextColumn::make('subscribed_at')
                     ->label('Angemeldet am')
@@ -48,11 +41,8 @@ class NewsletterSubscriptionTable
             ])
             ->filters([
                 SelectFilter::make('status')
-                    ->label('Status')
-                    ->options([
-                        'active' => 'Aktiv',
-                        'unsubscribed' => 'Abgemeldet',
-                    ]),
+                    ->label('Abonnement-Status')
+                    ->options(NewsletterSubscriptionStatus::options()),
             ])
             ->defaultSort('created_at', 'desc')
             ->recordActions([

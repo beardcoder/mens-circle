@@ -12,8 +12,10 @@ use App\Filament\Clusters\Events\Resources\Events\RelationManagers\Registrations
 use App\Filament\Clusters\Events\Resources\Events\Schemas\EventForm;
 use App\Filament\Clusters\Events\Resources\Events\Tables\EventTable;
 use App\Models\Event;
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -23,6 +25,14 @@ class EventResource extends Resource
     protected static ?string $model = Event::class;
 
     protected static ?string $cluster = EventsCluster::class;
+
+    protected static BackedEnum|string|null $navigationIcon = Heroicon::OutlinedCalendar;
+
+    protected static ?string $navigationLabel = 'Events';
+
+    protected static ?string $modelLabel = 'Event';
+
+    protected static ?string $pluralModelLabel = 'Events';
 
     public static function form(Schema $schema): Schema
     {
