@@ -2,48 +2,11 @@
    VIEW TRANSITIONS API
    ============================================
 
-   Modern View Transition API for smooth page navigation.
-   Provides smooth crossfade and slide animations between pages.
+   Bare minimum View Transition API for smooth page navigation.
+   Uses browser's default automatic transitions.
    Falls back gracefully for browsers that don't support it.
    ============================================ */
 
-/* Enable view transitions */
 @view-transition {
   navigation: auto;
-}
-
-/* Root transition - crossfade by default */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.4s;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-::view-transition-old(root) {
-  animation-name: fade-out;
-}
-
-::view-transition-new(root) {
-  animation-name: fade-in;
-}
-
-/* Animation keyframes */
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
 }

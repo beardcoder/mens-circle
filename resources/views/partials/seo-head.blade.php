@@ -41,9 +41,6 @@
 <!-- Security -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<!-- View Transitions -->
-<meta name="view-transition" content="same-origin">
-
 <!-- Robots -->
 <meta name="robots" content="@yield('robots', 'index, follow')">
 <meta name="googlebot" content="@yield('robots', 'index, follow')">
