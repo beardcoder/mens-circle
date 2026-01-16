@@ -97,14 +97,15 @@ class Page extends Model implements HasMedia
             }
 
             // Cleanup removed blocks
-            $existingBlocks->each(function (ContentBlock $block) use ($processedBlockIds): void {
-                if (!in_array($block->block_id, $processedBlockIds)) {
+            $existingBlocks->each(function ($blockModel) use ($processedBlockIds): void {
+                /** @var ContentBlock $blockModel */
+                if (!in_array($blockModel->block_id, $processedBlockIds)) {
                     // Delete associated media on the Page
                     $this->getMedia('page_blocks')
-                        ->filter(fn ($media): bool => $media->getCustomProperty('block_id') === $block->block_id)
+                        ->filter(fn ($media): bool => $media->getCustomProperty('block_id') === $blockModel->block_id)
                         ->each(fn ($media) => $media->delete());
 
-                    $block->delete();
+                    $blockModel->delete();
                 }
             });
         });

@@ -32,6 +32,7 @@
     "barryvdh/laravel-debugbar": "^3.16",
     "driftingly/rector-laravel": "^2.1",
     "kitloong/laravel-migrations-generator": "^7.2",
+    "larastan/larastan": "^3.8",
     "laravel/boost": "^1.8",
     "laravel/pail": "^1.2.2",
     "laravel/pint": "^1.24",
@@ -89,6 +90,9 @@
     ],
     "rector": [
       "rector process"
+    ],
+    "lint": [
+      "phpstan analyse"
     ],
     "setup": [
       "composer install",

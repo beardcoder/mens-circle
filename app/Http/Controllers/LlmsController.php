@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Page;
+use App\Settings\GeneralSettings;
 use Illuminate\Http\Response;
 
 class LlmsController extends Controller

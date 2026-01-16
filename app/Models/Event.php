@@ -17,6 +17,21 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+/**
+ * @property \Illuminate\Support\Carbon $event_date
+ * @property \Illuminate\Support\Carbon $start_time
+ * @property \Illuminate\Support\Carbon $end_time
+ * @property int $max_participants
+ * @property bool $is_published
+ * @property string $title
+ * @property ?string $description
+ * @property ?string $location
+ * @property int $confirmedRegistrationsCount
+ * @property int $availableSpots
+ * @property bool $isFull
+ * @property bool $isPast
+ * @property ?string $fullAddress
+ */
 class Event extends Model implements HasMedia
 {
     use HasFactory;
@@ -77,7 +92,7 @@ class Event extends Model implements HasMedia
     protected function availableSpots(): Attribute
     {
         return Attribute::make(
-            get: fn (): float|int => max(0, $this->max_participants - $this->confirmedRegistrationsCount)
+            get: fn (): int => max(0, $this->max_participants - $this->confirmedRegistrationsCount)
         );
     }
 
@@ -103,10 +118,10 @@ class Event extends Model implements HasMedia
                     return null;
                 }
 
-                $parts = array_filter([
+                $parts = [
                     $this->street,
                     $this->postal_code ? sprintf('%s %s', $this->postal_code, $this->city) : $this->city,
-                ]);
+                ];
 
                 return implode(', ', $parts);
             }

@@ -39,6 +39,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
 
     public function mount(): void
     {
+        /** @phpstan-ignore property.notFound */
         $this->form->fill();
     }
 
@@ -50,10 +51,11 @@ class SendNewsletter extends Page implements HasActions, HasForms
                     ->label('Betreff')
                     ->required()
                     ->maxLength(255)
-                    ->placeholder('z.B. Nächstes Treffen am 24. Januar'),
+                    ->placeholder('z.B. Nächstes Treffen am 24. Januar')
+                    ->helperText('Der Betreff erscheint in der E-Mail-Vorschau'),
 
                 RichEditor::make('content')
-                    ->label('Nachricht')
+                    ->label('Newsletter-Inhalt')
                     ->required()
                     ->toolbarButtons([
                         'bold',
@@ -66,7 +68,8 @@ class SendNewsletter extends Page implements HasActions, HasForms
                         'undo',
                         'redo',
                     ])
-                    ->placeholder('Schreibe deine Newsletter-Nachricht hier...'),
+                    ->placeholder('Schreibe deine Newsletter-Nachricht hier...')
+                    ->helperText('Formatiere deinen Text mit den Werkzeugen oben'),
             ])
             ->statePath('data');
     }
@@ -83,7 +86,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
                 ->modalDescription(function (): string {
                     $count = NewsletterSubscription::where('status', 'active')->count();
 
-                    return sprintf('Der Newsletter wird an %s aktive Abonnenten versendet. Dies kann nicht rückgängig gemacht werden.', $count);
+                    return sprintf('Der Newsletter wird an %d aktive %s versendet. Dies kann nicht rückgängig gemacht werden.', $count, $count === 1 ? 'Abonnenten' : 'Abonnenten');
                 })
                 ->modalSubmitActionLabel('Jetzt versenden')
                 ->action(fn () => $this->sendNewsletterAction()),
@@ -92,6 +95,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
 
     public function sendNewsletterAction(): void
     {
+        /** @phpstan-ignore property.notFound */
         $data = $this->form->getState();
 
         $newsletter = Newsletter::create([
@@ -108,6 +112,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
             ->success()
             ->send();
 
+        /** @phpstan-ignore property.notFound */
         $this->form->fill();
     }
 }

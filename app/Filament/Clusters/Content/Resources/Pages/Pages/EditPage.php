@@ -6,6 +6,7 @@ namespace App\Filament\Clusters\Content\Resources\Pages\Pages;
 
 use App\Filament\Clusters\Content\Resources\Pages\PageResource;
 use App\Models\ContentBlock;
+use App\Models\Page;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
@@ -13,6 +14,9 @@ use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+/**
+ * @property Page $record
+ */
 class EditPage extends EditRecord
 {
     protected static string $resource = PageResource::class;
@@ -32,9 +36,11 @@ class EditPage extends EditRecord
     protected function mutateFormDataBeforeFill(array $data): array
     {
         // Fix: Ensure media is attached to the Page, not the ContentBlock
-        $this->record->contentBlocks->each(function (ContentBlock $block): void {
-            $block->getMedia('page_blocks')->each(function (Media $media): void {
-                $media->update([
+        $this->record->contentBlocks->each(function ($blockItem): void {
+            /** @var ContentBlock $blockItem */
+            $blockItem->getMedia('page_blocks')->each(function ($mediaItem): void {
+                /** @var Media $mediaItem */
+                $mediaItem->update([
                     'model_type' => get_class($this->record),
                     'model_id' => $this->record->id,
                 ]);
@@ -44,12 +50,14 @@ class EditPage extends EditRecord
         $contentBlocks = $this->record->contentBlocks()
             ->orderBy('order')
             ->get()
-            ->map(function (ContentBlock $block): array {
-                $blockData = $block->data;
-                $blockData['block_id'] = $block->block_id;
+            ->map(function ($blockItem): array {
+                /** @var ContentBlock $blockItem */
+                /** @var array<string, mixed> $blockData */
+                $blockData = $blockItem->data;
+                $blockData['block_id'] = $blockItem->block_id;
 
                 return [
-                    'type' => $block->type,
+                    'type' => $blockItem->type,
                     'data' => $blockData,
                 ];
             })
@@ -72,6 +80,7 @@ class EditPage extends EditRecord
         $record->update($data);
 
         // Sync ContentBlocks via Model method
+        /** @var Page $record */
         $record->saveContentBlocks($contentBlocksData);
 
         return $record;

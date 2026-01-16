@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Clusters\Events\Resources\EventRegistrations\Tables;
 
+use App\Enums\EventRegistrationStatus;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -53,18 +54,8 @@ class EventRegistrationTable
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'confirmed' => 'success',
-                        'cancelled' => 'danger',
-                        'waitlist' => 'warning',
-                        default => 'gray',
-                    })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'confirmed' => 'Bestätigt',
-                        'cancelled' => 'Abgesagt',
-                        'waitlist' => 'Warteliste',
-                        default => $state,
-                    })
+                    ->color(fn (string $state): string => EventRegistrationStatus::tryFrom($state)?->getColor() ?? 'gray')
+                    ->formatStateUsing(fn (string $state): string => EventRegistrationStatus::tryFrom($state)?->getLabel() ?? $state)
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Angemeldet am')
@@ -82,14 +73,11 @@ class EventRegistrationTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                TrashedFilter::make(),
+                TrashedFilter::make()
+                    ->label('Gelöschte Anmeldungen'),
                 SelectFilter::make('status')
-                    ->label('Status')
-                    ->options([
-                        'confirmed' => 'Bestätigt',
-                        'cancelled' => 'Abgesagt',
-                        'waitlist' => 'Warteliste',
-                    ]),
+                    ->label('Anmeldestatus')
+                    ->options(EventRegistrationStatus::options()),
                 SelectFilter::make('event')
                     ->label('Veranstaltung')
                     ->relationship('event', 'title')

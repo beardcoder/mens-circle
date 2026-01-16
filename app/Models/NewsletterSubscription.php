@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
+/**
+ * @property string $email
+ * @property string $status
+ * @property string $token
+ * @property \Illuminate\Support\Carbon $subscribed_at
+ * @property ?\Illuminate\Support\Carbon $unsubscribed_at
+ */
 class NewsletterSubscription extends Model
 {
     use SoftDeletes;

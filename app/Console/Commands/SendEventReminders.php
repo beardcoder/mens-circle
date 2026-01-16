@@ -54,6 +54,7 @@ class SendEventReminders extends Command
 
             $this->info(sprintf('Processing event: %s (%s)', $event->title, $event->event_date->format('d.m.Y H:i')));
 
+            /** @var \App\Models\EventRegistration $registration */
             foreach ($registrations as $registration) {
                 // Send email reminder
                 Mail::queue(new EventReminder($registration, $event));

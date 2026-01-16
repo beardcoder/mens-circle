@@ -11,8 +11,10 @@ use App\Filament\Clusters\Content\Resources\Testimonials\Pages\ListTestimonials;
 use App\Filament\Clusters\Content\Resources\Testimonials\Schemas\TestimonialForm;
 use App\Filament\Clusters\Content\Resources\Testimonials\Tables\TestimonialsTable;
 use App\Models\Testimonial;
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -22,6 +24,8 @@ class TestimonialResource extends Resource
     protected static ?string $model = Testimonial::class;
 
     protected static ?string $cluster = ContentCluster::class;
+
+    protected static BackedEnum|string|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
 
     protected static ?string $modelLabel = 'Erfahrungsbericht';
 

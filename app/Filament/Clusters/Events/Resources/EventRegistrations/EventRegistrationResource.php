@@ -11,8 +11,10 @@ use App\Filament\Clusters\Events\Resources\EventRegistrations\Pages\ListEventReg
 use App\Filament\Clusters\Events\Resources\EventRegistrations\Schemas\EventRegistrationForm;
 use App\Filament\Clusters\Events\Resources\EventRegistrations\Tables\EventRegistrationTable;
 use App\Models\EventRegistration;
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class EventRegistrationResource extends Resource
@@ -20,6 +22,8 @@ class EventRegistrationResource extends Resource
     protected static ?string $model = EventRegistration::class;
 
     protected static ?string $cluster = EventsCluster::class;
+
+    protected static BackedEnum|string|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
     protected static ?int $navigationSort = 20;
 
