@@ -18,7 +18,7 @@ class AiDiscoveryController extends Controller
      */
     public function site(GeneralSettings $settings): JsonResponse
     {
-        $data = Cache::remember('ai_discovery:site', now()->addHours(12), function () use ($settings): array {
+        return Cache::remember('ai_discovery:site', now()->addHours(12), function () use ($settings): array {
             return [
                 'site' => [
                     'name' => $settings->site_name,
@@ -57,8 +57,6 @@ class AiDiscoveryController extends Controller
                 ],
             ];
         });
-
-        return response()->json($data);
     }
 
     /**
@@ -67,7 +65,7 @@ class AiDiscoveryController extends Controller
      */
     public function pages(): JsonResponse
     {
-        $data = Cache::remember('ai_discovery:pages', now()->addHours(6), function (): array {
+        return Cache::remember('ai_discovery:pages', now()->addHours(6), function (): array {
             $pages = Page::published()
                 ->with(['contentBlocks'])
                 ->orderBy('title')
@@ -92,8 +90,6 @@ class AiDiscoveryController extends Controller
                 })->toArray(),
             ];
         });
-
-        return response()->json($data);
     }
 
     /**
@@ -102,7 +98,7 @@ class AiDiscoveryController extends Controller
      */
     public function events(): JsonResponse
     {
-        $data = Cache::remember('ai_discovery:events', now()->addMinutes(15), function (): array {
+        return Cache::remember('ai_discovery:events', now()->addMinutes(15), function (): array {
             $upcomingEvents = Event::published()
                 ->upcoming()
                 ->withCount('confirmedRegistrations as confirmed_registrations_count')
@@ -121,8 +117,6 @@ class AiDiscoveryController extends Controller
                 'past_events' => $pastEvents->map(fn (Event $event): array => $this->formatEvent($event, includeFull: false))->toArray(),
             ];
         });
-
-        return response()->json($data);
     }
 
     /**
