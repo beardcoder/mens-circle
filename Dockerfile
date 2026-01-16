@@ -83,8 +83,10 @@ RUN mkdir -p \
       /app/storage/logs \
       /app/bootstrap/cache
 
-# Clear response cache for fresh deployment
-RUN php artisan responsecache:clear || true
+# Copy startup scripts to clear response cache on container start
+USER root
+COPY --chmod=755 docker/entrypoint.d/ /etc/entrypoint.d/
+USER www-data
 
 EXPOSE 8080
 
