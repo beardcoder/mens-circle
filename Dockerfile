@@ -83,6 +83,9 @@ RUN mkdir -p \
       /app/storage/logs \
       /app/bootstrap/cache
 
+# Clear response cache for fresh deployment
+RUN php artisan responsecache:clear || true
+
 EXPOSE 8080
 
 CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--port=8080"]
