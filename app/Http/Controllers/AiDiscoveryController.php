@@ -8,7 +8,6 @@ use App\Models\Event;
 use App\Models\Page;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
 
 class AiDiscoveryController extends Controller
 {
@@ -18,45 +17,43 @@ class AiDiscoveryController extends Controller
      */
     public function site(GeneralSettings $settings): JsonResponse
     {
-        $data = Cache::remember('ai_discovery:site', now()->addHours(12), function () use ($settings): array {
-            return [
-                'site' => [
-                    'name' => $settings->site_name,
-                    'tagline' => $settings->site_tagline,
-                    'description' => $settings->site_description,
-                    'location' => $settings->location,
-                    'language' => 'de',
+        $data = [
+            'site' => [
+                'name' => $settings->site_name,
+                'tagline' => $settings->site_tagline,
+                'description' => $settings->site_description,
+                'location' => $settings->location,
+                'language' => 'de',
+            ],
+            'contact' => [
+                'email' => $settings->contact_email,
+                'phone' => $settings->contact_phone,
+            ],
+            'community' => [
+                'whatsapp' => $settings->whatsapp_community_link,
+                'social_links' => $settings->social_links ?? [],
+            ],
+            'content_types' => [
+                'pages' => [
+                    'description' => 'Dynamische Seiten mit strukturierten Content-Blöcken',
+                    'endpoint' => route('ai.pages'),
                 ],
-                'contact' => [
-                    'email' => $settings->contact_email,
-                    'phone' => $settings->contact_phone,
+                'events' => [
+                    'description' => 'Veranstaltungen mit Datum, Ort und Anmeldungsstatus',
+                    'endpoint' => route('ai.events'),
                 ],
-                'community' => [
-                    'whatsapp' => $settings->whatsapp_community_link,
-                    'social_links' => $settings->social_links ?? [],
+            ],
+            'capabilities' => [
+                'event_registration' => [
+                    'available' => true,
+                    'requires' => ['first_name', 'last_name', 'email', 'phone_number'],
                 ],
-                'content_types' => [
-                    'pages' => [
-                        'description' => 'Dynamische Seiten mit strukturierten Content-Blöcken',
-                        'endpoint' => route('ai.pages'),
-                    ],
-                    'events' => [
-                        'description' => 'Veranstaltungen mit Datum, Ort und Anmeldungsstatus',
-                        'endpoint' => route('ai.events'),
-                    ],
+                'newsletter_subscription' => [
+                    'available' => true,
+                    'requires' => ['email'],
                 ],
-                'capabilities' => [
-                    'event_registration' => [
-                        'available' => true,
-                        'requires' => ['first_name', 'last_name', 'email', 'phone_number'],
-                    ],
-                    'newsletter_subscription' => [
-                        'available' => true,
-                        'requires' => ['email'],
-                    ],
-                ],
-            ];
-        });
+            ],
+        ];
 
         return response()->json($data);
     }
@@ -67,31 +64,29 @@ class AiDiscoveryController extends Controller
      */
     public function pages(): JsonResponse
     {
-        $data = Cache::remember('ai_discovery:pages', now()->addHours(6), function (): array {
-            $pages = Page::published()
-                ->with(['contentBlocks'])
-                ->orderBy('title')
-                ->get();
+        $pages = Page::published()
+            ->with(['contentBlocks'])
+            ->orderBy('title')
+            ->get();
 
-            return [
-                'pages' => $pages->map(function (Page $page): array {
-                    return [
-                        'title' => $page->title,
-                        'slug' => $page->slug,
-                        'url' => url($page->slug === 'home' ? '/' : "/{$page->slug}"),
-                        'published_at' => $page->published_at?->toIso8601String(),
-                        'meta' => $page->meta,
-                        'content_blocks' => $page->contentBlocks->map(function ($block): array {
-                            return [
-                                'type' => $block->type,
-                                'order' => $block->order,
-                                'content' => $this->extractBlockContent($block->type, $block->data),
-                            ];
-                        })->toArray(),
-                    ];
-                })->toArray(),
-            ];
-        });
+        $data = [
+            'pages' => $pages->map(function (Page $page): array {
+                return [
+                    'title' => $page->title,
+                    'slug' => $page->slug,
+                    'url' => url($page->slug === 'home' ? '/' : "/{$page->slug}"),
+                    'published_at' => $page->published_at?->toIso8601String(),
+                    'meta' => $page->meta,
+                    'content_blocks' => $page->contentBlocks->map(function ($block): array {
+                        return [
+                            'type' => $block->type,
+                            'order' => $block->order,
+                            'content' => $this->extractBlockContent($block->type, $block->data),
+                        ];
+                    })->toArray(),
+                ];
+            })->toArray(),
+        ];
 
         return response()->json($data);
     }
@@ -102,25 +97,23 @@ class AiDiscoveryController extends Controller
      */
     public function events(): JsonResponse
     {
-        $data = Cache::remember('ai_discovery:events', now()->addMinutes(15), function (): array {
-            $upcomingEvents = Event::published()
-                ->upcoming()
-                ->withCount('confirmedRegistrations as confirmed_registrations_count')
-                ->orderBy('event_date', 'asc')
-                ->get();
+        $upcomingEvents = Event::published()
+            ->upcoming()
+            ->withCount('confirmedRegistrations as confirmed_registrations_count')
+            ->orderBy('event_date', 'asc')
+            ->get();
 
-            $pastEvents = Event::published()
-                ->where('event_date', '<', now())
-                ->withCount('confirmedRegistrations as confirmed_registrations_count')
-                ->orderBy('event_date', 'desc')
-                ->limit(10)
-                ->get();
+        $pastEvents = Event::published()
+            ->where('event_date', '<', now())
+            ->withCount('confirmedRegistrations as confirmed_registrations_count')
+            ->orderBy('event_date', 'desc')
+            ->limit(10)
+            ->get();
 
-            return [
-                'upcoming_events' => $upcomingEvents->map(fn (Event $event): array => $this->formatEvent($event))->toArray(),
-                'past_events' => $pastEvents->map(fn (Event $event): array => $this->formatEvent($event, includeFull: false))->toArray(),
-            ];
-        });
+        $data = [
+            'upcoming_events' => $upcomingEvents->map(fn (Event $event): array => $this->formatEvent($event))->toArray(),
+            'past_events' => $pastEvents->map(fn (Event $event): array => $this->formatEvent($event, includeFull: false))->toArray(),
+        ];
 
         return response()->json($data);
     }
