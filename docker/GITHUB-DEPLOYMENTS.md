@@ -35,11 +35,17 @@ GITHUB_REPO=deinusername/deinrepo
 GITHUB_REF=main
 
 # Deployment Environment (Standard: "production")
+# Wichtig: "production" oder "prod" = production_environment: true
+#          Alles andere (z.B. "staging", "preview") = transient_environment: true
 DEPLOYMENT_ENVIRONMENT=production
 
 # Die öffentliche URL deiner App
 # Coolify setzt oft automatisch APP_URL, falls nicht:
 APP_URL=https://deine-app.example.com
+
+# Optional: Separate Log-URL (Standard: gleich wie APP_URL)
+# Nutzt GitHub's neuen log_url Parameter statt deprecated target_url
+DEPLOYMENT_LOG_URL=https://deine-app.example.com/logs
 ```
 
 ### 3. Dynamische Branch-Erkennung (optional)
@@ -149,6 +155,16 @@ Das Script wird automatisch ausgeführt:
 - **Wo**: `/etc/entrypoint.d/10-github-deployment.sh`
 - **Reihenfolge**: Nummer `10` = früh im Startup-Prozess
 - **Laufzeit**: ~1-2 Sekunden (oder sofort bei Skip)
+
+### GitHub API Konformität (2022-11-28)
+
+Das Script nutzt die aktuellsten GitHub API Best Practices:
+
+- ✅ **`log_url`** statt deprecated `target_url`
+- ✅ **`production_environment`** explizit gesetzt basierend auf Environment-Name
+- ✅ **`transient_environment`** für staging/preview (zeigt Deployments als "destroyed" wenn inactive)
+- ✅ **Manuelle Deaktivierung** alter Deployments (da `auto_inactive` nur für non-production funktioniert)
+- ✅ **Explizite `environment`** Parameter um Ambiguität zu vermeiden
 
 ### API Endpoints
 
