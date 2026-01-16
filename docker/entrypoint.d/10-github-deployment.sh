@@ -3,8 +3,7 @@
 # GitHub Deployments API Integration for Coolify
 # This script updates GitHub deployment status when the container starts
 # Runs before the application starts and never blocks the startup
-
-set -e
+# CRITICAL: No set -e! Script must never fail and block container startup
 
 echo "Starting GitHub Deployment status update..."
 
@@ -55,17 +54,17 @@ deactivate_old_deployments() {
 
     echo "🔍 Checking for old active deployments..."
 
-    # Get all deployments for this environment
-    DEPLOYMENTS_RESPONSE=$(github_api_call "GET" "/repos/$REPO_OWNER/$REPO_NAME/deployments?environment=$DEPLOYMENT_ENVIRONMENT&per_page=10")
+    # Get all deployments for this environment (never fail)
+    DEPLOYMENTS_RESPONSE=$(github_api_call "GET" "/repos/$REPO_OWNER/$REPO_NAME/deployments?environment=$DEPLOYMENT_ENVIRONMENT&per_page=10" || echo "")
 
     # Check if we got a valid response
-    if ! echo "$DEPLOYMENTS_RESPONSE" | grep -q '"id"'; then
+    if ! echo "$DEPLOYMENTS_RESPONSE" | grep -q '"id"' 2>/dev/null; then
         echo "⚠️  Could not fetch existing deployments (might be empty or API error)"
         return 0
     fi
 
-    # Extract deployment IDs (excluding the current one)
-    OLD_DEPLOYMENT_IDS=$(echo "$DEPLOYMENTS_RESPONSE" | grep -o '"id":[0-9]*' | cut -d':' -f2 | grep -v "^${current_deployment_id}$")
+    # Extract deployment IDs (excluding the current one) - never fail
+    OLD_DEPLOYMENT_IDS=$(echo "$DEPLOYMENTS_RESPONSE" | grep -o '"id":[0-9]*' 2>/dev/null | cut -d':' -f2 | grep -v "^${current_deployment_id}$" 2>/dev/null || true)
 
     if [ -z "$OLD_DEPLOYMENT_IDS" ]; then
         echo "✅ No old deployments to deactivate"
@@ -73,31 +72,32 @@ deactivate_old_deployments() {
     fi
 
     # Count old deployments
-    OLD_COUNT=$(echo "$OLD_DEPLOYMENT_IDS" | wc -l)
+    OLD_COUNT=$(echo "$OLD_DEPLOYMENT_IDS" | wc -l 2>/dev/null || echo "0")
     echo "🧹 Found $OLD_COUNT old deployment(s) to deactivate"
 
-    # Deactivate each old deployment
-    echo "$OLD_DEPLOYMENT_IDS" | while read -r old_id; do
+    # Deactivate each old deployment (never fail)
+    echo "$OLD_DEPLOYMENT_IDS" | while read -r old_id || true; do
         if [ -n "$old_id" ]; then
             echo "  → Deactivating deployment ID: $old_id"
             DEACTIVATE_RESPONSE=$(github_api_call "POST" "/repos/$REPO_OWNER/$REPO_NAME/deployments/$old_id/statuses" \
                 "{
                     \"state\": \"inactive\",
                     \"description\": \"Replaced by deployment $current_deployment_id\"
-                }")
+                }" || echo "")
 
-            if echo "$DEACTIVATE_RESPONSE" | grep -q '"state"'; then
+            if echo "$DEACTIVATE_RESPONSE" | grep -q '"state"' 2>/dev/null; then
                 echo "    ✅ Deployment $old_id set to inactive"
             else
                 echo "    ⚠️  Failed to deactivate deployment $old_id (continuing anyway)"
             fi
         fi
-    done
+    done || true
 
     echo "✅ Old deployments cleanup completed"
+    return 0
 }
 
-# Create deployment
+# Create deployment (never fail)
 echo "Creating GitHub deployment..."
 DEPLOYMENT_RESPONSE=$(github_api_call "POST" "/repos/$REPO_OWNER/$REPO_NAME/deployments" \
     "{
@@ -106,32 +106,37 @@ DEPLOYMENT_RESPONSE=$(github_api_call "POST" "/repos/$REPO_OWNER/$REPO_NAME/depl
         \"auto_merge\": false,
         \"required_contexts\": [],
         \"description\": \"Deployed via Coolify\"
-    }")
+    }" || echo "")
 
-# Check if deployment was created successfully
-if echo "$DEPLOYMENT_RESPONSE" | grep -q '"id"'; then
-    DEPLOYMENT_ID=$(echo "$DEPLOYMENT_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2)
-    echo "✅ Deployment created with ID: $DEPLOYMENT_ID"
+# Check if deployment was created successfully (never fail)
+if echo "$DEPLOYMENT_RESPONSE" | grep -q '"id"' 2>/dev/null; then
+    DEPLOYMENT_ID=$(echo "$DEPLOYMENT_RESPONSE" | grep -o '"id":[0-9]*' 2>/dev/null | head -1 | cut -d':' -f2 || echo "")
 
-    # Deactivate old deployments before setting new one to success
-    # This is critical for production environments where auto_inactive doesn't work
-    deactivate_old_deployments "$DEPLOYMENT_ID"
+    if [ -n "$DEPLOYMENT_ID" ]; then
+        echo "✅ Deployment created with ID: $DEPLOYMENT_ID"
 
-    # Create deployment status
-    echo "Setting deployment status to success..."
-    STATUS_RESPONSE=$(github_api_call "POST" "/repos/$REPO_OWNER/$REPO_NAME/deployments/$DEPLOYMENT_ID/statuses" \
-        "{
-            \"state\": \"success\",
-            \"environment\": \"$DEPLOYMENT_ENVIRONMENT\",
-            \"environment_url\": \"$DEPLOYMENT_URL\",
-            \"description\": \"Container started successfully\",
-            \"auto_inactive\": true
-        }")
+        # Deactivate old deployments before setting new one to success
+        # This is critical for production environments where auto_inactive doesn't work
+        deactivate_old_deployments "$DEPLOYMENT_ID" || true
 
-    if echo "$STATUS_RESPONSE" | grep -q '"state"'; then
-        echo "✅ Deployment status updated to success"
+        # Create deployment status (never fail)
+        echo "Setting deployment status to success..."
+        STATUS_RESPONSE=$(github_api_call "POST" "/repos/$REPO_OWNER/$REPO_NAME/deployments/$DEPLOYMENT_ID/statuses" \
+            "{
+                \"state\": \"success\",
+                \"environment\": \"$DEPLOYMENT_ENVIRONMENT\",
+                \"environment_url\": \"$DEPLOYMENT_URL\",
+                \"description\": \"Container started successfully\",
+                \"auto_inactive\": true
+            }" || echo "")
+
+        if echo "$STATUS_RESPONSE" | grep -q '"state"' 2>/dev/null; then
+            echo "✅ Deployment status updated to success"
+        else
+            echo "⚠️  Failed to update deployment status"
+        fi
     else
-        echo "⚠️  Failed to update deployment status"
+        echo "⚠️  Failed to extract deployment ID"
     fi
 else
     echo "⚠️  Failed to create deployment (API might be rate-limited or credentials invalid)"
