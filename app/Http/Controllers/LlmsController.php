@@ -98,10 +98,9 @@ class LlmsController extends Controller
         $lines[] = '';
 
         $lines[] = '## Data Freshness';
-        $lines[] = '- Site structure: cached 12 hours';
-        $lines[] = '- Pages: cached 6 hours';
-        $lines[] = '- Events: cached 15 minutes';
-        $lines[] = '- This llms.txt: cached with response cache';
+        $lines[] = '- All endpoints use response cache that automatically invalidates on content changes';
+        $lines[] = '- Cache is cleared when pages, events, or settings are updated';
+        $lines[] = '- Content reflects published status in real-time after cache invalidation';
 
         return implode("\n", $lines);
     }
