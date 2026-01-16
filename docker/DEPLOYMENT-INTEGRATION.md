@@ -63,6 +63,9 @@ git push origin main
 - ✅ Unterstützung für mehrere Environments
 - ✅ Kein manueller Eingriff nötig
 - ✅ Kompatibel mit bestehenden Entrypoint-Scripts
+- ✅ **NEU**: GitHub API 2022-11-28 konform mit `log_url`, `production_environment`, `transient_environment`
+- ✅ **NEU**: Automatische Erkennung ob Production oder Staging
+- ✅ **NEU**: Explizite Deaktivierung alter Deployments für Production
 
 ## 📊 Workflow
 

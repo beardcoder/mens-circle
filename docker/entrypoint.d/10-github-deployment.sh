@@ -17,6 +17,16 @@ fi
 GITHUB_REF="${GITHUB_REF:-main}"
 DEPLOYMENT_ENVIRONMENT="${DEPLOYMENT_ENVIRONMENT:-production}"
 DEPLOYMENT_URL="${APP_URL:-https://example.com}"
+DEPLOYMENT_LOG_URL="${DEPLOYMENT_LOG_URL:-$DEPLOYMENT_URL}"
+
+# Determine if this is a production environment
+if [ "$DEPLOYMENT_ENVIRONMENT" = "production" ] || [ "$DEPLOYMENT_ENVIRONMENT" = "prod" ]; then
+    IS_PRODUCTION="true"
+    IS_TRANSIENT="false"
+else
+    IS_PRODUCTION="false"
+    IS_TRANSIENT="true"
+fi
 
 # Extract owner and repo
 REPO_OWNER=$(echo "$GITHUB_REPO" | cut -d'/' -f1)
@@ -30,7 +40,7 @@ TIMEOUT=10
 
 echo "📦 Repository: $GITHUB_REPO"
 echo "🌿 Ref: $GITHUB_REF"
-echo "🌍 Environment: $DEPLOYMENT_ENVIRONMENT"
+echo "🌍 Environment: $DEPLOYMENT_ENVIRONMENT (production=$IS_PRODUCTION, transient=$IS_TRANSIENT)"
 echo "🔗 URL: $DEPLOYMENT_URL"
 
 # Function to make GitHub API calls with timeout and error handling
@@ -103,6 +113,8 @@ DEPLOYMENT_RESPONSE=$(github_api_call "POST" "/repos/$REPO_OWNER/$REPO_NAME/depl
     "{
         \"ref\": \"$GITHUB_REF\",
         \"environment\": \"$DEPLOYMENT_ENVIRONMENT\",
+        \"production_environment\": $IS_PRODUCTION,
+        \"transient_environment\": $IS_TRANSIENT,
         \"auto_merge\": false,
         \"required_contexts\": [],
         \"description\": \"Deployed via Coolify\"
@@ -125,6 +137,7 @@ if echo "$DEPLOYMENT_RESPONSE" | grep -q '"id"' 2>/dev/null; then
             "{
                 \"state\": \"success\",
                 \"environment\": \"$DEPLOYMENT_ENVIRONMENT\",
+                \"log_url\": \"$DEPLOYMENT_LOG_URL\",
                 \"environment_url\": \"$DEPLOYMENT_URL\",
                 \"description\": \"Container started successfully\",
                 \"auto_inactive\": true
