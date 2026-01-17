@@ -21,7 +21,7 @@ class EventRegistration extends Model
         'first_name',
         'last_name',
         'email',
-        'phone_number', // Für zukünftige SMS-Benachrichtigungen
+        'phone_number',
         'privacy_accepted',
         'status',
         'confirmed_at',
@@ -30,6 +30,11 @@ class EventRegistration extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public static function confirmedCount(): int
+    {
+        return static::where('status', 'confirmed')->count();
     }
 
     protected function casts(): array

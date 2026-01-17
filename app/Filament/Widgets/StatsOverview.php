@@ -14,44 +14,28 @@ class StatsOverview extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
-        $upcomingEvents = Event::published()
-            ->upcoming()
-            ->count();
-
-        $totalRegistrations = EventRegistration::where('status', 'confirmed')
-            ->count();
-
-        $activeSubscribers = NewsletterSubscription::where('status', 'active')
-            ->count();
-
-        $nextEvent = Event::published()
-            ->upcoming()
-            ->withCount('confirmedRegistrations')
-            ->orderBy('event_date')
-            ->first();
-
-        $nextEventSpots = $nextEvent ? $nextEvent->availableSpots : 0;
+        $nextEvent = Event::nextEvent();
 
         return [
-            Stat::make('Kommende Events', $upcomingEvents)
+            Stat::make('Kommende Events', Event::upcomingCount())
                 ->description('Veröffentlichte Events')
                 ->descriptionIcon('heroicon-o-calendar')
                 ->color('success'),
 
-            Stat::make('Anmeldungen', $totalRegistrations)
+            Stat::make('Anmeldungen', EventRegistration::confirmedCount())
                 ->description('Bestätigte Teilnehmer')
                 ->descriptionIcon('heroicon-o-user-group')
                 ->color('primary'),
 
-            Stat::make('Newsletter-Abonnenten', $activeSubscribers)
+            Stat::make('Newsletter-Abonnenten', NewsletterSubscription::activeCount())
                 ->description('Aktive Abonnenten')
                 ->descriptionIcon('heroicon-o-envelope')
                 ->color('warning'),
 
-            Stat::make('Verfügbare Plätze', $nextEventSpots)
+            Stat::make('Verfügbare Plätze', $nextEvent?->availableSpots ?? 0)
                 ->description($nextEvent ? 'Nächstes Event: '.$nextEvent->event_date->format('d.m.Y') : 'Kein Event geplant')
                 ->descriptionIcon('heroicon-o-ticket')
-                ->color($nextEventSpots > 3 ? 'success' : ($nextEventSpots > 0 ? 'warning' : 'danger')),
+                ->color(fn () => $nextEvent && $nextEvent->availableSpots > 3 ? 'success' : ($nextEvent && $nextEvent->availableSpots > 0 ? 'warning' : 'danger')),
         ];
     }
 }
