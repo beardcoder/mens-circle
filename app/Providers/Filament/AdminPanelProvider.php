@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
-use Awcodes\Gravatar\GravatarPlugin;
-use Awcodes\Gravatar\GravatarProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -14,7 +12,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -24,7 +21,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use MarcelWeidum\Passkeys\PasskeysPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -42,14 +38,23 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Männerkreis Niederbayern')
             ->brandLogoHeight('40px')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => [
+                    50 => 'oklch(0.97 0.02 46)',
+                    100 => 'oklch(0.94 0.04 46)',
+                    200 => 'oklch(0.88 0.07 46)',
+                    300 => 'oklch(0.79 0.1 46)',
+                    400 => 'oklch(0.7 0.13 46)',
+                    500 => 'oklch(0.58 0.13 46)',
+                    600 => 'oklch(0.52 0.12 46)',
+                    700 => 'oklch(0.44 0.1 46)',
+                    800 => 'oklch(0.37 0.08 46)',
+                    900 => 'oklch(0.31 0.06 46)',
+                    950 => 'oklch(0.21 0.04 46)',
+                ],
             ])
             ->renderHook(PanelsRenderHook::TOPBAR_END, fn (): Factory|View => view('filament.components.go-to-website'))
-            ->defaultAvatarProvider(GravatarProvider::class)
             ->plugins([
-                GravatarPlugin::make(),
                 FilamentLogViewer::make(),
-                PasskeysPlugin::make(),
             ])
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\Filament\Clusters')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
