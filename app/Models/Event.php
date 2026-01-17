@@ -267,12 +267,13 @@ class Event extends Model implements HasMedia
 
     public static function upcomingCount(): int
     {
-        return static::published()->upcoming()->count();
+        return static::query()->published()->upcoming()->count();
     }
 
     public static function nextEvent(): ?self
     {
-        return static::published()
+        return static::query()
+            ->published()
             ->upcoming()
             ->withCount('confirmedRegistrations')
             ->orderBy('event_date')
