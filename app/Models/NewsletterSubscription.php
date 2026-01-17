@@ -35,6 +35,11 @@ class NewsletterSubscription extends Model
         });
     }
 
+    public static function activeCount(): int
+    {
+        return static::where('status', 'active')->count();
+    }
+
     protected function casts(): array
     {
         return [
