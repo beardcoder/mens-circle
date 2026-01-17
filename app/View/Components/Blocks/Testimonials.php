@@ -11,7 +11,7 @@ use Illuminate\View\Component;
 
 class Testimonials extends Component
 {
-    /** @var Collection<int, Testimonial> */
+    /** @var Collection<int, \App\Models\Testimonial> */
     public Collection $testimonials;
 
     public function __construct()
