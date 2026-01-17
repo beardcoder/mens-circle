@@ -78,9 +78,17 @@ class LlmsController extends Controller
         if (!empty($settings->social_links)) {
             $lines[] = '### Social Media';
             $lines[] = '';
-            foreach ($settings->social_links as $platform => $url) {
-                if ($url) {
+            foreach ($settings->social_links as $platform => $data) {
+                // Handle both array and string formats
+                if (is_array($data)) {
+                    $url = $data['url'] ?? $data['link'] ?? null;
+                    $platformName = $data['platform'] ?? $data['name'] ?? ucfirst((string) $platform);
+                } else {
+                    $url = $data;
                     $platformName = ucfirst((string) $platform);
+                }
+
+                if ($url) {
                     $lines[] = '- **' . $platformName . ':** ' . $url;
                 }
             }
