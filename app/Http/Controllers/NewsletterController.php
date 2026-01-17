@@ -17,10 +17,10 @@ class NewsletterController extends Controller
 {
     public function subscribe(NewsletterSubscriptionRequest $request): JsonResponse
     {
-        $validated = $request->validated();
-        $subscription = NewsletterSubscription::withTrashed()->where('email', $validated['email'])->first();
+        $email = $request->validated()['email'];
+        $subscription = NewsletterSubscription::withTrashed()->where('email', $email)->first();
 
-        if ($subscription && $subscription->status === 'active') {
+        if ($subscription?->status === 'active') {
             return response()->json([
                 'success' => false,
                 'message' => 'Diese E-Mail-Adresse ist bereits für den Newsletter angemeldet.',
@@ -32,25 +32,19 @@ class NewsletterController extends Controller
                 'status' => 'active',
                 'subscribed_at' => now(),
                 'unsubscribed_at' => null,
-                'deleted_at' => null, // Restore if soft deleted
+                'deleted_at' => null,
             ]);
         } else {
-            $subscription = NewsletterSubscription::create([
-                'email' => $validated['email'],
-                'status' => 'active',
-            ]);
+            $subscription = NewsletterSubscription::create(['email' => $email, 'status' => 'active']);
         }
 
-        // Send welcome email
         try {
             Mail::to($subscription->email)->queue(new NewsletterWelcome($subscription));
         } catch (Exception $exception) {
             Log::error('Failed to send newsletter welcome email', [
                 'subscription_id' => $subscription->id,
-                'email' => $subscription->email,
                 'error' => $exception->getMessage(),
             ]);
-            // Don't fail the subscription if email fails
         }
 
         return response()->json([
@@ -69,10 +63,7 @@ class NewsletterController extends Controller
             ]);
         }
 
-        $subscription->update([
-            'status' => 'unsubscribed',
-            'unsubscribed_at' => now(),
-        ]);
+        $subscription->update(['status' => 'unsubscribed', 'unsubscribed_at' => now()]);
 
         return view('newsletter.unsubscribed', [
             'message' => 'Du wurdest erfolgreich vom Newsletter abgemeldet.',
