@@ -157,6 +157,7 @@ if echo "$DEPLOYMENT_RESPONSE" | grep -q '"id"' 2>/dev/null; then
 
     if [ -n "$DEPLOYMENT_ID" ] && [ "$DEPLOYMENT_ID" != "null" ]; then
         echo "✅ Deployment created with ID: $DEPLOYMENT_ID"
+        echo "🔗 Deployment URL: https://github.com/$REPO_OWNER/$REPO_NAME/deployments/$DEPLOYMENT_ID"
 
         # Deactivate old deployments before setting new one to success
         # This is critical for production environments where auto_inactive doesn't work
@@ -164,6 +165,7 @@ if echo "$DEPLOYMENT_RESPONSE" | grep -q '"id"' 2>/dev/null; then
 
         # Create deployment status (never fail)
         echo "Setting deployment status to success..."
+        echo "📤 POST /repos/$REPO_OWNER/$REPO_NAME/deployments/$DEPLOYMENT_ID/statuses"
         STATUS_RESPONSE=$(github_api_call "POST" "/repos/$REPO_OWNER/$REPO_NAME/deployments/$DEPLOYMENT_ID/statuses" \
             "{
                 \"state\": \"success\",
@@ -186,6 +188,12 @@ if echo "$DEPLOYMENT_RESPONSE" | grep -q '"id"' 2>/dev/null; then
             echo "✅ Deployment status updated to success"
         else
             echo "⚠️  Failed to update deployment status (state: ${STATUS_STATE:-unknown})"
+            # Debug: Show API response if jq is available
+            if command -v jq >/dev/null 2>&1; then
+                echo "🔍 API Response: $(echo "$STATUS_RESPONSE" | jq -c '.' 2>/dev/null || echo "$STATUS_RESPONSE")"
+            else
+                echo "🔍 API Response: $STATUS_RESPONSE"
+            fi
         fi
     else
         echo "⚠️  Failed to extract deployment ID"
