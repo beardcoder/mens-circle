@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
 
 class PageController extends Controller
@@ -22,6 +23,9 @@ class PageController extends Controller
             ->with(['contentBlocks.media'])
             ->firstOrFail();
 
-        return view('home', ['page' => $page]);
+        // Use specific view if it exists, otherwise fall back to generic 'page' view
+        $viewName = ViewFacade::exists($slug) ? $slug : 'page';
+
+        return view($viewName, ['page' => $page]);
     }
 }
