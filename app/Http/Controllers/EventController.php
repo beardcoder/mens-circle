@@ -71,23 +71,28 @@ class EventController extends Controller
             return response()->json(['success' => false, 'message' => 'Du bist bereits für diese Veranstaltung angemeldet.'], 409);
         }
 
-        $registrationData = [
-            'event_id' => $validated['event_id'],
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'phone_number' => $validated['phone_number'] ?? null,
-            'privacy_accepted' => true,
-            'status' => 'confirmed',
-            'confirmed_at' => now(),
-        ];
-
         if ($existingRegistration) {
             $existingRegistration->restore();
-            $existingRegistration->update($registrationData);
+            $existingRegistration->update([
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'phone_number' => $validated['phone_number'] ?? null,
+                'privacy_accepted' => true,
+                'status' => 'confirmed',
+                'confirmed_at' => now(),
+            ]);
             $registration = $existingRegistration;
         } else {
-            $registration = EventRegistration::create($registrationData);
+            $registration = EventRegistration::create([
+                'event_id' => $validated['event_id'],
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'email' => $validated['email'],
+                'phone_number' => $validated['phone_number'] ?? null,
+                'privacy_accepted' => true,
+                'status' => 'confirmed',
+                'confirmed_at' => now(),
+            ]);
         }
 
         ResponseCache::clear();
