@@ -41,9 +41,9 @@ class Testimonial extends Model
      * Scope a query to only include published testimonials.
      */
     #[Scope]
-    protected function published(Builder $query): void
+    protected function published(Builder $query): Builder
     {
-        $query->where('is_published', true);
+        return $query->where('is_published', true);
     }
 
     /**
