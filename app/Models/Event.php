@@ -265,6 +265,20 @@ class Event extends Model implements HasMedia
         ];
     }
 
+    public static function upcomingCount(): int
+    {
+        return static::published()->upcoming()->count();
+    }
+
+    public static function nextEvent(): ?self
+    {
+        return static::published()
+            ->upcoming()
+            ->withCount('confirmedRegistrations')
+            ->orderBy('event_date')
+            ->first();
+    }
+
     #[Scope]
     protected function published(Builder $query): Builder
     {
