@@ -80,7 +80,7 @@ class LlmsController extends Controller
             $lines[] = '';
             foreach ($settings->social_links as $platform => $url) {
                 if ($url) {
-                    $platformName = ucfirst($platform);
+                    $platformName = ucfirst((string) $platform);
                     $lines[] = '- **' . $platformName . ':** ' . $url;
                 }
             }
