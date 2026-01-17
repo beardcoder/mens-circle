@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Models\Testimonial;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
 
@@ -23,9 +24,17 @@ class PageController extends Controller
             ->with(['contentBlocks.media'])
             ->firstOrFail();
 
+        // Load testimonials if needed for this page
+        $testimonials = $page->contentBlocks->contains('type', 'testimonials')
+            ? Testimonial::published()->get()
+            : collect();
+
         // Use specific view if it exists, otherwise fall back to generic 'page' view
         $viewName = ViewFacade::exists($slug) ? $slug : 'page';
 
-        return view($viewName, ['page' => $page]);
+        return view($viewName, [
+            'page' => $page,
+            'testimonials' => $testimonials,
+        ]);
     }
 }

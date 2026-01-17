@@ -85,7 +85,9 @@
             @elseif($block->type === 'journey_steps')
                 <x-blocks.journey-steps :block="$block" />
             @elseif($block->type === 'testimonials')
-                <x-blocks.testimonials />
+                @if($testimonials->isNotEmpty())
+                    @include('components.blocks.testimonials', ['testimonials' => $testimonials])
+                @endif
             @elseif($block->type === 'faq')
                 <x-blocks.faq :block="$block" />
             @elseif($block->type === 'newsletter')
