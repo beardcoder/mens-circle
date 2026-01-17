@@ -13,47 +13,32 @@ use Illuminate\View\View;
 
 class TestimonialSubmissionController extends Controller
 {
-    /**
-     * Show the testimonial submission form.
-     */
     public function show(): View
     {
         return view('testimonial-form');
     }
 
-    /**
-     * Handle the testimonial submission.
-     */
     public function submit(TestimonialSubmissionRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
         try {
-            $testimonial = Testimonial::create([
+            Testimonial::create([
                 'quote' => $validated['quote'],
                 'author_name' => $validated['author_name'] ?? null,
                 'email' => $validated['email'],
                 'role' => $validated['role'] ?? null,
-                'is_published' => false, // Needs admin approval
+                'is_published' => false,
                 'published_at' => null,
                 'sort_order' => 0,
             ]);
 
-            Log::info('Testimonial submitted', [
-                'testimonial_id' => $testimonial->id,
-                'email' => $validated['email'],
-                'has_author' => ! empty($validated['author_name']),
-            ]);
-
-            $firstName = $validated['author_name'] ? explode(' ', $validated['author_name'])[0] : null;
+            $firstName = isset($validated['author_name']) ? explode(' ', $validated['author_name'])[0] : null;
             $message = $firstName
                 ? sprintf('Vielen Dank, %s! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.', $firstName)
                 : 'Vielen Dank! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.';
 
-            return response()->json([
-                'success' => true,
-                'message' => $message,
-            ]);
+            return response()->json(['success' => true, 'message' => $message]);
         } catch (Exception $exception) {
             Log::error('Failed to submit testimonial', [
                 'email' => $validated['email'],
