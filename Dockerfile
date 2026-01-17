@@ -42,11 +42,11 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 # ----------------------------
 FROM ${PHP_IMAGE} AS production
 
-# Install PHP intl extension (required by Filament) and curl for GitHub API
+# Install PHP intl extension (required by Filament) and curl/jq for GitHub API
 USER root
 RUN install-php-extensions intl && \
     apt-get update && \
-    apt-get install -y --no-install-recommends curl && \
+    apt-get install -y --no-install-recommends curl jq && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 USER www-data
