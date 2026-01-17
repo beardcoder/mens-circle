@@ -1,11 +1,7 @@
 @extends('layouts.app')
 
-@php
-    $isPast = $event->isPast;
-@endphp
-
 @section('title', $event->title . ' am ' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
-@section('meta_description', $isPast
+@section('meta_description', $event->isPast
     ? 'Rückblick auf das Treffen des Männerkreis Niederbayern/ Straubing: ' . $event->title . ' am ' . $event->event_date->format('d.m.Y')
     : 'Melde dich jetzt für das nächste Treffen des Männerkreis Niederbayern/ Straubing an: ' . $event->title . ' am ' . $event->event_date->format('d.m.Y'))
 @section('og_type', 'event')
@@ -34,7 +30,7 @@
     },
     "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}:00+01:00",
     "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}:00+01:00",
-    "eventStatus": "{{ $isPast ? 'https://schema.org/EventPostponed' : 'https://schema.org/EventScheduled' }}",
+    "eventStatus": "{{ $event->isPast ? 'https://schema.org/EventPostponed' : 'https://schema.org/EventScheduled' }}",
     "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
     "location": {
         "@@type": "Place",
@@ -61,7 +57,7 @@
         "url": "{{ route('event.show.slug', $event->slug) }}",
         "price": "0",
         "priceCurrency": "EUR",
-        "availability": "{{ $isPast ? 'https://schema.org/SoldOut' : ($event->isFull ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock') }}",
+        "availability": "{{ $event->isPast ? 'https://schema.org/SoldOut' : ($event->isFull ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock') }}",
         "validFrom": "{{ now()->format('Y-m-d') }}"
     },
     "maximumAttendeeCapacity": {{ $event->max_participants }},
@@ -75,20 +71,13 @@
     <!-- Event Hero -->
     <section class="hero event-hero">
         <div class="hero__bg">
-            @php
-                $eventMedia = $event->getFirstMedia('event_image');
-
-                if ($eventMedia) {
-                    $eventMedia->name = $event->title;
-                }
-            @endphp
-
-            @if($eventMedia)
-                {{ $eventMedia->img()->attributes([
+            @if($eventImage)
+                {{ $eventImage->img()->attributes([
                     'class' => 'hero__bg-image',
                     'loading' => 'eager',
                     'fetchpriority' => 'high',
                     'aria-hidden' => 'true',
+                    'alt' => $event->title,
                 ]) }}
             @endif
         </div>
@@ -101,7 +90,7 @@
 
         <div class="container">
             <div class="hero__content">
-                <p class="hero__label fade-in">{{ $isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
+                <p class="hero__label fade-in">{{ $event->isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
                 <h1 class="hero__title fade-in fade-in-delay-1">
                     <span class="hero__title-line">{{ $event->title }}</span>
                 </h1>
@@ -109,7 +98,7 @@
                     <p class="hero__description">
                         {{ $event->event_date->translatedFormat('l') }}, {{ $event->event_date->format('d.m.Y') }} · {{ $event->start_time->format('H:i') }} Uhr · {{ $event->location }}
                     </p>
-                    @unless($isPast)
+                    @unless($event->isPast)
                         <div class="hero__cta">
                             <a href="#anmeldung" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=registration;location=hero">Jetzt anmelden</a>
                         </div>
@@ -312,7 +301,7 @@
         </div>
         <div class="container">
             <div class="event-cta__content fade-in">
-                @if($isPast)
+                @if($event->isPast)
                     <p class="eyebrow">Interesse geweckt?</p>
                     <h2 class="section-title event-cta__title">
                         Bleib <span class="text-italic">informiert</span>
