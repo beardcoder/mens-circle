@@ -1,9 +1,3 @@
-@php
-    use App\Models\Testimonial;
-    $testimonials = Testimonial::published()->get();
-@endphp
-
-@if($testimonials->isNotEmpty())
 @push('structured_data')
 <script type="application/ld+json">
 {
@@ -71,4 +65,3 @@
         </div>
     </div>
 </section>
-@endif
