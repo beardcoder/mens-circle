@@ -61,21 +61,49 @@ class EventController extends Controller
             return response()->json(['success' => false, 'message' => 'Diese Veranstaltung ist leider bereits ausgebucht.'], 409);
         }
 
-        if (EventRegistration::where('event_id', $event->id)->where('email', $validated['email'])->exists()) {
-            return response()->json(['success' => false, 'message' => 'Du bist bereits für diese Veranstaltung angemeldet.'], 409);
-        }
+        // Check for existing registration (including soft-deleted ones)
+        $existingRegistration = EventRegistration::withTrashed()
+            ->where('event_id', $event->id)
+            ->where('email', $validated['email'])
+            ->first();
 
-        // Create registration
-        $registration = EventRegistration::create([
-            'event_id' => $validated['event_id'],
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'phone_number' => $validated['phone_number'] ?? null,
-            'privacy_accepted' => true,
-            'status' => 'confirmed',
-            'confirmed_at' => now(),
-        ]);
+        if ($existingRegistration) {
+            if ($existingRegistration->trashed()) {
+                // Restore and update the soft-deleted registration
+                $existingRegistration->restore();
+                $existingRegistration->update([
+                    'first_name' => $validated['first_name'],
+                    'last_name' => $validated['last_name'],
+                    'phone_number' => $validated['phone_number'] ?? null,
+                    'privacy_accepted' => true,
+                    'status' => 'confirmed',
+                    'confirmed_at' => now(),
+                ]);
+                $registration = $existingRegistration;
+            } else {
+                return response()->json(['success' => false, 'message' => 'Du bist bereits für diese Veranstaltung angemeldet.'], 409);
+            }
+        } else {
+            try {
+                // Create registration
+                $registration = EventRegistration::create([
+                    'event_id' => $validated['event_id'],
+                    'first_name' => $validated['first_name'],
+                    'last_name' => $validated['last_name'],
+                    'email' => $validated['email'],
+                    'phone_number' => $validated['phone_number'] ?? null,
+                    'privacy_accepted' => true,
+                    'status' => 'confirmed',
+                    'confirmed_at' => now(),
+                ]);
+            } catch (\PDOException $e) {
+                if (str_contains($e->getMessage(), 'event_registrations_event_id_email_unique')) {
+                    return response()->json(['success' => false, 'message' => 'Du bist bereits für diese Veranstaltung angemeldet.'], 409);
+                }
+
+                throw $e;
+            }
+        }
 
         ResponseCache::clear();
 
