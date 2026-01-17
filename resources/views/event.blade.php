@@ -108,7 +108,7 @@
         </div>
     </section>
 
-    @if($isPast)
+    @if($event->isPast)
         <!-- Past Event Info Section -->
         <section class="event-register-section" id="anmeldung">
             <div class="event-register__layout">
