@@ -55,7 +55,21 @@ github_api_call() {
         -H "Authorization: Bearer $GITHUB_TOKEN" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
         "$GITHUB_API$endpoint" \
-        ${data:+-d "$data"} || echo "API call failed"
+        ${data:+-d "$data"} || echo '{"error": "API call failed"}'
+}
+
+# Function to safely extract JSON values using jq with fallback
+json_extract() {
+    local json="$1"
+    local key="$2"
+
+    # Try jq first (more reliable)
+    if command -v jq >/dev/null 2>&1; then
+        echo "$json" | jq -r "$key" 2>/dev/null || echo ""
+    else
+        # Fallback to grep (less reliable but works without jq)
+        echo "$json" | grep -o "\"${key}\":[0-9]*" 2>/dev/null | head -1 | cut -d':' -f2 || echo ""
+    fi
 }
 
 # Function to deactivate old deployments for the same environment
@@ -65,16 +79,20 @@ deactivate_old_deployments() {
     echo "🔍 Checking for old active deployments..."
 
     # Get all deployments for this environment (never fail)
-    DEPLOYMENTS_RESPONSE=$(github_api_call "GET" "/repos/$REPO_OWNER/$REPO_NAME/deployments?environment=$DEPLOYMENT_ENVIRONMENT&per_page=10" || echo "")
+    DEPLOYMENTS_RESPONSE=$(github_api_call "GET" "/repos/$REPO_OWNER/$REPO_NAME/deployments?environment=$DEPLOYMENT_ENVIRONMENT&per_page=10" || echo "[]")
 
-    # Check if we got a valid response
-    if ! echo "$DEPLOYMENTS_RESPONSE" | grep -q '"id"' 2>/dev/null; then
+    # Check if we got a valid response (should be a JSON array)
+    if ! echo "$DEPLOYMENTS_RESPONSE" | grep -q '\[' 2>/dev/null; then
         echo "⚠️  Could not fetch existing deployments (might be empty or API error)"
         return 0
     fi
 
     # Extract deployment IDs (excluding the current one) - never fail
-    OLD_DEPLOYMENT_IDS=$(echo "$DEPLOYMENTS_RESPONSE" | grep -o '"id":[0-9]*' 2>/dev/null | cut -d':' -f2 | grep -v "^${current_deployment_id}$" 2>/dev/null || true)
+    if command -v jq >/dev/null 2>&1; then
+        OLD_DEPLOYMENT_IDS=$(echo "$DEPLOYMENTS_RESPONSE" | jq -r '.[].id' 2>/dev/null | grep -v "^${current_deployment_id}$" 2>/dev/null || true)
+    else
+        OLD_DEPLOYMENT_IDS=$(echo "$DEPLOYMENTS_RESPONSE" | grep -o '"id":[0-9]*' 2>/dev/null | cut -d':' -f2 | grep -v "^${current_deployment_id}$" 2>/dev/null || true)
+    fi
 
     if [ -z "$OLD_DEPLOYMENT_IDS" ]; then
         echo "✅ No old deployments to deactivate"
@@ -95,7 +113,15 @@ deactivate_old_deployments() {
                     \"description\": \"Replaced by deployment $current_deployment_id\"
                 }" || echo "")
 
-            if echo "$DEACTIVATE_RESPONSE" | grep -q '"state"' 2>/dev/null; then
+            # Check if deactivation was successful
+            DEACTIVATE_STATE=""
+            if command -v jq >/dev/null 2>&1; then
+                DEACTIVATE_STATE=$(echo "$DEACTIVATE_RESPONSE" | jq -r '.state // empty' 2>/dev/null || echo "")
+            else
+                DEACTIVATE_STATE=$(echo "$DEACTIVATE_RESPONSE" | grep -o '"state":"[^"]*"' 2>/dev/null | cut -d'"' -f4 || echo "")
+            fi
+
+            if [ -n "$DEACTIVATE_STATE" ] && [ "$DEACTIVATE_STATE" = "inactive" ]; then
                 echo "    ✅ Deployment $old_id set to inactive"
             else
                 echo "    ⚠️  Failed to deactivate deployment $old_id (continuing anyway)"
@@ -122,9 +148,14 @@ DEPLOYMENT_RESPONSE=$(github_api_call "POST" "/repos/$REPO_OWNER/$REPO_NAME/depl
 
 # Check if deployment was created successfully (never fail)
 if echo "$DEPLOYMENT_RESPONSE" | grep -q '"id"' 2>/dev/null; then
-    DEPLOYMENT_ID=$(echo "$DEPLOYMENT_RESPONSE" | grep -o '"id":[0-9]*' 2>/dev/null | head -1 | cut -d':' -f2 || echo "")
+    # Extract deployment ID using jq (robust) or fallback to grep
+    if command -v jq >/dev/null 2>&1; then
+        DEPLOYMENT_ID=$(echo "$DEPLOYMENT_RESPONSE" | jq -r '.id // empty' 2>/dev/null || echo "")
+    else
+        DEPLOYMENT_ID=$(echo "$DEPLOYMENT_RESPONSE" | grep -o '"id":[0-9]*' 2>/dev/null | head -1 | cut -d':' -f2 || echo "")
+    fi
 
-    if [ -n "$DEPLOYMENT_ID" ]; then
+    if [ -n "$DEPLOYMENT_ID" ] && [ "$DEPLOYMENT_ID" != "null" ]; then
         echo "✅ Deployment created with ID: $DEPLOYMENT_ID"
 
         # Deactivate old deployments before setting new one to success
@@ -143,10 +174,18 @@ if echo "$DEPLOYMENT_RESPONSE" | grep -q '"id"' 2>/dev/null; then
                 \"auto_inactive\": true
             }" || echo "")
 
-        if echo "$STATUS_RESPONSE" | grep -q '"state"' 2>/dev/null; then
+        # Check if status update was successful
+        STATUS_STATE=""
+        if command -v jq >/dev/null 2>&1; then
+            STATUS_STATE=$(echo "$STATUS_RESPONSE" | jq -r '.state // empty' 2>/dev/null || echo "")
+        else
+            STATUS_STATE=$(echo "$STATUS_RESPONSE" | grep -o '"state":"[^"]*"' 2>/dev/null | cut -d'"' -f4 || echo "")
+        fi
+
+        if [ -n "$STATUS_STATE" ] && [ "$STATUS_STATE" = "success" ]; then
             echo "✅ Deployment status updated to success"
         else
-            echo "⚠️  Failed to update deployment status"
+            echo "⚠️  Failed to update deployment status (state: ${STATUS_STATE:-unknown})"
         fi
     else
         echo "⚠️  Failed to extract deployment ID"
