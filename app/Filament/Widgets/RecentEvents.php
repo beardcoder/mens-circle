@@ -35,9 +35,9 @@ class RecentEvents extends TableWidget
                     ->date('d.m.Y')
                     ->sortable(),
 
-                TextColumn::make('confirmed_registrations_count')
+                TextColumn::make('active_registrations_count')
                     ->label('Anmeldungen')
-                    ->counts('confirmedRegistrations')
+                    ->counts('activeRegistrations')
                     ->badge()
                     ->color('success'),
 
