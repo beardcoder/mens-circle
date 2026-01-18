@@ -1,7 +1,7 @@
 <x-mail::message>
 # Erinnerung: {{ $event->title }} ist morgen!
 
-Hallo {{ $registration->first_name }},
+Hallo {{ $registration->participant->first_name }},
 
 dies ist eine freundliche Erinnerung, dass deine Veranstaltung **{{ $event->title }}** morgen stattfindet.
 
@@ -39,6 +39,6 @@ Herzliche Grüße,<br>
 **{{ config('app.name') }}**
 
 <x-mail::subcopy>
-Diese Erinnerung wurde an {{ $registration->email }} gesendet, weil du für diese Veranstaltung angemeldet bist.
+Diese Erinnerung wurde an {{ $registration->participant->email }} gesendet, weil du für diese Veranstaltung angemeldet bist.
 </x-mail::subcopy>
 </x-mail::message>

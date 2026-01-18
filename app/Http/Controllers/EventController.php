@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\RegistrationStatus;
 use App\Http\Requests\EventRegistrationRequest;
 use App\Models\Event;
-use App\Models\EventRegistration;
+use App\Models\Participant;
+use App\Models\Registration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -32,7 +34,7 @@ class EventController extends Controller
         $event = Event::published()
             ->where('slug', $slug)
             ->with(['media'])
-            ->withCount('confirmedRegistrations')
+            ->withCount('activeRegistrations')
             ->firstOrFail();
 
         $eventImage = $event->getFirstMedia('event_image');
@@ -61,10 +63,24 @@ class EventController extends Controller
             return response()->json(['success' => false, 'message' => 'Diese Veranstaltung ist leider bereits ausgebucht.'], 409);
         }
 
+        // Find or create participant
+        $participant = Participant::findOrCreateByEmail($validated['email'], [
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'phone' => $validated['phone_number'] ?? null,
+        ]);
+
+        // Update participant data if changed
+        $participant->update([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'phone' => $validated['phone_number'] ?? $participant->phone,
+        ]);
+
         // Check for existing registration (including soft-deleted ones)
-        $existingRegistration = EventRegistration::withTrashed()
+        $existingRegistration = Registration::withTrashed()
             ->where('event_id', $event->id)
-            ->where('email', $validated['email'])
+            ->where('participant_id', $participant->id)
             ->first();
 
         if ($existingRegistration && ! $existingRegistration->trashed()) {
@@ -74,24 +90,17 @@ class EventController extends Controller
         if ($existingRegistration) {
             $existingRegistration->restore();
             $existingRegistration->update([
-                'first_name' => $validated['first_name'],
-                'last_name' => $validated['last_name'],
-                'phone_number' => $validated['phone_number'] ?? null,
-                'privacy_accepted' => true,
-                'status' => 'confirmed',
-                'confirmed_at' => now(),
+                'status' => RegistrationStatus::Registered->value,
+                'registered_at' => now(),
+                'cancelled_at' => null,
             ]);
             $registration = $existingRegistration;
         } else {
-            $registration = EventRegistration::create([
+            $registration = Registration::create([
+                'participant_id' => $participant->id,
                 'event_id' => $validated['event_id'],
-                'first_name' => $validated['first_name'],
-                'last_name' => $validated['last_name'],
-                'email' => $validated['email'],
-                'phone_number' => $validated['phone_number'] ?? null,
-                'privacy_accepted' => true,
-                'status' => 'confirmed',
-                'confirmed_at' => now(),
+                'status' => RegistrationStatus::Registered->value,
+                'registered_at' => now(),
             ]);
         }
 
