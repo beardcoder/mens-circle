@@ -33,7 +33,7 @@ Herzliche Grüße,<br>
 **{{ config('app.name') }}**
 
 <x-mail::subcopy>
-Du erhältst diese E-Mail an {{ $subscription->email }}, weil du dich für unseren Newsletter angemeldet hast.
+Du erhältst diese E-Mail an {{ $subscription->participant->email }}, weil du dich für unseren Newsletter angemeldet hast.
 Falls du den Newsletter nicht mehr erhalten möchtest, kannst du dich jederzeit [hier abmelden]({{ route('newsletter.unsubscribe', $subscription->token) }}).
 </x-mail::subcopy>
 </x-mail::message>

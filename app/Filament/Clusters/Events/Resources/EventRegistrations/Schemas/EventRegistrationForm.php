@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Clusters\Events\Resources\EventRegistrations\Schemas;
 
-use App\Enums\EventRegistrationStatus;
+use App\Enums\RegistrationStatus;
+use App\Models\Participant;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -30,47 +30,56 @@ class EventRegistrationForm
                             ->native(false),
                     ]),
 
-                Section::make('Teilnehmer-Informationen')
-                    ->description('Persönliche Daten des Teilnehmers')
-                    ->columns(2)
+                Section::make('Teilnehmer')
+                    ->description('Wähle einen bestehenden Teilnehmer oder erstelle einen neuen')
                     ->schema([
-                        TextInput::make('first_name')
-                            ->label('Vorname')
+                        Select::make('participant_id')
+                            ->label('Teilnehmer')
+                            ->relationship('participant', 'email')
+                            ->getOptionLabelFromRecordUsing(fn (Participant $record): string => "{$record->fullName} ({$record->email})")
                             ->required()
-                            ->maxLength(255),
-                        TextInput::make('last_name')
-                            ->label('Nachname')
-                            ->required()
-                            ->maxLength(255),
-                        TextInput::make('email')
-                            ->label('E-Mail-Adresse')
-                            ->email()
-                            ->required()
-                            ->maxLength(255)
-                            ->columnSpanFull(),
-                        TextInput::make('phone_number')
-                            ->label('Handynummer')
-                            ->tel()
-                            ->maxLength(30)
-                            ->columnSpanFull(),
-                        Toggle::make('privacy_accepted')
-                            ->label('Datenschutzerklärung akzeptiert')
-                            ->default(false)
-                            ->columnSpanFull(),
+                            ->searchable(['first_name', 'last_name', 'email'])
+                            ->preload()
+                            ->createOptionForm([
+                                TextInput::make('first_name')
+                                    ->label('Vorname')
+                                    ->required()
+                                    ->maxLength(255),
+                                TextInput::make('last_name')
+                                    ->label('Nachname')
+                                    ->required()
+                                    ->maxLength(255),
+                                TextInput::make('email')
+                                    ->label('E-Mail-Adresse')
+                                    ->email()
+                                    ->required()
+                                    ->unique()
+                                    ->maxLength(255),
+                                TextInput::make('phone')
+                                    ->label('Telefonnummer')
+                                    ->tel()
+                                    ->maxLength(30),
+                            ])
+                            ->native(false),
                     ]),
 
                 Section::make('Anmeldestatus')
-                    ->description('Status und Bestätigung der Anmeldung')
+                    ->description('Status und Zeitpunkte der Anmeldung')
                     ->columns(2)
                     ->schema([
                         Select::make('status')
                             ->label('Status')
-                            ->options(EventRegistrationStatus::options())
+                            ->options(RegistrationStatus::options())
                             ->required()
-                            ->default(EventRegistrationStatus::Confirmed->value)
+                            ->default(RegistrationStatus::Registered->value)
                             ->native(false),
-                        DateTimePicker::make('confirmed_at')
-                            ->label('Bestätigt am')
+                        DateTimePicker::make('registered_at')
+                            ->label('Angemeldet am')
+                            ->native(false)
+                            ->default(now())
+                            ->displayFormat('d.m.Y H:i'),
+                        DateTimePicker::make('cancelled_at')
+                            ->label('Abgesagt am')
                             ->native(false)
                             ->displayFormat('d.m.Y H:i'),
                     ]),

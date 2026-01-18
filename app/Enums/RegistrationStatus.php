@@ -4,27 +4,30 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum EventRegistrationStatus: string
+enum RegistrationStatus: string
 {
-    case Confirmed = 'confirmed';
-    case Cancelled = 'cancelled';
+    case Registered = 'registered';
     case Waitlist = 'waitlist';
+    case Cancelled = 'cancelled';
+    case Attended = 'attended';
 
     public function getLabel(): string
     {
         return match ($this) {
-            self::Confirmed => 'Bestätigt',
-            self::Cancelled => 'Abgesagt',
+            self::Registered => 'Angemeldet',
             self::Waitlist => 'Warteliste',
+            self::Cancelled => 'Abgesagt',
+            self::Attended => 'Teilgenommen',
         };
     }
 
     public function getColor(): string
     {
         return match ($this) {
-            self::Confirmed => 'success',
-            self::Cancelled => 'danger',
+            self::Registered => 'info',
             self::Waitlist => 'warning',
+            self::Cancelled => 'danger',
+            self::Attended => 'success',
         };
     }
 
