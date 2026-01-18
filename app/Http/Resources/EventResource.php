@@ -33,7 +33,7 @@ class EventResource extends JsonResource
             ],
             'capacity' => [
                 'max' => $this->max_participants,
-                'confirmed' => $this->confirmedRegistrationsCount,
+                'registered' => $this->activeRegistrationsCount,
                 'available' => $this->availableSpots,
                 'isFull' => $this->isFull,
             ],

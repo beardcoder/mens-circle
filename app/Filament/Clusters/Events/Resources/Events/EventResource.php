@@ -176,7 +176,7 @@ class EventResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->withCount('confirmedRegistrations'))
+            ->modifyQueryUsing(fn (Builder $query) => $query->withCount('activeRegistrations'))
             ->columns([
                 TextColumn::make('title')
                     ->label('Titel')
@@ -194,11 +194,11 @@ class EventResource extends Resource
                     ->label('Ort')
                     ->searchable()
                     ->toggleable(),
-                TextColumn::make('confirmed_registrations_count')
+                TextColumn::make('active_registrations_count')
                     ->label('Anmeldungen')
-                    ->formatStateUsing(fn ($record): string => $record->confirmed_registrations_count.' / '.$record->max_participants)
+                    ->formatStateUsing(fn ($record): string => $record->active_registrations_count.' / '.$record->max_participants)
                     ->badge()
-                    ->color(fn ($record): string => $record->isFull ? 'danger' : ($record->confirmed_registrations_count > ($record->max_participants * 0.8) ? 'warning' : 'success'))
+                    ->color(fn ($record): string => $record->isFull ? 'danger' : ($record->active_registrations_count > ($record->max_participants * 0.8) ? 'warning' : 'success'))
                     ->sortable(),
                 IconColumn::make('is_published')
                     ->label('Veröffentlicht')
@@ -234,7 +234,7 @@ class EventResource extends Resource
                     ->toggle(),
                 Filter::make('full')
                     ->label('Ausgebuchte Events')
-                    ->query(fn (Builder $query): Builder => $query->whereRaw('(SELECT COUNT(*) FROM event_registrations WHERE event_id = events.id AND status = ?) >= max_participants', ['confirmed']))
+                    ->query(fn (Builder $query): Builder => $query->whereRaw('(SELECT COUNT(*) FROM registrations WHERE event_id = events.id AND status IN (?, ?)) >= max_participants', ['registered', 'attended']))
                     ->toggle(),
                 TrashedFilter::make()
                     ->label('Gelöschte Events'),
