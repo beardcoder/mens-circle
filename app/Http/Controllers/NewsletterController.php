@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\NewsletterSubscriptionRequest;
 use App\Mail\NewsletterWelcome;
 use App\Models\NewsletterSubscription;
+use App\Models\Participant;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -18,9 +19,16 @@ class NewsletterController extends Controller
     public function subscribe(NewsletterSubscriptionRequest $request): JsonResponse
     {
         $email = $request->validated()['email'];
-        $subscription = NewsletterSubscription::withTrashed()->where('email', $email)->first();
 
-        if ($subscription?->status === 'active') {
+        // Find or create participant
+        $participant = Participant::findOrCreateByEmail($email);
+
+        // Check for existing subscription
+        $subscription = NewsletterSubscription::withTrashed()
+            ->where('participant_id', $participant->id)
+            ->first();
+
+        if ($subscription?->isActive()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Diese E-Mail-Adresse ist bereits für den Newsletter angemeldet.',
@@ -28,18 +36,16 @@ class NewsletterController extends Controller
         }
 
         if ($subscription) {
-            $subscription->update([
-                'status' => 'active',
-                'subscribed_at' => now(),
-                'unsubscribed_at' => null,
-                'deleted_at' => null,
-            ]);
+            $subscription->restore();
+            $subscription->resubscribe();
         } else {
-            $subscription = NewsletterSubscription::create(['email' => $email, 'status' => 'active']);
+            $subscription = NewsletterSubscription::create([
+                'participant_id' => $participant->id,
+            ]);
         }
 
         try {
-            Mail::to($subscription->email)->queue(new NewsletterWelcome($subscription));
+            Mail::to($participant->email)->queue(new NewsletterWelcome($subscription));
         } catch (Exception $exception) {
             Log::error('Failed to send newsletter welcome email', [
                 'subscription_id' => $subscription->id,
@@ -57,13 +63,13 @@ class NewsletterController extends Controller
     {
         $subscription = NewsletterSubscription::where('token', $token)->firstOrFail();
 
-        if ($subscription->status === 'unsubscribed') {
+        if (! $subscription->isActive()) {
             return view('newsletter.unsubscribed', [
                 'message' => 'Diese E-Mail-Adresse wurde bereits vom Newsletter abgemeldet.',
             ]);
         }
 
-        $subscription->update(['status' => 'unsubscribed', 'unsubscribed_at' => now()]);
+        $subscription->unsubscribe();
 
         return view('newsletter.unsubscribed', [
             'message' => 'Du wurdest erfolgreich vom Newsletter abgemeldet.',

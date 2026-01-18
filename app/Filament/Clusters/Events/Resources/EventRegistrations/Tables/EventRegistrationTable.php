@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Clusters\Events\Resources\EventRegistrations\Tables;
 
-use App\Enums\EventRegistrationStatus;
+use App\Enums\RegistrationStatus;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -32,21 +32,21 @@ class EventRegistrationTable
                     ->label('Veranstaltung')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('first_name')
+                TextColumn::make('participant.first_name')
                     ->label('Vorname')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('last_name')
+                TextColumn::make('participant.last_name')
                     ->label('Nachname')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('email')
+                TextColumn::make('participant.email')
                     ->label('E-Mail')
                     ->searchable()
                     ->sortable()
                     ->copyable(),
-                TextColumn::make('phone_number')
-                    ->label('Handynummer')
+                TextColumn::make('participant.phone')
+                    ->label('Telefon')
                     ->searchable()
                     ->sortable()
                     ->copyable()
@@ -54,15 +54,15 @@ class EventRegistrationTable
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (string $state): string => EventRegistrationStatus::tryFrom($state)?->getColor() ?? 'gray')
-                    ->formatStateUsing(fn (string $state): string => EventRegistrationStatus::tryFrom($state)?->getLabel() ?? $state)
+                    ->color(fn (RegistrationStatus $state): string => $state->getColor())
+                    ->formatStateUsing(fn (RegistrationStatus $state): string => $state->getLabel())
                     ->sortable(),
-                TextColumn::make('created_at')
+                TextColumn::make('registered_at')
                     ->label('Angemeldet am')
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
-                TextColumn::make('updated_at')
-                    ->label('Aktualisiert')
+                TextColumn::make('cancelled_at')
+                    ->label('Abgesagt am')
                     ->dateTime('d.m.Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -77,7 +77,7 @@ class EventRegistrationTable
                     ->label('Gelöschte Anmeldungen'),
                 SelectFilter::make('status')
                     ->label('Anmeldestatus')
-                    ->options(EventRegistrationStatus::options()),
+                    ->options(RegistrationStatus::options()),
                 SelectFilter::make('event')
                     ->label('Veranstaltung')
                     ->relationship('event', 'title')

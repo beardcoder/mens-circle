@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\RegistrationStatus;
 use App\Mail\EventRegistrationConfirmation;
 use App\Traits\ClearsResponseCache;
 use Exception;
@@ -33,7 +34,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property string $title
  * @property ?string $description
  * @property ?string $location
- * @property int $confirmedRegistrationsCount
+ * @property int $activeRegistrationsCount
  * @property int $availableSpots
  * @property bool $isFull
  * @property bool $isPast
@@ -41,11 +42,11 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Event extends Model implements HasMedia
 {
+    use ClearsResponseCache;
     use HasFactory;
     use HasSlug;
     use InteractsWithMedia;
     use SoftDeletes;
-    use ClearsResponseCache;
 
     protected $fillable = [
         'title',
@@ -81,25 +82,28 @@ class Event extends Model implements HasMedia
 
     public function registrations(): HasMany
     {
-        return $this->hasMany(EventRegistration::class);
+        return $this->hasMany(Registration::class);
     }
 
-    public function confirmedRegistrations(): HasMany
+    public function activeRegistrations(): HasMany
     {
-        return $this->registrations()->where('status', 'confirmed');
+        return $this->registrations()->whereIn('status', [
+            RegistrationStatus::Registered->value,
+            RegistrationStatus::Attended->value,
+        ]);
     }
 
-    protected function confirmedRegistrationsCount(): Attribute
+    protected function activeRegistrationsCount(): Attribute
     {
         return Attribute::make(
-            get: fn (): int => (int) ($this->confirmed_registrations_count ?? $this->confirmedRegistrations()->count())
+            get: fn (): int => (int) ($this->active_registrations_count ?? $this->activeRegistrations()->count())
         );
     }
 
     protected function availableSpots(): Attribute
     {
         return Attribute::make(
-            get: fn (): int => max(0, $this->max_participants - $this->confirmedRegistrationsCount)
+            get: fn (): int => max(0, $this->max_participants - $this->activeRegistrationsCount)
         );
     }
 
@@ -173,14 +177,16 @@ class Event extends Model implements HasMedia
             ICAL;
     }
 
-    public function sendRegistrationConfirmation(EventRegistration $registration): void
+    public function sendRegistrationConfirmation(Registration $registration): void
     {
+        $participant = $registration->participant;
+
         // Send email
         try {
             Mail::queue(new EventRegistrationConfirmation($registration, $this));
             Log::info('Event registration confirmation sent', [
                 'registration_id' => $registration->id,
-                'email' => $registration->email,
+                'email' => $participant->email,
                 'event_id' => $this->id,
             ]);
         } catch (Exception $exception) {
@@ -191,32 +197,35 @@ class Event extends Model implements HasMedia
         }
 
         // Send SMS if phone number provided
-        if ($registration->phone_number) {
+        if ($participant->phone) {
             $this->sendRegistrationSms($registration);
         }
     }
 
-    public function sendEventReminder(EventRegistration $registration): void
+    public function sendEventReminder(Registration $registration): void
     {
-        if (! $registration->phone_number) {
+        $participant = $registration->participant;
+
+        if (! $participant->phone) {
             return;
         }
 
         $message = 'Erinnerung: Männerkreis findet morgen statt. Details per E-Mail. Bis bald!';
-        $this->sendSms($registration->phone_number, $message, [
+        $this->sendSms($participant->phone, $message, [
             'registration_id' => $registration->id,
             'type' => 'event_reminder',
         ]);
     }
 
-    private function sendRegistrationSms(EventRegistration $registration): void
+    private function sendRegistrationSms(Registration $registration): void
     {
+        $participant = $registration->participant;
         $message = sprintf(
             'Hallo %s! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis',
-            $registration->first_name
+            $participant->first_name
         );
-        
-        $this->sendSms($registration->phone_number, $message, [
+
+        $this->sendSms($participant->phone, $message, [
             'registration_id' => $registration->id,
             'type' => 'registration_confirmation',
         ]);
@@ -225,9 +234,10 @@ class Event extends Model implements HasMedia
     private function sendSms(string $phoneNumber, string $message, array $context = []): void
     {
         $apiKey = config('sevenio.api_key');
-        
+
         if (! $apiKey) {
             Log::warning('Cannot send SMS - Seven.io API key not configured', $context);
+
             return;
         }
 
@@ -275,7 +285,7 @@ class Event extends Model implements HasMedia
         return static::query()
             ->published()
             ->upcoming()
-            ->withCount('confirmedRegistrations')
+            ->withCount('activeRegistrations')
             ->orderBy('event_date')
             ->first();
     }

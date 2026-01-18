@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Mail;
 
 use App\Models\Event;
-use App\Models\EventRegistration;
+use App\Models\Registration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
@@ -19,16 +19,18 @@ class EventReminder extends Mailable
     use SerializesModels;
 
     public function __construct(
-        public EventRegistration $registration,
+        public Registration $registration,
         public Event $event
     ) {
     }
 
     public function envelope(): Envelope
     {
+        $participant = $this->registration->participant;
+
         return new Envelope(
-            to: [new Address($this->registration->email, $this->registration->first_name.' '.$this->registration->last_name)],
-            subject: 'Erinnerung: '.$this->event->title.' ist morgen!',
+            to: [new Address($participant->email, $participant->fullName)],
+            subject: 'Erinnerung: ' . $this->event->title . ' ist morgen!',
         );
     }
 

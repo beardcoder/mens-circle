@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Widgets;
 
 use App\Models\Event;
-use App\Models\EventRegistration;
 use App\Models\NewsletterSubscription;
+use App\Models\Registration;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -22,8 +22,8 @@ class StatsOverview extends StatsOverviewWidget
                 ->descriptionIcon('heroicon-o-calendar')
                 ->color('success'),
 
-            Stat::make('Anmeldungen', EventRegistration::confirmedCount())
-                ->description('Bestätigte Teilnehmer')
+            Stat::make('Anmeldungen', Registration::registeredCount())
+                ->description('Aktive Anmeldungen')
                 ->descriptionIcon('heroicon-o-user-group')
                 ->color('primary'),
 
@@ -33,7 +33,7 @@ class StatsOverview extends StatsOverviewWidget
                 ->color('warning'),
 
             Stat::make('Verfügbare Plätze', $nextEvent?->availableSpots ?? 0)
-                ->description($nextEvent ? 'Nächstes Event: '.$nextEvent->event_date->format('d.m.Y') : 'Kein Event geplant')
+                ->description($nextEvent ? 'Nächstes Event: ' . $nextEvent->event_date->format('d.m.Y') : 'Kein Event geplant')
                 ->descriptionIcon('heroicon-o-ticket')
                 ->color(fn () => $nextEvent && $nextEvent->availableSpots > 3 ? 'success' : ($nextEvent && $nextEvent->availableSpots > 0 ? 'warning' : 'danger')),
         ];

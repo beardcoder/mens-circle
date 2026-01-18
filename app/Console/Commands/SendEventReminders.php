@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Mail\EventReminder;
 use App\Models\Event;
+use App\Models\Registration;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -24,7 +25,7 @@ class SendEventReminders extends Command
 
         $upcomingEvents = Event::published()
             ->whereBetween('event_date', [$startWindow, $endWindow])
-            ->with('confirmedRegistrations')
+            ->with(['activeRegistrations.participant'])
             ->get();
 
         if ($upcomingEvents->isEmpty()) {
@@ -37,28 +38,30 @@ class SendEventReminders extends Command
         $totalSmsSent = 0;
 
         foreach ($upcomingEvents as $event) {
-            $registrations = $event->confirmedRegistrations;
+            $registrations = $event->activeRegistrations;
 
             if ($registrations->isEmpty()) {
-                $this->warn(sprintf("Event '%s' has no confirmed registrations.", $event->title));
+                $this->warn(sprintf("Event '%s' has no active registrations.", $event->title));
 
                 continue;
             }
 
             $this->info(sprintf('Processing event: %s (%s)', $event->title, $event->event_date->format('d.m.Y H:i')));
 
-            /** @var \App\Models\EventRegistration $registration */
+            /** @var Registration $registration */
             foreach ($registrations as $registration) {
+                $participant = $registration->participant;
+
                 // Send email reminder
                 Mail::queue(new EventReminder($registration, $event));
                 $totalEmailsSent++;
-                $this->line('  -> Email reminder sent to: '.$registration->email);
+                $this->line('  -> Email reminder sent to: ' . $participant->email);
 
                 // Send SMS reminder if phone number is provided
-                if ($registration->phone_number) {
+                if ($participant->phone) {
                     $event->sendEventReminder($registration);
                     $totalSmsSent++;
-                    $this->line('  -> SMS reminder sent to: '.$registration->phone_number);
+                    $this->line('  -> SMS reminder sent to: ' . $participant->phone);
                 }
             }
         }

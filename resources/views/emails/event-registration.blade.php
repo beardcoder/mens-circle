@@ -1,7 +1,7 @@
 <x-mail::message>
 # Deine Anmeldung ist bestätigt!
 
-Hallo {{ $registration->first_name }},
+Hallo {{ $registration->participant->first_name }},
 
 herzlich willkommen! Wir freuen uns sehr, dass du beim **{{ $event->title }}** dabei sein wirst.
 
@@ -43,6 +43,6 @@ Herzliche Grüße,<br>
 **{{ config('app.name') }}**
 
 <x-mail::subcopy>
-Diese E-Mail wurde an {{ $registration->email }} gesendet, weil du dich für unsere Veranstaltung angemeldet hast.
+Diese E-Mail wurde an {{ $registration->participant->email }} gesendet, weil du dich für unsere Veranstaltung angemeldet hast.
 </x-mail::subcopy>
 </x-mail::message>

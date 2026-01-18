@@ -5,45 +5,67 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-/**
- * @property string $email
- * @property string $status
- * @property string $token
- * @property \Illuminate\Support\Carbon $subscribed_at
- * @property ?\Illuminate\Support\Carbon $unsubscribed_at
- */
 class NewsletterSubscription extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
-        'email',
-        'status',
+        'participant_id',
         'token',
         'subscribed_at',
+        'confirmed_at',
         'unsubscribed_at',
     ];
 
     protected static function booted(): void
     {
         static::creating(function (self $subscription): void {
-            $subscription->token = Str::random(64);
-            $subscription->subscribed_at = now();
+            $subscription->token ??= Str::random(64);
+            $subscription->subscribed_at ??= now();
         });
+    }
+
+    public function participant(): BelongsTo
+    {
+        return $this->belongsTo(Participant::class);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->unsubscribed_at === null;
+    }
+
+    public function unsubscribe(): void
+    {
+        $this->update([
+            'unsubscribed_at' => now(),
+        ]);
+    }
+
+    public function resubscribe(): void
+    {
+        $this->update([
+            'subscribed_at' => now(),
+            'unsubscribed_at' => null,
+        ]);
     }
 
     public static function activeCount(): int
     {
-        return static::where('status', 'active')->count();
+        return static::query()
+            ->whereNull('unsubscribed_at')
+            ->count();
     }
 
     protected function casts(): array
     {
         return [
             'subscribed_at' => 'datetime',
+            'confirmed_at' => 'datetime',
             'unsubscribed_at' => 'datetime',
         ];
     }
