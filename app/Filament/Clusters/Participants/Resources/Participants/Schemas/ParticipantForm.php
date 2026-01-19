@@ -42,7 +42,7 @@ class ParticipantForm
                         Toggle::make('is_subscribed_to_newsletter')
                             ->label('Newsletter-Abonnement')
                             ->helperText('Aktivieren, um den Teilnehmer für den Newsletter anzumelden')
-                            ->default(fn ($record) => $record?->isSubscribedToNewsletter() ?? false)
+                            ->formatStateUsing(fn ($record) => $record?->isSubscribedToNewsletter() ?? false)
                             ->live()
                             ->afterStateUpdated(function ($state, $record): void {
                                 if (! $record) {
