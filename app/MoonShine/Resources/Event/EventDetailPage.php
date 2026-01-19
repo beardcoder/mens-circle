@@ -10,7 +10,7 @@ use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Column;
 use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Fields\Date;
-use MoonShine\UI\Fields\HasMany;
+use MoonShine\Laravel\Fields\Relationships\HasMany;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Number;

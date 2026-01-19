@@ -7,7 +7,7 @@ namespace App\MoonShine\Resources\Registration;
 use App\MoonShine\Resources\EventResource;
 use MoonShine\Laravel\Pages\Crud\DetailPage;
 use MoonShine\UI\Components\Layout\Box;
-use MoonShine\UI\Fields\BelongsTo;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Select;

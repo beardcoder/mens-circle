@@ -13,6 +13,8 @@ use MoonShine\Support\Enums\SortDirection;
 
 /**
  * MoonShine Resource for Registration Model
+ *
+ * @extends ModelResource<Registration, RegistrationIndexPage, RegistrationFormPage, RegistrationDetailPage>
  */
 class RegistrationResource extends ModelResource
 {

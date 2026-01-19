@@ -14,6 +14,8 @@ use MoonShine\Support\Enums\SortDirection;
 /**
  * MoonShine Resource for Event Model
  * This demonstrates MoonShine v4 running parallel to Filament
+ *
+ * @extends ModelResource<Event, EventIndexPage, EventFormPage, EventDetailPage>
  */
 class EventResource extends ModelResource
 {
