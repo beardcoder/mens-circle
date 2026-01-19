@@ -15,7 +15,7 @@ use MoonShine\Metrics\ValueMetric;
 class Dashboard extends Page
 {
     /**
-     * Page title
+     * Get the page title
      */
     public function title(): string
     {
@@ -23,7 +23,9 @@ class Dashboard extends Page
     }
 
     /**
-     * Page breadcrumbs
+     * Get the page breadcrumbs
+     *
+     * @return array<string, string>
      */
     public function breadcrumbs(): array
     {
@@ -33,16 +35,16 @@ class Dashboard extends Page
     }
 
     /**
-     * Page components
+     * Get the dashboard components with metrics and widgets
+     *
+     * @return array<int, \MoonShine\Decorations\Decoration>
      */
     public function components(): array
     {
         return [
             Grid::make([
                 Column::make([
-                    Block::make('Welcome to MoonShine', [
-                        // Welcome content
-                    ]),
+                    Block::make('Welcome to MoonShine', []),
                 ])->columnSpan(12),
 
                 Column::make([

@@ -16,11 +16,12 @@ use MoonShine\Fields\Relationships\HasMany;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\Textarea;
-use MoonShine\Fields\TinyMce;
 
 /**
- * Example MoonShine Resource for Event Model
- * This demonstrates MoonShine running parallel to Filament
+ * MoonShine Resource for Event Model
+ *
+ * Provides full CRUD functionality for events in the MoonShine admin panel,
+ * running parallel to Filament without conflicts.
  */
 class EventResource extends ModelResource
 {
@@ -30,10 +31,10 @@ class EventResource extends ModelResource
 
     protected string $column = 'title';
 
-    protected array $with = ['registrations'];
-
     /**
      * Define the fields for the index (list) view
+     *
+     * @return array<int, \MoonShine\Fields\Field>
      */
     public function indexFields(): array
     {
@@ -63,6 +64,8 @@ class EventResource extends ModelResource
 
     /**
      * Define the fields for the detail/form views
+     *
+     * @return array<int, \MoonShine\Fields\Field|\MoonShine\Decorations\Decoration>
      */
     public function formFields(): array
     {
@@ -149,15 +152,19 @@ class EventResource extends ModelResource
 
             HasMany::make('Registrations', 'registrations')
                 ->fields([
-                    Text::make('Participant', 'participant.full_name'),
-                    Text::make('Status', 'status'),
-                    Date::make('Registered At', 'created_at')->format('d.m.Y H:i'),
+                    Number::make('Participant ID', 'participant_id')->readonly(),
+                    Text::make('Status', 'status')->readonly(),
+                    Date::make('Registered At', 'created_at')
+                        ->format('d.m.Y H:i')
+                        ->readonly(),
                 ]),
         ];
     }
 
     /**
      * Define the fields for the detail view
+     *
+     * @return array<int, \MoonShine\Fields\Field|\MoonShine\Decorations\Decoration>
      */
     public function detailFields(): array
     {
@@ -166,6 +173,8 @@ class EventResource extends ModelResource
 
     /**
      * Define which fields are searchable
+     *
+     * @return array<int, string>
      */
     public function search(): array
     {
@@ -174,6 +183,8 @@ class EventResource extends ModelResource
 
     /**
      * Define filters for the index page
+     *
+     * @return array<int, \MoonShine\Fields\Field>
      */
     public function filters(): array
     {
@@ -185,17 +196,10 @@ class EventResource extends ModelResource
     }
 
     /**
-     * Actions available for bulk operations
-     */
-    public function actions(): array
-    {
-        return [
-            // Bulk actions can be added here
-        ];
-    }
-
-    /**
-     * Define the rules for validation
+     * Define the validation rules for the model
+     *
+     * @param Event $item
+     * @return array<string, array<int, string>>
      */
     public function rules($item): array
     {

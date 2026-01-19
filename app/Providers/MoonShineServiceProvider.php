@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\MoonShine\Resources\EventResource;
-use MoonShine\Providers\MoonShineApplicationServiceProvider;
-use MoonShine\MoonShine;
 use MoonShine\Menu\MenuGroup;
 use MoonShine\Menu\MenuItem;
+use MoonShine\Providers\MoonShineApplicationServiceProvider;
 use MoonShine\Resources\MoonShineUserResource;
 use MoonShine\Resources\MoonShineUserRoleResource;
 
@@ -16,17 +15,20 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
 {
     /**
      * Register MoonShine resources and configuration
+     *
+     * @return array<int, class-string>
      */
     protected function resources(): array
     {
         return [
-            // Example resource - Event model
             EventResource::class,
         ];
     }
 
     /**
      * Define MoonShine menu structure
+     *
+     * @return array<int, MenuItem|MenuGroup>
      */
     protected function menu(): array
     {
@@ -49,35 +51,17 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
     }
 
     /**
-     * Additional MoonShine configuration
+     * Configure MoonShine theme colors
+     *
+     * @return array<string, array<string, string>>
      */
     protected function theme(): array
     {
         return [
             'colors' => [
-                'primary' => '#1e40af', // Blue-700
-                'secondary' => '#64748b', // Slate-500
+                'primary' => '#1e40af',
+                'secondary' => '#64748b',
             ],
         ];
-    }
-
-    /**
-     * Bootstrap any application services
-     */
-    public function boot(): void
-    {
-        parent::boot();
-
-        // Additional MoonShine customization can go here
-    }
-
-    /**
-     * Register any application services
-     */
-    public function register(): void
-    {
-        parent::register();
-
-        // Register additional services if needed
     }
 }
