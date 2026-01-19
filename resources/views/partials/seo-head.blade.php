@@ -2,9 +2,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Primary Meta Tags -->
-<title>@yield('title', $settings->site_name . ($settings->site_tagline ? ' – ' . $settings->site_tagline : ''))</title>
-<meta name="title" content="@yield('meta_title', $settings->site_name . ($settings->site_tagline ? ' – ' . $settings->site_tagline : ''))">
-<meta name="description" content="@yield('meta_description', $settings->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
+<title>@yield('title', $settings?->site_name . ($settings?->site_tagline ? ' – ' . $settings?->site_tagline : ''))</title>
+<meta name="title" content="@yield('meta_title', $settings?->site_name . ($settings?->site_tagline ? ' – ' . $settings?->site_tagline : ''))">
+<meta name="description" content="@yield('meta_description', $settings?->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
 <meta name="keywords" content="@yield('meta_keywords', 'Männerkreis, Niederbayern, Männergruppe, persönliches Wachstum, Gemeinschaft, Männer')">
 <meta name="author" content="Markus Sommer">
 <link rel="canonical" href="@yield('canonical', url()->current())">
@@ -21,20 +21,20 @@
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="@yield('og_type', 'website')">
 <meta property="og:url" content="{{ url()->current() }}">
-<meta property="og:title" content="@yield('og_title', $settings->site_name)">
-<meta property="og:description" content="@yield('og_description', $settings->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
+<meta property="og:title" content="@yield('og_title', $settings?->site_name)">
+<meta property="og:description" content="@yield('og_description', $settings?->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
 <meta property="og:image" content="@yield('og_image', asset('images/logo-color.png'))">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="@yield('og_image_alt', 'Männerkreis Niederbayern/ Straubing - Gemeinschaft für Männer')">
 <meta property="og:locale" content="de_DE">
-<meta property="og:site_name" content="{{ $settings->site_name }}">
+<meta property="og:site_name" content="{{ $settings?->site_name }}">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="{{ url()->current() }}">
-<meta name="twitter:title" content="@yield('twitter_title', $settings->site_name)">
-<meta name="twitter:description" content="@yield('twitter_description', $settings->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
+<meta name="twitter:title" content="@yield('twitter_title', $settings?->site_name)">
+<meta name="twitter:description" content="@yield('twitter_description', $settings?->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
 <meta name="twitter:image" content="@yield('twitter_image', asset('images/logo-color.png'))">
 <meta name="twitter:image:alt" content="@yield('twitter_image_alt', 'Männerkreis Niederbayern/ Straubing')">
 
