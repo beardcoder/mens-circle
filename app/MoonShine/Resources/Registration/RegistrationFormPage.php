@@ -11,6 +11,7 @@ use MoonShine\UI\Fields\BelongsTo;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Select;
+use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use MoonShine\UI\Fields\Text;
 
 class RegistrationFormPage extends FormPage
@@ -56,7 +57,7 @@ class RegistrationFormPage extends FormPage
      *
      * @return array<string, array<string>>
      */
-    protected function rules(): array
+    protected function rules(DataWrapperContract $item): array
     {
         return [
             'event_id' => ['required', 'exists:events,id'],

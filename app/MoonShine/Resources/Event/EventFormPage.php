@@ -16,6 +16,7 @@ use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
+use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use MoonShine\UI\Fields\Textarea;
 
 class EventFormPage extends FormPage
@@ -126,7 +127,7 @@ class EventFormPage extends FormPage
      *
      * @return array<string, array<string>>
      */
-    protected function rules(): array
+    protected function rules(DataWrapperContract $item): array
     {
         return [
             'title' => ['required', 'string', 'max:255'],
