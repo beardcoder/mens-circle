@@ -30,6 +30,7 @@ class PageController extends Controller
             : collect();
 
         // Use specific view if it exists, otherwise fall back to generic 'page' view
+        /** @var view-string $viewName */
         $viewName = ViewFacade::exists($slug) ? $slug : 'page';
 
         return view($viewName, [

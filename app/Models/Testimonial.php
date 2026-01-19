@@ -12,9 +12,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use PhpStaticAnalysis\Attributes\TemplateUse;
 
+/**
+ * @property string $quote
+ * @property string $author_name
+ * @property string $email
+ * @property ?string $role
+ * @property bool $is_published
+ * @property ?\Illuminate\Support\Carbon $published_at
+ * @property int $sort_order
+ */
 #[TemplateUse('HasFactory<\Database\Factories\TestimonialFactory>')]
 class Testimonial extends Model
 {
+    /** @use HasFactory<\Database\Factories\TestimonialFactory> */
     use HasFactory;
     use ClearsResponseCache;
     use SoftDeletes;
@@ -39,6 +49,9 @@ class Testimonial extends Model
 
     /**
      * Scope a query to only include published testimonials.
+     *
+     * @param Builder<Testimonial> $query
+     * @return Builder<Testimonial>
      */
     #[Scope]
     protected function published(Builder $query): Builder

@@ -13,8 +13,16 @@ use Illuminate\Notifications\Notifiable;
 use PhpStaticAnalysis\Attributes\Returns;
 use PhpStaticAnalysis\Attributes\Type;
 
+/**
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property ?\Illuminate\Support\Carbon $email_verified_at
+ * @property string $remember_token
+ */
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use Notifiable;
 

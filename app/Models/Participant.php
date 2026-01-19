@@ -9,8 +9,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property ?string $phone
+ * @property string $fullName
+ */
 class Participant extends Model
 {
+    /** @use HasFactory<\Database\Factories\ParticipantFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -20,11 +28,17 @@ class Participant extends Model
         'phone',
     ];
 
+    /**
+     * @return HasMany<Registration, $this>
+     */
     public function registrations(): HasMany
     {
         return $this->hasMany(Registration::class);
     }
 
+    /**
+     * @return HasOne<NewsletterSubscription, $this>
+     */
     public function newsletterSubscription(): HasOne
     {
         return $this->hasOne(NewsletterSubscription::class);
@@ -47,6 +61,9 @@ class Participant extends Model
         return static::where('email', $email)->first();
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public static function findOrCreateByEmail(string $email, array $attributes = []): self
     {
         return static::firstOrCreate(

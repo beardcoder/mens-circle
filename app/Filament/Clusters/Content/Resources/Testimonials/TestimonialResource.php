@@ -59,6 +59,9 @@ class TestimonialResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<Testimonial>
+     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

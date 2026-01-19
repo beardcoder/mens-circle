@@ -44,6 +44,9 @@ class EventRegistrationConfirmation extends Mailable
         );
     }
 
+    /**
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
     #[Returns('array<int, \Illuminate\Mail\Mailables\Attachment>')]
     public function attachments(): array
     {

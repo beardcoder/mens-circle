@@ -11,6 +11,14 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+/**
+ * @property int $page_id
+ * @property string $type
+ * @property array<string, mixed> $data
+ * @property string $block_id
+ * @property int $order
+ * @property Page $page
+ */
 class ContentBlock extends Model implements HasMedia
 {
     use InteractsWithMedia;
@@ -26,6 +34,8 @@ class ContentBlock extends Model implements HasMedia
 
     /**
      * Relationship to Page
+     *
+     * @return BelongsTo<Page, $this>
      */
     public function page(): BelongsTo
     {

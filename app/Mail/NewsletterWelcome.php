@@ -48,6 +48,8 @@ class NewsletterWelcome extends Mailable
 
     /**
      * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
     #[Returns('array<int, \Illuminate\Mail\Mailables\Attachment>')]
     public function attachments(): array
