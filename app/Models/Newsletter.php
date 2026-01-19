@@ -6,6 +6,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $subject
+ * @property string $content
+ * @property ?\Illuminate\Support\Carbon $sent_at
+ * @property ?int $recipient_count
+ * @property string $status
+ */
 class Newsletter extends Model
 {
     protected $fillable = [

@@ -26,6 +26,8 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 /**
+ * @use HasFactory<\Database\Factories\EventFactory>
+ *
  * @property \Illuminate\Support\Carbon $event_date
  * @property \Illuminate\Support\Carbon $start_time
  * @property \Illuminate\Support\Carbon $end_time
@@ -42,8 +44,10 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Event extends Model implements HasMedia
 {
-    use ClearsResponseCache;
+    /** @use HasFactory<\Database\Factories\EventFactory> */
     use HasFactory;
+
+    use ClearsResponseCache;
     use HasSlug;
     use InteractsWithMedia;
     use SoftDeletes;
@@ -80,11 +84,17 @@ class Event extends Model implements HasMedia
             ->useDisk('public');
     }
 
+    /**
+     * @return HasMany<Registration, $this>
+     */
     public function registrations(): HasMany
     {
         return $this->hasMany(Registration::class);
     }
 
+    /**
+     * @return HasMany<Registration, $this>
+     */
     public function activeRegistrations(): HasMany
     {
         return $this->registrations()->whereIn('status', [
@@ -93,6 +103,9 @@ class Event extends Model implements HasMedia
         ]);
     }
 
+    /**
+     * @return Attribute<int, never>
+     */
     protected function activeRegistrationsCount(): Attribute
     {
         return Attribute::make(
@@ -100,6 +113,9 @@ class Event extends Model implements HasMedia
         );
     }
 
+    /**
+     * @return Attribute<int, never>
+     */
     protected function availableSpots(): Attribute
     {
         return Attribute::make(
@@ -107,6 +123,9 @@ class Event extends Model implements HasMedia
         );
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isFull(): Attribute
     {
         return Attribute::make(
@@ -114,6 +133,9 @@ class Event extends Model implements HasMedia
         );
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isPast(): Attribute
     {
         return Attribute::make(
@@ -121,6 +143,9 @@ class Event extends Model implements HasMedia
         );
     }
 
+    /**
+     * @return Attribute<?string, never>
+     */
     protected function fullAddress(): Attribute
     {
         return Attribute::make(
@@ -220,6 +245,11 @@ class Event extends Model implements HasMedia
     private function sendRegistrationSms(Registration $registration): void
     {
         $participant = $registration->participant;
+
+        if ($participant->phone === null) {
+            return;
+        }
+
         $message = sprintf(
             'Hallo %s! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis',
             $participant->first_name
@@ -231,6 +261,9 @@ class Event extends Model implements HasMedia
         ]);
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     private function sendSms(string $phoneNumber, string $message, array $context = []): void
     {
         $apiKey = config('sevenio.api_key');
@@ -290,12 +323,20 @@ class Event extends Model implements HasMedia
             ->first();
     }
 
+    /**
+     * @param Builder<Event> $query
+     * @return Builder<Event>
+     */
     #[Scope]
     protected function published(Builder $query): Builder
     {
         return $query->where('is_published', true);
     }
 
+    /**
+     * @param Builder<Event> $query
+     * @return Builder<Event>
+     */
     #[Scope]
     protected function upcoming(Builder $query): Builder
     {

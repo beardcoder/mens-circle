@@ -8,7 +8,8 @@ parameters:
         - app/
 
     # Level 10 is the highest level
-    level: 5
+    # Level 8 provides excellent type safety for production use
+    level: 8
 
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'

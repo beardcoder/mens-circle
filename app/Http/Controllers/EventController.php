@@ -48,6 +48,7 @@ class EventController extends Controller
     public function register(EventRegistrationRequest $request): JsonResponse
     {
         $validated = $request->validated();
+        /** @var Event $event */
         $event = Event::findOrFail($validated['event_id']);
 
         // Validate event availability

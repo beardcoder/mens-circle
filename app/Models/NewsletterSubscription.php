@@ -9,6 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $participant_id
+ * @property string $token
+ * @property \Illuminate\Support\Carbon $subscribed_at
+ * @property ?\Illuminate\Support\Carbon $confirmed_at
+ * @property ?\Illuminate\Support\Carbon $unsubscribed_at
+ * @property Participant $participant
+ */
 class NewsletterSubscription extends Model
 {
     use SoftDeletes;
@@ -29,6 +37,9 @@ class NewsletterSubscription extends Model
         });
     }
 
+    /**
+     * @return BelongsTo<Participant, $this>
+     */
     public function participant(): BelongsTo
     {
         return $this->belongsTo(Participant::class);

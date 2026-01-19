@@ -272,6 +272,9 @@ class EventResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

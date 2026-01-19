@@ -35,6 +35,9 @@ class SendNewsletter extends Page implements HasActions, HasForms
 
     protected static ?int $navigationSort = 70;
 
+    /**
+     * @var array<string, mixed>|null
+     */
     public ?array $data = [];
 
     public function mount(): void

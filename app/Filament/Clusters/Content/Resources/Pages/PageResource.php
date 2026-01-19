@@ -49,6 +49,9 @@ class PageResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<Page>
+     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

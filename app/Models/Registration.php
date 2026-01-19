@@ -11,9 +11,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $participant_id
+ * @property int $event_id
+ * @property RegistrationStatus $status
+ * @property \Illuminate\Support\Carbon $registered_at
+ * @property ?\Illuminate\Support\Carbon $cancelled_at
+ * @property Participant $participant
+ * @property Event $event
+ */
 class Registration extends Model
 {
     use ClearsResponseCache;
+
+    /** @use HasFactory<\Database\Factories\RegistrationFactory> */
     use HasFactory;
     use SoftDeletes;
 
@@ -25,11 +36,17 @@ class Registration extends Model
         'cancelled_at',
     ];
 
+    /**
+     * @return BelongsTo<Participant, $this>
+     */
     public function participant(): BelongsTo
     {
         return $this->belongsTo(Participant::class);
     }
 
+    /**
+     * @return BelongsTo<Event, $this>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);

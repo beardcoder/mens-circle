@@ -79,14 +79,9 @@ class LlmsController extends Controller
             $lines[] = '### Social Media';
             $lines[] = '';
             foreach ($settings->social_links as $platform => $data) {
-                // Handle both array and string formats
-                if (is_array($data)) {
-                    $url = $data['url'] ?? $data['link'] ?? null;
-                    $platformName = $data['platform'] ?? $data['name'] ?? ucfirst((string) $platform);
-                } else {
-                    $url = $data;
-                    $platformName = ucfirst((string) $platform);
-                }
+                /** @var array<string, mixed> $data */
+                $url = $data['url'] ?? $data['link'] ?? null;
+                $platformName = $data['platform'] ?? $data['name'] ?? ucfirst((string) $platform);
 
                 if ($url) {
                     $lines[] = '- **' . $platformName . ':** ' . $url;
@@ -140,10 +135,7 @@ class LlmsController extends Controller
                 $lines[] = '### ' . $event->title;
                 $lines[] = '';
                 $lines[] = '**Datum:** ' . $event->event_date->format('d.m.Y');
-
-                if ($event->start_time && $event->end_time) {
-                    $lines[] = '**Uhrzeit:** ' . $event->start_time->format('H:i') . ' - ' . $event->end_time->format('H:i') . ' Uhr';
-                }
+                $lines[] = '**Uhrzeit:** ' . $event->start_time->format('H:i') . ' - ' . $event->end_time->format('H:i') . ' Uhr';
 
                 if ($event->location) {
                     $lines[] = '**Ort:** ' . $event->location;
@@ -322,7 +314,7 @@ class LlmsController extends Controller
      * Format a content block for the llms.txt output
      *
      * @param \App\Models\ContentBlock $block
-     * @return array
+     * @return array<int, string>
      */
     private function formatContentBlock($block): array
     {
@@ -511,7 +503,7 @@ class LlmsController extends Controller
     /**
      * Extract FAQ blocks from all published pages
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
     private function extractFaqBlocks(): array
     {
@@ -545,8 +537,8 @@ class LlmsController extends Controller
         }
 
         // Remove script and style tags completely
-        $html = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $html);
-        $html = preg_replace('/<style[^>]*>.*?<\/style>/is', '', $html);
+        $html = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $html) ?? $html;
+        $html = preg_replace('/<style[^>]*>.*?<\/style>/is', '', $html) ?? $html;
 
         // Convert common HTML tags to Markdown
         $patterns = [
@@ -597,14 +589,14 @@ class LlmsController extends Controller
 
         $markdown = $html;
         foreach ($patterns as $pattern => $replacement) {
-            $markdown = preg_replace($pattern, $replacement, $markdown);
+            $markdown = preg_replace($pattern, $replacement, $markdown) ?? $markdown;
         }
 
         // Remove remaining HTML tags
         $markdown = strip_tags($markdown);
 
         // Clean up multiple newlines
-        $markdown = preg_replace("/\n{3,}/", "\n\n", $markdown);
+        $markdown = preg_replace("/\n{3,}/", "\n\n", $markdown) ?? $markdown;
 
         // Decode HTML entities
         $markdown = html_entity_decode($markdown, ENT_QUOTES | ENT_HTML5, 'UTF-8');

@@ -19,6 +19,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+/**
+ * @property string $title
+ * @property string $slug
+ * @property array<string, mixed> $meta
+ * @property bool $is_published
+ * @property ?\Illuminate\Support\Carbon $published_at
+ */
 class Page extends Model implements HasMedia
 {
     use HasSlug;
@@ -39,6 +46,9 @@ class Page extends Model implements HasMedia
         return SlugOptions::create()->generateSlugsFrom('title')->saveSlugsTo('slug');
     }
 
+    /**
+     * @return HasMany<ContentBlock, $this>
+     */
     public function contentBlocks(): HasMany
     {
         return $this->hasMany(ContentBlock::class)->orderBy('order');
@@ -58,6 +68,10 @@ class Page extends Model implements HasMedia
         ];
     }
 
+    /**
+     * @param Builder<Page> $query
+     * @return Builder<Page>
+     */
     #[Scope]
     protected function published(Builder $query): Builder
     {
@@ -67,6 +81,9 @@ class Page extends Model implements HasMedia
     /**
      * Sync content blocks for this page.
      * Handles creation, update, and deletion of blocks and their media.
+     */
+    /**
+     * @param array<int, array<string, mixed>> $contentBlocksData
      */
     #[Param(contentBlocksData: 'array')]
     #[Returns('void')]
@@ -99,7 +116,7 @@ class Page extends Model implements HasMedia
             // Cleanup removed blocks
             $existingBlocks->each(function ($blockModel) use ($processedBlockIds): void {
                 /** @var ContentBlock $blockModel */
-                if (!in_array($blockModel->block_id, $processedBlockIds)) {
+                if (!in_array($blockModel->block_id, $processedBlockIds, true)) {
                     // Delete associated media on the Page
                     $this->getMedia('page_blocks')
                         ->filter(fn ($media): bool => $media->getCustomProperty('block_id') === $blockModel->block_id)
