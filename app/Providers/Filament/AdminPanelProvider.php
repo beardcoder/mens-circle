@@ -10,6 +10,7 @@ use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
+use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\View\PanelsRenderHook;
@@ -31,12 +32,15 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->spa()
             ->unsavedChangesAlerts()
             ->profile()
-            ->brandLogo(asset('logo-color.svg'))
+            ->favicon(asset('favicon.svg'))
             ->brandName('Männerkreis Niederbayern')
             ->brandLogoHeight('40px')
+            ->renderHook(
+                'panels::auth.login.form.after',
+                fn () => view('filament.components.auth.socialite.github')
+            )
             ->colors([
                 'primary' => [
                     50 => 'oklch(0.97 0.02 46)',
@@ -62,6 +66,8 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+            ->broadcasting(false)
+            ->subNavigationPosition(SubNavigationPosition::Top)
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->middleware([
                 EncryptCookies::class,

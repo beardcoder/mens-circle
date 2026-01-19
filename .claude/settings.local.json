@@ -1,5 +1,11 @@
 {
-  "enabledPlugins": {
-    "laravel-boost@claude-plugins-official": true
-  }
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "ddev",
+            "args": [
+                "artisan",
+                "boost:mcp"
+            ]
+        }
+    }
 }

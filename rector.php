@@ -29,6 +29,9 @@ return RectorConfig::configure()
         PhpStaticAnalysisAnnotationsToAttributesSetList::ANNOTATIONS_TO_ATTRIBUTES
     ])
     ->withImportNames(removeUnusedImports: true)
+    ->withPHPStanConfigs([
+        __DIR__.'/phpstan.neon',
+    ])
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
@@ -36,5 +39,4 @@ return RectorConfig::configure()
         typeDeclarations: true,
         privatization: true,
         earlyReturn: true,
-        strictBooleans: false
     );
