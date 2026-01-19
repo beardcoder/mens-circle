@@ -14,6 +14,9 @@
 # Install dependencies
 composer install
 
+# Make setup script executable (if needed)
+chmod +x setup-moonshine.sh
+
 # Run MoonShine setup
 ./setup-moonshine.sh
 

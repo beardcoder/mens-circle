@@ -167,9 +167,27 @@ The integration is successful if:
 ✅ Performance is acceptable
 ✅ Documentation is clear and complete
 
-## Notes
+## Test Report
 
-- Date tested: _____________
-- Tested by: _____________
-- Issues found: _____________
-- Resolution: _____________
+### Test Information
+- **Date Tested**: _____________ (Format: YYYY-MM-DD)
+- **Tested By**: _____________ (Name)
+- **Environment**: _____________ (Local/Staging/Production)
+- **Browser**: _____________ (Chrome/Firefox/Safari/Edge)
+
+### Test Results
+- **Total Tests**: ___ / ___
+- **Passed**: ___
+- **Failed**: ___
+- **Skipped**: ___
+
+### Issues Found
+| Issue # | Description | Severity | Status | Resolution |
+|---------|-------------|----------|--------|------------|
+| 1 | | High/Medium/Low | Open/Fixed | |
+| 2 | | High/Medium/Low | Open/Fixed | |
+
+### Additional Notes
+_________________________________
+_________________________________
+_________________________________

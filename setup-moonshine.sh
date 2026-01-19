@@ -17,7 +17,7 @@ if [ ! -d "vendor" ]; then
 fi
 
 # Check if moonshine package is installed
-if [ ! -d "vendor/moonshine" ]; then
+if [ ! -d "vendor/moonshine-software/moonshine" ]; then
     echo "❌ Error: MoonShine package not found in vendor"
     echo "Please run 'composer require moonshine/moonshine' first"
     exit 1

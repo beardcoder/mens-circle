@@ -147,7 +147,7 @@ class EventResource extends ModelResource
                 ])->columnSpan(4),
             ]),
 
-            HasMany::make('Registrations', 'registrations', resource: 'name')
+            HasMany::make('Registrations', 'registrations')
                 ->fields([
                     Text::make('Participant', 'participant.full_name'),
                     Text::make('Status', 'status'),
