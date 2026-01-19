@@ -12,28 +12,31 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/achyutkneupane/filament-log-viewer.git",
-                "reference": "f2c4bd73c87f34178e0eadda9541cb4fe44a9202"
+                "reference": "7bbc75550d491a39317006a6ba166cd57fa383bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/achyutkneupane/filament-log-viewer/zipball/f2c4bd73c87f34178e0eadda9541cb4fe44a9202",
-                "reference": "f2c4bd73c87f34178e0eadda9541cb4fe44a9202",
+                "url": "https://api.github.com/repos/achyutkneupane/filament-log-viewer/zipball/7bbc75550d491a39317006a6ba166cd57fa383bc",
+                "reference": "7bbc75550d491a39317006a6ba166cd57fa383bc",
                 "shasum": ""
             },
             "require": {
-                "filament/filament": "^5.0",
+                "filament/filament": "^5",
+                "livewire/livewire": "^4",
                 "phiki/phiki": "^2.0",
                 "php": ">=8.2"
             },
             "require-dev": {
                 "larastan/larastan": "^3.8",
-                "laravel/pint": "^1.25",
-                "orchestra/testbench": "^10.6",
-                "pestphp/pest": "^4.1",
+                "laravel/pint": "^1.27",
+                "orchestra/testbench": "^10.9",
+                "pestphp/pest": "^4.3",
                 "pestphp/pest-plugin-laravel": "^4.0",
+                "pestphp/pest-plugin-livewire": "^4.1",
                 "phpstan/phpstan": "^2.1",
-                "rector/rector": "^2.2"
+                "rector/rector": "^2.3"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -76,6 +79,10 @@
                     "type": "buy_me_a_coffee"
                 },
                 {
+                    "url": "https://buymemomo.com/achyut",
+                    "type": "custom"
+                },
+                {
                     "url": "https://github.com/achyutkneupane",
                     "type": "github"
                 },
@@ -84,7 +91,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-11-05T08:51:50+00:00"
+            "time": "2026-01-17T12:11:49+00:00"
         },
         {
             "name": "anourvalar/eloquent-serialize",
@@ -10757,16 +10764,16 @@
         },
         {
             "name": "larastan/larastan",
-            "version": "v3.8.1",
+            "version": "v3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/larastan/larastan.git",
-                "reference": "ff3725291bc4c7e6032b5a54776e3e5104c86db9"
+                "reference": "82c18890d0d5b012bc39a3432531e5b6cd1b4b3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larastan/larastan/zipball/ff3725291bc4c7e6032b5a54776e3e5104c86db9",
-                "reference": "ff3725291bc4c7e6032b5a54776e3e5104c86db9",
+                "url": "https://api.github.com/repos/larastan/larastan/zipball/82c18890d0d5b012bc39a3432531e5b6cd1b4b3a",
+                "reference": "82c18890d0d5b012bc39a3432531e5b6cd1b4b3a",
                 "shasum": ""
             },
             "require": {
@@ -10835,7 +10842,7 @@
             ],
             "support": {
                 "issues": "https://github.com/larastan/larastan/issues",
-                "source": "https://github.com/larastan/larastan/tree/v3.8.1"
+                "source": "https://github.com/larastan/larastan/tree/v3.9.0"
             },
             "funding": [
                 {
@@ -10843,7 +10850,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-11T16:37:35+00:00"
+            "time": "2026-01-17T23:00:37+00:00"
         },
         {
             "name": "laravel/boost",
