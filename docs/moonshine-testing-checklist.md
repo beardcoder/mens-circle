@@ -9,6 +9,7 @@
 
 ## Installation Steps
 
+- [ ] Make setup script executable: `chmod +x setup-moonshine.sh` (if needed)
 - [ ] Run `./setup-moonshine.sh` script
 - [ ] MoonShine configuration published to `config/moonshine.php`
 - [ ] MoonShine migrations completed successfully
