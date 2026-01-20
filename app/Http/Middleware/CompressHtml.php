@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use WyriHaximus\HtmlCompress\Factory;
-use WyriHaximus\HtmlCompress\HtmlCompressorInterface;
+use WyriHaximus\HtmlCompress\Parser;
 
 class CompressHtml
 {
-    private HtmlCompressorInterface $compressor;
+    private Parser $compressor;
 
     public function __construct()
     {
@@ -49,7 +49,7 @@ class CompressHtml
             return false;
         }
 
-        $contentType = $response->headers->get('Content-Type', '');
+        $contentType = $response->headers->get('Content-Type') ?? '';
 
         return str_contains($contentType, 'text/html');
     }
