@@ -24,7 +24,8 @@
         "spatie/laravel-responsecache": "^7.7.2",
         "spatie/laravel-settings": "^3.6",
         "spatie/laravel-sitemap": "^7.3.8",
-        "spatie/laravel-sluggable": "^3.7.5"
+        "spatie/laravel-sluggable": "^3.7.5",
+        "wyrihaximus/html-compress": "^1.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16.3",
