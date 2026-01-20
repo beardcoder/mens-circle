@@ -34,11 +34,11 @@
     <div class="container">
         <div class="hero__content">
             @if(!empty($data['label']))
-                <p class="hero__label fade-in">{{ $data['label'] }}</p>
+                <p class="hero__label">{{ $data['label'] }}</p>
             @endif
 
             @if(!empty($data['title']))
-                <h1 class="hero__title fade-in-delay-1">
+                <h1 class="hero__title">
                     {!! $data['title'] !!}
                 </h1>
             @endif

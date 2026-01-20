@@ -90,8 +90,8 @@
 
         <div class="container">
             <div class="hero__content">
-                <p class="hero__label fade-in">{{ $event->isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
-                <h1 class="hero__title fade-in fade-in-delay-1">
+                <p class="hero__label">{{ $event->isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
+                <h1 class="hero__title">
                     <span class="hero__title-line">{{ $event->title }}</span>
                 </h1>
                 <div class="hero__bottom">
