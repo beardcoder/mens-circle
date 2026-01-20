@@ -35,7 +35,12 @@
   font-size: 1.25rem;
   color: var(--color-bone);
   letter-spacing: -0.02em;
-  transition: color var(--transition-medium);
+  transition: opacity var(--transition-medium);
+  will-change: opacity;
+}
+
+.logo:hover {
+  opacity: 0.9;
 }
 
 .logo__icon {
@@ -65,7 +70,12 @@
   font-weight: 500;
   color: var(--color-bone);
   letter-spacing: 0.02em;
-  transition: color var(--transition-medium);
+  transition: opacity var(--transition-medium);
+  will-change: opacity;
+}
+
+.nav__link:hover {
+  opacity: 0.8;
 }
 
 /* Underline effect */
@@ -294,10 +304,14 @@ body:not(:has(.hero)) .nav-toggle span {
     filter: blur(2px);
     transform: translateY(24px) scale(0.98);
     transition:
-      color var(--transition-fast),
       opacity var(--transition-slow),
       transform var(--transition-slow),
       filter var(--transition-medium);
+    will-change: opacity, transform, filter;
+  }
+
+  .nav__link:hover {
+    opacity: 0.8;
   }
 
   .nav__link::after {

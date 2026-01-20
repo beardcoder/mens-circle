@@ -32,7 +32,7 @@
                             @endif
                             <div class="value-item__content">
                                 @if(!empty($value['title']))
-                                    <h4>{{ $value['title'] }}</h4>
+                                    <h3>{{ $value['title'] }}</h3>
                                 @endif
                                 @if(!empty($value['description']))
                                     <p>{{ $value['description'] }}</p>

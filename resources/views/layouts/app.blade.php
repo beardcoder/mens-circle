@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="footer__nav">
-                    <h4 class="footer__heading">Navigation</h4>
+                    <h3 class="footer__heading">Navigation</h3>
                     <ul class="footer__links">
                         <li><a href="{{ route('home') }}#ueber" data-m:click="action=nav_click;element=link;target=ueber;location=footer">Über uns</a></li>
                         <li><a href="{{ route('home') }}#reise" data-m:click="action=nav_click;element=link;target=reise;location=footer">Die Reise</a></li>
@@ -89,7 +89,7 @@
                 </div>
 
                 <div class="footer__contact">
-                    <h4 class="footer__heading">Kontakt</h4>
+                    <h3 class="footer__heading">Kontakt</h3>
                     <ul class="footer__links">
                         @if($settings?->contact_email)
                             <li><a href="mailto:{{ $settings->contact_email }}" data-m:click="action=contact_click;element=email;location=footer">E-Mail schreiben</a></li>

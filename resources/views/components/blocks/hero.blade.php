@@ -45,7 +45,7 @@
 
             <div class="hero__bottom">
                 @if(!empty($data['description']))
-                    <p class="hero__description fade-in-delay-2">
+                    <p class="hero__description">
                         {{ $data['description'] }}
                     </p>
                 @endif

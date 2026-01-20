@@ -26,7 +26,7 @@
 
                         <div class="value-item__content">
                             @if(!empty($item['title']))
-                                <h4>{{ $item['title'] }}</h4>
+                                <h3>{{ $item['title'] }}</h3>
                             @endif
 
                             @if(!empty($item['description']))
