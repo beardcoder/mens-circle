@@ -105,7 +105,7 @@
      ============================================ */
   --font-display: 'Playfair Display Variable', georgia, serif;
   --font-body: 'DM Sans Variable', system-ui, sans-serif;
-  --font-accent: 'Cormorant Variable', georgia, serif;
+  --font-accent: 'Playfair Display Variable', georgia, serif;
 
   /* Fluid Type Scale using clamp() */
   --text-xs: clamp(0.625rem, 0.5rem + 0.25vw, 0.75rem);

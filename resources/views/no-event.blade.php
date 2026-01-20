@@ -27,8 +27,8 @@
 
         <div class="container">
             <div class="hero__content">
-                <p class="hero__label fade-in">Männerkreis Niederbayern/ Straubing</p>
-                <h1 class="hero__title fade-in fade-in-delay-1">
+                <p class="hero__label">Männerkreis Niederbayern/ Straubing</p>
+                <h1 class="hero__title">
                     <span class="hero__title-line">Aktuell ist kein</span>
                     <span class="hero__title-line"><span class="text-italic">Termin</span> geplant</span>
                 </h1>
