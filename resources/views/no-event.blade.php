@@ -32,14 +32,14 @@
                     <span class="hero__title-line">Aktuell ist kein</span>
                     <span class="hero__title-line"><span class="text-italic">Termin</span> geplant</span>
                 </h1>
-                <div class="hero__bottom fade-in fade-in-delay-2">
+                <div class="hero__bottom">
                     <p class="hero__description">
                         Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an
                         oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.
                     </p>
-                    <div class="hero__cta">
+                    <div class="hero__cta fade-in-delay-2">
                         <a href="#newsletter" class="btn btn--primary btn--large">Zum Newsletter</a>
-                        <div class="hero__scroll">
+                        <div class="hero__scroll fade-in-delay-3">
                             <span>Mehr erfahren</span>
                             <div class="hero__scroll-line"></div>
                         </div>

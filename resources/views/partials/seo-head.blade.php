@@ -54,6 +54,10 @@
 <link rel="preconnect" href="https://stats.letsbenow.de" crossorigin>
 <link rel="dns-prefetch" href="https://stats.letsbenow.de">
 
+<!-- Preload Critical Fonts for LCP -->
+<link rel="preload" as="font" type="font/woff2" href="/build/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/build/assets/playfair-display-latin-wght-normal-BOwq7MWX.woff2" crossorigin>
+
 <!-- Styles -->
 @vite(['resources/css/app.css'])
 

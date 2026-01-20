@@ -94,12 +94,12 @@
                 <h1 class="hero__title fade-in fade-in-delay-1">
                     <span class="hero__title-line">{{ $event->title }}</span>
                 </h1>
-                <div class="hero__bottom fade-in fade-in-delay-2">
+                <div class="hero__bottom">
                     <p class="hero__description">
                         {{ $event->event_date->translatedFormat('l') }}, {{ $event->event_date->format('d.m.Y') }} · {{ $event->start_time->format('H:i') }} Uhr · {{ $event->location }}
                     </p>
                     @unless($event->isPast)
-                        <div class="hero__cta">
+                        <div class="hero__cta fade-in-delay-2">
                             <a href="#anmeldung" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=registration;location=hero">Jetzt anmelden</a>
                         </div>
                     @endunless
