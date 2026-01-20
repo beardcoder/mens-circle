@@ -8,23 +8,19 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use WyriHaximus\HtmlCompress\Factory;
-use WyriHaximus\HtmlCompress\Parser;
+use voku\helper\HtmlMin;
 
-class CompressHtml
+readonly class CompressHtml
 {
-    private Parser $compressor;
-
-    public function __construct()
+    public function __construct(private HtmlMin $htmlMin)
     {
-        $this->compressor = Factory::constructFastest();
     }
 
     public function handle(Request $request, Closure $next): SymfonyResponse
     {
         $response = $next($request);
 
-        if (! $this->shouldCompress($response)) {
+        if (!$this->shouldCompress($response)) {
             return $response;
         }
 
@@ -34,18 +30,18 @@ class CompressHtml
             return $response;
         }
 
-        $response->setContent($this->compressor->compress($content));
+        $response->setContent($this->htmlMin->minify($content));
 
         return $response;
     }
 
     private function shouldCompress(SymfonyResponse $response): bool
     {
-        if (! $response instanceof Response) {
+        if (!$response instanceof Response) {
             return false;
         }
 
-        if ($response->isRedirection() || ! $response->isSuccessful()) {
+        if ($response->isRedirection() || !$response->isSuccessful()) {
             return false;
         }
 

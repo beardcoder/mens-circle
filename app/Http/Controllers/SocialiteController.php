@@ -30,6 +30,7 @@ class SocialiteController extends Controller
             return redirect()->route('socialite.redirect', ['provider' => $provider])
                 ->withErrors(['email' => 'No user found with the email ' . $response->getEmail()]);
         }
+
         $user->update([$provider . '_id' => $response->getId()]);
 
         auth()->login($user);

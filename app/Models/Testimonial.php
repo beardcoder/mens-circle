@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\ClearsResponseCache;
+use Database\Factories\TestimonialFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use PhpStaticAnalysis\Attributes\TemplateUse;
 
 /**
@@ -18,13 +20,13 @@ use PhpStaticAnalysis\Attributes\TemplateUse;
  * @property string $email
  * @property ?string $role
  * @property bool $is_published
- * @property ?\Illuminate\Support\Carbon $published_at
+ * @property ?Carbon $published_at
  * @property int $sort_order
  */
 #[TemplateUse('HasFactory<\Database\Factories\TestimonialFactory>')]
 class Testimonial extends Model
 {
-    /** @use HasFactory<\Database\Factories\TestimonialFactory> */
+    /** @use HasFactory<TestimonialFactory> */
     use HasFactory;
     use ClearsResponseCache;
     use SoftDeletes;

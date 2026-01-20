@@ -6,17 +6,19 @@ namespace App\Models;
 
 use App\Enums\RegistrationStatus;
 use App\Traits\ClearsResponseCache;
+use Database\Factories\RegistrationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $participant_id
  * @property int $event_id
  * @property RegistrationStatus $status
- * @property \Illuminate\Support\Carbon $registered_at
- * @property ?\Illuminate\Support\Carbon $cancelled_at
+ * @property Carbon $registered_at
+ * @property ?Carbon $cancelled_at
  * @property Participant $participant
  * @property Event $event
  */
@@ -24,7 +26,7 @@ class Registration extends Model
 {
     use ClearsResponseCache;
 
-    /** @use HasFactory<\Database\Factories\RegistrationFactory> */
+    /** @use HasFactory<RegistrationFactory> */
     use HasFactory;
     use SoftDeletes;
 

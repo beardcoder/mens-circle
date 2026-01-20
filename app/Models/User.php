@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use PhpStaticAnalysis\Attributes\Returns;
 use PhpStaticAnalysis\Attributes\Type;
 
@@ -17,12 +19,12 @@ use PhpStaticAnalysis\Attributes\Type;
  * @property string $name
  * @property string $email
  * @property string $password
- * @property ?\Illuminate\Support\Carbon $email_verified_at
+ * @property ?Carbon $email_verified_at
  * @property string $remember_token
  */
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
     use Notifiable;
 
