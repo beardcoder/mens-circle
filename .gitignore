@@ -28,3 +28,5 @@ Thumbs.db
 frankenphp
 frankenphp-worker.php
 public/sitemap.xml
+.phpstorm.meta.php
+_ide_helper.php
