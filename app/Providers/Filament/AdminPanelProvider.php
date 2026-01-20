@@ -39,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('40px')
             ->renderHook(
                 'panels::auth.login.form.after',
-                fn () => view('filament.components.auth.socialite.github')
+                fn (): Factory|View => view('filament.components.auth.socialite.github')
             )
             ->colors([
                 'primary' => [

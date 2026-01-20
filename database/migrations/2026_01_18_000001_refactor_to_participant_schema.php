@@ -135,10 +135,10 @@ return new class () extends Migration {
             // Step 9: Drop old columns
             $columnsToDrop = array_filter(
                 ['first_name', 'last_name', 'email', 'phone_number', 'privacy_accepted', 'confirmed_at'],
-                fn ($col) => Schema::hasColumn($sourceTable, $col)
+                fn (string $col) => Schema::hasColumn($sourceTable, $col)
             );
 
-            if (! empty($columnsToDrop)) {
+            if ($columnsToDrop !== []) {
                 Schema::table($sourceTable, function (Blueprint $table) use ($columnsToDrop): void {
                     $table->dropColumn($columnsToDrop);
                 });
@@ -221,10 +221,10 @@ return new class () extends Migration {
 
             $columnsToDrop = array_filter(
                 ['email', 'status'],
-                fn ($col) => Schema::hasColumn('newsletter_subscriptions', $col)
+                fn (string $col) => Schema::hasColumn('newsletter_subscriptions', $col)
             );
 
-            if (! empty($columnsToDrop)) {
+            if ($columnsToDrop !== []) {
                 Schema::table('newsletter_subscriptions', function (Blueprint $table) use ($columnsToDrop): void {
                     $table->dropColumn($columnsToDrop);
                 });
@@ -255,7 +255,7 @@ return new class () extends Migration {
         }
     }
 
-    public function down(): void
+    public function down(): never
     {
         // This migration is not reversible due to data transformation
         throw new RuntimeException('This migration cannot be reversed. Please restore from backup.');

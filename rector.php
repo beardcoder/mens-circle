@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use PhpStaticAnalysis\RectorRule\Set\PhpStaticAnalysisAnnotationsToAttributesSetList;
 use Rector\Config\RectorConfig;
 use Rector\ValueObject\PhpVersion;
 use RectorLaravel\Set\LaravelSetProvider;
@@ -23,11 +22,10 @@ return RectorConfig::configure()
         __DIR__.'/bootstrap/cache',
         __DIR__.'/storage',
         __DIR__.'/vendor',
+        __DIR__.'/.phpstorm.meta.php',
+        __DIR__.'/_ide_helper.php',
     ])
     ->withSetProviders(LaravelSetProvider::class)
-    ->withSets([
-        PhpStaticAnalysisAnnotationsToAttributesSetList::ANNOTATIONS_TO_ATTRIBUTES
-    ])
     ->withImportNames(removeUnusedImports: true)
     ->withPHPStanConfigs([
         __DIR__.'/phpstan.neon',

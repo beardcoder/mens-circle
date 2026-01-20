@@ -58,11 +58,9 @@ class ParticipantForm
                                     } elseif (! $subscription) {
                                         $record->newsletterSubscription()->create([]);
                                     }
-                                } else {
+                                } elseif ($subscription?->isActive()) {
                                     // Unsubscribe from newsletter
-                                    if ($subscription?->isActive()) {
-                                        $subscription->unsubscribe();
-                                    }
+                                    $subscription->unsubscribe();
                                 }
                             })
                             ->dehydrated(false),
