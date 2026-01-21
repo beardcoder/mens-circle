@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->unsavedChangesAlerts()
-            ->profile()
+            ->profile(isSimple: false)
             ->favicon(asset('favicon.svg'))
             ->brandName('Männerkreis Niederbayern')
             ->brandLogoHeight('40px')
