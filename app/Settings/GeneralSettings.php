@@ -20,8 +20,9 @@ class GeneralSettings extends Settings
 
     public string $location;
 
-    public ?string $whatsapp_community_link;
+    public string|null $whatsapp_community_link;
 
+    /** @var array<string, string>|null */
     public ?array $social_links;
 
     public string $footer_text;
