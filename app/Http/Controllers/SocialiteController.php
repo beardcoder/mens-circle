@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Socialite;
 
 class SocialiteController extends Controller
 {
-    public function redirect(string $provider)
+    public function redirect(string $provider): RedirectResponse
     {
         $this->validateProvider($provider);
 
@@ -19,7 +20,7 @@ class SocialiteController extends Controller
             ->redirect();
     }
 
-    public function callback(string $provider)
+    public function callback(string $provider): RedirectResponse
     {
         $this->validateProvider($provider);
 
@@ -38,6 +39,9 @@ class SocialiteController extends Controller
         return redirect()->intended(route('filament.admin.pages.dashboard'));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function validateProvider(string $provider): array
     {
         return Validator::make(
