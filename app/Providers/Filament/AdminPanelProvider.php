@@ -22,6 +22,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Openplain\FilamentShadcnTheme\Color;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -42,19 +43,7 @@ class AdminPanelProvider extends PanelProvider
                 fn (): Factory|View => view('filament.components.auth.socialite.github')
             )
             ->colors([
-                'primary' => [
-                    50 => 'oklch(0.97 0.02 46)',
-                    100 => 'oklch(0.94 0.04 46)',
-                    200 => 'oklch(0.88 0.07 46)',
-                    300 => 'oklch(0.79 0.1 46)',
-                    400 => 'oklch(0.7 0.13 46)',
-                    500 => 'oklch(0.58 0.13 46)',
-                    600 => 'oklch(0.52 0.12 46)',
-                    700 => 'oklch(0.44 0.1 46)',
-                    800 => 'oklch(0.37 0.08 46)',
-                    900 => 'oklch(0.31 0.06 46)',
-                    950 => 'oklch(0.21 0.04 46)',
-                ],
+                'primary' => Color::Orange,
             ])
             ->renderHook(PanelsRenderHook::TOPBAR_END, fn (): Factory|View => view('filament.components.go-to-website'))
             ->plugins([
