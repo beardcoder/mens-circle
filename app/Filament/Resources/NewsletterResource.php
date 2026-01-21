@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\NewsletterResource\Pages;
+use App\Filament\Resources\NewsletterResource\Pages\ListNewsletters;
+use App\Filament\Resources\NewsletterResource\Pages\ViewNewsletter;
 use App\Models\Newsletter;
+use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
@@ -32,7 +34,7 @@ class NewsletterResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Newsletter';
 
-    protected static string|null|\BackedEnum $navigationIcon = Heroicon::Newspaper;
+    protected static string|null|BackedEnum $navigationIcon = Heroicon::Newspaper;
 
     protected static ?int $navigationSort = 60;
 
@@ -138,8 +140,8 @@ class NewsletterResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNewsletters::route('/'),
-            'view' => Pages\ViewNewsletter::route('/{record}'),
+            'index' => ListNewsletters::route('/'),
+            'view' => ViewNewsletter::route('/{record}'),
         ];
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ParticipantResource\Pages;
+use App\Filament\Resources\ParticipantResource\Pages\CreateParticipant;
+use App\Filament\Resources\ParticipantResource\Pages\EditParticipant;
+use App\Filament\Resources\ParticipantResource\Pages\ListParticipants;
 use App\Models\Participant;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -155,9 +157,9 @@ class ParticipantResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListParticipants::route('/'),
-            'create' => Pages\CreateParticipant::route('/create'),
-            'edit' => Pages\EditParticipant::route('/{record}/edit'),
+            'index' => ListParticipants::route('/'),
+            'create' => CreateParticipant::route('/create'),
+            'edit' => EditParticipant::route('/{record}/edit'),
         ];
     }
 }

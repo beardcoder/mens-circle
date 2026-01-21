@@ -13,7 +13,7 @@
         "filament/filament": "^5.0",
         "filament/spatie-laravel-media-library-plugin": "^5.0",
         "filament/spatie-laravel-settings-plugin": "^5.0",
-        "laravel/framework": "^12.47",
+        "laravel/framework": "^12.48.1",
         "laravel/octane": "^2.13.4",
         "laravel/socialite": "^5.24.2",
         "laravel/tinker": "^2.11.0",
@@ -26,7 +26,7 @@
         "spatie/laravel-settings": "^3.6",
         "spatie/laravel-sitemap": "^7.3.8",
         "spatie/laravel-sluggable": "^3.7.5",
-        "voku/html-min": "^4.5"
+        "voku/html-min": "^4.5.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16.3",
@@ -34,7 +34,7 @@
         "driftingly/rector-laravel": "^2.1.9",
         "filament/upgrade": "^5.0",
         "kitloong/laravel-migrations-generator": "^7.2",
-        "larastan/larastan": "^3.9",
+        "larastan/larastan": "^3.9.1",
         "laravel/boost": "^1.8.10",
         "laravel/pail": "^1.2.4",
         "laravel/pint": "^1.27",
