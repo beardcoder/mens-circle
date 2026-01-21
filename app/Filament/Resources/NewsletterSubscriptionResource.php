@@ -16,6 +16,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -34,6 +35,8 @@ class NewsletterSubscriptionResource extends Resource
     protected static ?string $pluralModelLabel = 'Abonnenten';
 
     protected static UnitEnum|string|null $navigationGroup = 'Newsletter';
+
+    protected static string|null|\BackedEnum $navigationIcon = Heroicon::UserGroup;
 
     protected static ?int $navigationSort = 70;
 

@@ -46,6 +46,8 @@ class PageResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Seiten';
 
+    protected static string|null|\BackedEnum $navigationIcon = Heroicon::Document;
+
     protected static UnitEnum|string|null $navigationGroup = 'Inhalte';
 
     protected static ?int $navigationSort = 40;
