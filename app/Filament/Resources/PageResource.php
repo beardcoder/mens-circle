@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PageResource\Pages;
+use App\Filament\Resources\PageResource\Pages\CreatePage;
+use App\Filament\Resources\PageResource\Pages\EditPage;
+use App\Filament\Resources\PageResource\Pages\ListPages;
 use App\Models\Page;
+use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -46,7 +49,7 @@ class PageResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Seiten';
 
-    protected static string|null|\BackedEnum $navigationIcon = Heroicon::Document;
+    protected static string|null|BackedEnum $navigationIcon = Heroicon::Document;
 
     protected static UnitEnum|string|null $navigationGroup = 'Inhalte';
 
@@ -395,9 +398,9 @@ class PageResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPages::route('/'),
-            'create' => Pages\CreatePage::route('/create'),
-            'edit' => Pages\EditPage::route('/{record}/edit'),
+            'index' => ListPages::route('/'),
+            'create' => CreatePage::route('/create'),
+            'edit' => EditPage::route('/{record}/edit'),
         ];
     }
 
