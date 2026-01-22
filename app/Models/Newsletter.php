@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\NewsletterStatus;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $content
  * @property ?\Illuminate\Support\Carbon $sent_at
  * @property ?int $recipient_count
- * @property string $status
+ * @property NewsletterStatus $status
  */
 class Newsletter extends Model
 {
@@ -27,16 +28,17 @@ class Newsletter extends Model
     {
         return [
             'sent_at' => 'datetime',
+            'status' => NewsletterStatus::class,
         ];
     }
 
     public function isSent(): bool
     {
-        return $this->status === 'sent';
+        return $this->status === NewsletterStatus::Sent;
     }
 
     public function isDraft(): bool
     {
-        return $this->status === 'draft';
+        return $this->status === NewsletterStatus::Draft;
     }
 }

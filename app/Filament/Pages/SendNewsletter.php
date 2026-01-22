@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Enums\NewsletterStatus;
 use App\Jobs\SendNewsletterJob;
 use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
@@ -104,7 +105,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
         $newsletter = Newsletter::create([
             'subject' => $data['subject'],
             'content' => $data['content'],
-            'status' => 'draft',
+            'status' => NewsletterStatus::Draft,
         ]);
 
         dispatch(new SendNewsletterJob($newsletter));
