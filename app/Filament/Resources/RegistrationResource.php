@@ -118,6 +118,7 @@ class RegistrationResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with(['event', 'participant']))
             ->columns([
                 TextColumn::make('event.event_date')
                     ->label('Event-Datum')

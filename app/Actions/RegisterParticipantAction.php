@@ -58,6 +58,9 @@ class RegisterParticipantAction
             ]);
         }
 
+        // Eager load participant for confirmation sending
+        $registration->setRelation('participant', $participant);
+
         ResponseCache::clear();
 
         // Send confirmations
