@@ -204,6 +204,11 @@ class Event extends Model implements HasMedia
 
     public function sendRegistrationConfirmation(Registration $registration): void
     {
+        // Ensure participant relationship is loaded
+        if (! $registration->relationLoaded('participant')) {
+            $registration->load('participant');
+        }
+
         $participant = $registration->participant;
 
         // Send email

@@ -91,6 +91,7 @@ class RegistrationsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with('participant'))
             ->columns([
                 TextColumn::make('participant.first_name')
                     ->label('Vorname')
