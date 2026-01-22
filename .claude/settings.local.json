@@ -1,11 +1,15 @@
 {
-    "mcpServers": {
-        "laravel-boost": {
-            "command": "ddev",
-            "args": [
-                "artisan",
-                "boost:mcp"
-            ]
-        }
+  "mcpServers": {
+    "laravel-boost": {
+      "command": "ddev",
+      "args": [
+        "artisan",
+        "boost:mcp"
+      ]
     }
+  },
+  "enabledMcpjsonServers": [
+    "laravel-boost"
+  ],
+  "enableAllProjectMcpServers": true
 }
