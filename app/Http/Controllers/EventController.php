@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Enums\RegistrationStatus;
+use App\Actions\RegisterParticipantAction;
 use App\Http\Requests\EventRegistrationRequest;
 use App\Models\Event;
-use App\Models\Participant;
-use App\Models\Registration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Spatie\ResponseCache\Facades\ResponseCache;
 
 class EventController extends Controller
 {
@@ -45,7 +42,7 @@ class EventController extends Controller
         ]);
     }
 
-    public function register(EventRegistrationRequest $request): JsonResponse
+    public function register(EventRegistrationRequest $request, RegisterParticipantAction $action): JsonResponse
     {
         $validated = $request->validated();
         /** @var Event $event */
@@ -64,55 +61,15 @@ class EventController extends Controller
             return response()->json(['success' => false, 'message' => 'Diese Veranstaltung ist leider bereits ausgebucht.'], 409);
         }
 
-        // Find or create participant
-        $participant = Participant::findOrCreateByEmail($validated['email'], [
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'phone' => $validated['phone_number'] ?? null,
-        ]);
+        try {
+            $action->execute($event, $validated);
 
-        // Update participant data if changed
-        $participant->update([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'phone' => $validated['phone_number'] ?? $participant->phone,
-        ]);
-
-        // Check for existing registration (including soft-deleted ones)
-        $existingRegistration = Registration::withTrashed()
-            ->where('event_id', $event->id)
-            ->where('participant_id', $participant->id)
-            ->first();
-
-        if ($existingRegistration && ! $existingRegistration->trashed()) {
-            return response()->json(['success' => false, 'message' => 'Du bist bereits für diese Veranstaltung angemeldet.'], 409);
-        }
-
-        if ($existingRegistration) {
-            $existingRegistration->restore();
-            $existingRegistration->update([
-                'status' => RegistrationStatus::Registered->value,
-                'registered_at' => now(),
-                'cancelled_at' => null,
+            return response()->json([
+                'success' => true,
+                'message' => sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $validated['first_name']),
             ]);
-            $registration = $existingRegistration;
-        } else {
-            $registration = Registration::create([
-                'participant_id' => $participant->id,
-                'event_id' => $validated['event_id'],
-                'status' => RegistrationStatus::Registered->value,
-                'registered_at' => now(),
-            ]);
+        } catch (\RuntimeException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 409);
         }
-
-        ResponseCache::clear();
-
-        // Send confirmations
-        $event->sendRegistrationConfirmation($registration);
-
-        return response()->json([
-            'success' => true,
-            'message' => sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $validated['first_name']),
-        ]);
     }
 }

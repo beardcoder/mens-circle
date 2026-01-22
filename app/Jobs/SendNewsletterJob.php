@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Enums\NewsletterStatus;
 use App\Mail\NewsletterMail;
 use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
@@ -33,7 +34,7 @@ class SendNewsletterJob implements ShouldQueue
     public function handle(): void
     {
         // Update status to sending
-        $this->newsletter->update(['status' => 'sending']);
+        $this->newsletter->update(['status' => NewsletterStatus::Sending]);
 
         $recipientCount = 0;
         $failedRecipients = [];
@@ -41,11 +42,12 @@ class SendNewsletterJob implements ShouldQueue
         // Get all active subscribers and send emails in chunks
         NewsletterSubscription::query()
             ->where('status', 'active')
+            ->with('participant')
             ->chunk(100, function (\Illuminate\Support\Collection $subscriptions) use (&$recipientCount, &$failedRecipients): void {
                 /** @var NewsletterSubscription $subscription */
                 foreach ($subscriptions as $subscription) {
                     try {
-                        Mail::to($subscription->email)
+                        Mail::to($subscription->participant->email)
                             ->send(new NewsletterMail($this->newsletter, $subscription));
 
                         $recipientCount++;
@@ -53,17 +55,17 @@ class SendNewsletterJob implements ShouldQueue
                         Log::error('Failed to send newsletter to subscriber', [
                             'newsletter_id' => $this->newsletter->id,
                             'subscription_id' => $subscription->id,
-                            'email' => $subscription->email,
+                            'email' => $subscription->participant->email ?? 'unknown',
                             'error' => $e->getMessage(),
                         ]);
-                        $failedRecipients[] = $subscription->email;
+                        $failedRecipients[] = $subscription->participant->email ?? 'unknown';
                     }
                 }
             });
 
         // Update newsletter as sent
         $this->newsletter->update([
-            'status' => 'sent',
+            'status' => NewsletterStatus::Sent,
             'sent_at' => now(),
             'recipient_count' => $recipientCount,
         ]);
@@ -89,6 +91,6 @@ class SendNewsletterJob implements ShouldQueue
         ]);
 
         // Reset status to draft so it can be retried manually
-        $this->newsletter->update(['status' => 'draft']);
+        $this->newsletter->update(['status' => NewsletterStatus::Draft]);
     }
 }

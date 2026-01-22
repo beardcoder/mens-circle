@@ -15,7 +15,10 @@ class SocialiteController extends Controller
     {
         $this->validateProvider($provider);
 
-        return Socialite::driver($provider)
+        /** @var \Laravel\Socialite\Two\GithubProvider $driver */
+        $driver = Socialite::driver($provider);
+
+        return $driver
             ->scopes(['user:email'])
             ->redirect();
     }
@@ -27,12 +30,12 @@ class SocialiteController extends Controller
         $response = Socialite::driver($provider)->user();
 
         $user = User::firstWhere(['email' => $response->getEmail()]);
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('socialite.redirect', ['provider' => $provider])
-                ->withErrors(['email' => 'No user found with the email ' . $response->getEmail()]);
+                ->withErrors(['email' => 'No user found with the email '.$response->getEmail()]);
         }
 
-        $user->update([$provider . '_id' => $response->getId()]);
+        $user->update([$provider.'_id' => $response->getId()]);
 
         auth()->login($user);
 
