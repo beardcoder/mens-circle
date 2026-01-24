@@ -139,22 +139,22 @@ function initFadeAnimations(): void {
       () => {
         animate(
           element,
-          { opacity: config.animate.opacity } as any,
+          { opacity: config.animate.opacity },
           {
             duration: TIMING.opacityDuration,
             delay,
-            easing: EASING.decelerate,
-          } as any
+            easing: EASING.decelerate as unknown as string,
+          }
         );
 
         animate(
           element,
-          { transform: buildTransform(config.animate) } as any,
+          { transform: buildTransform(config.animate) },
           {
             duration: TIMING.transformDuration,
             delay,
-            easing: EASING.spring,
-          } as any
+            easing: EASING.spring as unknown as string,
+          }
         );
       },
       { amount: TIMING.viewportAmount }
@@ -183,22 +183,22 @@ function initStaggerAnimations(): void {
 
             animate(
               child,
-              { opacity: 1 } as any,
+              { opacity: 1 },
               {
                 duration: TIMING.opacityDuration,
                 delay,
-                easing: EASING.decelerate,
-              } as any
+                easing: EASING.decelerate as unknown as string,
+              }
             );
 
             animate(
               child,
-              { transform: 'translateY(0px)' } as any,
+              { transform: 'translateY(0px)' },
               {
                 duration: TIMING.transformDuration,
                 delay,
-                easing: EASING.gentle,
-              } as any
+                easing: EASING.gentle as unknown as string,
+              }
             );
           });
         },

@@ -69,11 +69,11 @@ export function useRegistrationForm(): void {
         throw new Error('Bitte bestätige die Datenschutzerklärung.');
       }
 
-      return fetch((globalThis as any).routes.eventRegister, {
+      return fetch(window.routes.eventRegister, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': (globalThis as any).routes.csrfToken,
+          'X-CSRF-TOKEN': window.routes.csrfToken,
           Accept: 'application/json',
         },
         body: JSON.stringify({
