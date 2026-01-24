@@ -59,7 +59,7 @@
 
                     @if($shouldShowButton)
                         <div class="hero__cta fade-in-delay-3">
-                            <a href="{{ $data['button_link'] }}" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=hero_cta;location=hero">
+                            <a href="{{ $data['button_link'] }}" class="btn btn--primary btn--large">
                                 {{ $data['button_text'] }}
                             </a>
                             <div class="hero__scroll fade-in-delay-4">
