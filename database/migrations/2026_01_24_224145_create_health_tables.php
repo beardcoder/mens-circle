@@ -9,29 +9,45 @@ use Spatie\Health\Models\HealthCheckResultHistoryItem;
 use Spatie\Health\ResultStores\EloquentHealthResultStore;
 
 return new class () extends Migration {
-    public function up()
+    public function up(): void
     {
         $connection = (new HealthCheckResultHistoryItem())->getConnectionName();
         $tableName = EloquentHealthResultStore::getHistoryItemInstance()->getTable();
 
-        Schema::connection($connection)->create($tableName, function (Blueprint $table) {
-            $table->id();
+        if (! Schema::connection($connection)->hasTable($tableName)) {
+            Schema::connection($connection)->create($tableName, function (Blueprint $table): void {
+                $table->id();
 
-            $table->string('check_name');
-            $table->string('check_label');
-            $table->string('status');
-            $table->text('notification_message')->nullable();
-            $table->string('short_summary')->nullable();
-            $table->json('meta');
-            $table->timestamp('ended_at');
-            $table->uuid('batch');
+                $table->string('check_name');
+                $table->string('check_label');
+                $table->string('status');
+                $table->text('notification_message')->nullable();
+                $table->string('short_summary')->nullable();
+                $table->json('meta');
+                $table->timestamp('ended_at');
+                $table->uuid('batch');
 
-            $table->timestamps();
+                $table->timestamps();
+            });
+        }
+
+        Schema::connection($connection)->table($tableName, function (Blueprint $table) use ($tableName): void {
+            $sm = Schema::connection($this->getConnection())->getConnection()->getSchemaBuilder();
+
+            $indexes = collect($sm->getIndexes($tableName))->pluck('name')->toArray();
+
+            if (! in_array("{$tableName}_created_at_index", $indexes, true)) {
+                $table->index('created_at');
+            }
+
+            if (! in_array("{$tableName}_batch_index", $indexes, true)) {
+                $table->index('batch');
+            }
         });
+    }
 
-        Schema::connection($connection)->table($tableName, function (Blueprint $table) {
-            $table->index('created_at');
-            $table->index('batch');
-        });
+    public function getConnection(): ?string
+    {
+        return (new HealthCheckResultHistoryItem())->getConnectionName();
     }
 };
