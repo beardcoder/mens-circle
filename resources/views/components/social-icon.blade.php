@@ -26,12 +26,9 @@ if (!$isInternal) {
 $isTextVariant = $variant === 'link';
 $linkClass = $isTextVariant ? 'social-link' : 'social-icon';
 $iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
-
-$trackingType = $socialType === SocialLinkType::EMAIL ? 'email' : ($socialType === SocialLinkType::PHONE ? 'phone' : 'social');
-$medamaClick = "action=social_click;element=link;type={$trackingType};location=footer";
 @endphp
 
-<a href="{{ $href }}" title="{{ $title }}" target="{{ $isInternal ? '_self' : '_blank' }}" rel="{{ $isInternal ? '' : 'noopener noreferrer' }}" data-m:click="{{ $medamaClick }}" {{ $attributes->merge(['class' => $linkClass]) }}>
+<a href="{{ $href }}" title="{{ $title }}" target="{{ $isInternal ? '_self' : '_blank' }}" rel="{{ $isInternal ? '' : 'noopener noreferrer' }}" {{ $attributes->merge(['class' => $linkClass]) }}>
     <span class="{{ $iconClass }}">{!! $iconSvg !!}</span>
     @if($isTextVariant)
         <span class="social-link__label">{{ $title }}</span>
