@@ -27,7 +27,7 @@
                 @endphp
 
                 @if($shouldShowButton)
-                    <a href="{{ $data['button_link'] }}" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=cta_section;location=page_cta">
+                    <a href="{{ $data['button_link'] }}" class="btn btn--primary btn--large">
                         {{ $data['button_text'] }}
                     </a>
                 @endif

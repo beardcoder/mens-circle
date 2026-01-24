@@ -100,7 +100,7 @@
                     </p>
                     @unless($event->isPast)
                         <div class="hero__cta fade-in-delay-2">
-                            <a href="#anmeldung" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=registration;location=hero">Jetzt anmelden</a>
+                            <a href="#anmeldung" class="btn btn--primary btn--large">Jetzt anmelden</a>
                         </div>
                     @endunless
                 </div>
@@ -191,10 +191,10 @@
 
                         <label class="form-checkbox">
                             <input type="checkbox" name="privacy" required>
-                            <span>Ich habe die <a href="{{ route('page.show', 'datenschutz') }}" target="_blank" data-m:click="action=legal_click;element=link;target=datenschutz;location=registration_form">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
+                            <span>Ich habe die <a href="{{ route('page.show', 'datenschutz') }}" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
                         </label>
 
-                        <button type="submit" class="btn btn--primary btn--large event-register__submit" {{ $event->isFull ? 'disabled' : '' }} data-m:click="action=form_submit;element=button;target=event_registration;location=registration_form">
+                        <button type="submit" class="btn btn--primary btn--large event-register__submit" {{ $event->isFull ? 'disabled' : '' }}>
                             {{ $event->isFull ? 'Ausgebucht' : 'Verbindlich anmelden' }}
                         </button>
 
@@ -248,7 +248,7 @@
             </div>
 
             <div class="event-info__calendar fade-in">
-                <button type="button" class="btn btn--secondary" id="addToCalendar" data-m:click="action=calendar_click;element=button;target=open_modal;location=event_info">
+                <button type="button" class="btn btn--secondary" id="addToCalendar">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -312,7 +312,7 @@
                     <h2 class="section-title event-cta__title">
                         Melde dich <span class="text-italic">jetzt</span> an
                     </h2>
-                    <a href="#anmeldung" class="btn btn--primary btn--large" data-m:click="action=cta_click;element=button;target=registration;location=event_cta">Zur Anmeldung</a>
+                    <a href="#anmeldung" class="btn btn--primary btn--large">Zur Anmeldung</a>
                 @endif
             </div>
         </div>

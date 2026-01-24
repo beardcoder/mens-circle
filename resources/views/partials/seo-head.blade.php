@@ -51,8 +51,8 @@
 <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
 
 <!-- Resource Hints for Performance -->
-<link rel="preconnect" href="https://stats.letsbenow.de" crossorigin>
-<link rel="dns-prefetch" href="https://stats.letsbenow.de">
+<link rel="preconnect" href="https://plausible.letsbenow.de" crossorigin>
+<link rel="dns-prefetch" href="https://plausible.letsbenow.de">
 
 <!-- Preload Critical Fonts for LCP -->
 <link rel="preload" as="font" type="font/woff2" href="/build/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2" crossorigin>
@@ -64,7 +64,11 @@
 <!-- Structured Data -->
 @stack('structured_data')
 
-<!-- Additional Analytics (Production Only) -->
+<!-- Privacy-friendly analytics by Plausible (Production Only) -->
 @production
-<script defer src="https://stats.letsbenow.de/script.js"></script>
+<script async src="https://plausible.letsbenow.de/js/pa-lbi9s_SfapZ6YIy5uNOSE.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
 @endproduction

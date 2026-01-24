@@ -11,7 +11,7 @@
     <header class="header" id="header">
         <div class="container">
             <div class="header__inner">
-                <a href="{{ route('home') }}" class="logo" aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite" data-m:click="action=nav_click;element=logo;location=header">
+                <a href="{{ route('home') }}" class="logo" aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite">
                     <svg class="logo__icon" viewBox="0 0 512 512" aria-hidden="true">
                         <path fill="currentColor" d="M256 0c141.31 0 256 114.73 256 256S397.31 512 256 512 0 397.27 0 256 114.69 0 256 0Zm0 10.53C120.47 10.53 10.4 120.5 10.4 256S120.47 501.47 256 501.47 501.6 391.5 501.6 256 391.53 10.53 256 10.53Z"/>
                         <path fill="currentColor" d="M256 24.06c126.47 0 229.15 103.93 229.15 231.94S382.47 487.94 256 487.94 26.86 384.01 26.86 256 129.53 24.06 256 24.06Zm0 10.53C135.27 34.59 37.26 133.8 37.26 256S135.28 477.41 256 477.41 474.74 378.2 474.74 256 376.73 34.59 256 34.59Z"/>
@@ -21,15 +21,15 @@
                 </a>
 
                 <nav class="nav" id="nav">
-                    <a href="{{ route('home') }}#ueber" class="nav__link" data-m:click="action=nav_click;element=link;target=ueber;location=header">Über</a>
-                    <a href="{{ route('home') }}#reise" class="nav__link" data-m:click="action=nav_click;element=link;target=reise;location=header">Die Reise</a>
-                    <a href="{{ route('home') }}#faq" class="nav__link" data-m:click="action=nav_click;element=link;target=faq;location=header">Fragen</a>
+                    <a href="{{ route('home') }}#ueber" class="nav__link">Über</a>
+                    <a href="{{ route('home') }}#reise" class="nav__link">Die Reise</a>
+                    <a href="{{ route('home') }}#faq" class="nav__link">Fragen</a>
                     @if($hasNextEvent)
-                        <a href="{{ route('event.show') }}" class="btn btn--primary btn--large nav__cta" data-m:click="action=cta_click;element=button;target=next_event;location=header">Nächster Termin</a>
+                        <a href="{{ route('event.show') }}" class="btn btn--primary btn--large nav__cta">Nächster Termin</a>
                     @endif
                 </nav>
 
-                <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" data-m:click="action=nav_click;element=mobile_toggle;location=header">
+                <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -48,7 +48,7 @@
         <div class="container">
             <div class="footer__top stagger-children">
                 <div class="footer__brand">
-                    <a href="{{ route('home') }}" class="footer__logo" data-m:click="action=nav_click;element=logo;location=footer">
+                    <a href="{{ route('home') }}" class="footer__logo">
                         <svg class="footer__logo-icon" viewBox="0 0 512 512" aria-hidden="true">
                             <path fill="currentColor" d="M256 0c141.31 0 256 114.73 256 256S397.31 512 256 512 0 397.27 0 256 114.69 0 256 0Zm0 10.53C120.47 10.53 10.4 120.5 10.4 256S120.47 501.47 256 501.47 501.6 391.5 501.6 256 391.53 10.53 256 10.53Z"/>
                             <path fill="currentColor" d="M256 24.06c126.47 0 229.15 103.93 229.15 231.94S382.47 487.94 256 487.94 26.86 384.01 26.86 256 129.53 24.06 256 24.06Zm0 10.53C135.27 34.59 37.26 133.8 37.26 256S135.28 477.41 256 477.41 474.74 378.2 474.74 256 376.73 34.59 256 34.59Z"/>
@@ -79,11 +79,11 @@
                 <div class="footer__nav">
                     <h3 class="footer__heading">Navigation</h3>
                     <ul class="footer__links">
-                        <li><a href="{{ route('home') }}#ueber" data-m:click="action=nav_click;element=link;target=ueber;location=footer">Über uns</a></li>
-                        <li><a href="{{ route('home') }}#reise" data-m:click="action=nav_click;element=link;target=reise;location=footer">Die Reise</a></li>
-                        <li><a href="{{ route('home') }}#faq" data-m:click="action=nav_click;element=link;target=faq;location=footer">FAQ</a></li>
+                        <li><a href="{{ route('home') }}#ueber">Über uns</a></li>
+                        <li><a href="{{ route('home') }}#reise">Die Reise</a></li>
+                        <li><a href="{{ route('home') }}#faq">FAQ</a></li>
                         @if($hasNextEvent)
-                            <li><a href="{{ route('event.show') }}" data-m:click="action=nav_click;element=link;target=next_event;location=footer">Nächster Termin</a></li>
+                            <li><a href="{{ route('event.show') }}">Nächster Termin</a></li>
                         @endif
                     </ul>
                 </div>
@@ -92,12 +92,12 @@
                     <h3 class="footer__heading">Kontakt</h3>
                     <ul class="footer__links">
                         @if($settings?->contact_email)
-                            <li><a href="mailto:{{ $settings->contact_email }}" data-m:click="action=contact_click;element=email;location=footer">E-Mail schreiben</a></li>
+                            <li><a href="mailto:{{ $settings->contact_email }}">E-Mail schreiben</a></li>
                         @endif
                         @if($settings?->contact_phone)
-                            <li><a href="tel:{{ str_replace([' ', '-', '(', ')'], '', $settings->contact_phone) }}" data-m:click="action=contact_click;element=phone;location=footer">{{ $settings->contact_phone }}</a></li>
+                            <li><a href="tel:{{ str_replace([' ', '-', '(', ')'], '', $settings->contact_phone) }}">{{ $settings->contact_phone }}</a></li>
                         @endif
-                        <li><a href="{{ route('home') }}#newsletter" data-m:click="action=nav_click;element=link;target=newsletter;location=footer">Newsletter</a></li>
+                        <li><a href="{{ route('home') }}#newsletter">Newsletter</a></li>
                     </ul>
                 </div>
             </div>
@@ -107,8 +107,8 @@
                     {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
                 </p>
                 <div class="footer__legal">
-                    <a href="{{ route('page.show', 'impressum') }}" data-m:click="action=legal_click;element=link;target=impressum;location=footer">Impressum</a>
-                    <a href="{{ route('page.show', 'datenschutz') }}" data-m:click="action=legal_click;element=link;target=datenschutz;location=footer">Datenschutz</a>
+                    <a href="{{ route('page.show', 'impressum') }}">Impressum</a>
+                    <a href="{{ route('page.show', 'datenschutz') }}">Datenschutz</a>
                 </div>
             </div>
         </div>
@@ -120,10 +120,10 @@
             <h3>In Kalender speichern</h3>
             <p>Wähle deinen Kalender:</p>
             <div class="calendar-modal__buttons">
-                <a href="#" id="calendarGoogle" class="btn btn--secondary" target="_blank" rel="noopener" data-m:click="action=calendar_click;element=button;target=google;location=modal">
+                <a href="#" id="calendarGoogle" class="btn btn--secondary" target="_blank" rel="noopener">
                     Google Calendar
                 </a>
-                <a href="#" id="calendarICS" class="btn btn--secondary" download="maennerkreis-straubing.ics" data-m:click="action=calendar_click;element=button;target=ics;location=modal">
+                <a href="#" id="calendarICS" class="btn btn--secondary" download="maennerkreis-straubing.ics">
                     Apple/Outlook (.ics)
                 </a>
             </div>
