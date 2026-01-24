@@ -34,11 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
   useParallax();
 });
 
-// Performance monitoring
-if ('PerformanceObserver' in globalThis) {
+// Performance monitoring (only in development)
+if (import.meta.env.DEV && 'PerformanceObserver' in globalThis) {
   const perfObserver = new PerformanceObserver((list) => {
     list.getEntries().forEach((entry) => {
       if (entry.entryType === 'largest-contentful-paint') {
+        // eslint-disable-next-line no-console
         console.debug('LCP:', entry.startTime);
       }
     });

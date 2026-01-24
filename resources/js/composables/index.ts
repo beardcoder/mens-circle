@@ -4,6 +4,7 @@
  */
 
 import { animate, inView, scroll, stagger } from 'motion';
+import type { ApiResponse } from '@/types';
 
 export interface AnimationOptions {
   threshold?: number;
@@ -28,8 +29,8 @@ export function useIntersectionObserver(options: AnimationOptions = {}): void {
       () => {
         animate(
           section,
-          { opacity: [0, 1], y: [20, 0] } as any,
-          { duration: 0.6, easing: 'ease-out' } as any
+          { opacity: [0, 1], y: [20, 0] },
+          { duration: 0.6, easing: 'ease-out' }
         );
       },
       { amount }
@@ -49,8 +50,8 @@ export function useIntersectionObserver(options: AnimationOptions = {}): void {
       () => {
         animate(
           items,
-          { opacity: [0, 1], y: [20, 0] } as any,
-          { duration: 0.5, delay: stagger(0.1), easing: 'ease-out' } as any
+          { opacity: [0, 1], y: [20, 0] },
+          { duration: 0.5, delay: stagger(0.1), easing: 'ease-out' }
         );
       },
       { amount: threshold }
@@ -68,8 +69,8 @@ export function useIntersectionObserver(options: AnimationOptions = {}): void {
       () => {
         animate(
           el,
-          { opacity: [0, 1], scale: [0.9, 1] } as any,
-          { duration: 0.5, easing: 'ease-out' } as any
+          { opacity: [0, 1], scale: [0.9, 1] },
+          { duration: 0.5, easing: 'ease-out' }
         );
       },
       { amount }
@@ -87,7 +88,7 @@ export function useParallax(): void {
   parallaxElements.forEach((el) => {
     const speed = Number.parseFloat(el.dataset.parallax || '0.5');
 
-    scroll(animate(el, { y: [0, -100 * speed] } as any), {
+    scroll(animate(el, { y: [0, -100 * speed] }), {
       target: el,
       offset: ['start end', 'end start'],
     });
@@ -99,7 +100,7 @@ export function useParallax(): void {
  */
 export interface FormOptions {
   onSubmit: (data: FormData) => Promise<Response>;
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: ApiResponse) => void;
   onError?: (error: Error) => void;
 }
 
@@ -174,27 +175,32 @@ export function showToast(
 
   // Create toast container
   const toast = document.createElement('div');
+
   toast.className = `toast toast--${type}`;
   toast.setAttribute('role', 'alert');
   toast.setAttribute('aria-live', 'polite');
 
   // Create icon element
   const icon = document.createElement('div');
+
   icon.className = 'toast__icon';
   icon.textContent = icons[type];
   icon.setAttribute('aria-hidden', 'true');
 
   // Create content container
   const content = document.createElement('div');
+
   content.className = 'toast__content';
 
   // Create title element
   const titleEl = document.createElement('div');
+
   titleEl.className = 'toast__title';
   titleEl.textContent = title ?? defaultTitles[type];
 
   // Create message element
   const messageEl = document.createElement('div');
+
   messageEl.className = 'toast__message';
   messageEl.textContent = message;
 
@@ -209,16 +215,16 @@ export function showToast(
   // Animate in
   animate(
     toast,
-    { opacity: [0, 1], y: [-20, 0], scale: [0.95, 1] } as any,
-    { duration: 0.4, easing: [0.16, 1, 0.3, 1] } as any
+    { opacity: [0, 1], y: [-20, 0], scale: [0.95, 1] },
+    { duration: 0.4, easing: [0.16, 1, 0.3, 1] }
   );
 
   // Auto-dismiss after 5 seconds
   setTimeout(() => {
     animate(
       toast,
-      { opacity: 0, y: -20, scale: 0.95 } as any,
-      { duration: 0.3, easing: 'ease-in' } as any
+      { opacity: 0, y: -20, scale: 0.95 },
+      { duration: 0.3, easing: 'ease-in' }
     ).finished.then(() => toast.remove());
   }, 5000);
 }
