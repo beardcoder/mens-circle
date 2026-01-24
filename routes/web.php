@@ -9,6 +9,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\TestimonialSubmissionController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
 Route::get('/llms.txt', [LlmsController::class, 'show'])->name('llms.txt');
 
@@ -39,6 +40,9 @@ Route::get('/auth/{provider}/redirect', [SocialiteController::class, 'redirect']
     ->name('socialite.redirect');
 Route::get('/auth/{provider}/callback', [SocialiteController::class, 'callback'])
     ->name('socialite.callback');
+
+// Health check routes
+Route::get('/health', HealthCheckJsonResultsController::class)->name('health');
 
 // Dynamic pages (must be last to avoid conflicts)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');

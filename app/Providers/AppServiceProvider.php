@@ -10,6 +10,13 @@ use App\Settings\GeneralSettings;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Health\Checks\Checks\CacheCheck;
+use Spatie\Health\Checks\Checks\DatabaseCheck;
+use Spatie\Health\Checks\Checks\DebugModeCheck;
+use Spatie\Health\Checks\Checks\EnvironmentCheck;
+use Spatie\Health\Checks\Checks\OptimizedAppCheck;
+use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
+use Spatie\Health\Facades\Health;
 use Throwable;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Event::observe(EventObserver::class);
+
+        $this->configureHealth();
 
         View::composer('*', function (ViewContract $view): void {
             try {
@@ -56,5 +65,19 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
         });
+    }
+
+    private function configureHealth(): void
+    {
+        Health::checks([
+            UsedDiskSpaceCheck::new()
+                ->warnWhenUsedSpaceIsAbovePercentage(70)
+                ->failWhenUsedSpaceIsAbovePercentage(90),
+            DatabaseCheck::new(),
+            CacheCheck::new(),
+            OptimizedAppCheck::new(),
+            DebugModeCheck::new(),
+            EnvironmentCheck::new(),
+        ]);
     }
 }
