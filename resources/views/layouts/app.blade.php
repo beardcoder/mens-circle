@@ -25,7 +25,13 @@
                     <a href="{{ route('home') }}#reise" class="nav__link">Die Reise</a>
                     <a href="{{ route('home') }}#faq" class="nav__link">Fragen</a>
                     @if($hasNextEvent)
-                        <a href="{{ route('event.show') }}" class="btn btn--primary btn--large nav__cta">Nächster Termin</a>
+                        <a
+                            href="{{ route('event.show') }}"
+                            class="btn btn--primary btn--large nav__cta"
+                            data-umami-event="cta-click"
+                            data-umami-event-location="header"
+                            data-umami-event-action="go-to-event"
+                        >Nächster Termin</a>
                     @endif
                 </nav>
 

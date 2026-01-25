@@ -4,6 +4,7 @@
  */
 
 import type { EventData } from '@/types';
+import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 
 /**
  * Calendar integration composable
@@ -35,6 +36,11 @@ export function useCalendarIntegration(): void {
   addToCalendarBtn.addEventListener('click', () => {
     if (!calendarModal) return;
 
+    // Track calendar modal open
+    trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, {
+      event: eventData.title,
+    });
+
     calendarModal.classList.add('open');
 
     if (calendarICS) {
@@ -50,6 +56,24 @@ export function useCalendarIntegration(): void {
       calendarGoogle.href = generateGoogleCalendarUrl(eventData);
     }
   });
+
+  // Track ICS download
+  if (calendarICS) {
+    calendarICS.addEventListener('click', () => {
+      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
+        event: eventData.title,
+      });
+    });
+  }
+
+  // Track Google Calendar click
+  if (calendarGoogle) {
+    calendarGoogle.addEventListener('click', () => {
+      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
+        event: eventData.title,
+      });
+    });
+  }
 
   if (calendarModal) {
     calendarModal.addEventListener('click', (e) => {
