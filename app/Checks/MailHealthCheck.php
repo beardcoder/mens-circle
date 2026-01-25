@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Spatie\Health\Checks\Check;
 use Spatie\Health\Checks\Result;
 use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
 use Throwable;
 
@@ -55,14 +56,16 @@ class MailHealthCheck extends Check
                 $host,
                 $username,
                 $password,
-                $port
+                (int) $port
             );
 
             $factory = new EsmtpTransportFactory();
             $transport = $factory->create($dsn);
 
-            $transport->start();
-            $transport->stop();
+            if ($transport instanceof EsmtpTransport) {
+                $transport->start();
+                $transport->stop();
+            }
 
             return $result
                 ->ok()

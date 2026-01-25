@@ -40,6 +40,7 @@ export function trackEvent(
   } catch (error) {
     // Silently fail in production, log in development
     if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
       console.error('[Umami] Tracking error:', error);
     }
   }
@@ -90,27 +91,24 @@ export function trackFormSubmit(formName: string): void {
 /**
  * Track form success
  */
-export function trackFormSuccess(formName: string, data?: UmamiEventData): void {
+export function trackFormSuccess(
+  formName: string,
+  data?: UmamiEventData
+): void {
   trackEvent(`${formName}-success`, data);
 }
 
 /**
  * Track form error
  */
-export function trackFormError(
-  formName: string,
-  errorMessage?: string
-): void {
+export function trackFormError(formName: string, errorMessage?: string): void {
   trackEvent(`${formName}-error`, { error: errorMessage });
 }
 
 /**
  * Track link click
  */
-export function trackLinkClick(
-  linkType: string,
-  destination?: string
-): void {
+export function trackLinkClick(linkType: string, destination?: string): void {
   trackEvent(`${linkType}-click`, { destination });
 }
 
