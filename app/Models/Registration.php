@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Enums\RegistrationStatus;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\RegistrationFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -69,11 +71,42 @@ class Registration extends Model
         ]);
     }
 
+    /**
+     * @param Builder<Registration> $query
+     * @return Builder<Registration>
+     */
+    #[Scope]
+    protected function active(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            RegistrationStatus::Registered,
+            RegistrationStatus::Attended,
+        ]);
+    }
+
+    /**
+     * @param Builder<Registration> $query
+     * @return Builder<Registration>
+     */
+    #[Scope]
+    protected function registered(Builder $query): Builder
+    {
+        return $query->where('status', RegistrationStatus::Registered);
+    }
+
+    /**
+     * @param Builder<Registration> $query
+     * @return Builder<Registration>
+     */
+    #[Scope]
+    protected function cancelled(Builder $query): Builder
+    {
+        return $query->where('status', RegistrationStatus::Cancelled);
+    }
+
     public static function registeredCount(): int
     {
-        return static::query()
-            ->where('status', RegistrationStatus::Registered->value)
-            ->count();
+        return static::query()->registered()->count();
     }
 
     protected function casts(): array

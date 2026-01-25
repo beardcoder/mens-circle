@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -65,11 +67,19 @@ class NewsletterSubscription extends Model
         ]);
     }
 
+    /**
+     * @param Builder<NewsletterSubscription> $query
+     * @return Builder<NewsletterSubscription>
+     */
+    #[Scope]
+    protected function active(Builder $query): Builder
+    {
+        return $query->whereNull('unsubscribed_at');
+    }
+
     public static function activeCount(): int
     {
-        return static::query()
-            ->whereNull('unsubscribed_at')
-            ->count();
+        return static::query()->active()->count();
     }
 
     protected function casts(): array

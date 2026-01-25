@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\RegistrationStatus;
-use App\Mail\EventRegistrationConfirmation;
+use App\Services\EventNotificationService;
 use App\Traits\ClearsResponseCache;
-use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -15,11 +13,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use Seven\Api\Client;
-use Seven\Api\Resource\Sms\SmsParams;
-use Seven\Api\Resource\Sms\SmsResource;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
@@ -97,10 +90,7 @@ class Event extends Model implements HasMedia
      */
     public function activeRegistrations(): HasMany
     {
-        return $this->registrations()->whereIn('status', [
-            RegistrationStatus::Registered->value,
-            RegistrationStatus::Attended->value,
-        ]);
+        return $this->registrations()->active();
     }
 
     /**
@@ -204,103 +194,12 @@ class Event extends Model implements HasMedia
 
     public function sendRegistrationConfirmation(Registration $registration): void
     {
-        // Ensure participant relationship is loaded
-        if (! $registration->relationLoaded('participant')) {
-            $registration->load('participant');
-        }
-
-        $participant = $registration->participant;
-
-        // Send email
-        try {
-            Mail::queue(new EventRegistrationConfirmation($registration, $this));
-            Log::info('Event registration confirmation sent', [
-                'registration_id' => $registration->id,
-                'email' => $participant->email,
-                'event_id' => $this->id,
-            ]);
-        } catch (Exception $exception) {
-            Log::error('Failed to send event registration confirmation', [
-                'registration_id' => $registration->id,
-                'error' => $exception->getMessage(),
-            ]);
-        }
-
-        // Send SMS if phone number provided
-        if ($participant->phone) {
-            $this->sendRegistrationSms($registration);
-        }
+        app(EventNotificationService::class)->sendRegistrationConfirmation($this, $registration);
     }
 
     public function sendEventReminder(Registration $registration): void
     {
-        $participant = $registration->participant;
-
-        if (! $participant->phone) {
-            return;
-        }
-
-        $message = 'Erinnerung: Männerkreis findet morgen statt. Details per E-Mail. Bis bald!';
-        $this->sendSms($participant->phone, $message, [
-            'registration_id' => $registration->id,
-            'type' => 'event_reminder',
-        ]);
-    }
-
-    private function sendRegistrationSms(Registration $registration): void
-    {
-        $participant = $registration->participant;
-
-        if ($participant->phone === null) {
-            return;
-        }
-
-        $message = sprintf(
-            'Hallo %s! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis',
-            $participant->first_name
-        );
-
-        $this->sendSms($participant->phone, $message, [
-            'registration_id' => $registration->id,
-            'type' => 'registration_confirmation',
-        ]);
-    }
-
-    /**
-     * @param array<string, mixed> $context
-     */
-    private function sendSms(string $phoneNumber, string $message, array $context = []): void
-    {
-        $apiKey = config('sevenio.api_key');
-
-        if (! $apiKey) {
-            Log::warning('Cannot send SMS - Seven.io API key not configured', $context);
-
-            return;
-        }
-
-        try {
-            $client = new Client($apiKey);
-            $smsResource = new SmsResource($client);
-            $params = new SmsParams(
-                text: $message,
-                to: $phoneNumber,
-                from: config('sevenio.from')
-            );
-
-            $response = $smsResource->dispatch($params);
-
-            Log::info('SMS sent successfully', array_merge($context, [
-                'phone_number' => $phoneNumber,
-                'event_id' => $this->id,
-            ]));
-        } catch (Exception $exception) {
-            Log::error('Failed to send SMS', array_merge($context, [
-                'phone_number' => $phoneNumber,
-                'event_id' => $this->id,
-                'error' => $exception->getMessage(),
-            ]));
-        }
+        app(EventNotificationService::class)->sendEventReminder($this, $registration);
     }
 
     protected function casts(): array

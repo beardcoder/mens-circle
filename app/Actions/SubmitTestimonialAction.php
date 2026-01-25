@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Models\Testimonial;
-use Exception;
-use Illuminate\Support\Facades\Log;
 
 class SubmitTestimonialAction
 {
@@ -15,25 +13,14 @@ class SubmitTestimonialAction
      */
     public function execute(array $data): Testimonial
     {
-        try {
-            $testimonial = Testimonial::create([
-                'quote' => $data['quote'],
-                'author_name' => $data['author_name'] ?? null,
-                'email' => $data['email'],
-                'role' => $data['role'] ?? null,
-                'is_published' => false,
-                'published_at' => null,
-                'sort_order' => 0,
-            ]);
-
-            return $testimonial;
-        } catch (Exception $exception) {
-            Log::error('Failed to submit testimonial', [
-                'email' => $data['email'],
-                'error' => $exception->getMessage(),
-            ]);
-
-            throw $exception;
-        }
+        return Testimonial::create([
+            'quote' => $data['quote'],
+            'author_name' => $data['author_name'] ?? null,
+            'email' => $data['email'],
+            'role' => $data['role'] ?? null,
+            'is_published' => false,
+            'published_at' => null,
+            'sort_order' => 0,
+        ]);
     }
 }
