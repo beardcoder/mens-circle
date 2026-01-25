@@ -5,6 +5,7 @@
 
 import { validateEmail } from '@/utils/helpers';
 import { useForm } from '@/composables';
+import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 
 /**
  * Newsletter form composable
@@ -23,6 +24,9 @@ export function useNewsletterForm(): void {
         throw new Error('Bitte gib eine gültige E-Mail-Adresse ein.');
       }
 
+      // Track newsletter submission
+      trackEvent(TRACKING_EVENTS.NEWSLETTER_SUBMIT);
+
       return fetch(window.routes.newsletter, {
         method: 'POST',
         headers: {
@@ -31,6 +35,16 @@ export function useNewsletterForm(): void {
           Accept: 'application/json',
         },
         body: JSON.stringify({ email }),
+      });
+    },
+    onSuccess: () => {
+      // Track successful newsletter subscription
+      trackEvent(TRACKING_EVENTS.NEWSLETTER_SUCCESS);
+    },
+    onError: (error) => {
+      // Track newsletter subscription error
+      trackEvent(TRACKING_EVENTS.NEWSLETTER_ERROR, {
+        error: error.message,
       });
     },
   });
@@ -69,6 +83,12 @@ export function useRegistrationForm(): void {
         throw new Error('Bitte bestätige die Datenschutzerklärung.');
       }
 
+      // Track event registration submission
+      trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUBMIT, {
+        event_id: eventId,
+        has_phone: phoneNumber ? 'yes' : 'no',
+      });
+
       return fetch(window.routes.eventRegister, {
         method: 'POST',
         headers: {
@@ -84,6 +104,16 @@ export function useRegistrationForm(): void {
           phone_number: phoneNumber,
           privacy: privacy ? 1 : 0,
         }),
+      });
+    },
+    onSuccess: () => {
+      // Track successful event registration
+      trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUCCESS);
+    },
+    onError: (error) => {
+      // Track event registration error
+      trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_ERROR, {
+        error: error.message,
       });
     },
   });
@@ -134,6 +164,13 @@ export function useTestimonialForm(): void {
         throw new Error('Bitte bestätige die Datenschutzerklärung.');
       }
 
+      // Track testimonial submission
+      trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUBMIT, {
+        has_name: authorName ? 'yes' : 'no',
+        has_role: role ? 'yes' : 'no',
+        char_count: quote.length,
+      });
+
       return fetch(submitUrl, {
         method: 'POST',
         headers: {
@@ -154,6 +191,15 @@ export function useTestimonialForm(): void {
       if (charCount) {
         charCount.textContent = '0';
       }
+
+      // Track successful testimonial submission
+      trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUCCESS);
+    },
+    onError: (error) => {
+      // Track testimonial submission error
+      trackEvent(TRACKING_EVENTS.TESTIMONIAL_ERROR, {
+        error: error.message,
+      });
     },
   });
 }

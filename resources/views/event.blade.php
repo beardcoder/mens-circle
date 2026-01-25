@@ -100,7 +100,13 @@
                     </p>
                     @unless($event->isPast)
                         <div class="hero__cta fade-in-delay-2">
-                            <a href="#anmeldung" class="btn btn--primary btn--large">Jetzt anmelden</a>
+                            <a
+                                href="#anmeldung"
+                                class="btn btn--primary btn--large"
+                                data-umami-event="cta-click"
+                                data-umami-event-location="hero"
+                                data-umami-event-action="scroll-to-registration"
+                            >Jetzt anmelden</a>
                         </div>
                     @endunless
                 </div>
@@ -134,7 +140,13 @@
                         <p class="event-register__past-text">
                             Möchtest du beim nächsten Männerkreis dabei sein? Dann trag dich in unseren Newsletter ein, um über kommende Termine informiert zu werden.
                         </p>
-                        <a href="{{ route('home') }}#newsletter" class="btn btn--primary btn--large">Zum Newsletter anmelden</a>
+                        <a
+                            href="{{ route('home') }}#newsletter"
+                            class="btn btn--primary btn--large"
+                            data-umami-event="cta-click"
+                            data-umami-event-location="past-event-info"
+                            data-umami-event-action="go-to-newsletter"
+                        >Zum Newsletter anmelden</a>
                     </div>
                 </div>
             </div>
@@ -306,13 +318,25 @@
                     <h2 class="section-title event-cta__title">
                         Bleib <span class="text-italic">informiert</span>
                     </h2>
-                    <a href="{{ route('home') }}#newsletter" class="btn btn--primary btn--large">Newsletter abonnieren</a>
+                    <a
+                        href="{{ route('home') }}#newsletter"
+                        class="btn btn--primary btn--large"
+                        data-umami-event="cta-click"
+                        data-umami-event-location="event-cta-bottom"
+                        data-umami-event-action="go-to-newsletter"
+                    >Newsletter abonnieren</a>
                 @else
                     <p class="eyebrow">Bereit?</p>
                     <h2 class="section-title event-cta__title">
                         Melde dich <span class="text-italic">jetzt</span> an
                     </h2>
-                    <a href="#anmeldung" class="btn btn--primary btn--large">Zur Anmeldung</a>
+                    <a
+                        href="#anmeldung"
+                        class="btn btn--primary btn--large"
+                        data-umami-event="cta-click"
+                        data-umami-event-location="event-cta-bottom"
+                        data-umami-event-action="scroll-to-registration"
+                    >Zur Anmeldung</a>
                 @endif
             </div>
         </div>

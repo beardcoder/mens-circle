@@ -27,7 +27,13 @@
                 @endphp
 
                 @if($shouldShowButton)
-                    <a href="{{ $data['button_link'] }}" class="btn btn--primary btn--large">
+                    <a
+                        href="{{ $data['button_link'] }}"
+                        class="btn btn--primary btn--large"
+                        data-umami-event="cta-click"
+                        data-umami-event-location="cta-block"
+                        data-umami-event-text="{{ $data['button_text'] }}"
+                    >
                         {{ $data['button_text'] }}
                     </a>
                 @endif
