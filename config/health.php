@@ -40,7 +40,7 @@ return [
         'enabled' => env('HEALTH_NOTIFICATIONS_ENABLED', false),
 
         'notifications' => [
-            Spatie\Health\Notifications\CheckFailedNotification::class => ['mail'],
+            App\Notifications\HealthCheckFailedNotification::class => ['mail'],
         ],
 
         /*
