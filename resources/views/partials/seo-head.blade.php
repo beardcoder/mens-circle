@@ -50,10 +50,6 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.ico') }}">
 <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
 
-<!-- Resource Hints for Performance -->
-<link rel="preconnect" href="https://plausible.letsbenow.de" crossorigin>
-<link rel="dns-prefetch" href="https://plausible.letsbenow.de">
-
 <!-- Preload Critical Fonts for LCP -->
 <link rel="preload" as="font" type="font/woff2" href="/build/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/build/assets/playfair-display-latin-wght-normal-BOwq7MWX.woff2" crossorigin>
@@ -61,14 +57,8 @@
 <!-- Styles -->
 @vite(['resources/css/app.css'])
 
+<!-- Analytics -->
+@include('components.analytics.umami')
+
 <!-- Structured Data -->
 @stack('structured_data')
-
-<!-- Privacy-friendly analytics by Plausible (Production Only) -->
-@production
-<script async src="https://plausible.letsbenow.de/js/pa-lbi9s_SfapZ6YIy5uNOSE.js"></script>
-<script>
-  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-  plausible.init()
-</script>
-@endproduction

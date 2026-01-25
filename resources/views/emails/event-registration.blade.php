@@ -45,4 +45,6 @@ Herzliche Grüße,<br>
 <x-mail::subcopy>
 Diese E-Mail wurde an {{ $registration->participant->email }} gesendet, weil du dich für unsere Veranstaltung angemeldet hast.
 </x-mail::subcopy>
+
+<x-analytics.email-pixel :subscriptionId="$registration->id" eventName="event_registration_open" />
 </x-mail::message>

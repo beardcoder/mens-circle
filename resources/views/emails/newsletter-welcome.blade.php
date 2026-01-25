@@ -36,4 +36,6 @@ Herzliche Grüße,<br>
 Du erhältst diese E-Mail an {{ $subscription->participant->email }}, weil du dich für unseren Newsletter angemeldet hast.
 Falls du den Newsletter nicht mehr erhalten möchtest, kannst du dich jederzeit [hier abmelden]({{ route('newsletter.unsubscribe', $subscription->token) }}).
 </x-mail::subcopy>
+
+<x-analytics.email-pixel :subscriptionId="$subscription->id" eventName="newsletter_welcome_open" />
 </x-mail::message>

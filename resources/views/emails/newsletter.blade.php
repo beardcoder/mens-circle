@@ -11,4 +11,6 @@ Vom Newsletter abmelden
 
 Herzliche Grüße,<br>
 {{ config('app.name') }}
+
+<x-analytics.email-pixel :subscriptionId="$subscription->id" eventName="newsletter_open" />
 </x-mail::message>

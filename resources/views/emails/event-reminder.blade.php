@@ -41,4 +41,6 @@ Herzliche Grüße,<br>
 <x-mail::subcopy>
 Diese Erinnerung wurde an {{ $registration->participant->email }} gesendet, weil du für diese Veranstaltung angemeldet bist.
 </x-mail::subcopy>
+
+<x-analytics.email-pixel :subscriptionId="$registration->id" eventName="event_reminder_open" />
 </x-mail::message>
