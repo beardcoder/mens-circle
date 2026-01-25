@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8129790876c33480f9fdd3557a99bf6a",
+    "content-hash": "558a26b115efac703fc715e4bd9e0abe",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -6853,6 +6853,82 @@
             "time": "2026-01-12T12:42:15+00:00"
         },
         {
+            "name": "shuvroroy/filament-spatie-laravel-health",
+            "version": "v3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shuvroroy/filament-spatie-laravel-health.git",
+                "reference": "77e80a542411313da9e78d89171a12b9a107667e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shuvroroy/filament-spatie-laravel-health/zipball/77e80a542411313da9e78d89171a12b9a107667e",
+                "reference": "77e80a542411313da9e78d89171a12b9a107667e",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0|^5.0",
+                "php": "^8.2",
+                "spatie/laravel-health": "^1.23",
+                "spatie/laravel-package-tools": "^1.9"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.0||^8.0",
+                "orchestra/testbench": "^9.0||^10.0",
+                "pestphp/pest": "^2.0||^3.0",
+                "pestphp/pest-plugin-arch": "^2.0||^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0||^3.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ShuvroRoy\\FilamentSpatieLaravelHealth\\FilamentSpatieLaravelHealthServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ShuvroRoy\\FilamentSpatieLaravelHealth\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shuvro Roy",
+                    "email": "shuvro.nsu.cse@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This plugin is built on top of Spatie's Laravel-health package",
+            "homepage": "https://github.com/shuvroroy/filament-spatie-laravel-health",
+            "keywords": [
+                "filament",
+                "filament-spatie-laravel-health",
+                "laravel-health"
+            ],
+            "support": {
+                "issues": "https://github.com/shuvroroy/filament-spatie-laravel-health/issues",
+                "source": "https://github.com/shuvroroy/filament-spatie-laravel-health/tree/v3.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.buymeacoffee.com/shuvroroy",
+                    "type": "buy_me_a_coffee"
+                }
+            ],
+            "time": "2026-01-17T12:24:55+00:00"
+        },
+        {
             "name": "spatie/browsershot",
             "version": "5.2.0",
             "source": {
@@ -12821,5 +12897,5 @@
         "php": "^8.4"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

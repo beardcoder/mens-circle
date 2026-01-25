@@ -58,7 +58,7 @@ class HealthCheckFailedNotification extends Notification
 
         return $message
             ->line('Bitte überprüfe den Server-Status und behebe die Probleme.')
-            ->action('Health Status anzeigen', url('/health'))
+            ->action('Health Status anzeigen', url('/admin/health'))
             ->line('Diese Benachrichtigung wurde automatisch versendet.')
             ->salutation('Dein ' . config('app.name') . ' System');
     }
