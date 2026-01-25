@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Checks\MailHealthCheck;
+use App\Checks\SevenIoHealthCheck;
 use App\Models\Event;
 use App\Observers\EventObserver;
 use App\Settings\GeneralSettings;
@@ -15,6 +17,9 @@ use Spatie\Health\Checks\Checks\DatabaseCheck;
 use Spatie\Health\Checks\Checks\DebugModeCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
 use Spatie\Health\Checks\Checks\OptimizedAppCheck;
+use Spatie\Health\Checks\Checks\PingCheck;
+use Spatie\Health\Checks\Checks\QueueCheck;
+use Spatie\Health\Checks\Checks\ScheduleCheck;
 use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
 use Spatie\Health\Facades\Health;
 use Throwable;
@@ -70,14 +75,41 @@ class AppServiceProvider extends ServiceProvider
     private function configureHealth(): void
     {
         Health::checks([
+            // Infrastructure Checks
             UsedDiskSpaceCheck::new()
                 ->warnWhenUsedSpaceIsAbovePercentage(70)
                 ->failWhenUsedSpaceIsAbovePercentage(90),
             DatabaseCheck::new(),
             CacheCheck::new(),
+
+            // Queue Check - wichtig für E-Mails und Newsletter
+            QueueCheck::new()
+                ->onQueue(['default', 'emails'])
+                ->failWhenHealthJobTakesLongerThanMinutes(5),
+
+            // Schedule Check - wichtig für Event-Reminders und Sitemap
+            ScheduleCheck::new()
+                ->heartbeatMaxAgeInMinutes(2),
+
+            // Application Checks
             OptimizedAppCheck::new(),
             DebugModeCheck::new(),
             EnvironmentCheck::new(),
+
+            // Website Availability Check
+            PingCheck::new()
+                ->url(config('app.url'))
+                ->name('Website')
+                ->timeout(5)
+                ->retryTimes(2),
+
+            // Mail System Check
+            MailHealthCheck::new()
+                ->name('SMTP Mail'),
+
+            // SMS Service Check (Seven.io)
+            SevenIoHealthCheck::new()
+                ->name('Seven.io SMS'),
         ]);
     }
 }
