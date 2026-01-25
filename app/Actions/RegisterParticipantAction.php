@@ -17,21 +17,40 @@ class RegisterParticipantAction
      */
     public function execute(Event $event, array $data): Registration
     {
-        // Find or create participant
+        $participant = $this->findOrUpdateParticipant($data);
+        $registration = $this->createOrRestoreRegistration($event, $participant);
+
+        $registration->setRelation('participant', $participant);
+
+        ResponseCache::clear();
+
+        $event->sendRegistrationConfirmation($registration);
+
+        return $registration;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function findOrUpdateParticipant(array $data): Participant
+    {
         $participant = Participant::findOrCreateByEmail($data['email'], [
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'phone' => $data['phone_number'] ?? null,
         ]);
 
-        // Update participant data if changed
         $participant->update([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'phone' => $data['phone_number'] ?? $participant->phone,
         ]);
 
-        // Check for existing registration (including soft-deleted ones)
+        return $participant;
+    }
+
+    private function createOrRestoreRegistration(Event $event, Participant $participant): Registration
+    {
         $existingRegistration = Registration::withTrashed()
             ->where('event_id', $event->id)
             ->where('participant_id', $participant->id)
@@ -44,28 +63,19 @@ class RegisterParticipantAction
         if ($existingRegistration) {
             $existingRegistration->restore();
             $existingRegistration->update([
-                'status' => RegistrationStatus::Registered->value,
+                'status' => RegistrationStatus::Registered,
                 'registered_at' => now(),
                 'cancelled_at' => null,
             ]);
-            $registration = $existingRegistration;
-        } else {
-            $registration = Registration::create([
-                'participant_id' => $participant->id,
-                'event_id' => $event->id,
-                'status' => RegistrationStatus::Registered->value,
-                'registered_at' => now(),
-            ]);
+
+            return $existingRegistration;
         }
 
-        // Eager load participant for confirmation sending
-        $registration->setRelation('participant', $participant);
-
-        ResponseCache::clear();
-
-        // Send confirmations
-        $event->sendRegistrationConfirmation($registration);
-
-        return $registration;
+        return Registration::create([
+            'participant_id' => $participant->id,
+            'event_id' => $event->id,
+            'status' => RegistrationStatus::Registered,
+            'registered_at' => now(),
+        ]);
     }
 }

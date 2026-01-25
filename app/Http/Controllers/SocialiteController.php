@@ -6,14 +6,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Socialite;
 
 class SocialiteController extends Controller
 {
     public function redirect(string $provider): RedirectResponse
     {
-        $this->validateProvider($provider);
+        abort_unless(in_array($provider, $this->allowedProviders()), 404);
 
         /** @var \Laravel\Socialite\Two\GithubProvider $driver */
         $driver = Socialite::driver($provider);
@@ -25,7 +24,7 @@ class SocialiteController extends Controller
 
     public function callback(string $provider): RedirectResponse
     {
-        $this->validateProvider($provider);
+        abort_unless(in_array($provider, $this->allowedProviders()), 404);
 
         $response = Socialite::driver($provider)->user();
 
@@ -43,13 +42,10 @@ class SocialiteController extends Controller
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, string>
      */
-    protected function validateProvider(string $provider): array
+    private function allowedProviders(): array
     {
-        return Validator::make(
-            ['provider' => $provider],
-            ['provider' => 'in:github']
-        )->validate();
+        return ['github'];
     }
 }

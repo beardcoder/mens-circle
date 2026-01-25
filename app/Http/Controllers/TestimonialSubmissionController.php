@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Actions\SubmitTestimonialAction;
 use App\Http\Requests\TestimonialSubmissionRequest;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
@@ -20,21 +19,27 @@ class TestimonialSubmissionController extends Controller
     public function submit(TestimonialSubmissionRequest $request, SubmitTestimonialAction $action): JsonResponse
     {
         $validated = $request->validated();
+        $action->execute($validated);
 
-        try {
-            $action->execute($validated);
+        $message = $this->buildSuccessMessage($validated);
 
-            $firstName = isset($validated['author_name']) ? explode(' ', $validated['author_name'])[0] : null;
-            $message = $firstName
-                ? sprintf('Vielen Dank, %s! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.', $firstName)
-                : 'Vielen Dank! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.';
+        return response()->json(['success' => true, 'message' => $message]);
+    }
 
-            return response()->json(['success' => true, 'message' => $message]);
-        } catch (Exception $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Es gab einen Fehler beim Einreichen deiner Erfahrung. Bitte versuche es später erneut.',
-            ], 500);
+    /**
+     * @param array<string, mixed> $validated
+     */
+    private function buildSuccessMessage(array $validated): string
+    {
+        if (! isset($validated['author_name'])) {
+            return 'Vielen Dank! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.';
         }
+
+        $firstName = explode(' ', $validated['author_name'])[0];
+
+        return sprintf(
+            'Vielen Dank, %s! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.',
+            $firstName
+        );
     }
 }
