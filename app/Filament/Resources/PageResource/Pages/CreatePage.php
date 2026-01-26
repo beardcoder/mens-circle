@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\PageResource\Pages;
 
+use App\Features\Pages\Domain\Models\Page;
 use App\Filament\Resources\PageResource;
-use App\Models\Page;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 

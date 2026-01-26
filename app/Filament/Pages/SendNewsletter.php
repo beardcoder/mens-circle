@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
-use App\Enums\NewsletterStatus;
+use App\Features\Newsletters\Domain\Enums\NewsletterStatus;
+use App\Features\Newsletters\Domain\Models\Newsletter;
+use App\Features\Newsletters\Domain\Models\NewsletterSubscription;
 use App\Jobs\SendNewsletterJob;
-use App\Models\Newsletter;
-use App\Models\NewsletterSubscription;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;

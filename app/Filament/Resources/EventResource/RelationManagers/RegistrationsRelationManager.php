@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\EventResource\RelationManagers;
 
-use App\Enums\RegistrationStatus;
-use App\Models\Participant;
+use App\Domain\Models\Participant;
+use App\Features\Events\Domain\Enums\RegistrationStatus;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;

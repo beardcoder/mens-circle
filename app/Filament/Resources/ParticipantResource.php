@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Domain\Models\Participant;
 use App\Filament\Resources\ParticipantResource\Pages\CreateParticipant;
 use App\Filament\Resources\ParticipantResource\Pages\EditParticipant;
 use App\Filament\Resources\ParticipantResource\Pages\ListParticipants;
-use App\Models\Participant;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;

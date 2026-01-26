@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Enums\RegistrationStatus;
+use App\Domain\Models\Participant;
+use App\Features\Events\Domain\Enums\RegistrationStatus;
+use App\Features\Events\Domain\Models\Registration;
 use App\Filament\Resources\RegistrationResource\Pages;
-use App\Models\Participant;
-use App\Models\Registration;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;

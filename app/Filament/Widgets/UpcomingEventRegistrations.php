@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
-use App\Enums\RegistrationStatus;
-use App\Models\Event;
-use App\Models\Registration;
+use App\Features\Events\Domain\Enums\RegistrationStatus;
+use App\Features\Events\Domain\Models\Event;
+use App\Features\Events\Domain\Models\Registration;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;

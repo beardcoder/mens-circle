@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\PageResource\Pages;
 
+use App\Features\Pages\Domain\Models\ContentBlock;
+use App\Features\Pages\Domain\Models\Page;
 use App\Filament\Resources\PageResource;
-use App\Models\ContentBlock;
-use App\Models\Page;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;

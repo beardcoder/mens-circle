@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Domain\Models\Participant;
+use App\Features\Newsletters\Domain\Models\NewsletterSubscription;
 use App\Filament\Resources\NewsletterSubscriptionResource\Pages;
-use App\Models\NewsletterSubscription;
-use App\Models\Participant;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;

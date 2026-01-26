@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Features\Newsletters\Domain\Models\Newsletter;
 use App\Filament\Resources\NewsletterResource\Pages\ListNewsletters;
 use App\Filament\Resources\NewsletterResource\Pages\ViewNewsletter;
-use App\Models\Newsletter;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;

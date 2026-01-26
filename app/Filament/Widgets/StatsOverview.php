@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
-use App\Models\Event;
-use App\Models\NewsletterSubscription;
-use App\Models\Registration;
+use App\Features\Events\Domain\Models\Event;
+use App\Features\Events\Domain\Models\Registration;
+use App\Features\Newsletters\Domain\Models\NewsletterSubscription;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
