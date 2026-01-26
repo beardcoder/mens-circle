@@ -18,7 +18,6 @@ use Spatie\Health\Checks\Checks\DebugModeCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
 use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 use Spatie\Health\Checks\Checks\PingCheck;
-use Spatie\Health\Checks\Checks\QueueCheck;
 use Spatie\Health\Checks\Checks\ScheduleCheck;
 use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
 use Spatie\Health\Facades\Health;
@@ -81,11 +80,6 @@ class AppServiceProvider extends ServiceProvider
                 ->failWhenUsedSpaceIsAbovePercentage(90),
             DatabaseCheck::new(),
             CacheCheck::new(),
-
-            // Queue Check - wichtig für E-Mails und Newsletter
-            QueueCheck::new()
-                ->onQueue(['default', 'emails'])
-                ->failWhenHealthJobTakesLongerThanMinutes(5),
 
             // Schedule Check - wichtig für Event-Reminders und Sitemap
             ScheduleCheck::new()
