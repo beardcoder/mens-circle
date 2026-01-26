@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Enums\NewsletterStatus;
+use App\Features\Newsletters\Domain\Enums\NewsletterStatus;
 use App\Mail\NewsletterMail;
-use App\Models\Newsletter;
-use App\Models\NewsletterSubscription;
+use App\Features\Newsletters\Domain\Models\Newsletter;
+use App\Features\Newsletters\Domain\Models\NewsletterSubscription;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;

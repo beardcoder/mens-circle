@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Features\Events\Http\Controllers\EventController;
+use App\Features\Newsletters\Http\Controllers\NewsletterController;
 use App\Http\Controllers\LlmsController;
-use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\TestimonialSubmissionController;

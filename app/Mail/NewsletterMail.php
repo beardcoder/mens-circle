@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Mail;
 
-use App\Models\Newsletter;
-use App\Models\NewsletterSubscription;
+use App\Features\Newsletters\Domain\Models\Newsletter;
+use App\Features\Newsletters\Domain\Models\NewsletterSubscription;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
