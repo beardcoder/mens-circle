@@ -181,23 +181,37 @@ class EventResource extends Resource
                     ->label('Titel')
                     ->searchable()
                     ->sortable()
-                    ->description(fn ($record): ?string => $record->description ? str($record->description)->limit(50)->toString() : null)
+                    ->description(
+                        fn ($record): ?string => $record->description ? str($record->description)->limit(
+                            50
+                        )->toString() : null
+                    )
                     ->wrap(),
                 TextColumn::make('event_date')
                     ->label('Datum')
                     ->dateTime('d.m.Y')
                     ->sortable()
-                    ->description(fn ($record): string => $record->start_time->format('H:i').' - '.$record->end_time->format('H:i'))
-                    ->color(fn ($record): string => $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary')),
+                    ->description(
+                        fn ($record): string => $record->start_time->format(
+                            'H:i'
+                        ) . ' - ' . $record->end_time->format('H:i')
+                    )
+                    ->color(
+                        fn ($record): string => $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary')
+                    ),
                 TextColumn::make('location')
                     ->label('Ort')
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('active_registrations_count')
                     ->label('Anmeldungen')
-                    ->formatStateUsing(fn ($record): string => $record->active_registrations_count.' / '.$record->max_participants)
+                    ->formatStateUsing(
+                        fn ($record): string => $record->active_registrations_count . ' / ' . $record->max_participants
+                    )
                     ->badge()
-                    ->color(fn ($record): string => $record->isFull ? 'danger' : ($record->active_registrations_count > ($record->max_participants * 0.8) ? 'warning' : 'success'))
+                    ->color(
+                        fn ($record): string => $record->isFull ? 'danger' : ($record->active_registrations_count > ($record->max_participants * 0.8) ? 'warning' : 'success')
+                    )
                     ->sortable(),
                 IconColumn::make('is_published')
                     ->label('Veröffentlicht')
@@ -233,16 +247,18 @@ class EventResource extends Resource
                     ->toggle(),
                 Filter::make('full')
                     ->label('Ausgebuchte Events')
-                    ->query(fn (Builder $query): Builder => $query->whereRaw('(SELECT COUNT(*) FROM registrations WHERE event_id = events.id AND status IN (?, ?)) >= max_participants', ['registered', 'attended']))
+                    ->query(
+                        fn (Builder $query): Builder => $query->whereRaw('(SELECT COUNT(*) FROM registrations WHERE event_id = events.id AND status IN (?, ?)) >= max_participants', [
+                            'registered',
+                            'attended'
+                        ])
+                    )
                     ->toggle(),
                 TrashedFilter::make()
                     ->label('Gelöschte Events'),
             ])
             ->deferFilters(false)
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-            ])
+            ->recordActions([ViewAction::make(), EditAction::make(), ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
@@ -257,9 +273,7 @@ class EventResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            RegistrationsRelationManager::class,
-        ];
+        return [RegistrationsRelationManager::class, ];
     }
 
     public static function getPages(): array
@@ -277,8 +291,6 @@ class EventResource extends Resource
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
+            ->withoutGlobalScopes([SoftDeletingScope::class, ]);
     }
 }

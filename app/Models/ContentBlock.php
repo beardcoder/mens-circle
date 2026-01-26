@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\ClearsResponseCache;
+use Database\Factories\ContentBlockFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
@@ -21,16 +23,12 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class ContentBlock extends Model implements HasMedia
 {
+    /** @use HasFactory<ContentBlockFactory> */
+    use HasFactory;
     use InteractsWithMedia;
     use ClearsResponseCache;
 
-    protected $fillable = [
-        'page_id',
-        'type',
-        'data',
-        'block_id',
-        'order',
-    ];
+    protected $fillable = ['page_id', 'type', 'data', 'block_id', 'order', ];
 
     /**
      * Relationship to Page
@@ -60,7 +58,6 @@ class ContentBlock extends Model implements HasMedia
     }
 
     /**
-     * Register Media Collections
      */
     public function registerMediaCollections(): void
     {
@@ -69,7 +66,6 @@ class ContentBlock extends Model implements HasMedia
     }
 
     /**
-     * Casts
      */
     protected function casts(): array
     {

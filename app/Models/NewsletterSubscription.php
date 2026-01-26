@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\NewsletterSubscriptionFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,15 +23,11 @@ use Illuminate\Support\Str;
  */
 class NewsletterSubscription extends Model
 {
+    /** @use HasFactory<NewsletterSubscriptionFactory> */
+    use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = [
-        'participant_id',
-        'token',
-        'subscribed_at',
-        'confirmed_at',
-        'unsubscribed_at',
-    ];
+    protected $fillable = ['participant_id', 'token', 'subscribed_at', 'confirmed_at', 'unsubscribed_at', ];
 
     protected static function booted(): void
     {

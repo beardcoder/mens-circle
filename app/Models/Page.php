@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\ClearsResponseCache;
+use Database\Factories\PageFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use PhpStaticAnalysis\Attributes\Param;
-use PhpStaticAnalysis\Attributes\Returns;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
@@ -28,18 +28,14 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Page extends Model implements HasMedia
 {
+    /** @use HasFactory<PageFactory> */
+    use HasFactory;
     use HasSlug;
     use InteractsWithMedia;
     use SoftDeletes;
     use ClearsResponseCache;
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'meta',
-        'is_published',
-        'published_at',
-    ];
+    protected $fillable = ['title', 'slug', 'meta', 'is_published', 'published_at', ];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -56,7 +52,8 @@ class Page extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('page_blocks')->useDisk('public');
+        $this->addMediaCollection('page_blocks')
+->useDisk('public');
     }
 
     protected function casts(): array
@@ -81,16 +78,15 @@ class Page extends Model implements HasMedia
     /**
      * Sync content blocks for this page.
      * Handles creation, update, and deletion of blocks and their media.
-     */
-    /**
+     *
      * @param array<int, array<string, mixed>> $contentBlocksData
      */
-    #[Param(contentBlocksData: 'array')]
-    #[Returns('void')]
     public function saveContentBlocks(array $contentBlocksData): void
     {
         DB::transaction(function () use ($contentBlocksData): void {
-            $existingBlocks = $this->contentBlocks()->get()->keyBy('block_id');
+            $existingBlocks = $this->contentBlocks()
+->get()
+->keyBy('block_id');
             $processedBlockIds = [];
 
             foreach ($contentBlocksData as $index => $blockData) {
@@ -101,14 +97,14 @@ class Page extends Model implements HasMedia
                 // Remove block_id from data payload as it's stored in a separate column
                 unset($data['block_id']);
 
-                $this->contentBlocks()->updateOrCreate(
-                    ['block_id' => $blockId],
-                    [
+                $this->contentBlocks()
+->updateOrCreate([
+'block_id' => $blockId
+], [
                         'type' => $blockData['type'],
                         'data' => $data,
                         'order' => $index,
-                    ]
-                );
+                    ]);
 
                 $processedBlockIds[] = $blockId;
             }

@@ -90,7 +90,8 @@ class Event extends Model implements HasMedia
      */
     public function activeRegistrations(): HasMany
     {
-        return $this->registrations()->active();
+        return $this->registrations()
+->active();
     }
 
     /**
@@ -118,9 +119,7 @@ class Event extends Model implements HasMedia
      */
     protected function isFull(): Attribute
     {
-        return Attribute::make(
-            get: fn (): bool => $this->availableSpots <= 0
-        );
+        return Attribute::make(get: fn (): bool => $this->availableSpots <= 0);
     }
 
     /**
@@ -128,9 +127,7 @@ class Event extends Model implements HasMedia
      */
     protected function isPast(): Attribute
     {
-        return Attribute::make(
-            get: fn () => $this->event_date->endOfDay()->isPast()
-        );
+        return Attribute::make(get: fn () => $this->event_date->endOfDay() ->isPast());
     }
 
     /**
@@ -140,7 +137,7 @@ class Event extends Model implements HasMedia
     {
         return Attribute::make(
             get: function (): ?string {
-                if (! $this->street || ! $this->city) {
+                if (!$this->street || !$this->city) {
                     return null;
                 }
 
@@ -164,13 +161,10 @@ class Event extends Model implements HasMedia
             ->setTimeFrom($this->end_time)
             ->format('Ymd\THis');
 
-        $now = now()->format('Ymd\THis\Z');
+        $now = now()
+->format('Ymd\THis\Z');
         $location = $this->fullAddress ?? $this->location;
-        $description = str_replace(
-            ["\r\n", "\n", "\r"],
-            '\n',
-            strip_tags($this->description ?? '')
-        );
+        $description = str_replace(["\r\n", "\n", "\r"], '\n', strip_tags($this->description ?? ''));
 
         $uid = $this->id . '@mens-circle.de';
 

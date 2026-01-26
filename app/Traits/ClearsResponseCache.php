@@ -10,16 +10,14 @@ trait ClearsResponseCache
 {
     public static function bootClearsResponseCache(): void
     {
-        self::created(function (): void {
+        $clearCache = function (): void {
             ResponseCache::clear();
-        });
+            cache()
+->forget('has_next_event');
+        };
 
-        self::updated(function (): void {
-            ResponseCache::clear();
-        });
-
-        self::deleted(function (): void {
-            ResponseCache::clear();
-        });
+        self::created($clearCache);
+        self::updated($clearCache);
+        self::deleted($clearCache);
     }
 }

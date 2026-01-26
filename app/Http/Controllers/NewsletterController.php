@@ -35,7 +35,7 @@ class NewsletterController extends Controller
     {
         $subscription = NewsletterSubscription::where('token', $token)->firstOrFail();
 
-        if (! $subscription->isActive()) {
+        if (!$subscription->isActive()) {
             return view('newsletter.unsubscribed', [
                 'message' => 'Diese E-Mail-Adresse wurde bereits vom Newsletter abgemeldet.',
             ]);

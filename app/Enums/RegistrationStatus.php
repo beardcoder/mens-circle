@@ -37,7 +37,9 @@ enum RegistrationStatus: string
     public static function options(): array
     {
         return collect(self::cases())
-            ->mapWithKeys(fn (self $status): array => [$status->value => $status->getLabel()])
+            ->mapWithKeys(fn (self $status): array => [
+$status->value => $status->getLabel()
+])
             ->toArray();
     }
 }

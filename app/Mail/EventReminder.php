@@ -36,8 +36,6 @@ class EventReminder extends Mailable
 
     public function content(): Content
     {
-        return new Content(
-            markdown: 'emails.event-reminder',
-        );
+        return new Content(markdown: 'emails.event-reminder', );
     }
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\NewsletterStatus;
+use Database\Factories\NewsletterFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -16,13 +18,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Newsletter extends Model
 {
-    protected $fillable = [
-        'subject',
-        'content',
-        'sent_at',
-        'recipient_count',
-        'status',
-    ];
+    /** @use HasFactory<NewsletterFactory> */
+    use HasFactory;
+
+    protected $fillable = ['subject', 'content', 'sent_at', 'recipient_count', 'status', ];
 
     protected function casts(): array
     {

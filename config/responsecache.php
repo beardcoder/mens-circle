@@ -75,9 +75,7 @@ return [
      * Here you may define replacers that dynamically replace content from the response.
      * Each replacer must implement the Replacer interface.
      */
-    'replacers' => [
-        CsrfTokenReplacer::class,
-    ],
+    'replacers' => [CsrfTokenReplacer::class, ],
 
     /*
      * If the cache driver you configured supports tags, you may specify a tag name

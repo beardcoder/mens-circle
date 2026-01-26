@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enums\RegistrationStatus;
+use App\Filament\Forms\ParticipantForms;
 use App\Filament\Resources\RegistrationResource\Pages;
-use App\Models\Participant;
 use App\Models\Registration;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -19,7 +19,6 @@ use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -61,36 +60,7 @@ class RegistrationResource extends Resource
 
                 Section::make('Teilnehmer')
                     ->description('Wähle einen bestehenden Teilnehmer oder erstelle einen neuen')
-                    ->schema([
-                        Select::make('participant_id')
-                            ->label('Teilnehmer')
-                            ->relationship('participant', 'email')
-                            ->getOptionLabelFromRecordUsing(fn (Participant $record): string => "{$record->fullName} ({$record->email})")
-                            ->required()
-                            ->searchable(['first_name', 'last_name', 'email'])
-                            ->preload()
-                            ->createOptionForm([
-                                TextInput::make('first_name')
-                                    ->label('Vorname')
-                                    ->required()
-                                    ->maxLength(255),
-                                TextInput::make('last_name')
-                                    ->label('Nachname')
-                                    ->required()
-                                    ->maxLength(255),
-                                TextInput::make('email')
-                                    ->label('E-Mail-Adresse')
-                                    ->email()
-                                    ->required()
-                                    ->unique()
-                                    ->maxLength(255),
-                                TextInput::make('phone')
-                                    ->label('Telefonnummer')
-                                    ->tel()
-                                    ->maxLength(30),
-                            ])
-                            ->native(false),
-                    ]),
+                    ->schema([ParticipantForms::participantSelect(), ]),
 
                 Section::make('Anmeldestatus')
                     ->description('Status und Zeitpunkte der Anmeldung')

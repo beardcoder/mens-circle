@@ -34,19 +34,16 @@ class RegisterParticipantAction
      */
     private function findOrUpdateParticipant(array $data): Participant
     {
-        $participant = Participant::findOrCreateByEmail($data['email'], [
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'phone' => $data['phone_number'] ?? null,
-        ]);
-
-        $participant->update([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'phone' => $data['phone_number'] ?? $participant->phone,
-        ]);
-
-        return $participant;
+        return Participant::updateOrCreate(
+            [
+'email' => $data['email']
+],
+            [
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'phone' => $data['phone_number'] ?? null,
+            ]
+        );
     }
 
     private function createOrRestoreRegistration(Event $event, Participant $participant): Registration
@@ -56,7 +53,7 @@ class RegisterParticipantAction
             ->where('participant_id', $participant->id)
             ->first();
 
-        if ($existingRegistration && ! $existingRegistration->trashed()) {
+        if ($existingRegistration && !$existingRegistration->trashed()) {
             throw new \RuntimeException('Du bist bereits für diese Veranstaltung angemeldet.');
         }
 

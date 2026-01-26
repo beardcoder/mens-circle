@@ -7,10 +7,10 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use PhpStaticAnalysis\Attributes\Returns;
-use PhpStaticAnalysis\Attributes\TemplateExtends;
 
-#[TemplateExtends('\Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>')]
+/**
+ * @extends Factory<\App\Models\User>
+ */
 class UserFactory extends Factory
 {
     /**
@@ -20,8 +20,9 @@ class UserFactory extends Factory
 
     /**
      * Define the model's default state.
+     *
+     * @return array<string, mixed>
      */
-    #[Returns('array<string, mixed>')]
     public function definition(): array
     {
         return [

@@ -149,12 +149,8 @@ class TestimonialResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                TrashedFilter::make(),
-            ])
-            ->recordActions([
-                EditAction::make(),
-            ])
+            ->filters([TrashedFilter::make(), ])
+            ->recordActions([EditAction::make(), ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
@@ -185,8 +181,6 @@ class TestimonialResource extends Resource
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
+            ->withoutGlobalScopes([SoftDeletingScope::class, ]);
     }
 }

@@ -197,7 +197,9 @@ enum Heroicon: string
     public static function options(): array
     {
         return collect(self::cases())
-            ->mapWithKeys(fn (self $icon): array => [$icon->value => $icon->getLabel()])
+            ->mapWithKeys(fn (self $icon): array => [
+$icon->value => $icon->getLabel()
+])
             ->toArray();
     }
 }

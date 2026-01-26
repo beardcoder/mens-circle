@@ -34,16 +34,21 @@ class SendNewsletterJob implements ShouldQueue
     public function handle(): void
     {
         // Update status to sending
-        $this->newsletter->update(['status' => NewsletterStatus::Sending]);
+        $this->newsletter->update([
+'status' => NewsletterStatus::Sending
+]);
 
         $recipientCount = 0;
         $failedRecipients = [];
 
         // Get all active subscribers and send emails in chunks
         NewsletterSubscription::query()
-            ->where('status', 'active')
+            ->whereNull('unsubscribed_at')
             ->with('participant')
-            ->chunk(100, function (\Illuminate\Support\Collection $subscriptions) use (&$recipientCount, &$failedRecipients): void {
+            ->chunk(100, function (\Illuminate\Support\Collection $subscriptions) use (
+                &$recipientCount,
+                &$failedRecipients
+            ): void {
                 /** @var NewsletterSubscription $subscription */
                 foreach ($subscriptions as $subscription) {
                     try {
@@ -91,6 +96,8 @@ class SendNewsletterJob implements ShouldQueue
         ]);
 
         // Reset status to draft so it can be retried manually
-        $this->newsletter->update(['status' => NewsletterStatus::Draft]);
+        $this->newsletter->update([
+'status' => NewsletterStatus::Draft
+]);
     }
 }

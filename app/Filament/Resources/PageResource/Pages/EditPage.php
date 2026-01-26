@@ -23,11 +23,7 @@ class EditPage extends EditRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            DeleteAction::make(),
-            ForceDeleteAction::make(),
-            RestoreAction::make(),
-        ];
+        return [DeleteAction::make(), ForceDeleteAction::make(), RestoreAction::make(), ];
     }
 
     /**
@@ -37,13 +33,14 @@ class EditPage extends EditRecord
     {
         $this->record->contentBlocks->each(function ($blockItem): void {
             /** @var ContentBlock $blockItem */
-            $blockItem->getMedia('page_blocks')->each(function ($mediaItem): void {
-                /** @var Media $mediaItem */
-                $mediaItem->update([
-                    'model_type' => get_class($this->record),
-                    'model_id' => $this->record->id,
-                ]);
-            });
+            $blockItem->getMedia('page_blocks')
+->each(function ($mediaItem): void {
+    /** @var Media $mediaItem */
+    $mediaItem->update([
+        'model_type' => get_class($this->record),
+        'model_id' => $this->record->id,
+    ]);
+});
         });
 
         $contentBlocks = $this->record->contentBlocks()

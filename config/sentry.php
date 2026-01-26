@@ -32,7 +32,9 @@ return [
     'traces_sample_rate' => env('SENTRY_TRACES_SAMPLE_RATE') === null ? null : (float) env('SENTRY_TRACES_SAMPLE_RATE'),
 
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#profiles-sample-rate
-    'profiles_sample_rate' => env('SENTRY_PROFILES_SAMPLE_RATE') === null ? null : (float) env('SENTRY_PROFILES_SAMPLE_RATE'),
+    'profiles_sample_rate' => env('SENTRY_PROFILES_SAMPLE_RATE') === null ? null : (float) env(
+        'SENTRY_PROFILES_SAMPLE_RATE'
+    ),
 
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#enable_logs
     'enable_logs' => env('SENTRY_ENABLE_LOGS', false),

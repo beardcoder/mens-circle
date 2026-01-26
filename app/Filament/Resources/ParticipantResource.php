@@ -73,17 +73,18 @@ class ParticipantResource extends Resource
                             ->formatStateUsing(fn ($record) => $record?->isSubscribedToNewsletter() ?? false)
                             ->live()
                             ->afterStateUpdated(function ($state, $record): void {
-                                if (! $record) {
+                                if (!$record) {
                                     return;
                                 }
 
                                 $subscription = $record->newsletterSubscription;
 
                                 if ($state) {
-                                    if ($subscription && ! $subscription->isActive()) {
+                                    if ($subscription && !$subscription->isActive()) {
                                         $subscription->resubscribe();
-                                    } elseif (! $subscription) {
-                                        $record->newsletterSubscription()->create([]);
+                                    } elseif (!$subscription) {
+                                        $record->newsletterSubscription()
+->create([]);
                                     }
                                 } elseif ($subscription?->isActive()) {
                                     $subscription->unsubscribe();
@@ -135,17 +136,14 @@ class ParticipantResource extends Resource
                     ->query(fn (Builder $query): Builder => $query->has('registrations')),
                 Filter::make('newsletter_subscriber')
                     ->label('Newsletter-Abonnent')
-                    ->query(fn (Builder $query): Builder => $query->whereHas('newsletterSubscription', fn (Builder $q) => $q->whereNull('unsubscribed_at'))),
+                    ->query(
+                        fn (Builder $query): Builder => $query->whereHas('newsletterSubscription', fn (Builder $q) => $q->whereNull(
+                            'unsubscribed_at'
+                        ))
+                    ),
             ])
-            ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ])
+            ->recordActions([EditAction::make(), DeleteAction::make(), ])
+            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make(), ]), ])
             ->defaultSort('created_at', 'desc');
     }
 

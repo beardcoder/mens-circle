@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\ContentBlock;
 use App\Models\Event;
-use App\Models\Newsletter;
+use App\Models\NewsletterSubscription;
 use App\Models\Page;
 use App\Models\Testimonial;
 use App\Settings\GeneralSettings;
@@ -13,6 +14,8 @@ use Illuminate\Http\Response;
 
 class LlmsController extends Controller
 {
+    private GeneralSettings $settings;
+
     public function show(): Response
     {
         return response($this->generateLlmsTxt(), 200, [
@@ -22,14 +25,34 @@ class LlmsController extends Controller
 
     private function generateLlmsTxt(): string
     {
-        $settings = app(GeneralSettings::class);
-        $siteName = $settings->site_name ?? 'Männerkreis Niederbayern';
-        $siteDescription = $settings->site_description ?? 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.';
-        $siteTagline = $settings->site_tagline ?? '';
+        $this->settings = app(GeneralSettings::class);
+
+        $lines = array_merge(
+            $this->generateHeader(),
+            $this->generateAboutSection(),
+            $this->generateStatistics(),
+            $this->generateUpcomingEvents(),
+            $this->generatePastEvents(),
+            $this->generatePageContent(),
+            $this->generateFaqSection(),
+            $this->generateTestimonials(),
+            $this->generateLegalSection(),
+            $this->generateActionsSection()
+        );
+
+        return implode("\n", $lines);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function generateHeader(): array
+    {
+        $siteName = $this->settings->site_name ?? 'Maennerkreis Niederbayern';
+        $siteDescription = $this->settings->site_description ?? 'Authentischer Austausch, Gemeinschaft und persoenliches Wachstum fuer Maenner in Niederbayern.';
+        $siteTagline = $this->settings->site_tagline ?? '';
 
         $lines = [];
-
-        // Header with Metadata
         $lines[] = '# ' . $siteName;
         $lines[] = '';
 
@@ -43,42 +66,51 @@ class LlmsController extends Controller
         $lines[] = '**Letzte Aktualisierung:** ' . now()->format('d.m.Y H:i') . ' Uhr';
         $lines[] = '**Website:** ' . url('/');
 
-        if ($settings->contact_email ?? false) {
-            $lines[] = '**Kontakt E-Mail:** ' . $settings->contact_email;
+        if ($this->settings->contact_email ?? false) {
+            $lines[] = '**Kontakt E-Mail:** ' . $this->settings->contact_email;
         }
 
-        if ($settings->contact_phone ?? false) {
-            $lines[] = '**Telefon:** ' . $settings->contact_phone;
+        if ($this->settings->contact_phone ?? false) {
+            $lines[] = '**Telefon:** ' . $this->settings->contact_phone;
         }
 
-        if ($settings->location ?? false) {
-            $lines[] = '**Standort:** ' . $settings->location;
+        if ($this->settings->location ?? false) {
+            $lines[] = '**Standort:** ' . $this->settings->location;
         }
 
-        if ($settings->whatsapp_community_link ?? false) {
-            $lines[] = '**WhatsApp Community:** ' . $settings->whatsapp_community_link;
+        if ($this->settings->whatsapp_community_link ?? false) {
+            $lines[] = '**WhatsApp Community:** ' . $this->settings->whatsapp_community_link;
         }
 
         $lines[] = '';
         $lines[] = '---';
         $lines[] = '';
 
-        // About / Organization Context
-        $lines[] = '## Über ' . $siteName;
+        return $lines;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function generateAboutSection(): array
+    {
+        $siteName = $this->settings->site_name ?? 'Maennerkreis Niederbayern';
+
+        $lines = [];
+        $lines[] = '## Ueber ' . $siteName;
         $lines[] = '';
-        $lines[] = 'Der Männerkreis Niederbayern ist eine Gemeinschaft für Männer, die sich regelmäßig zu Veranstaltungen treffen. Die Website bietet Informationen zu kommenden Events, Anmeldung zu Veranstaltungen und einen Newsletter-Service.';
+        $lines[] = 'Der Maennerkreis Niederbayern ist eine Gemeinschaft fuer Maenner, die sich regelmaessig zu Veranstaltungen treffen. Die Website bietet Informationen zu kommenden Events, Anmeldung zu Veranstaltungen und einen Newsletter-Service.';
         $lines[] = '';
 
-        if ($settings->footer_text ?? false) {
-            $lines[] = strip_tags($settings->footer_text);
+        if ($this->settings->footer_text ?? false) {
+            $lines[] = strip_tags($this->settings->footer_text);
             $lines[] = '';
         }
 
-        // Social Media Links
-        if (!empty($settings->social_links)) {
+        if (!empty($this->settings->social_links)) {
             $lines[] = '### Social Media';
             $lines[] = '';
-            foreach ($settings->social_links as $platform => $data) {
+            foreach ($this->settings->social_links as $platform => $data) {
                 /** @var array<string, mixed> $data */
                 $url = $data['url'] ?? $data['link'] ?? null;
                 $platformName = $data['platform'] ?? $data['name'] ?? ucfirst((string) $platform);
@@ -93,22 +125,29 @@ class LlmsController extends Controller
         $lines[] = '---';
         $lines[] = '';
 
-        // Statistics Section
-        $lines[] = '## Statistiken';
-        $lines[] = '';
+        return $lines;
+    }
 
+    /**
+     * @return array<int, string>
+     */
+    private function generateStatistics(): array
+    {
         $totalEvents = Event::published()->count();
         $upcomingEventsCount = Event::published()->upcoming()->count();
         $pastEventsCount = Event::published()->where('event_date', '<', now())->count();
         $totalTestimonials = Testimonial::published()->count();
-        $totalNewsletterSubscribers = Newsletter::where('status', 'active')->count();
+        $totalNewsletterSubscribers = NewsletterSubscription::whereNull('unsubscribed_at')->count();
 
+        $lines = [];
+        $lines[] = '## Statistiken';
+        $lines[] = '';
         $lines[] = '- **Gesamtanzahl Veranstaltungen:** ' . $totalEvents;
         $lines[] = '- **Kommende Veranstaltungen:** ' . $upcomingEventsCount;
         $lines[] = '- **Vergangene Veranstaltungen:** ' . $pastEventsCount;
 
         if ($totalTestimonials > 0) {
-            $lines[] = '- **Veröffentlichte Erfahrungsberichte:** ' . $totalTestimonials;
+            $lines[] = '- **Veroeffentlichte Erfahrungsberichte:** ' . $totalTestimonials;
         }
 
         if ($totalNewsletterSubscribers > 0) {
@@ -119,9 +158,18 @@ class LlmsController extends Controller
         $lines[] = '---';
         $lines[] = '';
 
-        // Upcoming Events Section
+        return $lines;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function generateUpcomingEvents(): array
+    {
+        $lines = [];
         $lines[] = '## Kommende Veranstaltungen';
         $lines[] = '';
+
         $upcomingEvents = Event::published()
             ->upcoming()
             ->orderBy('event_date')
@@ -130,67 +178,93 @@ class LlmsController extends Controller
         if ($upcomingEvents->isEmpty()) {
             $lines[] = 'Aktuell sind keine kommenden Veranstaltungen geplant.';
             $lines[] = '';
-        } else {
-            foreach ($upcomingEvents as $event) {
-                $lines[] = '### ' . $event->title;
-                $lines[] = '';
-                $lines[] = '**Datum:** ' . $event->event_date->format('d.m.Y');
-                $lines[] = '**Uhrzeit:** ' . $event->start_time->format('H:i') . ' - ' . $event->end_time->format('H:i') . ' Uhr';
 
-                if ($event->location) {
-                    $lines[] = '**Ort:** ' . $event->location;
-                }
-
-                if ($event->fullAddress) {
-                    $lines[] = '**Adresse:** ' . $event->fullAddress;
-                }
-
-                $lines[] = '**Verfügbare Plätze:** ' . $event->availableSpots . ' von ' . $event->max_participants;
-
-                if ($event->cost_basis) {
-                    $lines[] = '**Kostenbeitrag:** ' . $event->cost_basis;
-                }
-
-                if ($event->description) {
-                    $lines[] = '';
-                    $lines[] = $this->convertHtmlToMarkdown($event->description);
-                }
-
-                $url = url()->route('event.show.slug', $event->slug);
-                $lines[] = '';
-                $lines[] = '**Mehr Informationen und Anmeldung:** ' . $url;
-                $lines[] = '';
-                $lines[] = '---';
-                $lines[] = '';
-            }
+            return $lines;
         }
 
-        // Past Events Section
+        foreach ($upcomingEvents as $event) {
+            $lines[] = '### ' . $event->title;
+            $lines[] = '';
+            $lines[] = '**Datum:** ' . $event->event_date->format('d.m.Y');
+            $lines[] = '**Uhrzeit:** ' . $event->start_time->format('H:i') . ' - ' . $event->end_time->format(
+                'H:i'
+            ) . ' Uhr';
+
+            if ($event->location) {
+                $lines[] = '**Ort:** ' . $event->location;
+            }
+
+            if ($event->fullAddress) {
+                $lines[] = '**Adresse:** ' . $event->fullAddress;
+            }
+
+            $lines[] = '**Verfuegbare Plaetze:** ' . $event->availableSpots . ' von ' . $event->max_participants;
+
+            if ($event->cost_basis) {
+                $lines[] = '**Kostenbeitrag:** ' . $event->cost_basis;
+            }
+
+            if ($event->description) {
+                $lines[] = '';
+                $lines[] = $this->convertHtmlToMarkdown($event->description);
+            }
+
+            $url = url()
+->route('event.show.slug', $event->slug);
+            $lines[] = '';
+            $lines[] = '**Mehr Informationen und Anmeldung:** ' . $url;
+            $lines[] = '';
+            $lines[] = '---';
+            $lines[] = '';
+        }
+
+        return $lines;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function generatePastEvents(): array
+    {
         $pastEvents = Event::published()
             ->where('event_date', '<', now())
             ->orderByDesc('event_date')
             ->limit(5)
             ->get();
 
-        if ($pastEvents->isNotEmpty()) {
-            $lines[] = '## Vergangene Veranstaltungen (letzte 5)';
-            $lines[] = '';
-            foreach ($pastEvents as $event) {
-                $date = $event->event_date->format('d.m.Y');
-                $url = url()->route('event.show.slug', $event->slug);
-                $lines[] = sprintf('- **[%s](%s)** - %s', $event->title, $url, $date);
-            }
-            $lines[] = '';
-            $lines[] = '---';
-            $lines[] = '';
+        if ($pastEvents->isEmpty()) {
+            return [];
         }
 
-        // Pages with Content Section
+        $lines = [];
+        $lines[] = '## Vergangene Veranstaltungen (letzte 5)';
+        $lines[] = '';
+
+        foreach ($pastEvents as $event) {
+            $date = $event->event_date->format('d.m.Y');
+            $url = url()
+->route('event.show.slug', $event->slug);
+            $lines[] = sprintf('- **[%s](%s)** - %s', $event->title, $url, $date);
+        }
+
+        $lines[] = '';
+        $lines[] = '---';
+        $lines[] = '';
+
+        return $lines;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function generatePageContent(): array
+    {
+        $lines = [];
         $lines[] = '## Seiteninhalte';
         $lines[] = '';
         $lines[] = '### Startseite';
         $lines[] = '';
-        $lines[] = 'Die Hauptseite mit einem Überblick über den Männerkreis Niederbayern.';
+        $lines[] = 'Die Hauptseite mit einem Ueberblick ueber den Maennerkreis Niederbayern.';
         $lines[] = '';
         $lines[] = '**URL:** ' . url()->route('home');
         $lines[] = '';
@@ -204,11 +278,11 @@ class LlmsController extends Controller
         foreach ($pages as $page) {
             $lines[] = '### ' . $page->title;
             $lines[] = '';
-            $url = url()->route('page.show', $page->slug);
+            $url = url()
+->route('page.show', $page->slug);
             $lines[] = '**URL:** ' . $url;
             $lines[] = '';
 
-            // Include content blocks information
             foreach ($page->contentBlocks as $block) {
                 $lines = array_merge($lines, $this->formatContentBlock($block));
             }
@@ -217,106 +291,148 @@ class LlmsController extends Controller
             $lines[] = '';
         }
 
-        // FAQ Section
-        $faqBlocks = $this->extractFaqBlocks();
-        if (!empty($faqBlocks)) {
-            $lines[] = '## Häufig gestellte Fragen (FAQ)';
-            $lines[] = '';
-
-            foreach ($faqBlocks as $faq) {
-                if (!empty($faq['items'])) {
-                    if (!empty($faq['title'])) {
-                        $lines[] = '### ' . $this->convertHtmlToMarkdown($faq['title']);
-                        $lines[] = '';
-                    }
-
-                    if (!empty($faq['intro'])) {
-                        $lines[] = $faq['intro'];
-                        $lines[] = '';
-                    }
-
-                    foreach ($faq['items'] as $item) {
-                        if (!empty($item['question']) && !empty($item['answer'])) {
-                            $lines[] = '**Q: ' . $item['question'] . '**';
-                            $lines[] = '';
-                            $lines[] = '**A:** ' . $this->convertHtmlToMarkdown($item['answer']);
-                            $lines[] = '';
-                        }
-                    }
-                }
-            }
-
-            $lines[] = '---';
-            $lines[] = '';
-        }
-
-        // Testimonials Section
-        $testimonials = Testimonial::published()->get();
-        if ($testimonials->isNotEmpty()) {
-            $lines[] = '## Erfahrungsberichte';
-            $lines[] = '';
-            $lines[] = 'Was Teilnehmer über den Männerkreis sagen:';
-            $lines[] = '';
-
-            foreach ($testimonials as $testimonial) {
-                $lines[] = '> ' . $testimonial->quote;
-                $lines[] = '';
-
-                $author = $testimonial->author_name;
-                if ($testimonial->role) {
-                    $author .= ', ' . $testimonial->role;
-                }
-
-                $lines[] = '— **' . $author . '**';
-                $lines[] = '';
-            }
-
-            $lines[] = '---';
-            $lines[] = '';
-        }
-
-        // Legal Pages Section
-        $lines[] = '## Rechtliche Informationen';
-        $lines[] = '';
-        $lines[] = '- **[Impressum](' . url()->route('page.show', 'impressum') . '):** Rechtliche Angaben und Anbieterkennzeichnung';
-        $lines[] = '- **[Datenschutz](' . url()->route('page.show', 'datenschutz') . '):** Datenschutzerklärung gemäß DSGVO';
-        $lines[] = '';
-        $lines[] = '---';
-        $lines[] = '';
-
-        // Actions Section
-        $lines[] = '## Verfügbare Aktionen auf der Website';
-        $lines[] = '';
-        $lines[] = '1. **Newsletter-Anmeldung**';
-        $lines[] = '   - Über das Formular auf der Startseite können sich Interessierte für den Newsletter anmelden';
-        $lines[] = '   - Regelmäßige Updates zu neuen Veranstaltungen und Neuigkeiten';
-        $lines[] = '';
-        $lines[] = '2. **Veranstaltungsanmeldung**';
-        $lines[] = '   - Über die jeweilige Veranstaltungsseite können sich Teilnehmer direkt registrieren';
-        $lines[] = '   - Online-Formular mit persönlichen Daten und optionalen Notizen';
-        $lines[] = '';
-        $lines[] = '3. **Erfahrungsbericht teilen**';
-        $lines[] = '   - Teilnehmer können ihre Erfahrungen über ein Formular einreichen';
-        $lines[] = '   - Nach Prüfung werden Erfahrungsberichte auf der Website veröffentlicht';
-        $lines[] = '';
-
-        if ($settings->whatsapp_community_link ?? false) {
-            $lines[] = '4. **WhatsApp Community beitreten**';
-            $lines[] = '   - Direkter Austausch mit anderen Teilnehmern';
-            $lines[] = '   - Link: ' . $settings->whatsapp_community_link;
-            $lines[] = '';
-        }
-
-        return implode("\n", $lines);
+        return $lines;
     }
 
     /**
-     * Format a content block for the llms.txt output
-     *
-     * @param \App\Models\ContentBlock $block
      * @return array<int, string>
      */
-    private function formatContentBlock($block): array
+    private function generateFaqSection(): array
+    {
+        $faqBlocks = $this->extractFaqBlocks();
+
+        if (empty($faqBlocks)) {
+            return [];
+        }
+
+        $lines = [];
+        $lines[] = '## Haeufig gestellte Fragen (FAQ)';
+        $lines[] = '';
+
+        foreach ($faqBlocks as $faq) {
+            if (empty($faq['items'])) {
+                continue;
+            }
+
+            if (!empty($faq['title'])) {
+                $lines[] = '### ' . $this->convertHtmlToMarkdown($faq['title']);
+                $lines[] = '';
+            }
+
+            if (!empty($faq['intro'])) {
+                $lines[] = $faq['intro'];
+                $lines[] = '';
+            }
+
+            foreach ($faq['items'] as $item) {
+                if (!empty($item['question']) && !empty($item['answer'])) {
+                    $lines[] = '**Q: ' . $item['question'] . '**';
+                    $lines[] = '';
+                    $lines[] = '**A:** ' . $this->convertHtmlToMarkdown($item['answer']);
+                    $lines[] = '';
+                }
+            }
+        }
+
+        $lines[] = '---';
+        $lines[] = '';
+
+        return $lines;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function generateTestimonials(): array
+    {
+        $testimonials = Testimonial::published()->get();
+
+        if ($testimonials->isEmpty()) {
+            return [];
+        }
+
+        $lines = [];
+        $lines[] = '## Erfahrungsberichte';
+        $lines[] = '';
+        $lines[] = 'Was Teilnehmer ueber den Maennerkreis sagen:';
+        $lines[] = '';
+
+        foreach ($testimonials as $testimonial) {
+            $lines[] = '> ' . $testimonial->quote;
+            $lines[] = '';
+
+            $author = $testimonial->author_name;
+            if ($testimonial->role) {
+                $author .= ', ' . $testimonial->role;
+            }
+
+            $lines[] = '-- **' . $author . '**';
+            $lines[] = '';
+        }
+
+        $lines[] = '---';
+        $lines[] = '';
+
+        return $lines;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function generateLegalSection(): array
+    {
+        return [
+            '## Rechtliche Informationen',
+            '',
+            '- **[Impressum](' . url()->route(
+                'page.show',
+                'impressum'
+            ) . '):** Rechtliche Angaben und Anbieterkennzeichnung',
+            '- **[Datenschutz](' . url()->route(
+                'page.show',
+                'datenschutz'
+            ) . '):** Datenschutzerklaerung gemaess DSGVO',
+            '',
+            '---',
+            '',
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function generateActionsSection(): array
+    {
+        $lines = [];
+        $lines[] = '## Verfuegbare Aktionen auf der Website';
+        $lines[] = '';
+        $lines[] = '1. **Newsletter-Anmeldung**';
+        $lines[] = '   - Ueber das Formular auf der Startseite koennen sich Interessierte fuer den Newsletter anmelden';
+        $lines[] = '   - Regelmaessige Updates zu neuen Veranstaltungen und Neuigkeiten';
+        $lines[] = '';
+        $lines[] = '2. **Veranstaltungsanmeldung**';
+        $lines[] = '   - Ueber die jeweilige Veranstaltungsseite koennen sich Teilnehmer direkt registrieren';
+        $lines[] = '   - Online-Formular mit persoenlichen Daten und optionalen Notizen';
+        $lines[] = '';
+        $lines[] = '3. **Erfahrungsbericht teilen**';
+        $lines[] = '   - Teilnehmer koennen ihre Erfahrungen ueber ein Formular einreichen';
+        $lines[] = '   - Nach Pruefung werden Erfahrungsberichte auf der Website veroeffentlicht';
+        $lines[] = '';
+
+        if ($this->settings->whatsapp_community_link ?? false) {
+            $lines[] = '4. **WhatsApp Community beitreten**';
+            $lines[] = '   - Direkter Austausch mit anderen Teilnehmern';
+            $lines[] = '   - Link: ' . $this->settings->whatsapp_community_link;
+            $lines[] = '';
+        }
+
+        return $lines;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function formatContentBlock(ContentBlock $block): array
     {
         $lines = [];
         $data = $block->data;
@@ -469,18 +585,17 @@ class LlmsController extends Controller
                     $lines[] = $data['text'];
                     $lines[] = '';
                 }
-                $lines[] = '*Besucher können sich hier für den Newsletter anmelden.*';
+                $lines[] = '*Besucher koennen sich hier fuer den Newsletter anmelden.*';
                 $lines[] = '';
                 break;
 
             case 'whatsapp_community':
-                $settings = app(GeneralSettings::class);
                 $lines[] = '#### WhatsApp Community';
                 $lines[] = '';
-                $lines[] = 'Tritt unserer WhatsApp Community bei und vernetze dich mit anderen Männern aus der Region.';
+                $lines[] = 'Tritt unserer WhatsApp Community bei und vernetze dich mit anderen Maennern aus der Region.';
                 $lines[] = '';
-                if ($settings->whatsapp_community_link ?? false) {
-                    $lines[] = '**Link zur Community:** ' . $settings->whatsapp_community_link;
+                if ($this->settings->whatsapp_community_link ?? false) {
+                    $lines[] = '**Link zur Community:** ' . $this->settings->whatsapp_community_link;
                     $lines[] = '';
                 }
                 break;
@@ -488,7 +603,7 @@ class LlmsController extends Controller
             case 'testimonials':
                 $lines[] = '#### Erfahrungsberichte';
                 $lines[] = '';
-                $lines[] = '*Dieser Bereich zeigt automatisch veröffentlichte Erfahrungsberichte von Teilnehmern.*';
+                $lines[] = '*Dieser Bereich zeigt automatisch veroeffentlichte Erfahrungsberichte von Teilnehmern.*';
                 $lines[] = '';
                 break;
 
@@ -501,8 +616,6 @@ class LlmsController extends Controller
     }
 
     /**
-     * Extract FAQ blocks from all published pages
-     *
      * @return array<int, array<string, mixed>>
      */
     private function extractFaqBlocks(): array
@@ -524,12 +637,6 @@ class LlmsController extends Controller
         return $faqBlocks;
     }
 
-    /**
-     * Convert HTML to Markdown
-     *
-     * @param string $html
-     * @return string
-     */
     private function convertHtmlToMarkdown(string $html): string
     {
         if (empty($html)) {
@@ -602,8 +709,6 @@ class LlmsController extends Controller
         $markdown = html_entity_decode($markdown, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
         // Trim whitespace
-        $markdown = trim($markdown);
-
-        return $markdown;
+        return trim($markdown);
     }
 }

@@ -23,7 +23,10 @@ class TestimonialSubmissionController extends Controller
 
         $message = $this->buildSuccessMessage($validated);
 
-        return response()->json(['success' => true, 'message' => $message]);
+        return response()->json([
+'success' => true,
+'message' => $message
+]);
     }
 
     /**
@@ -31,7 +34,7 @@ class TestimonialSubmissionController extends Controller
      */
     private function buildSuccessMessage(array $validated): string
     {
-        if (! isset($validated['author_name'])) {
+        if (!isset($validated['author_name'])) {
             return 'Vielen Dank! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.';
         }
 

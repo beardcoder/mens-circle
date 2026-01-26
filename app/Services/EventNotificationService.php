@@ -19,7 +19,7 @@ class EventNotificationService
     public function sendRegistrationConfirmation(Event $event, Registration $registration): void
     {
         // Ensure participant relationship is loaded
-        if (! $registration->relationLoaded('participant')) {
+        if (!$registration->relationLoaded('participant')) {
             $registration->load('participant');
         }
 
@@ -50,7 +50,7 @@ class EventNotificationService
     {
         $participant = $registration->participant;
 
-        if (! $participant->phone) {
+        if (!$participant->phone) {
             return;
         }
 
@@ -87,7 +87,7 @@ class EventNotificationService
     {
         $apiKey = config('sevenio.api_key');
 
-        if (! $apiKey) {
+        if (!$apiKey) {
             Log::warning('Cannot send SMS - Seven.io API key not configured', $context);
 
             return;
@@ -96,11 +96,7 @@ class EventNotificationService
         try {
             $client = new Client($apiKey);
             $smsResource = new SmsResource($client);
-            $params = new SmsParams(
-                text: $message,
-                to: $phoneNumber,
-                from: config('sevenio.from')
-            );
+            $params = new SmsParams(text: $message, to: $phoneNumber, from: config('sevenio.from'));
 
             $response = $smsResource->dispatch($params);
 
