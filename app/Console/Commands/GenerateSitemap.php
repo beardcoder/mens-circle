@@ -60,7 +60,7 @@ class GenerateSitemap extends Command
         $path = public_path('sitemap.xml');
         $sitemap->writeToFile($path);
 
-        $this->info('Sitemap generated successfully at: '.$path);
+        $this->info('Sitemap generated successfully at: ' . $path);
 
         return self::SUCCESS;
     }

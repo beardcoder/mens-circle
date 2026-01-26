@@ -28,7 +28,7 @@ class UpcomingEventRegistrations extends TableWidget
     {
         $nextEvent = Event::nextEvent();
 
-        if (! $nextEvent) {
+        if (!$nextEvent) {
             return $table
                 ->query(Registration::query()->whereRaw('1 = 0'))
                 ->columns([]);
@@ -78,7 +78,11 @@ class UpcomingEventRegistrations extends TableWidget
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
             ])
-            ->heading('Anmeldungen für nächstes Event: ' . $nextEvent->title . ' (' . $nextEvent->event_date->format('d.m.Y') . ')')
+            ->heading(
+                'Anmeldungen für nächstes Event: ' . $nextEvent->title . ' (' . $nextEvent->event_date->format(
+                    'd.m.Y'
+                ) . ')'
+            )
             ->defaultSort('registered_at', 'desc');
     }
 }

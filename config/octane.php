@@ -65,10 +65,7 @@ return [
     */
 
     'listeners' => [
-        WorkerStarting::class => [
-            EnsureUploadedFilesAreValid::class,
-            EnsureUploadedFilesCanBeMoved::class,
-        ],
+        WorkerStarting::class => [EnsureUploadedFilesAreValid::class, EnsureUploadedFilesCanBeMoved::class, ],
 
         RequestReceived::class => [
             ...Octane::prepareApplicationForNextOperation(),
@@ -109,14 +106,9 @@ return [
             // CollectGarbage::class,
         ],
 
-        WorkerErrorOccurred::class => [
-            ReportException::class,
-            StopWorkerIfNecessary::class,
-        ],
+        WorkerErrorOccurred::class => [ReportException::class, StopWorkerIfNecessary::class, ],
 
-        WorkerStopping::class => [
-            CloseMonologHandlers::class,
-        ],
+        WorkerStopping::class => [CloseMonologHandlers::class, ],
     ],
 
     /*
@@ -130,14 +122,9 @@ return [
     |
     */
 
-    'warm' => [
-        ...Octane::defaultServicesToWarm(),
-        GeneralSettings::class,
-    ],
+    'warm' => [...Octane::defaultServicesToWarm(), GeneralSettings::class, ],
 
-    'flush' => [
-        'spatie.responsecache',
-    ],
+    'flush' => ['spatie.responsecache', ],
 
     /*
     |--------------------------------------------------------------------------

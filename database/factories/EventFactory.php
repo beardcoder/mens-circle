@@ -7,16 +7,17 @@ namespace Database\Factories;
 use DateTime;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use PhpStaticAnalysis\Attributes\Returns;
-use PhpStaticAnalysis\Attributes\TemplateExtends;
 
-#[TemplateExtends('\Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>')]
+/**
+ * @extends Factory<\App\Models\Event>
+ */
 class EventFactory extends Factory
 {
     /**
      * Define the model's default state.
+     *
+     * @return array<string, mixed>
      */
-    #[Returns('array<string, mixed>')]
     public function definition(): array
     {
         $eventDate = fake()->dateTimeBetween('+1 week', '+3 months');

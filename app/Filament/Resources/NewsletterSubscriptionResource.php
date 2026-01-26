@@ -147,14 +147,8 @@ class NewsletterSubscriptionResource extends Resource
                     ->query(fn (Builder $query): Builder => $query->whereNotNull('unsubscribed_at')),
             ])
             ->defaultSort('subscribed_at', 'desc')
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->recordActions([EditAction::make(), ])
+            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make(), ]), ]);
     }
 
     public static function getRelations(): array

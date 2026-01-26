@@ -19,12 +19,10 @@ return [
         Spatie\Health\ResultStores\CacheHealthResultStore::class => [
             'store' => 'file',
         ],
-
         Spatie\Health\ResultStores\JsonFileHealthResultStore::class => [
             'disk' => 's3',
             'path' => 'health.json',
         ],
-
         Spatie\Health\ResultStores\InMemoryHealthResultStore::class,
         */
     ],

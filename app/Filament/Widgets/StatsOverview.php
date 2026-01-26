@@ -33,9 +33,15 @@ class StatsOverview extends StatsOverviewWidget
                 ->color('warning'),
 
             Stat::make('Verfügbare Plätze', $nextEvent !== null ? $nextEvent->availableSpots : 0)
-                ->description($nextEvent !== null ? 'Nächstes Event: ' . $nextEvent->event_date->format('d.m.Y') : 'Kein Event geplant')
+                ->description(
+                    $nextEvent !== null ? 'Nächstes Event: ' . $nextEvent->event_date->format(
+                        'd.m.Y'
+                    ) : 'Kein Event geplant'
+                )
                 ->descriptionIcon('heroicon-o-ticket')
-                ->color(fn () => $nextEvent !== null && $nextEvent->availableSpots > 3 ? 'success' : ($nextEvent !== null && $nextEvent->availableSpots > 0 ? 'warning' : 'danger')),
+                ->color(
+                    fn () => $nextEvent !== null && $nextEvent->availableSpots > 3 ? 'success' : ($nextEvent !== null && $nextEvent->availableSpots > 0 ? 'warning' : 'danger')
+                ),
         ];
     }
 }

@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use PhpStaticAnalysis\Attributes\TemplateUse;
 
 /**
  * @property string $quote
@@ -23,7 +22,6 @@ use PhpStaticAnalysis\Attributes\TemplateUse;
  * @property ?Carbon $published_at
  * @property int $sort_order
  */
-#[TemplateUse('HasFactory<\Database\Factories\TestimonialFactory>')]
 class Testimonial extends Model
 {
     /** @use HasFactory<TestimonialFactory> */
@@ -31,15 +29,7 @@ class Testimonial extends Model
     use ClearsResponseCache;
     use SoftDeletes;
 
-    protected $fillable = [
-        'quote',
-        'author_name',
-        'email',
-        'role',
-        'is_published',
-        'published_at',
-        'sort_order',
-    ];
+    protected $fillable = ['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order', ];
 
     protected function casts(): array
     {
@@ -67,7 +57,8 @@ class Testimonial extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('order', function (Builder $builder): void {
-            $builder->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
+            $builder->orderBy('sort_order', 'asc')
+->orderBy('created_at', 'desc');
         });
     }
 }

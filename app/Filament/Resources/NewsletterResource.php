@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Enums\NewsletterStatus;
 use App\Filament\Resources\NewsletterResource\Pages\ListNewsletters;
 use App\Filament\Resources\NewsletterResource\Pages\ViewNewsletter;
 use App\Models\Newsletter;
@@ -85,18 +86,8 @@ class NewsletterResource extends Resource
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'sent' => 'success',
-                        'sending' => 'warning',
-                        'draft' => 'gray',
-                        default => 'gray',
-                    })
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'sent' => 'Versendet',
-                        'sending' => 'Wird versendet',
-                        'draft' => 'Entwurf',
-                        default => $state,
-                    })
+                    ->color(fn (NewsletterStatus $state): string => $state->getColor())
+                    ->formatStateUsing(fn (NewsletterStatus $state): string => $state->getLabel())
                     ->sortable(),
                 TextColumn::make('recipient_count')
                     ->label('Empfänger')
@@ -112,24 +103,10 @@ class NewsletterResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                SelectFilter::make('status')
-                    ->label('Status')
-                    ->options([
-                        'draft' => 'Entwurf',
-                        'sending' => 'Wird versendet',
-                        'sent' => 'Versendet',
-                    ]),
-            ])
+            ->filters([SelectFilter::make('status') ->label('Status') ->options(NewsletterStatus::options()), ])
             ->defaultSort('created_at', 'desc')
-            ->recordActions([
-                ViewAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->recordActions([ViewAction::make(), ])
+            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make(), ]), ]);
     }
 
     public static function getRelations(): array

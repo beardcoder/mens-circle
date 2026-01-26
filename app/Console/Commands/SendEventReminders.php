@@ -20,8 +20,10 @@ class SendEventReminders extends Command
     {
         $this->info('Searching for events happening in 24 hours...');
 
-        $startWindow = now()->addHours(23);
-        $endWindow = now()->addHours(25);
+        $startWindow = now()
+->addHours(23);
+        $endWindow = now()
+->addHours(25);
 
         $upcomingEvents = Event::published()
             ->whereBetween('event_date', [$startWindow, $endWindow])
@@ -67,7 +69,9 @@ class SendEventReminders extends Command
         }
 
         $this->newLine();
-        $this->info(sprintf('Successfully sent %d email(s) and %d SMS for %s event(s).', $totalEmailsSent, $totalSmsSent, $upcomingEvents->count()));
+        $this->info(
+            sprintf('Successfully sent %d email(s) and %d SMS for %s event(s).', $totalEmailsSent, $totalSmsSent, $upcomingEvents->count())
+        );
 
         return self::SUCCESS;
     }

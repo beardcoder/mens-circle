@@ -28,15 +28,24 @@ class SocialiteController extends Controller
 
         $response = Socialite::driver($provider)->user();
 
-        $user = User::firstWhere(['email' => $response->getEmail()]);
-        if (! $user) {
-            return redirect()->route('socialite.redirect', ['provider' => $provider])
-                ->withErrors(['email' => 'No user found with the email '.$response->getEmail()]);
+        $user = User::firstWhere([
+'email' => $response->getEmail()
+]);
+        if (!$user) {
+            return redirect()->route('socialite.redirect', [
+'provider' => $provider
+])
+                ->withErrors([
+'email' => 'No user found with the email ' . $response->getEmail()
+]);
         }
 
-        $user->update([$provider.'_id' => $response->getId()]);
+        $user->update([
+$provider . '_id' => $response->getId()
+]);
 
-        auth()->login($user);
+        auth()
+->login($user);
 
         return redirect()->intended(route('filament.admin.pages.dashboard'));
     }

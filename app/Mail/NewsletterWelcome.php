@@ -11,7 +11,6 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use PhpStaticAnalysis\Attributes\Returns;
 
 class NewsletterWelcome extends Mailable
 {
@@ -32,9 +31,7 @@ class NewsletterWelcome extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Willkommen beim Männerkreis Niederbayern/ Straubing Newsletter',
-        );
+        return new Envelope(subject: 'Willkommen beim Männerkreis Niederbayern/ Straubing Newsletter', );
     }
 
     /**
@@ -42,9 +39,7 @@ class NewsletterWelcome extends Mailable
      */
     public function content(): Content
     {
-        return new Content(
-            markdown: 'emails.newsletter-welcome',
-        );
+        return new Content(markdown: 'emails.newsletter-welcome', );
     }
 
     /**
@@ -52,7 +47,6 @@ class NewsletterWelcome extends Mailable
      *
      * @return array<int, Attachment>
      */
-    #[Returns('array<int, \Illuminate\Mail\Mailables\Attachment>')]
     public function attachments(): array
     {
         return [];

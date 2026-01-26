@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Filament\Resources\EventResource\RelationManagers;
 
 use App\Enums\RegistrationStatus;
-use App\Models\Participant;
+use App\Filament\Forms\ParticipantForms;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -34,36 +33,7 @@ class RegistrationsRelationManager extends RelationManager
             ->components([
                 Section::make('Teilnehmer')
                     ->description('Wähle einen bestehenden Teilnehmer oder erstelle einen neuen')
-                    ->schema([
-                        Select::make('participant_id')
-                            ->label('Teilnehmer')
-                            ->relationship('participant', 'email')
-                            ->getOptionLabelFromRecordUsing(fn (Participant $record): string => "{$record->fullName} ({$record->email})")
-                            ->required()
-                            ->searchable(['first_name', 'last_name', 'email'])
-                            ->preload()
-                            ->createOptionForm([
-                                TextInput::make('first_name')
-                                    ->label('Vorname')
-                                    ->required()
-                                    ->maxLength(255),
-                                TextInput::make('last_name')
-                                    ->label('Nachname')
-                                    ->required()
-                                    ->maxLength(255),
-                                TextInput::make('email')
-                                    ->label('E-Mail-Adresse')
-                                    ->email()
-                                    ->required()
-                                    ->unique()
-                                    ->maxLength(255),
-                                TextInput::make('phone')
-                                    ->label('Telefonnummer')
-                                    ->tel()
-                                    ->maxLength(30),
-                            ])
-                            ->native(false),
-                    ]),
+                    ->schema([ParticipantForms::participantSelect(), ]),
 
                 Section::make('Anmeldestatus')
                     ->description('Status und Zeitpunkte der Anmeldung')
@@ -128,17 +98,9 @@ class RegistrationsRelationManager extends RelationManager
                     ->label('Anmeldestatus')
                     ->options(RegistrationStatus::options()),
             ])
-            ->headerActions([
-                CreateAction::make(),
-            ])
-            ->actions([
-                EditAction::make(),
-            ])
-            ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ])
+            ->headerActions([CreateAction::make(), ])
+            ->recordActions([EditAction::make(), ])
+            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make(), ]), ])
             ->defaultSort('registered_at', 'desc');
     }
 }

@@ -41,7 +41,11 @@
         "laravel/pail": "^1.2.4",
         "laravel/pint": "^1.27",
         "laravel/sail": "^1.52",
-        "php-static-analysis/rector-rule": "^0.5.0"
+        "php-static-analysis/rector-rule": "^0.5.0",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "symplify/coding-standard": "^13.0",
+        "symplify/easy-coding-standard": "^13.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
@@ -54,7 +58,8 @@
     },
     "config": {
         "allow-plugins": {
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
         },
         "optimize-autoloader": true,
         "preferred-install": "dist",

@@ -32,13 +32,7 @@ class Registration extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = [
-        'participant_id',
-        'event_id',
-        'status',
-        'registered_at',
-        'cancelled_at',
-    ];
+    protected $fillable = ['participant_id', 'event_id', 'status', 'registered_at', 'cancelled_at', ];
 
     /**
      * @return BelongsTo<Participant, $this>
@@ -78,10 +72,7 @@ class Registration extends Model
     #[Scope]
     protected function active(Builder $query): Builder
     {
-        return $query->whereIn('status', [
-            RegistrationStatus::Registered,
-            RegistrationStatus::Attended,
-        ]);
+        return $query->whereIn('status', [RegistrationStatus::Registered, RegistrationStatus::Attended, ]);
     }
 
     /**

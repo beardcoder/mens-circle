@@ -82,7 +82,9 @@ class ManageGeneralSettings extends SettingsPage
                             ->url()
                             ->maxLength(500)
                             ->placeholder('https://chat.whatsapp.com/...')
-                            ->helperText('Einladungslink zur WhatsApp Community. Leer lassen um die Sektion auszublenden.'),
+                            ->helperText(
+                                'Einladungslink zur WhatsApp Community. Leer lassen um die Sektion auszublenden.'
+                            ),
 
                         Repeater::make('social_links')
                             ->label('Social & Kontakt Links')
@@ -110,16 +112,16 @@ class ManageGeneralSettings extends SettingsPage
                             ->itemLabel(function (array $state): string {
                                 $iconLabel = null;
 
-                                if (! empty($state['icon'])) {
+                                if (!empty($state['icon'])) {
                                     $iconLabel = SocialHeroicon::fromName($state['icon'])?->getLabel();
-                                } elseif (! empty($state['type']) && is_string($state['type'])) {
+                                } elseif (!empty($state['type']) && is_string($state['type'])) {
                                     $iconLabel = ucwords(str_replace(['-', '_'], ' ', $state['type']));
                                 }
 
                                 $detail = $state['label'] ?? $state['value'] ?? null;
 
                                 if ($detail) {
-                                    return ($iconLabel ?? 'Link').' - '.$detail;
+                                    return ($iconLabel ?? 'Link') . ' - ' . $detail;
                                 }
 
                                 return $iconLabel ?? 'Link';

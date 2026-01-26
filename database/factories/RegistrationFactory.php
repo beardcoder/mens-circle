@@ -8,13 +8,17 @@ use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Participant;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use PhpStaticAnalysis\Attributes\Returns;
-use PhpStaticAnalysis\Attributes\TemplateExtends;
 
-#[TemplateExtends('\Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Registration>')]
+/**
+ * @extends Factory<\App\Models\Registration>
+ */
 class RegistrationFactory extends Factory
 {
-    #[Returns('array<string, mixed>')]
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

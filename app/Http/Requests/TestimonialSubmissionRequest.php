@@ -8,7 +8,6 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use PhpStaticAnalysis\Attributes\Returns;
 
 class TestimonialSubmissionRequest extends FormRequest
 {
@@ -25,7 +24,6 @@ class TestimonialSubmissionRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    #[Returns('array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>')]
     public function rules(): array
     {
         return [
@@ -39,8 +37,9 @@ class TestimonialSubmissionRequest extends FormRequest
 
     /**
      * Get custom error messages for validation rules.
+     *
+     * @return array<string, string>
      */
-    #[Returns('array<string, string>')]
     public function messages(): array
     {
         return [
@@ -58,7 +57,8 @@ class TestimonialSubmissionRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success' => false,
-            'message' => $validator->errors()->first(),
+            'message' => $validator->errors()
+->first(),
         ], 422));
     }
 }

@@ -7,7 +7,6 @@ namespace App\Providers;
 use App\Checks\MailHealthCheck;
 use App\Checks\SevenIoHealthCheck;
 use App\Models\Event;
-use App\Observers\EventObserver;
 use App\Settings\GeneralSettings;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\View;
@@ -31,8 +30,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Event::observe(EventObserver::class);
-
         $this->configureHealth();
 
         View::composer('*', function (ViewContract $view): void {
@@ -59,9 +56,8 @@ class AppServiceProvider extends ServiceProvider
         ], function (ViewContract $view): void {
             try {
                 $view->with([
-                    'hasNextEvent' => cache()->remember('has_next_event', 300, fn () => Event::published()
-                        ->upcoming()
-                        ->exists()),
+                    'hasNextEvent' => cache()
+->remember('has_next_event', 300, fn () => Event::published() ->upcoming() ->exists()),
                 ]);
             } catch (Throwable) {
                 $view->with([

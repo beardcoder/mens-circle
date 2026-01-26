@@ -15,9 +15,7 @@ return [
      * Each settings class used in your application must be registered, you can
      * put them (manually) here.
      */
-    'settings' => [
-
-    ],
+    'settings' => [],
 
     /*
      * The path where the settings classes will be created.
@@ -29,9 +27,7 @@ return [
      * migration created via the make:settings-migration command will be stored in the first path or
      * a custom defined path when running the command.
      */
-    'migrations_paths' => [
-        database_path('settings'),
-    ],
+    'migrations_paths' => [database_path('settings'), ],
 
     /*
      * When no repository was set for a settings class the following repository
@@ -91,9 +87,7 @@ return [
      * The package will look for settings in these paths and automatically
      * register them.
      */
-    'auto_discover_settings' => [
-        app_path('Settings'),
-    ],
+    'auto_discover_settings' => [app_path('Settings'), ],
 
     /*
      * Automatically discovered settings classes can be cached, so they don't

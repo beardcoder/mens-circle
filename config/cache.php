@@ -58,10 +58,7 @@ return [
         'memcached' => [
             'driver' => 'memcached',
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
-            'sasl' => [
-                env('MEMCACHED_USERNAME'),
-                env('MEMCACHED_PASSWORD'),
-            ],
+            'sasl' => [env('MEMCACHED_USERNAME'), env('MEMCACHED_PASSWORD'), ],
             'options' => [
                 // Memcached::OPT_CONNECT_TIMEOUT => 2000,
             ],
@@ -95,10 +92,7 @@ return [
 
         'failover' => [
             'driver' => 'failover',
-            'stores' => [
-                'database',
-                'file',
-            ],
+            'stores' => ['database', 'file', ],
         ],
 
     ],
@@ -114,6 +108,6 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-cache-'),
+    'prefix' => env('CACHE_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')) . '-cache-'),
 
 ];
