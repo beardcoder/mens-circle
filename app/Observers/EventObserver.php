@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\Event;
+use App\Features\Events\Domain\Models\Event;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
 class EventObserver

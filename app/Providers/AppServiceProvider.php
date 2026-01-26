@@ -6,7 +6,7 @@ namespace App\Providers;
 
 use App\Checks\MailHealthCheck;
 use App\Checks\SevenIoHealthCheck;
-use App\Models\Event;
+use App\Features\Events\Domain\Models\Event;
 use App\Observers\EventObserver;
 use App\Settings\GeneralSettings;
 use Illuminate\Contracts\View\View as ViewContract;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\EventController;
+use App\Features\Events\Http\Controllers\EventController;
 use App\Http\Controllers\LlmsController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;

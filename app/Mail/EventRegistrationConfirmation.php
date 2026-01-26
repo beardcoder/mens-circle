@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Mail;
 
-use App\Models\Event;
-use App\Models\Registration;
+use App\Features\Events\Domain\Models\Event;
+use App\Features\Events\Domain\Models\Registration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
