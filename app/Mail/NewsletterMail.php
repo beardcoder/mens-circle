@@ -22,8 +22,8 @@ class NewsletterMail extends Mailable implements ShouldQueue
      * Create a new message instance.
      */
     public function __construct(
-        public Newsletter $newsletter,
-        public NewsletterSubscription $subscription
+        public readonly Newsletter $newsletter,
+        public readonly NewsletterSubscription $subscription
     ) {
         //
     }

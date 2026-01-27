@@ -1,4 +1,8 @@
 {
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "laravel-boost"
+  ],
   "mcpServers": {
     "laravel-boost": {
       "command": "ddev",
@@ -8,8 +12,7 @@
       ]
     }
   },
-  "enabledMcpjsonServers": [
-    "laravel-boost"
-  ],
-  "enableAllProjectMcpServers": true
+  "enabledPlugins": {
+    "fullstack-dev-skills@fullstack-dev-skills": true
+  }
 }

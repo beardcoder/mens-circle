@@ -21,12 +21,7 @@ class EventController extends Controller
             ->orderBy('event_date')
             ->first();
 
-        return $event
-            ? redirect()
-->route('event.show.slug', [
-'slug' => $event->slug
-])
-            : view('no-event');
+        return $event ? redirect()->route('event.show.slug', ['slug' => $event->slug]) : view('no-event');
     }
 
     public function show(string $slug): View
@@ -45,32 +40,24 @@ class EventController extends Controller
         ]);
     }
 
-    public function register(EventRegistrationRequest $request, RegisterParticipantAction $action): JsonResponse
-    {
+    public function register(
+        EventRegistrationRequest $request,
+        RegisterParticipantAction $action
+    ): JsonResponse {
         $validated = $request->validated();
         /** @var Event $event */
-        $event = Event::findOrFail($validated['event_id']);
+        $event = Event::query()->findOrFail($validated['event_id']);
 
-        // Validate event availability
-        if (!$event->is_published) {
-            return response()->json([
-'success' => false,
-'message' => 'Diese Veranstaltung ist nicht verfügbar.'
-], 404);
-        }
+        $error = match (true) {
+            !$event->is_published => ['Diese Veranstaltung ist nicht verfügbar.', 404],
+            $event->isPast => ['Diese Veranstaltung hat bereits stattgefunden. Eine Anmeldung ist nicht mehr möglich.', 410],
+            $event->isFull => ['Diese Veranstaltung ist leider bereits ausgebucht.', 409],
+            default => null,
+        };
 
-        if ($event->isPast) {
-            return response()->json([
-'success' => false,
-'message' => 'Diese Veranstaltung hat bereits stattgefunden. Eine Anmeldung ist nicht mehr möglich.'
-], 410);
-        }
-
-        if ($event->isFull) {
-            return response()->json([
-'success' => false,
-'message' => 'Diese Veranstaltung ist leider bereits ausgebucht.'
-], 409);
+        if ($error) {
+            [$message, $status] = $error;
+            return response()->json(['success' => false, 'message' => $message], $status);
         }
 
         try {
@@ -78,16 +65,14 @@ class EventController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => sprintf(
-                    'Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.',
-                    $validated['first_name']
-                ),
+                'message' => "Vielen Dank, {$validated['first_name']}! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.",
             ]);
         } catch (\RuntimeException $e) {
             return response()->json([
-'success' => false,
-'message' => $e->getMessage()
-], 409);
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 409);
         }
     }
+
 }

@@ -19,8 +19,8 @@ class EventReminder extends Mailable
     use SerializesModels;
 
     public function __construct(
-        public Registration $registration,
-        public Event $event
+        public readonly Registration $registration,
+        public readonly Event $event
     ) {
     }
 
