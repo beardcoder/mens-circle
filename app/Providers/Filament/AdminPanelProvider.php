@@ -47,6 +47,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Orange,
             ])
             ->renderHook(PanelsRenderHook::TOPBAR_END, fn (): Factory|View => view('filament.components.go-to-website'))
+            ->renderHook(PanelsRenderHook::HEAD_END, fn (): Factory|View => view('filament.components.apple-touch-icons'))
             ->plugins([
                 FilamentLogViewer::make(),
                 FilamentSpatieLaravelHealthPlugin::make(),
