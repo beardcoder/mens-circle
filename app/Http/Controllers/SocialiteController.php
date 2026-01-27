@@ -10,9 +10,14 @@ use Laravel\Socialite\Socialite;
 
 class SocialiteController extends Controller
 {
+    /**
+     * @var array<int, string>
+     */
+    private const ALLOWED_PROVIDERS = ['github'];
+
     public function redirect(string $provider): RedirectResponse
     {
-        abort_unless(in_array($provider, $this->allowedProviders()), 404);
+        abort_unless(in_array($provider, self::ALLOWED_PROVIDERS), 404);
 
         /** @var \Laravel\Socialite\Two\GithubProvider $driver */
         $driver = Socialite::driver($provider);
@@ -24,7 +29,7 @@ class SocialiteController extends Controller
 
     public function callback(string $provider): RedirectResponse
     {
-        abort_unless(in_array($provider, $this->allowedProviders()), 404);
+        abort_unless(in_array($provider, self::ALLOWED_PROVIDERS), 404);
 
         $response = Socialite::driver($provider)->user();
 
@@ -48,13 +53,5 @@ $provider . '_id' => $response->getId()
 ->login($user);
 
         return redirect()->intended(route('filament.admin.pages.dashboard'));
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function allowedProviders(): array
-    {
-        return ['github'];
     }
 }

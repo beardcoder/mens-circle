@@ -7,6 +7,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ParticipantResource\Pages\CreateParticipant;
 use App\Filament\Resources\ParticipantResource\Pages\EditParticipant;
 use App\Filament\Resources\ParticipantResource\Pages\ListParticipants;
+use App\Models\NewsletterSubscription;
 use App\Models\Participant;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -80,15 +81,12 @@ class ParticipantResource extends Resource
                                 $subscription = $record->newsletterSubscription;
 
                                 if ($state) {
-                                    if ($subscription && !$subscription->isActive()) {
-                                        $subscription->resubscribe();
-                                    } elseif (!$subscription) {
-                                        $record->newsletterSubscription()
-->create([]);
-                                    }
-                                } elseif ($subscription?->isActive()) {
-                                    $subscription->unsubscribe();
+                                    self::handleNewsletterSubscribe($record, $subscription);
+
+                                    return;
                                 }
+
+                                self::handleNewsletterUnsubscribe($subscription);
                             })
                             ->dehydrated(false),
                     ]),
@@ -159,5 +157,25 @@ class ParticipantResource extends Resource
             'create' => CreateParticipant::route('/create'),
             'edit' => EditParticipant::route('/{record}/edit'),
         ];
+    }
+
+    private static function handleNewsletterSubscribe(Participant $record, ?NewsletterSubscription $subscription): void
+    {
+        if ($subscription && !$subscription->isActive()) {
+            $subscription->resubscribe();
+
+            return;
+        }
+
+        if (!$subscription) {
+            $record->newsletterSubscription()->create([]);
+        }
+    }
+
+    private static function handleNewsletterUnsubscribe(?NewsletterSubscription $subscription): void
+    {
+        if ($subscription?->isActive()) {
+            $subscription->unsubscribe();
+        }
     }
 }

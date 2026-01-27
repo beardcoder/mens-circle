@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Traits\HasEnumOptions;
+
 enum RegistrationStatus: string
 {
+    use HasEnumOptions;
     case Registered = 'registered';
     case Waitlist = 'waitlist';
     case Cancelled = 'cancelled';
@@ -29,17 +32,5 @@ enum RegistrationStatus: string
             self::Cancelled => 'danger',
             self::Attended => 'success',
         };
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    public static function options(): array
-    {
-        return collect(self::cases())
-            ->mapWithKeys(fn (self $status): array => [
-$status->value => $status->getLabel()
-])
-            ->toArray();
     }
 }

@@ -84,43 +84,77 @@ class Page extends Model implements HasMedia
     public function saveContentBlocks(array $contentBlocksData): void
     {
         DB::transaction(function () use ($contentBlocksData): void {
-            $existingBlocks = $this->contentBlocks()
-->get()
-->keyBy('block_id');
-            $processedBlockIds = [];
-
-            foreach ($contentBlocksData as $index => $blockData) {
-                $data = $blockData['data'] ?? [];
-                // Block ID comes from the data array (hidden field)
-                $blockId = $data['block_id'] ?? Str::uuid()->toString();
-
-                // Remove block_id from data payload as it's stored in a separate column
-                unset($data['block_id']);
-
-                $this->contentBlocks()
-->updateOrCreate([
-'block_id' => $blockId
-], [
-                        'type' => $blockData['type'],
-                        'data' => $data,
-                        'order' => $index,
-                    ]);
-
-                $processedBlockIds[] = $blockId;
-            }
-
-            // Cleanup removed blocks
-            $existingBlocks->each(function ($blockModel) use ($processedBlockIds): void {
-                /** @var ContentBlock $blockModel */
-                if (!in_array($blockModel->block_id, $processedBlockIds, true)) {
-                    // Delete associated media on the Page
-                    $this->getMedia('page_blocks')
-                        ->filter(fn ($media): bool => $media->getCustomProperty('block_id') === $blockModel->block_id)
-                        ->each(fn ($media) => $media->delete());
-
-                    $blockModel->delete();
-                }
-            });
+            $existingBlocks = $this->contentBlocks()->get()->keyBy('block_id');
+            $processedBlockIds = $this->processContentBlocks($contentBlocksData);
+            $this->cleanupRemovedBlocks($existingBlocks, $processedBlockIds);
         });
+    }
+
+    /**
+     * Process and save content blocks, returning array of processed block IDs.
+     *
+     * @param array<int, array<string, mixed>> $contentBlocksData
+     * @return array<int, string>
+     */
+    private function processContentBlocks(array $contentBlocksData): array
+    {
+        $processedBlockIds = [];
+
+        foreach ($contentBlocksData as $index => $blockData) {
+            $blockId = $this->saveContentBlock($blockData, $index);
+            $processedBlockIds[] = $blockId;
+        }
+
+        return $processedBlockIds;
+    }
+
+    /**
+     * Save or update a single content block.
+     *
+     * @param array<string, mixed> $blockData
+     */
+    private function saveContentBlock(array $blockData, int $order): string
+    {
+        $data = $blockData['data'] ?? [];
+        $blockId = $data['block_id'] ?? Str::uuid()->toString();
+
+        unset($data['block_id']);
+
+        $this->contentBlocks()->updateOrCreate(
+            ['block_id' => $blockId],
+            [
+                'type' => $blockData['type'],
+                'data' => $data,
+                'order' => $order,
+            ]
+        );
+
+        return $blockId;
+    }
+
+    /**
+     * Remove blocks that are no longer in the content blocks data.
+     *
+     * @param \Illuminate\Support\Collection<string, ContentBlock> $existingBlocks
+     * @param array<int, string> $processedBlockIds
+     */
+    private function cleanupRemovedBlocks($existingBlocks, array $processedBlockIds): void
+    {
+        $existingBlocks
+            ->reject(fn (ContentBlock $block): bool => in_array($block->block_id, $processedBlockIds, true))
+            ->each(function (ContentBlock $block): void {
+                $this->deleteBlockMedia($block->block_id);
+                $block->delete();
+            });
+    }
+
+    /**
+     * Delete all media associated with a specific block.
+     */
+    private function deleteBlockMedia(string $blockId): void
+    {
+        $this->getMedia('page_blocks')
+            ->filter(fn ($media): bool => $media->getCustomProperty('block_id') === $blockId)
+            ->each(fn ($media) => $media->delete());
     }
 }
