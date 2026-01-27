@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use Faker\Factory as FakerFactory;
+
 use App\Models\Page;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,11 +21,13 @@ class PageFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = FakerFactory::create();
+
         return [
-            'title' => \fake()->sentence(),
-            'slug' => \fake()->slug(),
+            'title' => $faker->sentence(),
+            'slug' => $faker->slug(),
             'meta' => [
-                'description' => \fake()->sentence(),
+                'description' => $faker->sentence(),
             ],
             'is_published' => false,
             'published_at' => null,

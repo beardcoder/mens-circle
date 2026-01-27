@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use Faker\Factory as FakerFactory;
+
 use App\Models\ContentBlock;
 use App\Models\Page;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,11 +23,13 @@ class ContentBlockFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = FakerFactory::create();
+
         return [
             'page_id' => Page::factory(),
             'type' => 'text',
             'data' => [
-                'content' => \fake()->paragraphs(2, true),
+                'content' => $faker->paragraphs(2, true),
             ],
             'block_id' => Str::uuid()->toString(),
             'order' => 0,
@@ -44,8 +48,8 @@ class ContentBlockFactory extends Factory
         return $this->state(fn (array $attributes): array => [
             'type' => 'hero',
             'data' => [
-                'title' => \fake()->sentence(),
-                'subtitle' => \fake()->sentence(),
+                'title' => $faker->sentence(),
+                'subtitle' => $faker->sentence(),
             ],
         ]);
     }
@@ -55,7 +59,7 @@ class ContentBlockFactory extends Factory
         return $this->state(fn (array $attributes): array => [
             'type' => 'text',
             'data' => [
-                'content' => \fake()->paragraphs(3, true),
+                'content' => $faker->paragraphs(3, true),
             ],
         ]);
     }
