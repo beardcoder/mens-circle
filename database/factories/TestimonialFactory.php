@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use Faker\Factory as FakerFactory;
+
 use App\Models\Testimonial;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,6 +21,8 @@ class TestimonialFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = FakerFactory::create();
+
         $quotes = [
             'Hier kann ich endlich ich selbst sein, ohne Maske und ohne Leistungsdruck.',
             'Der Kreis hat mir gezeigt, dass ich mit meinen Gefühlen nicht alleine bin.',
@@ -31,9 +35,9 @@ class TestimonialFactory extends Factory
         ];
 
         return [
-            'quote' => \fake()->randomElement($quotes),
-            'author_name' => \fake()->boolean(60) ? \fake()->firstName() : null,
-            'role' => \fake()->boolean(70) ? 'Teilnehmer seit '.\fake()->year() : null,
+            'quote' => $faker->randomElement($quotes),
+            'author_name' => $faker->boolean(60) ? $faker->firstName() : null,
+            'role' => $faker->boolean(70) ? 'Teilnehmer seit '.$faker->year() : null,
             'is_published' => true,
             'published_at' => now(),
             'sort_order' => 0,
