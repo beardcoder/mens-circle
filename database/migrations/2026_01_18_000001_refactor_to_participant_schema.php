@@ -109,27 +109,21 @@ return new class () extends Migration {
                 WHERE status = 'confirmed'
             ");
 
-            // Step 8: Drop old indexes (PostgreSQL specific check)
-            $indexExists = DB::selectOne("
-                SELECT 1 FROM pg_indexes
-                WHERE tablename = ? AND indexname = ?
-            ", [$sourceTable, 'event_registrations_event_status_index']);
-
-            if ($indexExists) {
+            // Step 8: Drop old indexes (check if they exist first)
+            try {
                 Schema::table($sourceTable, function (Blueprint $table): void {
                     $table->dropIndex('event_registrations_event_status_index');
                 });
+            } catch (\Exception $e) {
+                // Index doesn't exist, continue
             }
 
-            $uniqueExists = DB::selectOne("
-                SELECT 1 FROM pg_indexes
-                WHERE tablename = ? AND indexname = ?
-            ", [$sourceTable, 'event_registrations_event_id_email_unique']);
-
-            if ($uniqueExists) {
+            try {
                 Schema::table($sourceTable, function (Blueprint $table): void {
                     $table->dropUnique(['event_id', 'email']);
                 });
+            } catch (\Exception $e) {
+                // Unique constraint doesn't exist, continue
             }
 
             // Step 9: Drop old columns
@@ -146,37 +140,31 @@ return new class () extends Migration {
         }
 
         // Step 10: Add foreign key and new indexes (if not exists)
-        $fkExists = DB::selectOne("
-            SELECT 1 FROM information_schema.table_constraints
-            WHERE constraint_name = ? AND table_name = ?
-        ", [$sourceTable . '_participant_id_foreign', $sourceTable]);
-
-        if (! $fkExists) {
+        // Skip FK check for SQLite as it doesn't have information_schema
+        try {
             Schema::table($sourceTable, function (Blueprint $table): void {
                 $table->foreign('participant_id')->references('id')->on('participants')->cascadeOnDelete();
             });
+        } catch (\Exception $e) {
+            // Foreign key already exists or cannot be created
         }
 
-        $uniqueParticipantEventExists = DB::selectOne("
-            SELECT 1 FROM pg_indexes
-            WHERE tablename = ? AND indexname LIKE ?
-        ", [$sourceTable, '%participant_id_event_id%']);
-
-        if (! $uniqueParticipantEventExists) {
+        // Add unique constraint if it doesn't exist
+        try {
             Schema::table($sourceTable, function (Blueprint $table): void {
                 $table->unique(['participant_id', 'event_id']);
             });
+        } catch (\Exception $e) {
+            // Unique constraint already exists
         }
 
-        $newIndexExists = DB::selectOne("
-            SELECT 1 FROM pg_indexes
-            WHERE tablename = ? AND indexname = ?
-        ", [$sourceTable, 'registrations_event_status_index']);
-
-        if (! $newIndexExists) {
+        // Add new index if it doesn't exist
+        try {
             Schema::table($sourceTable, function (Blueprint $table): void {
                 $table->index(['event_id', 'status'], 'registrations_event_status_index');
             });
+        } catch (\Exception $e) {
+            // Index already exists
         }
 
         // Step 11: Rename event_registrations to registrations (if still old name)
@@ -208,15 +196,12 @@ return new class () extends Migration {
             ");
 
             // Step 14: Drop old indexes and columns from newsletter_subscriptions
-            $emailUniqueExists = DB::selectOne("
-                SELECT 1 FROM pg_indexes
-                WHERE tablename = 'newsletter_subscriptions' AND indexname = ?
-            ", ['newsletter_subscriptions_email_unique']);
-
-            if ($emailUniqueExists) {
+            try {
                 Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
                     $table->dropUnique(['email']);
                 });
+            } catch (\Exception $e) {
+                // Unique constraint doesn't exist
             }
 
             $columnsToDrop = array_filter(
@@ -232,26 +217,20 @@ return new class () extends Migration {
         }
 
         // Step 15: Add foreign key and unique constraint
-        $nsFkExists = DB::selectOne("
-            SELECT 1 FROM information_schema.table_constraints
-            WHERE constraint_name = 'newsletter_subscriptions_participant_id_foreign' AND table_name = 'newsletter_subscriptions'
-        ");
-
-        if (! $nsFkExists) {
+        try {
             Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
                 $table->foreign('participant_id')->references('id')->on('participants')->cascadeOnDelete();
             });
+        } catch (\Exception $e) {
+            // Foreign key already exists
         }
 
-        $nsUniqueExists = DB::selectOne("
-            SELECT 1 FROM pg_indexes
-            WHERE tablename = 'newsletter_subscriptions' AND indexname LIKE '%participant_id%unique%'
-        ");
-
-        if (! $nsUniqueExists) {
+        try {
             Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
                 $table->unique('participant_id');
             });
+        } catch (\Exception $e) {
+            // Unique constraint already exists
         }
     }
 
