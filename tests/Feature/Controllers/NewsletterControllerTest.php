@@ -89,9 +89,9 @@ test('can resubscribe after unsubscribing', function (): void {
 
 test('can unsubscribe from newsletter with valid token', function (): void {
     $this->markTestSkipped('View tests require full frontend build');
-    
+
     $participant = Participant::factory()->create();
-    
+
     $subscription = NewsletterSubscription::factory()->create([
         'participant_id' => $participant->id,
         'token' => 'test-token-123',
@@ -109,7 +109,7 @@ test('can unsubscribe from newsletter with valid token', function (): void {
 
 test('unsubscribe with invalid token returns 404', function (): void {
     $this->markTestSkipped('View tests require full frontend build');
-    
+
     $response = $this->get(route('newsletter.unsubscribe', ['token' => 'invalid-token']));
 
     $response->assertStatus(404);
@@ -117,9 +117,9 @@ test('unsubscribe with invalid token returns 404', function (): void {
 
 test('unsubscribe shows message when already unsubscribed', function (): void {
     $this->markTestSkipped('View tests require full frontend build');
-    
+
     $participant = Participant::factory()->create();
-    
+
     $subscription = NewsletterSubscription::factory()->create([
         'participant_id' => $participant->id,
         'token' => 'already-unsubscribed',
