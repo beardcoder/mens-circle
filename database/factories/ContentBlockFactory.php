@@ -45,6 +45,8 @@ class ContentBlockFactory extends Factory
 
     public function hero(): static
     {
+        $faker = FakerFactory::create();
+        
         return $this->state(fn (array $attributes): array => [
             'type' => 'hero',
             'data' => [
@@ -56,6 +58,8 @@ class ContentBlockFactory extends Factory
 
     public function text(): static
     {
+        $faker = FakerFactory::create();
+        
         return $this->state(fn (array $attributes): array => [
             'type' => 'text',
             'data' => [
