@@ -53,6 +53,8 @@ class NewsletterFactory extends Factory
 
     public function sent(): static
     {
+        $faker = FakerFactory::create();
+        
         return $this->state(fn (array $attributes): array => [
             'status' => NewsletterStatus::Sent,
             'sent_at' => now(),
