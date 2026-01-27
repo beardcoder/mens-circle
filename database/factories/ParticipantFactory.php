@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use Faker\Factory as FakerFactory;
-
 use App\Models\Participant;
+use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -34,7 +33,7 @@ class ParticipantFactory extends Factory
     public function withPhone(): static
     {
         $faker = FakerFactory::create();
-        
+
         return $this->state(fn (array $attributes): array => [
             'phone' => $faker->phoneNumber(),
         ]);

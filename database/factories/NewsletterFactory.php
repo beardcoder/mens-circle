@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use Faker\Factory as FakerFactory;
-
 use App\Enums\NewsletterStatus;
 use App\Models\Newsletter;
+use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -54,7 +53,7 @@ class NewsletterFactory extends Factory
     public function sent(): static
     {
         $faker = FakerFactory::create();
-        
+
         return $this->state(fn (array $attributes): array => [
             'status' => NewsletterStatus::Sent,
             'sent_at' => now(),

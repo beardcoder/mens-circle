@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Models\NewsletterSubscription;
 use App\Models\Participant;
 use App\Models\Registration;
-use App\Models\NewsletterSubscription;
 
 test('participant can be created', function (): void {
     $participant = Participant::factory()->create([
@@ -51,7 +51,7 @@ test('participant full name trims whitespace', function (): void {
 
 test('participant can have multiple registrations', function (): void {
     $participant = Participant::factory()->create();
-    
+
     Registration::factory()->count(3)->create([
         'participant_id' => $participant->id,
     ]);
@@ -61,7 +61,7 @@ test('participant can have multiple registrations', function (): void {
 
 test('participant can have newsletter subscription', function (): void {
     $participant = Participant::factory()->create();
-    
+
     NewsletterSubscription::factory()->create([
         'participant_id' => $participant->id,
     ]);
@@ -71,7 +71,7 @@ test('participant can have newsletter subscription', function (): void {
 
 test('participant knows if subscribed to newsletter', function (): void {
     $participant = Participant::factory()->create();
-    
+
     NewsletterSubscription::factory()->create([
         'participant_id' => $participant->id,
         'unsubscribed_at' => null,
@@ -88,7 +88,7 @@ test('participant knows if not subscribed to newsletter', function (): void {
 
 test('participant knows if unsubscribed from newsletter', function (): void {
     $participant = Participant::factory()->create();
-    
+
     NewsletterSubscription::factory()->create([
         'participant_id' => $participant->id,
         'unsubscribed_at' => now(),
