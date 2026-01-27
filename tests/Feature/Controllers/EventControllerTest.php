@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
-use App\Enums\RegistrationStatus;
 
 test('can view next event page', function (): void {
     $event = Event::factory()->create([
@@ -21,7 +21,7 @@ test('can view next event page', function (): void {
 
 test('shows no event page when no upcoming events', function (): void {
     $this->markTestSkipped('View tests require full frontend build');
-    
+
     $response = $this->get(route('event.show'));
 
     $response->assertStatus(200);
@@ -30,7 +30,7 @@ test('shows no event page when no upcoming events', function (): void {
 
 test('can view specific event by slug', function (): void {
     $this->markTestSkipped('View tests require full frontend build');
-    
+
     $event = Event::factory()->create([
         'title' => 'Test Event',
         'event_date' => now()->addDays(7),
@@ -46,7 +46,7 @@ test('can view specific event by slug', function (): void {
 
 test('cannot view unpublished event', function (): void {
     $this->markTestSkipped('View tests require full frontend build');
-    
+
     $event = Event::factory()->create([
         'is_published' => false,
     ]);
@@ -84,7 +84,7 @@ test('can register for event', function (): void {
     ]);
 
     $participant = Participant::where('email', 'max@example.com')->first();
-    
+
     $this->assertDatabaseHas('registrations', [
         'event_id' => $event->id,
         'participant_id' => $participant->id,

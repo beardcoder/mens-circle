@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
-use App\Enums\RegistrationStatus;
 
 test('registration can be created', function (): void {
     $event = Event::factory()->create();

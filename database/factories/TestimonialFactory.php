@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use Faker\Factory as FakerFactory;
-
 use App\Models\Testimonial;
+use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

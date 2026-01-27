@@ -23,7 +23,7 @@ class EventFactory extends Factory
     public function definition(): array
     {
         $faker = FakerFactory::create();
-        
+
         $eventDate = $faker->dateTimeBetween('+1 week', '+3 months');
         $startTime = $faker->dateTimeBetween('18:00', '19:00');
         $endTime = (clone $startTime)->modify('+2 hours');

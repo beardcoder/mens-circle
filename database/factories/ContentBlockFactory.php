@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use Faker\Factory as FakerFactory;
-
 use App\Models\ContentBlock;
 use App\Models\Page;
+use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -46,7 +45,7 @@ class ContentBlockFactory extends Factory
     public function hero(): static
     {
         $faker = FakerFactory::create();
-        
+
         return $this->state(fn (array $attributes): array => [
             'type' => 'hero',
             'data' => [
@@ -59,7 +58,7 @@ class ContentBlockFactory extends Factory
     public function text(): static
     {
         $faker = FakerFactory::create();
-        
+
         return $this->state(fn (array $attributes): array => [
             'type' => 'text',
             'data' => [

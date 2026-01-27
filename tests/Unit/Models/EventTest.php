@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
-use App\Enums\RegistrationStatus;
 
 test('event can be created with required fields', function (): void {
     $event = Event::factory()->create([
@@ -37,7 +37,7 @@ test('event calculates available spots correctly', function (): void {
     ]);
 
     $participant = Participant::factory()->create();
-    
+
     Registration::factory()->count(3)->create([
         'event_id' => $event->id,
         'participant_id' => Participant::factory(),
@@ -45,7 +45,7 @@ test('event calculates available spots correctly', function (): void {
     ]);
 
     $event->refresh();
-    
+
     expect($event->availableSpots)->toBe(7);
 });
 
@@ -61,7 +61,7 @@ test('event knows when it is full', function (): void {
     ]);
 
     $event->refresh();
-    
+
     expect($event->isFull)->toBeTrue();
 });
 
@@ -77,7 +77,7 @@ test('event knows when it is not full', function (): void {
     ]);
 
     $event->refresh();
-    
+
     expect($event->isFull)->toBeFalse();
 });
 
@@ -140,7 +140,7 @@ test('nextEvent returns next published upcoming event', function (): void {
         'event_date' => now()->addDays(1),
         'is_published' => true,
     ]);
-    
+
     Event::factory()->create([
         'event_date' => now()->addDays(7),
         'is_published' => true,
@@ -197,7 +197,7 @@ test('cancelled registrations do not count as active', function (): void {
     ]);
 
     $event->refresh();
-    
+
     expect($event->activeRegistrationsCount)->toBe(3)
         ->and($event->availableSpots)->toBe(7);
 });
