@@ -107,7 +107,7 @@ class LlmsController extends Controller
             $lines[] = '';
         }
 
-        if (isset($this->settings->social_links) && ($this->settings->social_links !== null && $this->settings->social_links !== [])) {
+        if (isset($this->settings->social_links) && $this->settings->social_links !== []) {
             $lines[] = '### Social Media';
             $lines[] = '';
             foreach ($this->settings->social_links as $platform => $data) {
