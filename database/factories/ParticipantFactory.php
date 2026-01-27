@@ -33,6 +33,8 @@ class ParticipantFactory extends Factory
 
     public function withPhone(): static
     {
+        $faker = FakerFactory::create();
+        
         return $this->state(fn (array $attributes): array => [
             'phone' => $faker->phoneNumber(),
         ]);
