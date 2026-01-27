@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Traits\HasEnumOptions;
+
 enum Heroicon: string
 {
+    use HasEnumOptions;
+
     // Communication & Social
     case ENVELOPE = 'envelope';
     case PHONE = 'phone';
@@ -189,17 +193,5 @@ enum Heroicon: string
     public static function fromName(string $name): ?self
     {
         return self::tryFrom($name);
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    public static function options(): array
-    {
-        return collect(self::cases())
-            ->mapWithKeys(fn (self $icon): array => [
-$icon->value => $icon->getLabel()
-])
-            ->toArray();
     }
 }

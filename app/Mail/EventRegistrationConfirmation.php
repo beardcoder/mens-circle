@@ -23,8 +23,8 @@ class EventRegistrationConfirmation extends Mailable
         public readonly Registration $registration,
         public readonly Event $event
     ) {
-        //
     }
+
 
     public function envelope(): Envelope
     {

@@ -109,23 +109,7 @@ class ManageGeneralSettings extends SettingsPage
                             ])
                             ->collapsible()
                             ->collapsed()
-                            ->itemLabel(function (array $state): string {
-                                $iconLabel = null;
-
-                                if (!empty($state['icon'])) {
-                                    $iconLabel = SocialHeroicon::fromName($state['icon'])?->getLabel();
-                                } elseif (!empty($state['type']) && is_string($state['type'])) {
-                                    $iconLabel = ucwords(str_replace(['-', '_'], ' ', $state['type']));
-                                }
-
-                                $detail = $state['label'] ?? $state['value'] ?? null;
-
-                                if ($detail) {
-                                    return ($iconLabel ?? 'Link') . ' - ' . $detail;
-                                }
-
-                                return $iconLabel ?? 'Link';
-                            })
+                            ->itemLabel(fn (array $state): string => $this->getSocialLinkLabel($state))
                             ->addActionLabel('Link hinzufügen')
                             ->reorderable()
                             ->columnSpanFull(),
@@ -150,5 +134,36 @@ class ManageGeneralSettings extends SettingsPage
                     ])
                     ->columns(1),
             ]);
+    }
+
+    /**
+     * @param array<string, mixed> $state
+     */
+    private function getSocialLinkLabel(array $state): string
+    {
+        $iconLabel = $this->getIconLabel($state);
+        $detail = $state['label'] ?? $state['value'] ?? null;
+
+        if ($detail) {
+            return ($iconLabel ?? 'Link') . ' - ' . $detail;
+        }
+
+        return $iconLabel ?? 'Link';
+    }
+
+    /**
+     * @param array<string, mixed> $state
+     */
+    private function getIconLabel(array $state): ?string
+    {
+        if (!empty($state['icon'])) {
+            return SocialHeroicon::fromName($state['icon'])?->getLabel();
+        }
+
+        if (!empty($state['type']) && is_string($state['type'])) {
+            return ucwords(str_replace(['-', '_'], ' ', $state['type']));
+        }
+
+        return null;
     }
 }

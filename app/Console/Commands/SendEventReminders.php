@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Mail;
 
 class SendEventReminders extends Command
 {
+    private const REMINDER_WINDOW_START_HOURS = 23;
+    private const REMINDER_WINDOW_END_HOURS = 25;
+
     protected $signature = 'events:send-reminders';
 
     protected $description = 'Send reminder emails and SMS to participants for events happening in 24 hours';
@@ -20,10 +23,8 @@ class SendEventReminders extends Command
     {
         $this->info('Searching for events happening in 24 hours...');
 
-        $startWindow = now()
-->addHours(23);
-        $endWindow = now()
-->addHours(25);
+        $startWindow = now()->addHours(self::REMINDER_WINDOW_START_HOURS);
+        $endWindow = now()->addHours(self::REMINDER_WINDOW_END_HOURS);
 
         $upcomingEvents = Event::published()
             ->whereBetween('event_date', [$startWindow, $endWindow])
