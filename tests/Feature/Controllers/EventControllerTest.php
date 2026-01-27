@@ -1,0 +1,216 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Models\Event;
+use App\Models\Participant;
+use App\Models\Registration;
+use App\Enums\RegistrationStatus;
+
+test('can view next event page', function (): void {
+    $event = Event::factory()->create([
+        'event_date' => now()->addDays(7),
+        'is_published' => true,
+    ]);
+
+    $response = $this->get(route('event.show'));
+
+    expect($response->status())->toBe(302)
+        ->and($response->headers->get('Location'))->toContain($event->slug);
+});
+
+test('shows no event page when no upcoming events', function (): void {
+    $response = $this->get(route('event.show'));
+
+    $response->assertStatus(200);
+    $response->assertViewIs('no-event');
+});
+
+test('can view specific event by slug', function (): void {
+    $event = Event::factory()->create([
+        'title' => 'Test Event',
+        'event_date' => now()->addDays(7),
+        'is_published' => true,
+    ]);
+
+    $response = $this->get(route('event.show.slug', ['slug' => $event->slug]));
+
+    $response->assertStatus(200);
+    $response->assertViewIs('event');
+    $response->assertViewHas('event');
+});
+
+test('cannot view unpublished event', function (): void {
+    $event = Event::factory()->create([
+        'is_published' => false,
+    ]);
+
+    $response = $this->get(route('event.show.slug', ['slug' => $event->slug]));
+
+    $response->assertStatus(404);
+});
+
+test('can register for event', function (): void {
+    $event = Event::factory()->create([
+        'event_date' => now()->addDays(7),
+        'is_published' => true,
+        'max_participants' => 10,
+    ]);
+
+    $response = $this->postJson(route('event.register'), [
+        'event_id' => $event->id,
+        'first_name' => 'Max',
+        'last_name' => 'Mustermann',
+        'email' => 'max@example.com',
+        'phone_number' => '+49123456789',
+        'privacy_accepted' => true,
+    ]);
+
+    $response->assertStatus(200);
+    $response->assertJson([
+        'success' => true,
+    ]);
+
+    $this->assertDatabaseHas('participants', [
+        'email' => 'max@example.com',
+        'first_name' => 'Max',
+        'last_name' => 'Mustermann',
+    ]);
+
+    $participant = Participant::where('email', 'max@example.com')->first();
+    
+    $this->assertDatabaseHas('registrations', [
+        'event_id' => $event->id,
+        'participant_id' => $participant->id,
+        'status' => RegistrationStatus::Registered->value,
+    ]);
+});
+
+test('cannot register for past event', function (): void {
+    $event = Event::factory()->create([
+        'event_date' => now()->subDays(1),
+        'is_published' => true,
+    ]);
+
+    $response = $this->postJson(route('event.register'), [
+        'event_id' => $event->id,
+        'first_name' => 'Max',
+        'last_name' => 'Mustermann',
+        'email' => 'max@example.com',
+        'privacy_accepted' => true,
+    ]);
+
+    $response->assertStatus(410);
+    $response->assertJson([
+        'success' => false,
+    ]);
+});
+
+test('cannot register for full event', function (): void {
+    $event = Event::factory()->create([
+        'event_date' => now()->addDays(7),
+        'is_published' => true,
+        'max_participants' => 2,
+    ]);
+
+    // Fill up the event
+    Registration::factory()->count(2)->create([
+        'event_id' => $event->id,
+        'status' => RegistrationStatus::Registered,
+    ]);
+
+    $response = $this->postJson(route('event.register'), [
+        'event_id' => $event->id,
+        'first_name' => 'Max',
+        'last_name' => 'Mustermann',
+        'email' => 'max@example.com',
+        'privacy_accepted' => true,
+    ]);
+
+    $response->assertStatus(409);
+    $response->assertJson([
+        'success' => false,
+    ]);
+});
+
+test('cannot register for unpublished event', function (): void {
+    $event = Event::factory()->create([
+        'event_date' => now()->addDays(7),
+        'is_published' => false,
+    ]);
+
+    $response = $this->postJson(route('event.register'), [
+        'event_id' => $event->id,
+        'first_name' => 'Max',
+        'last_name' => 'Mustermann',
+        'email' => 'max@example.com',
+        'privacy_accepted' => true,
+    ]);
+
+    $response->assertStatus(404);
+    $response->assertJson([
+        'success' => false,
+    ]);
+});
+
+test('cannot register twice for same event', function (): void {
+    $event = Event::factory()->create([
+        'event_date' => now()->addDays(7),
+        'is_published' => true,
+    ]);
+
+    $participant = Participant::factory()->create([
+        'email' => 'max@example.com',
+    ]);
+
+    Registration::factory()->create([
+        'event_id' => $event->id,
+        'participant_id' => $participant->id,
+        'status' => RegistrationStatus::Registered,
+    ]);
+
+    $response = $this->postJson(route('event.register'), [
+        'event_id' => $event->id,
+        'first_name' => 'Max',
+        'last_name' => 'Mustermann',
+        'email' => 'max@example.com',
+        'privacy_accepted' => true,
+    ]);
+
+    $response->assertStatus(409);
+    $response->assertJson([
+        'success' => false,
+    ]);
+});
+
+test('registration requires all required fields', function (): void {
+    $event = Event::factory()->create([
+        'event_date' => now()->addDays(7),
+        'is_published' => true,
+    ]);
+
+    $response = $this->postJson(route('event.register'), [
+        'event_id' => $event->id,
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['first_name', 'last_name', 'email', 'privacy_accepted']);
+});
+
+test('registration validates email format', function (): void {
+    $event = Event::factory()->create([
+        'event_date' => now()->addDays(7),
+        'is_published' => true,
+    ]);
+
+    $response = $this->postJson(route('event.register'), [
+        'event_id' => $event->id,
+        'first_name' => 'Max',
+        'last_name' => 'Mustermann',
+        'email' => 'invalid-email',
+        'privacy_accepted' => true,
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['email']);
+});

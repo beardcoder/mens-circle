@@ -21,8 +21,8 @@ class NewsletterFactory extends Factory
     public function definition(): array
     {
         return [
-            'subject' => fake()->sentence(),
-            'content' => fake()->paragraphs(3, true),
+            'subject' => \fake()->sentence(),
+            'content' => \fake()->paragraphs(3, true),
             'status' => NewsletterStatus::Draft,
             'sent_at' => null,
             'recipient_count' => null,
@@ -52,7 +52,7 @@ class NewsletterFactory extends Factory
         return $this->state(fn (array $attributes): array => [
             'status' => NewsletterStatus::Sent,
             'sent_at' => now(),
-            'recipient_count' => fake()->numberBetween(10, 100),
+            'recipient_count' => \fake()->numberBetween(10, 100),
         ]);
     }
 }

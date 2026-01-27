@@ -25,7 +25,7 @@ class ContentBlockFactory extends Factory
             'page_id' => Page::factory(),
             'type' => 'text',
             'data' => [
-                'content' => fake()->paragraphs(2, true),
+                'content' => \fake()->paragraphs(2, true),
             ],
             'block_id' => Str::uuid()->toString(),
             'order' => 0,
@@ -44,8 +44,8 @@ class ContentBlockFactory extends Factory
         return $this->state(fn (array $attributes): array => [
             'type' => 'hero',
             'data' => [
-                'title' => fake()->sentence(),
-                'subtitle' => fake()->sentence(),
+                'title' => \fake()->sentence(),
+                'subtitle' => \fake()->sentence(),
             ],
         ]);
     }
@@ -55,7 +55,7 @@ class ContentBlockFactory extends Factory
         return $this->state(fn (array $attributes): array => [
             'type' => 'text',
             'data' => [
-                'content' => fake()->paragraphs(3, true),
+                'content' => \fake()->paragraphs(3, true),
             ],
         ]);
     }
