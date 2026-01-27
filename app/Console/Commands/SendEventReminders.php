@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 class SendEventReminders extends Command
 {
     private const REMINDER_WINDOW_START_HOURS = 23;
+
     private const REMINDER_WINDOW_END_HOURS = 25;
 
     protected $signature = 'events:send-reminders';

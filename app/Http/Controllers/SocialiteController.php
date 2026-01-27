@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Socialite;
+use Laravel\Socialite\Two\GithubProvider;
 
 class SocialiteController extends Controller
 {
@@ -19,7 +20,7 @@ class SocialiteController extends Controller
     {
         abort_unless(in_array($provider, self::ALLOWED_PROVIDERS), 404);
 
-        /** @var \Laravel\Socialite\Two\GithubProvider $driver */
+        /** @var GithubProvider $driver */
         $driver = Socialite::driver($provider);
 
         return $driver

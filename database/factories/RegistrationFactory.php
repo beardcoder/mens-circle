@@ -7,10 +7,11 @@ namespace Database\Factories;
 use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Participant;
+use App\Models\Registration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<\App\Models\Registration>
+ * @extends Factory<Registration>
  */
 class RegistrationFactory extends Factory
 {

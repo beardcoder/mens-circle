@@ -22,7 +22,7 @@ class MailHealthCheck extends Check
 
         if ($mailer === 'log' || $mailer === 'array') {
             return $result
-                ->warning("Mail-Treiber ist '{$mailer}' (nicht für Produktion)")
+                ->warning(sprintf("Mail-Treiber ist '%s' (nicht für Produktion)", $mailer))
                 ->shortSummary($mailer);
         }
 
@@ -69,17 +69,17 @@ class MailHealthCheck extends Check
 
             return $result
                 ->ok()
-                ->shortSummary("{$host}:{$port}")
+                ->shortSummary(sprintf('%s:%s', $host, $port))
                 ->meta([
                     'host' => $host,
                     'port' => $port,
                     'encryption' => $encryption,
                 ]);
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             return $result
-                ->failed("SMTP-Verbindungsfehler: {$e->getMessage()}")
+                ->failed('SMTP-Verbindungsfehler: ' . $throwable->getMessage())
                 ->shortSummary('Verbindungsfehler')
-                ->meta(['error' => $e->getMessage()]);
+                ->meta(['error' => $throwable->getMessage()]);
         }
     }
 }

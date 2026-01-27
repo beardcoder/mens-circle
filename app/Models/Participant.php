@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\ParticipantFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Participant extends Model
 {
-    /** @use HasFactory<\Database\Factories\ParticipantFactory> */
+    /** @use HasFactory<ParticipantFactory> */
     use HasFactory;
 
     protected $fillable = ['first_name', 'last_name', 'email', 'phone', ];
@@ -45,7 +46,7 @@ class Participant extends Model
      */
     protected function fullName(): Attribute
     {
-        return Attribute::make(get: fn (): string => trim("{$this->first_name} {$this->last_name}"));
+        return Attribute::make(get: fn (): string => trim(sprintf('%s %s', $this->first_name, $this->last_name)));
     }
 
     public function isSubscribedToNewsletter(): bool

@@ -16,7 +16,7 @@ class ParticipantForms
             ->label('Teilnehmer')
             ->relationship('participant', 'email')
             ->getOptionLabelFromRecordUsing(
-                fn (Participant $record): string => "{$record->fullName} ({$record->email})"
+                fn (Participant $record): string => sprintf('%s (%s)', $record->fullName, $record->email)
             )
             ->required()
             ->searchable(['first_name', 'last_name', 'email'])

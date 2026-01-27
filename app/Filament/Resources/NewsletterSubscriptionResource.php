@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\NewsletterSubscriptionResource\Pages;
+use App\Filament\Resources\NewsletterSubscriptionResource\Pages\CreateNewsletterSubscription;
+use App\Filament\Resources\NewsletterSubscriptionResource\Pages\EditNewsletterSubscription;
+use App\Filament\Resources\NewsletterSubscriptionResource\Pages\ListNewsletterSubscriptions;
 use App\Models\NewsletterSubscription;
 use App\Models\Participant;
+use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -36,7 +39,7 @@ class NewsletterSubscriptionResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Newsletter';
 
-    protected static string|null|\BackedEnum $navigationIcon = Heroicon::UserGroup;
+    protected static string|null|BackedEnum $navigationIcon = Heroicon::UserGroup;
 
     protected static ?int $navigationSort = 70;
 
@@ -51,7 +54,7 @@ class NewsletterSubscriptionResource extends Resource
                             ->label('Teilnehmer')
                             ->relationship('participant', 'email')
                             ->getOptionLabelFromRecordUsing(fn (Participant $record): string => $record->fullName
-                                ? "{$record->fullName} ({$record->email})"
+                                ? sprintf('%s (%s)', $record->fullName, $record->email)
                                 : $record->email)
                             ->required()
                             ->searchable(['first_name', 'last_name', 'email'])
@@ -159,9 +162,9 @@ class NewsletterSubscriptionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNewsletterSubscriptions::route('/'),
-            'create' => Pages\CreateNewsletterSubscription::route('/create'),
-            'edit' => Pages\EditNewsletterSubscription::route('/{record}/edit'),
+            'index' => ListNewsletterSubscriptions::route('/'),
+            'create' => CreateNewsletterSubscription::route('/create'),
+            'edit' => EditNewsletterSubscription::route('/{record}/edit'),
         ];
     }
 }

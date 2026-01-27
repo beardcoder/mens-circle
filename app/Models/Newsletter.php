@@ -8,11 +8,12 @@ use App\Enums\NewsletterStatus;
 use Database\Factories\NewsletterFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $subject
  * @property string $content
- * @property ?\Illuminate\Support\Carbon $sent_at
+ * @property ?Carbon $sent_at
  * @property ?int $recipient_count
  * @property NewsletterStatus $status
  */

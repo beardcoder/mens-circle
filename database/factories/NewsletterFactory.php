@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\NewsletterStatus;
+use App\Models\Newsletter;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<\App\Models\Newsletter>
+ * @extends Factory<Newsletter>
  */
 class NewsletterFactory extends Factory
 {

@@ -6,7 +6,9 @@ namespace App\Filament\Resources;
 
 use App\Enums\RegistrationStatus;
 use App\Filament\Forms\ParticipantForms;
-use App\Filament\Resources\RegistrationResource\Pages;
+use App\Filament\Resources\RegistrationResource\Pages\CreateRegistration;
+use App\Filament\Resources\RegistrationResource\Pages\EditRegistration;
+use App\Filament\Resources\RegistrationResource\Pages\ListRegistrations;
 use App\Models\Registration;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -174,9 +176,9 @@ class RegistrationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListRegistrations::route('/'),
-            'create' => Pages\CreateRegistration::route('/create'),
-            'edit' => Pages\EditRegistration::route('/{record}/edit'),
+            'index' => ListRegistrations::route('/'),
+            'create' => CreateRegistration::route('/create'),
+            'edit' => EditRegistration::route('/{record}/edit'),
         ];
     }
 }

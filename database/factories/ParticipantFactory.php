@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Participant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<\App\Models\Participant>
+ * @extends Factory<Participant>
  */
 class ParticipantFactory extends Factory
 {

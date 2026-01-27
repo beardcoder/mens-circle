@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
@@ -24,7 +26,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property string $slug
  * @property array<string, mixed> $meta
  * @property bool $is_published
- * @property ?\Illuminate\Support\Carbon $published_at
+ * @property ?Carbon $published_at
  */
 class Page extends Model implements HasMedia
 {
@@ -135,7 +137,7 @@ class Page extends Model implements HasMedia
     /**
      * Remove blocks that are no longer in the content blocks data.
      *
-     * @param \Illuminate\Support\Collection<string, ContentBlock> $existingBlocks
+     * @param Collection<string, ContentBlock> $existingBlocks
      * @param array<int, string> $processedBlockIds
      */
     private function cleanupRemovedBlocks($existingBlocks, array $processedBlockIds): void

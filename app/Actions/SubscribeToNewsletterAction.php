@@ -10,6 +10,7 @@ use App\Models\Participant;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use RuntimeException;
 
 class SubscribeToNewsletterAction
 {
@@ -24,7 +25,7 @@ class SubscribeToNewsletterAction
             ->first();
 
         if ($subscription?->isActive()) {
-            throw new \RuntimeException('Diese E-Mail-Adresse ist bereits für den Newsletter angemeldet.');
+            throw new RuntimeException('Diese E-Mail-Adresse ist bereits für den Newsletter angemeldet.');
         }
 
         if ($subscription) {

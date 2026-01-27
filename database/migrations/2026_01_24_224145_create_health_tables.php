@@ -36,17 +36,17 @@ return new class () extends Migration {
 
             $indexes = collect($sm->getIndexes($tableName))->pluck('name')->toArray();
 
-            if (! in_array("{$tableName}_created_at_index", $indexes, true)) {
+            if (! in_array($tableName . '_created_at_index', $indexes, true)) {
                 $table->index('created_at');
             }
 
-            if (! in_array("{$tableName}_batch_index", $indexes, true)) {
+            if (! in_array($tableName . '_batch_index', $indexes, true)) {
                 $table->index('batch');
             }
         });
     }
 
-    public function getConnection(): ?string
+    public function getConnection(): string
     {
         return (new HealthCheckResultHistoryItem())->getConnectionName();
     }

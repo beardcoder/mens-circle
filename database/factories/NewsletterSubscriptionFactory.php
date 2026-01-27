@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\NewsletterSubscription;
 use App\Models\Participant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<\App\Models\NewsletterSubscription>
+ * @extends Factory<NewsletterSubscription>
  */
 class NewsletterSubscriptionFactory extends Factory
 {

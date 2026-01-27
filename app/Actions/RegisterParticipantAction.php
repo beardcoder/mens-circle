@@ -8,6 +8,7 @@ use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
+use RuntimeException;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
 class RegisterParticipantAction
@@ -54,7 +55,7 @@ class RegisterParticipantAction
             ->first();
 
         if ($existingRegistration && !$existingRegistration->trashed()) {
-            throw new \RuntimeException('Du bist bereits für diese Veranstaltung angemeldet.');
+            throw new RuntimeException('Du bist bereits für diese Veranstaltung angemeldet.');
         }
 
         if ($existingRegistration) {

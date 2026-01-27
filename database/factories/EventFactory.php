@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Event;
 use DateTime;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<\App\Models\Event>
+ * @extends Factory<Event>
  */
 class EventFactory extends Factory
 {

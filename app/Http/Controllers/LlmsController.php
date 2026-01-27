@@ -56,7 +56,7 @@ class LlmsController extends Controller
         $lines[] = '# ' . $siteName;
         $lines[] = '';
 
-        if ($siteTagline) {
+        if ($siteTagline !== '' && $siteTagline !== '0') {
             $lines[] = '> ' . $siteTagline;
             $lines[] = '';
         }
@@ -107,7 +107,7 @@ class LlmsController extends Controller
             $lines[] = '';
         }
 
-        if (!empty($this->settings->social_links)) {
+        if (isset($this->settings->social_links) && ($this->settings->social_links !== null && $this->settings->social_links !== [])) {
             $lines[] = '### Social Media';
             $lines[] = '';
             foreach ($this->settings->social_links as $platform => $data) {
@@ -119,6 +119,7 @@ class LlmsController extends Controller
                     $lines[] = '- **' . $platformName . ':** ' . $url;
                 }
             }
+
             $lines[] = '';
         }
 
@@ -301,7 +302,7 @@ class LlmsController extends Controller
     {
         $faqBlocks = $this->extractFaqBlocks();
 
-        if (empty($faqBlocks)) {
+        if ($faqBlocks === []) {
             return [];
         }
 
@@ -443,18 +444,22 @@ class LlmsController extends Controller
                     $lines[] = '*' . $data['label'] . '*';
                     $lines[] = '';
                 }
+
                 if (!empty($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
+
                 if (!empty($data['description'])) {
                     $lines[] = $data['description'];
                     $lines[] = '';
                 }
+
                 if (!empty($data['button_text']) && !empty($data['button_link'])) {
                     $lines[] = '**Call-to-Action:** [' . $data['button_text'] . '](' . $data['button_link'] . ')';
                     $lines[] = '';
                 }
+
                 break;
 
             case 'text_section':
@@ -462,14 +467,17 @@ class LlmsController extends Controller
                     $lines[] = '*' . $data['eyebrow'] . '*';
                     $lines[] = '';
                 }
+
                 if (!empty($data['title'])) {
                     $lines[] = '#### ' . $data['title'];
                     $lines[] = '';
                 }
+
                 if (!empty($data['content'])) {
                     $lines[] = $this->convertHtmlToMarkdown($data['content']);
                     $lines[] = '';
                 }
+
                 break;
 
             case 'intro':
@@ -477,30 +485,36 @@ class LlmsController extends Controller
                     $lines[] = '*' . $data['eyebrow'] . '*';
                     $lines[] = '';
                 }
+
                 if (!empty($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
+
                 if (!empty($data['text'])) {
                     $lines[] = $data['text'];
                     $lines[] = '';
                 }
+
                 if (!empty($data['quote'])) {
                     $lines[] = '> ' . $this->convertHtmlToMarkdown($data['quote']);
                     $lines[] = '';
                 }
+
                 if (!empty($data['values'])) {
                     foreach ($data['values'] as $value) {
                         if (!empty($value['title'])) {
-                            $prefix = !empty($value['number']) ? $value['number'] . '. ' : '- ';
+                            $prefix = empty($value['number']) ? '- ' : $value['number'] . '. ';
                             $lines[] = $prefix . '**' . $value['title'] . '**';
                             if (!empty($value['description'])) {
                                 $lines[] = '  ' . $value['description'];
                             }
+
                             $lines[] = '';
                         }
                     }
                 }
+
                 break;
 
             case 'value_items':
@@ -509,10 +523,12 @@ class LlmsController extends Controller
                     $lines[] = '*' . $data['eyebrow'] . '*';
                     $lines[] = '';
                 }
+
                 if (!empty($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
+
                 if (!empty($data['subtitle'])) {
                     $lines[] = $data['subtitle'];
                     $lines[] = '';
@@ -522,16 +538,18 @@ class LlmsController extends Controller
                 if (!empty($items)) {
                     foreach ($items as $item) {
                         if (!empty($item['title'])) {
-                            $prefix = !empty($item['number']) ? $item['number'] . '. ' : '- ';
+                            $prefix = empty($item['number']) ? '- ' : $item['number'] . '. ';
                             $lines[] = $prefix . '**' . $item['title'] . '**';
 
                             if (!empty($item['description'])) {
                                 $lines[] = '  ' . $item['description'];
                             }
+
                             $lines[] = '';
                         }
                     }
                 }
+
                 break;
 
             case 'moderator':
@@ -539,18 +557,22 @@ class LlmsController extends Controller
                     $lines[] = '*' . $data['eyebrow'] . '*';
                     $lines[] = '';
                 }
+
                 if (!empty($data['name'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['name']);
                     $lines[] = '';
                 }
+
                 if (!empty($data['bio'])) {
                     $lines[] = $this->convertHtmlToMarkdown($data['bio']);
                     $lines[] = '';
                 }
+
                 if (!empty($data['quote'])) {
                     $lines[] = '> ' . $data['quote'];
                     $lines[] = '';
                 }
+
                 break;
 
             case 'cta':
@@ -558,18 +580,22 @@ class LlmsController extends Controller
                     $lines[] = '*' . $data['eyebrow'] . '*';
                     $lines[] = '';
                 }
+
                 if (!empty($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
+
                 if (!empty($data['text'])) {
                     $lines[] = $data['text'];
                     $lines[] = '';
                 }
+
                 if (!empty($data['button_text']) && !empty($data['button_link'])) {
                     $lines[] = '**Aktion:** [' . $data['button_text'] . '](' . $data['button_link'] . ')';
                     $lines[] = '';
                 }
+
                 break;
 
             case 'newsletter':
@@ -577,14 +603,17 @@ class LlmsController extends Controller
                     $lines[] = '*' . $data['eyebrow'] . '*';
                     $lines[] = '';
                 }
+
                 if (!empty($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
+
                 if (!empty($data['text'])) {
                     $lines[] = $data['text'];
                     $lines[] = '';
                 }
+
                 $lines[] = '*Besucher koennen sich hier fuer den Newsletter anmelden.*';
                 $lines[] = '';
                 break;
@@ -598,6 +627,7 @@ class LlmsController extends Controller
                     $lines[] = '**Link zur Community:** ' . $this->settings->whatsapp_community_link;
                     $lines[] = '';
                 }
+
                 break;
 
             case 'testimonials':
@@ -639,7 +669,7 @@ class LlmsController extends Controller
 
     private function convertHtmlToMarkdown(string $html): string
     {
-        if (empty($html)) {
+        if ($html === '' || $html === '0') {
             return '';
         }
 
