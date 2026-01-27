@@ -24,9 +24,9 @@ class TestimonialSubmissionController extends Controller
         $message = $this->buildSuccessMessage($validated);
 
         return response()->json([
-'success' => true,
-'message' => $message
-]);
+            'success' => true,
+            'message' => $message,
+        ]);
     }
 
     /**

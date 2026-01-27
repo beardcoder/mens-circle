@@ -127,7 +127,7 @@ class Event extends Model implements HasMedia
      */
     protected function isPast(): Attribute
     {
-        return Attribute::make(get: fn () => $this->event_date->endOfDay() ->isPast());
+        return Attribute::make(get: fn (): bool => $this->event_date->endOfDay()->isPast());
     }
 
     /**

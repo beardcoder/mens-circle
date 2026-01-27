@@ -24,7 +24,7 @@ class SendNewsletterJob implements ShouldQueue
     public int $backoff = 60;
 
     public function __construct(
-        public Newsletter $newsletter
+        public readonly Newsletter $newsletter
     ) {
     }
 
