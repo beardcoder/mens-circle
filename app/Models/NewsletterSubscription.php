@@ -11,14 +11,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
  * @property int $participant_id
  * @property string $token
- * @property \Illuminate\Support\Carbon $subscribed_at
- * @property ?\Illuminate\Support\Carbon $confirmed_at
- * @property ?\Illuminate\Support\Carbon $unsubscribed_at
+ * @property Carbon $subscribed_at
+ * @property ?Carbon $confirmed_at
+ * @property ?Carbon $unsubscribed_at
  * @property Participant $participant
  */
 class NewsletterSubscription extends Model

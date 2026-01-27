@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Services\EventNotificationService;
 use App\Traits\ClearsResponseCache;
+use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,17 +14,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 /**
- * @use HasFactory<\Database\Factories\EventFactory>
+ * @use HasFactory<EventFactory>
  *
- * @property \Illuminate\Support\Carbon $event_date
- * @property \Illuminate\Support\Carbon $start_time
- * @property \Illuminate\Support\Carbon $end_time
+ * @property Carbon $event_date
+ * @property Carbon $start_time
+ * @property Carbon $end_time
  * @property int $max_participants
  * @property bool $is_published
  * @property string $title
@@ -37,7 +39,7 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Event extends Model implements HasMedia
 {
-    /** @use HasFactory<\Database\Factories\EventFactory> */
+    /** @use HasFactory<EventFactory> */
     use HasFactory;
 
     use ClearsResponseCache;

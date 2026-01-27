@@ -9,6 +9,7 @@ use App\Traits\HasEnumOptions;
 enum RegistrationStatus: string
 {
     use HasEnumOptions;
+
     case Registered = 'registered';
     case Waitlist = 'waitlist';
     case Cancelled = 'cancelled';

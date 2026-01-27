@@ -10,6 +10,7 @@ use App\Models\Event;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use RuntimeException;
 
 class EventController extends Controller
 {
@@ -65,12 +66,12 @@ class EventController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => "Vielen Dank, {$validated['first_name']}! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.",
+                'message' => sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $validated['first_name']),
             ]);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $runtimeException) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
+                'message' => $runtimeException->getMessage(),
             ], 409);
         }
     }

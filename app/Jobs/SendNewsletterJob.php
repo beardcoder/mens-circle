@@ -11,6 +11,7 @@ use App\Models\NewsletterSubscription;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
@@ -45,7 +46,7 @@ class SendNewsletterJob implements ShouldQueue
         NewsletterSubscription::query()
             ->whereNull('unsubscribed_at')
             ->with('participant')
-            ->chunk(100, function (\Illuminate\Support\Collection $subscriptions) use (
+            ->chunk(100, function (Collection $subscriptions) use (
                 &$recipientCount,
                 &$failedRecipients
             ): void {

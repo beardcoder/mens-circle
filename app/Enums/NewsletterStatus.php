@@ -9,6 +9,7 @@ use App\Traits\HasEnumOptions;
 enum NewsletterStatus: string
 {
     use HasEnumOptions;
+
     case Draft = 'draft';
     case Sending = 'sending';
     case Sent = 'sent';

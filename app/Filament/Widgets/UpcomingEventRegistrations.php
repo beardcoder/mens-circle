@@ -21,14 +21,14 @@ class UpcomingEventRegistrations extends TableWidget
     {
         $nextEvent = Event::nextEvent();
 
-        return $nextEvent !== null && $nextEvent->active_registrations_count > 0;
+        return $nextEvent instanceof Event && $nextEvent->active_registrations_count > 0;
     }
 
     public function table(Table $table): Table
     {
         $nextEvent = Event::nextEvent();
 
-        if (!$nextEvent) {
+        if (!$nextEvent instanceof Event) {
             return $table
                 ->query(Registration::query()->whereRaw('1 = 0'))
                 ->columns([]);

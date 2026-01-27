@@ -32,10 +32,10 @@ class HealthCheckFailedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $failedChecks = collect($this->results)
-            ->filter(fn (Result $result) => $result->status->value === 'failed');
+            ->filter(fn (Result $result): bool => $result->status->value === 'failed');
 
         $warningChecks = collect($this->results)
-            ->filter(fn (Result $result) => $result->status->value === 'warning');
+            ->filter(fn (Result $result): bool => $result->status->value === 'warning');
 
         $message = (new MailMessage())
             ->subject('Health Check Warnung - ' . config('app.name'))
@@ -45,14 +45,14 @@ class HealthCheckFailedNotification extends Notification
         if ($failedChecks->isNotEmpty()) {
             $message->line('**Fehlgeschlagene Checks:**');
             foreach ($failedChecks as $result) {
-                $message->line("- {$result->check->getName()}: {$result->notificationMessage}");
+                $message->line(sprintf('- %s: %s', $result->check->getName(), $result->notificationMessage));
             }
         }
 
         if ($warningChecks->isNotEmpty()) {
             $message->line('**Warnungen:**');
             foreach ($warningChecks as $result) {
-                $message->line("- {$result->check->getName()}: {$result->notificationMessage}");
+                $message->line(sprintf('- %s: %s', $result->check->getName(), $result->notificationMessage));
             }
         }
 

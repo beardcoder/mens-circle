@@ -9,6 +9,7 @@ use App\Http\Requests\NewsletterSubscriptionRequest;
 use App\Models\NewsletterSubscription;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use RuntimeException;
 
 class NewsletterController extends Controller
 {
@@ -23,10 +24,10 @@ class NewsletterController extends Controller
                 'success' => true,
                 'message' => 'Vielen Dank! Du wurdest erfolgreich für den Newsletter angemeldet.',
             ]);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $runtimeException) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
+                'message' => $runtimeException->getMessage(),
             ], 409);
         }
     }

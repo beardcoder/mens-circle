@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\ContentBlock;
 use App\Models\Page;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<\App\Models\ContentBlock>
+ * @extends Factory<ContentBlock>
  */
 class ContentBlockFactory extends Factory
 {

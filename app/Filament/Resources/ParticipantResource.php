@@ -167,7 +167,7 @@ class ParticipantResource extends Resource
             return;
         }
 
-        if (!$subscription) {
+        if (!$subscription instanceof NewsletterSubscription) {
             $record->newsletterSubscription()->create([]);
         }
     }
