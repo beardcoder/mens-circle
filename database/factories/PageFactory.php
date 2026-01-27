@@ -20,10 +20,10 @@ class PageFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(),
-            'slug' => fake()->slug(),
+            'title' => \fake()->sentence(),
+            'slug' => \fake()->slug(),
             'meta' => [
-                'description' => fake()->sentence(),
+                'description' => \fake()->sentence(),
             ],
             'is_published' => false,
             'published_at' => null,

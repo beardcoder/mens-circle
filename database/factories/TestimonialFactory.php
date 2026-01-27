@@ -31,9 +31,9 @@ class TestimonialFactory extends Factory
         ];
 
         return [
-            'quote' => fake()->randomElement($quotes),
-            'author_name' => fake()->boolean(60) ? fake()->firstName() : null,
-            'role' => fake()->boolean(70) ? 'Teilnehmer seit '.fake()->year() : null,
+            'quote' => \fake()->randomElement($quotes),
+            'author_name' => \fake()->boolean(60) ? \fake()->firstName() : null,
+            'role' => \fake()->boolean(70) ? 'Teilnehmer seit '.\fake()->year() : null,
             'is_published' => true,
             'published_at' => now(),
             'sort_order' => 0,

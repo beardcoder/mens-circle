@@ -7,6 +7,7 @@ namespace Database\Factories;
 use App\Models\Event;
 use DateTime;
 use DateTimeInterface;
+use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,18 +22,20 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-        $eventDate = fake()->dateTimeBetween('+1 week', '+3 months');
-        $startTime = fake()->dateTimeBetween('18:00', '19:00');
+        $faker = FakerFactory::create();
+        
+        $eventDate = $faker->dateTimeBetween('+1 week', '+3 months');
+        $startTime = $faker->dateTimeBetween('18:00', '19:00');
         $endTime = (clone $startTime)->modify('+2 hours');
 
         return [
-            'title' => 'Männerkreis '.fake()->city(),
-            'description' => fake()->paragraphs(3, true),
+            'title' => 'Männerkreis ' . $faker->city(),
+            'description' => $faker->paragraphs(3, true),
             'event_date' => $eventDate,
             'start_time' => $startTime,
             'end_time' => $endTime,
-            'location' => fake()->city(),
-            'location_details' => fake()->address(),
+            'location' => $faker->city(),
+            'location_details' => $faker->address(),
             'max_participants' => 8,
             'cost_basis' => 'Auf Spendenbasis',
             'is_published' => false,
