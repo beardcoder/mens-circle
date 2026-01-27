@@ -49,7 +49,11 @@ A modern web application for managing and organizing men's circle events in Lowe
 
 - **Backend**: Laravel 12 (PHP 8.3-8.5)
 - **Admin Panel**: Filament 5
-- **Frontend**: Livewire 3, Tailwind CSS 4
+- **Frontend**: 
+  - Vanilla TypeScript with modern composables pattern
+  - Modern CSS (native nesting, custom properties, OKLCH colors, container queries, logical properties)
+  - Motion library for animations
+  - Blade templates for server-side rendering
 - **Build Tools**: Vite, Bun
 - **Database**: SQLite (default) / MySQL
 - **Server**: Laravel Octane with FrankenPHP
