@@ -11,20 +11,20 @@ jobs:
   build:
     name: Build and Commit Frontend Assets
     runs-on: ubuntu-latest
-    
+
     permissions:
       contents: write
-    
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: 'latest'
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
