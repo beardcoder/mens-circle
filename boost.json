@@ -2,17 +2,17 @@
     "agents": [
         "claude_code",
         "codex",
-        "copilot",
-        "opencode"
+        "copilot"
     ],
-    "editors": [
-        "claude_code",
-        "codex",
-        "opencode",
-        "phpstorm",
-        "vscode"
-    ],
-    "guidelines": [
+    "guidelines": true,
+    "herd_mcp": false,
+    "mcp": true,
+    "packages": [
         "filament/filament"
+    ],
+    "sail": false,
+    "skills": [
+        "pest-testing",
+        "tailwindcss-development"
     ]
 }
