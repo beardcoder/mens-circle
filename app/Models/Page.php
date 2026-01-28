@@ -55,7 +55,7 @@ class Page extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('page_blocks')
-->useDisk('public');
+            ->useDisk('public');
     }
 
     protected function casts(): array
@@ -69,6 +69,7 @@ class Page extends Model implements HasMedia
 
     /**
      * @param Builder<Page> $query
+     *
      * @return Builder<Page>
      */
     #[Scope]
@@ -96,6 +97,7 @@ class Page extends Model implements HasMedia
      * Process and save content blocks, returning array of processed block IDs.
      *
      * @param array<int, array<string, mixed>> $contentBlocksData
+     *
      * @return array<int, string>
      */
     private function processContentBlocks(array $contentBlocksData): array
@@ -128,7 +130,7 @@ class Page extends Model implements HasMedia
                 'type' => $blockData['type'],
                 'data' => $data,
                 'order' => $order,
-            ]
+            ],
         );
 
         return $blockId;
@@ -143,7 +145,7 @@ class Page extends Model implements HasMedia
     private function cleanupRemovedBlocks($existingBlocks, array $processedBlockIds): void
     {
         $existingBlocks
-            ->reject(fn (ContentBlock $block): bool => in_array($block->block_id, $processedBlockIds, true))
+            ->reject(fn(ContentBlock $block): bool => \in_array($block->block_id, $processedBlockIds, true))
             ->each(function (ContentBlock $block): void {
                 $this->deleteBlockMedia($block->block_id);
                 $block->delete();
@@ -156,7 +158,7 @@ class Page extends Model implements HasMedia
     private function deleteBlockMedia(string $blockId): void
     {
         $this->getMedia('page_blocks')
-            ->filter(fn ($media): bool => $media->getCustomProperty('block_id') === $blockId)
-            ->each(fn ($media) => $media->delete());
+            ->filter(fn($media): bool => $media->getCustomProperty('block_id') === $blockId)
+            ->each(fn($media) => $media->delete());
     }
 }

@@ -15,9 +15,8 @@ use Illuminate\Http\Response;
 class LlmsController extends Controller
 {
     public function __construct(
-        private readonly GeneralSettings $settings
-    ) {
-    }
+        private readonly GeneralSettings $settings,
+    ) {}
 
     public function show(): Response
     {
@@ -28,7 +27,6 @@ class LlmsController extends Controller
 
     private function generateLlmsTxt(): string
     {
-
         $lines = [
             ...$this->generateHeader(),
             ...$this->generateAboutSection(),
@@ -63,25 +61,25 @@ class LlmsController extends Controller
             $lines[] = '';
         }
 
-        $lines[] = "**Beschreibung:** {$siteDescription}";
+        $lines[] = '**Beschreibung:** ' . $siteDescription;
         $lines[] = '';
         $lines[] = '**Letzte Aktualisierung:** ' . now()->format('d.m.Y H:i') . ' Uhr';
         $lines[] = '**Website:** ' . url('/');
 
         if ($this->settings->contact_email ?? false) {
-            $lines[] = "**Kontakt E-Mail:** {$this->settings->contact_email}";
+            $lines[] = '**Kontakt E-Mail:** ' . $this->settings->contact_email;
         }
 
         if ($this->settings->contact_phone ?? false) {
-            $lines[] = "**Telefon:** {$this->settings->contact_phone}";
+            $lines[] = '**Telefon:** ' . $this->settings->contact_phone;
         }
 
         if ($this->settings->location ?? false) {
-            $lines[] = "**Standort:** {$this->settings->location}";
+            $lines[] = '**Standort:** ' . $this->settings->location;
         }
 
         if ($this->settings->whatsapp_community_link ?? false) {
-            $lines[] = "**WhatsApp Community:** {$this->settings->whatsapp_community_link}";
+            $lines[] = '**WhatsApp Community:** ' . $this->settings->whatsapp_community_link;
         }
 
         $lines[] = '';
@@ -99,7 +97,7 @@ class LlmsController extends Controller
         $siteName = $this->settings->site_name ?? 'Maennerkreis Niederbayern';
 
         $lines = [];
-        $lines[] = "## Ueber {$siteName}";
+        $lines[] = '## Ueber ' . $siteName;
         $lines[] = '';
         $lines[] = 'Der Maennerkreis Niederbayern ist eine Gemeinschaft fuer Maenner, die sich regelmaessig zu Veranstaltungen treffen. Die Website bietet Informationen zu kommenden Events, Anmeldung zu Veranstaltungen und einen Newsletter-Service.';
         $lines[] = '';
@@ -118,7 +116,7 @@ class LlmsController extends Controller
                 $platformName = $data['platform'] ?? $data['name'] ?? ucfirst((string) $platform);
 
                 if ($url) {
-                    $lines[] = "- **{$platformName}:** {$url}";
+                    $lines[] = \sprintf('- **%s:** %s', $platformName, $url);
                 }
             }
 
@@ -145,16 +143,16 @@ class LlmsController extends Controller
         $lines = [];
         $lines[] = '## Statistiken';
         $lines[] = '';
-        $lines[] = "- **Gesamtanzahl Veranstaltungen:** {$totalEvents}";
-        $lines[] = "- **Kommende Veranstaltungen:** {$upcomingEventsCount}";
-        $lines[] = "- **Vergangene Veranstaltungen:** {$pastEventsCount}";
+        $lines[] = '- **Gesamtanzahl Veranstaltungen:** ' . $totalEvents;
+        $lines[] = '- **Kommende Veranstaltungen:** ' . $upcomingEventsCount;
+        $lines[] = '- **Vergangene Veranstaltungen:** ' . $pastEventsCount;
 
         if ($totalTestimonials > 0) {
-            $lines[] = "- **Veroeffentlichte Erfahrungsberichte:** {$totalTestimonials}";
+            $lines[] = '- **Veroeffentlichte Erfahrungsberichte:** ' . $totalTestimonials;
         }
 
         if ($totalNewsletterSubscribers > 0) {
-            $lines[] = "- **Newsletter-Abonnenten:** {$totalNewsletterSubscribers}";
+            $lines[] = '- **Newsletter-Abonnenten:** ' . $totalNewsletterSubscribers;
         }
 
         $lines[] = '';
@@ -186,23 +184,23 @@ class LlmsController extends Controller
         }
 
         foreach ($upcomingEvents as $event) {
-            $lines[] = "### {$event->title}";
+            $lines[] = '### ' . $event->title;
             $lines[] = '';
-            $lines[] = "**Datum:** {$event->event_date->format('d.m.Y')}";
-            $lines[] = "**Uhrzeit:** {$event->start_time->format('H:i')} - {$event->end_time->format('H:i')} Uhr";
+            $lines[] = '**Datum:** ' . $event->event_date->format('d.m.Y');
+            $lines[] = \sprintf('**Uhrzeit:** %s - %s Uhr', $event->start_time->format('H:i'), $event->end_time->format('H:i'));
 
             if ($event->location) {
-                $lines[] = "**Ort:** {$event->location}";
+                $lines[] = '**Ort:** ' . $event->location;
             }
 
             if ($event->fullAddress) {
-                $lines[] = "**Adresse:** {$event->fullAddress}";
+                $lines[] = '**Adresse:** ' . $event->fullAddress;
             }
 
-            $lines[] = "**Verfuegbare Plaetze:** {$event->availableSpots} von {$event->max_participants}";
+            $lines[] = \sprintf('**Verfuegbare Plaetze:** %s von %s', $event->availableSpots, $event->max_participants);
 
             if ($event->cost_basis) {
-                $lines[] = "**Kostenbeitrag:** {$event->cost_basis}";
+                $lines[] = '**Kostenbeitrag:** ' . $event->cost_basis;
             }
 
             if ($event->description) {
@@ -212,7 +210,7 @@ class LlmsController extends Controller
 
             $url = url()->route('event.show.slug', $event->slug);
             $lines[] = '';
-            $lines[] = "**Mehr Informationen und Anmeldung:** {$url}";
+            $lines[] = '**Mehr Informationen und Anmeldung:** ' . $url;
             $lines[] = '';
             $lines[] = '---';
             $lines[] = '';
@@ -243,7 +241,7 @@ class LlmsController extends Controller
         foreach ($pastEvents as $event) {
             $date = $event->event_date->format('d.m.Y');
             $url = url()->route('event.show.slug', $event->slug);
-            $lines[] = "- **[{$event->title}]({$url})** - {$date}";
+            $lines[] = \sprintf('- **[%s](%s)** - %s', $event->title, $url, $date);
         }
 
         $lines[] = '';
@@ -275,10 +273,10 @@ class LlmsController extends Controller
             ->get();
 
         foreach ($pages as $page) {
-            $lines[] = "### {$page->title}";
+            $lines[] = '### ' . $page->title;
             $lines[] = '';
             $url = url()->route('page.show', $page->slug);
-            $lines[] = "**URL:** {$url}";
+            $lines[] = '**URL:** ' . $url;
             $lines[] = '';
 
             foreach ($page->contentBlocks as $block) {
@@ -324,7 +322,7 @@ class LlmsController extends Controller
 
             foreach ($faq['items'] as $item) {
                 if (!empty($item['question']) && !empty($item['answer'])) {
-                    $lines[] = "**Q: {$item['question']}**";
+                    $lines[] = \sprintf('**Q: %s**', $item['question']);
                     $lines[] = '';
                     $lines[] = '**A:** ' . $this->convertHtmlToMarkdown($item['answer']);
                     $lines[] = '';
@@ -361,10 +359,10 @@ class LlmsController extends Controller
 
             $author = $testimonial->author_name;
             if ($testimonial->role) {
-                $author .= ", {$testimonial->role}";
+                $author .= ', ' . $testimonial->role;
             }
 
-            $lines[] = "-- **{$author}**";
+            $lines[] = \sprintf('-- **%s**', $author);
             $lines[] = '';
         }
 
@@ -384,11 +382,11 @@ class LlmsController extends Controller
             '',
             '- **[Impressum](' . url()->route(
                 'page.show',
-                'impressum'
+                'impressum',
             ) . '):** Rechtliche Angaben und Anbieterkennzeichnung',
             '- **[Datenschutz](' . url()->route(
                 'page.show',
-                'datenschutz'
+                'datenschutz',
             ) . '):** Datenschutzerklaerung gemaess DSGVO',
             '',
             '---',
@@ -420,7 +418,7 @@ class LlmsController extends Controller
         if ($this->settings->whatsapp_community_link ?? false) {
             $lines[] = '4. **WhatsApp Community beitreten**';
             $lines[] = '   - Direkter Austausch mit anderen Teilnehmern';
-            $lines[] = "   - Link: {$this->settings->whatsapp_community_link}";
+            $lines[] = '   - Link: ' . $this->settings->whatsapp_community_link;
             $lines[] = '';
         }
 
@@ -438,7 +436,7 @@ class LlmsController extends Controller
         switch ($block->type) {
             case 'hero':
                 if (!empty($data['label'])) {
-                    $lines[] = "*{$data['label']}*";
+                    $lines[] = \sprintf('*%s*', $data['label']);
                     $lines[] = '';
                 }
 
@@ -453,7 +451,7 @@ class LlmsController extends Controller
                 }
 
                 if (!empty($data['button_text']) && !empty($data['button_link'])) {
-                    $lines[] = "**Call-to-Action:** [{$data['button_text']}]({$data['button_link']})";
+                    $lines[] = \sprintf('**Call-to-Action:** [%s](%s)', $data['button_text'], $data['button_link']);
                     $lines[] = '';
                 }
 
@@ -461,12 +459,12 @@ class LlmsController extends Controller
 
             case 'text_section':
                 if (!empty($data['eyebrow'])) {
-                    $lines[] = "*{$data['eyebrow']}*";
+                    $lines[] = \sprintf('*%s*', $data['eyebrow']);
                     $lines[] = '';
                 }
 
                 if (!empty($data['title'])) {
-                    $lines[] = "#### {$data['title']}";
+                    $lines[] = '#### ' . $data['title'];
                     $lines[] = '';
                 }
 
@@ -479,7 +477,7 @@ class LlmsController extends Controller
 
             case 'intro':
                 if (!empty($data['eyebrow'])) {
-                    $lines[] = "*{$data['eyebrow']}*";
+                    $lines[] = \sprintf('*%s*', $data['eyebrow']);
                     $lines[] = '';
                 }
 
@@ -501,10 +499,10 @@ class LlmsController extends Controller
                 if (!empty($data['values'])) {
                     foreach ($data['values'] as $value) {
                         if (!empty($value['title'])) {
-                            $prefix = empty($value['number']) ? '- ' : "{$value['number']}. ";
-                            $lines[] = "{$prefix}**{$value['title']}**";
+                            $prefix = empty($value['number']) ? '- ' : $value['number'] . '. ';
+                            $lines[] = \sprintf('%s**%s**', $prefix, $value['title']);
                             if (!empty($value['description'])) {
-                                $lines[] = "  {$value['description']}";
+                                $lines[] = '  ' . $value['description'];
                             }
 
                             $lines[] = '';
@@ -517,7 +515,7 @@ class LlmsController extends Controller
             case 'value_items':
             case 'journey_steps':
                 if (!empty($data['eyebrow'])) {
-                    $lines[] = "*{$data['eyebrow']}*";
+                    $lines[] = \sprintf('*%s*', $data['eyebrow']);
                     $lines[] = '';
                 }
 
@@ -535,11 +533,11 @@ class LlmsController extends Controller
                 if (!empty($items)) {
                     foreach ($items as $item) {
                         if (!empty($item['title'])) {
-                            $prefix = empty($item['number']) ? '- ' : "{$item['number']}. ";
-                            $lines[] = "{$prefix}**{$item['title']}**";
+                            $prefix = empty($item['number']) ? '- ' : $item['number'] . '. ';
+                            $lines[] = \sprintf('%s**%s**', $prefix, $item['title']);
 
                             if (!empty($item['description'])) {
-                                $lines[] = "  {$item['description']}";
+                                $lines[] = '  ' . $item['description'];
                             }
 
                             $lines[] = '';
@@ -551,7 +549,7 @@ class LlmsController extends Controller
 
             case 'moderator':
                 if (!empty($data['eyebrow'])) {
-                    $lines[] = "*{$data['eyebrow']}*";
+                    $lines[] = \sprintf('*%s*', $data['eyebrow']);
                     $lines[] = '';
                 }
 
@@ -574,7 +572,7 @@ class LlmsController extends Controller
 
             case 'cta':
                 if (!empty($data['eyebrow'])) {
-                    $lines[] = "*{$data['eyebrow']}*";
+                    $lines[] = \sprintf('*%s*', $data['eyebrow']);
                     $lines[] = '';
                 }
 
@@ -589,7 +587,7 @@ class LlmsController extends Controller
                 }
 
                 if (!empty($data['button_text']) && !empty($data['button_link'])) {
-                    $lines[] = "**Aktion:** [{$data['button_text']}]({$data['button_link']})";
+                    $lines[] = \sprintf('**Aktion:** [%s](%s)', $data['button_text'], $data['button_link']);
                     $lines[] = '';
                 }
 
@@ -597,7 +595,7 @@ class LlmsController extends Controller
 
             case 'newsletter':
                 if (!empty($data['eyebrow'])) {
-                    $lines[] = "*{$data['eyebrow']}*";
+                    $lines[] = \sprintf('*%s*', $data['eyebrow']);
                     $lines[] = '';
                 }
 
@@ -621,7 +619,7 @@ class LlmsController extends Controller
                 $lines[] = 'Tritt unserer WhatsApp Community bei und vernetze dich mit anderen Maennern aus der Region.';
                 $lines[] = '';
                 if ($this->settings->whatsapp_community_link ?? false) {
-                    $lines[] = "**Link zur Community:** {$this->settings->whatsapp_community_link}";
+                    $lines[] = '**Link zur Community:** ' . $this->settings->whatsapp_community_link;
                     $lines[] = '';
                 }
 

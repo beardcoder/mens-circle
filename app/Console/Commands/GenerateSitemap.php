@@ -26,7 +26,7 @@ class GenerateSitemap extends Command
         $sitemap->add(
             Url::create(route('home'))
                 ->setPriority(1.0)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY),
         );
 
         // Add all published events
@@ -39,7 +39,7 @@ class GenerateSitemap extends Command
                     Url::create(route('event.show.slug', $event->slug))
                         ->setLastModificationDate($event->updated_at ?? now())
                         ->setPriority(0.8)
-                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY),
                 );
             });
 
@@ -53,7 +53,7 @@ class GenerateSitemap extends Command
                     Url::create(route('page.show', $page->slug))
                         ->setLastModificationDate($page->updated_at ?? now())
                         ->setPriority(0.7)
-                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY),
                 );
             });
 

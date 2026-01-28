@@ -61,7 +61,7 @@ class RegistrationsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->with('participant'))
+            ->modifyQueryUsing(fn($query) => $query->with('participant'))
             ->columns([
                 TextColumn::make('participant.first_name')
                     ->label('Vorname')
@@ -85,8 +85,8 @@ class RegistrationsRelationManager extends RelationManager
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (RegistrationStatus $state): string => $state->getColor())
-                    ->formatStateUsing(fn (RegistrationStatus $state): string => $state->getLabel())
+                    ->color(fn(RegistrationStatus $state): string => $state->getColor())
+                    ->formatStateUsing(fn(RegistrationStatus $state): string => $state->getLabel())
                     ->sortable(),
                 TextColumn::make('registered_at')
                     ->label('Angemeldet am')

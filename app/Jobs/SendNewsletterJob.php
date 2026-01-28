@@ -25,9 +25,8 @@ class SendNewsletterJob implements ShouldQueue
     public int $backoff = 60;
 
     public function __construct(
-        public readonly Newsletter $newsletter
-    ) {
-    }
+        public readonly Newsletter $newsletter,
+    ) {}
 
     /**
      * Execute the job.
@@ -36,8 +35,8 @@ class SendNewsletterJob implements ShouldQueue
     {
         // Update status to sending
         $this->newsletter->update([
-'status' => NewsletterStatus::Sending
-]);
+            'status' => NewsletterStatus::Sending,
+        ]);
 
         $recipientCount = 0;
         $failedRecipients = [];
@@ -81,7 +80,7 @@ class SendNewsletterJob implements ShouldQueue
             Log::warning('Newsletter sending completed with failures', [
                 'newsletter_id' => $this->newsletter->id,
                 'successful' => $recipientCount,
-                'failed' => count($failedRecipients),
+                'failed' => \count($failedRecipients),
             ]);
         }
     }
@@ -98,7 +97,7 @@ class SendNewsletterJob implements ShouldQueue
 
         // Reset status to draft so it can be retried manually
         $this->newsletter->update([
-'status' => NewsletterStatus::Draft
-]);
+            'status' => NewsletterStatus::Draft,
+        ]);
     }
 }

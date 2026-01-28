@@ -49,7 +49,7 @@ class PageResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Seiten';
 
-    protected static string|null|BackedEnum $navigationIcon = Heroicon::Document;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Document;
 
     protected static UnitEnum|string|null $navigationGroup = 'Inhalte';
 
@@ -154,7 +154,7 @@ class PageResource extends Resource
             ->afterStateUpdated(function (Builder $component): void {
                 $state = $component->getState();
 
-                if (!is_array($state)) {
+                if (!\is_array($state)) {
                     return;
                 }
 
@@ -165,7 +165,7 @@ class PageResource extends Resource
                     $data = $item['data'] ?? [];
                     $blockId = $data['block_id'] ?? null;
 
-                    if (!$blockId || array_key_exists($blockId, $seenBlockIds)) {
+                    if (!$blockId || \array_key_exists($blockId, $seenBlockIds)) {
                         $data['block_id'] = (string) Str::uuid();
                         $item['data'] = $data;
                         $state[$key] = $item;
@@ -253,7 +253,7 @@ class PageResource extends Resource
                             ->rows(2),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(fn(array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -300,7 +300,7 @@ class PageResource extends Resource
                             ->rows(2),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(fn(array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -356,7 +356,7 @@ class PageResource extends Resource
                             ->rows(2),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(fn(array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -370,7 +370,7 @@ class PageResource extends Resource
                 TextEntry::make('testimonials_info')
                     ->label('Automatische Anzeige')
                     ->state(
-                        'Dieser Block zeigt automatisch alle veröffentlichten Testimonials aus der Datenbank an. Keine weiteren Einstellungen erforderlich.'
+                        'Dieser Block zeigt automatisch alle veröffentlichten Testimonials aus der Datenbank an. Keine weiteren Einstellungen erforderlich.',
                     ),
             ]);
     }
@@ -402,7 +402,7 @@ class PageResource extends Resource
                             ->rows(3),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['question'] ?? null),
+                    ->itemLabel(fn(array $state): ?string => $state['question'] ?? null),
             ]);
     }
 
@@ -458,7 +458,7 @@ class PageResource extends Resource
                 TextEntry::make('whatsapp_info')
                     ->label('Automatische Anzeige')
                     ->state(
-                        'Dieser Block zeigt die WhatsApp Community Sektion an. Die WhatsApp Community URL wird in den allgemeinen Einstellungen konfiguriert.'
+                        'Dieser Block zeigt die WhatsApp Community Sektion an. Die WhatsApp Community URL wird in den allgemeinen Einstellungen konfiguriert.',
                     ),
             ]);
     }
@@ -466,7 +466,7 @@ class PageResource extends Resource
     private static function blockIdField(): Hidden
     {
         return Hidden::make('block_id')
-            ->default(fn (): string => (string) Str::uuid());
+            ->default(fn(): string => (string) Str::uuid());
     }
 
     private static function blockImageUpload(string $name, string $label): SpatieMediaLibraryFileUpload
@@ -478,7 +478,7 @@ class PageResource extends Resource
             ->image()
             ->imageEditor()
             ->responsiveImages()
-            ->customProperties(fn (Get $get): array => [
+            ->customProperties(fn(Get $get): array => [
                 'block_id' => $get('block_id'),
                 'field' => $name,
             ])

@@ -43,7 +43,7 @@ class EventController extends Controller
 
     public function register(
         EventRegistrationRequest $request,
-        RegisterParticipantAction $action
+        RegisterParticipantAction $action,
     ): JsonResponse {
         $validated = $request->validated();
         /** @var Event $event */
@@ -66,7 +66,7 @@ class EventController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => "Vielen Dank, {$validated['first_name']}! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.",
+                'message' => \sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $validated['first_name']),
             ]);
         } catch (RuntimeException $runtimeException) {
             return response()->json([
@@ -75,5 +75,4 @@ class EventController extends Controller
             ], 409);
         }
     }
-
 }

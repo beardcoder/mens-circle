@@ -21,10 +21,8 @@ class EventRegistrationConfirmation extends Mailable
 
     public function __construct(
         public readonly Registration $registration,
-        public readonly Event $event
-    ) {
-    }
-
+        public readonly Event $event,
+    ) {}
 
     public function envelope(): Envelope
     {
@@ -32,7 +30,7 @@ class EventRegistrationConfirmation extends Mailable
 
         return new Envelope(
             to: [new Address($participant->email, $participant->fullName)],
-            subject: "Anmeldebestätigung: {$this->event->title}",
+            subject: 'Anmeldebestätigung: ' . $this->event->title,
         );
     }
 
@@ -47,10 +45,10 @@ class EventRegistrationConfirmation extends Mailable
     public function attachments(): array
     {
         $icalContent = $this->event->generateICalContent();
-        $filename = "event-{$this->event->slug}.ics";
+        $filename = \sprintf('event-%s.ics', $this->event->slug);
 
         return [
-            Attachment::fromData(fn (): string => $icalContent, $filename)
+            Attachment::fromData(fn(): string => $icalContent, $filename)
                 ->withMime('text/calendar'),
         ];
     }

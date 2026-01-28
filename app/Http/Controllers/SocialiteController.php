@@ -18,7 +18,7 @@ class SocialiteController extends Controller
 
     public function redirect(string $provider): RedirectResponse
     {
-        abort_unless(in_array($provider, self::ALLOWED_PROVIDERS), 404);
+        abort_unless(\in_array($provider, self::ALLOWED_PROVIDERS, true), 404);
 
         /** @var GithubProvider $driver */
         $driver = Socialite::driver($provider);
@@ -30,28 +30,28 @@ class SocialiteController extends Controller
 
     public function callback(string $provider): RedirectResponse
     {
-        abort_unless(in_array($provider, self::ALLOWED_PROVIDERS), 404);
+        abort_unless(\in_array($provider, self::ALLOWED_PROVIDERS, true), 404);
 
         $response = Socialite::driver($provider)->user();
 
         $user = User::firstWhere([
-'email' => $response->getEmail()
-]);
+            'email' => $response->getEmail(),
+        ]);
         if (!$user) {
             return redirect()->route('socialite.redirect', [
-'provider' => $provider
-])
+                'provider' => $provider,
+            ])
                 ->withErrors([
-'email' => 'No user found with the email ' . $response->getEmail()
-]);
+                    'email' => 'No user found with the email ' . $response->getEmail(),
+                ]);
         }
 
         $user->update([
-$provider . '_id' => $response->getId()
-]);
+            $provider . '_id' => $response->getId(),
+        ]);
 
         auth()
-->login($user);
+            ->login($user);
 
         return redirect()->intended(route('filament.admin.pages.dashboard'));
     }

@@ -71,7 +71,7 @@ class ParticipantResource extends Resource
                         Toggle::make('is_subscribed_to_newsletter')
                             ->label('Newsletter-Abonnement')
                             ->helperText('Aktivieren, um den Teilnehmer für den Newsletter anzumelden')
-                            ->formatStateUsing(fn ($record) => $record?->isSubscribedToNewsletter() ?? false)
+                            ->formatStateUsing(fn($record) => $record?->isSubscribedToNewsletter() ?? false)
                             ->live()
                             ->afterStateUpdated(function ($state, $record): void {
                                 if (!$record) {
@@ -121,7 +121,7 @@ class ParticipantResource extends Resource
                 IconColumn::make('newsletter_subscription')
                     ->label('Newsletter')
                     ->boolean()
-                    ->state(fn ($record): bool => $record->isSubscribedToNewsletter()),
+                    ->state(fn($record): bool => $record->isSubscribedToNewsletter()),
                 TextColumn::make('created_at')
                     ->label('Erstellt')
                     ->dateTime('d.m.Y H:i')
@@ -131,13 +131,13 @@ class ParticipantResource extends Resource
             ->filters([
                 Filter::make('has_registrations')
                     ->label('Hat Anmeldungen')
-                    ->query(fn (Builder $query): Builder => $query->has('registrations')),
+                    ->query(fn(Builder $query): Builder => $query->has('registrations')),
                 Filter::make('newsletter_subscriber')
                     ->label('Newsletter-Abonnent')
                     ->query(
-                        fn (Builder $query): Builder => $query->whereHas('newsletterSubscription', fn (Builder $q) => $q->whereNull(
-                            'unsubscribed_at'
-                        ))
+                        fn(Builder $query): Builder => $query->whereHas('newsletterSubscription', fn(Builder $q) => $q->whereNull(
+                            'unsubscribed_at',
+                        )),
                     ),
             ])
             ->recordActions([EditAction::make(), DeleteAction::make(), ])

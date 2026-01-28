@@ -68,6 +68,7 @@ class NewsletterSubscription extends Model
 
     /**
      * @param Builder<NewsletterSubscription> $query
+     *
      * @return Builder<NewsletterSubscription>
      */
     #[Scope]

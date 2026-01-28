@@ -41,13 +41,13 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('40px')
             ->renderHook(
                 'panels::auth.login.form.after',
-                fn (): Factory|View => view('filament.components.auth.socialite.github')
+                fn(): Factory|View => view('filament.components.auth.socialite.github'),
             )
             ->colors([
                 'primary' => Color::Orange,
             ])
-            ->renderHook(PanelsRenderHook::TOPBAR_END, fn (): Factory|View => view('filament.components.go-to-website'))
-            ->renderHook(PanelsRenderHook::HEAD_END, fn (): Factory|View => view('filament.components.apple-touch-icons'))
+            ->renderHook(PanelsRenderHook::TOPBAR_END, fn(): Factory|View => view('filament.components.go-to-website'))
+            ->renderHook(PanelsRenderHook::HEAD_END, fn(): Factory|View => view('filament.components.apple-touch-icons'))
             ->plugins([
                 FilamentLogViewer::make(),
                 FilamentSpatieLaravelHealthPlugin::make(),

@@ -32,23 +32,23 @@ class SevenIoHealthCheck extends Check
 
                 if ($balance < 1) {
                     return $result
-                        ->warning("Niedriges Guthaben: {$balance}€")
-                        ->shortSummary("{$balance}€")
+                        ->warning(\sprintf('Niedriges Guthaben: %s€', $balance))
+                        ->shortSummary($balance . '€')
                         ->meta(['balance' => $balance]);
                 }
 
                 return $result
                     ->ok()
-                    ->shortSummary("{$balance}€")
+                    ->shortSummary($balance . '€')
                     ->meta(['balance' => $balance]);
             }
 
             return $result
-                ->failed("Seven.io API nicht erreichbar (HTTP {$response->status()})")
+                ->failed(\sprintf('Seven.io API nicht erreichbar (HTTP %d)', $response->status()))
                 ->shortSummary('API-Fehler');
         } catch (Throwable $throwable) {
             return $result
-                ->failed("Seven.io Verbindungsfehler: {$throwable->getMessage()}")
+                ->failed('Seven.io Verbindungsfehler: ' . $throwable->getMessage())
                 ->shortSummary('Verbindungsfehler');
         }
     }

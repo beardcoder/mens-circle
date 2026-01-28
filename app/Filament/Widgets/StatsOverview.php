@@ -35,14 +35,14 @@ class StatsOverview extends StatsOverviewWidget
             Stat::make('Verfügbare Plätze', $nextEvent instanceof Event ? $nextEvent->availableSpots : 0)
                 ->description($this->getNextEventDescription($nextEvent))
                 ->descriptionIcon('heroicon-o-ticket')
-                ->color(fn (): string => $this->getAvailableSpotsColor()),
+                ->color(fn(): string => $this->getAvailableSpotsColor()),
         ];
     }
 
     private function getNextEventDescription(?Event $event): string
     {
         return $event instanceof Event
-            ? "Nächstes Event: {$event->event_date->format('d.m.Y')}"
+            ? 'Nächstes Event: ' . $event->event_date->format('d.m.Y')
             : 'Kein Event geplant';
     }
 

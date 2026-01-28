@@ -41,6 +41,7 @@ class Testimonial extends Model
 
     /**
      * @param Builder<Testimonial> $query
+     *
      * @return Builder<Testimonial>
      */
     #[Scope]
@@ -53,7 +54,7 @@ class Testimonial extends Model
     {
         static::addGlobalScope('order', function (Builder $builder): void {
             $builder->orderBy('sort_order', 'asc')
-->orderBy('created_at', 'desc');
+                ->orderBy('created_at', 'desc');
         });
     }
 }

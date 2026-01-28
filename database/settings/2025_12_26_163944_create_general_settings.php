@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
-return new class () extends SettingsMigration {
+return new class extends SettingsMigration {
     public function up(): void
     {
         $this->migrator->add('general.site_name', 'Männerkreis Niederbayern');
@@ -15,7 +15,7 @@ return new class () extends SettingsMigration {
         $this->migrator->add('general.location', 'Niederbayern');
         $this->migrator->add('general.whatsapp_community_link', '');
         $this->migrator->add('general.social_links', []);
-        $this->migrator->add('general.footer_text', '© '.date('Y').' Männerkreis Niederbayern. Alle Rechte vorbehalten.');
+        $this->migrator->add('general.footer_text', '© ' . date('Y') . ' Männerkreis Niederbayern. Alle Rechte vorbehalten.');
         $this->migrator->add('general.event_default_max_participants', 8);
     }
 };

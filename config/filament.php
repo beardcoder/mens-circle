@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Broadcasting
@@ -17,7 +16,6 @@ return [
     */
 
     'broadcasting' => [
-
         // 'echo' => [
         //     'broadcaster' => 'pusher',
         //     'key' => env('VITE_PUSHER_APP_KEY'),
@@ -30,7 +28,6 @@ return [
         //     'encrypted' => true,
         //     'forceTLS' => true,
         // ],
-
     ],
 
     /*
@@ -120,5 +117,4 @@ return [
     'system_route_prefix' => 'filament',
 
     'dark_mode' => true,
-
 ];

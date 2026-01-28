@@ -40,6 +40,6 @@ class TestimonialSubmissionController extends Controller
 
         $firstName = explode(' ', $validated['author_name'])[0];
 
-        return "Vielen Dank, {$firstName}! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.";
+        return \sprintf('Vielen Dank, %s! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.', $firstName);
     }
 }

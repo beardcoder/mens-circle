@@ -40,7 +40,7 @@ class UpcomingEventRegistrations extends TableWidget
                     ->with('participant')
                     ->where('event_id', $nextEvent->id)
                     ->whereIn('status', [RegistrationStatus::Registered->value, RegistrationStatus::Attended->value])
-                    ->latest('registered_at')
+                    ->latest('registered_at'),
             )
             ->columns([
                 TextColumn::make('participant.first_name')
@@ -69,8 +69,8 @@ class UpcomingEventRegistrations extends TableWidget
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (RegistrationStatus $state): string => $state->getColor())
-                    ->formatStateUsing(fn (RegistrationStatus $state): string => $state->getLabel())
+                    ->color(fn(RegistrationStatus $state): string => $state->getColor())
+                    ->formatStateUsing(fn(RegistrationStatus $state): string => $state->getLabel())
                     ->sortable(),
 
                 TextColumn::make('registered_at')
@@ -79,7 +79,7 @@ class UpcomingEventRegistrations extends TableWidget
                     ->sortable(),
             ])
             ->heading(
-                "Anmeldungen für nächstes Event: {$nextEvent->title} ({$nextEvent->event_date->format('d.m.Y')})"
+                \sprintf('Anmeldungen für nächstes Event: %s (%s)', $nextEvent->title, $nextEvent->event_date->format('d.m.Y')),
             )
             ->defaultSort('registered_at', 'desc');
     }

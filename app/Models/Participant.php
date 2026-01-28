@@ -46,7 +46,7 @@ class Participant extends Model
      */
     protected function fullName(): Attribute
     {
-        return Attribute::make(get: fn (): string => trim("{$this->first_name} {$this->last_name}"));
+        return Attribute::make(get: fn(): string => trim(\sprintf('%s %s', $this->first_name, $this->last_name)));
     }
 
     public function isSubscribedToNewsletter(): bool
@@ -67,7 +67,7 @@ class Participant extends Model
     public static function findOrCreateByEmail(string $email, array $attributes = []): self
     {
         return static::firstOrCreate([
-'email' => $email
-], $attributes);
+            'email' => $email,
+        ], $attributes);
     }
 }

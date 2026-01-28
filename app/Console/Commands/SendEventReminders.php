@@ -45,12 +45,12 @@ class SendEventReminders extends Command
             $registrations = $event->activeRegistrations;
 
             if ($registrations->isEmpty()) {
-                $this->warn("Event '{$event->title}' has no active registrations.");
+                $this->warn(\sprintf("Event '%s' has no active registrations.", $event->title));
 
                 continue;
             }
 
-            $this->info("Processing event: {$event->title} ({$event->event_date->format('d.m.Y H:i')})");
+            $this->info(\sprintf('Processing event: %s (%s)', $event->title, $event->event_date->format('d.m.Y H:i')));
 
             /** @var Registration $registration */
             foreach ($registrations as $registration) {
@@ -72,7 +72,7 @@ class SendEventReminders extends Command
 
         $this->newLine();
         $this->info(
-            "Successfully sent {$totalEmailsSent} email(s) and {$totalSmsSent} SMS for {$upcomingEvents->count()} event(s)."
+            \sprintf('Successfully sent %d email(s) and %d SMS for %s event(s).', $totalEmailsSent, $totalSmsSent, $upcomingEvents->count()),
         );
 
         return self::SUCCESS;

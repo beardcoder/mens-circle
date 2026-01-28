@@ -13,7 +13,7 @@ trait ClearsResponseCache
         $clearCache = function (): void {
             ResponseCache::clear();
             cache()
-->forget('has_next_event');
+                ->forget('has_next_event');
         };
 
         self::created($clearCache);

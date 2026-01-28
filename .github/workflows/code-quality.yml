@@ -18,7 +18,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
           coverage: none
 
@@ -36,11 +36,14 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Run Pint (check only)
-        run: vendor/bin/pint --test
+      - name: Run PHP-CS-Fixer (check only)
+        run: composer format:check
 
-      - name: Run PHPStan
-        run: vendor/bin/phpstan analyse --error-format=github --no-progress
+      - name: Run PHPStan (Level 9)
+        run: composer lint
+
+      - name: Run Rector (check only)
+        run: composer rector:check
 
   javascript-checks:
     name: JavaScript Code Quality

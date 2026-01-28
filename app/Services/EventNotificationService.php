@@ -69,7 +69,7 @@ class EventNotificationService
             return;
         }
 
-        $message = "Hallo {$participant->first_name}! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis";
+        $message = \sprintf('Hallo %s! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis', $participant->first_name);
 
         $this->sendSms($event, $participant->phone, $message, [
             'registration_id' => $registration->id,

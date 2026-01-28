@@ -35,7 +35,7 @@ class NewsletterResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Newsletter';
 
-    protected static string|null|BackedEnum $navigationIcon = Heroicon::Newspaper;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Newspaper;
 
     protected static ?int $navigationSort = 60;
 
@@ -86,8 +86,8 @@ class NewsletterResource extends Resource
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (NewsletterStatus $state): string => $state->getColor())
-                    ->formatStateUsing(fn (NewsletterStatus $state): string => $state->getLabel())
+                    ->color(fn(NewsletterStatus $state): string => $state->getColor())
+                    ->formatStateUsing(fn(NewsletterStatus $state): string => $state->getLabel())
                     ->sortable(),
                 TextColumn::make('recipient_count')
                     ->label('Empfänger')

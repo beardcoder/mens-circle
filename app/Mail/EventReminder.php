@@ -20,9 +20,8 @@ class EventReminder extends Mailable
 
     public function __construct(
         public readonly Registration $registration,
-        public readonly Event $event
-    ) {
-    }
+        public readonly Event $event,
+    ) {}
 
     public function envelope(): Envelope
     {
@@ -30,7 +29,7 @@ class EventReminder extends Mailable
 
         return new Envelope(
             to: [new Address($participant->email, $participant->fullName)],
-            subject: "Erinnerung: {$this->event->title} ist morgen!",
+            subject: \sprintf('Erinnerung: %s ist morgen!', $this->event->title),
         );
     }
 

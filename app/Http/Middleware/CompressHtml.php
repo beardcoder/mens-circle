@@ -13,9 +13,8 @@ use voku\helper\HtmlMin;
 readonly class CompressHtml
 {
     public function __construct(
-        private HtmlMin $htmlMin
-    ) {
-    }
+        private HtmlMin $htmlMin,
+    ) {}
 
     public function handle(Request $request, Closure $next): SymfonyResponse
     {

@@ -67,6 +67,7 @@ class Registration extends Model
 
     /**
      * @param Builder<Registration> $query
+     *
      * @return Builder<Registration>
      */
     #[Scope]
@@ -77,6 +78,7 @@ class Registration extends Model
 
     /**
      * @param Builder<Registration> $query
+     *
      * @return Builder<Registration>
      */
     #[Scope]
@@ -87,6 +89,7 @@ class Registration extends Model
 
     /**
      * @param Builder<Registration> $query
+     *
      * @return Builder<Registration>
      */
     #[Scope]

@@ -24,9 +24,7 @@ use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register(): void
-    {
-    }
+    public function register(): void {}
 
     public function boot(): void
     {
@@ -59,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
                     'hasNextEvent' => cache()->remember(
                         'has_next_event',
                         300,
-                        fn () => Event::published()->upcoming()->exists()
+                        fn() => Event::published()->upcoming()->exists(),
                     ),
                 ]);
             } catch (Throwable) {

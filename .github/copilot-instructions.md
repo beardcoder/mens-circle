@@ -9,7 +9,7 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.5.0RC3
+- php - 8.5.2
 - filament/filament (FILAMENT) - v5
 - laravel/framework (LARAVEL) - v12
 - laravel/octane (OCTANE) - v2
@@ -18,7 +18,9 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - livewire/livewire (LIVEWIRE) - v4
 - larastan/larastan (LARASTAN) - v3
 - laravel/mcp (MCP) - v0
-- laravel/pint (PINT) - v1
+- laravel/pint (PINT) - v1 (optional, use PHP-CS-Fixer as primary)
+- friendsofphp/php-cs-fixer (PHP-CS-FIXER) - v3 (primary formatter)
+- phpat/phpat (PHPAT) - v0 (architecture testing)
 - laravel/sail (SAIL) - v1
 - pestphp/pest (PEST) - v4
 - phpunit/phpunit (PHPUNIT) - v12
@@ -223,12 +225,15 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 - Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
 
-=== pint/core rules ===
+=== php-cs-fixer/core rules ===
 
-# Laravel Pint Code Formatter
+# PHP-CS-Fixer Code Formatter
 
-- You must run `vendor/bin/pint --dirty` before finalizing changes to ensure your code matches the project's expected style.
-- Do not run `vendor/bin/pint --test`, simply run `vendor/bin/pint` to fix any formatting issues.
+- This project uses PHP-CS-Fixer with @PER-CS ruleset as the primary code formatter.
+- You must run `composer format` before finalizing changes to ensure your code matches the project's expected style.
+- Do not run `composer format:check` for fixing, simply run `composer format` to fix any formatting issues.
+- Configuration is in `.php-cs-fixer.dist.php` with strict rules: declare_strict_types, strict_param, strict_comparison.
+- Pint is still available via `composer pint` but PHP-CS-Fixer is the standard.
 
 === pest/core rules ===
 

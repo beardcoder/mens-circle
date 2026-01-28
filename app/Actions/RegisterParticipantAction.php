@@ -37,13 +37,13 @@ class RegisterParticipantAction
     {
         return Participant::updateOrCreate(
             [
-'email' => $data['email']
-],
+                'email' => $data['email'],
+            ],
             [
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'phone' => $data['phone_number'] ?? null,
-            ]
+            ],
         );
     }
 

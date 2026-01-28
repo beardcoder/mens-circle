@@ -21,7 +21,7 @@ class NewsletterWelcome extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public readonly NewsletterSubscription $subscription
+        public readonly NewsletterSubscription $subscription,
     ) {
         //
     }

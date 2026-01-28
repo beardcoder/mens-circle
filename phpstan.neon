@@ -2,10 +2,16 @@ parameters:
 
     paths:
         - app/
+        - tests/Architecture
 
-    # Level 10 is the highest level
-    # Level 8 provides excellent type safety for production use
-    level: 8
+    # Level 9 is the production minimum for strict type safety
+    # Level 10 is the highest level (experimental checks)
+    level: 9
+
+    # PHPat configuration
+    phpat:
+        ignore_built_in_classes: true
+        show_rule_names: true
 
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'

@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class () extends Migration {
+return new class extends Migration {
     public function up(): void
     {
         // Step 1: Create participants table (if not exists)
@@ -114,7 +114,7 @@ return new class () extends Migration {
                 Schema::table($sourceTable, function (Blueprint $table): void {
                     $table->dropIndex('event_registrations_event_status_index');
                 });
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Index doesn't exist, continue
             }
 
@@ -122,14 +122,14 @@ return new class () extends Migration {
                 Schema::table($sourceTable, function (Blueprint $table): void {
                     $table->dropUnique(['event_id', 'email']);
                 });
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Unique constraint doesn't exist, continue
             }
 
             // Step 9: Drop old columns
             $columnsToDrop = array_filter(
                 ['first_name', 'last_name', 'email', 'phone_number', 'privacy_accepted', 'confirmed_at'],
-                fn (string $col) => Schema::hasColumn($sourceTable, $col)
+                fn(string $col) => Schema::hasColumn($sourceTable, $col),
             );
 
             if ($columnsToDrop !== []) {
@@ -145,7 +145,7 @@ return new class () extends Migration {
             Schema::table($sourceTable, function (Blueprint $table): void {
                 $table->foreign('participant_id')->references('id')->on('participants')->cascadeOnDelete();
             });
-        } catch (\Exception $e) {
+        } catch (Exception $exception) {
             // Foreign key already exists or cannot be created
         }
 
@@ -154,7 +154,7 @@ return new class () extends Migration {
             Schema::table($sourceTable, function (Blueprint $table): void {
                 $table->unique(['participant_id', 'event_id']);
             });
-        } catch (\Exception $e) {
+        } catch (Exception $exception) {
             // Unique constraint already exists
         }
 
@@ -163,7 +163,7 @@ return new class () extends Migration {
             Schema::table($sourceTable, function (Blueprint $table): void {
                 $table->index(['event_id', 'status'], 'registrations_event_status_index');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $exception) {
             // Index already exists
         }
 
@@ -187,26 +187,26 @@ return new class () extends Migration {
 
         // Step 13: Update newsletter_subscriptions with participant_id
         if (Schema::hasColumn('newsletter_subscriptions', 'email')) {
-            DB::statement("
+            DB::statement('
                 UPDATE newsletter_subscriptions
                 SET
                     participant_id = (SELECT id FROM participants WHERE participants.email = newsletter_subscriptions.email),
                     confirmed_at = subscribed_at
                 WHERE participant_id IS NULL
-            ");
+            ');
 
             // Step 14: Drop old indexes and columns from newsletter_subscriptions
             try {
                 Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
                     $table->dropUnique(['email']);
                 });
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Unique constraint doesn't exist
             }
 
             $columnsToDrop = array_filter(
                 ['email', 'status'],
-                fn (string $col) => Schema::hasColumn('newsletter_subscriptions', $col)
+                fn(string $col) => Schema::hasColumn('newsletter_subscriptions', $col),
             );
 
             if ($columnsToDrop !== []) {
@@ -221,7 +221,7 @@ return new class () extends Migration {
             Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
                 $table->foreign('participant_id')->references('id')->on('participants')->cascadeOnDelete();
             });
-        } catch (\Exception $e) {
+        } catch (Exception $exception) {
             // Foreign key already exists
         }
 
@@ -229,7 +229,7 @@ return new class () extends Migration {
             Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
                 $table->unique('participant_id');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $exception) {
             // Unique constraint already exists
         }
     }
