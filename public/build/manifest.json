@@ -1,8 +1,4 @@
 {
-  "_vendor-DOZOKNCB.js": {
-    "file": "assets/vendor-DOZOKNCB.js",
-    "name": "vendor"
-  },
   "node_modules/@fontsource-variable/cormorant/files/cormorant-cyrillic-ext-wght-normal.woff2": {
     "file": "assets/cormorant-cyrillic-ext-wght-normal-Bbszbot-.woff2",
     "src": "node_modules/@fontsource-variable/cormorant/files/cormorant-cyrillic-ext-wght-normal.woff2"
@@ -48,7 +44,7 @@
     "src": "node_modules/@fontsource-variable/playfair-display/files/playfair-display-vietnamese-wght-normal.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CVccc5N4.css",
+    "file": "assets/app-4UkDop3R.css",
     "name": "app",
     "names": [
       "app.css"
@@ -57,12 +53,9 @@
     "isEntry": true
   },
   "resources/js/app.ts": {
-    "file": "assets/app-DltrG5dQ.js",
+    "file": "assets/app-JxVuerLX.js",
     "name": "app",
     "src": "resources/js/app.ts",
-    "isEntry": true,
-    "imports": [
-      "_vendor-DOZOKNCB.js"
-    ]
+    "isEntry": true
   }
 }
