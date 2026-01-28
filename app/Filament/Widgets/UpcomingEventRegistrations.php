@@ -79,9 +79,7 @@ class UpcomingEventRegistrations extends TableWidget
                     ->sortable(),
             ])
             ->heading(
-                'Anmeldungen für nächstes Event: ' . $nextEvent->title . ' (' . $nextEvent->event_date->format(
-                    'd.m.Y'
-                ) . ')'
+                "Anmeldungen für nächstes Event: {$nextEvent->title} ({$nextEvent->event_date->format('d.m.Y')})"
             )
             ->defaultSort('registered_at', 'desc');
     }

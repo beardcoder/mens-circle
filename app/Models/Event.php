@@ -145,7 +145,7 @@ class Event extends Model implements HasMedia
 
                 $parts = [
                     $this->street,
-                    $this->postal_code ? sprintf('%s %s', $this->postal_code, $this->city) : $this->city,
+                    $this->postal_code ? "{$this->postal_code} {$this->city}" : $this->city,
                 ];
 
                 return implode(', ', $parts);
@@ -168,7 +168,7 @@ class Event extends Model implements HasMedia
         $location = $this->fullAddress ?? $this->location;
         $description = str_replace(["\r\n", "\n", "\r"], '\n', strip_tags($this->description ?? ''));
 
-        $uid = $this->id . '@mens-circle.de';
+        $uid = "{$this->id}@mens-circle.de";
 
         return <<<ICAL
             BEGIN:VCALENDAR\r

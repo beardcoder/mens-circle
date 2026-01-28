@@ -65,14 +65,11 @@ class EventNotificationService
     {
         $participant = $registration->participant;
 
-        if ($participant->phone === null) {
+        if (!$participant->phone) {
             return;
         }
 
-        $message = sprintf(
-            'Hallo %s! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis',
-            $participant->first_name
-        );
+        $message = "Hallo {$participant->first_name}! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis";
 
         $this->sendSms($event, $participant->phone, $message, [
             'registration_id' => $registration->id,
@@ -100,16 +97,18 @@ class EventNotificationService
 
             $response = $smsResource->dispatch($params);
 
-            Log::info('SMS sent successfully', array_merge($context, [
+            Log::info('SMS sent successfully', [
+                ...$context,
                 'phone_number' => $phoneNumber,
                 'event_id' => $event->id,
-            ]));
+            ]);
         } catch (Exception $exception) {
-            Log::error('Failed to send SMS', array_merge($context, [
+            Log::error('Failed to send SMS', [
+                ...$context,
                 'phone_number' => $phoneNumber,
                 'event_id' => $event->id,
                 'error' => $exception->getMessage(),
-            ]));
+            ]);
         }
     }
 }

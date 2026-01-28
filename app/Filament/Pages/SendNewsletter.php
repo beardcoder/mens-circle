@@ -90,11 +90,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
                 ->modalDescription(function (): string {
                     $count = NewsletterSubscription::whereNull('unsubscribed_at')->count();
 
-                    return sprintf(
-                        'Der Newsletter wird an %d aktive %s versendet. Dies kann nicht rückgängig gemacht werden.',
-                        $count,
-                        $count === 1 ? 'Abonnenten' : 'Abonnenten'
-                    );
+                    return "Der Newsletter wird an {$count} aktive Abonnenten versendet. Dies kann nicht rückgängig gemacht werden.";
                 })
                 ->modalSubmitActionLabel('Jetzt versenden')
                 ->action(fn () => $this->sendNewsletterAction()),

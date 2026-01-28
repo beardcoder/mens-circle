@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Enums\RegistrationStatus;
 use App\Filament\Resources\EventResource\Pages\CreateEvent;
 use App\Filament\Resources\EventResource\Pages\EditEvent;
 use App\Filament\Resources\EventResource\Pages\ListEvents;
 use App\Filament\Resources\EventResource\RelationManagers\RegistrationsRelationManager;
 use App\Models\Event;
+use App\Models\Registration;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -192,9 +194,7 @@ class EventResource extends Resource
                     ->dateTime('d.m.Y')
                     ->sortable()
                     ->description(
-                        fn ($record): string => $record->start_time->format(
-                            'H:i'
-                        ) . ' - ' . $record->end_time->format('H:i')
+                        fn ($record): string => "{$record->start_time->format('H:i')} - {$record->end_time->format('H:i')}"
                     )
                     ->color(
                         fn ($record): string => $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary')
@@ -206,7 +206,7 @@ class EventResource extends Resource
                 TextColumn::make('active_registrations_count')
                     ->label('Anmeldungen')
                     ->formatStateUsing(
-                        fn ($record): string => $record->active_registrations_count . ' / ' . $record->max_participants
+                        fn ($record): string => "{$record->active_registrations_count} / {$record->max_participants}"
                     )
                     ->badge()
                     ->color(
@@ -248,10 +248,14 @@ class EventResource extends Resource
                 Filter::make('full')
                     ->label('Ausgebuchte Events')
                     ->query(
-                        fn (Builder $query): Builder => $query->whereRaw('(SELECT COUNT(*) FROM registrations WHERE event_id = events.id AND status IN (?, ?)) >= max_participants', [
-                            'registered',
-                            'attended'
-                        ])
+                        fn (Builder $query): Builder => $query->whereColumn(
+                            'max_participants',
+                            '<=',
+                            Registration::query()
+                                ->selectRaw('COUNT(*)')
+                                ->whereColumn('event_id', 'events.id')
+                                ->whereIn('status', [RegistrationStatus::Registered, RegistrationStatus::Attended])
+                        )
                     )
                     ->toggle(),
                 TrashedFilter::make()

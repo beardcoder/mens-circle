@@ -30,7 +30,7 @@ class EventReminder extends Mailable
 
         return new Envelope(
             to: [new Address($participant->email, $participant->fullName)],
-            subject: 'Erinnerung: ' . $this->event->title . ' ist morgen!',
+            subject: "Erinnerung: {$this->event->title} ist morgen!",
         );
     }
 
