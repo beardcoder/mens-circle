@@ -3,7 +3,7 @@
 @php
 use App\Enums\SocialLinkType;
 
-$socialType = $type instanceof SocialLinkType ? $type : SocialLinkType::tryFrom($type ?? '') ?? SocialLinkType::OTHER;
+$socialType = $type instanceof SocialLinkType ? $type : SocialLinkType::tryFrom($type ?? '') ?? SocialLinkType::Other;
 $iconSvg = $socialType->getIcon(24);
 $title = $label ?: $socialType->getLabel();
 
