@@ -63,6 +63,9 @@ class QueueHealthCheck extends Check
         }
     }
 
+    /**
+     * Check database queue (works with PostgreSQL, MySQL, SQLite, etc.)
+     */
     private function checkDatabaseQueue(Result $result): void
     {
         // Check if jobs table exists
