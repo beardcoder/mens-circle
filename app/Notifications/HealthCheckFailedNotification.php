@@ -40,8 +40,8 @@ class HealthCheckFailedNotification extends Notification
             return false;
         }
 
-        /** @var int $throttleMinutes */
-        $throttleMinutes = (int) config('health.notifications.throttle_notifications_for_minutes', 60);
+        $throttleMinutes = config('health.notifications.throttle_notifications_for_minutes', 60);
+        assert(is_int($throttleMinutes));
 
         if ($throttleMinutes <= 0) {
             return true;
@@ -71,7 +71,7 @@ class HealthCheckFailedNotification extends Notification
             // If we couldn't acquire the lock, assume another process is sending
             return false;
         } finally {
-            $lock?->release();
+            $lock->release();
         }
     }
 
