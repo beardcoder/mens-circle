@@ -47,18 +47,28 @@ class HealthCheckFailedNotification extends Notification
         }
 
         $cacheKey = config('health.notifications.throttle_notifications_key', 'health:latestNotificationSentAt:') . $channel;
-        $lastNotificationSentAt = Cache::get($cacheKey);
+        $lockKey = $cacheKey . ':lock';
 
-        if ($lastNotificationSentAt === null) {
-            return Cache::add($cacheKey, now(), $throttleMinutes * 60);
+        // Use atomic lock to prevent race conditions
+        $lock = Cache::lock($lockKey, 10);
+
+        try {
+            if ($lock->get()) {
+                $lastNotificationSentAt = Cache::get($cacheKey);
+
+                if ($lastNotificationSentAt === null || $lastNotificationSentAt->diffInMinutes(now()) >= $throttleMinutes) {
+                    Cache::put($cacheKey, now(), $throttleMinutes * 60);
+                    return true;
+                }
+
+                return false;
+            }
+
+            // If we couldn't acquire the lock, assume another process is sending
+            return false;
+        } finally {
+            $lock?->release();
         }
-
-        if ($lastNotificationSentAt->diffInMinutes(now()) >= $throttleMinutes) {
-            Cache::put($cacheKey, now(), $throttleMinutes * 60);
-            return true;
-        }
-
-        return false;
     }
 
     /**
