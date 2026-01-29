@@ -64,9 +64,12 @@ class EventController extends Controller
         try {
             $action->execute($event, $validated);
 
+            /** @var string $firstName */
+            $firstName = $validated['first_name'];
+
             return response()->json([
                 'success' => true,
-                'message' => \sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $validated['first_name']),
+                'message' => \sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $firstName),
             ]);
         } catch (RuntimeException $runtimeException) {
             return response()->json([

@@ -158,12 +158,24 @@ class PageResource extends Resource
                     return;
                 }
 
+                /** @var array<string, true> $seenBlockIds */
                 $seenBlockIds = [];
                 $hasUpdates = false;
 
                 foreach ($state as $key => $item) {
+                    if (!\is_array($item)) {
+                        continue;
+                    }
+
                     $data = $item['data'] ?? [];
+                    if (!\is_array($data)) {
+                        continue;
+                    }
+
                     $blockId = $data['block_id'] ?? null;
+                    if (!\is_string($blockId)) {
+                        $blockId = null;
+                    }
 
                     if (!$blockId || \array_key_exists($blockId, $seenBlockIds)) {
                         $data['block_id'] = (string) Str::uuid();

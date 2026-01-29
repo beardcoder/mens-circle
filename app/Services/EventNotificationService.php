@@ -82,6 +82,7 @@ class EventNotificationService
      */
     private function sendSms(Event $event, string $phoneNumber, string $message, array $context = []): void
     {
+        /** @var string|null $apiKey */
         $apiKey = config('sevenio.api_key');
 
         if (!$apiKey) {
@@ -93,7 +94,9 @@ class EventNotificationService
         try {
             $client = new Client($apiKey);
             $smsResource = new SmsResource($client);
-            $params = new SmsParams(text: $message, to: $phoneNumber, from: config('sevenio.from'));
+            /** @var string|null $from */
+            $from = config('sevenio.from');
+            $params = new SmsParams(text: $message, to: $phoneNumber, from: $from ?? '');
 
             $response = $smsResource->dispatch($params);
 

@@ -70,6 +70,7 @@ class EditPage extends EditRecord
      */
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
+        /** @var array<int, array<string, mixed>> $contentBlocksData */
         $contentBlocksData = $data['content_blocks'] ?? [];
         unset($data['content_blocks']);
 

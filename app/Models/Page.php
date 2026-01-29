@@ -122,8 +122,10 @@ class Page extends Model implements HasMedia
      */
     private function saveContentBlock(array $blockData, int $order): string
     {
+        /** @var array<string, mixed> $data */
         $data = $blockData['data'] ?? [];
-        $blockId = $data['block_id'] ?? Str::uuid()->toString();
+        $blockIdRaw = $data['block_id'] ?? null;
+        $blockId = \is_string($blockIdRaw) ? $blockIdRaw : Str::uuid()->toString();
 
         unset($data['block_id']);
 
