@@ -28,11 +28,6 @@ class HealthCheckFailedNotification extends Notification
      * Note: This method updates the cache timestamp when returning true. In rare cases where
      * notification delivery fails after this method returns true, the throttle window will
      * still be enforced. This is an acceptable trade-off for health check notifications.
-     *
-     * @param object $notifiable
-     * @param string $channel
-     *
-     * @return bool
      */
     public function shouldSend(object $notifiable, string $channel): bool
     {

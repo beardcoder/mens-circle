@@ -9,10 +9,11 @@ use App\Models\NewsletterSubscription;
 use App\Models\Registration;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Override;
 
 class StatsOverview extends StatsOverviewWidget
 {
-    #[\Override]
+    #[Override]
     protected function getStats(): array
     {
         $nextEvent = Event::nextEvent();

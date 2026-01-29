@@ -20,6 +20,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Override;
 
 class SendNewsletter extends Page implements HasActions, HasForms
 {
@@ -78,7 +79,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
             ->statePath('data');
     }
 
-    #[\Override]
+    #[Override]
     protected function getHeaderActions(): array
     {
         return [

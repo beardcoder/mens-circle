@@ -9,6 +9,7 @@ use Database\Factories\ContentBlockFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Override;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -57,14 +58,14 @@ class ContentBlock extends Model implements HasMedia
             );
     }
 
-    #[\Override]
+    #[Override]
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('page_blocks')
             ->useDisk('public');
     }
 
-    #[\Override]
+    #[Override]
     protected function casts(): array
     {
         return [

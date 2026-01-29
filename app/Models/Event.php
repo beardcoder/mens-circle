@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Override;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
@@ -65,7 +66,7 @@ class Event extends Model implements HasMedia
         'is_published',
     ];
 
-    #[\Override]
+    #[Override]
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
@@ -73,7 +74,7 @@ class Event extends Model implements HasMedia
             ->saveSlugsTo('slug');
     }
 
-    #[\Override]
+    #[Override]
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('event_image')
@@ -200,7 +201,7 @@ class Event extends Model implements HasMedia
         app(EventNotificationService::class)->sendEventReminder($this, $registration);
     }
 
-    #[\Override]
+    #[Override]
     protected function casts(): array
     {
         return [

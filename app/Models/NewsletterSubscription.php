@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Override;
 
 /**
  * @property int $participant_id
@@ -30,7 +31,7 @@ class NewsletterSubscription extends Model
 
     protected $fillable = ['participant_id', 'token', 'subscribed_at', 'confirmed_at', 'unsubscribed_at', ];
 
-    #[\Override]
+    #[Override]
     protected static function booted(): void
     {
         static::creating(function (self $subscription): void {
@@ -83,7 +84,7 @@ class NewsletterSubscription extends Model
         return static::query()->active()->count();
     }
 
-    #[\Override]
+    #[Override]
     protected function casts(): array
     {
         return [

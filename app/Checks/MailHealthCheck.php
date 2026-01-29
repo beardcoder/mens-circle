@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Checks;
 
 use Illuminate\Support\Facades\Config;
+use Override;
 use Spatie\Health\Checks\Check;
 use Spatie\Health\Checks\Result;
 use Symfony\Component\Mailer\Transport\Dsn;
@@ -14,7 +15,7 @@ use Throwable;
 
 class MailHealthCheck extends Check
 {
-    #[\Override]
+    #[Override]
     public function run(): Result
     {
         $result = Result::make();

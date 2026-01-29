@@ -9,6 +9,7 @@ use Database\Factories\NewsletterFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @property string $subject
@@ -24,7 +25,7 @@ class Newsletter extends Model
 
     protected $fillable = ['subject', 'content', 'sent_at', 'recipient_count', 'status', ];
 
-    #[\Override]
+    #[Override]
     protected function casts(): array
     {
         return [

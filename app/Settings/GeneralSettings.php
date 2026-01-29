@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Settings;
 
+use Override;
 use Spatie\LaravelSettings\Settings;
 
 class GeneralSettings extends Settings
@@ -29,7 +30,7 @@ class GeneralSettings extends Settings
 
     public int $event_default_max_participants;
 
-    #[\Override]
+    #[Override]
     public static function group(): string
     {
         return 'general';
