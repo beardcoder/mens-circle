@@ -34,7 +34,6 @@ class HealthCheckFailedNotification extends Notification
      *
      * @return bool
      */
-    #[\Override]
     public function shouldSend(object $notifiable, string $channel): bool
     {
         if (! config('health.notifications.enabled')) {
@@ -42,7 +41,7 @@ class HealthCheckFailedNotification extends Notification
         }
 
         $throttleMinutes = config('health.notifications.throttle_notifications_for_minutes', 60);
-        assert(is_int($throttleMinutes));
+        \assert(\is_int($throttleMinutes));
 
         if ($throttleMinutes <= 0) {
             return true;
