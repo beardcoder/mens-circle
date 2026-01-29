@@ -144,7 +144,7 @@ test('throttling is independent per channel', function (): void {
     expect($notification->shouldSend($notifiable, 'slack'))->toBeFalse();
 });
 
-test('only one notification is sent when multiple concurrent shouldSend calls happen', function (): void {
+test('only one notification is sent when shouldSend is called multiple times rapidly', function (): void {
     Config::set('health.notifications.enabled', true);
     Config::set('health.notifications.throttle_notifications_for_minutes', 60);
 
@@ -158,8 +158,9 @@ test('only one notification is sent when multiple concurrent shouldSend calls ha
 
     $notifiable = new Notifiable();
 
-    // Simulate concurrent calls by creating multiple notification instances
-    // and calling shouldSend rapidly
+    // Call shouldSend multiple times rapidly to verify Cache::add() atomicity
+    // Note: These are sequential calls in a single thread, but Cache::add() ensures
+    // only the first call succeeds, protecting against the race condition
     $notification1 = new HealthCheckFailedNotification($results);
     $notification2 = new HealthCheckFailedNotification($results);
     $notification3 = new HealthCheckFailedNotification($results);
