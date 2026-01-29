@@ -68,9 +68,8 @@ test('notification is sent after throttle window expires', function (): void {
     // First notification should be sent
     expect($notification->shouldSend($notifiable, 'mail'))->toBeTrue();
 
-    // Simulate time passing (61 minutes)
-    $cacheKey = config('health.notifications.throttle_notifications_key') . 'mail';
-    Cache::put($cacheKey, now()->subMinutes(61), now()->addHour());
+    // Simulate time passing beyond throttle window (61 minutes)
+    $this->travel(61)->minutes();
 
     // Second notification after throttle window should be sent
     $secondNotification = new HealthCheckFailedNotification($results);
@@ -143,4 +142,33 @@ test('throttling is independent per channel', function (): void {
 
     // Second notification via slack should also be throttled
     expect($notification->shouldSend($notifiable, 'slack'))->toBeFalse();
+});
+
+test('only one notification is sent when multiple concurrent shouldSend calls happen', function (): void {
+    Config::set('health.notifications.enabled', true);
+    Config::set('health.notifications.throttle_notifications_for_minutes', 60);
+
+    Cache::flush();
+
+    $results = [
+        Result::make()
+            ->failed()
+            ->notificationMessage('Test check failed'),
+    ];
+
+    $notifiable = new Notifiable();
+
+    // Simulate concurrent calls by creating multiple notification instances
+    // and calling shouldSend rapidly
+    $notification1 = new HealthCheckFailedNotification($results);
+    $notification2 = new HealthCheckFailedNotification($results);
+    $notification3 = new HealthCheckFailedNotification($results);
+
+    $result1 = $notification1->shouldSend($notifiable, 'mail');
+    $result2 = $notification2->shouldSend($notifiable, 'mail');
+    $result3 = $notification3->shouldSend($notifiable, 'mail');
+
+    // Only one should return true due to Cache::add() atomic operation
+    $sentCount = collect([$result1, $result2, $result3])->filter(fn ($result) => $result === true)->count();
+    expect($sentCount)->toBe(1);
 });

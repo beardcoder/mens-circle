@@ -22,15 +22,21 @@ class HealthCheckFailedNotification extends Notification
     ) {
     }
 
+    /**
+     * @param object $notifiable
+     * @param string $channel
+     *
+     * @return bool
+     */
     public function shouldSend(object $notifiable, string $channel): bool
     {
         if (! config('health.notifications.enabled')) {
             return false;
         }
 
-        $throttleMinutes = config('health.notifications.throttle_notifications_for_minutes', 60);
+        $throttleMinutes = (int) config('health.notifications.throttle_notifications_for_minutes', 60);
 
-        if ($throttleMinutes === 0) {
+        if ($throttleMinutes <= 0) {
             return true;
         }
 
@@ -38,12 +44,11 @@ class HealthCheckFailedNotification extends Notification
         $lastNotificationSentAt = Cache::get($cacheKey);
 
         if ($lastNotificationSentAt === null) {
-            Cache::put($cacheKey, now(), now()->addMinutes($throttleMinutes));
-            return true;
+            return Cache::add($cacheKey, now(), $throttleMinutes * 60);
         }
 
         if ($lastNotificationSentAt->diffInMinutes(now()) >= $throttleMinutes) {
-            Cache::put($cacheKey, now(), now()->addMinutes($throttleMinutes));
+            Cache::put($cacheKey, now(), $throttleMinutes * 60);
             return true;
         }
 
