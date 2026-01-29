@@ -12,6 +12,7 @@ class EditRegistration extends EditRecord
 {
     protected static string $resource = RegistrationResource::class;
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [DeleteAction::make(), ];

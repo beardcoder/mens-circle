@@ -31,6 +31,7 @@ class Testimonial extends Model
 
     protected $fillable = ['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order', ];
 
+    #[\Override]
     protected function casts(): array
     {
         return [
@@ -50,6 +51,7 @@ class Testimonial extends Model
         return $query->where('is_published', true);
     }
 
+    #[\Override]
     protected static function booted(): void
     {
         static::addGlobalScope('order', function (Builder $builder): void {

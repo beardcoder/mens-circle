@@ -12,6 +12,7 @@ class ListParticipants extends ListRecords
 {
     protected static string $resource = ParticipantResource::class;
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [CreateAction::make(), ];

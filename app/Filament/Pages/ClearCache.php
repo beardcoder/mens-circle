@@ -26,6 +26,7 @@ class ClearCache extends Page
 
     protected static ?int $navigationSort = 100;
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [

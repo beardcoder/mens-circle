@@ -34,6 +34,7 @@ class HealthCheckFailedNotification extends Notification
      *
      * @return bool
      */
+    #[\Override]
     public function shouldSend(object $notifiable, string $channel): bool
     {
         if (! config('health.notifications.enabled')) {

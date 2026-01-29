@@ -12,6 +12,7 @@ class EditParticipant extends EditRecord
 {
     protected static string $resource = ParticipantResource::class;
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [DeleteAction::make(), ];

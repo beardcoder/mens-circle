@@ -103,6 +103,7 @@ class Registration extends Model
         return static::query()->registered()->count();
     }
 
+    #[\Override]
     protected function casts(): array
     {
         return [

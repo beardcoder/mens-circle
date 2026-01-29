@@ -12,6 +12,7 @@ class EditNewsletterSubscription extends EditRecord
 {
     protected static string $resource = NewsletterSubscriptionResource::class;
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [DeleteAction::make(), ];

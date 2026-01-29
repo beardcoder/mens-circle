@@ -11,6 +11,7 @@ use Throwable;
 
 class SevenIoHealthCheck extends Check
 {
+    #[\Override]
     public function run(): Result
     {
         $result = Result::make();

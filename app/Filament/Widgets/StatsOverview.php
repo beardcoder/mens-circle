@@ -12,6 +12,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverview extends StatsOverviewWidget
 {
+    #[\Override]
     protected function getStats(): array
     {
         $nextEvent = Event::nextEvent();
@@ -35,7 +36,7 @@ class StatsOverview extends StatsOverviewWidget
             Stat::make('Verfügbare Plätze', $nextEvent instanceof Event ? $nextEvent->availableSpots : 0)
                 ->description($this->getNextEventDescription($nextEvent))
                 ->descriptionIcon('heroicon-o-ticket')
-                ->color(fn(): string => $this->getAvailableSpotsColor()),
+                ->color('danger'),
         ];
     }
 
@@ -44,10 +45,5 @@ class StatsOverview extends StatsOverviewWidget
         return $event instanceof Event
             ? 'Nächstes Event: ' . $event->event_date->format('d.m.Y')
             : 'Kein Event geplant';
-    }
-
-    private function getAvailableSpotsColor(): string
-    {
-        return 'danger';
     }
 }

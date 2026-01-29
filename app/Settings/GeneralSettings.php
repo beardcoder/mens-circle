@@ -29,6 +29,7 @@ class GeneralSettings extends Settings
 
     public int $event_default_max_participants;
 
+    #[\Override]
     public static function group(): string
     {
         return 'general';

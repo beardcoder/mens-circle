@@ -39,6 +39,7 @@ class Page extends Model implements HasMedia
 
     protected $fillable = ['title', 'slug', 'meta', 'is_published', 'published_at', ];
 
+    #[\Override]
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()->generateSlugsFrom('title')->saveSlugsTo('slug');
@@ -52,12 +53,14 @@ class Page extends Model implements HasMedia
         return $this->hasMany(ContentBlock::class)->orderBy('order');
     }
 
+    #[\Override]
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('page_blocks')
             ->useDisk('public');
     }
 
+    #[\Override]
     protected function casts(): array
     {
         return [

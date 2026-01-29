@@ -24,6 +24,7 @@ class Newsletter extends Model
 
     protected $fillable = ['subject', 'content', 'sent_at', 'recipient_count', 'status', ];
 
+    #[\Override]
     protected function casts(): array
     {
         return [
