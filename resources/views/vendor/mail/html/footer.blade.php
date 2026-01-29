@@ -13,22 +13,22 @@
 @php
     $socialType = isset($link['type']) && is_string($link['type'])
         ? \App\Enums\SocialLinkType::tryFrom($link['type'])
-        : \App\Enums\SocialLinkType::OTHER;
+        : \App\Enums\SocialLinkType::Other;
 
     $href = $link['value'];
     if (!str_starts_with($href, 'mailto:') && !str_starts_with($href, 'tel:')) {
         $isEmail = filter_var($href, FILTER_VALIDATE_EMAIL) !== false;
         $isPhone = preg_match('/^\+?[0-9\s\-\(\)]+$/', $href) === 1;
 
-        if ($socialType === \App\Enums\SocialLinkType::EMAIL || $isEmail) {
+        if ($socialType === \App\Enums\SocialLinkType::Email || $isEmail) {
             $href = 'mailto:' . $href;
-        } elseif ($socialType === \App\Enums\SocialLinkType::PHONE || $isPhone) {
+        } elseif ($socialType === \App\Enums\SocialLinkType::Phone || $isPhone) {
             $href = 'tel:' . str_replace([' ', '-', '(', ')'], '', $href);
         }
     }
 
     $title = $link['label'] ?? $socialType?->getLabel() ?? 'Link';
-    $iconSvg = $socialType?->getIcon(24) ?? \App\Enums\SocialLinkType::OTHER->getIcon(24);
+    $iconSvg = $socialType?->getIcon(24) ?? \App\Enums\SocialLinkType::Other->getIcon(24);
 @endphp
 <td style="padding: 0 8px;">
 <a href="{{ $href }}" title="{{ $title }}" style="display: inline-block; width: 24px; height: 24px; color: #7a6248;">
