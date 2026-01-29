@@ -170,6 +170,6 @@ test('only one notification is sent when shouldSend is called multiple times rap
     $result3 = $notification3->shouldSend($notifiable, 'mail');
 
     // Only one should return true due to Cache::add() atomic operation
-    $sentCount = collect([$result1, $result2, $result3])->filter(fn ($result) => $result === true)->count();
+    $sentCount = collect([$result1, $result2, $result3])->filter(fn($result) => $result === true)->count();
     expect($sentCount)->toBe(1);
 });

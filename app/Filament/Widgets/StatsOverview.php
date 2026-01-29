@@ -35,7 +35,7 @@ class StatsOverview extends StatsOverviewWidget
             Stat::make('Verfügbare Plätze', $nextEvent instanceof Event ? $nextEvent->availableSpots : 0)
                 ->description($this->getNextEventDescription($nextEvent))
                 ->descriptionIcon('heroicon-o-ticket')
-                ->color(fn (): string => $this->getAvailableSpotsColor()),
+                ->color(fn(): string => $this->getAvailableSpotsColor()),
         ];
     }
 

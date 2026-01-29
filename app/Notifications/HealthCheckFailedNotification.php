@@ -20,8 +20,7 @@ class HealthCheckFailedNotification extends Notification
      */
     public function __construct(
         public array $results,
-    ) {
-    }
+    ) {}
 
     /**
      * Determine if the notification should be sent based on throttle settings.
@@ -87,10 +86,10 @@ class HealthCheckFailedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $failedChecks = collect($this->results)
-            ->filter(fn (Result $result): bool => $result->status->value === 'failed');
+            ->filter(fn(Result $result): bool => $result->status->value === 'failed');
 
         $warningChecks = collect($this->results)
-            ->filter(fn (Result $result): bool => $result->status->value === 'warning');
+            ->filter(fn(Result $result): bool => $result->status->value === 'warning');
 
         /** @var string $appName */
         $appName = config('app.name', 'Application');

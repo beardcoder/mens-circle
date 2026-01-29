@@ -35,7 +35,7 @@ class PageFactory extends Factory
 
     public function published(): static
     {
-        return $this->state(fn (array $attributes): array => [
+        return $this->state(fn(array $attributes): array => [
             'is_published' => true,
             'published_at' => now(),
         ]);
@@ -43,7 +43,7 @@ class PageFactory extends Factory
 
     public function unpublished(): static
     {
-        return $this->state(fn (array $attributes): array => [
+        return $this->state(fn(array $attributes): array => [
             'is_published' => false,
             'published_at' => null,
         ]);

@@ -38,7 +38,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht den Anwendungs-Cache.',
                 successTitle: 'Anwendungs-Cache gelöscht',
                 successBody: 'Der Anwendungs-Cache wurde erfolgreich gelöscht.',
-                action: fn () => Artisan::call('cache:clear'),
+                action: fn() => Artisan::call('cache:clear'),
             ),
 
             $this->makeCacheAction(
@@ -50,7 +50,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht den Response-Cache (gecachte HTTP-Antworten). Die Seiten werden beim nächsten Aufruf neu generiert.',
                 successTitle: 'Response-Cache gelöscht',
                 successBody: 'Der Response-Cache wurde erfolgreich gelöscht.',
-                action: fn () => ResponseCache::clear(),
+                action: fn() => ResponseCache::clear(),
             ),
 
             $this->makeCacheAction(
@@ -62,7 +62,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht den Konfigurations-Cache.',
                 successTitle: 'Konfigurations-Cache gelöscht',
                 successBody: 'Der Konfigurations-Cache wurde erfolgreich gelöscht.',
-                action: fn () => Artisan::call('config:clear'),
+                action: fn() => Artisan::call('config:clear'),
             ),
 
             $this->makeCacheAction(
@@ -125,7 +125,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies führt den Laravel Optimize-Befehl aus und cached Konfiguration, Routen, Views und Events für maximale Performance.',
                 successTitle: 'Laravel optimiert',
                 successBody: 'Die Anwendung wurde erfolgreich optimiert. Konfiguration, Routen, Views und Events wurden gecached.',
-                action: fn () => Artisan::call('optimize'),
+                action: fn() => Artisan::call('optimize'),
                 submitLabel: 'Jetzt optimieren',
             ),
 
@@ -138,7 +138,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht alle durch Laravel Optimize erstellten Caches. Nützlich während der Entwicklung.',
                 successTitle: 'Optimierung zurückgesetzt',
                 successBody: 'Alle Optimierungs-Caches wurden gelöscht.',
-                action: fn () => Artisan::call('optimize:clear'),
+                action: fn() => Artisan::call('optimize:clear'),
                 submitLabel: 'Zurücksetzen',
             ),
         ];

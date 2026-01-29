@@ -68,7 +68,7 @@ class Event extends Model implements HasMedia
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom(fn ($model) => $model->event_date->format('Y-m-d'))
+            ->generateSlugsFrom(fn($model) => $model->event_date->format('Y-m-d'))
             ->saveSlugsTo('slug');
     }
 
@@ -102,7 +102,7 @@ class Event extends Model implements HasMedia
     protected function activeRegistrationsCount(): Attribute
     {
         return Attribute::make(
-            get: fn (): int => (int) ($this->active_registrations_count ?? $this->activeRegistrations()->count()),
+            get: fn(): int => (int) ($this->active_registrations_count ?? $this->activeRegistrations()->count()),
         );
     }
 
@@ -112,7 +112,7 @@ class Event extends Model implements HasMedia
     protected function availableSpots(): Attribute
     {
         return Attribute::make(
-            get: fn (): int => max(0, $this->max_participants - $this->activeRegistrationsCount),
+            get: fn(): int => max(0, $this->max_participants - $this->activeRegistrationsCount),
         );
     }
 
@@ -121,7 +121,7 @@ class Event extends Model implements HasMedia
      */
     protected function isFull(): Attribute
     {
-        return Attribute::make(get: fn (): bool => $this->availableSpots <= 0);
+        return Attribute::make(get: fn(): bool => $this->availableSpots <= 0);
     }
 
     /**
@@ -129,7 +129,7 @@ class Event extends Model implements HasMedia
      */
     protected function isPast(): Attribute
     {
-        return Attribute::make(get: fn (): bool => $this->event_date->endOfDay()->isPast());
+        return Attribute::make(get: fn(): bool => $this->event_date->endOfDay()->isPast());
     }
 
     /**

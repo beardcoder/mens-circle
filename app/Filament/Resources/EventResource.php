@@ -63,7 +63,7 @@ class EventResource extends Resource
                             ->maxLength(255)
                             ->placeholder('z.B. Männerabend im Januar')
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', null)),
+                            ->afterStateUpdated(fn($state, callable $set) => $set('slug', null)),
                         TextInput::make('slug')
                             ->label('URL-Slug')
                             ->maxLength(255)
@@ -176,14 +176,14 @@ class EventResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->withCount('activeRegistrations'))
+            ->modifyQueryUsing(fn(Builder $query) => $query->withCount('activeRegistrations'))
             ->columns([
                 TextColumn::make('title')
                     ->label('Titel')
                     ->searchable()
                     ->sortable()
                     ->description(
-                        fn ($record): ?string => $record->description ? str($record->description)->limit(
+                        fn($record): ?string => $record->description ? str($record->description)->limit(
                             50,
                         )->toString() : null,
                     )
@@ -193,10 +193,10 @@ class EventResource extends Resource
                     ->dateTime('d.m.Y')
                     ->sortable()
                     ->description(
-                        fn ($record): string => \sprintf('%s - %s', $record->start_time->format('H:i'), $record->end_time->format('H:i')),
+                        fn($record): string => \sprintf('%s - %s', $record->start_time->format('H:i'), $record->end_time->format('H:i')),
                     )
                     ->color(
-                        fn ($record): string => $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary'),
+                        fn($record): string => $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary'),
                     ),
                 TextColumn::make('location')
                     ->label('Ort')
@@ -205,11 +205,11 @@ class EventResource extends Resource
                 TextColumn::make('active_registrations_count')
                     ->label('Anmeldungen')
                     ->formatStateUsing(
-                        fn ($record): string => \sprintf('%s / %s', $record->active_registrations_count, $record->max_participants),
+                        fn($record): string => \sprintf('%s / %s', $record->active_registrations_count, $record->max_participants),
                     )
                     ->badge()
                     ->color(
-                        fn ($record): string => $record->isFull ? 'danger' : ($record->active_registrations_count > ($record->max_participants * 0.8) ? 'warning' : 'success'),
+                        fn($record): string => $record->isFull ? 'danger' : ($record->active_registrations_count > ($record->max_participants * 0.8) ? 'warning' : 'success'),
                     )
                     ->sortable(),
                 IconColumn::make('is_published')
@@ -237,17 +237,17 @@ class EventResource extends Resource
                     ]),
                 Filter::make('upcoming')
                     ->label('Kommende Events')
-                    ->query(fn (Builder $query): Builder => $query->where('event_date', '>=', now()))
+                    ->query(fn(Builder $query): Builder => $query->where('event_date', '>=', now()))
                     ->toggle()
                     ->default(),
                 Filter::make('past')
                     ->label('Vergangene Events')
-                    ->query(fn (Builder $query): Builder => $query->where('event_date', '<', now()))
+                    ->query(fn(Builder $query): Builder => $query->where('event_date', '<', now()))
                     ->toggle(),
                 Filter::make('full')
                     ->label('Ausgebuchte Events')
                     ->query(
-                        fn (Builder $query): Builder => $query->whereRaw(
+                        fn(Builder $query): Builder => $query->whereRaw(
                             'max_participants <= (
                                 SELECT COUNT(*)
                                 FROM registrations
