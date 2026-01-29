@@ -45,6 +45,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
      *
      * @return array<string, string>
      */
+    #[\Override]
     protected function casts(): array
     {
         return [
@@ -53,11 +54,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         ];
     }
 
+    #[\Override]
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
     }
 
+    #[\Override]
     public function getFilamentAvatarUrl(): ?string
     {
         return null;

@@ -11,177 +11,177 @@ enum Heroicon: string
     use HasEnumOptions;
 
     // Communication & Social
-    case ENVELOPE = 'envelope';
-    case PHONE = 'phone';
-    case CHAT_BUBBLE_LEFT_RIGHT = 'chat-bubble-left-right';
-    case AT_SYMBOL = 'at-symbol';
+    case Envelope = 'envelope';
+    case Phone = 'phone';
+    case ChatBubbleLeftRight = 'chat-bubble-left-right';
+    case AtSymbol = 'at-symbol';
 
     // Social Media & Web
-    case GLOBE_ALT = 'globe-alt';
-    case LINK = 'link';
-    case SHARE = 'share';
+    case GlobeAlt = 'globe-alt';
+    case Link = 'link';
+    case Share = 'share';
 
     // Location & Navigation
-    case MAP_PIN = 'map-pin';
-    case MAP = 'map';
-    case HOME = 'home';
-    case BUILDING_OFFICE = 'building-office';
+    case MapPin = 'map-pin';
+    case Map = 'map';
+    case Home = 'home';
+    case BuildingOffice = 'building-office';
 
     // Users & People
-    case USER = 'user';
-    case USER_GROUP = 'user-group';
-    case USERS = 'users';
-    case HEART = 'heart';
+    case User = 'user';
+    case UserGroup = 'user-group';
+    case Users = 'users';
+    case Heart = 'heart';
 
     // Calendar & Time
-    case CALENDAR = 'calendar';
-    case CALENDAR_DAYS = 'calendar-days';
-    case CLOCK = 'clock';
+    case Calendar = 'calendar';
+    case CalendarDays = 'calendar-days';
+    case Clock = 'clock';
 
     // Information & Support
-    case INFORMATION_CIRCLE = 'information-circle';
-    case QUESTION_MARK_CIRCLE = 'question-mark-circle';
-    case EXCLAMATION_CIRCLE = 'exclamation-circle';
-    case LIGHT_BULB = 'light-bulb';
+    case InformationCircle = 'information-circle';
+    case QuestionMarkCircle = 'question-mark-circle';
+    case ExclamationCircle = 'exclamation-circle';
+    case LightBulb = 'light-bulb';
 
     // Actions
-    case ARROW_RIGHT = 'arrow-right';
-    case ARROW_LEFT = 'arrow-left';
-    case ARROW_UP = 'arrow-up';
-    case ARROW_DOWN = 'arrow-down';
-    case CHEVRON_RIGHT = 'chevron-right';
-    case CHEVRON_LEFT = 'chevron-left';
-    case CHEVRON_UP = 'chevron-up';
-    case CHEVRON_DOWN = 'chevron-down';
-    case PLUS = 'plus';
-    case MINUS = 'minus';
-    case X_MARK = 'x-mark';
-    case CHECK = 'check';
-    case CHECK_CIRCLE = 'check-circle';
+    case ArrowRight = 'arrow-right';
+    case ArrowLeft = 'arrow-left';
+    case ArrowUp = 'arrow-up';
+    case ArrowDown = 'arrow-down';
+    case ChevronRight = 'chevron-right';
+    case ChevronLeft = 'chevron-left';
+    case ChevronUp = 'chevron-up';
+    case ChevronDown = 'chevron-down';
+    case Plus = 'plus';
+    case Minus = 'minus';
+    case XMark = 'x-mark';
+    case Check = 'check';
+    case CheckCircle = 'check-circle';
 
     // Media & Content
-    case PHOTO = 'photo';
-    case CAMERA = 'camera';
-    case VIDEO_CAMERA = 'video-camera';
-    case DOCUMENT = 'document';
-    case NEWSPAPER = 'newspaper';
-    case BOOK_OPEN = 'book-open';
+    case Photo = 'photo';
+    case Camera = 'camera';
+    case VideoCamera = 'video-camera';
+    case Document = 'document';
+    case Newspaper = 'newspaper';
+    case BookOpen = 'book-open';
 
     // Commerce & Business
-    case SHOPPING_BAG = 'shopping-bag';
-    case SHOPPING_CART = 'shopping-cart';
-    case CREDIT_CARD = 'credit-card';
-    case CURRENCY_EURO = 'currency-euro';
-    case BANKNOTES = 'banknotes';
+    case ShoppingBag = 'shopping-bag';
+    case ShoppingCart = 'shopping-cart';
+    case CreditCard = 'credit-card';
+    case CurrencyEuro = 'currency-euro';
+    case Banknotes = 'banknotes';
 
     // Settings & Tools
-    case COG_6_TOOTH = 'cog-6-tooth';
-    case WRENCH = 'wrench';
-    case ADJUSTMENTS_HORIZONTAL = 'adjustments-horizontal';
+    case Cog6Tooth = 'cog-6-tooth';
+    case Wrench = 'wrench';
+    case AdjustmentsHorizontal = 'adjustments-horizontal';
 
     // Security
-    case LOCK_CLOSED = 'lock-closed';
-    case LOCK_OPEN = 'lock-open';
-    case SHIELD_CHECK = 'shield-check';
-    case KEY = 'key';
+    case LockClosed = 'lock-closed';
+    case LockOpen = 'lock-open';
+    case ShieldCheck = 'shield-check';
+    case Key = 'key';
 
     // Other
-    case STAR = 'star';
-    case SPARKLES = 'sparkles';
-    case FIRE = 'fire';
-    case MEGAPHONE = 'megaphone';
-    case BELL = 'bell';
-    case FLAG = 'flag';
-    case TAG = 'tag';
-    case TICKET = 'ticket';
+    case Star = 'star';
+    case Sparkles = 'sparkles';
+    case Fire = 'fire';
+    case Megaphone = 'megaphone';
+    case Bell = 'bell';
+    case Flag = 'flag';
+    case Tag = 'tag';
+    case Ticket = 'ticket';
 
     public function getLabel(): string
     {
         return match ($this) {
             // Communication & Social
-            self::ENVELOPE => 'E-Mail (Umschlag)',
-            self::PHONE => 'Telefon',
-            self::CHAT_BUBBLE_LEFT_RIGHT => 'Chat',
-            self::AT_SYMBOL => '@-Symbol',
+            self::Envelope => 'E-Mail (Umschlag)',
+            self::Phone => 'Telefon',
+            self::ChatBubbleLeftRight => 'Chat',
+            self::AtSymbol => '@-Symbol',
 
             // Social Media & Web
-            self::GLOBE_ALT => 'Weltkugel',
-            self::LINK => 'Link',
-            self::SHARE => 'Teilen',
+            self::GlobeAlt => 'Weltkugel',
+            self::Link => 'Link',
+            self::Share => 'Teilen',
 
             // Location & Navigation
-            self::MAP_PIN => 'Standort-Pin',
-            self::MAP => 'Karte',
-            self::HOME => 'Haus',
-            self::BUILDING_OFFICE => 'Gebäude',
+            self::MapPin => 'Standort-Pin',
+            self::Map => 'Karte',
+            self::Home => 'Haus',
+            self::BuildingOffice => 'Gebäude',
 
             // Users & People
-            self::USER => 'Benutzer',
-            self::USER_GROUP => 'Benutzergruppe',
-            self::USERS => 'Benutzer (Mehrere)',
-            self::HEART => 'Herz',
+            self::User => 'Benutzer',
+            self::UserGroup => 'Benutzergruppe',
+            self::Users => 'Benutzer (Mehrere)',
+            self::Heart => 'Herz',
 
             // Calendar & Time
-            self::CALENDAR => 'Kalender',
-            self::CALENDAR_DAYS => 'Kalender (Tage)',
-            self::CLOCK => 'Uhr',
+            self::Calendar => 'Kalender',
+            self::CalendarDays => 'Kalender (Tage)',
+            self::Clock => 'Uhr',
 
             // Information & Support
-            self::INFORMATION_CIRCLE => 'Information',
-            self::QUESTION_MARK_CIRCLE => 'Frage',
-            self::EXCLAMATION_CIRCLE => 'Warnung',
-            self::LIGHT_BULB => 'Glühbirne',
+            self::InformationCircle => 'Information',
+            self::QuestionMarkCircle => 'Frage',
+            self::ExclamationCircle => 'Warnung',
+            self::LightBulb => 'Glühbirne',
 
             // Actions
-            self::ARROW_RIGHT => 'Pfeil Rechts',
-            self::ARROW_LEFT => 'Pfeil Links',
-            self::ARROW_UP => 'Pfeil Oben',
-            self::ARROW_DOWN => 'Pfeil Unten',
-            self::CHEVRON_RIGHT => 'Chevron Rechts',
-            self::CHEVRON_LEFT => 'Chevron Links',
-            self::CHEVRON_UP => 'Chevron Oben',
-            self::CHEVRON_DOWN => 'Chevron Unten',
-            self::PLUS => 'Plus',
-            self::MINUS => 'Minus',
-            self::X_MARK => 'X',
-            self::CHECK => 'Häkchen',
-            self::CHECK_CIRCLE => 'Häkchen (Kreis)',
+            self::ArrowRight => 'Pfeil Rechts',
+            self::ArrowLeft => 'Pfeil Links',
+            self::ArrowUp => 'Pfeil Oben',
+            self::ArrowDown => 'Pfeil Unten',
+            self::ChevronRight => 'Chevron Rechts',
+            self::ChevronLeft => 'Chevron Links',
+            self::ChevronUp => 'Chevron Oben',
+            self::ChevronDown => 'Chevron Unten',
+            self::Plus => 'Plus',
+            self::Minus => 'Minus',
+            self::XMark => 'X',
+            self::Check => 'Häkchen',
+            self::CheckCircle => 'Häkchen (Kreis)',
 
             // Media & Content
-            self::PHOTO => 'Foto',
-            self::CAMERA => 'Kamera',
-            self::VIDEO_CAMERA => 'Videokamera',
-            self::DOCUMENT => 'Dokument',
-            self::NEWSPAPER => 'Zeitung',
-            self::BOOK_OPEN => 'Buch (Offen)',
+            self::Photo => 'Foto',
+            self::Camera => 'Kamera',
+            self::VideoCamera => 'Videokamera',
+            self::Document => 'Dokument',
+            self::Newspaper => 'Zeitung',
+            self::BookOpen => 'Buch (Offen)',
 
             // Commerce & Business
-            self::SHOPPING_BAG => 'Einkaufstasche',
-            self::SHOPPING_CART => 'Einkaufswagen',
-            self::CREDIT_CARD => 'Kreditkarte',
-            self::CURRENCY_EURO => 'Euro',
-            self::BANKNOTES => 'Geldscheine',
+            self::ShoppingBag => 'Einkaufstasche',
+            self::ShoppingCart => 'Einkaufswagen',
+            self::CreditCard => 'Kreditkarte',
+            self::CurrencyEuro => 'Euro',
+            self::Banknotes => 'Geldscheine',
 
             // Settings & Tools
-            self::COG_6_TOOTH => 'Zahnrad',
-            self::WRENCH => 'Schraubenschlüssel',
-            self::ADJUSTMENTS_HORIZONTAL => 'Einstellungen',
+            self::Cog6Tooth => 'Zahnrad',
+            self::Wrench => 'Schraubenschlüssel',
+            self::AdjustmentsHorizontal => 'Einstellungen',
 
             // Security
-            self::LOCK_CLOSED => 'Schloss (Geschlossen)',
-            self::LOCK_OPEN => 'Schloss (Offen)',
-            self::SHIELD_CHECK => 'Schild (Häkchen)',
-            self::KEY => 'Schlüssel',
+            self::LockClosed => 'Schloss (Geschlossen)',
+            self::LockOpen => 'Schloss (Offen)',
+            self::ShieldCheck => 'Schild (Häkchen)',
+            self::Key => 'Schlüssel',
 
             // Other
-            self::STAR => 'Stern',
-            self::SPARKLES => 'Funken',
-            self::FIRE => 'Feuer',
-            self::MEGAPHONE => 'Megaphon',
-            self::BELL => 'Glocke',
-            self::FLAG => 'Flagge',
-            self::TAG => 'Tag',
-            self::TICKET => 'Ticket',
+            self::Star => 'Stern',
+            self::Sparkles => 'Funken',
+            self::Fire => 'Feuer',
+            self::Megaphone => 'Megaphon',
+            self::Bell => 'Glocke',
+            self::Flag => 'Flagge',
+            self::Tag => 'Tag',
+            self::Ticket => 'Ticket',
         };
     }
 

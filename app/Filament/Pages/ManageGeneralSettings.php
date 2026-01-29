@@ -27,6 +27,7 @@ class ManageGeneralSettings extends SettingsPage
 
     protected static ?int $navigationSort = 90;
 
+    #[\Override]
     public function form(Schema $schema): Schema
     {
         return $schema

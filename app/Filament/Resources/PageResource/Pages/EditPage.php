@@ -21,6 +21,7 @@ class EditPage extends EditRecord
 {
     protected static string $resource = PageResource::class;
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [DeleteAction::make(), ForceDeleteAction::make(), RestoreAction::make(), ];

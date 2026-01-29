@@ -30,6 +30,7 @@ class NewsletterSubscription extends Model
 
     protected $fillable = ['participant_id', 'token', 'subscribed_at', 'confirmed_at', 'unsubscribed_at', ];
 
+    #[\Override]
     protected static function booted(): void
     {
         static::creating(function (self $subscription): void {
@@ -82,6 +83,7 @@ class NewsletterSubscription extends Model
         return static::query()->active()->count();
     }
 
+    #[\Override]
     protected function casts(): array
     {
         return [

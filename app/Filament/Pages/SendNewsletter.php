@@ -78,6 +78,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
             ->statePath('data');
     }
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [

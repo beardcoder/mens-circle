@@ -65,6 +65,7 @@ class Event extends Model implements HasMedia
         'is_published',
     ];
 
+    #[\Override]
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
@@ -72,6 +73,7 @@ class Event extends Model implements HasMedia
             ->saveSlugsTo('slug');
     }
 
+    #[\Override]
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('event_image')
@@ -198,6 +200,7 @@ class Event extends Model implements HasMedia
         app(EventNotificationService::class)->sendEventReminder($this, $registration);
     }
 
+    #[\Override]
     protected function casts(): array
     {
         return [

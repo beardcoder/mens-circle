@@ -12,6 +12,7 @@ class ListRegistrations extends ListRecords
 {
     protected static string $resource = RegistrationResource::class;
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [CreateAction::make(), ];

@@ -57,12 +57,14 @@ class ContentBlock extends Model implements HasMedia
             );
     }
 
+    #[\Override]
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('page_blocks')
             ->useDisk('public');
     }
 
+    #[\Override]
     protected function casts(): array
     {
         return [
