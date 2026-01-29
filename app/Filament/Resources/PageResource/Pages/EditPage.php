@@ -12,6 +12,7 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -21,7 +22,7 @@ class EditPage extends EditRecord
 {
     protected static string $resource = PageResource::class;
 
-    #[\Override]
+    #[Override]
     protected function getHeaderActions(): array
     {
         return [DeleteAction::make(), ForceDeleteAction::make(), RestoreAction::make(), ];

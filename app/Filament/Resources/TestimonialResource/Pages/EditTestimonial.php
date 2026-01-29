@@ -9,12 +9,13 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
+use Override;
 
 class EditTestimonial extends EditRecord
 {
     protected static string $resource = TestimonialResource::class;
 
-    #[\Override]
+    #[Override]
     protected function getHeaderActions(): array
     {
         return [DeleteAction::make(), ForceDeleteAction::make(), RestoreAction::make(), ];

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @property string $quote
@@ -31,7 +32,7 @@ class Testimonial extends Model
 
     protected $fillable = ['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order', ];
 
-    #[\Override]
+    #[Override]
     protected function casts(): array
     {
         return [
@@ -51,7 +52,7 @@ class Testimonial extends Model
         return $query->where('is_published', true);
     }
 
-    #[\Override]
+    #[Override]
     protected static function booted(): void
     {
         static::addGlobalScope('order', function (Builder $builder): void {

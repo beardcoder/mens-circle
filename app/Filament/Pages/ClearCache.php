@@ -12,6 +12,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
+use Override;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
 class ClearCache extends Page
@@ -26,7 +27,7 @@ class ClearCache extends Page
 
     protected static ?int $navigationSort = 100;
 
-    #[\Override]
+    #[Override]
     protected function getHeaderActions(): array
     {
         return [

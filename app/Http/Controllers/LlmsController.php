@@ -306,7 +306,11 @@ class LlmsController extends Controller
         $lines[] = '';
 
         foreach ($faqBlocks as $faq) {
-            if (empty($faq['items']) || !\is_array($faq['items'])) {
+            if (empty($faq['items'])) {
+                continue;
+            }
+
+            if (!\is_array($faq['items'])) {
                 continue;
             }
 
@@ -503,7 +507,15 @@ class LlmsController extends Controller
 
                 if (!empty($data['values']) && \is_array($data['values'])) {
                     foreach ($data['values'] as $value) {
-                        if (!\is_array($value) || empty($value['title']) || !\is_string($value['title'])) {
+                        if (!\is_array($value)) {
+                            continue;
+                        }
+
+                        if (empty($value['title'])) {
+                            continue;
+                        }
+
+                        if (!\is_string($value['title'])) {
                             continue;
                         }
 
@@ -540,7 +552,15 @@ class LlmsController extends Controller
                 $items = $data['items'] ?? $data['steps'] ?? [];
                 if (!empty($items) && \is_array($items)) {
                     foreach ($items as $item) {
-                        if (!\is_array($item) || empty($item['title']) || !\is_string($item['title'])) {
+                        if (!\is_array($item)) {
+                            continue;
+                        }
+
+                        if (empty($item['title'])) {
+                            continue;
+                        }
+
+                        if (!\is_string($item['title'])) {
                             continue;
                         }
 

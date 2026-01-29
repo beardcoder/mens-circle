@@ -14,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Override;
 
 class ManageGeneralSettings extends SettingsPage
 {
@@ -27,7 +28,7 @@ class ManageGeneralSettings extends SettingsPage
 
     protected static ?int $navigationSort = 90;
 
-    #[\Override]
+    #[Override]
     public function form(Schema $schema): Schema
     {
         return $schema

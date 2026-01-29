@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Checks;
 
 use Illuminate\Support\Facades\Http;
+use Override;
 use Spatie\Health\Checks\Check;
 use Spatie\Health\Checks\Result;
 use Throwable;
 
 class SevenIoHealthCheck extends Check
 {
-    #[\Override]
+    #[Override]
     public function run(): Result
     {
         $result = Result::make();

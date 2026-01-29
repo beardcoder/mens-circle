@@ -7,13 +7,15 @@ namespace App\Checks;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
+use Override;
+use RuntimeException;
 use Spatie\Health\Checks\Check;
 use Spatie\Health\Checks\Result;
 use Throwable;
 
 class QueueHealthCheck extends Check
 {
-    #[\Override]
+    #[Override]
     public function run(): Result
     {
         $result = Result::make();
@@ -38,12 +40,12 @@ class QueueHealthCheck extends Check
         try {
             // For database queue, check the jobs table exists
             if ($connection === 'database') {
-                $this->checkDatabaseQueue($result);
+                $this->checkDatabaseQueue();
             }
 
             // For redis queue, check the connection
             if ($connection === 'redis') {
-                $this->checkRedisQueue($result);
+                $this->checkRedisQueue();
             }
 
             // Try to get queue size (works for most drivers)
@@ -67,24 +69,23 @@ class QueueHealthCheck extends Check
     /**
      * Check database queue (works with PostgreSQL, MySQL, SQLite, etc.)
      */
-    private function checkDatabaseQueue(Result $result): void
+    private function checkDatabaseQueue(): void
     {
         // Check if jobs table exists
         if (! DB::getSchemaBuilder()->hasTable('jobs')) {
-            throw new \RuntimeException('Queue-Tabelle "jobs" existiert nicht');
+            throw new RuntimeException('Queue-Tabelle "jobs" existiert nicht');
         }
 
         // Check if failed_jobs table exists
         if (! DB::getSchemaBuilder()->hasTable('failed_jobs')) {
-            throw new \RuntimeException('Queue-Tabelle "failed_jobs" existiert nicht');
+            throw new RuntimeException('Queue-Tabelle "failed_jobs" existiert nicht');
         }
     }
 
-    private function checkRedisQueue(Result $result): void
+    private function checkRedisQueue(): void
     {
         /** @var string $redisConnection */
         $redisConnection = Config::get('queue.connections.redis.connection', 'default');
-
         // Try to ping redis
         $redis = app('redis')->connection($redisConnection);
         $redis->ping();

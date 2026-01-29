@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @property string $name
@@ -45,7 +46,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
      *
      * @return array<string, string>
      */
-    #[\Override]
+    #[Override]
     protected function casts(): array
     {
         return [
@@ -54,13 +55,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         ];
     }
 
-    #[\Override]
+    #[Override]
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
     }
 
-    #[\Override]
+    #[Override]
     public function getFilamentAvatarUrl(): ?string
     {
         return null;

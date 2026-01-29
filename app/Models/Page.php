@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Override;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
@@ -39,7 +40,7 @@ class Page extends Model implements HasMedia
 
     protected $fillable = ['title', 'slug', 'meta', 'is_published', 'published_at', ];
 
-    #[\Override]
+    #[Override]
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()->generateSlugsFrom('title')->saveSlugsTo('slug');
@@ -53,14 +54,14 @@ class Page extends Model implements HasMedia
         return $this->hasMany(ContentBlock::class)->orderBy('order');
     }
 
-    #[\Override]
+    #[Override]
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('page_blocks')
             ->useDisk('public');
     }
 
-    #[\Override]
+    #[Override]
     protected function casts(): array
     {
         return [
