@@ -38,7 +38,7 @@ class MailHealthCheck extends Check
             /** @var string|null $host */
             $host = Config::get('mail.mailers.smtp.host');
             /** @var int $port */
-            $port = Config::get('mail.mailers.smtp.port', 587);
+            $port = (int) Config::get('mail.mailers.smtp.port', 587);
             /** @var string $encryption */
             $encryption = Config::get('mail.mailers.smtp.encryption', 'tls');
             /** @var string|null $username */
