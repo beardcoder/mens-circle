@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Checks\MailHealthCheck;
+use App\Checks\QueueHealthCheck;
 use App\Checks\SevenIoHealthCheck;
 use App\Models\Event;
 use App\Settings\GeneralSettings;
@@ -24,7 +25,9 @@ use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register(): void {}
+    public function register(): void
+    {
+    }
 
     public function boot(): void
     {
@@ -57,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
                     'hasNextEvent' => cache()->remember(
                         'has_next_event',
                         300,
-                        fn() => Event::published()->upcoming()->exists(),
+                        fn () => Event::published()->upcoming()->exists(),
                     ),
                 ]);
             } catch (Throwable) {
@@ -82,6 +85,10 @@ class AppServiceProvider extends ServiceProvider
             ScheduleCheck::new()
                 ->heartbeatMaxAgeInMinutes(2),
 
+            // Queue Check - wichtig für asynchrone Jobs
+            QueueHealthCheck::new()
+                ->name('Queue System'),
+
             // Application Checks
             OptimizedAppCheck::new(),
             DebugModeCheck::new(),
@@ -89,7 +96,7 @@ class AppServiceProvider extends ServiceProvider
 
             // Website Availability Check
             PingCheck::new()
-                ->url(config('app.url'))
+                ->url(config('app.url') ?: 'http://localhost') // @phpstan-ignore argument.type
                 ->name('Website')
                 ->timeout(5)
                 ->retryTimes(2),

@@ -16,7 +16,8 @@ class LlmsController extends Controller
 {
     public function __construct(
         private readonly GeneralSettings $settings,
-    ) {}
+    ) {
+    }
 
     public function show(): Response
     {

@@ -22,7 +22,8 @@ class EventRegistrationConfirmation extends Mailable
     public function __construct(
         public readonly Registration $registration,
         public readonly Event $event,
-    ) {}
+    ) {
+    }
 
     public function envelope(): Envelope
     {
@@ -48,7 +49,7 @@ class EventRegistrationConfirmation extends Mailable
         $filename = \sprintf('event-%s.ics', $this->event->slug);
 
         return [
-            Attachment::fromData(fn(): string => $icalContent, $filename)
+            Attachment::fromData(fn (): string => $icalContent, $filename)
                 ->withMime('text/calendar'),
         ];
     }

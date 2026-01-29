@@ -93,7 +93,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
                     return \sprintf('Der Newsletter wird an %s aktive Abonnenten versendet. Dies kann nicht rückgängig gemacht werden.', $count);
                 })
                 ->modalSubmitActionLabel('Jetzt versenden')
-                ->action(fn() => $this->sendNewsletterAction()),
+                ->action(fn () => $this->sendNewsletterAction()),
         ];
     }
 

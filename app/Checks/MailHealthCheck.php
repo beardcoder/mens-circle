@@ -18,7 +18,8 @@ class MailHealthCheck extends Check
     {
         $result = Result::make();
 
-        $mailer = Config::get('mail.default');
+        /** @var string $mailer */
+        $mailer = Config::get('mail.default', 'smtp');
 
         if ($mailer === 'log' || $mailer === 'array') {
             return $result
@@ -33,10 +34,15 @@ class MailHealthCheck extends Check
         }
 
         try {
+            /** @var string|null $host */
             $host = Config::get('mail.mailers.smtp.host');
-            $port = Config::get('mail.mailers.smtp.port');
-            $encryption = Config::get('mail.mailers.smtp.encryption');
+            /** @var int $port */
+            $port = Config::get('mail.mailers.smtp.port', 587);
+            /** @var string $encryption */
+            $encryption = Config::get('mail.mailers.smtp.encryption', 'tls');
+            /** @var string|null $username */
             $username = Config::get('mail.mailers.smtp.username');
+            /** @var string|null $password */
             $password = Config::get('mail.mailers.smtp.password');
 
             if (empty($host)) {
@@ -56,7 +62,7 @@ class MailHealthCheck extends Check
                 $host,
                 $username,
                 $password,
-                (int) $port,
+                $port,
             );
 
             $factory = new EsmtpTransportFactory();
@@ -69,7 +75,7 @@ class MailHealthCheck extends Check
 
             return $result
                 ->ok()
-                ->shortSummary(\sprintf('%s:%s', $host, $port))
+                ->shortSummary(\sprintf('%s:%d', $host, $port))
                 ->meta([
                     'host' => $host,
                     'port' => $port,

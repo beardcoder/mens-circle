@@ -53,7 +53,7 @@ class NewsletterSubscriptionResource extends Resource
                         Select::make('participant_id')
                             ->label('Teilnehmer')
                             ->relationship('participant', 'email')
-                            ->getOptionLabelFromRecordUsing(fn(Participant $record): string => $record->fullName
+                            ->getOptionLabelFromRecordUsing(fn (Participant $record): string => $record->fullName
                                 ? \sprintf('%s (%s)', $record->fullName, $record->email)
                                 : $record->email)
                             ->required()
@@ -128,7 +128,7 @@ class NewsletterSubscriptionResource extends Resource
                 IconColumn::make('is_active')
                     ->label('Aktiv')
                     ->boolean()
-                    ->state(fn($record): bool => $record->isActive()),
+                    ->state(fn ($record): bool => $record->isActive()),
                 TextColumn::make('subscribed_at')
                     ->label('Angemeldet am')
                     ->dateTime('d.m.Y H:i')
@@ -143,11 +143,11 @@ class NewsletterSubscriptionResource extends Resource
             ->filters([
                 Filter::make('active')
                     ->label('Aktive Abonnenten')
-                    ->query(fn(Builder $query): Builder => $query->whereNull('unsubscribed_at'))
+                    ->query(fn (Builder $query): Builder => $query->whereNull('unsubscribed_at'))
                     ->default(),
                 Filter::make('unsubscribed')
                     ->label('Abgemeldete')
-                    ->query(fn(Builder $query): Builder => $query->whereNotNull('unsubscribed_at')),
+                    ->query(fn (Builder $query): Builder => $query->whereNotNull('unsubscribed_at')),
             ])
             ->defaultSort('subscribed_at', 'desc')
             ->recordActions([EditAction::make(), ])

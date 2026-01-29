@@ -34,7 +34,7 @@ class ParticipantFactory extends Factory
     {
         $faker = FakerFactory::create();
 
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(fn (array $attributes): array => [
             'phone' => $faker->phoneNumber(),
         ]);
     }
