@@ -34,7 +34,7 @@ class TestimonialSubmissionController extends Controller
      */
     private function buildSuccessMessage(array $validated): string
     {
-        if (empty($validated['author_name'])) {
+        if (empty($validated['author_name']) || !\is_string($validated['author_name'])) {
             return 'Vielen Dank! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.';
         }
 

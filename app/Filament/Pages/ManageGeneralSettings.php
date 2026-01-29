@@ -145,7 +145,7 @@ class ManageGeneralSettings extends SettingsPage
         $iconLabel = $this->getIconLabel($state);
         $detail = $state['label'] ?? $state['value'] ?? null;
 
-        if ($detail) {
+        if ($detail && \is_string($detail)) {
             return ($iconLabel ?? 'Link') . ' - ' . $detail;
         }
 
@@ -157,7 +157,7 @@ class ManageGeneralSettings extends SettingsPage
      */
     private function getIconLabel(array $state): ?string
     {
-        if (!empty($state['icon'])) {
+        if (!empty($state['icon']) && \is_string($state['icon'])) {
             return SocialHeroicon::fromName($state['icon'])?->getLabel();
         }
 

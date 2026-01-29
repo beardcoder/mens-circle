@@ -15,6 +15,7 @@ class NewsletterController extends Controller
 {
     public function subscribe(NewsletterSubscriptionRequest $request, SubscribeToNewsletterAction $action): JsonResponse
     {
+        /** @var string $email */
         $email = $request->validated()['email'];
 
         try {

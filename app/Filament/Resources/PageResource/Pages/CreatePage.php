@@ -18,6 +18,7 @@ class CreatePage extends CreateRecord
      */
     protected function handleRecordCreation(array $data): Model
     {
+        /** @var array<int, array<string, mixed>> $contentBlocksData */
         $contentBlocksData = $data['content_blocks'] ?? [];
         unset($data['content_blocks']);
 
