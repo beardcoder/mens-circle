@@ -8,11 +8,6 @@ parameters:
     # Level 10 is the highest level (experimental checks)
     level: 9
 
-    # PHPat configuration
-    phpat:
-        ignore_built_in_classes: true
-        show_rule_names: true
-
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'
 #
