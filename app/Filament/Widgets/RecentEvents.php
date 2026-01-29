@@ -38,9 +38,9 @@ class RecentEvents extends TableWidget
 
                 TextColumn::make('available_spots')
                     ->label('Freie Plätze')
-                    ->getStateUsing(fn(Event $record): int => $record->availableSpots)
+                    ->getStateUsing(fn (Event $record): int => $record->availableSpots)
                     ->badge()
-                    ->color(fn(int $state): string => match (true) {
+                    ->color(fn (int $state): string => match (true) {
                         $state === 0 => 'danger',
                         $state <= 3 => 'warning',
                         default => 'success',
@@ -49,8 +49,8 @@ class RecentEvents extends TableWidget
                 TextColumn::make('is_published')
                     ->label('Status')
                     ->badge()
-                    ->formatStateUsing(fn(bool $state): string => $state ? 'Veröffentlicht' : 'Entwurf')
-                    ->color(fn(bool $state): string => $state ? 'success' : 'gray'),
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Veröffentlicht' : 'Entwurf')
+                    ->color(fn (bool $state): string => $state ? 'success' : 'gray'),
             ])
             ->heading('Kommende Events')
             ->defaultSort('event_date', 'asc');

@@ -12,14 +12,14 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('newsletters', function (Blueprint $table): void {
+        Schema::create('failed_jobs', function (Blueprint $table) {
             $table->id();
-            $table->string('subject');
-            $table->text('content');
-            $table->timestamp('sent_at')->nullable();
-            $table->integer('recipient_count')->default(0);
-            $table->string('status')->default('draft');
-            $table->timestamps();
+            $table->string('uuid')->unique();
+            $table->text('connection');
+            $table->text('queue');
+            $table->longText('payload');
+            $table->longText('exception');
+            $table->timestamp('failed_at')->useCurrent();
         });
     }
 
@@ -28,6 +28,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('newsletters');
+        Schema::dropIfExists('failed_jobs');
     }
 };

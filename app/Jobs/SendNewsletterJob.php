@@ -26,7 +26,8 @@ class SendNewsletterJob implements ShouldQueue
 
     public function __construct(
         public readonly Newsletter $newsletter,
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.

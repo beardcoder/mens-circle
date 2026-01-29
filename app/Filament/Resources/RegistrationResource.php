@@ -90,7 +90,7 @@ class RegistrationResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn($query) => $query->with(['event', 'participant']))
+            ->modifyQueryUsing(fn ($query) => $query->with(['event', 'participant']))
             ->columns([
                 TextColumn::make('event.event_date')
                     ->label('Event-Datum')
@@ -122,8 +122,8 @@ class RegistrationResource extends Resource
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn(RegistrationStatus $state): string => $state->getColor())
-                    ->formatStateUsing(fn(RegistrationStatus $state): string => $state->getLabel())
+                    ->color(fn (RegistrationStatus $state): string => $state->getColor())
+                    ->formatStateUsing(fn (RegistrationStatus $state): string => $state->getLabel())
                     ->sortable(),
                 TextColumn::make('registered_at')
                     ->label('Angemeldet am')

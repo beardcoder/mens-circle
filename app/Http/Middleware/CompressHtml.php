@@ -14,7 +14,8 @@ readonly class CompressHtml
 {
     public function __construct(
         private HtmlMin $htmlMin,
-    ) {}
+    ) {
+    }
 
     public function handle(Request $request, Closure $next): SymfonyResponse
     {

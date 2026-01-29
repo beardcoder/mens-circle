@@ -69,8 +69,8 @@ class UpcomingEventRegistrations extends TableWidget
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn(RegistrationStatus $state): string => $state->getColor())
-                    ->formatStateUsing(fn(RegistrationStatus $state): string => $state->getLabel())
+                    ->color(fn (RegistrationStatus $state): string => $state->getColor())
+                    ->formatStateUsing(fn (RegistrationStatus $state): string => $state->getLabel())
                     ->sortable(),
 
                 TextColumn::make('registered_at')

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -40,13 +41,16 @@ class HealthCheckFailedNotification extends Notification
             return false;
         }
 
+        /** @var int $throttleMinutes */
         $throttleMinutes = (int) config('health.notifications.throttle_notifications_for_minutes', 60);
 
         if ($throttleMinutes <= 0) {
             return true;
         }
 
-        $cacheKey = config('health.notifications.throttle_notifications_key', 'health:latestNotificationSentAt:') . $channel;
+        /** @var string $throttleKey */
+        $throttleKey = config('health.notifications.throttle_notifications_key', 'health:latestNotificationSentAt:');
+        $cacheKey = $throttleKey . $channel;
         $lockKey = $cacheKey . ':lock';
 
         // Use atomic lock to prevent race conditions
@@ -54,6 +58,7 @@ class HealthCheckFailedNotification extends Notification
 
         try {
             if ($lock->get()) {
+                /** @var Carbon|null $lastNotificationSentAt */
                 $lastNotificationSentAt = Cache::get($cacheKey);
 
                 if ($lastNotificationSentAt === null || $lastNotificationSentAt->diffInMinutes(now()) >= $throttleMinutes) {
@@ -87,8 +92,11 @@ class HealthCheckFailedNotification extends Notification
         $warningChecks = collect($this->results)
             ->filter(fn (Result $result): bool => $result->status->value === 'warning');
 
+        /** @var string $appName */
+        $appName = config('app.name', 'Application');
+
         $message = (new MailMessage())
-            ->subject('Health Check Warnung - ' . config('app.name'))
+            ->subject('Health Check Warnung - ' . $appName)
             ->greeting('Health Check Benachrichtigung')
             ->line('Es wurden Probleme bei den automatischen Health Checks festgestellt:');
 
@@ -110,6 +118,6 @@ class HealthCheckFailedNotification extends Notification
             ->line('Bitte überprüfe den Server-Status und behebe die Probleme.')
             ->action('Health Status anzeigen', url('/admin/health'))
             ->line('Diese Benachrichtigung wurde automatisch versendet.')
-            ->salutation('Dein ' . config('app.name') . ' System');
+            ->salutation('Dein ' . $appName . ' System');
     }
 }
