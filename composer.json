@@ -41,7 +41,6 @@
         "larastan/larastan": "^3.9.1",
         "laravel/boost": "^2.0.3",
         "laravel/pail": "^1.2.4",
-        "laravel/pint": "^1.27",
         "laravel/sail": "^1.52",
         "mockery/mockery": "^1.6.12",
         "pestphp/pest": "^4.3.2",
@@ -115,9 +114,6 @@
         ],
         "format:check": [
             "php-cs-fixer fix --dry-run --diff"
-        ],
-        "pint": [
-            "pint"
         ],
         "rector": [
             "rector process"
