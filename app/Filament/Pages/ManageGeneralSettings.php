@@ -109,7 +109,7 @@ class ManageGeneralSettings extends SettingsPage
                             ])
                             ->collapsible()
                             ->collapsed()
-                            ->itemLabel(fn (array $state): string => $this->getSocialLinkLabel($state))
+                            ->itemLabel(fn(array $state): string => $this->getSocialLinkLabel($state))
                             ->addActionLabel('Link hinzufügen')
                             ->reorderable()
                             ->columnSpanFull(),

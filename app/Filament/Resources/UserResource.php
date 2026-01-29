@@ -61,9 +61,9 @@ class UserResource extends Resource
                             ->label('Passwort')
                             ->password()
                             ->revealable()
-                            ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
-                            ->dehydrated(fn (?string $state): bool => filled($state))
-                            ->required(fn (string $operation): bool => $operation === 'create')
+                            ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
+                            ->dehydrated(fn(?string $state): bool => filled($state))
+                            ->required(fn(string $operation): bool => $operation === 'create')
                             ->rule(Password::default()),
                         TextInput::make('password_confirmation')
                             ->label('Passwort bestätigen')

@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class () extends Migration {
+return new class extends Migration {
     public function up(): void
     {
         // Step 1: Create participants table (if not exists)
@@ -129,7 +129,7 @@ return new class () extends Migration {
             // Step 9: Drop old columns
             $columnsToDrop = array_filter(
                 ['first_name', 'last_name', 'email', 'phone_number', 'privacy_accepted', 'confirmed_at'],
-                fn (string $col) => Schema::hasColumn($sourceTable, $col),
+                fn(string $col) => Schema::hasColumn($sourceTable, $col),
             );
 
             if ($columnsToDrop !== []) {
@@ -206,7 +206,7 @@ return new class () extends Migration {
 
             $columnsToDrop = array_filter(
                 ['email', 'status'],
-                fn (string $col) => Schema::hasColumn('newsletter_subscriptions', $col),
+                fn(string $col) => Schema::hasColumn('newsletter_subscriptions', $col),
             );
 
             if ($columnsToDrop !== []) {

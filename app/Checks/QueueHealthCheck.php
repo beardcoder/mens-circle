@@ -50,7 +50,7 @@ class QueueHealthCheck extends Check
 
             return $result
                 ->ok()
-                ->shortSummary(sprintf('%s (%d jobs)', $connection, $size))
+                ->shortSummary(\sprintf('%s (%d jobs)', $connection, $size))
                 ->meta([
                     'connection' => $connection,
                     'jobs_in_queue' => $size,
