@@ -52,7 +52,7 @@ class SevenIoHealthCheck extends Check
                 ->shortSummary('API-Fehler');
         } catch (Throwable $throwable) {
             return $result
-                ->failed('Seven.io Verbindungsfehler: '.$throwable->getMessage())
+                ->failed('Seven.io Verbindungsfehler: ' . $throwable->getMessage())
                 ->shortSummary('Verbindungsfehler');
         }
     }

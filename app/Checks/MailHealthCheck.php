@@ -68,7 +68,7 @@ class MailHealthCheck extends Check
                 $port,
             );
 
-            $factory = new EsmtpTransportFactory;
+            $factory = new EsmtpTransportFactory();
             $transport = $factory->create($dsn);
 
             if ($transport instanceof EsmtpTransport) {
@@ -86,7 +86,7 @@ class MailHealthCheck extends Check
                 ]);
         } catch (Throwable $throwable) {
             return $result
-                ->failed('SMTP-Verbindungsfehler: '.$throwable->getMessage())
+                ->failed('SMTP-Verbindungsfehler: ' . $throwable->getMessage())
                 ->shortSummary('Verbindungsfehler')
                 ->meta(['error' => $throwable->getMessage()]);
         }

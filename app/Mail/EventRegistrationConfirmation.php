@@ -30,7 +30,7 @@ class EventRegistrationConfirmation extends Mailable
 
         return new Envelope(
             to: [new Address($participant->email, $participant->fullName)],
-            subject: 'Anmeldebestätigung: '.$this->event->title,
+            subject: 'Anmeldebestätigung: ' . $this->event->title,
         );
     }
 

@@ -151,7 +151,7 @@ class Page extends Model implements HasMedia
     private function cleanupRemovedBlocks($existingBlocks, array $processedBlockIds): void
     {
         $existingBlocks
-            ->reject(fn(ContentBlock $block): bool => \in_array($block->block_id, $processedBlockIds, true))
+            ->reject(fn (ContentBlock $block): bool => \in_array($block->block_id, $processedBlockIds, true))
             ->each(function (ContentBlock $block): void {
                 $this->deleteBlockMedia($block->block_id);
                 $block->delete();
@@ -164,7 +164,7 @@ class Page extends Model implements HasMedia
     private function deleteBlockMedia(string $blockId): void
     {
         $this->getMedia('page_blocks')
-            ->filter(fn($media): bool => $media->getCustomProperty('block_id') === $blockId)
-            ->each(fn($media) => $media->delete());
+            ->filter(fn ($media): bool => $media->getCustomProperty('block_id') === $blockId)
+            ->each(fn ($media) => $media->delete());
     }
 }

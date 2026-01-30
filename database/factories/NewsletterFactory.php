@@ -34,7 +34,7 @@ class NewsletterFactory extends Factory
 
     public function draft(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(fn (array $attributes): array => [
             'status' => NewsletterStatus::Draft,
             'sent_at' => null,
             'recipient_count' => null,
@@ -43,7 +43,7 @@ class NewsletterFactory extends Factory
 
     public function sending(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(fn (array $attributes): array => [
             'status' => NewsletterStatus::Sending,
             'sent_at' => null,
             'recipient_count' => null,
@@ -54,7 +54,7 @@ class NewsletterFactory extends Factory
     {
         $faker = FakerFactory::create();
 
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(fn (array $attributes): array => [
             'status' => NewsletterStatus::Sent,
             'sent_at' => now(),
             'recipient_count' => $faker->numberBetween(10, 100),

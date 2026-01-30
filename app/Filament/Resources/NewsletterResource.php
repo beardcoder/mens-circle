@@ -86,8 +86,8 @@ class NewsletterResource extends Resource
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn(NewsletterStatus $state): string => $state->getColor())
-                    ->formatStateUsing(fn(NewsletterStatus $state): string => $state->getLabel())
+                    ->color(fn (NewsletterStatus $state): string => $state->getColor())
+                    ->formatStateUsing(fn (NewsletterStatus $state): string => $state->getLabel())
                     ->sortable(),
                 TextColumn::make('recipient_count')
                     ->label('Empfänger')

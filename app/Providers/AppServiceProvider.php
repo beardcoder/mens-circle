@@ -58,7 +58,7 @@ class AppServiceProvider extends ServiceProvider
                     'hasNextEvent' => cache()->remember(
                         'has_next_event',
                         300,
-                        fn() => Event::published()->upcoming()->exists(),
+                        fn () => Event::published()->upcoming()->exists(),
                     ),
                 ]);
             } catch (Throwable) {

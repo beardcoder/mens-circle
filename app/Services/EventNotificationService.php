@@ -78,7 +78,7 @@ class EventNotificationService
     }
 
     /**
-     * @param  array<string, mixed>  $context
+     * @param array<string, mixed> $context
      */
     private function sendSms(Event $event, string $phoneNumber, string $message, array $context = []): void
     {

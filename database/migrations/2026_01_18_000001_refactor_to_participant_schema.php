@@ -129,7 +129,7 @@ return new class extends Migration {
             // Step 9: Drop old columns
             $columnsToDrop = array_filter(
                 ['first_name', 'last_name', 'email', 'phone_number', 'privacy_accepted', 'confirmed_at'],
-                fn(string $col) => Schema::hasColumn($sourceTable, $col),
+                fn (string $col) => Schema::hasColumn($sourceTable, $col),
             );
 
             if ($columnsToDrop !== []) {
@@ -206,7 +206,7 @@ return new class extends Migration {
 
             $columnsToDrop = array_filter(
                 ['email', 'status'],
-                fn(string $col) => Schema::hasColumn('newsletter_subscriptions', $col),
+                fn (string $col) => Schema::hasColumn('newsletter_subscriptions', $col),
             );
 
             if ($columnsToDrop !== []) {

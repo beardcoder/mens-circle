@@ -193,7 +193,7 @@ class EventResource extends Resource
                     ->dateTime('d.m.Y')
                     ->sortable()
                     ->description(
-                        fn ($record): string => $record->start_time->format('H:i').' - '.$record->end_time->format('H:i'),
+                        fn ($record): string => $record->start_time->format('H:i') . ' - ' . $record->end_time->format('H:i'),
                     )
                     ->color(
                         fn ($record): string => $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary'),

@@ -265,7 +265,7 @@ class PageResource extends Resource
                             ->rows(2),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn(array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -312,7 +312,7 @@ class PageResource extends Resource
                             ->rows(2),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn(array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -368,7 +368,7 @@ class PageResource extends Resource
                             ->rows(2),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn(array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -414,7 +414,7 @@ class PageResource extends Resource
                             ->rows(3),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn(array $state): ?string => $state['question'] ?? null),
+                    ->itemLabel(fn (array $state): ?string => $state['question'] ?? null),
             ]);
     }
 
@@ -478,7 +478,7 @@ class PageResource extends Resource
     private static function blockIdField(): Hidden
     {
         return Hidden::make('block_id')
-            ->default(fn(): string => (string) Str::uuid());
+            ->default(fn (): string => (string) Str::uuid());
     }
 
     private static function blockImageUpload(string $name, string $label): SpatieMediaLibraryFileUpload
@@ -490,7 +490,7 @@ class PageResource extends Resource
             ->image()
             ->imageEditor()
             ->responsiveImages()
-            ->customProperties(fn(Get $get): array => [
+            ->customProperties(fn (Get $get): array => [
                 'block_id' => $get('block_id'),
                 'field' => $name,
             ])

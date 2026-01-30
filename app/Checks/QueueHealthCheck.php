@@ -60,7 +60,7 @@ class QueueHealthCheck extends Check
                 ]);
         } catch (Throwable $throwable) {
             return $result
-                ->failed('Queue-Verbindungsfehler: '.$throwable->getMessage())
+                ->failed('Queue-Verbindungsfehler: ' . $throwable->getMessage())
                 ->shortSummary('Verbindungsfehler')
                 ->meta(['error' => $throwable->getMessage()]);
         }

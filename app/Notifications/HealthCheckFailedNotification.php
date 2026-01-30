@@ -16,7 +16,7 @@ class HealthCheckFailedNotification extends Notification
     use Queueable;
 
     /**
-     * @param  array<Result>  $results
+     * @param array<Result> $results
      */
     public function __construct(
         public readonly array $results,
@@ -44,8 +44,8 @@ class HealthCheckFailedNotification extends Notification
 
         /** @var string $throttleKey */
         $throttleKey = config('health.notifications.throttle_notifications_key', 'health:latestNotificationSentAt:');
-        $cacheKey = $throttleKey.$channel;
-        $lockKey = $cacheKey.':lock';
+        $cacheKey = $throttleKey . $channel;
+        $lockKey = $cacheKey . ':lock';
 
         // Use atomic lock to prevent race conditions
         $lock = Cache::lock($lockKey, 10);
@@ -90,8 +90,8 @@ class HealthCheckFailedNotification extends Notification
         /** @var string $appName */
         $appName = config('app.name', 'Application');
 
-        $message = (new MailMessage)
-            ->subject('Health Check Warnung - '.$appName)
+        $message = (new MailMessage())
+            ->subject('Health Check Warnung - ' . $appName)
             ->greeting('Health Check Benachrichtigung')
             ->line('Es wurden Probleme bei den automatischen Health Checks festgestellt:');
 
@@ -113,6 +113,6 @@ class HealthCheckFailedNotification extends Notification
             ->line('Bitte überprüfe den Server-Status und behebe die Probleme.')
             ->action('Health Status anzeigen', url('/admin/health'))
             ->line('Diese Benachrichtigung wurde automatisch versendet.')
-            ->salutation('Dein '.$appName.' System');
+            ->salutation('Dein ' . $appName . ' System');
     }
 }
