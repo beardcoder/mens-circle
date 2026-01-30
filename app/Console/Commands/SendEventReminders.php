@@ -45,35 +45,34 @@ class SendEventReminders extends Command
             $registrations = $event->activeRegistrations;
 
             if ($registrations->isEmpty()) {
-                $this->warn(\sprintf("Event '%s' has no active registrations.", $event->title));
+                $this->warn("Event '{$event->title}' has no active registrations.");
 
                 continue;
             }
 
-            $this->info(\sprintf('Processing event: %s (%s)', $event->title, $event->event_date->format('d.m.Y H:i')));
+            $eventDate = $event->event_date->format('d.m.Y H:i');
+            $this->info("Processing event: {$event->title} ({$eventDate})");
 
-            /** @var Registration $registration */
-            foreach ($registrations as $registration) {
+            $registrations->each(function (Registration $registration) use ($event, &$totalEmailsSent, &$totalSmsSent) {
                 $participant = $registration->participant;
 
                 // Send email reminder
                 Mail::queue(new EventReminder($registration, $event));
                 $totalEmailsSent++;
-                $this->line('  -> Email reminder sent to: ' . $participant->email);
+                $this->line("  -> Email reminder sent to: {$participant->email}");
 
                 // Send SMS reminder if phone number is provided
                 if ($participant->phone) {
                     $event->sendEventReminder($registration);
                     $totalSmsSent++;
-                    $this->line('  -> SMS reminder sent to: ' . $participant->phone);
+                    $this->line("  -> SMS reminder sent to: {$participant->phone}");
                 }
-            }
+            });
         }
 
         $this->newLine();
-        $this->info(
-            \sprintf('Successfully sent %d email(s) and %d SMS for %s event(s).', $totalEmailsSent, $totalSmsSent, $upcomingEvents->count()),
-        );
+        $eventCount = $upcomingEvents->count();
+        $this->info("Successfully sent {$totalEmailsSent} email(s) and {$totalSmsSent} SMS for {$eventCount} event(s).");
 
         return self::SUCCESS;
     }

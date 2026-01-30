@@ -50,7 +50,7 @@ class EventController extends Controller
         $event = Event::query()->findOrFail($validated['event_id']);
 
         $error = match (true) {
-            !$event->is_published => ['Diese Veranstaltung ist nicht verfügbar.', 404],
+            ! $event->is_published => ['Diese Veranstaltung ist nicht verfügbar.', 404],
             $event->isPast => ['Diese Veranstaltung hat bereits stattgefunden. Eine Anmeldung ist nicht mehr möglich.', 410],
             $event->isFull => ['Diese Veranstaltung ist leider bereits ausgebucht.', 409],
             default => null,
@@ -58,6 +58,7 @@ class EventController extends Controller
 
         if ($error) {
             [$message, $status] = $error;
+
             return response()->json(['success' => false, 'message' => $message], $status);
         }
 
@@ -69,7 +70,7 @@ class EventController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => \sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.', $firstName),
+                'message' => "Vielen Dank, {$firstName}! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.",
             ]);
         } catch (RuntimeException $runtimeException) {
             return response()->json([

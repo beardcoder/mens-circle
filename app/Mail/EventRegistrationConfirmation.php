@@ -30,13 +30,13 @@ class EventRegistrationConfirmation extends Mailable
 
         return new Envelope(
             to: [new Address($participant->email, $participant->fullName)],
-            subject: 'Anmeldebestätigung: ' . $this->event->title,
+            subject: 'Anmeldebestätigung: '.$this->event->title,
         );
     }
 
     public function content(): Content
     {
-        return new Content(markdown: 'emails.event-registration', );
+        return new Content(markdown: 'emails.event-registration');
     }
 
     /**
@@ -45,10 +45,10 @@ class EventRegistrationConfirmation extends Mailable
     public function attachments(): array
     {
         $icalContent = $this->event->generateICalContent();
-        $filename = \sprintf('event-%s.ics', $this->event->slug);
+        $filename = "event-{$this->event->slug}.ics";
 
         return [
-            Attachment::fromData(fn(): string => $icalContent, $filename)
+            Attachment::fromData(fn (): string => $icalContent, $filename)
                 ->withMime('text/calendar'),
         ];
     }

@@ -53,14 +53,14 @@ class QueueHealthCheck extends Check
 
             return $result
                 ->ok()
-                ->shortSummary(\sprintf('%s (%d jobs)', $connection, $size))
+                ->shortSummary("{$connection} ({$size} jobs)")
                 ->meta([
                     'connection' => $connection,
                     'jobs_in_queue' => $size,
                 ]);
         } catch (Throwable $throwable) {
             return $result
-                ->failed('Queue-Verbindungsfehler: ' . $throwable->getMessage())
+                ->failed('Queue-Verbindungsfehler: '.$throwable->getMessage())
                 ->shortSummary('Verbindungsfehler')
                 ->meta(['error' => $throwable->getMessage()]);
         }

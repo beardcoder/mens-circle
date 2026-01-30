@@ -29,12 +29,12 @@ class EventReminder extends Mailable
 
         return new Envelope(
             to: [new Address($participant->email, $participant->fullName)],
-            subject: \sprintf('Erinnerung: %s ist morgen!', $this->event->title),
+            subject: "Erinnerung: {$this->event->title} ist morgen!",
         );
     }
 
     public function content(): Content
     {
-        return new Content(markdown: 'emails.event-reminder', );
+        return new Content(markdown: 'emails.event-reminder');
     }
 }

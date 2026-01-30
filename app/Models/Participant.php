@@ -23,7 +23,7 @@ class Participant extends Model
     /** @use HasFactory<ParticipantFactory> */
     use HasFactory;
 
-    protected $fillable = ['first_name', 'last_name', 'email', 'phone', ];
+    protected $fillable = ['first_name', 'last_name', 'email', 'phone'];
 
     /**
      * @return HasMany<Registration, $this>
@@ -46,7 +46,7 @@ class Participant extends Model
      */
     protected function fullName(): Attribute
     {
-        return Attribute::make(get: fn(): string => trim(\sprintf('%s %s', $this->first_name, $this->last_name)));
+        return Attribute::make(get: fn (): string => trim("{$this->first_name} {$this->last_name}"));
     }
 
     public function isSubscribedToNewsletter(): bool
@@ -62,7 +62,7 @@ class Participant extends Model
     }
 
     /**
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     public static function findOrCreateByEmail(string $email, array $attributes = []): self
     {

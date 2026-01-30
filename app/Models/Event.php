@@ -40,10 +40,10 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Event extends Model implements HasMedia
 {
+    use ClearsResponseCache;
+
     /** @use HasFactory<EventFactory> */
     use HasFactory;
-
-    use ClearsResponseCache;
     use HasSlug;
     use InteractsWithMedia;
     use SoftDeletes;
@@ -70,7 +70,7 @@ class Event extends Model implements HasMedia
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom(fn($model) => $model->event_date->format('Y-m-d'))
+            ->generateSlugsFrom(fn ($model) => $model->event_date->format('Y-m-d'))
             ->saveSlugsTo('slug');
     }
 
@@ -105,7 +105,7 @@ class Event extends Model implements HasMedia
     protected function activeRegistrationsCount(): Attribute
     {
         return Attribute::make(
-            get: fn(): int => (int) ($this->active_registrations_count ?? $this->activeRegistrations()->count()),
+            get: fn (): int => (int) ($this->active_registrations_count ?? $this->activeRegistrations()->count()),
         );
     }
 
@@ -115,7 +115,7 @@ class Event extends Model implements HasMedia
     protected function availableSpots(): Attribute
     {
         return Attribute::make(
-            get: fn(): int => max(0, $this->max_participants - $this->activeRegistrationsCount),
+            get: fn (): int => max(0, $this->max_participants - $this->activeRegistrationsCount),
         );
     }
 
@@ -124,7 +124,7 @@ class Event extends Model implements HasMedia
      */
     protected function isFull(): Attribute
     {
-        return Attribute::make(get: fn(): bool => $this->availableSpots <= 0);
+        return Attribute::make(get: fn (): bool => $this->availableSpots <= 0);
     }
 
     /**
@@ -132,7 +132,7 @@ class Event extends Model implements HasMedia
      */
     protected function isPast(): Attribute
     {
-        return Attribute::make(get: fn(): bool => $this->event_date->endOfDay()->isPast());
+        return Attribute::make(get: fn (): bool => $this->event_date->endOfDay()->isPast());
     }
 
     /**
@@ -142,13 +142,13 @@ class Event extends Model implements HasMedia
     {
         return Attribute::make(
             get: function (): ?string {
-                if (!$this->street || !$this->city) {
+                if (! $this->street || ! $this->city) {
                     return null;
                 }
 
                 $parts = [
                     $this->street,
-                    $this->postal_code ? \sprintf('%s %s', $this->postal_code, $this->city) : $this->city,
+                    $this->postal_code ? "{$this->postal_code} {$this->city}" : $this->city,
                 ];
 
                 return implode(', ', $parts);
@@ -171,7 +171,7 @@ class Event extends Model implements HasMedia
         $location = $this->fullAddress ?? $this->location;
         $description = str_replace(["\r\n", "\n", "\r"], '\n', strip_tags($this->description ?? ''));
 
-        $uid = $this->id . '@mens-circle.de';
+        $uid = $this->id.'@mens-circle.de';
 
         return <<<ICAL
             BEGIN:VCALENDAR\r
@@ -228,8 +228,7 @@ class Event extends Model implements HasMedia
     }
 
     /**
-     * @param Builder<Event> $query
-     *
+     * @param  Builder<Event>  $query
      * @return Builder<Event>
      */
     #[Scope]
@@ -239,8 +238,7 @@ class Event extends Model implements HasMedia
     }
 
     /**
-     * @param Builder<Event> $query
-     *
+     * @param  Builder<Event>  $query
      * @return Builder<Event>
      */
     #[Scope]
