@@ -330,15 +330,19 @@ class LlmsController extends Controller
                 if (! \is_array($item)) {
                     continue;
                 }
+
                 if (empty($item['question'])) {
                     continue;
                 }
+
                 if (! \is_string($item['question'])) {
                     continue;
                 }
+
                 if (empty($item['answer'])) {
                     continue;
                 }
+
                 if (! \is_string($item['answer'])) {
                     continue;
                 }
