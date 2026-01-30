@@ -30,16 +30,16 @@ class TestimonialSubmissionController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $validated
+     * @param  array<string, mixed>  $validated
      */
     private function buildSuccessMessage(array $validated): string
     {
-        if (empty($validated['author_name']) || !\is_string($validated['author_name'])) {
+        if (empty($validated['author_name']) || ! is_string($validated['author_name'])) {
             return 'Vielen Dank! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.';
         }
 
         $firstName = explode(' ', $validated['author_name'])[0];
 
-        return \sprintf('Vielen Dank, %s! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.', $firstName);
+        return "Vielen Dank, {$firstName}! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.";
     }
 }

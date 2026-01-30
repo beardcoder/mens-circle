@@ -80,7 +80,7 @@ class SendNewsletterJob implements ShouldQueue
             Log::warning('Newsletter sending completed with failures', [
                 'newsletter_id' => $this->newsletter->id,
                 'successful' => $recipientCount,
-                'failed' => \count($failedRecipients),
+                'failed' => count($failedRecipients),
             ]);
         }
     }

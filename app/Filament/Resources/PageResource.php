@@ -111,8 +111,8 @@ class PageResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([TrashedFilter::make(), ])
-            ->recordActions([EditAction::make(), ])
+            ->filters([TrashedFilter::make()])
+            ->recordActions([EditAction::make()])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
@@ -142,7 +142,7 @@ class PageResource extends Resource
     public static function getRecordRouteBindingEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([SoftDeletingScope::class, ]);
+            ->withoutGlobalScopes([SoftDeletingScope::class]);
     }
 
     private static function contentBlocksBuilder(): Builder
@@ -154,7 +154,7 @@ class PageResource extends Resource
             ->afterStateUpdated(function (Builder $component): void {
                 $state = $component->getState();
 
-                if (!\is_array($state)) {
+                if (! is_array($state)) {
                     return;
                 }
 
@@ -163,21 +163,21 @@ class PageResource extends Resource
                 $hasUpdates = false;
 
                 foreach ($state as $key => $item) {
-                    if (!\is_array($item)) {
+                    if (! is_array($item)) {
                         continue;
                     }
 
                     $data = $item['data'] ?? [];
-                    if (!\is_array($data)) {
+                    if (! is_array($data)) {
                         continue;
                     }
 
                     $blockId = $data['block_id'] ?? null;
-                    if (!\is_string($blockId)) {
+                    if (! is_string($blockId)) {
                         $blockId = null;
                     }
 
-                    if (!$blockId || \array_key_exists($blockId, $seenBlockIds)) {
+                    if (! $blockId || array_key_exists($blockId, $seenBlockIds)) {
                         $data['block_id'] = (string) Str::uuid();
                         $item['data'] = $data;
                         $state[$key] = $item;
@@ -497,7 +497,7 @@ class PageResource extends Resource
             ->filterMediaUsing(function (Collection $media, Get $get) use ($name): Collection {
                 $blockId = $get('block_id');
 
-                if (!$blockId) {
+                if (! $blockId) {
                     return $media->take(0);
                 }
 

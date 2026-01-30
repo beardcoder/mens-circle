@@ -139,30 +139,30 @@ class ManageGeneralSettings extends SettingsPage
     }
 
     /**
-     * @param array<string, mixed> $state
+     * @param  array<string, mixed>  $state
      */
     private function getSocialLinkLabel(array $state): string
     {
         $iconLabel = $this->getIconLabel($state);
         $detail = $state['label'] ?? $state['value'] ?? null;
 
-        if ($detail && \is_string($detail)) {
-            return ($iconLabel ?? 'Link') . ' - ' . $detail;
+        if ($detail && is_string($detail)) {
+            return ($iconLabel ?? 'Link').' - '.$detail;
         }
 
         return $iconLabel ?? 'Link';
     }
 
     /**
-     * @param array<string, mixed> $state
+     * @param  array<string, mixed>  $state
      */
     private function getIconLabel(array $state): ?string
     {
-        if (!empty($state['icon']) && \is_string($state['icon'])) {
+        if (! empty($state['icon']) && is_string($state['icon'])) {
             return SocialHeroicon::fromName($state['icon'])?->getLabel();
         }
 
-        if (!empty($state['type']) && \is_string($state['type'])) {
+        if (! empty($state['type']) && is_string($state['type'])) {
             return ucwords(str_replace(['-', '_'], ' ', $state['type']));
         }
 
