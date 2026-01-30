@@ -2,8 +2,14 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
+use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
+use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
 use Rector\ValueObject\PhpVersion;
+use RectorLaravel\Rector\MethodCall\EloquentWhereTypeHintClosureParameterRector;
 use RectorLaravel\Set\LaravelSetProvider;
 
 return RectorConfig::configure()
@@ -24,6 +30,10 @@ return RectorConfig::configure()
         __DIR__.'/vendor',
         __DIR__.'/.phpstorm.meta.php',
         __DIR__.'/_ide_helper.php',
+
+        // Skip rules that conflict with our modernization
+        OptionalParametersAfterRequiredRector::class, // Keep our nullable params where they make sense
+        EncapsedStringsToSprintfRector::class, // Prefer string interpolation over sprintf
     ])
     ->withSetProviders(LaravelSetProvider::class)
     ->withImportNames(removeUnusedImports: true)
@@ -34,7 +44,20 @@ return RectorConfig::configure()
         deadCode: true,
         codeQuality: true,
         codingStyle: true,
-        typeDeclarations: true,
+        typeDeclarations: true, // Includes closure return types
         privatization: true,
         earlyReturn: true,
-    );
+    )
+    ->withRules([
+        // PHP 8.0+ - Constructor Property Promotion
+        ClassPropertyAssignToConstructorPromotionRector::class,
+
+        // PHP 8.1+ - Readonly Properties (encourages immutability)
+        ReadOnlyPropertyRector::class,
+
+        // PHP 8.4+ - Explicit Nullable Types
+        ExplicitNullableParamTypeRector::class,
+
+        // Laravel - Eloquent Type Hints for Closures
+        EloquentWhereTypeHintClosureParameterRector::class,
+    ]);

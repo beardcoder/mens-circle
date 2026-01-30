@@ -53,7 +53,7 @@ class SendEventReminders extends Command
             $eventDate = $event->event_date->format('d.m.Y H:i');
             $this->info("Processing event: {$event->title} ({$eventDate})");
 
-            $registrations->each(function (Registration $registration) use ($event, &$totalEmailsSent, &$totalSmsSent) {
+            $registrations->each(function (Registration $registration) use ($event, &$totalEmailsSent, &$totalSmsSent): void {
                 $participant = $registration->participant;
 
                 // Send email reminder

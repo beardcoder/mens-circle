@@ -53,33 +53,33 @@ class LlmsController extends Controller
         $siteTagline = $this->settings->site_tagline ?? '';
 
         $lines = [];
-        $lines[] = '# ' . $siteName;
+        $lines[] = '# '.$siteName;
         $lines[] = '';
 
         if ($siteTagline !== '' && $siteTagline !== '0') {
-            $lines[] = '> ' . $siteTagline;
+            $lines[] = '> '.$siteTagline;
             $lines[] = '';
         }
 
-        $lines[] = '**Beschreibung:** ' . $siteDescription;
+        $lines[] = '**Beschreibung:** '.$siteDescription;
         $lines[] = '';
-        $lines[] = '**Letzte Aktualisierung:** ' . now()->format('d.m.Y H:i') . ' Uhr';
-        $lines[] = '**Website:** ' . url('/');
+        $lines[] = '**Letzte Aktualisierung:** '.now()->format('d.m.Y H:i').' Uhr';
+        $lines[] = '**Website:** '.url('/');
 
         if ($this->settings->contact_email ?? false) {
-            $lines[] = '**Kontakt E-Mail:** ' . $this->settings->contact_email;
+            $lines[] = '**Kontakt E-Mail:** '.$this->settings->contact_email;
         }
 
         if ($this->settings->contact_phone ?? false) {
-            $lines[] = '**Telefon:** ' . $this->settings->contact_phone;
+            $lines[] = '**Telefon:** '.$this->settings->contact_phone;
         }
 
         if ($this->settings->location ?? false) {
-            $lines[] = '**Standort:** ' . $this->settings->location;
+            $lines[] = '**Standort:** '.$this->settings->location;
         }
 
         if ($this->settings->whatsapp_community_link ?? false) {
-            $lines[] = '**WhatsApp Community:** ' . $this->settings->whatsapp_community_link;
+            $lines[] = '**WhatsApp Community:** '.$this->settings->whatsapp_community_link;
         }
 
         $lines[] = '';
@@ -97,7 +97,7 @@ class LlmsController extends Controller
         $siteName = $this->settings->site_name ?? 'Maennerkreis Niederbayern';
 
         $lines = [];
-        $lines[] = '## Ueber ' . $siteName;
+        $lines[] = '## Ueber '.$siteName;
         $lines[] = '';
         $lines[] = 'Der Maennerkreis Niederbayern ist eine Gemeinschaft fuer Maenner, die sich regelmaessig zu Veranstaltungen treffen. Die Website bietet Informationen zu kommenden Events, Anmeldung zu Veranstaltungen und einen Newsletter-Service.';
         $lines[] = '';
@@ -143,16 +143,16 @@ class LlmsController extends Controller
         $lines = [];
         $lines[] = '## Statistiken';
         $lines[] = '';
-        $lines[] = '- **Gesamtanzahl Veranstaltungen:** ' . $totalEvents;
-        $lines[] = '- **Kommende Veranstaltungen:** ' . $upcomingEventsCount;
-        $lines[] = '- **Vergangene Veranstaltungen:** ' . $pastEventsCount;
+        $lines[] = '- **Gesamtanzahl Veranstaltungen:** '.$totalEvents;
+        $lines[] = '- **Kommende Veranstaltungen:** '.$upcomingEventsCount;
+        $lines[] = '- **Vergangene Veranstaltungen:** '.$pastEventsCount;
 
         if ($totalTestimonials > 0) {
-            $lines[] = '- **Veroeffentlichte Erfahrungsberichte:** ' . $totalTestimonials;
+            $lines[] = '- **Veroeffentlichte Erfahrungsberichte:** '.$totalTestimonials;
         }
 
         if ($totalNewsletterSubscribers > 0) {
-            $lines[] = '- **Newsletter-Abonnenten:** ' . $totalNewsletterSubscribers;
+            $lines[] = '- **Newsletter-Abonnenten:** '.$totalNewsletterSubscribers;
         }
 
         $lines[] = '';
@@ -184,25 +184,25 @@ class LlmsController extends Controller
         }
 
         foreach ($upcomingEvents as $event) {
-            $lines[] = '### ' . $event->title;
+            $lines[] = '### '.$event->title;
             $lines[] = '';
-            $lines[] = '**Datum:** ' . $event->event_date->format('d.m.Y');
+            $lines[] = '**Datum:** '.$event->event_date->format('d.m.Y');
             $startTime = $event->start_time->format('H:i');
             $endTime = $event->end_time->format('H:i');
             $lines[] = "**Uhrzeit:** {$startTime} - {$endTime} Uhr";
 
             if ($event->location) {
-                $lines[] = '**Ort:** ' . $event->location;
+                $lines[] = '**Ort:** '.$event->location;
             }
 
             if ($event->fullAddress) {
-                $lines[] = '**Adresse:** ' . $event->fullAddress;
+                $lines[] = '**Adresse:** '.$event->fullAddress;
             }
 
             $lines[] = "**Verfuegbare Plaetze:** {$event->availableSpots} von {$event->max_participants}";
 
             if ($event->cost_basis) {
-                $lines[] = '**Kostenbeitrag:** ' . $event->cost_basis;
+                $lines[] = '**Kostenbeitrag:** '.$event->cost_basis;
             }
 
             if ($event->description) {
@@ -212,7 +212,7 @@ class LlmsController extends Controller
 
             $url = url()->route('event.show.slug', $event->slug);
             $lines[] = '';
-            $lines[] = '**Mehr Informationen und Anmeldung:** ' . $url;
+            $lines[] = '**Mehr Informationen und Anmeldung:** '.$url;
             $lines[] = '';
             $lines[] = '---';
             $lines[] = '';
@@ -265,7 +265,7 @@ class LlmsController extends Controller
         $lines[] = '';
         $lines[] = 'Die Hauptseite mit einem Ueberblick ueber den Maennerkreis Niederbayern.';
         $lines[] = '';
-        $lines[] = '**URL:** ' . url()->route('home');
+        $lines[] = '**URL:** '.url()->route('home');
         $lines[] = '';
 
         $pages = Page::with('contentBlocks')
@@ -275,10 +275,10 @@ class LlmsController extends Controller
             ->get();
 
         foreach ($pages as $page) {
-            $lines[] = '### ' . $page->title;
+            $lines[] = '### '.$page->title;
             $lines[] = '';
             $url = url()->route('page.show', $page->slug);
-            $lines[] = '**URL:** ' . $url;
+            $lines[] = '**URL:** '.$url;
             $lines[] = '';
 
             foreach ($page->contentBlocks as $block) {
@@ -317,7 +317,7 @@ class LlmsController extends Controller
             }
 
             if (! empty($faq['title']) && \is_string($faq['title'])) {
-                $lines[] = '### ' . $this->convertHtmlToMarkdown($faq['title']);
+                $lines[] = '### '.$this->convertHtmlToMarkdown($faq['title']);
                 $lines[] = '';
             }
 
@@ -330,18 +330,22 @@ class LlmsController extends Controller
                 if (! \is_array($item)) {
                     continue;
                 }
-
-                if (empty($item['question']) || ! \is_string($item['question'])) {
+                if (empty($item['question'])) {
                     continue;
                 }
-
-                if (empty($item['answer']) || ! \is_string($item['answer'])) {
+                if (! \is_string($item['question'])) {
+                    continue;
+                }
+                if (empty($item['answer'])) {
+                    continue;
+                }
+                if (! \is_string($item['answer'])) {
                     continue;
                 }
 
                 $lines[] = "**Q: {$item['question']}**";
                 $lines[] = '';
-                $lines[] = '**A:** ' . $this->convertHtmlToMarkdown($item['answer']);
+                $lines[] = '**A:** '.$this->convertHtmlToMarkdown($item['answer']);
                 $lines[] = '';
             }
         }
@@ -370,12 +374,12 @@ class LlmsController extends Controller
         $lines[] = '';
 
         foreach ($testimonials as $testimonial) {
-            $lines[] = '> ' . $testimonial->quote;
+            $lines[] = '> '.$testimonial->quote;
             $lines[] = '';
 
             $author = $testimonial->author_name;
             if ($testimonial->role) {
-                $author .= ', ' . $testimonial->role;
+                $author .= ', '.$testimonial->role;
             }
 
             $lines[] = "-- **{$author}**";
@@ -396,14 +400,14 @@ class LlmsController extends Controller
         return [
             '## Rechtliche Informationen',
             '',
-            '- **[Impressum](' . url()->route(
+            '- **[Impressum]('.url()->route(
                 'page.show',
                 'impressum',
-            ) . '):** Rechtliche Angaben und Anbieterkennzeichnung',
-            '- **[Datenschutz](' . url()->route(
+            ).'):** Rechtliche Angaben und Anbieterkennzeichnung',
+            '- **[Datenschutz]('.url()->route(
                 'page.show',
                 'datenschutz',
-            ) . '):** Datenschutzerklaerung gemaess DSGVO',
+            ).'):** Datenschutzerklaerung gemaess DSGVO',
             '',
             '---',
             '',
@@ -434,7 +438,7 @@ class LlmsController extends Controller
         if ($this->settings->whatsapp_community_link ?? false) {
             $lines[] = '4. **WhatsApp Community beitreten**';
             $lines[] = '   - Direkter Austausch mit anderen Teilnehmern';
-            $lines[] = '   - Link: ' . $this->settings->whatsapp_community_link;
+            $lines[] = '   - Link: '.$this->settings->whatsapp_community_link;
             $lines[] = '';
         }
 
@@ -458,7 +462,7 @@ class LlmsController extends Controller
                 }
 
                 if (! empty($data['title']) && \is_string($data['title'])) {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
+                    $lines[] = '#### '.$this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
@@ -486,7 +490,7 @@ class LlmsController extends Controller
                 }
 
                 if (! empty($data['title']) && \is_string($data['title'])) {
-                    $lines[] = '#### ' . $data['title'];
+                    $lines[] = '#### '.$data['title'];
                     $lines[] = '';
                 }
 
@@ -504,7 +508,7 @@ class LlmsController extends Controller
                 }
 
                 if (! empty($data['title']) && \is_string($data['title'])) {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
+                    $lines[] = '#### '.$this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
@@ -514,7 +518,7 @@ class LlmsController extends Controller
                 }
 
                 if (! empty($data['quote']) && \is_string($data['quote'])) {
-                    $lines[] = '> ' . $this->convertHtmlToMarkdown($data['quote']);
+                    $lines[] = '> '.$this->convertHtmlToMarkdown($data['quote']);
                     $lines[] = '';
                 }
 
@@ -533,10 +537,10 @@ class LlmsController extends Controller
                         }
 
                         $numberPart = empty($value['number']) || ! \is_scalar($value['number']) ? '' : (string) $value['number'];
-                        $prefix = $numberPart === '' ? '- ' : $numberPart . '. ';
+                        $prefix = $numberPart === '' ? '- ' : $numberPart.'. ';
                         $lines[] = "{$prefix}**{$value['title']}**";
                         if (! empty($value['description']) && \is_string($value['description'])) {
-                            $lines[] = '  ' . $value['description'];
+                            $lines[] = '  '.$value['description'];
                         }
 
                         $lines[] = '';
@@ -553,7 +557,7 @@ class LlmsController extends Controller
                 }
 
                 if (! empty($data['title']) && \is_string($data['title'])) {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
+                    $lines[] = '#### '.$this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
@@ -578,11 +582,11 @@ class LlmsController extends Controller
                         }
 
                         $numberPart = empty($item['number']) || ! \is_scalar($item['number']) ? '' : (string) $item['number'];
-                        $prefix = $numberPart === '' ? '- ' : $numberPart . '. ';
+                        $prefix = $numberPart === '' ? '- ' : $numberPart.'. ';
                         $lines[] = "{$prefix}**{$item['title']}**";
 
                         if (! empty($item['description']) && \is_string($item['description'])) {
-                            $lines[] = '  ' . $item['description'];
+                            $lines[] = '  '.$item['description'];
                         }
 
                         $lines[] = '';
@@ -598,7 +602,7 @@ class LlmsController extends Controller
                 }
 
                 if (! empty($data['name']) && \is_string($data['name'])) {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['name']);
+                    $lines[] = '#### '.$this->convertHtmlToMarkdown($data['name']);
                     $lines[] = '';
                 }
 
@@ -608,7 +612,7 @@ class LlmsController extends Controller
                 }
 
                 if (! empty($data['quote']) && \is_string($data['quote'])) {
-                    $lines[] = '> ' . $data['quote'];
+                    $lines[] = '> '.$data['quote'];
                     $lines[] = '';
                 }
 
@@ -621,7 +625,7 @@ class LlmsController extends Controller
                 }
 
                 if (! empty($data['title']) && \is_string($data['title'])) {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
+                    $lines[] = '#### '.$this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
@@ -649,7 +653,7 @@ class LlmsController extends Controller
                 }
 
                 if (! empty($data['title']) && \is_string($data['title'])) {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
+                    $lines[] = '#### '.$this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
@@ -668,7 +672,7 @@ class LlmsController extends Controller
                 $lines[] = 'Tritt unserer WhatsApp Community bei und vernetze dich mit anderen Maennern aus der Region.';
                 $lines[] = '';
                 if ($this->settings->whatsapp_community_link ?? false) {
-                    $lines[] = '**Link zur Community:** ' . $this->settings->whatsapp_community_link;
+                    $lines[] = '**Link zur Community:** '.$this->settings->whatsapp_community_link;
                     $lines[] = '';
                 }
 
@@ -747,19 +751,19 @@ class LlmsController extends Controller
             '/<br\s*\/?>/i' => "\n",
 
             // Paragraphs
-            '/<p[^>]*>(.*?)<\/p>/is' => '$1' . "\n\n",
+            '/<p[^>]*>(.*?)<\/p>/is' => '$1'."\n\n",
 
             // Lists
             '/<ul[^>]*>(.*?)<\/ul>/is' => '$1',
             '/<ol[^>]*>(.*?)<\/ol>/is' => '$1',
-            '/<li[^>]*>(.*?)<\/li>/is' => '- $1' . "\n",
+            '/<li[^>]*>(.*?)<\/li>/is' => '- $1'."\n",
 
             // Blockquotes
             '/<blockquote[^>]*>(.*?)<\/blockquote>/is' => '> $1',
 
             // Code
             '/<code[^>]*>(.*?)<\/code>/is' => '`$1`',
-            '/<pre[^>]*>(.*?)<\/pre>/is' => '```' . "\n" . '$1' . "\n" . '```',
+            '/<pre[^>]*>(.*?)<\/pre>/is' => '```'."\n".'$1'."\n".'```',
 
             // Horizontal rule
             '/<hr[^>]*>/i' => '---',
