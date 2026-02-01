@@ -1,32 +1,48 @@
-*.log
+# Dependencies
+/vendor/
+/node_modules/
+
+# IDE
+/.idea/
+/.vscode/
+/.fleet/
+/.nova/
+/.zed/
+
+# OS
 .DS_Store
-.copilot
-.env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
-Homestead.json
-Homestead.yaml
 Thumbs.db
 
-**/caddy
-frankenphp
-frankenphp-worker.php
-public/sitemap.xml
+# Environment
+.env
+.env.local
+.env.backup
+.env.production
+
+# TYPO3 generated / web root contents
+/web/typo3/
+/web/typo3conf/
+/web/fileadmin/
+/web/uploads/
+/web/cache/
+/web/typo3temp/
+/web/CHANGELOG.md
+/web/INSTALL.md
+/web/LICENSE.txt
+/web/NEWS.md
+# Keep web/ itself but ignore generated content
+/web/*
+!/web/.gitkeep
+
+# Public (alternative web root)
+/public/*
+!/public/.gitkeep
+
+# PHP
+.phpunit.result.cache
+.phpunit.cache
 .phpstorm.meta.php
 _ide_helper.php
 .php-cs-fixer.cache
+.phpactor.json
+auth.json

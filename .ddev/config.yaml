@@ -1,5 +1,5 @@
-name: mens-circle-design
-type: laravel
+name: mens-circle
+type: typo3
 docroot: public
 php_version: "8.5"
 webserver_type: nginx-fpm
@@ -7,12 +7,12 @@ xdebug_enabled: false
 additional_hostnames: []
 additional_fqdns: []
 database:
-    type: postgres
-    version: "18"
+    type: mariadb
+    version: "11.8"
 use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
-corepack_enable: false
+corepack_enable: true
 
 # Key features of DDEV's config.yaml:
 
@@ -291,3 +291,5 @@ corepack_enable: false
 # information on the commands that can be extended and the tasks you can define
 # for them. Example:
 #hooks:
+#  post-start:
+#    - exec: composer install -d /var/www/html
