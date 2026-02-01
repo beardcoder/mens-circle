@@ -1,0 +1,48 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  BeardCoder\MensCircle\:
+    resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
+
+  # Controllers must be public
+  BeardCoder\MensCircle\Controller\EventController:
+    public: true
+    tags: ['extbase.controller']
+
+  BeardCoder\MensCircle\Controller\NewsletterController:
+    public: true
+    tags: ['extbase.controller']
+
+  BeardCoder\MensCircle\Controller\TestimonialController:
+    public: true
+    tags: ['extbase.controller']
+
+  # Event Listeners via PHP attributes - no manual tag needed
+  # but kept here for clarity
+  BeardCoder\MensCircle\EventListener\RegistrationCreatedListener:
+    tags:
+      - name: event.listener
+        identifier: 'mens-circle/registration-created'
+
+  BeardCoder\MensCircle\EventListener\NewsletterSubscribedListener:
+    tags:
+      - name: event.listener
+        identifier: 'mens-circle/newsletter-subscribed'
+
+  # Repositories must be public for Extbase
+  BeardCoder\MensCircle\Domain\Repository\EventRepository:
+    public: true
+
+  BeardCoder\MensCircle\Domain\Repository\RegistrationRepository:
+    public: true
+
+  BeardCoder\MensCircle\Domain\Repository\NewsletterSubscriptionRepository:
+    public: true
+
+  BeardCoder\MensCircle\Domain\Repository\TestimonialRepository:
+    public: true
+

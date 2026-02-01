@@ -1,0 +1,4 @@
+name: beardcoder/mens-circle
+label: 'Männerkreis Niederbayern'
+dependencies:
+  - typo3/form

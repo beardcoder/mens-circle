@@ -1,0 +1,16 @@
+base: /
+dependencies:
+  - beardcoder/mens-circle
+languages:
+  -
+    title: Deutsch
+    enabled: true
+    locale: de_DE.utf8
+    hreflang: de-DE
+    base: /
+    websiteTitle: ''
+    navigationTitle: ''
+    flag: de
+    languageId: 0
+rootPageId: 1
+websiteTitle: ''

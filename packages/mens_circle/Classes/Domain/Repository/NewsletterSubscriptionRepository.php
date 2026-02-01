@@ -1,0 +1,64 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BeardCoder\MensCircle\Domain\Repository;
+
+use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
+use TYPO3\CMS\Extbase\Persistence\Repository;
+
+/**
+ * @template T of NewsletterSubscription
+ * @extends Repository<T>
+ */
+class NewsletterSubscriptionRepository extends Repository
+{
+    public function findByEmail(string $email): ?NewsletterSubscription
+    {
+        $query = $this->createQuery();
+        $query->setConstraints([
+            $query->equals('email', $email),
+        ]);
+
+        return $query->execute()->current() ?: null;
+    }
+
+    public function findByConfirmationToken(string $token): ?NewsletterSubscription
+    {
+        $query = $this->createQuery();
+        $query->setConstraints([
+            $query->equals('confirmationToken', $token),
+        ]);
+
+        return $query->execute()->current() ?: null;
+    }
+
+    public function findByUnsubscribeToken(string $token): ?NewsletterSubscription
+    {
+        $query = $this->createQuery();
+        $query->setConstraints([
+            $query->equals('unsubscribeToken', $token),
+        ]);
+
+        return $query->execute()->current() ?: null;
+    }
+
+    /**
+     * @return QueryResult<NewsletterSubscription>
+     */
+    public function findAllConfirmed(): QueryResult
+    {
+        $query = $this->createQuery();
+        $query->setConstraints([
+            $query->equals('isConfirmed', true),
+        ]);
+
+        return $query->execute();
+    }
+
+    public function countConfirmed(): int
+    {
+        return $this->findAllConfirmed()->count();
+    }
+}

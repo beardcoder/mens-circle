@@ -1,0 +1,90 @@
+page = PAGE
+page {
+    typeNum = 0
+
+    10 = PAGEVIEW
+    10 {
+        paths {
+            100 = EXT:mens_circle/Resources/Private/PageView/
+        }
+
+        variables {
+            siteName = TEXT
+            siteName.value = {$plugin.tx_menscircle.settings.siteName}
+
+            siteTagline = TEXT
+            siteTagline.value = {$plugin.tx_menscircle.settings.siteTagline}
+        }
+
+        dataProcessing {
+            # Hauptinhalt
+            10 = page-content
+            10.as = mainContent
+
+            # Hauptnavigation
+            20 = menu
+            20 {
+                as = mainNavigation
+                levels = 2
+                expandAll = 1
+                includeSpacer = 1
+            }
+
+            # Footer Navigation
+            30 = menu
+            30 {
+                as = footerNavigation
+                special = directory
+                special.value = {$plugin.tx_menscircle.settings.footerPageId}
+            }
+
+            # Breadcrumb
+            40 = menu
+            40 {
+                as = breadcrumb
+                special = rootline
+                special.range = 0|-1
+            }
+        }
+    }
+
+    # Meta Tags
+    meta {
+        viewport = width=device-width, initial-scale=1
+        robots = index,follow
+    }
+
+    includeCSS {
+        main = EXT:mens_circle/Resources/Public/Css/main.css
+    }
+
+    includeJSFooter {
+        main = EXT:mens_circle/Resources/Public/JavaScript/main.js
+    }
+}
+
+# Plugin TypoScript
+plugin.tx_menscircle.settings = {$settings.tx_menscircle}
+
+# Extbase Plugins
+plugin.tx_menscircle_events.settings = {$settings.tx_menscircle}
+plugin.tx_menscircle_newsletter.settings = {$settings.tx_menscircle}
+plugin.tx_menscircle_testimonials.settings = {$settings.tx_menscircle}
+
+# Upcoming Events lib object for use in PAGEVIEW
+lib.upcomingEvents = CONTENT
+lib.upcomingEvents {
+    table = tx_menscircle_domain_model_event
+    select {
+        where = is_published = 1 AND event_date > {CURRENT_UNIX_TIME}
+        orderBy = event_date ASC
+        limitOffset = 3,0
+    }
+    renderObj = FLUIDTEMPLATE
+    renderObj {
+        file = EXT:mens_circle/Resources/Private/Partials/Event/Card.html
+        variables {
+            event.field = uid
+        }
+    }
+}

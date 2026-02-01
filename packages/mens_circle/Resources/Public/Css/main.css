@@ -1,0 +1,270 @@
+/**
+ * Männerkreis Niederbayern — Main Stylesheet
+ * Uses Tailwind CSS utility classes inline in templates.
+ * This file provides base resets, custom components, and badge styles.
+ */
+
+/* =========================================================
+   Base / Reset
+   ========================================================= */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    color: #292524; /* stone-800 */
+    background-color: #fafaf9; /* stone-50 */
+    -webkit-text-size-adjust: 100%;
+}
+
+img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* Skip to content for accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #f59e0b;
+    color: #1c1917;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    transition: top 0.2s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* =========================================================
+   Badges — Event Status
+   ========================================================= */
+
+.badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+}
+
+.badge--available {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge--limited {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge--full {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.badge--past {
+    background-color: #e2e8f0;
+    color: #64748b;
+}
+
+/* =========================================================
+   Flash Messages
+   ========================================================= */
+
+.flash-message {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.flash-message--ok,
+.flash-message--success {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.flash-message--warning {
+    background-color: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+
+.flash-message--error {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+}
+
+.flash-message--info {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Auto-dismiss after 5 seconds */
+.flash-message {
+    animation: slideInAndOut 5s ease forwards;
+}
+
+@keyframes slideInAndOut {
+    0% {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    85% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-1rem);
+    }
+}
+
+/* =========================================================
+   Prose (rich text content)
+   ========================================================= */
+
+.prose {
+    color: #44403c; /* stone-600 */
+}
+
+.prose p {
+    margin-bottom: 1rem;
+}
+
+.prose h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1c1917;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.prose h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #292524;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.prose ul, .prose ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.prose li {
+    margin-bottom: 0.25rem;
+}
+
+.prose a {
+    color: #d97706;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.prose a:hover {
+    color: #b45309;
+}
+
+.prose img {
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}
+
+.prose blockquote {
+    border-left: 3px solid #f59e0b;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: #78716c;
+    font-style: italic;
+}
+
+/* =========================================================
+   Utility: Main Content Padding (compensates for fixed nav)
+   ========================================================= */
+
+#main {
+    padding-top: 4rem; /* h-16 nav height */
+}
+
+/* =========================================================
+   Responsive: Container
+   ========================================================= */
+
+.container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        max-width: 640px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 768px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1024px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1280px;
+    }
+}

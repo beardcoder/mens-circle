@@ -1,0 +1,35 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="main">
+    <div class="container mx-auto px-4 py-12 max-w-6xl">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-stone-900 mb-3">Testimonials</h1>
+            <p class="text-stone-500 text-lg">Was unsere Teilnehmer sagen</p>
+        </div>
+
+        <f:if condition="{testimonials}">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <f:for each="{testimonials}" as="testimonial">
+                    <f:render partial="Testimonial/Card" arguments="{testimonial: testimonial}" />
+                </f:for>
+            </div>
+        </f:if>
+
+        <f:if condition="{testimonials -> f:boolean() -> f:not()}">
+            <div class="text-center text-stone-500 py-12">
+                Noch keine Testimonials vorhanden.
+            </div>
+        </f:if>
+
+        <div class="text-center">
+            <a href="{f:uri.action(action: 'form')}" class="inline-flex items-center px-6 py-3 bg-amber-500 hover:bg-amber-600 text-stone-900 font-semibold rounded-lg transition-colors">
+                Eigenes Testimonial einreichen
+            </a>
+        </div>
+    </div>
+</f:section>
+
+</html>

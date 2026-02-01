@@ -1,0 +1,68 @@
+<footer xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        class="footer bg-stone-900 text-stone-400 py-12 mt-0">
+
+    <div class="container mx-auto px-4 max-w-6xl">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+            <!-- Branding Column -->
+            <div>
+                <h3 class="text-white font-bold text-lg mb-3">Männerkreis Niederbayern</h3>
+                <p class="text-sm leading-relaxed">
+                    Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern und Straubing.
+                </p>
+            </div>
+
+            <!-- Footer Navigation -->
+            <div>
+                <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-3">Navigation</h4>
+                <ul class="space-y-2">
+                    <f:for each="{footerNavigation}" as="menuItem">
+                        <li>
+                            <f:link.page pageUid="{menuItem.uid}"
+                                         class="text-stone-400 hover:text-white text-sm transition-colors">
+                                {menuItem.title}
+                            </f:link.page>
+                        </li>
+                    </f:for>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-3">Kontakt</h4>
+                <div class="space-y-2 text-sm">
+                    <p>Straubing, Niederbayern</p>
+                    <f:if condition="{settings.contactEmail}">
+                        <p>
+                            <a href="mailto:{settings.contactEmail}" class="text-amber-400 hover:text-amber-300 transition-colors">
+                                {settings.contactEmail}
+                            </a>
+                        </p>
+                    </f:if>
+                    <f:if condition="{settings.whatsappCommunityLink}">
+                        <a href="{settings.whatsappCommunityLink}" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors mt-2">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.966-.273-.098-.473-.149-.674.149-.2.297-.776.966-.952 1.165-.175.198-.36.223-.658.074-.297-.149-1.255-.474-2.39-1.475-.885-.788-1.484-1.761-1.659-2.059-.175-.297-.019-.458.132-.607.136-.132.297-.345.446-.519.149-.175.198-.297.297-.497.099-.198.05-.371-.025-.52-.074-.149-.674-1.625-.924-2.199-.243-.578-.492-.5-.674-.51-.173-.008-.371-.01-.569-.01-.198 0-.52.074-.792.371-.271.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.073.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.735.227 1.408.195 1.913.118.592-.088 1.826-.748 2.083-1.468.257-.72.257-1.338.18-1.468-.074-.131-.272-.198-.569-.347z" />
+                            </svg>
+                            WhatsApp Community
+                        </a>
+                    </f:if>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-stone-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p class="text-xs text-stone-500">
+                © {f:format.date(format: 'Y')}<f:format.date>{0}</f:format.date> Männerkreis Niederbayern. Alle Rechte vorbehalten.
+            </p>
+            <div class="flex gap-4 text-xs text-stone-500">
+                <f:if condition="{settings.impressumPageId}">
+                    <f:link.page pageUid="{settings.impressumPageId}" class="hover:text-stone-300 transition-colors">Impressum</f:link.page>
+                </f:if>
+                <f:if condition="{settings.datenschutzPageId}">
+                    <f:link.page pageUid="{settings.datenschutzPageId}" class="hover:text-stone-300 transition-colors">Datenschutz</f:link.page>
+                </f:if>
+            </div>
+        </div>
+    </div>
+</footer>

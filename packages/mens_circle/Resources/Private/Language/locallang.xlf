@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="de" datatype="plaintext">
+        <body>
+            <!-- Extension Labels -->
+            <trans-unit id="extension.name" xml:space="preserve">
+                <source>Männerkreis Niederbayern</source>
+            </trans-unit>
+            <trans-unit id="extension.description" xml:space="preserve">
+                <source>Event Management und Community Plattform</source>
+            </trans-unit>
+
+            <!-- Backend Modules -->
+            <trans-unit id="module.events" xml:space="preserve">
+                <source>Veranstaltungen</source>
+            </trans-unit>
+            <trans-unit id="module.newsletter" xml:space="preserve">
+                <source>Newsletter</source>
+            </trans-unit>
+
+            <!-- Frontend Plugins -->
+            <trans-unit id="plugin.events" xml:space="preserve">
+                <source>Männerkreis: Veranstaltungen</source>
+            </trans-unit>
+            <trans-unit id="plugin.newsletter" xml:space="preserve">
+                <source>Männerkreis: Newsletter</source>
+            </trans-unit>
+            <trans-unit id="plugin.testimonials" xml:space="preserve">
+                <source>Männerkreis: Testimonials</source>
+            </trans-unit>
+
+            <!-- General Labels -->
+            <trans-unit id="label.save" xml:space="preserve">
+                <source>Speichern</source>
+            </trans-unit>
+            <trans-unit id="label.cancel" xml:space="preserve">
+                <source>Abbrechen</source>
+            </trans-unit>
+            <trans-unit id="label.submit" xml:space="preserve">
+                <source>Absenden</source>
+            </trans-unit>
+            <trans-unit id="label.register" xml:space="preserve">
+                <source>Anmelden</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

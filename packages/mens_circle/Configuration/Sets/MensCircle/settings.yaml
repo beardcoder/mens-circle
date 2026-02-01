@@ -1,0 +1,33 @@
+settings:
+  tx_menscircle:
+    siteName: 'Männerkreis Niederbayern / Straubing'
+    siteTagline: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer'
+    siteDescription: 'Männerkreis Niederbayern - Eine Plattform für Männerkreis-Veranstaltungen in Niederbayern und Straubing.'
+
+    contactEmail: ''
+    contactPhone: ''
+    location: 'Straubing, Niederbayern'
+
+    whatsappCommunityLink: ''
+
+    # Page IDs (configure after pages are created)
+    eventPageId: 0
+    footerPageId: 0
+    impressumPageId: 0
+    datenschutzPageId: 0
+
+    # Features
+    features:
+      enableNewsletter: true
+      enableTestimonials: true
+      enableSmsNotifications: false
+
+    # SMS Service (Seven.io)
+    sms:
+      apiKey: ''
+      senderName: 'Maennerkreis'
+
+    # Email Settings
+    email:
+      fromEmail: ''
+      fromName: 'Männerkreis Niederbayern'

@@ -1,0 +1,28 @@
+<div xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+     class="testimonial-card bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
+
+    <div class="flex items-start gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+            <span class="text-amber-600 font-bold text-sm">
+                {testimonial.authorName -> f:format.case(mode: 'upper') -> f:string.substring(position: 0, length: 1)}
+            </span>
+        </div>
+        <div>
+            <h4 class="font-semibold text-stone-900">{testimonial.authorName}</h4>
+            <f:if condition="{testimonial.event}">
+                <p class="text-xs text-stone-400">{testimonial.event.title}</p>
+            </f:if>
+        </div>
+    </div>
+
+    <!-- Quote marks -->
+    <div class="text-amber-400 text-3xl font-bold leading-none mb-2">"</div>
+
+    <p class="text-stone-600 text-sm leading-relaxed">{testimonial.content}</p>
+
+    <div class="mt-4 pt-3 border-t border-stone-100">
+        <span class="text-xs text-stone-400">
+            <f:format.date format="d.M. Y">{testimonial.createdAt}</f:format.date>
+        </span>
+    </div>
+</div>

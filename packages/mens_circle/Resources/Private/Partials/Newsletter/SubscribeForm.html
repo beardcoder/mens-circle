@@ -1,0 +1,31 @@
+<div xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+     class="newsletter-form max-w-lg mx-auto">
+
+    <f:form action="subscribe" controller="Newsletter" method="post" class="bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
+        <input type="hidden" name="_typo3_fluid_csrf_token" value="{f:form.csrf()}" />
+
+        <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex-1">
+                <label for="nl-firstName" class="block text-sm font-medium text-stone-600 mb-1">Vorname</label>
+                <input type="text" id="nl-firstName" name="firstName"
+                       placeholder="Dein Vorname"
+                       class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm" />
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 mt-3">
+            <input type="email" name="email" required
+                   placeholder="deine@email.de"
+                   class="flex-1 px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm" />
+
+            <button type="submit"
+                    class="bg-amber-500 hover:bg-amber-600 text-stone-900 font-semibold px-6 py-2 rounded-lg transition-colors text-sm whitespace-nowrap active:scale-95 transform">
+                Anmelden
+            </button>
+        </div>
+
+        <p class="text-xs text-stone-400 mt-3 text-center">
+            Wir senden dir eine Bestätigungsmail. Du kannst dich jederzeit abmelden.
+        </p>
+    </f:form>
+</div>

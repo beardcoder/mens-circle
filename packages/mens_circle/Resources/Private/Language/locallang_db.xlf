@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="de" datatype="plaintext">
+        <body>
+            <!-- Event Model -->
+            <trans-unit id="tx_menscircle_domain_model_event" xml:space="preserve">
+                <source>Veranstaltung</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.slug" xml:space="preserve">
+                <source>URL-Slug</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.description" xml:space="preserve">
+                <source>Beschreibung</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.location" xml:space="preserve">
+                <source>Ort</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.event_date" xml:space="preserve">
+                <source>Datum &amp; Uhrzeit</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.event_end_date" xml:space="preserve">
+                <source>Endzeit</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.max_participants" xml:space="preserve">
+                <source>Maximale Teilnehmer (0 = unbegrenzt)</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.is_published" xml:space="preserve">
+                <source>Veröffentlicht</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.event_image" xml:space="preserve">
+                <source>Titelbild</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_event.registrations" xml:space="preserve">
+                <source>Anmeldungen</source>
+            </trans-unit>
+
+            <!-- Registration Model -->
+            <trans-unit id="tx_menscircle_domain_model_registration" xml:space="preserve">
+                <source>Anmeldung</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_registration.event" xml:space="preserve">
+                <source>Veranstaltung</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_registration.first_name" xml:space="preserve">
+                <source>Vorname</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_registration.last_name" xml:space="preserve">
+                <source>Nachname</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_registration.email" xml:space="preserve">
+                <source>E-Mail</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_registration.phone" xml:space="preserve">
+                <source>Telefonnummer</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_registration.is_confirmed" xml:space="preserve">
+                <source>Bestätigt</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_registration.notes" xml:space="preserve">
+                <source>Anmerkungen</source>
+            </trans-unit>
+
+            <!-- Participant Model -->
+            <trans-unit id="tx_menscircle_domain_model_participant" xml:space="preserve">
+                <source>Teilnehmer</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_participant.registration" xml:space="preserve">
+                <source>Anmeldung</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_participant.first_name" xml:space="preserve">
+                <source>Vorname</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_participant.last_name" xml:space="preserve">
+                <source>Nachname</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_participant.email" xml:space="preserve">
+                <source>E-Mail</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_participant.phone" xml:space="preserve">
+                <source>Telefonnummer</source>
+            </trans-unit>
+
+            <!-- Newsletter Model -->
+            <trans-unit id="tx_menscircle_domain_model_newsletter" xml:space="preserve">
+                <source>Newsletter</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_newsletter.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_newsletter.subject" xml:space="preserve">
+                <source>Betreff</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_newsletter.content" xml:space="preserve">
+                <source>Inhalt</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_newsletter.is_sent" xml:space="preserve">
+                <source>Gesendet</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_newsletter.sent_at" xml:space="preserve">
+                <source>Gesendet am</source>
+            </trans-unit>
+
+            <!-- Newsletter Subscription Model -->
+            <trans-unit id="tx_menscircle_domain_model_newslettersubscription" xml:space="preserve">
+                <source>Newsletter-Abonnement</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_newslettersubscription.email" xml:space="preserve">
+                <source>E-Mail</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_newslettersubscription.first_name" xml:space="preserve">
+                <source>Vorname</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_newslettersubscription.is_confirmed" xml:space="preserve">
+                <source>Bestätigt</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_newslettersubscription.confirmed_at" xml:space="preserve">
+                <source>Bestätigt am</source>
+            </trans-unit>
+
+            <!-- Testimonial Model -->
+            <trans-unit id="tx_menscircle_domain_model_testimonial" xml:space="preserve">
+                <source>Testimonial</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_testimonial.author_name" xml:space="preserve">
+                <source>Autorenname</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_testimonial.content" xml:space="preserve">
+                <source>Inhalt</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_testimonial.event" xml:space="preserve">
+                <source>Veranstaltung</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_testimonial.is_approved" xml:space="preserve">
+                <source>Freigegeben</source>
+            </trans-unit>
+
+            <!-- Page Model -->
+            <trans-unit id="tx_menscircle_domain_model_page" xml:space="preserve">
+                <source>Seite</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_page.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_page.slug" xml:space="preserve">
+                <source>URL-Slug</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_page.meta_title" xml:space="preserve">
+                <source>Meta-Titel</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_page.meta_description" xml:space="preserve">
+                <source>Meta-Beschreibung</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_page.content_blocks" xml:space="preserve">
+                <source>Inhaltsblöcke</source>
+            </trans-unit>
+
+            <!-- Content Block Model -->
+            <trans-unit id="tx_menscircle_domain_model_contentblock" xml:space="preserve">
+                <source>Inhaltsblock</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_contentblock.type" xml:space="preserve">
+                <source>Typ</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_contentblock.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_contentblock.content" xml:space="preserve">
+                <source>Inhalt</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_contentblock.image" xml:space="preserve">
+                <source>Bild</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_contentblock.cta_text" xml:space="preserve">
+                <source>CTA Text</source>
+            </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_contentblock.cta_url" xml:space="preserve">
+                <source>CTA URL</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
