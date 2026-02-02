@@ -1,4 +1,5 @@
 name: beardcoder/mens-circle
-label: 'Männerkreis Niederbayern'
-dependencies:
+label: 'Theme: Männerkreis'
+optionalDependencies:
   - typo3/form
+  - typo3/seo

@@ -468,6 +468,28 @@
             <trans-unit id="flexform.whatsapp.hint" xml:space="preserve">
                 <source>Hinweistext</source>
             </trans-unit>
+
+            <!-- Backend Layouts -->
+            <trans-unit id="backend_layout.startpage.title" xml:space="preserve">
+                <source>Männerkreis Startseite</source>
+            </trans-unit>
+            <trans-unit id="backend_layout.contentpage.title" xml:space="preserve">
+                <source>Männerkreis Inhaltsseite</source>
+            </trans-unit>
+            <trans-unit id="backend_layout.colPos.stage" xml:space="preserve">
+                <source>Bühne (Hero)</source>
+            </trans-unit>
+            <trans-unit id="backend_layout.colPos.main" xml:space="preserve">
+                <source>Hauptinhalt</source>
+            </trans-unit>
+            <trans-unit id="backend_layout.colPos.footer" xml:space="preserve">
+                <source>Footer Bereich</source>
+            </trans-unit>
+
+            <!-- Frame class -->
+            <trans-unit id="tt_content.frame_class" xml:space="preserve">
+                <source>Hintergrund</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

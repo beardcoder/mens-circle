@@ -1,0 +1,47 @@
+# Page rendering using PAGEVIEW
+lib.fluidPage = PAGEVIEW
+lib.fluidPage {
+    paths.10 = EXT:mens_circle/Resources/Private/Templates/
+
+    dataProcessing {
+        # Main navigation
+        10 = menu
+        10 {
+            as = mainMenu
+            levels = 2
+            expandAll = 1
+        }
+
+        # Breadcrumb
+        20 = menu
+        20 {
+            special = rootline
+            as = breadcrumb
+            dataProcessing.10 = record-transformation
+        }
+
+        # Site configuration
+        30 = site
+        30.as = site
+
+        # Footer navigation
+        40 = menu
+        40 {
+            as = footerMenu
+            special = directory
+            special.value = {$settings.menscircle.footerPageId}
+        }
+    }
+}
+
+# Dynamic content rendering for use in Fluid templates
+lib.dynamicContent = CONTENT
+lib.dynamicContent {
+    table = tt_content
+    select {
+        orderBy = sorting
+        where = {#colPos}={field:colPos}
+        where.insertData = 1
+    }
+    slide.field = slide
+}

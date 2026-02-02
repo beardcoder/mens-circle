@@ -1,58 +1,30 @@
+@import './TypoScript/*.typoscript'
+
 page = PAGE
 page {
     typeNum = 0
 
-    10 = PAGEVIEW
-    10 {
-        paths {
-            100 = EXT:mens_circle/Resources/Private/PageView/
-        }
-
-        variables {
-            siteName = TEXT
-            siteName.value = {$plugin.tx_menscircle.settings.siteName}
-
-            siteTagline = TEXT
-            siteTagline.value = {$plugin.tx_menscircle.settings.siteTagline}
-        }
-
-        dataProcessing {
-            # Hauptinhalt
-            10 = page-content
-            10.as = mainContent
-
-            # Hauptnavigation
-            20 = menu
-            20 {
-                as = mainNavigation
-                levels = 2
-                expandAll = 1
-                includeSpacer = 1
-            }
-
-            # Footer Navigation
-            30 = menu
-            30 {
-                as = footerNavigation
-                special = directory
-                special.value = {$plugin.tx_menscircle.settings.footerPageId}
-            }
-
-            # Breadcrumb
-            40 = menu
-            40 {
-                as = breadcrumb
-                special = rootline
-                special.range = 0|-1
-            }
-        }
-    }
-
-    # Meta Tags
     meta {
-        viewport = width=device-width, initial-scale=1
+        viewport = width=device-width, initial-scale=1, shrink-to-fit=no
         robots = index,follow
+        charset = utf-8
     }
+
+    bodyTagCObject = COA
+    bodyTagCObject {
+        10 = TEXT
+        10.data = sitesettings:menscircle.colorScheme
+        10.wrap = theme-|
+
+        20 = TEXT
+        20.value = header-fixed
+        20.if.isTrue.data = sitesettings:menscircle.fixedHeader
+
+        stdWrap.noTrimWrap = | ||
+        stdWrap.wrap = <body class="|">
+    }
+
+    10 =< lib.fluidPage
 
     includeCSS {
         main = EXT:mens_circle/Resources/Public/Css/main.css
@@ -60,208 +32,5 @@ page {
 
     includeJSFooter {
         main = EXT:mens_circle/Resources/Public/JavaScript/main.js
-    }
-}
-
-# Plugin TypoScript
-plugin.tx_menscircle.settings = {$settings.tx_menscircle}
-
-# Extbase Plugins
-plugin.tx_menscircle_events.settings = {$settings.tx_menscircle}
-plugin.tx_menscircle_newsletter.settings = {$settings.tx_menscircle}
-plugin.tx_menscircle_testimonials.settings = {$settings.tx_menscircle}
-
-# Upcoming Events lib object for use in PAGEVIEW
-lib.upcomingEvents = CONTENT
-lib.upcomingEvents {
-    table = tx_menscircle_domain_model_event
-    select {
-        where = is_published = 1 AND event_date > {CURRENT_UNIX_TIME}
-        orderBy = event_date ASC
-        limitOffset = 3,0
-    }
-    renderObj = FLUIDTEMPLATE
-    renderObj {
-        file = EXT:mens_circle/Resources/Private/Partials/Event/Card.html
-        variables {
-            event.field = uid
-        }
-    }
-}
-
-# =============================================================================
-# Custom Content Elements Rendering
-# =============================================================================
-
-tt_content {
-    # Hero Content Element
-    menscircle_hero =< lib.contentElement
-    menscircle_hero {
-        templateName = Hero
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-        dataProcessing {
-            10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
-            10 {
-                references.fieldName = image
-                as = images
-            }
-            20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
-            20 {
-                fieldName = pi_flexform
-                as = flexform
-            }
-        }
-    }
-
-    # CTA Content Element
-    menscircle_cta =< lib.contentElement
-    menscircle_cta {
-        templateName = Cta
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-        dataProcessing {
-            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
-            10 {
-                fieldName = pi_flexform
-                as = flexform
-            }
-        }
-    }
-
-    # FAQ Content Element
-    menscircle_faq =< lib.contentElement
-    menscircle_faq {
-        templateName = Faq
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-        dataProcessing {
-            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
-            10 {
-                fieldName = pi_flexform
-                as = flexform
-            }
-        }
-    }
-
-    # Intro Content Element
-    menscircle_intro =< lib.contentElement
-    menscircle_intro {
-        templateName = Intro
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-        dataProcessing {
-            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
-            10 {
-                fieldName = pi_flexform
-                as = flexform
-            }
-        }
-    }
-
-    # Journey Steps Content Element
-    menscircle_journey =< lib.contentElement
-    menscircle_journey {
-        templateName = Journey
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-        dataProcessing {
-            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
-            10 {
-                fieldName = pi_flexform
-                as = flexform
-            }
-        }
-    }
-
-    # Moderator Content Element
-    menscircle_moderator =< lib.contentElement
-    menscircle_moderator {
-        templateName = Moderator
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-        dataProcessing {
-            10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
-            10 {
-                references.fieldName = image
-                as = images
-            }
-            20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
-            20 {
-                fieldName = pi_flexform
-                as = flexform
-            }
-        }
-    }
-
-    # Text Section Content Element
-    menscircle_textsection =< lib.contentElement
-    menscircle_textsection {
-        templateName = TextSection
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-    }
-
-    # Values Content Element
-    menscircle_values =< lib.contentElement
-    menscircle_values {
-        templateName = Values
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-        dataProcessing {
-            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
-            10 {
-                fieldName = pi_flexform
-                as = flexform
-            }
-        }
-    }
-
-    # WhatsApp Community Content Element
-    menscircle_whatsapp =< lib.contentElement
-    menscircle_whatsapp {
-        templateName = WhatsApp
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-        dataProcessing {
-            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
-            10 {
-                fieldName = pi_flexform
-                as = flexform
-            }
-        }
-    }
-
-    # Newsletter Section Content Element
-    menscircle_newsletter_section =< lib.contentElement
-    menscircle_newsletter_section {
-        templateName = NewsletterSection
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-    }
-
-    # Testimonials Section Content Element
-    menscircle_testimonials_section =< lib.contentElement
-    menscircle_testimonials_section {
-        templateName = TestimonialsSection
-        templateRootPaths {
-            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
-        }
-        dataProcessing {
-            10 = BeardCoder\MensCircle\DataProcessing\TestimonialsProcessor
-            10 {
-                as = testimonials
-            }
-        }
     }
 }

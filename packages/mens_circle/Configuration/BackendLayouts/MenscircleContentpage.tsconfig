@@ -1,0 +1,37 @@
+mod {
+    web_layout {
+        BackendLayouts {
+            MenscircleContentpage {
+                title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:backend_layout.contentpage.title
+                config {
+                    backend_layout {
+                        colCount = 1
+                        rowCount = 2
+                        rows {
+                            1 {
+                                columns {
+                                    1 {
+                                        name = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:backend_layout.colPos.main
+                                        colPos = 0
+                                        identifier = content
+                                        disallowedContentTypes = menscircle_hero
+                                    }
+                                }
+                            }
+                            2 {
+                                columns {
+                                    1 {
+                                        name = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:backend_layout.colPos.footer
+                                        colPos = 10
+                                        identifier = footer
+                                        slideMode = slide
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

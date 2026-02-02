@@ -1,0 +1,189 @@
+# Base content element definition
+lib.contentElement = FLUIDTEMPLATE
+lib.contentElement {
+    layoutRootPaths.10 = EXT:mens_circle/Resources/Private/Templates/Layouts/
+    partialRootPaths.10 = EXT:mens_circle/Resources/Private/Templates/Partials/
+    templateRootPaths.10 = EXT:mens_circle/Resources/Private/Templates/Content/
+
+    templateName >
+    templateName.ifEmpty.cObject = TEXT
+    templateName.ifEmpty.cObject {
+        field = CType
+        required = 1
+        case = uppercamelcase
+    }
+
+    dataProcessing.10 = record-transformation
+}
+
+# Content element rendering
+tt_content = CASE
+tt_content.default =< lib.contentElement
+
+# =============================================================================
+# Custom Content Elements
+# =============================================================================
+
+# Hero
+tt_content.menscircle_hero =< lib.contentElement
+tt_content.menscircle_hero {
+    templateName = MenscircleHero
+    dataProcessing {
+        20 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
+        20 {
+            references.fieldName = image
+            as = images
+        }
+        30 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+        30 {
+            fieldName = pi_flexform
+            as = flexform
+        }
+    }
+}
+
+# CTA
+tt_content.menscircle_cta =< lib.contentElement
+tt_content.menscircle_cta {
+    templateName = MenscircleCta
+    dataProcessing {
+        20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+        20 {
+            fieldName = pi_flexform
+            as = flexform
+        }
+    }
+}
+
+# FAQ
+tt_content.menscircle_faq =< lib.contentElement
+tt_content.menscircle_faq {
+    templateName = MenscircleFaq
+    dataProcessing {
+        20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+        20 {
+            fieldName = pi_flexform
+            as = flexform
+        }
+    }
+}
+
+# Intro
+tt_content.menscircle_intro =< lib.contentElement
+tt_content.menscircle_intro {
+    templateName = MenscircleIntro
+    dataProcessing {
+        20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+        20 {
+            fieldName = pi_flexform
+            as = flexform
+        }
+    }
+}
+
+# Journey Steps
+tt_content.menscircle_journey =< lib.contentElement
+tt_content.menscircle_journey {
+    templateName = MenscircleJourney
+    dataProcessing {
+        20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+        20 {
+            fieldName = pi_flexform
+            as = flexform
+        }
+    }
+}
+
+# Moderator
+tt_content.menscircle_moderator =< lib.contentElement
+tt_content.menscircle_moderator {
+    templateName = MenscircleModerator
+    dataProcessing {
+        20 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
+        20 {
+            references.fieldName = image
+            as = images
+        }
+        30 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+        30 {
+            fieldName = pi_flexform
+            as = flexform
+        }
+    }
+}
+
+# Text Section
+tt_content.menscircle_textsection =< lib.contentElement
+tt_content.menscircle_textsection {
+    templateName = MenscircleTextsection
+}
+
+# Values
+tt_content.menscircle_values =< lib.contentElement
+tt_content.menscircle_values {
+    templateName = MenscircleValues
+    dataProcessing {
+        20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+        20 {
+            fieldName = pi_flexform
+            as = flexform
+        }
+    }
+}
+
+# WhatsApp
+tt_content.menscircle_whatsapp =< lib.contentElement
+tt_content.menscircle_whatsapp {
+    templateName = MenscircleWhatsapp
+    dataProcessing {
+        20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+        20 {
+            fieldName = pi_flexform
+            as = flexform
+        }
+    }
+}
+
+# Newsletter Section
+tt_content.menscircle_newsletter_section =< lib.contentElement
+tt_content.menscircle_newsletter_section {
+    templateName = MenscircleNewsletterSection
+}
+
+# Testimonials Section
+tt_content.menscircle_testimonials_section =< lib.contentElement
+tt_content.menscircle_testimonials_section {
+    templateName = MenscircleTestimonialsSection
+    dataProcessing {
+        20 = BeardCoder\MensCircle\DataProcessing\TestimonialsProcessor
+        20 {
+            as = testimonials
+        }
+    }
+}
+
+# =============================================================================
+# Rich Text Editor Adaptations
+# =============================================================================
+
+lib.parseFunc_RTE {
+    externalBlocks := addToList(ol,ul)
+    externalBlocks {
+        ol {
+            stripNL = 1
+            callRecursive = 1
+            callRecursive.tagStdWrap {
+                HTMLparser = 1
+                HTMLparser.tags.ol.fixAttrib.class.default = list list--ordered
+            }
+        }
+        ul {
+            stripNL = 1
+            callRecursive = 1
+            callRecursive.tagStdWrap {
+                HTMLparser = 1
+                HTMLparser.tags.ul.fixAttrib.class.default = list list--unordered
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<f:render partial="Pages/Header" arguments="{mainMenu: mainMenu, site: site}" />
+
+<main id="main" class="min-h-screen">
+    <f:render section="main" />
+</main>
+
+<f:render partial="Pages/Footer" arguments="{footerMenu: footerMenu, site: site}" />
+
+<f:cObject typoscriptObjectPath="lib.dynamicContent" data="{colPos: 10, slide: -1}" />
+
+</html>

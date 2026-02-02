@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="labels.xlf" date="2024-01-01T00:00:00Z">
+        <header/>
+        <body>
+            <trans-unit id="label" resname="label">
+                <source>Theme: Männerkreis</source>
+            </trans-unit>
+            <trans-unit id="description" resname="description">
+                <source>Theme for the Männerkreis Niederbayern website</source>
+            </trans-unit>
+            <trans-unit id="categories.menscircle" resname="categories.menscircle">
+                <source>Männerkreis Theme</source>
+            </trans-unit>
+            <trans-unit id="settings.menscircle.colorScheme" resname="settings.menscircle.colorScheme">
+                <source>Color Scheme</source>
+            </trans-unit>
+            <trans-unit id="settings.menscircle.header.fixedPosition" resname="settings.menscircle.header.fixedPosition">
+                <source>Fixed Header</source>
+            </trans-unit>
+            <trans-unit id="settings.menscircle.siteName" resname="settings.menscircle.siteName">
+                <source>Site Name</source>
+            </trans-unit>
+            <trans-unit id="settings.menscircle.siteTagline" resname="settings.menscircle.siteTagline">
+                <source>Site Tagline</source>
+            </trans-unit>
+            <trans-unit id="settings.menscircle.contactEmail" resname="settings.menscircle.contactEmail">
+                <source>Contact Email</source>
+            </trans-unit>
+            <trans-unit id="settings.menscircle.whatsappCommunityLink" resname="settings.menscircle.whatsappCommunityLink">
+                <source>WhatsApp Community Link</source>
+            </trans-unit>
+            <trans-unit id="settings.menscircle.features.enableNewsletter" resname="settings.menscircle.features.enableNewsletter">
+                <source>Enable Newsletter</source>
+            </trans-unit>
+            <trans-unit id="settings.menscircle.features.enableTestimonials" resname="settings.menscircle.features.enableTestimonials">
+                <source>Enable Testimonials</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,40 @@
+categories:
+  menscircle: ~
+
+settings:
+  menscircle.colorScheme:
+    default: theme-earth-brown
+    type: string
+    enum:
+      theme-earth-brown: 'Erde & Braun'
+      theme-forest-green: 'Wald & Grün'
+      theme-night-blue: 'Nacht & Blau'
+    category: menscircle
+  menscircle.header.fixedPosition:
+    default: true
+    type: bool
+    category: menscircle
+  menscircle.siteName:
+    default: 'Männerkreis Niederbayern'
+    type: string
+    category: menscircle
+  menscircle.siteTagline:
+    default: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer'
+    type: string
+    category: menscircle
+  menscircle.contactEmail:
+    default: ''
+    type: string
+    category: menscircle
+  menscircle.whatsappCommunityLink:
+    default: ''
+    type: string
+    category: menscircle
+  menscircle.features.enableNewsletter:
+    default: true
+    type: bool
+    category: menscircle
+  menscircle.features.enableTestimonials:
+    default: true
+    type: bool
+    category: menscircle

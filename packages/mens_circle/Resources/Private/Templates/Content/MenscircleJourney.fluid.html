@@ -1,0 +1,70 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:layout name="Content/Default" />
+
+<f:section name="main">
+    <f:comment><!-- HowTo Schema for SEO --></f:comment>
+    <f:if condition="{flexform.steps}">
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            "name": "<f:format.htmlentities><f:format.stripTags>{data.subheader}</f:format.stripTags></f:format.htmlentities>",
+            "description": "<f:format.htmlentities>{data.bodytext}</f:format.htmlentities>",
+            "step": [
+                <f:for each="{flexform.steps}" as="container" iteration="iter">
+                {
+                    "@type": "HowToStep",
+                    "position": {iter.cycle},
+                    "name": "<f:format.htmlentities>{container.step.el.title}</f:format.htmlentities>",
+                    "text": "<f:format.htmlentities>{container.step.el.description}</f:format.htmlentities>"
+                }<f:if condition="{iter.isLast} == 0">,</f:if>
+                </f:for>
+            ]
+        }
+        </script>
+    </f:if>
+
+    <div class="section section--large journey-section" id="reise" aria-labelledby="journey-title-{data.uid}">
+        <div class="container">
+            <div class="journey__header fade-in">
+                <f:if condition="{data.header}">
+                    <p class="eyebrow">{data.header}</p>
+                </f:if>
+
+                <f:if condition="{data.subheader}">
+                    <h2 class="section-title journey__title" id="journey-title-{data.uid}">
+                        <f:format.html>{data.subheader}</f:format.html>
+                    </h2>
+                </f:if>
+
+                <f:if condition="{data.bodytext}">
+                    <p class="journey__subtitle">{data.bodytext}</p>
+                </f:if>
+            </div>
+
+            <f:if condition="{flexform.steps}">
+                <div class="journey__steps stagger-children">
+                    <f:for each="{flexform.steps}" as="container">
+                        <div class="journey__step">
+                            <f:if condition="{container.step.el.number}">
+                                <div class="journey__step-number" aria-hidden="true">{container.step.el.number}</div>
+                            </f:if>
+
+                            <f:if condition="{container.step.el.title}">
+                                <h3 class="journey__step-title">{container.step.el.title}</h3>
+                            </f:if>
+
+                            <f:if condition="{container.step.el.description}">
+                                <p class="journey__step-text">{container.step.el.description}</p>
+                            </f:if>
+                        </div>
+                    </f:for>
+                </div>
+            </f:if>
+        </div>
+    </div>
+</f:section>
+
+</html>

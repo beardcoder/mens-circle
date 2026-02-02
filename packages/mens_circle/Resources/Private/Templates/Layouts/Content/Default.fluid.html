@@ -1,0 +1,12 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:variable name="frameClass" value="{data.frame_class}" />
+<f:variable name="hasFrame" value="{f:if(condition: '{frameClass} != \'default\'', then: '1')}" />
+
+<section id="c{data.uid}"
+         class="content-element content-element--{f:format.case(mode: 'lower', value: data.CType)}{f:if(condition: hasFrame, then: ' {frameClass}')}{f:if(condition: data.space_before_class, then: ' {data.space_before_class}')}{f:if(condition: data.space_after_class, then: ' {data.space_after_class}')}">
+    <f:render section="main" />
+</section>
+
+</html>
