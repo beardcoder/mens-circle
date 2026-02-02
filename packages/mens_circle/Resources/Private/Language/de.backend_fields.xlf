@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en" trgLang="de">
+    <file id="backend_fields">
+        <!-- Content Element Group -->
+        <unit id="tt_content.group.menscircle">
+            <segment state="final">
+                <source>Men's Circle</source>
+                <target>Männerkreis</target>
+            </segment>
+        </unit>
+
+        <!-- Hero Content Element -->
+        <unit id="tt_content.CType.menscircle_hero.label">
+            <segment state="final">
+                <source>Hero Section</source>
+                <target>Hero Section</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_hero.description">
+            <segment state="final">
+                <source>Full-width hero section with image, heading, and call-to-action</source>
+                <target>Vollbreite Hero-Sektion mit Bild, Überschrift und Call-to-Action</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.hero.label">
+            <segment state="final">
+                <source>Label (Eyebrow)</source>
+                <target>Label (Oberzeile)</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.hero.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.hero.description">
+            <segment state="final">
+                <source>Description</source>
+                <target>Beschreibung</target>
+            </segment>
+        </unit>
+
+        <!-- CTA Content Element -->
+        <unit id="tt_content.CType.menscircle_cta.label">
+            <segment state="final">
+                <source>Call to Action</source>
+                <target>Call to Action</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_cta.description">
+            <segment state="final">
+                <source>Call-to-action section with button</source>
+                <target>Call-to-Action-Bereich mit Button</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.cta.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.cta.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.cta.text">
+            <segment state="final">
+                <source>Text</source>
+                <target>Text</target>
+            </segment>
+        </unit>
+
+        <!-- FAQ Content Element -->
+        <unit id="tt_content.CType.menscircle_faq.label">
+            <segment state="final">
+                <source>FAQ Section</source>
+                <target>FAQ Bereich</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_faq.description">
+            <segment state="final">
+                <source>Frequently asked questions with collapsible answers</source>
+                <target>Häufig gestellte Fragen mit ausklappbaren Antworten</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.faq.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.faq.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.faq.intro">
+            <segment state="final">
+                <source>Intro Text</source>
+                <target>Intro-Text</target>
+            </segment>
+        </unit>
+
+        <!-- Intro Content Element -->
+        <unit id="tt_content.CType.menscircle_intro.label">
+            <segment state="final">
+                <source>Intro Section</source>
+                <target>Intro Bereich</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_intro.description">
+            <segment state="final">
+                <source>Introduction section with values</source>
+                <target>Einführungsbereich mit Werten</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.intro.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.intro.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.intro.text">
+            <segment state="final">
+                <source>Text</source>
+                <target>Text</target>
+            </segment>
+        </unit>
+
+        <!-- Journey Steps Content Element -->
+        <unit id="tt_content.CType.menscircle_journey.label">
+            <segment state="final">
+                <source>Journey Steps</source>
+                <target>Journey Schritte</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_journey.description">
+            <segment state="final">
+                <source>Step-by-step journey visualization</source>
+                <target>Schritt-für-Schritt Journey-Visualisierung</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.journey.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.journey.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.journey.subtitle">
+            <segment state="final">
+                <source>Subtitle</source>
+                <target>Untertitel</target>
+            </segment>
+        </unit>
+
+        <!-- Moderator Content Element -->
+        <unit id="tt_content.CType.menscircle_moderator.label">
+            <segment state="final">
+                <source>Moderator</source>
+                <target>Moderator</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_moderator.description">
+            <segment state="final">
+                <source>Moderator profile with image and biography</source>
+                <target>Moderatorprofil mit Bild und Biographie</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.moderator.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.moderator.name">
+            <segment state="final">
+                <source>Name</source>
+                <target>Name</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.moderator.bio">
+            <segment state="final">
+                <source>Biography</source>
+                <target>Biographie</target>
+            </segment>
+        </unit>
+
+        <!-- Text Section Content Element -->
+        <unit id="tt_content.CType.menscircle_textsection.label">
+            <segment state="final">
+                <source>Text Section</source>
+                <target>Text Bereich</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_textsection.description">
+            <segment state="final">
+                <source>Rich text content section</source>
+                <target>Rich-Text-Inhaltsbereich</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.textsection.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.textsection.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.textsection.content">
+            <segment state="final">
+                <source>Content</source>
+                <target>Inhalt</target>
+            </segment>
+        </unit>
+
+        <!-- Values Content Element -->
+        <unit id="tt_content.CType.menscircle_values.label">
+            <segment state="final">
+                <source>Values / Features</source>
+                <target>Werte / Features</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_values.description">
+            <segment state="final">
+                <source>Display values or features with icons</source>
+                <target>Werte oder Features mit Icons anzeigen</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.values.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.values.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+
+        <!-- WhatsApp Content Element -->
+        <unit id="tt_content.CType.menscircle_whatsapp.label">
+            <segment state="final">
+                <source>WhatsApp Community</source>
+                <target>WhatsApp Community</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_whatsapp.description">
+            <segment state="final">
+                <source>WhatsApp community invitation section</source>
+                <target>WhatsApp Community-Einladungsbereich</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.whatsapp.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.whatsapp.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.whatsapp.text">
+            <segment state="final">
+                <source>Text</source>
+                <target>Text</target>
+            </segment>
+        </unit>
+
+        <!-- Newsletter Section Content Element -->
+        <unit id="tt_content.CType.menscircle_newsletter_section.label">
+            <segment state="final">
+                <source>Newsletter Section</source>
+                <target>Newsletter Bereich</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_newsletter_section.description">
+            <segment state="final">
+                <source>Newsletter subscription section</source>
+                <target>Newsletter-Abonnementbereich</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.newsletter_section.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.newsletter_section.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.newsletter_section.text">
+            <segment state="final">
+                <source>Text</source>
+                <target>Text</target>
+            </segment>
+        </unit>
+
+        <!-- Testimonials Section Content Element -->
+        <unit id="tt_content.CType.menscircle_testimonials_section.label">
+            <segment state="final">
+                <source>Testimonials Section</source>
+                <target>Testimonials Bereich</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.CType.menscircle_testimonials_section.description">
+            <segment state="final">
+                <source>Display approved testimonials</source>
+                <target>Freigegebene Testimonials anzeigen</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.testimonials_section.eyebrow">
+            <segment state="final">
+                <source>Eyebrow</source>
+                <target>Eyebrow</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.testimonials_section.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tt_content.testimonials_section.subtitle">
+            <segment state="final">
+                <source>Subtitle</source>
+                <target>Untertitel</target>
+            </segment>
+        </unit>
+
+        <!-- FlexForm Labels - General -->
+        <unit id="flexform.sheet.general">
+            <segment state="final">
+                <source>General</source>
+                <target>Allgemein</target>
+            </segment>
+        </unit>
+
+        <!-- FlexForm Labels - Hero -->
+        <unit id="flexform.hero.buttonText">
+            <segment state="final">
+                <source>Button Text</source>
+                <target>Button Text</target>
+            </segment>
+        </unit>
+        <unit id="flexform.hero.buttonLink">
+            <segment state="final">
+                <source>Button Link</source>
+                <target>Button Link</target>
+            </segment>
+        </unit>
+        <unit id="flexform.hero.showScrollIndicator">
+            <segment state="final">
+                <source>Show Scroll Indicator</source>
+                <target>Scroll-Indikator anzeigen</target>
+            </segment>
+        </unit>
+
+        <!-- FlexForm Labels - CTA -->
+        <unit id="flexform.cta.buttonText">
+            <segment state="final">
+                <source>Button Text</source>
+                <target>Button Text</target>
+            </segment>
+        </unit>
+        <unit id="flexform.cta.buttonLink">
+            <segment state="final">
+                <source>Button Link</source>
+                <target>Button Link</target>
+            </segment>
+        </unit>
+
+        <!-- FlexForm Labels - FAQ -->
+        <unit id="flexform.faq.sheet.items">
+            <segment state="final">
+                <source>FAQ Entries</source>
+                <target>FAQ Einträge</target>
+            </segment>
+        </unit>
+        <unit id="flexform.faq.items">
+            <segment state="final">
+                <source>FAQ Entries</source>
+                <target>FAQ Einträge</target>
+            </segment>
+        </unit>
+        <unit id="flexform.faq.item">
+            <segment state="final">
+                <source>FAQ Entry</source>
+                <target>FAQ Eintrag</target>
+            </segment>
+        </unit>
+        <unit id="flexform.faq.question">
+            <segment state="final">
+                <source>Question</source>
+                <target>Frage</target>
+            </segment>
+        </unit>
+        <unit id="flexform.faq.answer">
+            <segment state="final">
+                <source>Answer</source>
+                <target>Antwort</target>
+            </segment>
+        </unit>
+
+        <!-- FlexForm Labels - Intro -->
+        <unit id="flexform.intro.quote">
+            <segment state="final">
+                <source>Quote</source>
+                <target>Zitat</target>
+            </segment>
+        </unit>
+        <unit id="flexform.intro.sheet.values">
+            <segment state="final">
+                <source>Values</source>
+                <target>Werte</target>
+            </segment>
+        </unit>
+        <unit id="flexform.intro.values">
+            <segment state="final">
+                <source>Values</source>
+                <target>Werte</target>
+            </segment>
+        </unit>
+        <unit id="flexform.intro.value">
+            <segment state="final">
+                <source>Value</source>
+                <target>Wert</target>
+            </segment>
+        </unit>
+        <unit id="flexform.intro.value.number">
+            <segment state="final">
+                <source>Number</source>
+                <target>Nummer</target>
+            </segment>
+        </unit>
+        <unit id="flexform.intro.value.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="flexform.intro.value.description">
+            <segment state="final">
+                <source>Description</source>
+                <target>Beschreibung</target>
+            </segment>
+        </unit>
+
+        <!-- FlexForm Labels - Journey -->
+        <unit id="flexform.journey.sheet.steps">
+            <segment state="final">
+                <source>Steps</source>
+                <target>Schritte</target>
+            </segment>
+        </unit>
+        <unit id="flexform.journey.steps">
+            <segment state="final">
+                <source>Steps</source>
+                <target>Schritte</target>
+            </segment>
+        </unit>
+        <unit id="flexform.journey.step">
+            <segment state="final">
+                <source>Step</source>
+                <target>Schritt</target>
+            </segment>
+        </unit>
+        <unit id="flexform.journey.step.number">
+            <segment state="final">
+                <source>Number</source>
+                <target>Nummer</target>
+            </segment>
+        </unit>
+        <unit id="flexform.journey.step.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="flexform.journey.step.description">
+            <segment state="final">
+                <source>Description</source>
+                <target>Beschreibung</target>
+            </segment>
+        </unit>
+
+        <!-- FlexForm Labels - Moderator -->
+        <unit id="flexform.moderator.quote">
+            <segment state="final">
+                <source>Quote</source>
+                <target>Zitat</target>
+            </segment>
+        </unit>
+
+        <!-- FlexForm Labels - Values -->
+        <unit id="flexform.values.sheet.items">
+            <segment state="final">
+                <source>Values</source>
+                <target>Werte</target>
+            </segment>
+        </unit>
+        <unit id="flexform.values.items">
+            <segment state="final">
+                <source>Values</source>
+                <target>Werte</target>
+            </segment>
+        </unit>
+        <unit id="flexform.values.item">
+            <segment state="final">
+                <source>Value</source>
+                <target>Wert</target>
+            </segment>
+        </unit>
+        <unit id="flexform.values.item.number">
+            <segment state="final">
+                <source>Number</source>
+                <target>Nummer</target>
+            </segment>
+        </unit>
+        <unit id="flexform.values.item.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="flexform.values.item.description">
+            <segment state="final">
+                <source>Description</source>
+                <target>Beschreibung</target>
+            </segment>
+        </unit>
+
+        <!-- FlexForm Labels - WhatsApp -->
+        <unit id="flexform.whatsapp.communityLink">
+            <segment state="final">
+                <source>WhatsApp Community Link</source>
+                <target>WhatsApp Community Link</target>
+            </segment>
+        </unit>
+        <unit id="flexform.whatsapp.buttonText">
+            <segment state="final">
+                <source>Button Text</source>
+                <target>Button Text</target>
+            </segment>
+        </unit>
+        <unit id="flexform.whatsapp.hint">
+            <segment state="final">
+                <source>Hint Text</source>
+                <target>Hinweistext</target>
+            </segment>
+        </unit>
+
+        <!-- Frame class -->
+        <unit id="tt_content.frame_class">
+            <segment state="final">
+                <source>Background</source>
+                <target>Hintergrund</target>
+            </segment>
+        </unit>
+    </file>
+</xliff>

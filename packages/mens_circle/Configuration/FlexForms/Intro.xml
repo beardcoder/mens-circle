@@ -6,11 +6,11 @@
     <sheets>
         <sDEF>
             <ROOT>
-                <sheetTitle>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.intro.sheet.general</sheetTitle>
+                <sheetTitle>mens_circle.backend_fields:flexform.intro.sheet.general</sheetTitle>
                 <type>array</type>
                 <el>
                     <settings.quote>
-                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.intro.quote</label>
+                        <label>mens_circle.backend_fields:flexform.intro.quote</label>
                         <config>
                             <type>text</type>
                             <cols>40</cols>
@@ -23,18 +23,18 @@
         </sDEF>
         <sVALUES>
             <ROOT>
-                <sheetTitle>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.intro.sheet.values</sheetTitle>
+                <sheetTitle>mens_circle.backend_fields:flexform.intro.sheet.values</sheetTitle>
                 <type>array</type>
                 <el>
                     <settings.values>
-                        <title>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.intro.values</title>
+                        <title>mens_circle.backend_fields:flexform.intro.values</title>
                         <type>section</type>
                         <el>
                             <value>
-                                <title>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.intro.value</title>
+                                <title>mens_circle.backend_fields:flexform.intro.value</title>
                                 <el>
                                     <number>
-                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.intro.value.number</label>
+                                        <label>mens_circle.backend_fields:flexform.intro.value.number</label>
                                         <config>
                                             <type>input</type>
                                             <size>10</size>
@@ -42,7 +42,7 @@
                                         </config>
                                     </number>
                                     <title>
-                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.intro.value.title</label>
+                                        <label>mens_circle.backend_fields:flexform.intro.value.title</label>
                                         <config>
                                             <type>input</type>
                                             <size>50</size>
@@ -50,7 +50,7 @@
                                         </config>
                                     </title>
                                     <description>
-                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.intro.value.description</label>
+                                        <label>mens_circle.backend_fields:flexform.intro.value.description</label>
                                         <config>
                                             <type>text</type>
                                             <cols>40</cols>

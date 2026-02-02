@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en" trgLang="de">
+    <file id="backend_layouts">
+        <!-- Backend Layouts -->
+        <unit id="backend_layout.startpage.title">
+            <segment state="final">
+                <source>Men's Circle Start Page</source>
+                <target>Männerkreis Startseite</target>
+            </segment>
+        </unit>
+        <unit id="backend_layout.contentpage.title">
+            <segment state="final">
+                <source>Men's Circle Content Page</source>
+                <target>Männerkreis Inhaltsseite</target>
+            </segment>
+        </unit>
+        <unit id="backend_layout.colPos.stage">
+            <segment state="final">
+                <source>Stage (Hero)</source>
+                <target>Bühne (Hero)</target>
+            </segment>
+        </unit>
+        <unit id="backend_layout.colPos.main">
+            <segment state="final">
+                <source>Main Content</source>
+                <target>Hauptinhalt</target>
+            </segment>
+        </unit>
+        <unit id="backend_layout.colPos.footer">
+            <segment state="final">
+                <source>Footer Area</source>
+                <target>Footer Bereich</target>
+            </segment>
+        </unit>
+    </file>
+</xliff>

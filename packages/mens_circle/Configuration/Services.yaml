@@ -46,3 +46,36 @@ services:
   BeardCoder\MensCircle\Domain\Repository\TestimonialRepository:
     public: true
 
+  # Dashboard Widgets
+  dashboard.widget.menscircle.newsletterSubscriberCount:
+    class: 'BeardCoder\MensCircle\Widgets\NewsletterSubscriberCountWidget'
+    tags:
+      - name: dashboard.widget
+        identifier: 'menscircle-newsletter-subscriber-count'
+        groupNames: 'menscircle'
+        title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang.xlf:widget.newsletterSubscriberCount.title'
+        description: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang.xlf:widget.newsletterSubscriberCount.description'
+        iconIdentifier: 'content-form'
+        height: 'small'
+        width: 'small'
+
+  dashboard.widget.menscircle.latestNewsletterSubscriber:
+    class: 'BeardCoder\MensCircle\Widgets\LatestNewsletterSubscriberWidget'
+    tags:
+      - name: dashboard.widget
+        identifier: 'menscircle-latest-newsletter-subscriber'
+        groupNames: 'menscircle'
+        title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang.xlf:widget.latestNewsletterSubscriber.title'
+        description: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang.xlf:widget.latestNewsletterSubscriber.description'
+        iconIdentifier: 'content-form'
+        height: 'medium'
+        width: 'small'
+
+  dashboard.widgetGroup.menscircle:
+    class: 'stdClass'
+    synthetic: true
+    tags:
+      - name: dashboard.widgetGroup
+        identifier: 'menscircle'
+        title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang.xlf:widget.group.menscircle'
+

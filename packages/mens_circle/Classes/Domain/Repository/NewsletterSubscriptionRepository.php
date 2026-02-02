@@ -53,4 +53,22 @@ class NewsletterSubscriptionRepository extends Repository
     {
         return $this->findAllConfirmed()->count();
     }
+
+    public function countByIsConfirmed(bool $isConfirmed): int
+    {
+        $query = $this->createQuery();
+        $query->matching($query->equals('isConfirmed', $isConfirmed));
+
+        return $query->execute()->count();
+    }
+
+    public function findLatestConfirmed(int $limit = 1): QueryResult
+    {
+        $query = $this->createQuery();
+        $query->matching($query->equals('isConfirmed', true));
+        $query->setOrderings(['crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
+        $query->setLimit($limit);
+
+        return $query->execute();
+    }
 }

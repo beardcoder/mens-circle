@@ -1,10 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="de" datatype="plaintext">
-        <body>
-            <trans-unit id="extension.name" xml:space="preserve">
-                <source>Männerkreis Niederbayern</source>
-            </trans-unit>
-        </body>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en" trgLang="de">
+    <file id="locallang">
+        <!-- Extension Labels -->
+        <unit id="extension.name">
+            <segment state="final">
+                <source>Men's Circle Lower Bavaria</source>
+                <target>Männerkreis Niederbayern</target>
+            </segment>
+        </unit>
+        <unit id="extension.description">
+            <segment state="final">
+                <source>Event Management and Community Platform</source>
+                <target>Event Management und Community Plattform</target>
+            </segment>
+        </unit>
+
+        <!-- Backend Modules -->
+        <unit id="module.events">
+            <segment state="final">
+                <source>Events</source>
+                <target>Veranstaltungen</target>
+            </segment>
+        </unit>
+        <unit id="module.newsletter">
+            <segment state="final">
+                <source>Newsletter</source>
+                <target>Newsletter</target>
+            </segment>
+        </unit>
+
+        <!-- Frontend Plugins -->
+        <unit id="plugin.events">
+            <segment state="final">
+                <source>Men's Circle: Events</source>
+                <target>Männerkreis: Veranstaltungen</target>
+            </segment>
+        </unit>
+        <unit id="plugin.newsletter">
+            <segment state="final">
+                <source>Men's Circle: Newsletter</source>
+                <target>Männerkreis: Newsletter</target>
+            </segment>
+        </unit>
+        <unit id="plugin.testimonials">
+            <segment state="final">
+                <source>Men's Circle: Testimonials</source>
+                <target>Männerkreis: Testimonials</target>
+            </segment>
+        </unit>
+
+        <!-- General Labels -->
+        <unit id="label.save">
+            <segment state="final">
+                <source>Save</source>
+                <target>Speichern</target>
+            </segment>
+        </unit>
+        <unit id="label.cancel">
+            <segment state="final">
+                <source>Cancel</source>
+                <target>Abbrechen</target>
+            </segment>
+        </unit>
+        <unit id="label.submit">
+            <segment state="final">
+                <source>Submit</source>
+                <target>Absenden</target>
+            </segment>
+        </unit>
+        <unit id="label.register">
+            <segment state="final">
+                <source>Register</source>
+                <target>Anmelden</target>
+            </segment>
+        </unit>
+
+        <!-- Dashboard Widgets -->
+        <unit id="widget.group.menscircle">
+            <segment state="final">
+                <source>Men's Circle</source>
+                <target>Männerkreis</target>
+            </segment>
+        </unit>
+        <unit id="widget.newsletterSubscriberCount.title">
+            <segment state="final">
+                <source>Newsletter Subscribers</source>
+                <target>Newsletter-Abonnenten</target>
+            </segment>
+        </unit>
+        <unit id="widget.newsletterSubscriberCount.description">
+            <segment state="final">
+                <source>Shows the total number of confirmed newsletter subscribers</source>
+                <target>Zeigt die Gesamtzahl der bestätigten Newsletter-Abonnenten</target>
+            </segment>
+        </unit>
+        <unit id="widget.latestNewsletterSubscriber.title">
+            <segment state="final">
+                <source>Latest Newsletter Subscribers</source>
+                <target>Neueste Newsletter-Abonnenten</target>
+            </segment>
+        </unit>
+        <unit id="widget.latestNewsletterSubscriber.description">
+            <segment state="final">
+                <source>Shows the most recent newsletter subscribers</source>
+                <target>Zeigt die neuesten Newsletter-Abonnenten</target>
+            </segment>
+        </unit>
+        <unit id="widget.latestNewsletterSubscriber.noSubscribers">
+            <segment state="final">
+                <source>No newsletter subscribers yet</source>
+                <target>Noch keine Newsletter-Abonnenten</target>
+            </segment>
+        </unit>
+        <unit id="widget.latestNewsletterSubscriber.subscribedAt">
+            <segment state="final">
+                <source>Subscribed</source>
+                <target>Angemeldet</target>
+            </segment>
+        </unit>
     </file>
 </xliff>

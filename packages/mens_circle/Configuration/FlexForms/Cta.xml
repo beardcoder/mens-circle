@@ -6,11 +6,11 @@
     <sheets>
         <sDEF>
             <ROOT>
-                <sheetTitle>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.cta.sheet.general</sheetTitle>
+                <sheetTitle>mens_circle.backend_fields:flexform.cta.sheet.general</sheetTitle>
                 <type>array</type>
                 <el>
                     <settings.buttonText>
-                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.cta.buttonText</label>
+                        <label>mens_circle.backend_fields:flexform.cta.buttonText</label>
                         <config>
                             <type>input</type>
                             <size>50</size>
@@ -19,7 +19,7 @@
                         </config>
                     </settings.buttonText>
                     <settings.buttonLink>
-                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.cta.buttonLink</label>
+                        <label>mens_circle.backend_fields:flexform.cta.buttonLink</label>
                         <config>
                             <type>link</type>
                             <allowedTypes>page,url,email</allowedTypes>

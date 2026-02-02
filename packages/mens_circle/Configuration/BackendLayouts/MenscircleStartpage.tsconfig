@@ -2,7 +2,7 @@ mod {
     web_layout {
         BackendLayouts {
             MenscircleStartpage {
-                title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:backend_layout.startpage.title
+                title = mens_circle.backend_layouts:backend_layout.startpage.title
                 config {
                     backend_layout {
                         colCount = 1
@@ -11,7 +11,7 @@ mod {
                             1 {
                                 columns {
                                     1 {
-                                        name = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:backend_layout.colPos.stage
+                                        name = mens_circle.backend_layouts:backend_layout.colPos.stage
                                         colPos = 2
                                         identifier = stage
                                         allowedContentTypes = menscircle_hero
@@ -21,7 +21,7 @@ mod {
                             2 {
                                 columns {
                                     1 {
-                                        name = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:backend_layout.colPos.main
+                                        name = mens_circle.backend_layouts:backend_layout.colPos.main
                                         colPos = 0
                                         identifier = content
                                         disallowedContentTypes = menscircle_hero
@@ -31,7 +31,7 @@ mod {
                             3 {
                                 columns {
                                     1 {
-                                        name = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:backend_layout.colPos.footer
+                                        name = mens_circle.backend_layouts:backend_layout.colPos.footer
                                         colPos = 10
                                         identifier = footer
                                         slideMode = slide

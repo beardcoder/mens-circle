@@ -6,18 +6,18 @@
     <sheets>
         <sDEF>
             <ROOT>
-                <sheetTitle>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.journey.sheet.steps</sheetTitle>
+                <sheetTitle>mens_circle.backend_fields:flexform.journey.sheet.steps</sheetTitle>
                 <type>array</type>
                 <el>
                     <settings.steps>
-                        <title>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.journey.steps</title>
+                        <title>mens_circle.backend_fields:flexform.journey.steps</title>
                         <type>section</type>
                         <el>
                             <step>
-                                <title>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.journey.step</title>
+                                <title>mens_circle.backend_fields:flexform.journey.step</title>
                                 <el>
                                     <number>
-                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.journey.step.number</label>
+                                        <label>mens_circle.backend_fields:flexform.journey.step.number</label>
                                         <config>
                                             <type>input</type>
                                             <size>10</size>
@@ -26,7 +26,7 @@
                                         </config>
                                     </number>
                                     <title>
-                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.journey.step.title</label>
+                                        <label>mens_circle.backend_fields:flexform.journey.step.title</label>
                                         <config>
                                             <type>input</type>
                                             <size>50</size>
@@ -34,7 +34,7 @@
                                         </config>
                                     </title>
                                     <description>
-                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.journey.step.description</label>
+                                        <label>mens_circle.backend_fields:flexform.journey.step.description</label>
                                         <config>
                                             <type>text</type>
                                             <cols>40</cols>

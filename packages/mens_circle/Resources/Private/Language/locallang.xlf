@@ -1,47 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="de" datatype="plaintext">
-        <body>
-            <!-- Extension Labels -->
-            <trans-unit id="extension.name" xml:space="preserve">
-                <source>Männerkreis Niederbayern</source>
-            </trans-unit>
-            <trans-unit id="extension.description" xml:space="preserve">
-                <source>Event Management und Community Plattform</source>
-            </trans-unit>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en">
+    <file id="locallang">
+        <!-- Extension Labels -->
+        <unit id="extension.name">
+            <segment>
+                <source>Men's Circle Lower Bavaria</source>
+            </segment>
+        </unit>
+        <unit id="extension.description">
+            <segment>
+                <source>Event Management and Community Platform</source>
+            </segment>
+        </unit>
 
-            <!-- Backend Modules -->
-            <trans-unit id="module.events" xml:space="preserve">
-                <source>Veranstaltungen</source>
-            </trans-unit>
-            <trans-unit id="module.newsletter" xml:space="preserve">
+        <!-- Backend Modules -->
+        <unit id="module.events">
+            <segment>
+                <source>Events</source>
+            </segment>
+        </unit>
+        <unit id="module.newsletter">
+            <segment>
                 <source>Newsletter</source>
-            </trans-unit>
+            </segment>
+        </unit>
 
-            <!-- Frontend Plugins -->
-            <trans-unit id="plugin.events" xml:space="preserve">
-                <source>Männerkreis: Veranstaltungen</source>
-            </trans-unit>
-            <trans-unit id="plugin.newsletter" xml:space="preserve">
-                <source>Männerkreis: Newsletter</source>
-            </trans-unit>
-            <trans-unit id="plugin.testimonials" xml:space="preserve">
-                <source>Männerkreis: Testimonials</source>
-            </trans-unit>
+        <!-- Frontend Plugins -->
+        <unit id="plugin.events">
+            <segment>
+                <source>Men's Circle: Events</source>
+            </segment>
+        </unit>
+        <unit id="plugin.newsletter">
+            <segment>
+                <source>Men's Circle: Newsletter</source>
+            </segment>
+        </unit>
+        <unit id="plugin.testimonials">
+            <segment>
+                <source>Men's Circle: Testimonials</source>
+            </segment>
+        </unit>
 
-            <!-- General Labels -->
-            <trans-unit id="label.save" xml:space="preserve">
-                <source>Speichern</source>
-            </trans-unit>
-            <trans-unit id="label.cancel" xml:space="preserve">
-                <source>Abbrechen</source>
-            </trans-unit>
-            <trans-unit id="label.submit" xml:space="preserve">
-                <source>Absenden</source>
-            </trans-unit>
-            <trans-unit id="label.register" xml:space="preserve">
-                <source>Anmelden</source>
-            </trans-unit>
-        </body>
+        <!-- General Labels -->
+        <unit id="label.save">
+            <segment>
+                <source>Save</source>
+            </segment>
+        </unit>
+        <unit id="label.cancel">
+            <segment>
+                <source>Cancel</source>
+            </segment>
+        </unit>
+        <unit id="label.submit">
+            <segment>
+                <source>Submit</source>
+            </segment>
+        </unit>
+        <unit id="label.register">
+            <segment>
+                <source>Register</source>
+            </segment>
+        </unit>
+
+        <!-- Dashboard Widgets -->
+        <unit id="widget.group.menscircle">
+            <segment>
+                <source>Men's Circle</source>
+            </segment>
+        </unit>
+        <unit id="widget.newsletterSubscriberCount.title">
+            <segment>
+                <source>Newsletter Subscribers</source>
+            </segment>
+        </unit>
+        <unit id="widget.newsletterSubscriberCount.description">
+            <segment>
+                <source>Shows the total number of confirmed newsletter subscribers</source>
+            </segment>
+        </unit>
+        <unit id="widget.latestNewsletterSubscriber.title">
+            <segment>
+                <source>Latest Newsletter Subscribers</source>
+            </segment>
+        </unit>
+        <unit id="widget.latestNewsletterSubscriber.description">
+            <segment>
+                <source>Shows the most recent newsletter subscribers</source>
+            </segment>
+        </unit>
+        <unit id="widget.latestNewsletterSubscriber.noSubscribers">
+            <segment>
+                <source>No newsletter subscribers yet</source>
+            </segment>
+        </unit>
+        <unit id="widget.latestNewsletterSubscriber.subscribedAt">
+            <segment>
+                <source>Subscribed</source>
+            </segment>
+        </unit>
     </file>
 </xliff>

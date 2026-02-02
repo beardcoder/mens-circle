@@ -1,0 +1,47 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+    <f:if condition="{subscribers}">
+        <f:then>
+            <div class="widget-content-main">
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th><f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang.xlf:widget.latestNewsletterSubscriber.subscribedAt" /></th>
+                            <th>E-Mail</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <f:for each="{subscribers}" as="subscriber">
+                            <tr>
+                                <td>
+                                    <f:if condition="{subscriber.confirmedAt}">
+                                        <f:then>
+                                            <f:format.date format="d.m.Y H:i">{subscriber.confirmedAt}</f:format.date>
+                                        </f:then>
+                                        <f:else>
+                                            -
+                                        </f:else>
+                                    </f:if>
+                                </td>
+                                <td>{subscriber.email}</td>
+                                <td>{subscriber.firstName}</td>
+                            </tr>
+                        </f:for>
+                    </tbody>
+                </table>
+            </div>
+        </f:then>
+        <f:else>
+            <div class="widget-content-main">
+                <div class="widget-content-empty">
+                    <p class="text-muted">
+                        <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang.xlf:widget.latestNewsletterSubscriber.noSubscribers" />
+                    </p>
+                </div>
+            </div>
+        </f:else>
+    </f:if>
+</html>

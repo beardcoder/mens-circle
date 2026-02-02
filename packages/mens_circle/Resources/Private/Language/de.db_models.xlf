@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en" trgLang="de">
+    <file id="db_models">
+        <!-- Event Model -->
+        <unit id="tx_menscircle_domain_model_event">
+            <segment state="final">
+                <source>Event</source>
+                <target>Veranstaltung</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.slug">
+            <segment state="final">
+                <source>URL Slug</source>
+                <target>URL-Slug</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.description">
+            <segment state="final">
+                <source>Description</source>
+                <target>Beschreibung</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.location">
+            <segment state="final">
+                <source>Location</source>
+                <target>Ort</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.event_date">
+            <segment state="final">
+                <source>Date &amp; Time</source>
+                <target>Datum &amp; Uhrzeit</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.event_end_date">
+            <segment state="final">
+                <source>End Time</source>
+                <target>Endzeit</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.max_participants">
+            <segment state="final">
+                <source>Maximum Participants (0 = unlimited)</source>
+                <target>Maximale Teilnehmer (0 = unbegrenzt)</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.is_published">
+            <segment state="final">
+                <source>Published</source>
+                <target>Veröffentlicht</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.event_image">
+            <segment state="final">
+                <source>Feature Image</source>
+                <target>Titelbild</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.registrations">
+            <segment state="final">
+                <source>Registrations</source>
+                <target>Anmeldungen</target>
+            </segment>
+        </unit>
+
+        <!-- Registration Model -->
+        <unit id="tx_menscircle_domain_model_registration">
+            <segment state="final">
+                <source>Registration</source>
+                <target>Anmeldung</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.event">
+            <segment state="final">
+                <source>Event</source>
+                <target>Veranstaltung</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.first_name">
+            <segment state="final">
+                <source>First Name</source>
+                <target>Vorname</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.last_name">
+            <segment state="final">
+                <source>Last Name</source>
+                <target>Nachname</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.email">
+            <segment state="final">
+                <source>Email</source>
+                <target>E-Mail</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.phone">
+            <segment state="final">
+                <source>Phone Number</source>
+                <target>Telefonnummer</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.is_confirmed">
+            <segment state="final">
+                <source>Confirmed</source>
+                <target>Bestätigt</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.notes">
+            <segment state="final">
+                <source>Notes</source>
+                <target>Anmerkungen</target>
+            </segment>
+        </unit>
+
+        <!-- Participant Model -->
+        <unit id="tx_menscircle_domain_model_participant">
+            <segment state="final">
+                <source>Participant</source>
+                <target>Teilnehmer</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.registration">
+            <segment state="final">
+                <source>Registration</source>
+                <target>Anmeldung</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.first_name">
+            <segment state="final">
+                <source>First Name</source>
+                <target>Vorname</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.last_name">
+            <segment state="final">
+                <source>Last Name</source>
+                <target>Nachname</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.email">
+            <segment state="final">
+                <source>Email</source>
+                <target>E-Mail</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.phone">
+            <segment state="final">
+                <source>Phone Number</source>
+                <target>Telefonnummer</target>
+            </segment>
+        </unit>
+
+        <!-- Newsletter Model -->
+        <unit id="tx_menscircle_domain_model_newsletter">
+            <segment state="final">
+                <source>Newsletter</source>
+                <target>Newsletter</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newsletter.title">
+            <segment state="final">
+                <source>Title</source>
+                <target>Titel</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newsletter.subject">
+            <segment state="final">
+                <source>Subject</source>
+                <target>Betreff</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newsletter.content">
+            <segment state="final">
+                <source>Content</source>
+                <target>Inhalt</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newsletter.is_sent">
+            <segment state="final">
+                <source>Sent</source>
+                <target>Gesendet</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newsletter.sent_at">
+            <segment state="final">
+                <source>Sent At</source>
+                <target>Gesendet am</target>
+            </segment>
+        </unit>
+
+        <!-- Newsletter Subscription Model -->
+        <unit id="tx_menscircle_domain_model_newslettersubscription">
+            <segment state="final">
+                <source>Newsletter Subscription</source>
+                <target>Newsletter-Abonnement</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newslettersubscription.email">
+            <segment state="final">
+                <source>Email</source>
+                <target>E-Mail</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newslettersubscription.first_name">
+            <segment state="final">
+                <source>First Name</source>
+                <target>Vorname</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newslettersubscription.is_confirmed">
+            <segment state="final">
+                <source>Confirmed</source>
+                <target>Bestätigt</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newslettersubscription.confirmed_at">
+            <segment state="final">
+                <source>Confirmed At</source>
+                <target>Bestätigt am</target>
+            </segment>
+        </unit>
+
+        <!-- Testimonial Model -->
+        <unit id="tx_menscircle_domain_model_testimonial">
+            <segment state="final">
+                <source>Testimonial</source>
+                <target>Testimonial</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_testimonial.author_name">
+            <segment state="final">
+                <source>Author Name</source>
+                <target>Autorenname</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_testimonial.role">
+            <segment state="final">
+                <source>Role / Position</source>
+                <target>Rolle / Position</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_testimonial.content">
+            <segment state="final">
+                <source>Content</source>
+                <target>Inhalt</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_testimonial.event">
+            <segment state="final">
+                <source>Event</source>
+                <target>Veranstaltung</target>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_testimonial.is_approved">
+            <segment state="final">
+                <source>Approved</source>
+                <target>Freigegeben</target>
+            </segment>
+        </unit>
+    </file>
+</xliff>

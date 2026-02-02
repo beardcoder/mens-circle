@@ -6,18 +6,18 @@
     <sheets>
         <sDEF>
             <ROOT>
-                <sheetTitle>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.sheet.items</sheetTitle>
+                <sheetTitle>mens_circle.backend_fields:flexform.faq.sheet.items</sheetTitle>
                 <type>array</type>
                 <el>
                     <settings.items>
-                        <title>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.items</title>
+                        <title>mens_circle.backend_fields:flexform.faq.items</title>
                         <type>section</type>
                         <el>
                             <item>
-                                <title>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.item</title>
+                                <title>mens_circle.backend_fields:flexform.faq.item</title>
                                 <el>
                                     <question>
-                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.question</label>
+                                        <label>mens_circle.backend_fields:flexform.faq.question</label>
                                         <config>
                                             <type>input</type>
                                             <size>50</size>
@@ -25,7 +25,7 @@
                                         </config>
                                     </question>
                                     <answer>
-                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.answer</label>
+                                        <label>mens_circle.backend_fields:flexform.faq.answer</label>
                                         <config>
                                             <type>text</type>
                                             <cols>40</cols>
