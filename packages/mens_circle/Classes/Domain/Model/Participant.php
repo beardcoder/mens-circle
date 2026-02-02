@@ -5,25 +5,34 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
+/**
+ * Participant represents a person who can register for events and/or subscribe to the newsletter
+ */
 class Participant extends AbstractEntity
 {
-    protected ?Registration $registration = null;
     protected string $firstName = '';
     protected string $lastName = '';
     protected string $email = '';
     protected string $phone = '';
+    protected ?\DateTimeInterface $createdAt = null;
 
-    public function getRegistration(): ?Registration
+    /**
+     * @var ObjectStorage<Registration>
+     */
+    protected ObjectStorage $eventRegistrations;
+
+    /**
+     * @var ObjectStorage<NewsletterSubscription>
+     */
+    protected ObjectStorage $newsletterSubscriptions;
+
+    public function __construct()
     {
-        return $this->registration;
-    }
-
-    public function setRegistration(?Registration $registration): self
-    {
-        $this->registration = $registration;
-
-        return $this;
+        $this->createdAt = new \DateTime();
+        $this->eventRegistrations = new ObjectStorage();
+        $this->newsletterSubscriptions = new ObjectStorage();
     }
 
     public function getFirstName(): string
@@ -77,5 +86,59 @@ class Participant extends AbstractEntity
         $this->phone = $phone;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function getEventRegistrations(): ObjectStorage
+    {
+        return $this->eventRegistrations;
+    }
+
+    public function addEventRegistration(Registration $registration): self
+    {
+        $this->eventRegistrations->attach($registration);
+
+        return $this;
+    }
+
+    public function removeEventRegistration(Registration $registration): self
+    {
+        $this->eventRegistrations->detach($registration);
+
+        return $this;
+    }
+
+    public function getNewsletterSubscriptions(): ObjectStorage
+    {
+        return $this->newsletterSubscriptions;
+    }
+
+    public function addNewsletterSubscription(NewsletterSubscription $subscription): self
+    {
+        $this->newsletterSubscriptions->attach($subscription);
+
+        return $this;
+    }
+
+    public function removeNewsletterSubscription(NewsletterSubscription $subscription): self
+    {
+        $this->newsletterSubscriptions->detach($subscription);
+
+        return $this;
+    }
+
+    public function hasActiveNewsletterSubscription(): bool
+    {
+        foreach ($this->newsletterSubscriptions as $subscription) {
+            if ($subscription->isConfirmed()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

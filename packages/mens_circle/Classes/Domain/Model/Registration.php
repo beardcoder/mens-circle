@@ -6,17 +6,18 @@ namespace BeardCoder\MensCircle\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
+/**
+ * Registration represents a link between a Participant and an Event
+ */
 class Registration extends AbstractEntity
 {
     protected ?Event $event = null;
-    protected string $firstName = '';
-    protected string $lastName = '';
-    protected string $email = '';
-    protected string $phone = '';
+    protected ?Participant $participant = null;
     protected bool $isConfirmed = false;
     protected string $confirmationToken = '';
     protected string $notes = '';
     protected ?\DateTimeInterface $createdAt = null;
+    protected ?\DateTimeInterface $confirmedAt = null;
 
     public function __construct()
     {
@@ -36,57 +37,42 @@ class Registration extends AbstractEntity
         return $this;
     }
 
-    public function getFirstName(): string
+    public function getParticipant(): ?Participant
     {
-        return $this->firstName;
+        return $this->participant;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setParticipant(?Participant $participant): self
     {
-        $this->firstName = $firstName;
+        $this->participant = $participant;
 
         return $this;
+    }
+
+    // Convenience methods to access participant data
+    public function getFirstName(): string
+    {
+        return $this->participant?->getFirstName() ?? '';
     }
 
     public function getLastName(): string
     {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
-
-        return $this;
+        return $this->participant?->getLastName() ?? '';
     }
 
     public function getFullName(): string
     {
-        return trim($this->firstName . ' ' . $this->lastName);
+        return $this->participant?->getFullName() ?? '';
     }
 
     public function getEmail(): string
     {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
+        return $this->participant?->getEmail() ?? '';
     }
 
     public function getPhone(): string
     {
-        return $this->phone;
-    }
-
-    public function setPhone(string $phone): self
-    {
-        $this->phone = $phone;
-
-        return $this;
+        return $this->participant?->getPhone() ?? '';
     }
 
     public function isConfirmed(): bool
@@ -97,8 +83,16 @@ class Registration extends AbstractEntity
     public function setIsConfirmed(bool $isConfirmed): self
     {
         $this->isConfirmed = $isConfirmed;
+        if ($isConfirmed && $this->confirmedAt === null) {
+            $this->confirmedAt = new \DateTime();
+        }
 
         return $this;
+    }
+
+    public function confirm(): void
+    {
+        $this->setIsConfirmed(true);
     }
 
     public function getConfirmationToken(): string
@@ -121,5 +115,10 @@ class Registration extends AbstractEntity
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function getConfirmedAt(): ?\DateTimeInterface
+    {
+        return $this->confirmedAt;
     }
 }

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Service;
 
 use BeardCoder\MensCircle\Domain\Model\Event;
+use BeardCoder\MensCircle\Domain\Model\Participant;
 use BeardCoder\MensCircle\Domain\Model\Registration;
+use BeardCoder\MensCircle\Domain\Repository\ParticipantRepository;
 use BeardCoder\MensCircle\Domain\Repository\RegistrationRepository;
 use BeardCoder\MensCircle\Event\RegistrationCreatedEvent;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
@@ -14,6 +16,7 @@ use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 final class RegistrationService
 {
     public function __construct(
+        private readonly ParticipantRepository $participantRepository,
         private readonly RegistrationRepository $registrationRepository,
         private readonly PersistenceManagerInterface $persistenceManager,
         private readonly EventDispatcher $eventDispatcher,
@@ -47,16 +50,26 @@ final class RegistrationService
             throw new \RuntimeException('Bitte gib eine gültige E-Mail-Adresse ein.');
         }
 
+        // Find or create participant
+        $participant = $this->participantRepository->findOrCreateByEmail(
+            $email,
+            $firstName,
+            $lastName,
+            $phone
+        );
+
+        // Create registration
         $registration = new Registration();
         $registration->setEvent($event);
-        $registration->setFirstName($firstName);
-        $registration->setLastName($lastName);
-        $registration->setEmail($email);
-        $registration->setPhone($phone);
+        $registration->setParticipant($participant);
         $registration->setNotes($notes);
-        $registration->setIsConfirmed(true);
+        $registration->setIsConfirmed(true); // Auto-confirm for now
+
+        // Add registration to participant
+        $participant->addEventRegistration($registration);
 
         $this->registrationRepository->add($registration);
+        $this->participantRepository->update($participant);
         $this->persistenceManager->persistAll();
 
         $sendSms = !empty($phone) && $this->isSmsEnabled();

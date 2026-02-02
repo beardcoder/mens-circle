@@ -3,9 +3,8 @@
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration',
-        'label' => 'first_name',
-        'label_alt' => 'last_name,email',
-        'label_alt_Max' => 60,
+        'label' => 'participant',
+        'label_alt' => 'event',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'delete' => 'deleted',
@@ -13,6 +12,7 @@ return [
             'disabled' => 'hidden',
         ],
         'iconfile' => 'EXT:mens_circle/Resources/Public/Icons/registration.svg',
+        'searchFields' => 'notes',
         'security' => [
             'ignorePageTypeRestriction' => true,
         ],
@@ -25,42 +25,18 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [],
                 'foreign_table' => 'tx_menscircle_domain_model_event',
-                'foreign_table_where' => 'AND is_published = 1 ORDER BY event_date DESC',
+                'foreign_table_where' => 'AND {#tx_menscircle_domain_model_event}.{#is_published} = 1 ORDER BY {#tx_menscircle_domain_model_event}.{#event_date} DESC',
                 'required' => true,
             ],
         ],
-        'first_name' => [
-            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.first_name',
+        'participant' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.participant',
             'config' => [
-                'type' => 'input',
-                'size' => 30,
-                'max' => 255,
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [],
+                'foreign_table' => 'tx_menscircle_domain_model_participant',
                 'required' => true,
-            ],
-        ],
-        'last_name' => [
-            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.last_name',
-            'config' => [
-                'type' => 'input',
-                'size' => 30,
-                'max' => 255,
-                'required' => true,
-            ],
-        ],
-        'email' => [
-            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.email',
-            'config' => [
-                'type' => 'email',
-                'required' => true,
-            ],
-        ],
-        'phone' => [
-            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.phone',
-            'config' => [
-                'type' => 'input',
-                'size' => 20,
-                'max' => 50,
-                'searchable' => false,
             ],
         ],
         'is_confirmed' => [
@@ -69,6 +45,14 @@ return [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
                 'default' => 0,
+            ],
+        ],
+        'confirmation_token' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.confirmation_token',
+            'config' => [
+                'type' => 'input',
+                'size' => 64,
+                'max' => 64,
                 'readOnly' => true,
             ],
         ],
@@ -77,7 +61,23 @@ return [
             'config' => [
                 'type' => 'text',
                 'rows' => 5,
-                'searchable' => false,
+                'eval' => 'trim',
+            ],
+        ],
+        'created_at' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.created_at',
+            'config' => [
+                'type' => 'datetime',
+                'format' => 'datetime',
+                'readOnly' => true,
+            ],
+        ],
+        'confirmed_at' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.confirmed_at',
+            'config' => [
+                'type' => 'datetime',
+                'format' => 'datetime',
+                'readOnly' => true,
             ],
         ],
     ],
@@ -85,7 +85,9 @@ return [
         '1' => [
             'showitem' => '
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-                    event, first_name, last_name, email, phone, is_confirmed, notes
+                    event, participant, is_confirmed, confirmed_at, notes,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+                    created_at, confirmation_token
             ',
         ],
     ],
