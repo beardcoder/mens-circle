@@ -1,18 +1,22 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-      data-namespace-typo3-fluid="true">
+<html
+        data-namespace-typo3-fluid="true"
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        xmlns:vite="http://typo3.org/ns/Praetorius/ViteAssetCollector/ViewHelpers"
+>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<f:page.meta property="viewport">width=device-width, initial-scale=1.0</f:page.meta>
+<vite:asset entry="EXT:mens_circle/Resources/Private/Assets/Styles/app.entry.css"/>
+<vite:asset entry="EXT:mens_circle/Resources/Private/Assets/Scripts/app.entry.ts"/>
 
-<f:render partial="Pages/Header" arguments="{mainMenu: mainMenu, site: site}" />
+<f:render arguments="{mainMenu: mainMenu, site: site}" partial="Pages/Header"/>
 
-<main id="main" class="min-h-screen">
-    <f:render section="main" />
+<main class="min-h-screen" id="main">
+    <f:render section="main"/>
 </main>
 
-<f:render partial="Pages/Footer" arguments="{footerMenu: footerMenu, site: site}" />
+<f:render arguments="{footerMenu: footerMenu, site: site}" partial="Pages/Footer"/>
 
-<f:cObject typoscriptObjectPath="lib.dynamicContent" data="{colPos: 10, slide: -1}" />
+<f:cObject data="{colPos: 10, slide: -1}" typoscriptObjectPath="lib.dynamicContent"/>
+
 
 </html>
