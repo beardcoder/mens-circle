@@ -5,88 +5,156 @@
 <f:layout name="Default" />
 
 <f:section name="main">
-    <article class="event-detail container mx-auto px-4 py-12 max-w-4xl" itemscope itemtype="https://schema.org/Event">
-        <header class="event-detail__header mb-10">
+    <article class="event-detail" itemscope itemtype="https://schema.org/Event">
+        <!-- Event Hero Section -->
+        <section class="event-hero hero">
             <f:if condition="{event.eventImage}">
-                <div class="mb-8 rounded-xl overflow-hidden shadow-lg">
+                <div class="hero__bg">
                     <f:image image="{event.eventImage}"
+                             class="hero__bg-image"
                              alt="{event.title}"
-                             class="w-full object-cover"
                              width="1200"
-                             height="630" />
+                             height="630"
+                             loading="eager" />
                 </div>
             </f:if>
 
-            <h1 class="text-4xl md:text-5xl font-bold text-stone-900 mb-4" itemprop="name">{event.title}</h1>
+            <div class="hero__circles" aria-hidden="true">
+                <div class="hero__circle hero__circle--1"></div>
+                <div class="hero__circle hero__circle--2"></div>
+                <div class="hero__circle hero__circle--3"></div>
+                <div class="hero__circle hero__circle--4"></div>
+            </div>
 
-            <div class="event-detail__meta flex flex-wrap gap-6 text-stone-500">
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <time datetime="{event.eventDate -> f:format.date(format: 'c')}" itemprop="startDate">
-                        <f:format.date format="l, d. F Y, H:i">{event.eventDate}</f:format.date> Uhr
-                    </time>
-                </div>
-
-                <f:if condition="{event.eventEndDate}">
-                    <div class="flex items-center gap-1">
-                        <span>–</span>
-                        <time datetime="{event.eventEndDate -> f:format.date(format: 'c')}">
-                            <f:format.date format="H:i">{event.eventEndDate}</f:format.date> Uhr
-                        </time>
-                    </div>
-                </f:if>
-
-                <div class="flex items-center gap-2" itemprop="location">
-                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span>{event.location}</span>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <mc:eventStatus event="{event}" />
+            <div class="container">
+                <div class="hero__content">
+                    <h1 class="hero__title" itemprop="name">{event.title}</h1>
                 </div>
             </div>
-        </header>
+        </section>
 
-        <div class="event-detail__content prose prose-lg max-w-none mb-10" itemprop="description">
-            <f:format.html>{event.description}</f:format.html>
-        </div>
+        <!-- Event Info Section -->
+        <section class="event-info-section">
+            <div class="container">
+                <div class="event-info__grid">
+                    <div class="event-info__card">
+                        <h3>Datum & Zeit</h3>
+                        <div class="event-info__card-value">
+                            <time datetime="{event.eventDate -> f:format.date(format: 'c')}" itemprop="startDate">
+                                <f:format.date format="d. F Y">{event.eventDate}</f:format.date>
+                            </time>
+                        </div>
+                        <div class="event-info__card-sub">
+                            <f:format.date format="H:i">{event.eventDate}</f:format.date> Uhr
+                            <f:if condition="{event.eventEndDate}">
+                                - <f:format.date format="H:i">{event.eventEndDate}</f:format.date> Uhr
+                            </f:if>
+                        </div>
+                        <div class="event-info__card-circle"></div>
+                    </div>
 
-        <!-- Capacity Info -->
-        <f:if condition="{event.maxParticipants}">
-            <div class="bg-stone-50 rounded-lg p-4 mb-8">
-                <div class="flex items-center justify-between">
-                    <span class="text-stone-600 text-sm">
-                        {event.activeRegistrationsCount} von {event.maxParticipants} Teilnehmern angemeldet
-                    </span>
-                    <div class="w-32 bg-stone-200 rounded-full h-2">
-                        <div class="bg-amber-500 h-2 rounded-full" style="width: calc({event.activeRegistrationsCount} / {event.maxParticipants} * 100%)"></div>
+                    <div class="event-info__card">
+                        <h3>Ort</h3>
+                        <div class="event-info__card-value" itemprop="location">{event.location}</div>
+                        <div class="event-info__card-circle"></div>
+                    </div>
+
+                    <div class="event-info__card">
+                        <h3>Teilnehmer</h3>
+                        <div class="event-info__card-value">
+                            {event.activeRegistrationsCount} / {event.maxParticipants}
+                        </div>
+                        <div class="event-info__card-sub">
+                            <mc:eventStatus event="{event}" />
+                        </div>
+                        <div class="event-info__card-circle"></div>
+                    </div>
+
+                    <div class="event-info__card">
+                        <h3>Status</h3>
+                        <div class="event-info__card-value">
+                            <f:if condition="{isPast}">
+                                <f:then>Vergangen</f:then>
+                                <f:else>
+                                    <f:if condition="{isFull}">
+                                        <f:then>Ausgebucht</f:then>
+                                        <f:else>Verfügbar</f:else>
+                                    </f:if>
+                                </f:else>
+                            </f:if>
+                        </div>
+                        <div class="event-info__card-circle"></div>
                     </div>
                 </div>
             </div>
-        </f:if>
+        </section>
 
-        <!-- Registration / Status Messages -->
+        <!-- Event About/Description Section -->
+        <section class="event-about-section">
+            <div class="event-about__layout">
+                <div class="event-about__content">
+                    <p class="eyebrow fade-in">Details</p>
+                    <h2 class="section-title event-about__title fade-in fade-in-delay-1">
+                        Über diese <span class="text-italic">Veranstaltung</span>
+                    </h2>
+                    <div class="event-about__text fade-in fade-in-delay-2" itemprop="description">
+                        <f:format.html>{event.description}</f:format.html>
+                    </div>
+                </div>
+
+                <div class="event-about__visual">
+                    <div class="event-about__quote-area">
+                        <div class="event-about__circles">
+                            <div class="event-about__circle event-about__circle--1"></div>
+                            <div class="event-about__circle event-about__circle--2"></div>
+                            <div class="event-about__circle event-about__circle--3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Section -->
         <f:if condition="{isPast}">
-            <div class="alert alert--info bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4">
-                <p class="font-medium">Diese Veranstaltung hat bereits stattgefunden.</p>
-            </div>
-        </f:if>
-
-        <f:if condition="{isPast -> f:boolean() -> f:not()}">
-            <f:if condition="{isFull}">
-                <div class="alert alert--warning bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-4">
-                    <p class="font-medium">Diese Veranstaltung ist bereits ausgebucht.</p>
-                </div>
-            </f:if>
-
-            <f:if condition="{isFull -> f:boolean() -> f:not()}">
-                <f:render partial="Event/RegistrationForm" arguments="{event: event}" />
-            </f:if>
+            <f:then>
+                <section class="event-cta-section">
+                    <div class="container">
+                        <div class="event-cta__circles">
+                            <div class="event-cta__circle event-cta__circle--1"></div>
+                            <div class="event-cta__circle event-cta__circle--2"></div>
+                        </div>
+                        <div class="event-cta__content">
+                            <p class="eyebrow eyebrow--secondary">Veranstaltung beendet</p>
+                            <h2 class="section-title event-cta__title section-title--lg section-title--light">
+                                Diese Veranstaltung hat bereits <span class="text-italic">stattgefunden</span>
+                            </h2>
+                        </div>
+                    </div>
+                </section>
+            </f:then>
+            <f:else>
+                <f:if condition="{isFull}">
+                    <f:then>
+                        <section class="event-cta-section">
+                            <div class="container">
+                                <div class="event-cta__circles">
+                                    <div class="event-cta__circle event-cta__circle--1"></div>
+                                    <div class="event-cta__circle event-cta__circle--2"></div>
+                                </div>
+                                <div class="event-cta__content">
+                                    <p class="eyebrow eyebrow--secondary">Ausgebucht</p>
+                                    <h2 class="section-title event-cta__title section-title--lg section-title--light">
+                                        Diese Veranstaltung ist bereits <span class="text-italic">ausgebucht</span>
+                                    </h2>
+                                </div>
+                            </div>
+                        </section>
+                    </f:then>
+                    <f:else>
+                        <f:render partial="Event/RegistrationSection" arguments="{event: event}" />
+                    </f:else>
+                </f:if>
+            </f:else>
         </f:if>
     </article>
 </f:section>

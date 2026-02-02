@@ -1,0 +1,34 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<section class="event-register-section">
+    <div class="event-register__layout">
+        <!-- Left: Event Info -->
+        <div class="event-register__content">
+            <div class="event-register__circles">
+                <div class="event-register__circle event-register__circle--1"></div>
+                <div class="event-register__circle event-register__circle--2"></div>
+            </div>
+
+            <p class="eyebrow eyebrow--secondary event-register__eyebrow">Jetzt anmelden</p>
+            <h2 class="section-title section-title--lg section-title--light event-register__title">
+                Sichere dir deinen <span class="text-italic">Platz</span>
+            </h2>
+
+            <f:if condition="{event.maxParticipants} > 0">
+                <div class="event-register__spots">
+                    <span class="event-register__spots-available">{event.remainingSpots}</span>
+                    <span>freie Plätze</span>
+                </div>
+            </f:if>
+        </div>
+
+        <!-- Right: Registration Form -->
+        <div class="event-register__form-wrap">
+            <f:render partial="Event/RegistrationForm" arguments="{event: event}" />
+        </div>
+    </div>
+</section>
+
+</html>
+
