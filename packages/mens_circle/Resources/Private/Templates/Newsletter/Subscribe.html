@@ -4,13 +4,18 @@
 <f:layout name="Default" />
 
 <f:section name="main">
-    <div class="container mx-auto px-4 py-12 max-w-2xl">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-stone-900 mb-2">Newsletter Anmeldung</h1>
-            <p class="text-stone-500">Bleibe über unsere Veranstaltungen informiert.</p>
+    <section class="section section--large">
+        <div class="container container--narrow">
+            <div class="section__header fade-in">
+                <p class="eyebrow">Newsletter</p>
+                <h1 class="section-title">Newsletter <span class="text-italic">Anmeldung</span></h1>
+                <p class="newsletter__text">Bleibe über unsere Veranstaltungen informiert.</p>
+            </div>
+            <div class="fade-in fade-in-delay-1">
+                <f:render partial="Newsletter/SubscribeForm" />
+            </div>
         </div>
-        <f:render partial="Newsletter/SubscribeForm" />
-    </div>
+    </section>
 </f:section>
 
 </html>
