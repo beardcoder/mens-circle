@@ -1,1 +1,0 @@
-a:3:{s:17:"short_description";s:36:"Configure sites and routing behavior";s:11:"description";s:254:"This module contains the full configuration interface for individual sites. You can define languages, error handling, routes, entry points, and domain behavior. It is the central place for setting up and maintaining the technical foundation of each site.";s:5:"title";s:5:"Setup";}
