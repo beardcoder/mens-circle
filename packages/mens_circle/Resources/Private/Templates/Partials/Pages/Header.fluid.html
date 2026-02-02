@@ -1,68 +1,40 @@
 <header xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-        class="navigation fixed top-0 left-0 right-0 z-40 bg-stone-900 bg-opacity-95 backdrop-blur-sm border-b border-stone-800"
+        class="header"
         id="main-nav">
 
-    <div class="container mx-auto px-4 max-w-6xl">
-        <div class="flex items-center justify-between h-16">
+    <div class="container">
+        <div class="header__inner">
             <!-- Logo / Branding -->
-            <f:link.page pageUid="0" class="navigation__logo text-white font-bold text-lg flex items-center gap-2">
-                <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-stone-900" fill="currentColor" viewBox="0 0 24 24">
+            <f:link.page pageUid="1" class="logo">
+                <div class="logo__icon">
+                    <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
-                MC
+                <span class="logo__text">Männerkreis</span>
             </f:link.page>
 
             <!-- Desktop Navigation -->
-            <nav>
-                <ul class="navigation__links hidden md:flex items-center space-x-1">
-                    <f:for each="{mainMenu}" as="menuItem">
-                        <li>
-                            <a href="{menuItem.link}"
-                               class="text-stone-300 hover:text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium{f:if(condition: menuItem.current, then: ' text-white bg-stone-800')}"
-                               {f:if(condition: menuItem.current, then: 'aria-current="page"')}>
-                                {menuItem.title}
-                            </a>
-                            <f:if condition="{menuItem.children}">
-                                <ul class="navigation__submenu">
-                                    <f:for each="{menuItem.children}" as="child">
-                                        <li>
-                                            <a href="{child.link}"
-                                               class="text-stone-300 hover:text-white px-4 py-2 text-sm">
-                                                {child.title}
-                                            </a>
-                                        </li>
-                                    </f:for>
-                                </ul>
-                            </f:if>
-                        </li>
-                    </f:for>
-                </ul>
+            <nav class="nav">
+                <f:for each="{mainMenu}" as="menuItem">
+                    <a href="{menuItem.link}"
+                       class="nav__link{f:if(condition: menuItem.current, then: ' nav__link--active')}"
+                       {f:if(condition: menuItem.current, then: 'aria-current="page"')}>
+                        {menuItem.title}
+                    </a>
+                </f:for>
             </nav>
 
             <!-- Mobile Menu Toggle -->
-            <button class="md:hidden text-stone-300 hover:text-white transition-colors"
+            <button class="nav-toggle"
                     id="mobile-menu-toggle"
                     aria-label="Menu umschalten"
                     aria-expanded="false"
                     aria-controls="mobile-menu">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
         </div>
-    </div>
-
-    <!-- Mobile Navigation -->
-    <div class="md:hidden hidden" id="mobile-menu" aria-hidden="true">
-        <nav class="px-4 py-3 space-y-1 border-t border-stone-800">
-            <f:for each="{mainMenu}" as="menuItem">
-                <a href="{menuItem.link}"
-                   class="block text-stone-300 hover:text-white hover:bg-stone-800 px-4 py-2 rounded-lg transition-colors text-sm">
-                    {menuItem.title}
-                </a>
-            </f:for>
-        </nav>
     </div>
 </header>

@@ -1,24 +1,30 @@
 <footer xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-        class="footer bg-stone-900 text-stone-400 py-12 mt-0">
+        class="footer">
 
-    <div class="container mx-auto px-4 max-w-6xl">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+    <div class="container">
+        <div class="footer__top">
             <!-- Branding Column -->
-            <div>
-                <h3 class="text-white font-bold text-lg mb-3">{site.configuration.websiteTitle}</h3>
-                <p class="text-sm leading-relaxed">
+            <div class="footer__brand">
+                <div class="footer__logo">
+                    <div class="footer__logo-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <span>{site.configuration.websiteTitle}</span>
+                </div>
+                <p class="footer__text">
                     Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern und Straubing.
                 </p>
             </div>
 
             <!-- Footer Navigation -->
             <div>
-                <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-3">Navigation</h4>
-                <ul class="space-y-2">
+                <h4 class="footer__heading">Navigation</h4>
+                <ul class="footer__links">
                     <f:for each="{footerMenu}" as="menuItem">
                         <li>
-                            <a href="{menuItem.link}"
-                               class="text-stone-400 hover:text-white text-sm transition-colors">
+                            <a href="{menuItem.link}">
                                 {menuItem.title}
                             </a>
                         </li>
@@ -28,18 +34,16 @@
 
             <!-- Contact -->
             <div>
-                <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-3">Kontakt</h4>
-                <div class="space-y-2 text-sm">
-                    <p>Straubing, Niederbayern</p>
-                </div>
+                <h4 class="footer__heading">Kontakt</h4>
+                <p class="footer__text">Straubing, Niederbayern</p>
             </div>
         </div>
 
-        <div class="border-t border-stone-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p class="text-xs text-stone-500">
+        <div class="footer__bottom">
+            <p class="footer__copyright">
                 © <f:format.date format="Y">now</f:format.date> {site.configuration.websiteTitle}. Alle Rechte vorbehalten.
             </p>
-            <div class="flex gap-4 text-xs text-stone-500">
+            <div class="footer__legal">
                 <!-- Legal links can be added via footer colPos -->
             </div>
         </div>

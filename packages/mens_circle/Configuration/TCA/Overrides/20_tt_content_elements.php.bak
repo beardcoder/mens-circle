@@ -130,11 +130,8 @@ ExtensionManagementUtility::addRecordType(
             ],
             'pi_flexform' => [
                 'config' => [
-                    'type' => 'flex',
-                    'ds_pointerField' => 'CType',
                     'ds' => [
                         'default' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Faq.xml',
-                        'menscircle_faq' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Faq.xml',
                     ],
                 ],
             ],
@@ -173,11 +170,8 @@ ExtensionManagementUtility::addRecordType(
             ],
             'pi_flexform' => [
                 'config' => [
-                    'type' => 'flex',
-                    'ds_pointerField' => 'CType',
                     'ds' => [
                         'default' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Intro.xml',
-                        'menscircle_intro' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Intro.xml',
                     ],
                 ],
             ],
@@ -216,11 +210,8 @@ ExtensionManagementUtility::addRecordType(
             ],
             'pi_flexform' => [
                 'config' => [
-                    'type' => 'flex',
-                    'ds_pointerField' => 'CType',
                     'ds' => [
                         'default' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Journey.xml',
-                        'menscircle_journey' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Journey.xml',
                     ],
                 ],
             ],
@@ -266,11 +257,8 @@ ExtensionManagementUtility::addRecordType(
             ],
             'pi_flexform' => [
                 'config' => [
-                    'type' => 'flex',
-                    'ds_pointerField' => 'CType',
                     'ds' => [
                         'default' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Moderator.xml',
-                        'menscircle_moderator' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Moderator.xml',
                     ],
                 ],
             ],
@@ -335,11 +323,8 @@ ExtensionManagementUtility::addRecordType(
         'columnsOverrides' => [
             'pi_flexform' => [
                 'config' => [
-                    'type' => 'flex',
-                    'ds_pointerField' => 'CType',
                     'ds' => [
                         'default' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Values.xml',
-                        'menscircle_values' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Values.xml',
                     ],
                 ],
             ],
@@ -378,11 +363,8 @@ ExtensionManagementUtility::addRecordType(
             ],
             'pi_flexform' => [
                 'config' => [
-                    'type' => 'flex',
-                    'ds_pointerField' => 'CType',
                     'ds' => [
                         'default' => 'FILE:EXT:mens_circle/Configuration/FlexForms/WhatsApp.xml',
-                        'menscircle_whatsapp' => 'FILE:EXT:mens_circle/Configuration/FlexForms/WhatsApp.xml',
                     ],
                 ],
             ],

@@ -46,9 +46,19 @@ services:
   BeardCoder\MensCircle\Domain\Repository\TestimonialRepository:
     public: true
 
+  # Dashboard Widget Data Providers
+  BeardCoder\MensCircle\Widgets\Provider\NewsletterSubscriberCountDataProvider:
+    public: true
+
   # Dashboard Widgets
   dashboard.widget.menscircle.newsletterSubscriberCount:
-    class: 'BeardCoder\MensCircle\Widgets\NewsletterSubscriberCountWidget'
+    class: 'TYPO3\CMS\Dashboard\Widgets\NumberWithIconWidget'
+    arguments:
+      $dataProvider: '@BeardCoder\MensCircle\Widgets\Provider\NewsletterSubscriberCountDataProvider'
+      $options:
+        title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang.xlf:widget.newsletterSubscriberCount.title'
+        subtitle: ''
+        icon: 'content-form'
     tags:
       - name: dashboard.widget
         identifier: 'menscircle-newsletter-subscriber-count'
