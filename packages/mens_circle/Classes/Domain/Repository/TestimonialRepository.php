@@ -21,9 +21,7 @@ class TestimonialRepository extends Repository
     public function findApproved(): QueryResult
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('isApproved', true),
-        ]);
+        $query->matching($query->equals('isApproved', true));
         $query->setOrderings(['createdAt' => QueryInterface::ORDER_DESCENDING]);
 
         return $query->execute();
@@ -35,9 +33,7 @@ class TestimonialRepository extends Repository
     public function findPending(): QueryResult
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('isApproved', false),
-        ]);
+        $query->matching($query->equals('isApproved', false));
         $query->setOrderings(['createdAt' => QueryInterface::ORDER_DESCENDING]);
 
         return $query->execute();

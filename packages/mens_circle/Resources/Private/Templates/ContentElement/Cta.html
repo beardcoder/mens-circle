@@ -1,0 +1,34 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<section class="section section--large cta-section" id="c{data.uid}">
+    <div class="container">
+        <div class="cta__content fade-in">
+            <f:if condition="{data.header}">
+                <p class="eyebrow">{data.header}</p>
+            </f:if>
+
+            <f:if condition="{data.subheader}">
+                <h2 class="section-title cta__title">
+                    <f:format.html>{data.subheader}</f:format.html>
+                </h2>
+            </f:if>
+
+            <f:if condition="{data.bodytext}">
+                <p class="cta__text">{data.bodytext}</p>
+            </f:if>
+
+            <f:if condition="{flexform.buttonText} && {flexform.buttonLink}">
+                <f:link.typolink
+                    parameter="{flexform.buttonLink}"
+                    class="btn btn--primary btn--large"
+                    additionalAttributes="{data-umami-event: 'cta-click', data-umami-event-location: 'cta-block', data-umami-event-text: flexform.buttonText}"
+                >
+                    {flexform.buttonText}
+                </f:link.typolink>
+            </f:if>
+        </div>
+    </div>
+</section>
+
+</html>

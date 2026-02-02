@@ -6,7 +6,10 @@ namespace BeardCoder\MensCircle\Service;
 
 use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
 use BeardCoder\MensCircle\Domain\Model\Registration;
+use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\MailMessage;
+use TYPO3\CMS\Core\Mail\Mailer;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class EmailService
@@ -14,8 +17,10 @@ final class EmailService
     private string $fromEmail;
     private string $fromName;
 
-    public function __construct()
-    {
+    public function __construct(
+        private readonly Mailer $mailer,
+        private readonly SiteFinder $siteFinder,
+    ) {
         $this->fromEmail = $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] ?? 'noreply@example.com';
         $this->fromName = $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'] ?? 'Männerkreis Niederbayern';
     }
@@ -59,10 +64,7 @@ final class EmailService
     {
         $subject = 'Bitte bestätige deine Newsletter-Anmeldung';
 
-        $confirmationUrl = GeneralUtility::getIndpUrl(
-            sprintf('/newsletter/confirm/%s', $subscription->getConfirmationToken()),
-            true,
-        );
+        $confirmationUrl = $this->getBaseUrl() . sprintf('/newsletter/confirm/%s', $subscription->getConfirmationToken());
 
         $body = sprintf(
             "Hallo %s,\n\n"
@@ -87,10 +89,23 @@ final class EmailService
     {
         $mail = GeneralUtility::makeInstance(MailMessage::class);
         $mail
-            ->from([$this->fromEmail => $this->fromName])
-            ->to([$to])
+            ->from(new Address($this->fromEmail, $this->fromName))
+            ->to($to)
             ->subject($subject)
-            ->text($body)
-            ->send();
+            ->text($body);
+
+        $this->mailer->send($mail);
+    }
+
+    private function getBaseUrl(): string
+    {
+        try {
+            $sites = $this->siteFinder->getAllSites();
+            $site = reset($sites);
+
+            return $site !== false ? rtrim((string) $site->getBase(), '/') : '';
+        } catch (\Exception) {
+            return '';
+        }
     }
 }

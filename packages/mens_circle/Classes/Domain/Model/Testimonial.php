@@ -10,6 +10,7 @@ class Testimonial extends AbstractEntity
 {
     protected string $authorName = '';
     protected string $content = '';
+    protected string $role = '';
     protected bool $isApproved = false;
     protected ?Event $event = null;
     protected ?\DateTimeInterface $createdAt = null;
@@ -39,6 +40,26 @@ class Testimonial extends AbstractEntity
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Alias for getContent() to match template expectations
+     */
+    public function getQuote(): string
+    {
+        return $this->content;
+    }
+
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }

@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    paths:
+        - packages/mens_circle/Classes
+    treatPhpDocTypesAsCertain: false
+    scanDirectories:
+        - vendor/typo3/cms-core/Classes
+        - vendor/typo3/cms-extbase/Classes
+        - vendor/typo3/cms-fluid/Classes
+        - vendor/typo3/cms-frontend/Classes

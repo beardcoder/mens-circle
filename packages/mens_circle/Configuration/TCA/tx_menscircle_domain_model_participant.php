@@ -11,7 +11,6 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'first_name,last_name,email',
         'iconfile' => 'EXT:mens_circle/Resources/Public/Icons/registration.svg',
         'security' => [
             'ignorePageTypeRestriction' => true,
@@ -58,6 +57,7 @@ return [
                 'type' => 'input',
                 'size' => 20,
                 'max' => 50,
+                'searchable' => false,
             ],
         ],
     ],

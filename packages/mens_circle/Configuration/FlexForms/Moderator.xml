@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <sheetTitle>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.moderator.sheet.general</sheetTitle>
+                <type>array</type>
+                <el>
+                    <settings.quote>
+                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.moderator.quote</label>
+                        <config>
+                            <type>text</type>
+                            <cols>40</cols>
+                            <rows>3</rows>
+                        </config>
+                    </settings.quote>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3DataStructure>

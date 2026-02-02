@@ -1,0 +1,61 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<section class="hero" role="banner" id="c{data.uid}">
+    <div class="hero__bg">
+        <f:if condition="{data.image}">
+            <f:for each="{data.image}" as="image">
+                <f:image
+                    image="{image}"
+                    class="hero__bg-image"
+                    loading="eager"
+                    alt="{f:if(condition: image.alternative, then: image.alternative, else: data.subheader)}"
+                    aria-hidden="true"
+                />
+            </f:for>
+        </f:if>
+    </div>
+
+    <div class="hero__circles" aria-hidden="true">
+        <div class="hero__circle hero__circle--1"></div>
+        <div class="hero__circle hero__circle--2"></div>
+        <div class="hero__circle hero__circle--3"></div>
+        <div class="hero__circle hero__circle--4"></div>
+    </div>
+
+    <div class="container">
+        <div class="hero__content">
+            <f:if condition="{data.header}">
+                <p class="hero__label">{data.header}</p>
+            </f:if>
+
+            <f:if condition="{data.subheader}">
+                <h1 class="hero__title">
+                    <f:format.html>{data.subheader}</f:format.html>
+                </h1>
+            </f:if>
+
+            <div class="hero__bottom">
+                <f:if condition="{data.bodytext}">
+                    <p class="hero__description">{data.bodytext}</p>
+                </f:if>
+
+                <f:if condition="{flexform.buttonText} && {flexform.buttonLink}">
+                    <div class="hero__cta fade-in-delay-3">
+                        <f:link.typolink parameter="{flexform.buttonLink}" class="btn btn--primary btn--large">
+                            {flexform.buttonText}
+                        </f:link.typolink>
+                        <f:if condition="{flexform.showScrollIndicator}">
+                            <div class="hero__scroll fade-in-delay-4">
+                                <span>Entdecken</span>
+                                <div class="hero__scroll-line" aria-hidden="true"></div>
+                            </div>
+                        </f:if>
+                    </div>
+                </f:if>
+            </div>
+        </div>
+    </div>
+</section>
+
+</html>

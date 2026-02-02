@@ -17,7 +17,8 @@ final class RegistrationService
         private readonly RegistrationRepository $registrationRepository,
         private readonly PersistenceManagerInterface $persistenceManager,
         private readonly EventDispatcher $eventDispatcher,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array<string, mixed> $data

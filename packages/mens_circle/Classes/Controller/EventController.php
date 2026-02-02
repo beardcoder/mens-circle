@@ -16,7 +16,8 @@ final class EventController extends ActionController
     public function __construct(
         private readonly EventRepository $eventRepository,
         private readonly RegistrationService $registrationService,
-    ) {}
+    ) {
+    }
 
     public function listAction(): ResponseInterface
     {

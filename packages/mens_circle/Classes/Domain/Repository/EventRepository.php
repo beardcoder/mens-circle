@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Domain\Repository;
 
 use BeardCoder\MensCircle\Domain\Model\Event;
-use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -22,10 +21,12 @@ class EventRepository extends Repository
     public function findUpcoming(): QueryResult
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->greaterThan('eventDate', new \DateTime()),
-            $query->equals('isPublished', true),
-        ]);
+        $query->matching(
+            $query->logicalAnd(
+                $query->greaterThan('eventDate', new \DateTime()),
+                $query->equals('isPublished', true),
+            ),
+        );
         $query->setOrderings(['eventDate' => QueryInterface::ORDER_ASCENDING]);
 
         return $query->execute();
@@ -34,10 +35,12 @@ class EventRepository extends Repository
     public function findNextUpcoming(): ?Event
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->greaterThan('eventDate', new \DateTime()),
-            $query->equals('isPublished', true),
-        ]);
+        $query->matching(
+            $query->logicalAnd(
+                $query->greaterThan('eventDate', new \DateTime()),
+                $query->equals('isPublished', true),
+            ),
+        );
         $query->setOrderings(['eventDate' => QueryInterface::ORDER_ASCENDING]);
         $query->setLimit(1);
 
@@ -52,10 +55,12 @@ class EventRepository extends Repository
     public function findPast(): QueryResult
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->lessThan('eventDate', new \DateTime()),
-            $query->equals('isPublished', true),
-        ]);
+        $query->matching(
+            $query->logicalAnd(
+                $query->lessThan('eventDate', new \DateTime()),
+                $query->equals('isPublished', true),
+            ),
+        );
         $query->setOrderings(['eventDate' => QueryInterface::ORDER_DESCENDING]);
 
         return $query->execute();
@@ -64,9 +69,7 @@ class EventRepository extends Repository
     public function findBySlug(string $slug): ?Event
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('slug', $slug),
-        ]);
+        $query->matching($query->equals('slug', $slug));
 
         return $query->execute()->current() ?: null;
     }

@@ -13,7 +13,8 @@ final class NewsletterSubscribedListener
 {
     public function __construct(
         private readonly EmailService $emailService,
-    ) {}
+    ) {
+    }
 
     public function __invoke(NewsletterSubscribedEvent $event): void
     {

@@ -1,0 +1,24 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<section class="section" id="c{data.uid}">
+    <div class="container container--narrow">
+        <div class="section__header fade-in">
+            <f:if condition="{data.header}">
+                <p class="eyebrow">{data.header}</p>
+            </f:if>
+
+            <f:if condition="{data.subheader}">
+                <h2 class="section-title">{data.subheader}</h2>
+            </f:if>
+        </div>
+
+        <f:if condition="{data.bodytext}">
+            <div class="section__content fade-in fade-in-delay-1">
+                <f:format.html>{data.bodytext}</f:format.html>
+            </div>
+        </f:if>
+    </div>
+</section>
+
+</html>

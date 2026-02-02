@@ -10,13 +10,16 @@ use BeardCoder\MensCircle\Service\EmailService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 final class NewsletterController extends ActionController
 {
     public function __construct(
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
         private readonly EmailService $emailService,
-    ) {}
+        private readonly PersistenceManagerInterface $persistenceManager,
+    ) {
+    }
 
     public function subscribeAction(): ResponseInterface
     {
@@ -61,7 +64,7 @@ final class NewsletterController extends ActionController
             $subscription->setFirstName($firstName);
 
             $this->newsletterSubscriptionRepository->add($subscription);
-            $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface::class)->persistAll();
+            $this->persistenceManager->persistAll();
 
             $this->emailService->sendNewsletterConfirmation($subscription);
 
@@ -95,7 +98,7 @@ final class NewsletterController extends ActionController
 
         $subscription->confirm();
         $this->newsletterSubscriptionRepository->update($subscription);
-        $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface::class)->persistAll();
+        $this->persistenceManager->persistAll();
 
         $this->view->assign('success', true);
         $this->view->assign('message', 'Deine Newsletter-Anmeldung wurde erfolgreich bestätigt!');
@@ -126,7 +129,7 @@ final class NewsletterController extends ActionController
         }
 
         $this->newsletterSubscriptionRepository->remove($subscription);
-        $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface::class)->persistAll();
+        $this->persistenceManager->persistAll();
 
         $this->view->assign('showForm', false);
         $this->view->assign('success', true);

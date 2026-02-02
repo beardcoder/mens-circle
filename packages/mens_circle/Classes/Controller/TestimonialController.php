@@ -9,12 +9,15 @@ use BeardCoder\MensCircle\Domain\Repository\TestimonialRepository;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 final class TestimonialController extends ActionController
 {
     public function __construct(
         private readonly TestimonialRepository $testimonialRepository,
-    ) {}
+        private readonly PersistenceManagerInterface $persistenceManager,
+    ) {
+    }
 
     public function listAction(): ResponseInterface
     {
@@ -64,7 +67,7 @@ final class TestimonialController extends ActionController
         $testimonial->setContent($content);
 
         $this->testimonialRepository->add($testimonial);
-        $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface::class)->persistAll();
+        $this->persistenceManager->persistAll();
 
         $this->addFlashMessage(
             'Danke für dein Testimonial! Es wird nach einer Überprüfung veröffentlicht.',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\ViewHelpers;
 
-use TYPO3\CMS\Fluid\ViewHelpers\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 final class FormatPhoneViewHelper extends AbstractViewHelper
 {

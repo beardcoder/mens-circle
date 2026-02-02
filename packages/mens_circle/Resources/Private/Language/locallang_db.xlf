@@ -127,6 +127,9 @@
             <trans-unit id="tx_menscircle_domain_model_testimonial.author_name" xml:space="preserve">
                 <source>Autorenname</source>
             </trans-unit>
+            <trans-unit id="tx_menscircle_domain_model_testimonial.role" xml:space="preserve">
+                <source>Rolle / Position</source>
+            </trans-unit>
             <trans-unit id="tx_menscircle_domain_model_testimonial.content" xml:space="preserve">
                 <source>Inhalt</source>
             </trans-unit>
@@ -178,6 +181,292 @@
             </trans-unit>
             <trans-unit id="tx_menscircle_domain_model_contentblock.cta_url" xml:space="preserve">
                 <source>CTA URL</source>
+            </trans-unit>
+
+            <!-- Content Element Group -->
+            <trans-unit id="tt_content.CType.group.menscircle" xml:space="preserve">
+                <source>Männerkreis</source>
+            </trans-unit>
+
+            <!-- Hero Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_hero" xml:space="preserve">
+                <source>Hero Section</source>
+            </trans-unit>
+            <trans-unit id="tt_content.hero.label" xml:space="preserve">
+                <source>Label (Oberzeile)</source>
+            </trans-unit>
+            <trans-unit id="tt_content.hero.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tt_content.hero.description" xml:space="preserve">
+                <source>Beschreibung</source>
+            </trans-unit>
+
+            <!-- CTA Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_cta" xml:space="preserve">
+                <source>Call to Action</source>
+            </trans-unit>
+            <trans-unit id="tt_content.cta.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.cta.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tt_content.cta.text" xml:space="preserve">
+                <source>Text</source>
+            </trans-unit>
+
+            <!-- FAQ Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_faq" xml:space="preserve">
+                <source>FAQ Bereich</source>
+            </trans-unit>
+            <trans-unit id="tt_content.faq.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.faq.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tt_content.faq.intro" xml:space="preserve">
+                <source>Intro-Text</source>
+            </trans-unit>
+
+            <!-- Intro Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_intro" xml:space="preserve">
+                <source>Intro Bereich</source>
+            </trans-unit>
+            <trans-unit id="tt_content.intro.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.intro.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tt_content.intro.text" xml:space="preserve">
+                <source>Text</source>
+            </trans-unit>
+
+            <!-- Journey Steps Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_journey" xml:space="preserve">
+                <source>Journey Schritte</source>
+            </trans-unit>
+            <trans-unit id="tt_content.journey.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.journey.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tt_content.journey.subtitle" xml:space="preserve">
+                <source>Untertitel</source>
+            </trans-unit>
+
+            <!-- Moderator Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_moderator" xml:space="preserve">
+                <source>Moderator</source>
+            </trans-unit>
+            <trans-unit id="tt_content.moderator.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.moderator.name" xml:space="preserve">
+                <source>Name</source>
+            </trans-unit>
+            <trans-unit id="tt_content.moderator.bio" xml:space="preserve">
+                <source>Biographie</source>
+            </trans-unit>
+
+            <!-- Text Section Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_textsection" xml:space="preserve">
+                <source>Text Bereich</source>
+            </trans-unit>
+            <trans-unit id="tt_content.textsection.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.textsection.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tt_content.textsection.content" xml:space="preserve">
+                <source>Inhalt</source>
+            </trans-unit>
+
+            <!-- Values Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_values" xml:space="preserve">
+                <source>Werte / Features</source>
+            </trans-unit>
+            <trans-unit id="tt_content.values.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.values.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+
+            <!-- WhatsApp Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_whatsapp" xml:space="preserve">
+                <source>WhatsApp Community</source>
+            </trans-unit>
+            <trans-unit id="tt_content.whatsapp.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.whatsapp.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tt_content.whatsapp.text" xml:space="preserve">
+                <source>Text</source>
+            </trans-unit>
+
+            <!-- Newsletter Section Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_newsletter_section" xml:space="preserve">
+                <source>Newsletter Bereich</source>
+            </trans-unit>
+            <trans-unit id="tt_content.newsletter_section.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.newsletter_section.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tt_content.newsletter_section.text" xml:space="preserve">
+                <source>Text</source>
+            </trans-unit>
+
+            <!-- Testimonials Section Content Element -->
+            <trans-unit id="tt_content.CType.menscircle_testimonials_section" xml:space="preserve">
+                <source>Testimonials Bereich</source>
+            </trans-unit>
+            <trans-unit id="tt_content.testimonials_section.eyebrow" xml:space="preserve">
+                <source>Eyebrow</source>
+            </trans-unit>
+            <trans-unit id="tt_content.testimonials_section.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="tt_content.testimonials_section.subtitle" xml:space="preserve">
+                <source>Untertitel</source>
+            </trans-unit>
+
+            <!-- FlexForm Labels - General -->
+            <trans-unit id="flexform.hero.sheet.general" xml:space="preserve">
+                <source>Allgemein</source>
+            </trans-unit>
+            <trans-unit id="flexform.hero.buttonText" xml:space="preserve">
+                <source>Button Text</source>
+            </trans-unit>
+            <trans-unit id="flexform.hero.buttonLink" xml:space="preserve">
+                <source>Button Link</source>
+            </trans-unit>
+            <trans-unit id="flexform.hero.showScrollIndicator" xml:space="preserve">
+                <source>Scroll-Indikator anzeigen</source>
+            </trans-unit>
+
+            <!-- FlexForm Labels - CTA -->
+            <trans-unit id="flexform.cta.sheet.general" xml:space="preserve">
+                <source>Allgemein</source>
+            </trans-unit>
+            <trans-unit id="flexform.cta.buttonText" xml:space="preserve">
+                <source>Button Text</source>
+            </trans-unit>
+            <trans-unit id="flexform.cta.buttonLink" xml:space="preserve">
+                <source>Button Link</source>
+            </trans-unit>
+
+            <!-- FlexForm Labels - FAQ -->
+            <trans-unit id="flexform.faq.sheet.items" xml:space="preserve">
+                <source>FAQ Einträge</source>
+            </trans-unit>
+            <trans-unit id="flexform.faq.items" xml:space="preserve">
+                <source>FAQ Einträge</source>
+            </trans-unit>
+            <trans-unit id="flexform.faq.item" xml:space="preserve">
+                <source>FAQ Eintrag</source>
+            </trans-unit>
+            <trans-unit id="flexform.faq.question" xml:space="preserve">
+                <source>Frage</source>
+            </trans-unit>
+            <trans-unit id="flexform.faq.answer" xml:space="preserve">
+                <source>Antwort</source>
+            </trans-unit>
+
+            <!-- FlexForm Labels - Intro -->
+            <trans-unit id="flexform.intro.sheet.general" xml:space="preserve">
+                <source>Allgemein</source>
+            </trans-unit>
+            <trans-unit id="flexform.intro.quote" xml:space="preserve">
+                <source>Zitat</source>
+            </trans-unit>
+            <trans-unit id="flexform.intro.sheet.values" xml:space="preserve">
+                <source>Werte</source>
+            </trans-unit>
+            <trans-unit id="flexform.intro.values" xml:space="preserve">
+                <source>Werte</source>
+            </trans-unit>
+            <trans-unit id="flexform.intro.value" xml:space="preserve">
+                <source>Wert</source>
+            </trans-unit>
+            <trans-unit id="flexform.intro.value.number" xml:space="preserve">
+                <source>Nummer</source>
+            </trans-unit>
+            <trans-unit id="flexform.intro.value.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="flexform.intro.value.description" xml:space="preserve">
+                <source>Beschreibung</source>
+            </trans-unit>
+
+            <!-- FlexForm Labels - Journey -->
+            <trans-unit id="flexform.journey.sheet.steps" xml:space="preserve">
+                <source>Schritte</source>
+            </trans-unit>
+            <trans-unit id="flexform.journey.steps" xml:space="preserve">
+                <source>Schritte</source>
+            </trans-unit>
+            <trans-unit id="flexform.journey.step" xml:space="preserve">
+                <source>Schritt</source>
+            </trans-unit>
+            <trans-unit id="flexform.journey.step.number" xml:space="preserve">
+                <source>Nummer</source>
+            </trans-unit>
+            <trans-unit id="flexform.journey.step.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="flexform.journey.step.description" xml:space="preserve">
+                <source>Beschreibung</source>
+            </trans-unit>
+
+            <!-- FlexForm Labels - Moderator -->
+            <trans-unit id="flexform.moderator.sheet.general" xml:space="preserve">
+                <source>Allgemein</source>
+            </trans-unit>
+            <trans-unit id="flexform.moderator.quote" xml:space="preserve">
+                <source>Zitat</source>
+            </trans-unit>
+
+            <!-- FlexForm Labels - Values -->
+            <trans-unit id="flexform.values.sheet.items" xml:space="preserve">
+                <source>Werte</source>
+            </trans-unit>
+            <trans-unit id="flexform.values.items" xml:space="preserve">
+                <source>Werte</source>
+            </trans-unit>
+            <trans-unit id="flexform.values.item" xml:space="preserve">
+                <source>Wert</source>
+            </trans-unit>
+            <trans-unit id="flexform.values.item.number" xml:space="preserve">
+                <source>Nummer</source>
+            </trans-unit>
+            <trans-unit id="flexform.values.item.title" xml:space="preserve">
+                <source>Titel</source>
+            </trans-unit>
+            <trans-unit id="flexform.values.item.description" xml:space="preserve">
+                <source>Beschreibung</source>
+            </trans-unit>
+
+            <!-- FlexForm Labels - WhatsApp -->
+            <trans-unit id="flexform.whatsapp.sheet.general" xml:space="preserve">
+                <source>Allgemein</source>
+            </trans-unit>
+            <trans-unit id="flexform.whatsapp.communityLink" xml:space="preserve">
+                <source>WhatsApp Community Link</source>
+            </trans-unit>
+            <trans-unit id="flexform.whatsapp.buttonText" xml:space="preserve">
+                <source>Button Text</source>
+            </trans-unit>
+            <trans-unit id="flexform.whatsapp.hint" xml:space="preserve">
+                <source>Hinweistext</source>
             </trans-unit>
         </body>
     </file>

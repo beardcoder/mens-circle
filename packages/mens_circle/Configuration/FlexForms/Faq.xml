@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <sheetTitle>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.sheet.items</sheetTitle>
+                <type>array</type>
+                <el>
+                    <settings.items>
+                        <title>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.items</title>
+                        <type>section</type>
+                        <el>
+                            <item>
+                                <title>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.item</title>
+                                <el>
+                                    <question>
+                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.question</label>
+                                        <config>
+                                            <type>input</type>
+                                            <size>50</size>
+                                            <max>255</max>
+                                        </config>
+                                    </question>
+                                    <answer>
+                                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.faq.answer</label>
+                                        <config>
+                                            <type>text</type>
+                                            <cols>40</cols>
+                                            <rows>5</rows>
+                                            <enableRichtext>true</enableRichtext>
+                                        </config>
+                                    </answer>
+                                </el>
+                            </item>
+                        </el>
+                    </settings.items>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3DataStructure>

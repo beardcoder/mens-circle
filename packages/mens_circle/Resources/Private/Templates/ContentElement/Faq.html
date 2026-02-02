@@ -1,0 +1,69 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:mc="http://typo3.org/ns/BeardCoder/MensCircle/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:comment><!-- FAQ Schema for SEO --></f:comment>
+<f:if condition="{flexform.items}">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            <f:for each="{flexform.items}" as="container" iteration="iter">
+            {
+                "@type": "Question",
+                "name": "<f:format.htmlentities>{container.item.el.question}</f:format.htmlentities>",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "<f:format.htmlentities><f:format.stripTags>{container.item.el.answer}</f:format.stripTags></f:format.htmlentities>"
+                }
+            }<f:if condition="{iter.isLast} == 0">,</f:if>
+            </f:for>
+        ]
+    }
+    </script>
+</f:if>
+
+<section class="section section--large faq-section" id="faq">
+    <div class="container">
+        <div class="faq__layout">
+            <div class="faq__header fade-in">
+                <f:if condition="{data.header}">
+                    <p class="eyebrow">{data.header}</p>
+                </f:if>
+
+                <f:if condition="{data.subheader}">
+                    <h2 class="section-title faq__title">
+                        <f:format.html>{data.subheader}</f:format.html>
+                    </h2>
+                </f:if>
+
+                <f:if condition="{data.bodytext}">
+                    <p class="faq__intro">{data.bodytext}</p>
+                </f:if>
+            </div>
+
+            <f:if condition="{flexform.items}">
+                <div class="faq__list fade-in fade-in-delay-1">
+                    <f:for each="{flexform.items}" as="container">
+                        <f:if condition="{container.item.el.question} && {container.item.el.answer}">
+                            <details class="faq-item" name="faq-accordion" data-m:toggle="action=faq_toggle;element=details;target=question;location=faq_section">
+                                <summary class="faq-item__question">
+                                    <span>{container.item.el.question}</span>
+                                    <span class="faq-item__icon" aria-hidden="true"></span>
+                                </summary>
+                                <div class="faq-item__answer">
+                                    <div class="faq-item__answer-inner">
+                                        <f:format.html>{container.item.el.answer}</f:format.html>
+                                    </div>
+                                </div>
+                            </details>
+                        </f:if>
+                    </f:for>
+                </div>
+            </f:if>
+        </div>
+    </div>
+</section>
+
+</html>

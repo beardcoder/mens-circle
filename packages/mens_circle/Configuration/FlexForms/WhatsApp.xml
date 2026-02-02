@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <sheetTitle>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.whatsapp.sheet.general</sheetTitle>
+                <type>array</type>
+                <el>
+                    <settings.communityLink>
+                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.whatsapp.communityLink</label>
+                        <config>
+                            <type>link</type>
+                            <allowedTypes>url</allowedTypes>
+                            <placeholder>https://chat.whatsapp.com/...</placeholder>
+                        </config>
+                    </settings.communityLink>
+                    <settings.buttonText>
+                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.whatsapp.buttonText</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>255</max>
+                            <default>Community beitreten</default>
+                        </config>
+                    </settings.buttonText>
+                    <settings.hint>
+                        <label>LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:flexform.whatsapp.hint</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>255</max>
+                            <default>Kostenlos und unverbindlich</default>
+                        </config>
+                    </settings.hint>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3DataStructure>

@@ -13,7 +13,6 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
-        'searchFields' => 'title,description,location',
         'iconfile' => 'EXT:mens_circle/Resources/Public/Icons/event.svg',
         'security' => [
             'ignorePageTypeRestriction' => true,
@@ -40,6 +39,7 @@ return [
                 ],
                 'fallbackCharacter' => '-',
                 'eval' => 'uniqueInSite',
+                'searchable' => false,
             ],
         ],
         'description' => [
@@ -63,12 +63,14 @@ return [
             'config' => [
                 'type' => 'datetime',
                 'required' => true,
+                'searchable' => false,
             ],
         ],
         'event_end_date' => [
             'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_event.event_end_date',
             'config' => [
                 'type' => 'datetime',
+                'searchable' => false,
             ],
         ],
         'max_participants' => [

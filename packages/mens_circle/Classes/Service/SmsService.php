@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Service;
 
 use BeardCoder\MensCircle\Domain\Model\Registration;
+use GuzzleHttp\Psr7\Utils;
 use TYPO3\CMS\Core\Http\RequestFactory;
 
 final class SmsService
@@ -13,7 +14,8 @@ final class SmsService
 
     public function __construct(
         private readonly RequestFactory $requestFactory,
-    ) {}
+    ) {
+    }
 
     public function sendRegistrationConfirmation(Registration $registration): void
     {
@@ -51,19 +53,19 @@ final class SmsService
 
     private function sendSms(string $apiKey, string $sender, string $to, string $message): void
     {
-        $request = $this->requestFactory->createRequest('POST', self::SEVEN_IO_API_URL);
-        $request = $request->withHeader('Authorization', 'Basic ' . base64_encode(':' . $apiKey))
-            ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
-            ->withBody(
-                \TYPO3\CMS\Core\Http\Stream::fromString(http_build_query([
-                    'to' => $to,
-                    'from' => $sender,
-                    'message' => $message,
-                ])),
-            );
+        $additionalOptions = [
+            'headers' => [
+                'Authorization' => 'Basic ' . base64_encode(':' . $apiKey),
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'body' => http_build_query([
+                'to' => $to,
+                'from' => $sender,
+                'message' => $message,
+            ]),
+        ];
 
-        $client = \TYPO3\CMS\Core\Http\Client::create();
-        $client->send($request);
+        $this->requestFactory->request(self::SEVEN_IO_API_URL, 'POST', $additionalOptions);
     }
 
     private function normalizePhoneNumber(string $phone): string

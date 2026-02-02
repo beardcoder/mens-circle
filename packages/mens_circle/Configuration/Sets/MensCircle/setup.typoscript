@@ -88,3 +88,180 @@ lib.upcomingEvents {
         }
     }
 }
+
+# =============================================================================
+# Custom Content Elements Rendering
+# =============================================================================
+
+tt_content {
+    # Hero Content Element
+    menscircle_hero =< lib.contentElement
+    menscircle_hero {
+        templateName = Hero
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+        dataProcessing {
+            10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
+            10 {
+                references.fieldName = image
+                as = images
+            }
+            20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+            20 {
+                fieldName = pi_flexform
+                as = flexform
+            }
+        }
+    }
+
+    # CTA Content Element
+    menscircle_cta =< lib.contentElement
+    menscircle_cta {
+        templateName = Cta
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+        dataProcessing {
+            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+            10 {
+                fieldName = pi_flexform
+                as = flexform
+            }
+        }
+    }
+
+    # FAQ Content Element
+    menscircle_faq =< lib.contentElement
+    menscircle_faq {
+        templateName = Faq
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+        dataProcessing {
+            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+            10 {
+                fieldName = pi_flexform
+                as = flexform
+            }
+        }
+    }
+
+    # Intro Content Element
+    menscircle_intro =< lib.contentElement
+    menscircle_intro {
+        templateName = Intro
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+        dataProcessing {
+            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+            10 {
+                fieldName = pi_flexform
+                as = flexform
+            }
+        }
+    }
+
+    # Journey Steps Content Element
+    menscircle_journey =< lib.contentElement
+    menscircle_journey {
+        templateName = Journey
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+        dataProcessing {
+            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+            10 {
+                fieldName = pi_flexform
+                as = flexform
+            }
+        }
+    }
+
+    # Moderator Content Element
+    menscircle_moderator =< lib.contentElement
+    menscircle_moderator {
+        templateName = Moderator
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+        dataProcessing {
+            10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
+            10 {
+                references.fieldName = image
+                as = images
+            }
+            20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+            20 {
+                fieldName = pi_flexform
+                as = flexform
+            }
+        }
+    }
+
+    # Text Section Content Element
+    menscircle_textsection =< lib.contentElement
+    menscircle_textsection {
+        templateName = TextSection
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+    }
+
+    # Values Content Element
+    menscircle_values =< lib.contentElement
+    menscircle_values {
+        templateName = Values
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+        dataProcessing {
+            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+            10 {
+                fieldName = pi_flexform
+                as = flexform
+            }
+        }
+    }
+
+    # WhatsApp Community Content Element
+    menscircle_whatsapp =< lib.contentElement
+    menscircle_whatsapp {
+        templateName = WhatsApp
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+        dataProcessing {
+            10 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+            10 {
+                fieldName = pi_flexform
+                as = flexform
+            }
+        }
+    }
+
+    # Newsletter Section Content Element
+    menscircle_newsletter_section =< lib.contentElement
+    menscircle_newsletter_section {
+        templateName = NewsletterSection
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+    }
+
+    # Testimonials Section Content Element
+    menscircle_testimonials_section =< lib.contentElement
+    menscircle_testimonials_section {
+        templateName = TestimonialsSection
+        templateRootPaths {
+            100 = EXT:mens_circle/Resources/Private/Templates/ContentElement/
+        }
+        dataProcessing {
+            10 = BeardCoder\MensCircle\DataProcessing\TestimonialsProcessor
+            10 {
+                as = testimonials
+            }
+        }
+    }
+}

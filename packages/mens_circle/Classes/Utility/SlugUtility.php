@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Utility;
 
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 final class SlugUtility
 {
     public static function generate(string $text): string
@@ -39,19 +42,18 @@ final class SlugUtility
 
     public static function isUnique(string $slug, string $table, ?int $excludeUid = null): bool
     {
-        $connection = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Database\ConnectionPool::class,
-        )->getConnectionForTable($table);
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable($table);
 
-        $query = $connection->createQueryBuilder()
-            ->select('uid')
+        $queryBuilder
+            ->count('uid')
             ->from($table)
-            ->where($connection->createQueryBuilder()->expr()->eq('slug', $connection->quote($slug, \PDO::PARAM_STR)));
+            ->where($queryBuilder->expr()->eq('slug', $queryBuilder->createNamedParameter($slug)));
 
         if ($excludeUid !== null) {
-            $query = $query->andWhere($connection->createQueryBuilder()->expr()->neq('uid', $excludeUid));
+            $queryBuilder->andWhere($queryBuilder->expr()->neq('uid', $queryBuilder->createNamedParameter($excludeUid, \Doctrine\DBAL\ParameterType::INTEGER)));
         }
 
-        return $query->executeQuery()->rowCount() === 0;
+        return (int) $queryBuilder->executeQuery()->fetchOne() === 0;
     }
 }

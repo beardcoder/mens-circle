@@ -22,9 +22,7 @@ class RegistrationRepository extends Repository
     public function findByEvent(Event $event): QueryResult
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('event', $event),
-        ]);
+        $query->matching($query->equals('event', $event));
         $query->setOrderings(['createdAt' => QueryInterface::ORDER_DESCENDING]);
 
         return $query->execute();
@@ -33,9 +31,7 @@ class RegistrationRepository extends Repository
     public function findByConfirmationToken(string $token): ?Registration
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('confirmationToken', $token),
-        ]);
+        $query->matching($query->equals('confirmationToken', $token));
 
         return $query->execute()->current() ?: null;
     }
@@ -43,9 +39,7 @@ class RegistrationRepository extends Repository
     public function countByEvent(Event $event): int
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('event', $event),
-        ]);
+        $query->matching($query->equals('event', $event));
 
         return $query->execute()->count();
     }
@@ -53,9 +47,7 @@ class RegistrationRepository extends Repository
     public function findByEmail(string $email): ?Registration
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('email', $email),
-        ]);
+        $query->matching($query->equals('email', $email));
         $query->setOrderings(['createdAt' => QueryInterface::ORDER_DESCENDING]);
         $query->setLimit(1);
 

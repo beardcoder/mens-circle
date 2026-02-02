@@ -17,9 +17,7 @@ class NewsletterSubscriptionRepository extends Repository
     public function findByEmail(string $email): ?NewsletterSubscription
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('email', $email),
-        ]);
+        $query->matching($query->equals('email', $email));
 
         return $query->execute()->current() ?: null;
     }
@@ -27,9 +25,7 @@ class NewsletterSubscriptionRepository extends Repository
     public function findByConfirmationToken(string $token): ?NewsletterSubscription
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('confirmationToken', $token),
-        ]);
+        $query->matching($query->equals('confirmationToken', $token));
 
         return $query->execute()->current() ?: null;
     }
@@ -37,9 +33,7 @@ class NewsletterSubscriptionRepository extends Repository
     public function findByUnsubscribeToken(string $token): ?NewsletterSubscription
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('unsubscribeToken', $token),
-        ]);
+        $query->matching($query->equals('unsubscribeToken', $token));
 
         return $query->execute()->current() ?: null;
     }
@@ -50,9 +44,7 @@ class NewsletterSubscriptionRepository extends Repository
     public function findAllConfirmed(): QueryResult
     {
         $query = $this->createQuery();
-        $query->setConstraints([
-            $query->equals('isConfirmed', true),
-        ]);
+        $query->matching($query->equals('isConfirmed', true));
 
         return $query->execute();
     }

@@ -10,7 +10,6 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'title,subject',
         'iconfile' => 'EXT:mens_circle/Resources/Public/Icons/newsletter.svg',
         'security' => [
             'ignorePageTypeRestriction' => true,
@@ -41,6 +40,7 @@ return [
                 'type' => 'text',
                 'enableRichtext' => true,
                 'rows' => 20,
+                'searchable' => false,
             ],
         ],
         'is_sent' => [
@@ -57,6 +57,7 @@ return [
             'config' => [
                 'type' => 'datetime',
                 'readOnly' => true,
+                'searchable' => false,
             ],
         ],
     ],

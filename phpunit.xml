@@ -3,9 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://phpunit.de/phpunit.xsd"
     backupGlobals="false"
-    bootstrap="vendor/typo3/testing-framework/bootstrap.php"
+    bootstrap="vendor/autoload.php"
     colors="true"
-    convertDeprecationsToExceptions="false"
     processIsolation="false"
     stopOnError="false"
     stopOnFailure="false">

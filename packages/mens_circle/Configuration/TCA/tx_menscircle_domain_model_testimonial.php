@@ -10,7 +10,6 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'author_name,content',
         'iconfile' => 'EXT:mens_circle/Resources/Public/Icons/testimonial.svg',
         'security' => [
             'ignorePageTypeRestriction' => true,
@@ -24,6 +23,15 @@ return [
                 'size' => 40,
                 'max' => 255,
                 'required' => true,
+            ],
+        ],
+        'role' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_testimonial.role',
+            'config' => [
+                'type' => 'input',
+                'size' => 40,
+                'max' => 255,
+                'placeholder' => 'z.B. Teilnehmer seit 2023',
             ],
         ],
         'content' => [
@@ -57,7 +65,7 @@ return [
         '1' => [
             'showitem' => '
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-                    author_name, content, event, is_approved
+                    author_name, role, content, event, is_approved
             ',
         ],
     ],

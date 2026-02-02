@@ -21,7 +21,7 @@ class NewsletterSubscriptionTest extends TestCase
     {
         self::assertNotEmpty($this->subscription->getConfirmationToken());
         self::assertNotEmpty($this->subscription->getUnsubscribeToken());
-        self::assertNotEqual(
+        self::assertNotEquals(
             $this->subscription->getConfirmationToken(),
             $this->subscription->getUnsubscribeToken(),
         );
