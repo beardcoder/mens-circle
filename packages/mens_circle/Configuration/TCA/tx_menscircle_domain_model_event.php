@@ -58,6 +58,47 @@ return [
                 'max' => 255,
             ],
         ],
+        'location_details' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_event.location_details',
+            'config' => [
+                'type' => 'text',
+                'rows' => 3,
+                'max' => 500,
+            ],
+        ],
+        'street' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_event.street',
+            'config' => [
+                'type' => 'input',
+                'size' => 40,
+                'max' => 255,
+            ],
+        ],
+        'postal_code' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_event.postal_code',
+            'config' => [
+                'type' => 'input',
+                'size' => 10,
+                'max' => 20,
+            ],
+        ],
+        'city' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_event.city',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'max' => 255,
+            ],
+        ],
+        'cost_basis' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_event.cost_basis',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'max' => 255,
+                'placeholder' => 'z.B. Kostenlos, Auf Spendenbasis, 15-30€',
+            ],
+        ],
         'event_date' => [
             'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_event.event_date',
             'config' => [
@@ -114,9 +155,11 @@ return [
         '1' => [
             'showitem' => '
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-                    title, slug, description, location,
+                    title, slug, description,
                 --div--;Event Details,
-                    event_date, event_end_date, max_participants, is_published, event_image,
+                    event_date, event_end_date, max_participants, cost_basis, is_published, event_image,
+                --div--;Location,
+                    location, location_details, street, postal_code, city,
                 --div--;Registrations,
                     registrations,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,

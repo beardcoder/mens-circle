@@ -23,7 +23,9 @@ class ParticipantRepository extends Repository
         $query = $this->createQuery();
         $query->matching($query->equals('email', $email));
 
-        return $query->execute()->getFirst();
+        /** @var Participant|null $result */
+        $result = $query->execute()->getFirst();
+        return $result;
     }
 
     /**

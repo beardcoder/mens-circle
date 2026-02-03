@@ -62,6 +62,9 @@ class NewsletterSubscriptionRepository extends Repository
         return $query->execute()->count();
     }
 
+    /**
+     * @return QueryResult<NewsletterSubscription>
+     */
     public function findLatestConfirmed(int $limit = 1): QueryResult
     {
         $query = $this->createQuery();
@@ -69,6 +72,8 @@ class NewsletterSubscriptionRepository extends Repository
         $query->setOrderings(['crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
         $query->setLimit($limit);
 
-        return $query->execute();
+        /** @var QueryResult<NewsletterSubscription> $result */
+        $result = $query->execute();
+        return $result;
     }
 }

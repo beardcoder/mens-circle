@@ -47,7 +47,7 @@ class RegistrationRepository extends Repository
     public function findByEmail(string $email): ?Registration
     {
         $query = $this->createQuery();
-        $query->matching($query->equals('email', $email));
+        $query->matching($query->equals('participant.email', $email));
         $query->setOrderings(['createdAt' => QueryInterface::ORDER_DESCENDING]);
         $query->setLimit(1);
 

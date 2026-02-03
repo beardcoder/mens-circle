@@ -46,10 +46,7 @@ ExtensionManagementUtility::addRecordType(
                 'config' => [
                     'type' => 'flex',
                     'ds_pointerField' => 'CType',
-                    'ds' => [
-                        'default' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Hero.xml',
-                        'menscircle_hero' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Hero.xml',
-                    ],
+                    'ds' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Hero.xml',
                 ],
             ],
         ],
@@ -89,10 +86,7 @@ ExtensionManagementUtility::addRecordType(
                 'config' => [
                     'type' => 'flex',
                     'ds_pointerField' => 'CType',
-                    'ds' => [
-                        'default' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Cta.xml',
-                        'menscircle_cta' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Cta.xml',
-                    ],
+                    'ds' => 'FILE:EXT:mens_circle/Configuration/FlexForms/Cta.xml',
                 ],
             ],
         ],

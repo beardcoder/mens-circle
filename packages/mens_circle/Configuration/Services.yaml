@@ -21,6 +21,10 @@ services:
     public: true
     tags: ['extbase.controller']
 
+  BeardCoder\MensCircle\Controller\Backend\NewsletterController:
+    public: true
+    tags: ['backend.controller']
+
   # Event Listeners via PHP attributes - no manual tag needed
   # but kept here for clarity
   BeardCoder\MensCircle\EventListener\RegistrationCreatedListener:
@@ -35,6 +39,9 @@ services:
 
   # Repositories must be public for Extbase
   BeardCoder\MensCircle\Domain\Repository\EventRepository:
+    public: true
+
+  BeardCoder\MensCircle\Domain\Repository\ParticipantRepository:
     public: true
 
   BeardCoder\MensCircle\Domain\Repository\RegistrationRepository:

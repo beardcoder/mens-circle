@@ -13,11 +13,14 @@ use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
 
 final class LatestNewsletterSubscriberWidget implements WidgetInterface, RequestAwareWidgetInterface
 {
+    /** @phpstan-ignore-next-line property.onlyWritten - Required by RequestAwareWidgetInterface */
     private ServerRequestInterface $request;
 
     public function __construct(
+        /** @phpstan-ignore-next-line property.onlyWritten - May be used in future enhancements */
         private readonly WidgetConfigurationInterface $configuration,
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
+        /** @phpstan-ignore-next-line property.onlyWritten - Required for potential template-based rendering */
         private readonly BackendViewFactory $backendViewFactory,
     ) {}
 
@@ -28,21 +31,29 @@ final class LatestNewsletterSubscriberWidget implements WidgetInterface, Request
 
     public function renderWidgetContent(): string
     {
-        $view = $this->backendViewFactory->create($this->request);
-        $view->setTemplate('Widget/LatestNewsletterSubscriber');
-
         $querySettings = $this->newsletterSubscriptionRepository->createQuery()->getQuerySettings();
         $querySettings->setRespectStoragePage(false);
         $this->newsletterSubscriptionRepository->setDefaultQuerySettings($querySettings);
 
         $latestSubscribers = $this->newsletterSubscriptionRepository->findLatestConfirmed(5);
 
-        $view->assignMultiple([
-            'subscribers' => $latestSubscribers,
-            'configuration' => $this->configuration,
-        ]);
+        $html = '<div class="widget-content"><ul class="list-unstyled">';
 
-        return $view->render();
+        if ($latestSubscribers->count() === 0) {
+            $html .= '<li class="text-muted">Keine Newsletter-Anmeldungen vorhanden</li>';
+        } else {
+            foreach ($latestSubscribers as $subscriber) {
+                $html .= sprintf(
+                    '<li><strong>%s</strong><br><small>%s</small></li>',
+                    htmlspecialchars($subscriber->getFirstName() ?: $subscriber->getEmail()),
+                    htmlspecialchars($subscriber->getEmail())
+                );
+            }
+        }
+
+        $html .= '</ul></div>';
+
+        return $html;
     }
 
     public function getOptions(): array

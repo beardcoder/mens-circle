@@ -80,12 +80,34 @@ return [
                 'readOnly' => true,
             ],
         ],
+        'status' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.status',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.status.pending', 'pending'],
+                    ['LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.status.registered', 'registered'],
+                    ['LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.status.cancelled', 'cancelled'],
+                    ['LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.status.attended', 'attended'],
+                ],
+                'default' => 'pending',
+            ],
+        ],
+        'cancelled_at' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_registration.cancelled_at',
+            'config' => [
+                'type' => 'datetime',
+                'format' => 'datetime',
+                'readOnly' => true,
+            ],
+        ],
     ],
     'types' => [
         '1' => [
             'showitem' => '
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-                    event, participant, is_confirmed, confirmed_at, notes,
+                    event, participant, status, is_confirmed, confirmed_at, cancelled_at, notes,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
                     created_at, confirmation_token
             ',

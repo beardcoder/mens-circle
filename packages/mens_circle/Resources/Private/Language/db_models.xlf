@@ -57,6 +57,31 @@
                 <source>Registrations</source>
             </segment>
         </unit>
+        <unit id="tx_menscircle_domain_model_event.location_details">
+            <segment>
+                <source>Location Details</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.street">
+            <segment>
+                <source>Street</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.postal_code">
+            <segment>
+                <source>Postal Code</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.city">
+            <segment>
+                <source>City</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_event.cost_basis">
+            <segment>
+                <source>Cost Basis</source>
+            </segment>
+        </unit>
 
         <!-- Registration Model -->
         <unit id="tx_menscircle_domain_model_registration">
@@ -99,6 +124,56 @@
                 <source>Notes</source>
             </segment>
         </unit>
+        <unit id="tx_menscircle_domain_model_registration.participant">
+            <segment>
+                <source>Participant</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.confirmation_token">
+            <segment>
+                <source>Confirmation Token</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.confirmed_at">
+            <segment>
+                <source>Confirmed At</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.created_at">
+            <segment>
+                <source>Created At</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.status">
+            <segment>
+                <source>Status</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.status.pending">
+            <segment>
+                <source>Pending</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.status.registered">
+            <segment>
+                <source>Registered</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.status.cancelled">
+            <segment>
+                <source>Cancelled</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.status.attended">
+            <segment>
+                <source>Attended</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_registration.cancelled_at">
+            <segment>
+                <source>Cancelled At</source>
+            </segment>
+        </unit>
 
         <!-- Participant Model -->
         <unit id="tx_menscircle_domain_model_participant">
@@ -129,6 +204,31 @@
         <unit id="tx_menscircle_domain_model_participant.phone">
             <segment>
                 <source>Phone Number</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.created_at">
+            <segment>
+                <source>Created At</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.event_registrations">
+            <segment>
+                <source>Event Registrations</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.newsletter_subscriptions">
+            <segment>
+                <source>Newsletter Subscriptions</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.tabs.registrations">
+            <segment>
+                <source>Event Registrations</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_participant.tabs.newsletter">
+            <segment>
+                <source>Newsletter</source>
             </segment>
         </unit>
 
@@ -163,6 +263,11 @@
                 <source>Sent At</source>
             </segment>
         </unit>
+        <unit id="tx_menscircle_domain_model_newsletter.recipient_count">
+            <segment>
+                <source>Recipient Count</source>
+            </segment>
+        </unit>
 
         <!-- Newsletter Subscription Model -->
         <unit id="tx_menscircle_domain_model_newslettersubscription">
@@ -188,6 +293,31 @@
         <unit id="tx_menscircle_domain_model_newslettersubscription.confirmed_at">
             <segment>
                 <source>Confirmed At</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newslettersubscription.participant">
+            <segment>
+                <source>Participant</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newslettersubscription.participant.none">
+            <segment>
+                <source>-- No Participant --</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newslettersubscription.confirmation_token">
+            <segment>
+                <source>Confirmation Token</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newslettersubscription.unsubscribe_token">
+            <segment>
+                <source>Unsubscribe Token</source>
+            </segment>
+        </unit>
+        <unit id="tx_menscircle_domain_model_newslettersubscription.created_at">
+            <segment>
+                <source>Created At</source>
             </segment>
         </unit>
 

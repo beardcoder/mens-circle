@@ -60,12 +60,20 @@ return [
                 'searchable' => false,
             ],
         ],
+        'recipient_count' => [
+            'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:tx_menscircle_domain_model_newsletter.recipient_count',
+            'config' => [
+                'type' => 'number',
+                'default' => 0,
+                'readOnly' => true,
+            ],
+        ],
     ],
     'types' => [
         '1' => [
             'showitem' => '
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-                    title, subject, content, is_sent, sent_at
+                    title, subject, content, is_sent, sent_at, recipient_count
             ',
         ],
     ],

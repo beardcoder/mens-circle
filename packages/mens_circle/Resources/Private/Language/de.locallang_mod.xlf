@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en" trgLang="de">
+    <file id="locallang_mod">
+        <unit id="mlang_tabs_tab">
+            <segment state="final">
+                <source>Newsletter</source>
+                <target>Newsletter</target>
+            </segment>
+        </unit>
+        <unit id="mlang_labels_tabdescr">
+            <segment state="final">
+                <source>Manage newsletter subscriptions and send newsletters to subscribers</source>
+                <target>Newsletter-Abonnements verwalten und Newsletter an Abonnenten senden</target>
+            </segment>
+        </unit>
+        <unit id="mlang_labels_tablabel">
+            <segment state="final">
+                <source>Newsletter Management</source>
+                <target>Newsletter-Verwaltung</target>
+            </segment>
+        </unit>
+    </file>
+</xliff>
+

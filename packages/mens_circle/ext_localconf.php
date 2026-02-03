@@ -7,6 +7,7 @@ use BeardCoder\MensCircle\Controller\NewsletterController;
 use BeardCoder\MensCircle\Controller\TestimonialController;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
+
 ExtensionUtility::configurePlugin(
     'mens_circle',
     'Events',

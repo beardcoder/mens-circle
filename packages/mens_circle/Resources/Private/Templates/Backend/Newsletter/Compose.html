@@ -1,0 +1,115 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:be.pageRenderer
+    includeJavaScriptModules="{0: '@typo3/backend/element/immediate-action-element.js', 1: '@typo3/rte-ckeditor/ckeditor.js'}"
+    includeCssFiles="{0: 'EXT:backend/Resources/Public/Css/backend.css'}"
+/>
+
+<f:flashMessages />
+
+<div class="module-body">
+    <!-- Info Alert -->
+    <div class="alert alert-info mb-4">
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+                <core:icon identifier="actions-info" size="large" />
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <strong>Empfänger:</strong> Dieser Newsletter wird an <strong>{confirmedCount}</strong> bestätigte Abonnenten gesendet.
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter Form -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <core:icon identifier="actions-document-new" size="small" />
+                Newsletter erstellen
+            </h3>
+        </div>
+        <div class="card-body">
+            <f:form action="send" method="post" name="newsletter">
+                <div class="form-group mb-4">
+                    <label for="subject" class="form-label">
+                        <strong>Betreff *</strong>
+                    </label>
+                    <f:form.textfield
+                        name="subject"
+                        id="subject"
+                        class="form-control form-control-lg"
+                        placeholder="Newsletter-Betreff eingeben..."
+                        required="required"
+                    />
+                    <small class="form-text text-muted">
+                        Der Betreff wird in der E-Mail-Betreffzeile angezeigt.
+                    </small>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="message" class="form-label">
+                        <strong>Nachricht *</strong>
+                    </label>
+                    <f:form.textarea
+                        name="message"
+                        id="message"
+                        class="form-control"
+                        rows="20"
+                        placeholder="Newsletter-Inhalt eingeben..."
+                        required="required"
+                        additionalAttributes="{data-rte: 'true', data-rte-config: 'default'}"
+                    />
+                    <small class="form-text text-muted">
+                        Nutzen Sie den Rich-Text-Editor für formatierte Inhalte. HTML wird unterstützt.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg"
+                            onclick="return confirm('Newsletter jetzt an {confirmedCount} Empfänger senden?')">
+                        <core:icon identifier="actions-document-export-t3d" size="small" />
+                        Newsletter senden
+                    </button>
+                    <f:link.action action="list" class="btn btn-default btn-lg ms-2">
+                        <core:icon identifier="actions-close" size="small" />
+                        Abbrechen
+                    </f:link.action>
+                </div>
+            </f:form>
+        </div>
+    </div>
+
+    <!-- Info Card -->
+    <div class="card mt-4">
+        <div class="card-header bg-light">
+            <h4 class="card-title mb-0">
+                <core:icon identifier="actions-lightbulb" size="small" />
+                Hinweise zum Newsletter-Versand
+            </h4>
+        </div>
+        <div class="card-body">
+            <ul class="mb-0">
+                <li>Der Newsletter wird an alle <strong>bestätigten</strong> Abonnenten gesendet</li>
+                <li>Die E-Mail wird als <strong>HTML</strong> mit Plaintext-Fallback versendet</li>
+                <li>Jede E-Mail enthält automatisch einen <strong>Abmelde-Link</strong></li>
+                <li>Der Versand kann je nach Anzahl der Empfänger einige Minuten dauern</li>
+                <li>Sie erhalten eine Bestätigungsmeldung nach dem Versand</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize CKEditor for the message textarea
+    require(['TYPO3/CMS/RteCKEditor/RteCKEditor'], function(RteCKEditor) {
+        const messageField = document.getElementById('message');
+        if (messageField) {
+            RteCKEditor.initialize(messageField);
+        }
+    });
+</script>
+
+</html>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Tests\Unit\Domain;
 
 use BeardCoder\MensCircle\Domain\Model\Event;
+use BeardCoder\MensCircle\Domain\Model\Participant;
 use BeardCoder\MensCircle\Domain\Model\Registration;
 use PHPUnit\Framework\TestCase;
 
@@ -32,14 +33,20 @@ class RegistrationTest extends TestCase
 
     public function testGetFullName(): void
     {
-        $this->registration->setFirstName('Hans');
-        $this->registration->setLastName('Müller');
+        $participant = new Participant();
+        $participant->setFirstName('Hans');
+        $participant->setLastName('Müller');
+        $this->registration->setParticipant($participant);
+
         self::assertEquals('Hans Müller', $this->registration->getFullName());
     }
 
     public function testGetFullNameWithOnlyFirstName(): void
     {
-        $this->registration->setFirstName('Hans');
+        $participant = new Participant();
+        $participant->setFirstName('Hans');
+        $this->registration->setParticipant($participant);
+
         self::assertEquals('Hans', $this->registration->getFullName());
     }
 

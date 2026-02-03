@@ -1,0 +1,102 @@
+imports:
+  - { resource: 'EXT:rte_ckeditor/Configuration/RTE/Default.yaml' }
+
+editor:
+  config:
+    # Newsletter-spezifische Toolbar
+    toolbar:
+      - { name: 'styles', items: [ 'Styles', 'Format' ] }
+      - { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript' ] }
+      - { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', 'Blockquote' ] }
+      - { name: 'links', items: [ 'Link', 'Unlink' ] }
+      - { name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'SpecialChar' ] }
+      - { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] }
+      - { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll' ] }
+      - { name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] }
+
+    # Erlaubte Inhalte für Newsletter
+    format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;div'
+
+    # Style-Sets
+    stylesSet:
+      - { name: 'Überschrift 1', element: 'h1' }
+      - { name: 'Überschrift 2', element: 'h2' }
+      - { name: 'Überschrift 3', element: 'h3' }
+      - { name: 'Hervorgehoben', element: 'span', attributes: { 'class': 'highlight' } }
+      - { name: 'Button', element: 'a', attributes: { 'class': 'btn btn-primary' } }
+
+    # Höhe des Editors
+    height: 500
+
+    # Farben für Text und Hintergrund
+    colorButton_colors: 'CF5D4E,454545,FFF,DDD,CCEAEE,66AB16'
+    colorButton_enableMore: true
+
+    # Tabellen-Eigenschaften
+    table:
+      contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties' ]
+
+    # Link-Dialog Optionen
+    linkDefaultProtocol: 'https://'
+
+    # Erlaubte Inhalte
+    allowedContent: true
+
+    # Autosave
+    autosave:
+      save_interval: 60
+      messageType: 'notification'
+
+    # Word-Import bereinigen
+    pasteFromWordRemoveFontStyles: true
+    pasteFromWordRemoveStyles: true
+
+# Processing-Optionen
+processing:
+  allowTags:
+    - 'p'
+    - 'br'
+    - 'h1'
+    - 'h2'
+    - 'h3'
+    - 'h4'
+    - 'h5'
+    - 'h6'
+    - 'strong'
+    - 'b'
+    - 'em'
+    - 'i'
+    - 'u'
+    - 'strike'
+    - 'sub'
+    - 'sup'
+    - 'a'
+    - 'img'
+    - 'ul'
+    - 'ol'
+    - 'li'
+    - 'table'
+    - 'thead'
+    - 'tbody'
+    - 'tr'
+    - 'th'
+    - 'td'
+    - 'blockquote'
+    - 'hr'
+    - 'div'
+    - 'span'
+
+  allowAttributes:
+    - 'href'
+    - 'target'
+    - 'title'
+    - 'src'
+    - 'alt'
+    - 'width'
+    - 'height'
+    - 'class'
+    - 'id'
+    - 'style'
+    - 'colspan'
+    - 'rowspan'
+
