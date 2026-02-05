@@ -27,7 +27,8 @@ class FormViewHelper extends AbstractTagBasedViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerUniversalTagAttributes();
+        $this->registerArgument('class', 'string', 'CSS class(es) for the form', false, null);
+        $this->registerArgument('id', 'string', 'HTML id for the form', false, null);
         $this->registerArgument('action', 'string', 'Form action URL', true);
         $this->registerArgument('method', 'string', 'HTTP method', false, 'post');
         $this->registerArgument('resetOnSuccess', 'bool', 'Reset form after success', false, true);
@@ -41,6 +42,14 @@ class FormViewHelper extends AbstractTagBasedViewHelper
         $this->tag->addAttribute('action', $this->arguments['action']);
         $this->tag->addAttribute('method', $this->arguments['method']);
         $this->tag->addAttribute('data-fluid-form', '');
+
+        if ($this->arguments['class'] !== null) {
+            $this->tag->addAttribute('class', $this->arguments['class']);
+        }
+
+        if ($this->arguments['id'] !== null) {
+            $this->tag->addAttribute('id', $this->arguments['id']);
+        }
 
         if (!$this->arguments['resetOnSuccess']) {
             $this->tag->addAttribute('data-reset-on-success', 'false');

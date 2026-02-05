@@ -10,8 +10,7 @@ final class NewsletterSubscribedEvent
 {
     public function __construct(
         private readonly NewsletterSubscription $subscription,
-    ) {
-    }
+    ) {}
 
     public function getSubscription(): NewsletterSubscription
     {

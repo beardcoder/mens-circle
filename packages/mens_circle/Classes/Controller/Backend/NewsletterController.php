@@ -23,9 +23,7 @@ final class NewsletterController extends ActionController
         private readonly ModuleTemplateFactory $moduleTemplateFactory,
         private readonly IconFactory $iconFactory,
         private readonly PersistenceManagerInterface $persistenceManager,
-    ) {
-    }
-
+    ) {}
 
     public function listAction(): ResponseInterface
     {
@@ -96,7 +94,7 @@ final class NewsletterController extends ActionController
 
         if ($failedCount > 0) {
             $this->addFlashMessage(
-                sprintf(
+                \sprintf(
                     'Newsletter wurde an %d Empfänger gesendet. %d Fehler sind aufgetreten.',
                     $sentCount,
                     $failedCount,
@@ -106,7 +104,7 @@ final class NewsletterController extends ActionController
             );
         } else {
             $this->addFlashMessage(
-                sprintf('Newsletter wurde erfolgreich an %d Empfänger gesendet.', $sentCount),
+                \sprintf('Newsletter wurde erfolgreich an %d Empfänger gesendet.', $sentCount),
                 'Erfolgreich',
                 ContextualFeedbackSeverity::OK,
             );

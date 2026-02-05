@@ -12,13 +12,13 @@ final class TestimonialsProcessor implements DataProcessorInterface
 {
     public function __construct(
         private readonly TestimonialRepository $testimonialRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $contentObjectConfiguration
      * @param array<string, mixed> $processorConfiguration
      * @param array<string, mixed> $processedData
+     *
      * @return array<string, mixed>
      */
     public function process(

@@ -15,8 +15,7 @@ final class RegistrationCreatedListener
     public function __construct(
         private readonly EmailService $emailService,
         private readonly SmsService $smsService,
-    ) {
-    }
+    ) {}
 
     public function __invoke(RegistrationCreatedEvent $event): void
     {

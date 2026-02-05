@@ -11,9 +11,9 @@
     }
   },
   "require": {
-    "php": "^8.5",
-    "beardcoder/fluid-forms": "dev-main",
-    "beardcoder/mens-circle": "dev-main",
+    "php": "^8.4",
+    "beardcoder/fluid-forms": "@dev",
+    "beardcoder/mens-circle": "@dev",
     "helhum/dotenv-connector": "^3.2",
     "praetorius/vite-asset-collector": "^1.15",
     "typo3/cms-backend": "^14.1",
@@ -52,7 +52,7 @@
   },
   "config": {
     "platform": {
-      "php": "8.5"
+      "php": "8.4.17"
     },
     "sort-packages": true,
     "allow-plugins": {

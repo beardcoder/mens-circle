@@ -12,6 +12,7 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * @template T of Registration
+ *
  * @extends Repository<T>
  */
 class RegistrationRepository extends Repository

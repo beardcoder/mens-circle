@@ -20,8 +20,7 @@ final class NewsletterController extends ActionController
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
         private readonly EmailService $emailService,
         private readonly PersistenceManagerInterface $persistenceManager,
-    ) {
-    }
+    ) {}
 
     public function subscribeAction(): ResponseInterface
     {

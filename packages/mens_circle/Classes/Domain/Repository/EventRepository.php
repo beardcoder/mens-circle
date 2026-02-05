@@ -11,6 +11,7 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * @template T of Event
+ *
  * @extends Repository<T>
  */
 class EventRepository extends Repository

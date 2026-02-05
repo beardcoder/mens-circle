@@ -31,7 +31,7 @@ final class EventStatusViewHelper extends AbstractViewHelper
 
         $remaining = $event->getRemainingSpots();
         if ($remaining !== PHP_INT_MAX && $remaining <= 3) {
-            return sprintf(
+            return \sprintf(
                 '<span class="badge badge--limited">Nur noch %d Plätze frei</span>',
                 $remaining,
             );

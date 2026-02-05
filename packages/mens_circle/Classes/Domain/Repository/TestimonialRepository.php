@@ -11,6 +11,7 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * @template T of Testimonial
+ *
  * @extends Repository<T>
  */
 class TestimonialRepository extends Repository

@@ -10,6 +10,7 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * @template T of NewsletterSubscription
+ *
  * @extends Repository<T>
  */
 class NewsletterSubscriptionRepository extends Repository
