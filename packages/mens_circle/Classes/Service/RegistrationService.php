@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Service;
 
 use BeardCoder\MensCircle\Domain\Model\Event;
-use BeardCoder\MensCircle\Domain\Model\Participant;
 use BeardCoder\MensCircle\Domain\Model\Registration;
 use BeardCoder\MensCircle\Domain\Repository\ParticipantRepository;
 use BeardCoder\MensCircle\Domain\Repository\RegistrationRepository;
@@ -24,7 +23,11 @@ final class RegistrationService
     }
 
     /**
-     * @param array<string, mixed> $data
+     * Register a participant for an event.
+     *
+     * Expects pre-validated and sanitized data (e.g. from FormValidator).
+     *
+     * @param array<string, mixed> $data Validated form data with keys: firstName, lastName, email, phone, notes
      */
     public function register(Event $event, array $data): Registration
     {
@@ -36,11 +39,11 @@ final class RegistrationService
             throw new \RuntimeException('Diese Veranstaltung hat bereits stattgefunden.');
         }
 
-        $firstName = htmlspecialchars((string) ($data['firstName'] ?? ''));
-        $lastName = htmlspecialchars((string) ($data['lastName'] ?? ''));
-        $email = filter_var((string) ($data['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+        $firstName = (string) ($data['firstName'] ?? '');
+        $lastName = (string) ($data['lastName'] ?? '');
+        $email = (string) ($data['email'] ?? '');
         $phone = (string) ($data['phone'] ?? '');
-        $notes = htmlspecialchars((string) ($data['notes'] ?? ''));
+        $notes = (string) ($data['notes'] ?? '');
 
         if (empty($firstName) || empty($lastName)) {
             throw new \RuntimeException('Vor- und Nachname sind erforderlich.');

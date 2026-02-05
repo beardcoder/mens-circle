@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'Männerkreis Niederbayern',
-    'description' => 'Event Management und Community Plattform für den Männerkreis Niederbayern',
-    'category' => 'plugin',
+    'title' => 'Fluid Forms',
+    'description' => 'Lightweight dynamic AJAX form handling for TYPO3 Extbase. Declarative validation, automatic JSON responses, and zero-config JavaScript form interception.',
+    'category' => 'fe',
     'author' => 'beardcoder',
     'author_email' => '',
     'state' => 'stable',
@@ -14,15 +14,13 @@ $EM_CONF[$_EXTKEY] = [
         'depends' => [
             'typo3' => '14.1.0-14.99.99',
             'php' => '8.3.0-8.99.99',
-            'fluid_forms' => '1.0.0-1.99.99',
         ],
         'conflicts' => [],
         'suggests' => [],
     ],
     'autoload' => [
         'psr-4' => [
-            'BeardCoder\\MensCircle\\' => 'Classes',
+            'BeardCoder\\FluidForms\\' => 'Classes',
         ],
     ],
 ];
-

@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Controller;
 
+use BeardCoder\FluidForms\Trait\JsonFormResponder;
 use BeardCoder\MensCircle\Domain\Model\Testimonial;
 use BeardCoder\MensCircle\Domain\Repository\TestimonialRepository;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 final class TestimonialController extends ActionController
 {
+    use JsonFormResponder;
+
     public function __construct(
         private readonly TestimonialRepository $testimonialRepository,
         private readonly PersistenceManagerInterface $persistenceManager,
@@ -38,42 +40,38 @@ final class TestimonialController extends ActionController
             return $this->redirect('form');
         }
 
-        $data = $this->request->getParsedBody();
-        $authorName = htmlspecialchars((string) ($data['authorName'] ?? ''));
-        $content = htmlspecialchars((string) ($data['content'] ?? ''));
+        $data = $this->getFormData();
 
-        if (empty($authorName) || empty($content)) {
-            $this->addFlashMessage(
-                'Bitte fülle alle Felder aus.',
-                'Unvollständige Eingabe',
-                ContextualFeedbackSeverity::ERROR,
-            );
+        $validator = $this->validateForm($data, [
+            'authorName' => ['required', 'minLength:2'],
+            'content' => ['required', 'minLength:20'],
+        ], [
+            'content.minLength' => 'Das Testimonial muss mindestens 20 Zeichen lang sein.',
+        ], [
+            'authorName' => 'Name',
+            'content' => 'Testimonial',
+        ]);
 
-            return $this->redirect('form');
-        }
-
-        if (\strlen($content) < 20) {
-            $this->addFlashMessage(
-                'Das Testimonial muss mindestens 20 Zeichen lang sein.',
-                'Zu kurz',
-                ContextualFeedbackSeverity::ERROR,
-            );
+        if ($validator->fails()) {
+            if ($this->isJsonRequest()) {
+                return $this->validationErrorResponse($validator);
+            }
 
             return $this->redirect('form');
         }
 
         $testimonial = new Testimonial();
-        $testimonial->setAuthorName($authorName);
-        $testimonial->setContent($content);
+        $testimonial->setAuthorName($validator->get('authorName'));
+        $testimonial->setContent($validator->get('content'));
 
         $this->testimonialRepository->add($testimonial);
         $this->persistenceManager->persistAll();
 
-        $this->addFlashMessage(
-            'Danke für dein Testimonial! Es wird nach einer Überprüfung veröffentlicht.',
-            'Testimonial eingereicht',
-            ContextualFeedbackSeverity::OK,
-        );
+        $message = 'Danke für dein Testimonial! Es wird nach einer Überprüfung veröffentlicht.';
+
+        if ($this->isJsonRequest()) {
+            return $this->successResponse($message);
+        }
 
         return $this->redirect('list');
     }

@@ -3,7 +3,8 @@
 
 <form action="{f:uri.action(action: 'subscribe', controller: 'Newsletter')}"
       method="post"
-      class="newsletter__form">
+      class="newsletter__form"
+      data-fluid-form>
 
     <div class="form-group">
         <label for="email" class="form__label">
@@ -15,7 +16,9 @@
                class="form-input form-input--light"
                placeholder="deine@email.de"
                required
-               autocomplete="email" />
+               autocomplete="email"
+               data-rules="required|email"
+               data-label="E-Mail" />
     </div>
 
     <div class="form-group">
@@ -26,14 +29,18 @@
                id="firstName"
                name="firstName"
                class="form-input form-input--light"
-               autocomplete="given-name" />
+               autocomplete="given-name"
+               data-rules="maxLength:100"
+               data-label="Vorname" />
     </div>
 
     <div class="form-group form-checkbox">
         <input type="checkbox"
                id="privacy"
                name="privacy"
-               required />
+               required
+               data-rules="accepted"
+               data-label="Datenschutzerklärung" />
         <label for="privacy">
             <span>Ich akzeptiere die <a href="{f:uri.page(pageUid: '{settings.privacyPageUid}')}" target="_blank" class="link">Datenschutzerklärung</a> <span class="required">*</span></span>
         </label>
@@ -45,4 +52,3 @@
 </form>
 
 </html>
-

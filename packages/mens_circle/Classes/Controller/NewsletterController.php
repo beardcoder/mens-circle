@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Controller;
 
+use BeardCoder\FluidForms\Trait\JsonFormResponder;
 use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
 use BeardCoder\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
 use BeardCoder\MensCircle\Service\EmailService;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 final class NewsletterController extends ActionController
 {
+    use JsonFormResponder;
+
     public function __construct(
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
         private readonly EmailService $emailService,
@@ -23,56 +25,67 @@ final class NewsletterController extends ActionController
 
     public function subscribeAction(): ResponseInterface
     {
-        if ($this->request->getMethod() === 'POST') {
-            $data = $this->request->getParsedBody();
-            $email = filter_var((string) ($data['email'] ?? ''), FILTER_SANITIZE_EMAIL);
-            $firstName = htmlspecialchars((string) ($data['firstName'] ?? ''));
+        if ($this->request->getMethod() !== 'POST') {
+            return $this->htmlResponse();
+        }
 
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $this->addFlashMessage(
-                    'Bitte gib eine gültige E-Mail-Adresse ein.',
-                    'Ungültige E-Mail',
-                    ContextualFeedbackSeverity::ERROR,
-                );
+        $data = $this->getFormData();
 
-                return $this->htmlResponse();
+        $validator = $this->validateForm($data, [
+            'email' => ['required', 'email'],
+            'firstName' => ['maxLength:100'],
+        ], [], [
+            'email' => 'E-Mail',
+            'firstName' => 'Vorname',
+        ]);
+
+        if ($validator->fails()) {
+            if ($this->isJsonRequest()) {
+                return $this->validationErrorResponse($validator);
             }
 
-            $existing = $this->newsletterSubscriptionRepository->findByEmail($email);
+            return $this->htmlResponse();
+        }
 
-            if ($existing !== null) {
-                if ($existing->isConfirmed()) {
-                    $this->addFlashMessage(
-                        'Diese E-Mail-Adresse ist bereits angemeldet.',
-                        'Bereits angemeldet',
-                        ContextualFeedbackSeverity::WARNING,
-                    );
-                } else {
-                    $this->emailService->sendNewsletterConfirmation($existing);
-                    $this->addFlashMessage(
-                        'Bestätigungsmail wurde erneut gesendet.',
-                        'Mail gesendet',
-                        ContextualFeedbackSeverity::INFO,
-                    );
+        $email = $validator->get('email');
+        $firstName = $validator->get('firstName', '');
+
+        $existing = $this->newsletterSubscriptionRepository->findByEmail($email);
+
+        if ($existing !== null) {
+            if ($existing->isConfirmed()) {
+                $message = 'Diese E-Mail-Adresse ist bereits angemeldet.';
+
+                if ($this->isJsonRequest()) {
+                    return $this->errorResponse($message);
                 }
 
                 return $this->htmlResponse();
             }
 
-            $subscription = new NewsletterSubscription();
-            $subscription->setEmail($email);
-            $subscription->setFirstName($firstName);
+            $this->emailService->sendNewsletterConfirmation($existing);
+            $message = 'Bestätigungsmail wurde erneut gesendet.';
 
-            $this->newsletterSubscriptionRepository->add($subscription);
-            $this->persistenceManager->persistAll();
+            if ($this->isJsonRequest()) {
+                return $this->successResponse($message);
+            }
 
-            $this->emailService->sendNewsletterConfirmation($subscription);
+            return $this->htmlResponse();
+        }
 
-            $this->addFlashMessage(
-                'Danke! Bitte bestätige deine Anmeldung mit dem Link in der gesendeten E-Mail.',
-                'Bestätigung ausstehend',
-                ContextualFeedbackSeverity::OK,
-            );
+        $subscription = new NewsletterSubscription();
+        $subscription->setEmail($email);
+        $subscription->setFirstName($firstName);
+
+        $this->newsletterSubscriptionRepository->add($subscription);
+        $this->persistenceManager->persistAll();
+
+        $this->emailService->sendNewsletterConfirmation($subscription);
+
+        $message = 'Danke! Bitte bestätige deine Anmeldung mit dem Link in der gesendeten E-Mail.';
+
+        if ($this->isJsonRequest()) {
+            return $this->successResponse($message);
         }
 
         return $this->htmlResponse();
