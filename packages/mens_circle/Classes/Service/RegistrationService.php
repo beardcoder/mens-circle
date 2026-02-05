@@ -19,8 +19,7 @@ final class RegistrationService
         private readonly RegistrationRepository $registrationRepository,
         private readonly PersistenceManagerInterface $persistenceManager,
         private readonly EventDispatcher $eventDispatcher,
-    ) {
-    }
+    ) {}
 
     /**
      * Register a participant for an event.
@@ -58,7 +57,7 @@ final class RegistrationService
             $email,
             $firstName,
             $lastName,
-            $phone
+            $phone,
         );
 
         // Create registration

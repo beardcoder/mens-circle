@@ -22,7 +22,7 @@ class Registration extends AbstractEntity
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->confirmationToken = bin2hex(\random_bytes(32));
+        $this->confirmationToken = bin2hex(random_bytes(32));
     }
 
     public function getEvent(): ?Event

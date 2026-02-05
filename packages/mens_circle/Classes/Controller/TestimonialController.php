@@ -18,8 +18,7 @@ final class TestimonialController extends ActionController
     public function __construct(
         private readonly TestimonialRepository $testimonialRepository,
         private readonly PersistenceManagerInterface $persistenceManager,
-    ) {
-    }
+    ) {}
 
     public function listAction(): ResponseInterface
     {

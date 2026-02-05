@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Service;
 
 use BeardCoder\MensCircle\Domain\Model\Registration;
-use GuzzleHttp\Psr7\Utils;
 use TYPO3\CMS\Core\Http\RequestFactory;
 
 final class SmsService
@@ -14,8 +13,7 @@ final class SmsService
 
     public function __construct(
         private readonly RequestFactory $requestFactory,
-    ) {
-    }
+    ) {}
 
     public function sendRegistrationConfirmation(Registration $registration): void
     {
@@ -41,7 +39,7 @@ final class SmsService
             return;
         }
 
-        $message = sprintf(
+        $message = \sprintf(
             'Anmeldung bestätigt: %s am %s in %s. - Männerkreis',
             $event->getTitle(),
             $event->getEventDate()?->format('d.m.') ?? '',

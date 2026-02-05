@@ -34,10 +34,10 @@ final class FormValidator
     private array $labels = [];
 
     /**
-     * @param array<string, mixed>          $data   Raw request data
-     * @param array<string, list<string>>   $rules  Validation rules per field
-     * @param array<string, string>         $messages Custom error messages (field.rule => message)
-     * @param array<string, string>         $labels Custom field labels
+     * @param array<string, mixed> $data Raw request data
+     * @param array<string, list<string>> $rules Validation rules per field
+     * @param array<string, string> $messages Custom error messages (field.rule => message)
+     * @param array<string, string> $labels Custom field labels
      */
     public function __construct(
         private readonly array $data,
@@ -146,20 +146,20 @@ final class FormValidator
         $label = $this->labels[$field] ?? $this->humanize($field);
 
         $this->errors[$field][] = match ($ruleName) {
-            'required' => sprintf('%s ist erforderlich.', $label),
+            'required' => \sprintf('%s ist erforderlich.', $label),
             'email' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
-            'minLength' => sprintf('%s muss mindestens %s Zeichen lang sein.', $label, $parameter),
-            'maxLength' => sprintf('%s darf maximal %s Zeichen lang sein.', $label, $parameter),
-            'numeric' => sprintf('%s muss eine Zahl sein.', $label),
-            'integer' => sprintf('%s muss eine ganze Zahl sein.', $label),
+            'minLength' => \sprintf('%s muss mindestens %s Zeichen lang sein.', $label, $parameter),
+            'maxLength' => \sprintf('%s darf maximal %s Zeichen lang sein.', $label, $parameter),
+            'numeric' => \sprintf('%s muss eine Zahl sein.', $label),
+            'integer' => \sprintf('%s muss eine ganze Zahl sein.', $label),
             'phone' => 'Bitte gib eine gültige Telefonnummer ein.',
             'url' => 'Bitte gib eine gültige URL ein.',
-            'accepted' => sprintf('%s muss akzeptiert werden.', $label),
-            'in' => sprintf('%s enthält einen ungültigen Wert.', $label),
-            'regex' => sprintf('%s hat ein ungültiges Format.', $label),
-            'min' => sprintf('%s muss mindestens %s sein.', $label, $parameter),
-            'max' => sprintf('%s darf maximal %s sein.', $label, $parameter),
-            default => sprintf('%s ist ungültig.', $label),
+            'accepted' => \sprintf('%s muss akzeptiert werden.', $label),
+            'in' => \sprintf('%s enthält einen ungültigen Wert.', $label),
+            'regex' => \sprintf('%s hat ein ungültiges Format.', $label),
+            'min' => \sprintf('%s muss mindestens %s sein.', $label, $parameter),
+            'max' => \sprintf('%s darf maximal %s sein.', $label, $parameter),
+            default => \sprintf('%s ist ungültig.', $label),
         };
     }
 

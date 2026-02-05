@@ -43,10 +43,10 @@ final class LatestNewsletterSubscriberWidget implements WidgetInterface, Request
             $html .= '<li class="text-muted">Keine Newsletter-Anmeldungen vorhanden</li>';
         } else {
             foreach ($latestSubscribers as $subscriber) {
-                $html .= sprintf(
+                $html .= \sprintf(
                     '<li><strong>%s</strong><br><small>%s</small></li>',
                     htmlspecialchars($subscriber->getFirstName() ?: $subscriber->getEmail()),
-                    htmlspecialchars($subscriber->getEmail())
+                    htmlspecialchars($subscriber->getEmail()),
                 );
             }
         }

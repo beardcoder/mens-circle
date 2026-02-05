@@ -3,13 +3,9 @@
 declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__ . '/app')
-    ->in(__DIR__ . '/tests')
-    ->in(__DIR__ . '/config')
-    ->in(__DIR__ . '/database')
-    ->in(__DIR__ . '/routes')
+    ->in(__DIR__ . '/packages/mens_circle/Classes')
+    ->in(__DIR__ . '/packages/fluid_forms/Classes')
     ->exclude('cache')
-    ->exclude('storage')
     ->exclude('vendor');
 
 return (new PhpCsFixer\Config())

@@ -11,8 +11,7 @@ final class RegistrationCreatedEvent
     public function __construct(
         private readonly Registration $registration,
         private readonly bool $sendSms = false,
-    ) {
-    }
+    ) {}
 
     public function getRegistration(): Registration
     {

@@ -18,8 +18,7 @@ final class EventController extends ActionController
     public function __construct(
         private readonly EventRepository $eventRepository,
         private readonly RegistrationService $registrationService,
-    ) {
-    }
+    ) {}
 
     public function listAction(): ResponseInterface
     {
@@ -88,7 +87,7 @@ final class EventController extends ActionController
 
             if ($this->isJsonRequest()) {
                 return $this->successResponse(
-                    sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich.', $validator->get('firstName')),
+                    \sprintf('Vielen Dank, %s! Deine Anmeldung war erfolgreich.', $validator->get('firstName')),
                 );
             }
         } catch (\RuntimeException $e) {

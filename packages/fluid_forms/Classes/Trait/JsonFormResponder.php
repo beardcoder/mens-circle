@@ -70,10 +70,10 @@ trait JsonFormResponder
     /**
      * Validate form data with declarative rules.
      *
-     * @param array<string, mixed>        $data
+     * @param array<string, mixed> $data
      * @param array<string, list<string>> $rules
-     * @param array<string, string>       $messages Custom error messages
-     * @param array<string, string>       $labels   Custom field labels
+     * @param array<string, string> $messages Custom error messages
+     * @param array<string, string> $labels Custom field labels
      */
     protected function validateForm(
         array $data,

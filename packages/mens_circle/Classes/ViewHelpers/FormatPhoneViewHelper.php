@@ -28,7 +28,7 @@ final class FormatPhoneViewHelper extends AbstractViewHelper
         }
 
         if (\strlen($digits) === 11 && str_starts_with($digits, '0')) {
-            return sprintf(
+            return \sprintf(
                 '(%s) %s-%s',
                 substr($digits, 0, 4),
                 substr($digits, 4, 4),
@@ -37,7 +37,7 @@ final class FormatPhoneViewHelper extends AbstractViewHelper
         }
 
         if (\strlen($digits) === 10 && str_starts_with($digits, '0')) {
-            return sprintf(
+            return \sprintf(
                 '(%s) %s-%s',
                 substr($digits, 0, 3),
                 substr($digits, 3, 4),

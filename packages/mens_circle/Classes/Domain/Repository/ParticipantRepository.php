@@ -16,6 +16,7 @@ class ParticipantRepository extends Repository
      * Find a participant by email address
      *
      * @param string $email
+     *
      * @return Participant|null
      */
     public function findOneByEmail(string $email): ?Participant
@@ -36,13 +37,14 @@ class ParticipantRepository extends Repository
      * @param string $firstName
      * @param string $lastName
      * @param string $phone
+     *
      * @return Participant
      */
     public function findOrCreateByEmail(
         string $email,
         string $firstName = '',
         string $lastName = '',
-        string $phone = ''
+        string $phone = '',
     ): Participant {
         $participant = $this->findOneByEmail($email);
 
@@ -70,4 +72,3 @@ class ParticipantRepository extends Repository
         return $participant;
     }
 }
-

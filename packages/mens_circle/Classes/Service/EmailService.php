@@ -7,8 +7,8 @@ namespace BeardCoder\MensCircle\Service;
 use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
 use BeardCoder\MensCircle\Domain\Model\Registration;
 use Symfony\Component\Mime\Address;
-use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Mail\Mailer;
+use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -32,12 +32,12 @@ final class EmailService
             return;
         }
 
-        $subject = sprintf(
+        $subject = \sprintf(
             'Anmeldungsbestätigung: %s',
             $event->getTitle(),
         );
 
-        $body = sprintf(
+        $body = \sprintf(
             "Hallo %s,\n\n"
             . "Deine Anmeldung für die Veranstaltung \"%s\" wurde erfolgreich registriert.\n\n"
             . "Veranstaltung: %s\n"
@@ -64,9 +64,9 @@ final class EmailService
     {
         $subject = 'Bitte bestätige deine Newsletter-Anmeldung';
 
-        $confirmationUrl = $this->getBaseUrl() . sprintf('/newsletter/confirm/%s', $subscription->getConfirmationToken());
+        $confirmationUrl = $this->getBaseUrl() . \sprintf('/newsletter/confirm/%s', $subscription->getConfirmationToken());
 
-        $body = sprintf(
+        $body = \sprintf(
             "Hallo %s,\n\n"
             . "Bitte bestätige deine Newsletter-Anmeldung, indem du auf den folgenden Link klickst:\n\n"
             . "%s\n\n"
@@ -87,11 +87,11 @@ final class EmailService
 
     public function sendNewsletter(NewsletterSubscription $subscription, string $subject, string $message): void
     {
-        $unsubscribeUrl = $this->getBaseUrl() . sprintf('/newsletter/unsubscribe/%s', $subscription->getUnsubscribeToken());
+        $unsubscribeUrl = $this->getBaseUrl() . \sprintf('/newsletter/unsubscribe/%s', $subscription->getUnsubscribeToken());
         $firstName = $subscription->getFirstName() ?: 'Nutzer';
 
         // HTML-Version
-        $htmlBody = sprintf(
+        $htmlBody = \sprintf(
             '<!DOCTYPE html>
 <html>
 <head>
@@ -135,7 +135,7 @@ final class EmailService
         );
 
         // Plaintext-Version (HTML entfernen)
-        $plainBody = sprintf(
+        $plainBody = \sprintf(
             "Hallo %s,\n\n"
             . "%s\n\n"
             . "---\n\n"
