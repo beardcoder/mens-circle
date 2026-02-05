@@ -1,0 +1,203 @@
+/**
+ * FluidForms - Minimal CSS for validation states and toasts
+ * Designed to work alongside existing form styles.
+ */
+
+/* ── Field Error States ───────────────────────────────────────────── */
+.ff-field--error input,
+.ff-field--error textarea,
+.ff-field--error select {
+  border-color: var(--ff-color-error, #dc3545) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ff-color-error, #dc3545) 20%, transparent);
+}
+
+.ff-error-message {
+  color: var(--ff-color-error, #dc3545);
+  font-size: 0.85rem;
+  margin-top: 0.35rem;
+  line-height: 1.4;
+}
+
+.ff-error-message p {
+  margin: 0;
+}
+
+.ff-error-message p + p {
+  margin-top: 0.15rem;
+}
+
+/* ── Loading State ────────────────────────────────────────────────── */
+.ff-form--loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.ff-form--loading [type="submit"] {
+  cursor: wait;
+}
+
+/* ── Toast Container ──────────────────────────────────────────────── */
+.ff-toast-container {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: min(420px, calc(100vw - 3rem));
+  pointer-events: none;
+}
+
+/* ── Toast Base ───────────────────────────────────────────────────── */
+.ff-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  background: var(--ff-toast-bg, #fff);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border-left: 4px solid var(--ff-toast-accent, #6b7280);
+  pointer-events: all;
+  transform: translateX(100%);
+  opacity: 0;
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s ease;
+}
+
+.ff-toast--visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.ff-toast--leaving {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* ── Toast Types ──────────────────────────────────────────────────── */
+.ff-toast--success {
+  --ff-toast-accent: #059669;
+  --ff-toast-icon-bg: #ecfdf5;
+  --ff-toast-icon-color: #059669;
+}
+
+.ff-toast--error {
+  --ff-toast-accent: #dc2626;
+  --ff-toast-icon-bg: #fef2f2;
+  --ff-toast-icon-color: #dc2626;
+}
+
+.ff-toast--warning {
+  --ff-toast-accent: #d97706;
+  --ff-toast-icon-bg: #fffbeb;
+  --ff-toast-icon-color: #d97706;
+}
+
+.ff-toast--info {
+  --ff-toast-accent: #2563eb;
+  --ff-toast-icon-bg: #eff6ff;
+  --ff-toast-icon-color: #2563eb;
+}
+
+/* ── Toast Icon ───────────────────────────────────────────────────── */
+.ff-toast__icon {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--ff-toast-icon-bg, #f3f4f6);
+  color: var(--ff-toast-icon-color, #6b7280);
+}
+
+/* ── Toast Content ────────────────────────────────────────────────── */
+.ff-toast__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ff-toast__title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.ff-toast__message {
+  font-size: 0.85rem;
+  color: #6b7280;
+  line-height: 1.4;
+  margin-top: 0.15rem;
+}
+
+/* ── Toast Close ──────────────────────────────────────────────────── */
+.ff-toast__close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.ff-toast__close:hover {
+  color: #374151;
+}
+
+/* ── Dark Mode Support ────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  .ff-toast {
+    --ff-toast-bg: #1f2937;
+  }
+
+  .ff-toast__title {
+    color: #f9fafb;
+  }
+
+  .ff-toast__message {
+    color: #9ca3af;
+  }
+
+  .ff-toast__close {
+    color: #6b7280;
+  }
+
+  .ff-toast__close:hover {
+    color: #d1d5db;
+  }
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .ff-toast-container {
+    top: auto;
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+  }
+
+  .ff-toast {
+    transform: translateY(100%);
+  }
+
+  .ff-toast--visible {
+    transform: translateY(0);
+  }
+
+  .ff-toast--leaving {
+    transform: translateY(100%);
+  }
+}

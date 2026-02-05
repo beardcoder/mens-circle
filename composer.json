@@ -12,6 +12,7 @@
   },
   "require": {
     "php": "^8.5",
+    "beardcoder/fluid-forms": "dev-main",
     "beardcoder/mens-circle": "dev-main",
     "helhum/dotenv-connector": "^3.2",
     "praetorius/vite-asset-collector": "^1.15",

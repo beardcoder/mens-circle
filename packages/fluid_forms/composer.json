@@ -1,0 +1,28 @@
+{
+    "name": "beardcoder/fluid-forms",
+    "type": "typo3-cms-extension",
+    "description": "Lightweight dynamic AJAX form handling for TYPO3 Extbase",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "beardcoder",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.3 || ^8.5",
+        "typo3/cms-core": "^14.1",
+        "typo3/cms-extbase": "^14.1",
+        "typo3/cms-fluid": "^14.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "BeardCoder\\FluidForms\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "fluid_forms"
+        }
+    }
+}
