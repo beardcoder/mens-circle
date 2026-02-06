@@ -81,7 +81,7 @@ class AppServiceProvider extends ServiceProvider
 
             // Schedule Check - wichtig für Event-Reminders und Sitemap
             ScheduleCheck::new()
-                ->heartbeatMaxAgeInMinutes(2),
+                ->heartbeatMaxAgeInMinutes(10),
 
             // Queue Check - wichtig für asynchrone Jobs
             QueueHealthCheck::new()
