@@ -86,7 +86,9 @@ class Page extends Model implements HasMedia
      * Sync content blocks for this page.
      * Handles creation, update, and deletion of blocks and their media.
      *
-     * @param  array<int, array<string, mixed>>  $contentBlocksData
+     * @param array<int, array<string, mixed>> $contentBlocksData
+     *
+     * @return void
      */
     public function saveContentBlocks(array $contentBlocksData): void
     {
@@ -100,7 +102,8 @@ class Page extends Model implements HasMedia
     /**
      * Process and save content blocks, returning array of processed block IDs.
      *
-     * @param  array<int, array<string, mixed>>  $contentBlocksData
+     * @param array<int, array<string, mixed>> $contentBlocksData
+     *
      * @return array<int, string>
      */
     private function processContentBlocks(array $contentBlocksData): array
@@ -118,14 +121,16 @@ class Page extends Model implements HasMedia
     /**
      * Save or update a single content block.
      *
-     * @param  array<string, mixed>  $blockData
+     * @param array<string, mixed> $blockData
+     *
+     * @return string
      */
     private function saveContentBlock(array $blockData, int $order): string
     {
         /** @var array<string, mixed> $data */
         $data = $blockData['data'] ?? [];
         $blockIdRaw = $data['block_id'] ?? null;
-        $blockId = is_string($blockIdRaw) ? $blockIdRaw : Str::uuid()->toString();
+        $blockId = \is_string($blockIdRaw) ? $blockIdRaw : Str::uuid()->toString();
 
         unset($data['block_id']);
 
@@ -144,8 +149,10 @@ class Page extends Model implements HasMedia
     /**
      * Remove blocks that are no longer in the content blocks data.
      *
-     * @param  Collection<string, ContentBlock>  $existingBlocks
-     * @param  array<int, string>  $processedBlockIds
+     * @param Collection<string, ContentBlock> $existingBlocks
+     * @param array<int, string> $processedBlockIds
+     *
+     * @return void
      */
     private function cleanupRemovedBlocks($existingBlocks, array $processedBlockIds): void
     {
@@ -159,6 +166,8 @@ class Page extends Model implements HasMedia
 
     /**
      * Delete all media associated with a specific block.
+     *
+     * @return void
      */
     private function deleteBlockMedia(string $blockId): void
     {

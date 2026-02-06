@@ -154,7 +154,7 @@ class PageResource extends Resource
             ->afterStateUpdated(function (Builder $component): void {
                 $state = $component->getState();
 
-                if (! is_array($state)) {
+                if (! \is_array($state)) {
                     return;
                 }
 
@@ -163,17 +163,17 @@ class PageResource extends Resource
                 $hasUpdates = false;
 
                 foreach ($state as $key => $item) {
-                    if (! is_array($item)) {
+                    if (! \is_array($item)) {
                         continue;
                     }
 
                     $data = $item['data'] ?? [];
-                    if (! is_array($data)) {
+                    if (! \is_array($data)) {
                         continue;
                     }
 
                     $blockId = $data['block_id'] ?? null;
-                    if (! is_string($blockId)) {
+                    if (! \is_string($blockId)) {
                         $blockId = null;
                     }
 
