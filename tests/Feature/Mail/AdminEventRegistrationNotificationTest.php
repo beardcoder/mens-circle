@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Mail\AdminEventRegistrationNotification;
-use App\Mail\EventRegistrationConfirmation;
 use App\Models\Event;
 use Illuminate\Support\Facades\Mail;
 
