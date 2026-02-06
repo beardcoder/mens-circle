@@ -28,6 +28,8 @@ test('admin notification is sent when registration is created', function (): voi
 });
 
 test('admin notification has correct recipient', function (): void {
+    Mail::fake();
+
     $event = Event::factory()->create([
         'event_date' => now()->addDays(7),
         'is_published' => true,
@@ -43,6 +45,8 @@ test('admin notification has correct recipient', function (): void {
 });
 
 test('admin notification has correct subject', function (): void {
+    Mail::fake();
+
     $event = Event::factory()->create([
         'title' => 'Männerkreis Test',
         'event_date' => now()->addDays(7),
