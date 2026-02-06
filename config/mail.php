@@ -110,4 +110,20 @@ return [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Email Address
+    |--------------------------------------------------------------------------
+    |
+    | You may wish to specify the email address used for receiving admin
+    | notifications. This address will be used for notifications such as
+    | new event registrations and other administrative alerts.
+    |
+    */
+
+    'admin' => [
+        'address' => env('MAIL_ADMIN_ADDRESS', 'hallo@mens-circle.de'),
+        'name' => env('MAIL_ADMIN_NAME', 'Männerkreis Admin'),
+    ],
 ];

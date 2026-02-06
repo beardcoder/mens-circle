@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Mail\AdminEventRegistrationNotification;
 use App\Mail\EventRegistrationConfirmation;
 use App\Models\Event;
 use App\Models\Registration;
@@ -35,6 +36,20 @@ class EventNotificationService
             ]);
         } catch (Exception $exception) {
             Log::error('Failed to send event registration confirmation', [
+                'registration_id' => $registration->id,
+                'error' => $exception->getMessage(),
+            ]);
+        }
+
+        // Send admin notification
+        try {
+            Mail::queue(new AdminEventRegistrationNotification($registration, $event));
+            Log::info('Admin notification sent for new registration', [
+                'registration_id' => $registration->id,
+                'event_id' => $event->id,
+            ]);
+        } catch (Exception $exception) {
+            Log::error('Failed to send admin notification for new registration', [
                 'registration_id' => $registration->id,
                 'error' => $exception->getMessage(),
             ]);
