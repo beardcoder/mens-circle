@@ -73,7 +73,8 @@ class Page extends Model implements HasMedia
     }
 
     /**
-     * @param  Builder<Page>  $query
+     * @param Builder<Page> $query
+     *
      * @return Builder<Page>
      */
     #[Scope]
@@ -154,7 +155,7 @@ class Page extends Model implements HasMedia
      *
      * @return void
      */
-    private function cleanupRemovedBlocks($existingBlocks, array $processedBlockIds): void
+    private function cleanupRemovedBlocks(Collection $existingBlocks, array $processedBlockIds): void
     {
         $existingBlocks
             ->reject(fn (ContentBlock $block): bool => \in_array($block->block_id, $processedBlockIds, true))

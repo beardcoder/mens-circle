@@ -184,14 +184,4 @@ enum Heroicon: string
             self::Ticket => 'Ticket',
         };
     }
-
-    public function getName(): string
-    {
-        return $this->value;
-    }
-
-    public static function fromName(string $name): ?self
-    {
-        return self::tryFrom($name);
-    }
 }

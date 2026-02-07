@@ -16,7 +16,7 @@ Für die Veranstaltung **{{ $event->title }}** hat sich ein neuer Teilnehmer ang
 **Datum:** {{ $event->event_date->format('d.m.Y') }}<br>
 **Uhrzeit:** {{ $event->start_time->format('H:i') }} – {{ $event->end_time->format('H:i') }} Uhr<br>
 **Ort:** {{ $event->location }}<br>
-**Anmeldungen:** {{ $event->activeRegistrations()->count() }} / {{ $event->max_participants }}
+**Anmeldungen:** {{ $registrationCount }} / {{ $event->max_participants }}
 
 ---
 

@@ -177,7 +177,7 @@ class PageResource extends Resource
                         $blockId = null;
                     }
 
-                    if (! $blockId || array_key_exists($blockId, $seenBlockIds)) {
+                    if (! $blockId || \array_key_exists($blockId, $seenBlockIds)) {
                         $data['block_id'] = (string) Str::uuid();
                         $item['data'] = $data;
                         $state[$key] = $item;
