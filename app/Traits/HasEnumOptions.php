@@ -13,11 +13,13 @@ trait HasEnumOptions
      */
     public static function options(): array
     {
-        $options = [];
-        foreach (self::cases() as $case) {
-            $options[$case->value] = $case->getLabel();
-        }
-
-        return $options;
+        return array_column(
+            array_map(
+                static fn (self $case): array => ['value' => $case->value, 'label' => $case->getLabel()],
+                self::cases(),
+            ),
+            'label',
+            'value',
+        );
     }
 }

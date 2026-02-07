@@ -1,24 +1,20 @@
 /**
- * Calendar Composables - Modern Functional Pattern
+ * Calendar Composables
  * Handles calendar integration for ICS and Google Calendar export
  */
 
 import type { EventData } from '@/types';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 
-/**
- * Calendar integration composable
- * Provides calendar export functionality for events
- */
 export function useCalendarIntegration(): void {
   const addToCalendarBtn = document.getElementById('addToCalendar');
   const calendarModal = document.getElementById('calendarModal');
   const calendarICS = document.getElementById(
     'calendarICS'
-  ) as HTMLAnchorElement;
+  ) as HTMLAnchorElement | null;
   const calendarGoogle = document.getElementById(
     'calendarGoogle'
-  ) as HTMLAnchorElement;
+  ) as HTMLAnchorElement | null;
 
   if (!addToCalendarBtn) return;
 
@@ -33,76 +29,66 @@ export function useCalendarIntegration(): void {
     endTime: '21:30',
   };
 
+  // Pre-generate URLs once instead of on every click
+  let icsBlobUrl: string | null = null;
+
+  if (calendarICS) {
+    const icsContent = generateICS(eventData);
+    const blob = new Blob([icsContent], {
+      type: 'text/calendar;charset=utf-8',
+    });
+    icsBlobUrl = URL.createObjectURL(blob);
+    calendarICS.href = icsBlobUrl;
+  }
+
+  if (calendarGoogle) {
+    calendarGoogle.href = generateGoogleCalendarUrl(eventData);
+  }
+
   addToCalendarBtn.addEventListener('click', () => {
     if (!calendarModal) return;
 
-    // Track calendar modal open
     trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, {
       event: eventData.title,
     });
 
     calendarModal.classList.add('open');
-
-    if (calendarICS) {
-      const icsContent = generateICS(eventData);
-      const blob = new Blob([icsContent], {
-        type: 'text/calendar;charset=utf-8',
-      });
-
-      calendarICS.href = URL.createObjectURL(blob);
-    }
-
-    if (calendarGoogle) {
-      calendarGoogle.href = generateGoogleCalendarUrl(eventData);
-    }
   });
 
-  // Track ICS download
-  if (calendarICS) {
-    calendarICS.addEventListener('click', () => {
-      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
-        event: eventData.title,
-      });
+  calendarICS?.addEventListener('click', () => {
+    trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
+      event: eventData.title,
     });
-  }
+  });
 
-  // Track Google Calendar click
-  if (calendarGoogle) {
-    calendarGoogle.addEventListener('click', () => {
-      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
-        event: eventData.title,
-      });
+  calendarGoogle?.addEventListener('click', () => {
+    trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
+      event: eventData.title,
     });
-  }
+  });
 
-  if (calendarModal) {
-    calendarModal.addEventListener('click', (e) => {
-      if (e.target === calendarModal) {
-        calendarModal.classList.remove('open');
-      }
-    });
-  }
+  calendarModal?.addEventListener('click', (e) => {
+    if (e.target === calendarModal) {
+      calendarModal.classList.remove('open');
+    }
+  });
 }
 
-/**
- * Generate ICS file content for calendar import
- */
-function generateICS(event: EventData): string {
-  const formatDate = (date: string, time: string): string => {
-    const d = new Date(`${date}T${time}:00`);
-
-    return d
-      .toISOString()
-      .replace(/[-:]/g, '')
-      .replace(/\.\d{3}/, '');
-  };
-
-  const start = formatDate(event.startDate, event.startTime);
-  const end = formatDate(event.endDate, event.endTime);
-  const now = new Date()
+function formatICSDate(date: string, time: string): string {
+  const d = new Date(`${date}T${time}:00`);
+  return d
     .toISOString()
     .replace(/[-:]/g, '')
     .replace(/\.\d{3}/, '');
+}
+
+function generateICS(event: EventData): string {
+  const start = formatICSDate(event.startDate, event.startTime);
+  const end = formatICSDate(event.endDate, event.endTime);
+  const now = formatICSDate(
+    new Date().toISOString().slice(0, 10),
+    new Date().toISOString().slice(11, 16)
+  );
 
   return `BEGIN:VCALENDAR
 VERSION:2.0
@@ -122,18 +108,14 @@ END:VEVENT
 END:VCALENDAR`;
 }
 
-/**
- * Generate Google Calendar URL for the event
- */
 function generateGoogleCalendarUrl(event: EventData): string {
-  const formatGoogleDate = (date: string, time: string): string => {
-    return `${date.replace(/-/g, '')}T${time.replace(':', '')}00`;
-  };
+  const formatDate = (date: string, time: string): string =>
+    `${date.replace(/-/g, '')}T${time.replace(':', '')}00`;
 
   const params = new URLSearchParams({
     action: 'TEMPLATE',
     text: event.title,
-    dates: `${formatGoogleDate(event.startDate, event.startTime)}/${formatGoogleDate(event.endDate, event.endTime)}`,
+    dates: `${formatDate(event.startDate, event.startTime)}/${formatDate(event.endDate, event.endTime)}`,
     details: event.description,
     location: event.location,
     ctz: 'Europe/Berlin',

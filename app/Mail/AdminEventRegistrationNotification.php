@@ -38,6 +38,11 @@ class AdminEventRegistrationNotification extends Mailable
 
     public function content(): Content
     {
-        return new Content(markdown: 'emails.admin-event-registration');
+        return new Content(
+            markdown: 'emails.admin-event-registration',
+            with: [
+                'registrationCount' => $this->event->activeRegistrations()->count(),
+            ],
+        );
     }
 }

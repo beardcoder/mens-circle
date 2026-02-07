@@ -23,8 +23,6 @@ export interface ApiResponse {
   message: string;
 }
 
-export type MessageType = 'success' | 'error';
-
 declare global {
   interface Window {
     eventData?: EventData;

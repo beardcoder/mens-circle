@@ -265,7 +265,7 @@ class LlmsController extends Controller
         $lines[] = '';
         $lines[] = 'Die Hauptseite mit einem Ueberblick ueber den Maennerkreis Niederbayern.';
         $lines[] = '';
-        $lines[] = '**URL:** '.url()->route('home');
+        $lines[] = '**URL:** ' . url()->route('home');
         $lines[] = '';
 
         $pages = Page::with('contentBlocks')
@@ -312,7 +312,7 @@ class LlmsController extends Controller
                 continue;
             }
 
-            if (! is_array($faq['items'])) {
+            if (! \is_array($faq['items'])) {
                 continue;
             }
 
@@ -378,7 +378,7 @@ class LlmsController extends Controller
         $lines[] = '';
 
         foreach ($testimonials as $testimonial) {
-            $lines[] = '> '.$testimonial->quote;
+            $lines[] = '> ' . $testimonial->quote;
             $lines[] = '';
 
             $author = $testimonial->author_name;
