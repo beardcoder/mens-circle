@@ -1,0 +1,94 @@
+# =============================================================================
+# Docker Compose for Coolify — TYPO3 v14
+# Männerkreis Niederbayern / Straubing
+#
+# Services:
+#   app      – serversideup/php:8.5-fpm-nginx (PHP + Nginx in one container)
+#   mariadb  – MariaDB 11.8 with low-memory config (~100-150 MB RAM)
+#
+# Optimised for: low memory footprint · performance · low latency
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # PHP + Nginx application
+  # ---------------------------------------------------------------------------
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      # --- serversideup/php tuning ---
+      PHP_OPCACHE_ENABLE: "1"
+      PHP_OPCACHE_MEMORY_CONSUMPTION: "128"
+      PHP_OPCACHE_MAX_ACCELERATED_FILES: "10000"
+      PHP_OPCACHE_VALIDATE_TIMESTAMPS: "0"
+      PHP_MEMORY_LIMIT: "${PHP_MEMORY_LIMIT:-256M}"
+      PHP_POST_MAX_SIZE: "64M"
+      PHP_UPLOAD_MAX_FILE_SIZE: "64M"
+      SSL_MODE: "off"
+
+      # --- TYPO3 database connection ---
+      TYPO3_DB_DRIVER: "mysqli"
+      TYPO3_DB_HOST: "mariadb"
+      TYPO3_DB_PORT: "3306"
+      TYPO3_DB_NAME: "${TYPO3_DB_NAME:-typo3}"
+      TYPO3_DB_USER: "${TYPO3_DB_USER:-typo3}"
+      TYPO3_DB_PASSWORD: "${SERVICE_PASSWORD_TYPO3DB}"
+
+      # --- TYPO3 application ---
+      TYPO3_CONTEXT: "${TYPO3_CONTEXT:-Production}"
+      TYPO3_SETUP_ADMIN_EMAIL: "${TYPO3_SETUP_ADMIN_EMAIL:-admin@example.com}"
+      TYPO3_SETUP_ADMIN_USERNAME: "${TYPO3_SETUP_ADMIN_USERNAME:-admin}"
+      TYPO3_SETUP_ADMIN_PASSWORD: "${TYPO3_SETUP_ADMIN_PASSWORD}"
+      TYPO3_SERVER_TYPE: "other"
+
+      # --- Mail (optional) ---
+      TYPO3_MAIL_TRANSPORT: "${TYPO3_MAIL_TRANSPORT:-smtp}"
+      TYPO3_MAIL_SMTP_SERVER: "${TYPO3_MAIL_SMTP_SERVER:-}"
+      TYPO3_MAIL_SMTP_ENCRYPT: "${TYPO3_MAIL_SMTP_ENCRYPT:-}"
+      TYPO3_MAIL_SMTP_USERNAME: "${TYPO3_MAIL_SMTP_USERNAME:-}"
+      TYPO3_MAIL_SMTP_PASSWORD: "${TYPO3_MAIL_SMTP_PASSWORD:-}"
+    volumes:
+      - fileadmin:/var/www/html/public/fileadmin
+      - typo3temp:/var/www/html/public/typo3temp
+      - var:/var/www/html/var
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8080"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # MariaDB — low-memory optimised
+  # ---------------------------------------------------------------------------
+  mariadb:
+    image: mariadb:11.8
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: "${TYPO3_DB_NAME:-typo3}"
+      MARIADB_USER: "${TYPO3_DB_USER:-typo3}"
+      MARIADB_PASSWORD: "${SERVICE_PASSWORD_TYPO3DB}"
+      MARIADB_ROOT_PASSWORD: "${SERVICE_PASSWORD_MARIADBROOT}"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./docker/mariadb/my.cnf:/etc/mysql/conf.d/custom.cnf:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  mariadb_data:
+  fileadmin:
+  typo3temp:
+  var:
