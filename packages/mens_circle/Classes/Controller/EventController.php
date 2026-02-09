@@ -77,49 +77,51 @@ final class EventController extends ActionController
         return $this->renderEventDetail($resolvedEvent);
     }
 
-    public function registerAction(): ResponseInterface
+    public function registerAction(
+        mixed $event = null,
+        string $firstName = '',
+        string $lastName = '',
+        string $email = '',
+        string $phoneNumber = '',
+        bool $privacy = false,
+        bool $newsletterOptIn = false
+    ): ResponseInterface
     {
-        $arguments = $this->request->getArguments();
-        $eventUid = (int) ($arguments['event_id'] ?? $arguments['event'] ?? 0);
-
-        /** @var Event|null $event */
-        $event = $eventUid > 0 ? $this->eventRepository->findByUid($eventUid) : null;
-        if (! $event instanceof Event) {
+        $resolvedEvent = $this->resolveEventByIdentifier($event);
+        if (! $resolvedEvent instanceof Event) {
             $this->addFlashMessage('Ungültiger Termin.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirectToEventOverview();
         }
 
-        $firstName = trim((string) ($arguments['first_name'] ?? $arguments['firstName'] ?? ''));
-        $lastName = trim((string) ($arguments['last_name'] ?? $arguments['lastName'] ?? ''));
-        $email = strtolower(trim((string) ($arguments['email'] ?? '')));
-        $phone = trim((string) ($arguments['phone_number'] ?? $arguments['phone'] ?? ''));
-        $privacyAccepted = $this->isTruthy($arguments['privacy'] ?? null);
-        $newsletterOptIn = $this->isTruthy($arguments['newsletterOptIn'] ?? null);
+        $firstName = trim($firstName);
+        $lastName = trim($lastName);
+        $email = strtolower(trim($email));
+        $phoneNumber = trim($phoneNumber);
 
-        if ($firstName === '' || $lastName === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacyAccepted) {
+        if ($firstName === '' || $lastName === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacy) {
             $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', ContextualFeedbackSeverity::ERROR);
 
-            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
         }
 
-        if (! $event->isPublished()) {
+        if (! $resolvedEvent->isPublished()) {
             $this->addFlashMessage('Dieser Termin ist nicht verfügbar.', '', ContextualFeedbackSeverity::ERROR);
 
-            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
         }
 
-        if ($event->isPast()) {
+        if ($resolvedEvent->isPast()) {
             $this->addFlashMessage('Dieser Termin liegt bereits in der Vergangenheit.', '', ContextualFeedbackSeverity::ERROR);
 
-            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
         }
 
-        $activeRegistrations = $this->registrationRepository->countActiveByEvent($event);
-        if ($activeRegistrations >= $event->getMaxParticipants()) {
+        $activeRegistrations = $this->registrationRepository->countActiveByEvent($resolvedEvent);
+        if ($activeRegistrations >= $resolvedEvent->getMaxParticipants()) {
             $this->addFlashMessage('Dieser Termin ist leider bereits ausgebucht.', '', ContextualFeedbackSeverity::ERROR);
 
-            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
         }
 
         $participant = $this->participantRepository->findOneByEmail($email);
@@ -128,24 +130,24 @@ final class EventController extends ActionController
             $participant->setEmail($email);
             $participant->setFirstName($firstName);
             $participant->setLastName($lastName);
-            $participant->setPhone($phone);
+            $participant->setPhone($phoneNumber);
             $this->participantRepository->add($participant);
         } else {
             $participant->setFirstName($firstName);
             $participant->setLastName($lastName);
-            $participant->setPhone($phone);
+            $participant->setPhone($phoneNumber);
             $this->participantRepository->update($participant);
         }
 
-        $existingRegistration = $this->registrationRepository->findActiveByEventAndParticipant($event, $participant);
+        $existingRegistration = $this->registrationRepository->findActiveByEventAndParticipant($resolvedEvent, $participant);
         if ($existingRegistration instanceof Registration) {
             $this->addFlashMessage('Du bist bereits für diesen Termin angemeldet.', '', ContextualFeedbackSeverity::WARNING);
 
-            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
         }
 
         $registration = new Registration();
-        $registration->setEvent($event);
+        $registration->setEvent($resolvedEvent);
         $registration->setParticipant($participant);
         $registration->setStatus(RegistrationStatus::Registered);
         $registration->setRegisteredAt(new \DateTime());
@@ -186,7 +188,7 @@ final class EventController extends ActionController
             ));
         }
 
-        return $this->redirect('registerSuccess', null, null, ['event' => $event->getUid()]);
+        return $this->redirect('registerSuccess', null, null, ['event' => $resolvedEvent->getUid()]);
     }
 
     public function registerSuccessAction(Event $event): ResponseInterface
@@ -212,25 +214,6 @@ final class EventController extends ActionController
             ->withHeader('Cache-Control', 'public, max-age=3600');
 
         return $response->withBody($this->httpStreamFactory->createStream($ical));
-    }
-
-    private function isTruthy(mixed $value): bool
-    {
-        if (is_bool($value)) {
-            return $value;
-        }
-
-        if ($value === null) {
-            return false;
-        }
-
-        if (is_int($value) || is_float($value)) {
-            return (int) $value > 0;
-        }
-
-        $normalized = strtolower(trim((string) $value));
-
-        return in_array($normalized, ['1', 'true', 'on', 'yes'], true);
     }
 
     private function resolveDetailEvent(?Event $event): ?Event

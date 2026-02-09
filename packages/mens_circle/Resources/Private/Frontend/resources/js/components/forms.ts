@@ -1,226 +1,148 @@
 /**
- * Form Composables - Modern Functional Pattern
- * Handles all form interactions with validation and submission
+ * Form enhancements for Extbase forms.
+ * Native submit/redirect stays untouched.
  */
 
 import { validateEmail } from '@/utils/helpers';
-import { useForm } from '@/composables';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 
-/**
- * Newsletter form composable
- * Handles newsletter subscription with validation
- */
+function setValidationError(
+  input: HTMLInputElement | HTMLTextAreaElement,
+  message: string
+): void {
+  input.setCustomValidity(message);
+  input.reportValidity();
+}
+
+function clearValidationError(
+  input: HTMLInputElement | HTMLTextAreaElement
+): void {
+  input.setCustomValidity('');
+}
+
 export function useNewsletterForm(): void {
-  const form = document.getElementById('newsletterForm') as HTMLFormElement;
-
-  if (!form) return;
-  const newsletterRoute = window.routes?.newsletter;
-
-  if (!newsletterRoute) return;
-
-  useForm(form, {
-    onSubmit: async (formData) => {
-      const email = formData.get('email') as string;
-
-      if (!validateEmail(email)) {
-        throw new Error('Bitte gib eine gültige E-Mail-Adresse ein.');
-      }
-
-      // Track newsletter submission
-      trackEvent(TRACKING_EVENTS.NEWSLETTER_SUBMIT);
-
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      };
-
-      if (window.routes?.csrfToken) {
-        headers['X-CSRF-TOKEN'] = window.routes.csrfToken;
-      }
-
-      return fetch(newsletterRoute, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ email }),
-      });
-    },
-    onSuccess: () => {
-      // Track successful newsletter subscription
-      trackEvent(TRACKING_EVENTS.NEWSLETTER_SUCCESS);
-    },
-    onError: (error) => {
-      // Track newsletter subscription error
-      trackEvent(TRACKING_EVENTS.NEWSLETTER_ERROR, {
-        error: error.message,
-      });
-    },
-  });
-}
-
-/**
- * Event registration form composable
- * Handles event registration with validation
- */
-export function useRegistrationForm(): void {
-  const form = document.getElementById('registrationForm') as HTMLFormElement;
-
-  if (!form) return;
-  const eventRegisterRoute = window.routes?.eventRegister;
-
-  if (!eventRegisterRoute) return;
-
-  useForm(form, {
-    onSubmit: async (formData) => {
-      const firstName = (formData.get('first_name') as string)?.trim();
-      const lastName = (formData.get('last_name') as string)?.trim();
-      const email = (formData.get('email') as string)?.trim();
-      const phoneNumber =
-        (formData.get('phone_number') as string)?.trim() || null;
-      const privacy = form.querySelector<HTMLInputElement>(
-        'input[name="privacy"]'
-      )?.checked;
-      const eventId = formData.get('event_id') as string;
-
-      if (!firstName || !lastName) {
-        throw new Error('Bitte fülle alle Pflichtfelder aus.');
-      }
-
-      if (!validateEmail(email)) {
-        throw new Error('Bitte gib eine gültige E-Mail-Adresse ein.');
-      }
-
-      if (!privacy) {
-        throw new Error('Bitte bestätige die Datenschutzerklärung.');
-      }
-
-      // Track event registration submission
-      trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUBMIT, {
-        event_id: eventId,
-        has_phone: phoneNumber ? 'yes' : 'no',
-      });
-
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      };
-
-      if (window.routes?.csrfToken) {
-        headers['X-CSRF-TOKEN'] = window.routes.csrfToken;
-      }
-
-      return fetch(eventRegisterRoute, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          event_id: eventId,
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          phone_number: phoneNumber,
-          privacy: privacy ? 1 : 0,
-        }),
-      });
-    },
-    onSuccess: () => {
-      // Track successful event registration
-      trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUCCESS);
-    },
-    onError: (error) => {
-      // Track event registration error
-      trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_ERROR, {
-        error: error.message,
-      });
-    },
-  });
-}
-
-/**
- * Testimonial form composable
- * Handles testimonial submission with character counter
- */
-export function useTestimonialForm(): void {
-  const form = document.getElementById('testimonialForm') as HTMLFormElement;
-
-  if (!form) return;
-
-  const quoteTextarea = form.querySelector<HTMLTextAreaElement>('#quote');
-  const charCount = document.getElementById('charCount');
-
-  if (quoteTextarea && charCount) {
-    quoteTextarea.addEventListener('input', () => {
-      charCount.textContent = String(quoteTextarea.value.length);
-    });
+  const form = document.querySelector<HTMLFormElement>('.newsletter__form');
+  if (!form) {
+    return;
   }
 
-  const submitUrl = form.dataset.submitUrl ?? '';
+  form.addEventListener('submit', (event) => {
+    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+    const email = emailInput?.value.trim() ?? '';
 
-  useForm(form, {
-    onSubmit: async (formData) => {
-      const quote = (formData.get('quote') as string)?.trim();
-      const authorName =
-        (formData.get('author_name') as string)?.trim() || null;
-      const role = (formData.get('role') as string)?.trim() || null;
-      const email = (formData.get('email') as string)?.trim();
-      const privacy = form.querySelector<HTMLInputElement>(
-        'input[name="privacy"]'
-      )?.checked;
-
-      if (!quote || quote.length < 10) {
-        throw new Error(
-          'Bitte teile deine Erfahrung mit uns (mindestens 10 Zeichen).'
-        );
+    if (!emailInput || !validateEmail(email)) {
+      if (emailInput) {
+        setValidationError(emailInput, 'Bitte gib eine gültige E-Mail-Adresse ein.');
       }
+      event.preventDefault();
+      return;
+    }
 
-      if (!validateEmail(email)) {
-        throw new Error('Bitte gib eine gültige E-Mail-Adresse ein.');
+    clearValidationError(emailInput);
+    trackEvent(TRACKING_EVENTS.NEWSLETTER_SUBMIT);
+  });
+}
+
+export function useRegistrationForm(): void {
+  const form = document.querySelector<HTMLFormElement>('.event-register__form');
+  if (!form) {
+    return;
+  }
+
+  form.addEventListener('submit', (event) => {
+    const eventInput = form.querySelector<HTMLInputElement>('input[name="event"]');
+    const firstNameInput = form.querySelector<HTMLInputElement>('input[name="firstName"]');
+    const lastNameInput = form.querySelector<HTMLInputElement>('input[name="lastName"]');
+    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+    const phoneInput = form.querySelector<HTMLInputElement>('input[name="phoneNumber"]');
+    const privacyInput = form.querySelector<HTMLInputElement>('input[name="privacy"]');
+
+    const firstName = firstNameInput?.value.trim() ?? '';
+    const lastName = lastNameInput?.value.trim() ?? '';
+    const email = emailInput?.value.trim() ?? '';
+
+    if (!firstNameInput || firstName === '') {
+      if (firstNameInput) {
+        setValidationError(firstNameInput, 'Bitte gib deinen Vornamen ein.');
       }
+      event.preventDefault();
+      return;
+    }
+    clearValidationError(firstNameInput);
 
-      if (!privacy) {
-        throw new Error('Bitte bestätige die Datenschutzerklärung.');
+    if (!lastNameInput || lastName === '') {
+      if (lastNameInput) {
+        setValidationError(lastNameInput, 'Bitte gib deinen Nachnamen ein.');
       }
+      event.preventDefault();
+      return;
+    }
+    clearValidationError(lastNameInput);
 
-      // Track testimonial submission
-      trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUBMIT, {
-        has_name: authorName ? 'yes' : 'no',
-        has_role: role ? 'yes' : 'no',
-        char_count: quote.length,
-      });
-
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      };
-
-      if (window.routes?.csrfToken) {
-        headers['X-CSRF-TOKEN'] = window.routes.csrfToken;
+    if (!emailInput || !validateEmail(email)) {
+      if (emailInput) {
+        setValidationError(emailInput, 'Bitte gib eine gültige E-Mail-Adresse ein.');
       }
+      event.preventDefault();
+      return;
+    }
+    clearValidationError(emailInput);
 
-      return fetch(submitUrl, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          quote,
-          author_name: authorName,
-          role,
-          email,
-          privacy: privacy ? 1 : 0,
-        }),
-      });
-    },
-    onSuccess: () => {
-      if (charCount) {
-        charCount.textContent = '0';
+    if (!privacyInput?.checked) {
+      event.preventDefault();
+      return;
+    }
+
+    trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUBMIT, {
+      event_id: eventInput?.value ?? '',
+      has_phone: phoneInput?.value.trim() ? 'yes' : 'no',
+    });
+  });
+}
+
+export function useTestimonialForm(): void {
+  const form = document.querySelector<HTMLFormElement>('.testimonial-form');
+  if (!form) {
+    return;
+  }
+
+  form.addEventListener('submit', (event) => {
+    const quoteInput = form.querySelector<HTMLTextAreaElement>('textarea[name="quote"]');
+    const nameInput = form.querySelector<HTMLInputElement>('input[name="authorName"]');
+    const roleInput = form.querySelector<HTMLInputElement>('input[name="role"]');
+    const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+    const privacyInput = form.querySelector<HTMLInputElement>('input[name="privacy"]');
+
+    const quote = quoteInput?.value.trim() ?? '';
+    const email = emailInput?.value.trim() ?? '';
+
+    if (!quoteInput || quote.length < 10) {
+      if (quoteInput) {
+        setValidationError(quoteInput, 'Bitte teile deine Erfahrung mit mindestens 10 Zeichen.');
       }
+      event.preventDefault();
+      return;
+    }
+    clearValidationError(quoteInput);
 
-      // Track successful testimonial submission
-      trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUCCESS);
-    },
-    onError: (error) => {
-      // Track testimonial submission error
-      trackEvent(TRACKING_EVENTS.TESTIMONIAL_ERROR, {
-        error: error.message,
-      });
-    },
+    if (!emailInput || !validateEmail(email)) {
+      if (emailInput) {
+        setValidationError(emailInput, 'Bitte gib eine gültige E-Mail-Adresse ein.');
+      }
+      event.preventDefault();
+      return;
+    }
+    clearValidationError(emailInput);
+
+    if (!privacyInput?.checked) {
+      event.preventDefault();
+      return;
+    }
+
+    trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUBMIT, {
+      has_name: nameInput?.value.trim() ? 'yes' : 'no',
+      has_role: roleInput?.value.trim() ? 'yes' : 'no',
+      char_count: quote.length,
+    });
   });
 }

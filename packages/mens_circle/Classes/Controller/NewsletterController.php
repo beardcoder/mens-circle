@@ -29,13 +29,11 @@ final class NewsletterController extends ActionController
         return $this->htmlResponse();
     }
 
-    public function subscribeAction(): ResponseInterface
+    public function subscribeAction(string $email = '', bool $privacy = false): ResponseInterface
     {
-        $arguments = $this->request->getArguments();
-        $email = strtolower(trim((string) ($arguments['email'] ?? '')));
-        $privacyAccepted = (bool) ((int) ($arguments['privacy'] ?? 0));
+        $email = strtolower(trim($email));
 
-        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacyAccepted) {
+        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacy) {
             $this->addFlashMessage('Bitte gib eine gültige E-Mail-Adresse ein und bestätige den Datenschutz.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirect('form');

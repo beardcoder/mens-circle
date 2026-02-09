@@ -114,15 +114,15 @@
 
                 <div class="event-register__form-wrap fade-in fade-in-delay-1">
                     <f:flashMessages />
-                    <f:form action="register" method="post" class="event-register__form" id="registrationForm" additionalAttributes="{autocomplete: 'on'}">
-                        <f:form.hidden name="event_id" value="{event.uid}" />
+                    <f:form action="register" method="post" class="event-register__form" additionalAttributes="{autocomplete: 'on'}">
+                        <f:form.hidden name="event" value="{event.uid}" />
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="firstName">Vorname</label>
                                 <f:form.textfield
                                     id="firstName"
-                                    name="first_name"
+                                    name="firstName"
                                     required="required"
                                     placeholder="Dein Vorname"
                                     additionalAttributes="{autocomplete: 'given-name'}"
@@ -133,7 +133,7 @@
                                 <label for="lastName">Nachname</label>
                                 <f:form.textfield
                                     id="lastName"
-                                    name="last_name"
+                                    name="lastName"
                                     required="required"
                                     placeholder="Dein Nachname"
                                     additionalAttributes="{autocomplete: 'family-name'}"
@@ -158,7 +158,7 @@
                             <f:form.textfield
                                 type="tel"
                                 id="phone"
-                                name="phone_number"
+                                name="phoneNumber"
                                 placeholder="+49 170 1234567"
                                 additionalAttributes="{autocomplete: 'tel', inputmode: 'tel'}"
                             />
@@ -168,6 +168,11 @@
                         <label class="form-checkbox">
                             <f:form.checkbox name="privacy" value="1" required="required" />
                             <span>Ich habe die <a href="/datenschutz" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
+                        </label>
+
+                        <label class="form-checkbox">
+                            <f:form.checkbox name="newsletterOptIn" value="1" />
+                            <span>Ich möchte zusätzlich per E-Mail über kommende Termine informiert werden.</span>
                         </label>
 
                         <f:if condition="{isFull}">
@@ -183,7 +188,6 @@
                             </f:else>
                         </f:if>
 
-                        <div id="registrationMessage"></div>
                     </f:form>
                 </div>
             </div>

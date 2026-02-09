@@ -31,16 +31,20 @@ final class TestimonialController extends ActionController
         return $this->htmlResponse();
     }
 
-    public function submitAction(): ResponseInterface
+    public function submitAction(
+        string $quote = '',
+        string $authorName = '',
+        string $role = '',
+        string $email = '',
+        bool $privacy = false
+    ): ResponseInterface
     {
-        $arguments = $this->request->getArguments();
-        $quote = trim((string) ($arguments['quote'] ?? ''));
-        $authorName = trim((string) ($arguments['authorName'] ?? ''));
-        $role = trim((string) ($arguments['role'] ?? ''));
-        $email = strtolower(trim((string) ($arguments['email'] ?? '')));
-        $privacyAccepted = (bool) ((int) ($arguments['privacy'] ?? 0));
+        $quote = trim($quote);
+        $authorName = trim($authorName);
+        $role = trim($role);
+        $email = strtolower(trim($email));
 
-        if ($quote === '' || mb_strlen($quote) < 10 || $email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacyAccepted) {
+        if ($quote === '' || mb_strlen($quote) < 10 || $email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacy) {
             $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirect('form');
