@@ -425,9 +425,9 @@ final class ImportLaravelSqlCommand extends Command
                 'slug' => $this->toString($row['slug'] ?? ''),
                 'teaser' => $this->toString($row['teaser'] ?? ''),
                 'description' => $this->toString($row['description'] ?? ''),
-                'event_date' => $this->toDateTimeString($row['event_date'] ?? null),
-                'start_time' => $this->toTimeString($row['start_time'] ?? null),
-                'end_time' => $this->toTimeString($row['end_time'] ?? null),
+                'event_date' => $this->toDateTimestamp($row['event_date'] ?? null),
+                'start_time' => $this->toTimeTimestampNullable($row['start_time'] ?? null),
+                'end_time' => $this->toTimeTimestampNullable($row['end_time'] ?? null),
                 'location' => $this->toString($row['location'] ?? ''),
                 'street' => $this->toString($row['street'] ?? ''),
                 'postal_code' => $this->toString($row['postal_code'] ?? ''),
@@ -471,8 +471,8 @@ final class ImportLaravelSqlCommand extends Command
                 'event' => $eventUid,
                 'participant' => $participantUid,
                 'status' => $status,
-                'registered_at' => $this->toDateTimeString($row['registered_at'] ?? $row['confirmed_at'] ?? $row['created_at'] ?? null),
-                'cancelled_at' => $this->toDateTimeString($row['cancelled_at'] ?? null),
+                'registered_at' => $this->toUnixTimestampNullable($row['registered_at'] ?? $row['confirmed_at'] ?? $row['created_at'] ?? null) ?? time(),
+                'cancelled_at' => $this->toUnixTimestampNullable($row['cancelled_at'] ?? null),
             ]);
 
             $stats['registrationsImported']++;
@@ -519,9 +519,9 @@ final class ImportLaravelSqlCommand extends Command
                 'hidden' => 0,
                 'participant' => $participantUid,
                 'token' => $token,
-                'subscribed_at' => $this->toDateTimeString($row['subscribed_at'] ?? $row['created_at'] ?? null),
-                'confirmed_at' => $this->toDateTimeString($row['confirmed_at'] ?? null),
-                'unsubscribed_at' => $this->toDateTimeString($row['unsubscribed_at'] ?? null),
+                'subscribed_at' => $this->toUnixTimestampNullable($row['subscribed_at'] ?? $row['created_at'] ?? null) ?? time(),
+                'confirmed_at' => $this->toUnixTimestampNullable($row['confirmed_at'] ?? null),
+                'unsubscribed_at' => $this->toUnixTimestampNullable($row['unsubscribed_at'] ?? null),
             ]);
 
             $stats['newsletterImported']++;
@@ -546,7 +546,7 @@ final class ImportLaravelSqlCommand extends Command
                 'email' => strtolower($this->toString($row['email'] ?? '')),
                 'role' => $this->toString($row['role'] ?? ''),
                 'is_published' => $this->toBoolInt($row['is_published'] ?? 0),
-                'published_at' => $this->toDateTimeString($row['published_at'] ?? null),
+                'published_at' => $this->toUnixTimestampNullable($row['published_at'] ?? null),
                 'sort_order' => $this->toInt($row['sort_order'] ?? 0, 0),
             ]);
 
@@ -1546,6 +1546,23 @@ final class ImportLaravelSqlCommand extends Command
         return $dateTime?->getTimestamp() ?? time();
     }
 
+    private function toUnixTimestampNullable(mixed $value): ?int
+    {
+        $dateTime = $this->createDateTimeImmutable($value);
+
+        return $dateTime?->getTimestamp();
+    }
+
+    private function toDateTimestamp(mixed $value): int
+    {
+        $dateTime = $this->createDateTimeImmutable($value);
+        if (!$dateTime instanceof \DateTimeImmutable) {
+            return strtotime('today') ?: time();
+        }
+
+        return $dateTime->setTime(0, 0, 0)->getTimestamp();
+    }
+
     private function toDateTimeString(mixed $value): ?string
     {
         $dateTime = $this->createDateTimeImmutable($value);
@@ -1577,23 +1594,106 @@ final class ImportLaravelSqlCommand extends Command
         return $dateTime?->format('H:i:s');
     }
 
+    private function toTimeTimestampNullable(mixed $value): ?int
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $string = trim((string) $value);
+        if ($string === '' || $string === '0000-00-00 00:00:00') {
+            return null;
+        }
+
+        if (preg_match('/^(\d{2}):(\d{2})(?::(\d{2}))?$/', $string, $matches) === 1) {
+            $hours = (int) $matches[1];
+            $minutes = (int) $matches[2];
+            $seconds = isset($matches[3]) ? (int) $matches[3] : 0;
+
+            if ($hours > 23 || $minutes > 59 || $seconds > 59) {
+                return null;
+            }
+
+            return $hours * 3600 + $minutes * 60 + $seconds;
+        }
+
+        if (preg_match('/^(\d{2})(\d{2})(\d{2})$/', $string, $matches) === 1) {
+            $hours = (int) $matches[1];
+            $minutes = (int) $matches[2];
+            $seconds = (int) $matches[3];
+
+            if ($hours > 23 || $minutes > 59 || $seconds > 59) {
+                return null;
+            }
+
+            return $hours * 3600 + $minutes * 60 + $seconds;
+        }
+
+        $dateTime = $this->createDateTimeImmutable($value);
+        if (!$dateTime instanceof \DateTimeImmutable) {
+            return null;
+        }
+
+        return ((int) $dateTime->format('H') * 3600)
+            + ((int) $dateTime->format('i') * 60)
+            + (int) $dateTime->format('s');
+    }
+
     private function createDateTimeImmutable(mixed $value): ?\DateTimeImmutable
     {
         if ($value === null) {
             return null;
         }
 
-        if (is_int($value) || is_float($value) || (is_string($value) && preg_match('/^\d+$/', $value) === 1)) {
-            $timestamp = (int) $value;
-            if ($timestamp <= 0) {
+        if (is_int($value) || is_float($value)) {
+            $numeric = (int) $value;
+            if ($numeric <= 0) {
                 return null;
             }
 
-            return (new \DateTimeImmutable())->setTimestamp($timestamp);
+            $numericString = (string) $numeric;
+            if (preg_match('/^\d{14}$/', $numericString) === 1) {
+                $dateTime = \DateTimeImmutable::createFromFormat('YmdHis', $numericString);
+
+                return $dateTime instanceof \DateTimeImmutable ? $dateTime : null;
+            }
+
+            if (preg_match('/^\d{8}$/', $numericString) === 1) {
+                $dateTime = \DateTimeImmutable::createFromFormat('Ymd', $numericString);
+
+                return $dateTime instanceof \DateTimeImmutable ? $dateTime : null;
+            }
+
+            if ($numeric <= 4102444800) {
+                return (new \DateTimeImmutable())->setTimestamp($numeric);
+            }
+
+            return null;
         }
 
         $string = trim((string) $value);
         if ($string === '' || $string === '0000-00-00 00:00:00') {
+            return null;
+        }
+
+        if (preg_match('/^\d+$/', $string) === 1) {
+            if (preg_match('/^\d{14}$/', $string) === 1) {
+                $dateTime = \DateTimeImmutable::createFromFormat('YmdHis', $string);
+
+                return $dateTime instanceof \DateTimeImmutable ? $dateTime : null;
+            }
+
+            if (preg_match('/^\d{8}$/', $string) === 1) {
+                $dateTime = \DateTimeImmutable::createFromFormat('Ymd', $string);
+
+                return $dateTime instanceof \DateTimeImmutable ? $dateTime : null;
+            }
+
+            $numeric = (int) $string;
+            if ($numeric > 0 && $numeric <= 4102444800) {
+                return (new \DateTimeImmutable())->setTimestamp($numeric);
+            }
+
             return null;
         }
 
