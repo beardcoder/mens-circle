@@ -19,8 +19,7 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\StreamFactory;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
@@ -70,7 +69,7 @@ final class EventController extends ActionController
     {
         $resolvedEvent = $this->resolveDetailEvent($event);
         if (! $resolvedEvent instanceof Event) {
-            $this->addFlashMessage('Aktuell ist kein passender Termin verfügbar.', '', AbstractMessage::WARNING);
+            $this->addFlashMessage('Aktuell ist kein passender Termin verfügbar.', '', ContextualFeedbackSeverity::WARNING);
 
             return $this->redirectToEventOverview();
         }
@@ -86,7 +85,7 @@ final class EventController extends ActionController
         /** @var Event|null $event */
         $event = $eventUid > 0 ? $this->eventRepository->findByUid($eventUid) : null;
         if (! $event instanceof Event) {
-            $this->addFlashMessage('Ungültiger Termin.', '', AbstractMessage::ERROR);
+            $this->addFlashMessage('Ungültiger Termin.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirectToEventOverview();
         }
@@ -99,26 +98,26 @@ final class EventController extends ActionController
         $newsletterOptIn = $this->isTruthy($arguments['newsletterOptIn'] ?? null);
 
         if ($firstName === '' || $lastName === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacyAccepted) {
-            $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', AbstractMessage::ERROR);
+            $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
 
         if (! $event->isPublished()) {
-            $this->addFlashMessage('Dieser Termin ist nicht verfügbar.', '', AbstractMessage::ERROR);
+            $this->addFlashMessage('Dieser Termin ist nicht verfügbar.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
 
         if ($event->isPast()) {
-            $this->addFlashMessage('Dieser Termin liegt bereits in der Vergangenheit.', '', AbstractMessage::ERROR);
+            $this->addFlashMessage('Dieser Termin liegt bereits in der Vergangenheit.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
 
         $activeRegistrations = $this->registrationRepository->countActiveByEvent($event);
         if ($activeRegistrations >= $event->getMaxParticipants()) {
-            $this->addFlashMessage('Dieser Termin ist leider bereits ausgebucht.', '', AbstractMessage::ERROR);
+            $this->addFlashMessage('Dieser Termin ist leider bereits ausgebucht.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
@@ -140,7 +139,7 @@ final class EventController extends ActionController
 
         $existingRegistration = $this->registrationRepository->findActiveByEventAndParticipant($event, $participant);
         if ($existingRegistration instanceof Registration) {
-            $this->addFlashMessage('Du bist bereits für diesen Termin angemeldet.', '', AbstractMessage::WARNING);
+            $this->addFlashMessage('Du bist bereits für diesen Termin angemeldet.', '', ContextualFeedbackSeverity::WARNING);
 
             return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
@@ -252,7 +251,7 @@ final class EventController extends ActionController
             'tx_menscircle_event',
         ];
         foreach ($pluginArgumentNamespaces as $pluginNamespace) {
-            $pluginArguments = GeneralUtility::_GP($pluginNamespace);
+            $pluginArguments = $this->resolveNamespacedPluginArguments($pluginNamespace);
             if (is_array($pluginArguments) && array_key_exists('event', $pluginArguments)) {
                 $resolved = $this->resolveEventByIdentifier($pluginArguments['event']);
                 if ($resolved instanceof Event) {
@@ -269,6 +268,24 @@ final class EventController extends ActionController
         }
 
         return $this->eventRepository->findNextEvent();
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function resolveNamespacedPluginArguments(string $pluginNamespace): ?array
+    {
+        $queryParams = $this->request->getQueryParams();
+        if (isset($queryParams[$pluginNamespace]) && is_array($queryParams[$pluginNamespace])) {
+            return $queryParams[$pluginNamespace];
+        }
+
+        $parsedBody = $this->request->getParsedBody();
+        if (is_array($parsedBody) && isset($parsedBody[$pluginNamespace]) && is_array($parsedBody[$pluginNamespace])) {
+            return $parsedBody[$pluginNamespace];
+        }
+
+        return null;
     }
 
     private function resolveEventByIdentifier(mixed $identifier): ?Event
@@ -314,7 +331,7 @@ final class EventController extends ActionController
     private function renderEventDetail(Event $event): ResponseInterface
     {
         if (! $event->isPublished()) {
-            $this->addFlashMessage('Dieser Termin ist nicht öffentlich.', '', AbstractMessage::WARNING);
+            $this->addFlashMessage('Dieser Termin ist nicht öffentlich.', '', ContextualFeedbackSeverity::WARNING);
 
             return $this->redirectToEventOverview();
         }

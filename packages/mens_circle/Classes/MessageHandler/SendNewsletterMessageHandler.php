@@ -19,12 +19,12 @@ final readonly class SendNewsletterMessageHandler
     public function __invoke(SendNewsletterMessage $message): void
     {
         $this->mailService->sendNewsletterBroadcast(
-            $message->toEmail,
-            $message->toName,
-            $message->subject,
-            $message->content,
-            $message->unsubscribeUrl,
-            $message->settings
+            $message->getToEmail(),
+            $message->getToName(),
+            $message->getSubject(),
+            $message->getContent(),
+            $message->getUnsubscribeUrl(),
+            $message->getSettings()
         );
     }
 }

@@ -8,6 +8,7 @@ use MarkusSommer\MensCircle\Domain\Model\Event;
 use MarkusSommer\MensCircle\Domain\Model\NewsletterSubscription;
 use MarkusSommer\MensCircle\Domain\Model\Registration;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Mail\MailMessage;
@@ -274,7 +275,7 @@ final class MailService
 
             return true;
         } catch (\Throwable $throwable) {
-            $this->logger->error('Mail delivery failed', [
+            $this->logger->log(LogLevel::ERROR, 'Mail delivery failed', [
                 'to' => $toEmail,
                 'subject' => $subject,
                 'error' => $throwable->getMessage(),

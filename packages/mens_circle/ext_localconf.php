@@ -17,7 +17,9 @@ ExtensionUtility::configurePlugin(
     'Event',
     [
         EventController::class => 'list',
-    ]
+    ],
+    [],
+    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -28,7 +30,8 @@ ExtensionUtility::configurePlugin(
     ],
     [
         EventController::class => 'register',
-    ]
+    ],
+    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -39,7 +42,8 @@ ExtensionUtility::configurePlugin(
     ],
     [
         NewsletterController::class => 'subscribe,unsubscribe',
-    ]
+    ],
+    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -48,7 +52,8 @@ ExtensionUtility::configurePlugin(
     [
         TestimonialController::class => 'list',
     ],
-    []
+    [],
+    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -59,7 +64,8 @@ ExtensionUtility::configurePlugin(
     ],
     [
         TestimonialController::class => 'submit',
-    ]
+    ],
+    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'] ??= [];

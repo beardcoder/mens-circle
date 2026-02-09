@@ -21,21 +21,21 @@ final readonly class SendEventMailMessageHandler
 
     public function __invoke(SendEventMailMessage $message): void
     {
-        $notificationData = $this->notificationDataService->findByRegistrationUid($message->registrationUid);
+        $notificationData = $this->notificationDataService->findByRegistrationUid($message->getRegistrationUid());
         if (!is_array($notificationData)) {
             return;
         }
 
-        if ($message->type === SendEventMailMessage::TYPE_REMINDER) {
+        if ($message->getType() === SendEventMailMessage::TYPE_REMINDER) {
             if (!in_array((string) ($notificationData['status'] ?? ''), RegistrationStatus::activeValues(), true)) {
                 return;
             }
 
-            $this->mailService->sendEventReminderFromData($notificationData, $message->settings);
+            $this->mailService->sendEventReminderFromData($notificationData, $message->getSettings());
 
             return;
         }
 
-        $this->mailService->sendEventRegistrationConfirmationFromData($notificationData, $message->settings);
+        $this->mailService->sendEventRegistrationConfirmationFromData($notificationData, $message->getSettings());
     }
 }

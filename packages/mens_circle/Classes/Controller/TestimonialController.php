@@ -7,7 +7,7 @@ namespace MarkusSommer\MensCircle\Controller;
 use MarkusSommer\MensCircle\Domain\Model\Testimonial;
 use MarkusSommer\MensCircle\Domain\Repository\TestimonialRepository;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
@@ -41,7 +41,7 @@ final class TestimonialController extends ActionController
         $privacyAccepted = (bool) ((int) ($arguments['privacy'] ?? 0));
 
         if ($quote === '' || mb_strlen($quote) < 10 || $email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacyAccepted) {
-            $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', AbstractMessage::ERROR);
+            $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirect('form');
         }

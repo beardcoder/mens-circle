@@ -176,21 +176,21 @@ final class ImportLaravelSqlCommand extends Command
         $sqlFile = (string) $input->getArgument('sql-file');
         $realPath = realpath($sqlFile);
         if ($realPath === false || !is_file($realPath)) {
-            $io->error(sprintf('SQL-Datei nicht gefunden: %s', $sqlFile));
+            $this->writeError($io, sprintf('SQL-Datei nicht gefunden: %s', $sqlFile));
 
             return Command::FAILURE;
         }
 
         $pid = (int) $input->getOption('pid');
         if ($pid <= 0) {
-            $io->error('--pid muss größer als 0 sein.');
+            $this->writeError($io, '--pid muss größer als 0 sein.');
 
             return Command::FAILURE;
         }
 
         $contentPid = (int) $input->getOption('content-pid');
         if ($contentPid <= 0) {
-            $io->error('--content-pid muss größer als 0 sein.');
+            $this->writeError($io, '--content-pid muss größer als 0 sein.');
 
             return Command::FAILURE;
         }
@@ -208,7 +208,7 @@ final class ImportLaravelSqlCommand extends Command
 
         $sqlContent = (string) file_get_contents($realPath);
         if ($sqlContent === '') {
-            $io->error('Die SQL-Datei ist leer oder konnte nicht gelesen werden.');
+            $this->writeError($io, 'Die SQL-Datei ist leer oder konnte nicht gelesen werden.');
 
             return Command::FAILURE;
         }
@@ -226,7 +226,7 @@ final class ImportLaravelSqlCommand extends Command
         $selectedPageId = $this->resolveSourcePageId($pages, $sourcePageSlug);
 
         if ($contentBlocks !== [] && $pages !== [] && $selectedPageId <= 0) {
-            $io->error(sprintf('Der angegebene Source-Page-Slug "%s" wurde in der Tabelle "pages" nicht gefunden.', $sourcePageSlug));
+            $this->writeError($io, sprintf('Der angegebene Source-Page-Slug "%s" wurde in der Tabelle "pages" nicht gefunden.', $sourcePageSlug));
 
             return Command::FAILURE;
         }
@@ -240,7 +240,7 @@ final class ImportLaravelSqlCommand extends Command
             && $pages === []
             && $contentBlocks === []
         ) {
-            $io->error('Im SQL-Dump wurden keine unterstützten Quelldaten gefunden.');
+            $this->writeError($io, 'Im SQL-Dump wurden keine unterstützten Quelldaten gefunden.');
 
             return Command::FAILURE;
         }
@@ -325,10 +325,15 @@ final class ImportLaravelSqlCommand extends Command
                 $connection->rollBack();
             }
 
-            $io->error($exception->getMessage());
+            $this->writeError($io, $exception->getMessage());
 
             return Command::FAILURE;
         }
+    }
+
+    private function writeError(SymfonyStyle $io, string $message): void
+    {
+        $io->writeln('<error>' . $message . '</error>');
     }
 
     private function importAll(
@@ -1490,7 +1495,11 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         $xml = new \SimpleXMLElement('<T3FlexForms><data><sheet index="sDEF"><language index="lDEF"></language></sheet></data></T3FlexForms>');
-        $languageNode = $xml->data->sheet->language;
+        $languageNodes = $xml->xpath('/T3FlexForms/data/sheet/language');
+        if (!is_array($languageNodes) || !isset($languageNodes[0]) || !$languageNodes[0] instanceof \SimpleXMLElement) {
+            return '';
+        }
+        $languageNode = $languageNodes[0];
 
         foreach ($normalizedValues as $fieldName => $fieldValue) {
             $fieldNode = $languageNode->addChild('field');

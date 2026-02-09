@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MarkusSommer\MensCircle\Service;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Log\LogManager;
@@ -132,7 +133,7 @@ final class SmsService
 
             return true;
         } catch (\Throwable $throwable) {
-            $this->logger->error('SMS delivery failed', [
+            $this->logger->log(LogLevel::ERROR, 'SMS delivery failed', [
                 'phone' => $phone,
                 'error' => $throwable->getMessage(),
             ]);

@@ -10,7 +10,7 @@ use MarkusSommer\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
 use MarkusSommer\MensCircle\Domain\Repository\ParticipantRepository;
 use MarkusSommer\MensCircle\Service\MailService;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
@@ -36,7 +36,7 @@ final class NewsletterController extends ActionController
         $privacyAccepted = (bool) ((int) ($arguments['privacy'] ?? 0));
 
         if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacyAccepted) {
-            $this->addFlashMessage('Bitte gib eine gültige E-Mail-Adresse ein und bestätige den Datenschutz.', '', AbstractMessage::ERROR);
+            $this->addFlashMessage('Bitte gib eine gültige E-Mail-Adresse ein und bestätige den Datenschutz.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirect('form');
         }
@@ -50,7 +50,7 @@ final class NewsletterController extends ActionController
 
         $subscription = $this->newsletterSubscriptionRepository->findOneByParticipant($participant);
         if ($subscription instanceof NewsletterSubscription && $subscription->isActive()) {
-            $this->addFlashMessage('Diese E-Mail-Adresse ist bereits angemeldet.', '', AbstractMessage::INFO);
+            $this->addFlashMessage('Diese E-Mail-Adresse ist bereits angemeldet.', '', ContextualFeedbackSeverity::INFO);
 
             return $this->redirect('form');
         }
@@ -90,7 +90,7 @@ final class NewsletterController extends ActionController
         );
 
         $this->mailService->sendNewsletterWelcome($subscription, $unsubscribeUrl, $this->settings);
-        $this->addFlashMessage('Danke! Du bist jetzt für den Newsletter angemeldet.', '', AbstractMessage::OK);
+        $this->addFlashMessage('Danke! Du bist jetzt für den Newsletter angemeldet.', '', ContextualFeedbackSeverity::OK);
 
         return $this->redirect('form');
     }

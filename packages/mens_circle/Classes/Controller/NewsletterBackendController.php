@@ -10,9 +10,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
 use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
@@ -57,7 +57,7 @@ final class NewsletterBackendController extends ActionController
             $this->addFlashMessage(
                 'Betreff und Inhalt sind Pflichtfelder.',
                 '',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
             return $this->redirect('index');
@@ -68,7 +68,7 @@ final class NewsletterBackendController extends ActionController
             $this->addFlashMessage(
                 'Es sind keine aktiven Newsletter-Abonnenten vorhanden.',
                 '',
-                AbstractMessage::INFO
+                ContextualFeedbackSeverity::INFO
             );
 
             return $this->redirect('index');
@@ -104,7 +104,7 @@ final class NewsletterBackendController extends ActionController
             $this->addFlashMessage(
                 sprintf('Newsletter an den Message Bus übergeben: %d Empfänger.', $dispatchedCount),
                 '',
-                AbstractMessage::OK
+                ContextualFeedbackSeverity::OK
             );
         }
 
@@ -112,7 +112,7 @@ final class NewsletterBackendController extends ActionController
             $this->addFlashMessage(
                 sprintf('Übergabe an den Message Bus nicht vollständig: %d Empfänger konnten nicht übergeben werden.', $failedCount),
                 '',
-                AbstractMessage::WARNING
+                ContextualFeedbackSeverity::WARNING
             );
         }
 

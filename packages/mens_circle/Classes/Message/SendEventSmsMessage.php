@@ -13,9 +13,27 @@ final readonly class SendEventSmsMessage
      * @param array<string, mixed> $settings
      */
     public function __construct(
-        public int $registrationUid,
-        public string $type,
-        public array $settings = []
+        private int $registrationUid,
+        private string $type,
+        private array $settings = []
     ) {
+    }
+
+    public function getRegistrationUid(): int
+    {
+        return $this->registrationUid;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getSettings(): array
+    {
+        return $this->settings;
     }
 }

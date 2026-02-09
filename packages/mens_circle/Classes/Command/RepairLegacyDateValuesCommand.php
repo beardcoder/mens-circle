@@ -90,10 +90,15 @@ final class RepairLegacyDateValuesCommand extends Command
                 $connection->rollBack();
             }
 
-            $io->error($exception->getMessage());
+            $this->writeError($io, $exception->getMessage());
 
             return Command::FAILURE;
         }
+    }
+
+    private function writeError(SymfonyStyle $io, string $message): void
+    {
+        $io->writeln('<error>' . $message . '</error>');
     }
 
     private function repairTimestampField(Connection $connection, string $table, string $field, bool $dateOnly): int
