@@ -91,6 +91,42 @@
         <target>Actions</target>
       </segment>
     </unit>
+    <unit id="participants.summary">
+      <segment>
+        <source>Teilnehmerliste ({0})</source>
+        <target>Participant list ({0})</target>
+      </segment>
+    </unit>
+    <unit id="participants.column.name">
+      <segment>
+        <source>Teilnehmer</source>
+        <target>Participant</target>
+      </segment>
+    </unit>
+    <unit id="participants.column.contact">
+      <segment>
+        <source>Kontakt</source>
+        <target>Contact</target>
+      </segment>
+    </unit>
+    <unit id="participants.column.registration">
+      <segment>
+        <source>Anmeldung</source>
+        <target>Registration</target>
+      </segment>
+    </unit>
+    <unit id="participants.column.newsletter">
+      <segment>
+        <source>Newsletter</source>
+        <target>Newsletter</target>
+      </segment>
+    </unit>
+    <unit id="participants.none">
+      <segment>
+        <source>Für dieses Event gibt es noch keine Anmeldungen.</source>
+        <target>No registrations are available for this event yet.</target>
+      </segment>
+    </unit>
     <unit id="label.slug">
       <segment>
         <source>Slug</source>
@@ -131,6 +167,48 @@
       <segment>
         <source>Aktiv</source>
         <target>Active</target>
+      </segment>
+    </unit>
+    <unit id="registrationStatus.registered">
+      <segment>
+        <source>Angemeldet</source>
+        <target>Registered</target>
+      </segment>
+    </unit>
+    <unit id="registrationStatus.attended">
+      <segment>
+        <source>Teilgenommen</source>
+        <target>Attended</target>
+      </segment>
+    </unit>
+    <unit id="registrationStatus.cancelled">
+      <segment>
+        <source>Abgemeldet</source>
+        <target>Cancelled</target>
+      </segment>
+    </unit>
+    <unit id="newsletterStatus.none">
+      <segment>
+        <source>Nicht abonniert</source>
+        <target>Not subscribed</target>
+      </segment>
+    </unit>
+    <unit id="newsletterStatus.pending">
+      <segment>
+        <source>Ausstehend</source>
+        <target>Pending</target>
+      </segment>
+    </unit>
+    <unit id="newsletterStatus.confirmed">
+      <segment>
+        <source>Bestätigt</source>
+        <target>Confirmed</target>
+      </segment>
+    </unit>
+    <unit id="newsletterStatus.unsubscribed">
+      <segment>
+        <source>Abgemeldet</source>
+        <target>Unsubscribed</target>
       </segment>
     </unit>
     <unit id="action.edit">

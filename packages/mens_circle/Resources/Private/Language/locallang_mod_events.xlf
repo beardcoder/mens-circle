@@ -76,6 +76,36 @@
         <source>Aktionen</source>
       </segment>
     </unit>
+    <unit id="participants.summary">
+      <segment>
+        <source>Teilnehmerliste ({0})</source>
+      </segment>
+    </unit>
+    <unit id="participants.column.name">
+      <segment>
+        <source>Teilnehmer</source>
+      </segment>
+    </unit>
+    <unit id="participants.column.contact">
+      <segment>
+        <source>Kontakt</source>
+      </segment>
+    </unit>
+    <unit id="participants.column.registration">
+      <segment>
+        <source>Anmeldung</source>
+      </segment>
+    </unit>
+    <unit id="participants.column.newsletter">
+      <segment>
+        <source>Newsletter</source>
+      </segment>
+    </unit>
+    <unit id="participants.none">
+      <segment>
+        <source>Für dieses Event gibt es noch keine Anmeldungen.</source>
+      </segment>
+    </unit>
     <unit id="label.slug">
       <segment>
         <source>Slug</source>
@@ -109,6 +139,41 @@
     <unit id="status.live">
       <segment>
         <source>Aktiv</source>
+      </segment>
+    </unit>
+    <unit id="registrationStatus.registered">
+      <segment>
+        <source>Angemeldet</source>
+      </segment>
+    </unit>
+    <unit id="registrationStatus.attended">
+      <segment>
+        <source>Teilgenommen</source>
+      </segment>
+    </unit>
+    <unit id="registrationStatus.cancelled">
+      <segment>
+        <source>Abgemeldet</source>
+      </segment>
+    </unit>
+    <unit id="newsletterStatus.none">
+      <segment>
+        <source>Nicht abonniert</source>
+      </segment>
+    </unit>
+    <unit id="newsletterStatus.pending">
+      <segment>
+        <source>Ausstehend</source>
+      </segment>
+    </unit>
+    <unit id="newsletterStatus.confirmed">
+      <segment>
+        <source>Bestätigt</source>
+      </segment>
+    </unit>
+    <unit id="newsletterStatus.unsubscribed">
+      <segment>
+        <source>Abgemeldet</source>
       </segment>
     </unit>
     <unit id="action.edit">

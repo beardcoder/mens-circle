@@ -19,6 +19,8 @@ final class EventBackendController extends ActionController
 {
     private const EVENT_TABLE = 'tx_menscircle_domain_model_event';
     private const REGISTRATION_TABLE = 'tx_menscircle_domain_model_registration';
+    private const PARTICIPANT_TABLE = 'tx_menscircle_domain_model_participant';
+    private const NEWSLETTER_SUBSCRIPTION_TABLE = 'tx_menscircle_domain_model_newslettersubscription';
 
     public function __construct(
         private readonly ConnectionPool $connectionPool,
@@ -61,6 +63,19 @@ final class EventBackendController extends ActionController
      *   availableSpots: int,
      *   statusLabel: string,
      *   statusClass: string,
+     *   participantsCount: int,
+     *   participants: list<array{
+     *     uid: int,
+     *     name: string,
+     *     email: string,
+     *     phone: string,
+     *     registrationStatusLabel: string,
+     *     registrationStatusClass: string,
+     *     registrationDateLabel: string,
+     *     newsletterStatusLabel: string,
+     *     newsletterStatusClass: string,
+     *     newsletterDateLabel: string
+     *   }>,
      *   editUrl: string,
      *   recordsUrl: string,
      *   frontendUrl: string
@@ -70,6 +85,7 @@ final class EventBackendController extends ActionController
     {
         $events = $this->fetchEvents();
         $registrationCounts = $this->fetchActiveRegistrationCountsByEvent();
+        $participantsByEvent = $this->fetchParticipantsByEvent();
         $eventRows = [];
 
         foreach ($events as $event) {
@@ -102,6 +118,7 @@ final class EventBackendController extends ActionController
             );
 
             $slug = trim((string) ($event['slug'] ?? ''));
+            $participants = $participantsByEvent[$eventUid] ?? [];
 
             $eventRows[] = [
                 'uid' => $eventUid,
@@ -115,6 +132,8 @@ final class EventBackendController extends ActionController
                 'availableSpots' => $availableSpots,
                 'statusLabel' => $status['label'],
                 'statusClass' => $status['class'],
+                'participantsCount' => count($participants),
+                'participants' => $participants,
                 'editUrl' => $this->buildEditEventUrl($eventUid, $returnUrl, $moduleIdentifier),
                 'recordsUrl' => $this->buildRecordsModuleUrl((int) ($event['pid'] ?? 0)),
                 'frontendUrl' => $this->buildFrontendEventUrl($slug),
@@ -199,6 +218,232 @@ final class EventBackendController extends ActionController
     }
 
     /**
+     * @return array<int, list<array{
+     *   uid: int,
+     *   name: string,
+     *   email: string,
+     *   phone: string,
+     *   registrationStatusLabel: string,
+     *   registrationStatusClass: string,
+     *   registrationDateLabel: string,
+     *   newsletterStatusLabel: string,
+     *   newsletterStatusClass: string,
+     *   newsletterDateLabel: string
+     * }>>
+     */
+    private function fetchParticipantsByEvent(): array
+    {
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::REGISTRATION_TABLE);
+        $queryBuilder->getRestrictions()->removeAll();
+        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+
+        $rows = $queryBuilder
+            ->select(
+                'registration.uid',
+                'registration.event',
+                'registration.status',
+                'registration.registered_at',
+                'participant.uid AS participant_uid',
+                'participant.first_name',
+                'participant.last_name',
+                'participant.email',
+                'participant.phone'
+            )
+            ->from(self::REGISTRATION_TABLE, 'registration')
+            ->innerJoin(
+                'registration',
+                self::PARTICIPANT_TABLE,
+                'participant',
+                $queryBuilder->expr()->eq('participant.uid', $queryBuilder->quoteIdentifier('registration.participant'))
+            )
+            ->where(
+                $queryBuilder->expr()->eq('registration.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
+                $queryBuilder->expr()->eq('participant.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
+                $queryBuilder->expr()->eq('participant.deleted', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER))
+            )
+            ->orderBy('registration.event', 'ASC')
+            ->addOrderBy('registration.registered_at', 'DESC')
+            ->addOrderBy('registration.uid', 'DESC')
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        if (!is_array($rows) || $rows === []) {
+            return [];
+        }
+
+        $participantUids = [];
+        foreach ($rows as $row) {
+            $participantUid = (int) ($row['participant_uid'] ?? 0);
+            if ($participantUid > 0) {
+                $participantUids[] = $participantUid;
+            }
+        }
+
+        $newsletterByParticipant = $this->fetchNewsletterByParticipant(array_values(array_unique($participantUids)));
+
+        $participantsByEvent = [];
+        foreach ($rows as $row) {
+            $eventUid = (int) ($row['event'] ?? 0);
+            $participantUid = (int) ($row['participant_uid'] ?? 0);
+
+            if ($eventUid <= 0 || $participantUid <= 0) {
+                continue;
+            }
+
+            $registrationStatus = $this->resolveRegistrationStatus((string) ($row['status'] ?? ''));
+            $newsletterStatus = $this->resolveNewsletterStatus($newsletterByParticipant[$participantUid] ?? null);
+            $email = trim((string) ($row['participant.email'] ?? $row['email'] ?? ''));
+            $phone = trim((string) ($row['participant.phone'] ?? $row['phone'] ?? ''));
+
+            $participantsByEvent[$eventUid][] = [
+                'uid' => $participantUid,
+                'name' => $this->buildParticipantName(
+                    firstName: (string) ($row['participant.first_name'] ?? $row['first_name'] ?? ''),
+                    lastName: (string) ($row['participant.last_name'] ?? $row['last_name'] ?? ''),
+                    email: $email
+                ),
+                'email' => $email !== '' ? $email : '-',
+                'phone' => $phone !== '' ? $phone : '-',
+                'registrationStatusLabel' => $registrationStatus['label'],
+                'registrationStatusClass' => $registrationStatus['class'],
+                'registrationDateLabel' => $this->formatDateTimeLabel($row['registered_at'] ?? null),
+                'newsletterStatusLabel' => $newsletterStatus['label'],
+                'newsletterStatusClass' => $newsletterStatus['class'],
+                'newsletterDateLabel' => $newsletterStatus['dateLabel'],
+            ];
+        }
+
+        return $participantsByEvent;
+    }
+
+    /**
+     * @param list<int> $participantUids
+     * @return array<int, array{subscribed_at: mixed, confirmed_at: mixed, unsubscribed_at: mixed}>
+     */
+    private function fetchNewsletterByParticipant(array $participantUids): array
+    {
+        if ($participantUids === []) {
+            return [];
+        }
+
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::NEWSLETTER_SUBSCRIPTION_TABLE);
+        $queryBuilder->getRestrictions()->removeAll();
+        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+
+        $rows = $queryBuilder
+            ->select('uid', 'participant', 'subscribed_at', 'confirmed_at', 'unsubscribed_at')
+            ->from(self::NEWSLETTER_SUBSCRIPTION_TABLE)
+            ->where(
+                $queryBuilder->expr()->eq('hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
+                $queryBuilder->expr()->in(
+                    'participant',
+                    $queryBuilder->createNamedParameter($participantUids, ArrayParameterType::INTEGER)
+                )
+            )
+            ->orderBy('participant', 'ASC')
+            ->addOrderBy('uid', 'DESC')
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        if (!is_array($rows)) {
+            return [];
+        }
+
+        $newsletterByParticipant = [];
+        foreach ($rows as $row) {
+            $participantUid = (int) ($row['participant'] ?? 0);
+            if ($participantUid <= 0 || isset($newsletterByParticipant[$participantUid])) {
+                continue;
+            }
+
+            $newsletterByParticipant[$participantUid] = [
+                'subscribed_at' => $row['subscribed_at'] ?? null,
+                'confirmed_at' => $row['confirmed_at'] ?? null,
+                'unsubscribed_at' => $row['unsubscribed_at'] ?? null,
+            ];
+        }
+
+        return $newsletterByParticipant;
+    }
+
+    /**
+     * @return array{label: string, class: string}
+     */
+    private function resolveRegistrationStatus(string $status): array
+    {
+        $normalizedStatus = strtolower(trim($status));
+
+        return match ($normalizedStatus) {
+            RegistrationStatus::Registered->value => [
+                'label' => $this->translate('registrationStatus.registered'),
+                'class' => 'text-bg-success',
+            ],
+            RegistrationStatus::Attended->value => [
+                'label' => $this->translate('registrationStatus.attended'),
+                'class' => 'text-bg-primary',
+            ],
+            RegistrationStatus::Cancelled->value => [
+                'label' => $this->translate('registrationStatus.cancelled'),
+                'class' => 'text-bg-danger',
+            ],
+            default => [
+                'label' => $normalizedStatus !== '' ? ucfirst($normalizedStatus) : '-',
+                'class' => 'text-bg-secondary',
+            ],
+        };
+    }
+
+    /**
+     * @param array{subscribed_at: mixed, confirmed_at: mixed, unsubscribed_at: mixed}|null $newsletterRow
+     * @return array{label: string, class: string, dateLabel: string}
+     */
+    private function resolveNewsletterStatus(?array $newsletterRow): array
+    {
+        if ($newsletterRow === null) {
+            return [
+                'label' => $this->translate('newsletterStatus.none'),
+                'class' => 'text-bg-secondary',
+                'dateLabel' => '',
+            ];
+        }
+
+        $unsubscribedAt = $this->createDateTimeImmutable($newsletterRow['unsubscribed_at'] ?? null);
+        if ($unsubscribedAt instanceof \DateTimeImmutable) {
+            return [
+                'label' => $this->translate('newsletterStatus.unsubscribed'),
+                'class' => 'text-bg-warning',
+                'dateLabel' => $unsubscribedAt->format('d.m.Y H:i'),
+            ];
+        }
+
+        $confirmedAt = $this->createDateTimeImmutable($newsletterRow['confirmed_at'] ?? null);
+        if ($confirmedAt instanceof \DateTimeImmutable) {
+            return [
+                'label' => $this->translate('newsletterStatus.confirmed'),
+                'class' => 'text-bg-success',
+                'dateLabel' => $confirmedAt->format('d.m.Y H:i'),
+            ];
+        }
+
+        $subscribedAt = $this->createDateTimeImmutable($newsletterRow['subscribed_at'] ?? null);
+        return [
+            'label' => $this->translate('newsletterStatus.pending'),
+            'class' => 'text-bg-info',
+            'dateLabel' => $subscribedAt instanceof \DateTimeImmutable ? $subscribedAt->format('d.m.Y H:i') : '',
+        ];
+    }
+
+    private function buildParticipantName(string $firstName, string $lastName, string $email): string
+    {
+        $fullName = trim(trim($firstName) . ' ' . trim($lastName));
+        if ($fullName !== '') {
+            return $fullName;
+        }
+
+        return trim($email) !== '' ? trim($email) : '-';
+    }
+
+    /**
      * @return array{label: string, class: string}
      */
     private function resolveStatus(bool $isHidden, bool $isPublished, bool $isPast): array
@@ -248,6 +493,11 @@ final class EventBackendController extends ActionController
         }
 
         return $end->format('H:i');
+    }
+
+    private function formatDateTimeLabel(mixed $value): string
+    {
+        return $this->createDateTimeImmutable($value)?->format('d.m.Y H:i') ?? '-';
     }
 
     private function createDateTimeImmutable(mixed $value): ?\DateTimeImmutable

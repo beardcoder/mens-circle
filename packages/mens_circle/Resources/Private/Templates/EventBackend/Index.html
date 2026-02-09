@@ -102,6 +102,71 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td colspan="6" class="bg-body-tertiary">
+                                                <details>
+                                                    <summary class="fw-semibold">
+                                                        <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_events.xlf:participants.summary" arguments="{0: event.participantsCount}" />
+                                                    </summary>
+                                                    <div class="mt-2">
+                                                        <f:if condition="{event.participants}">
+                                                            <f:then>
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-sm table-striped align-middle mb-0">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">
+                                                                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_events.xlf:participants.column.name" />
+                                                                                </th>
+                                                                                <th scope="col">
+                                                                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_events.xlf:participants.column.contact" />
+                                                                                </th>
+                                                                                <th scope="col">
+                                                                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_events.xlf:participants.column.registration" />
+                                                                                </th>
+                                                                                <th scope="col">
+                                                                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_events.xlf:participants.column.newsletter" />
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <f:for each="{event.participants}" as="participant">
+                                                                                <tr>
+                                                                                    <td class="fw-medium">{participant.name}</td>
+                                                                                    <td>
+                                                                                        <div>{participant.email}</div>
+                                                                                        <small class="text-body-secondary">{participant.phone}</small>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span class="badge {participant.registrationStatusClass}">
+                                                                                            {participant.registrationStatusLabel}
+                                                                                        </span>
+                                                                                        <small class="d-block text-body-secondary">{participant.registrationDateLabel}</small>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span class="badge {participant.newsletterStatusClass}">
+                                                                                            {participant.newsletterStatusLabel}
+                                                                                        </span>
+                                                                                        <f:if condition="{participant.newsletterDateLabel}">
+                                                                                            <small class="d-block text-body-secondary">{participant.newsletterDateLabel}</small>
+                                                                                        </f:if>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </f:for>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </f:then>
+                                                            <f:else>
+                                                                <p class="mb-0 text-body-secondary">
+                                                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_events.xlf:participants.none" />
+                                                                </p>
+                                                            </f:else>
+                                                        </f:if>
+                                                    </div>
+                                                </details>
+                                            </td>
+                                        </tr>
                                     </f:for>
                                 </tbody>
                             </table>
