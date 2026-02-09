@@ -14,6 +14,12 @@ lib.mensCircleContentElement {
       fieldName = pi_flexform
       as = flexFormData
     }
+
+    30 = MarkusSommer\MensCircle\DataProcessing\NextEventDataProcessor
+    30 {
+      as = nextEvent
+      eventBasePath = /event
+    }
   }
 }
 

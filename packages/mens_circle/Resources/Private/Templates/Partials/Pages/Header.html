@@ -1,4 +1,10 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:variable name="nextEventUrl">
+    <f:if condition="{nextEvent.url}">
+        <f:then>{nextEvent.url}</f:then>
+        <f:else>/event</f:else>
+    </f:if>
+</f:variable>
 <header class="header" id="header">
     <div class="container">
         <div class="header__inner">
@@ -15,7 +21,7 @@
                 <a href="{breadcrumb.0.link}#ueber" class="nav__link">Über</a>
                 <a href="{breadcrumb.0.link}#reise" class="nav__link">Die Reise</a>
                 <a href="{breadcrumb.0.link}#faq" class="nav__link">Fragen</a>
-                <a href="/event" class="btn btn--primary btn--large nav__cta">Nächster Termin</a>
+                <a href="{nextEventUrl}" class="btn btn--primary btn--large nav__cta">Nächster Termin</a>
             </nav>
 
             <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-controls="nav" aria-expanded="false" type="button">

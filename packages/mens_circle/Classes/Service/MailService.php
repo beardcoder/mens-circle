@@ -13,9 +13,13 @@ use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\View\TemplateView;
 
 final class MailService
 {
+    private const MAIL_TEMPLATE_ROOT_PATH = 'EXT:mens_circle/Resources/Private/Templates/Mail/';
+    private const MAIL_LAYOUT_ROOT_PATH = 'EXT:mens_circle/Resources/Private/Templates/Layouts/Mail/';
+
     private readonly LoggerInterface $logger;
 
     public function __construct()
@@ -39,6 +43,7 @@ final class MailService
                 'participantFirstName' => $participant->getFirstName(),
                 'participantLastName' => $participant->getLastName(),
                 'eventTitle' => $event->getTitle(),
+                'eventSlug' => $event->getSlug(),
                 'eventDate' => $event->getEventDate()?->format('Y-m-d H:i:s') ?? '',
                 'eventStartTime' => $event->getStartTime()?->format('H:i:s') ?? '',
                 'eventLocation' => $event->getLocation(),
@@ -53,6 +58,7 @@ final class MailService
      *   participantFirstName: string,
      *   participantLastName: string,
      *   eventTitle: string,
+     *   eventSlug?: string,
      *   eventDate: string,
      *   eventStartTime: string,
      *   eventLocation: string
@@ -69,6 +75,7 @@ final class MailService
         $firstName = trim((string) ($notificationData['participantFirstName'] ?? ''));
         $lastName = trim((string) ($notificationData['participantLastName'] ?? ''));
         $eventTitle = trim((string) ($notificationData['eventTitle'] ?? ''));
+        $eventSlug = trim((string) ($notificationData['eventSlug'] ?? ''));
         $eventLocation = trim((string) ($notificationData['eventLocation'] ?? ''));
 
         $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
@@ -76,26 +83,40 @@ final class MailService
 
         $date = $this->formatDate((string) ($notificationData['eventDate'] ?? ''));
         $startTime = $this->formatTime((string) ($notificationData['eventStartTime'] ?? ''));
+        $eventTitleLabel = $eventTitle !== '' ? $eventTitle : 'Männerkreis';
+        $dateLabel = $date !== '' ? $date : 'tba';
+        $timeLabel = $startTime !== '' ? $startTime . ' Uhr' : 'offen';
+        $locationLabel = $eventLocation !== '' ? $eventLocation : '-';
+        $recipientName = $firstName !== '' ? $firstName : 'du';
+        $eventUrl = $this->buildEventUrl($settings, $eventSlug);
 
         $text = implode("\n", [
-            'Servus ' . ($firstName !== '' ? $firstName : 'du'),
+            'Servus ' . $recipientName,
             '',
             'deine Anmeldung war erfolgreich.',
             '',
-            sprintf('Termin: %s am %s%s', $eventTitle, $date !== '' ? $date : 'tba', $startTime !== '' ? ' um ' . $startTime . ' Uhr' : ''),
-            'Ort: ' . ($eventLocation !== '' ? $eventLocation : '-'),
+            sprintf('Termin: %s am %s', $eventTitleLabel, $dateLabel),
+            'Uhrzeit: ' . $timeLabel,
+            'Ort: ' . $locationLabel,
+            $eventUrl !== '' ? 'Termin öffnen: ' . $eventUrl : '',
             '',
             $siteName,
         ]);
 
-        $html = sprintf(
-            '<p>Servus %s,</p><p>deine Anmeldung war erfolgreich.</p><p><strong>Termin:</strong> %s am %s%s<br><strong>Ort:</strong> %s</p><p>%s</p>',
-            htmlspecialchars($firstName !== '' ? $firstName : 'du', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($eventTitle, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($date !== '' ? $date : 'tba', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            $startTime !== '' ? ' um ' . htmlspecialchars($startTime, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' Uhr' : '',
-            htmlspecialchars($eventLocation !== '' ? $eventLocation : '-', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($siteName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+        $html = $this->renderMailTemplate(
+            'EventRegistration',
+            array_merge(
+                $this->resolveMailLayoutVariables($settings),
+                [
+                    'preheader' => 'Anmeldung bestätigt: ' . ($eventTitle !== '' ? $eventTitle : $siteName),
+                    'recipientName' => $recipientName,
+                    'eventTitle' => $eventTitleLabel,
+                    'eventDate' => $dateLabel,
+                    'eventTime' => $timeLabel,
+                    'eventLocation' => $locationLabel,
+                    'eventUrl' => $eventUrl,
+                ]
+            )
         );
 
         return $this->sendMail(
@@ -114,6 +135,7 @@ final class MailService
      *   participantFirstName: string,
      *   participantLastName: string,
      *   eventTitle: string,
+     *   eventSlug?: string,
      *   eventDate: string,
      *   eventStartTime: string,
      *   eventLocation: string
@@ -130,6 +152,7 @@ final class MailService
         $firstName = trim((string) ($notificationData['participantFirstName'] ?? ''));
         $lastName = trim((string) ($notificationData['participantLastName'] ?? ''));
         $eventTitle = trim((string) ($notificationData['eventTitle'] ?? ''));
+        $eventSlug = trim((string) ($notificationData['eventSlug'] ?? ''));
         $eventLocation = trim((string) ($notificationData['eventLocation'] ?? ''));
 
         $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
@@ -137,28 +160,42 @@ final class MailService
 
         $date = $this->formatDate((string) ($notificationData['eventDate'] ?? ''));
         $startTime = $this->formatTime((string) ($notificationData['eventStartTime'] ?? ''));
+        $eventTitleLabel = $eventTitle !== '' ? $eventTitle : 'Männerkreis';
+        $dateLabel = $date !== '' ? $date : 'tba';
+        $timeLabel = $startTime !== '' ? $startTime . ' Uhr' : 'offen';
+        $locationLabel = $eventLocation !== '' ? $eventLocation : '-';
+        $recipientName = $firstName !== '' ? $firstName : 'du';
+        $eventUrl = $this->buildEventUrl($settings, $eventSlug);
 
         $text = implode("\n", [
-            'Servus ' . ($firstName !== '' ? $firstName : 'du'),
+            'Servus ' . $recipientName,
             '',
             'kurze Erinnerung an den Männerkreis Termin.',
             '',
-            sprintf('Termin: %s am %s%s', $eventTitle, $date !== '' ? $date : 'tba', $startTime !== '' ? ' um ' . $startTime . ' Uhr' : ''),
-            'Ort: ' . ($eventLocation !== '' ? $eventLocation : '-'),
+            sprintf('Termin: %s am %s', $eventTitleLabel, $dateLabel),
+            'Uhrzeit: ' . $timeLabel,
+            'Ort: ' . $locationLabel,
+            $eventUrl !== '' ? 'Termin öffnen: ' . $eventUrl : '',
             '',
             'Wir freuen uns auf dich.',
             '',
             $siteName,
         ]);
 
-        $html = sprintf(
-            '<p>Servus %s,</p><p>kurze Erinnerung an den Männerkreis Termin.</p><p><strong>Termin:</strong> %s am %s%s<br><strong>Ort:</strong> %s</p><p>Wir freuen uns auf dich.</p><p>%s</p>',
-            htmlspecialchars($firstName !== '' ? $firstName : 'du', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($eventTitle, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($date !== '' ? $date : 'tba', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            $startTime !== '' ? ' um ' . htmlspecialchars($startTime, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' Uhr' : '',
-            htmlspecialchars($eventLocation !== '' ? $eventLocation : '-', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($siteName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+        $html = $this->renderMailTemplate(
+            'EventReminder',
+            array_merge(
+                $this->resolveMailLayoutVariables($settings),
+                [
+                    'preheader' => 'Erinnerung: ' . ($eventTitle !== '' ? $eventTitle : $siteName),
+                    'recipientName' => $recipientName,
+                    'eventTitle' => $eventTitleLabel,
+                    'eventDate' => $dateLabel,
+                    'eventTime' => $timeLabel,
+                    'eventLocation' => $locationLabel,
+                    'eventUrl' => $eventUrl,
+                ]
+            )
         );
 
         return $this->sendMail(
@@ -183,6 +220,7 @@ final class MailService
 
         $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
         $subject = sprintf('%s Newsletter Anmeldung', $siteName);
+        $recipientName = trim($participant->getFirstName()) !== '' ? trim($participant->getFirstName()) : 'du';
 
         $text = implode("\n", [
             'Danke für deine Anmeldung zum Newsletter.',
@@ -192,10 +230,15 @@ final class MailService
             $siteName,
         ]);
 
-        $html = sprintf(
-            '<p>Danke für deine Anmeldung zum Newsletter.</p><p><a href="%s">Hier abmelden</a>, falls du keine E-Mails mehr möchtest.</p><p>%s</p>',
-            htmlspecialchars($unsubscribeUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($siteName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+        $html = $this->renderMailTemplate(
+            'NewsletterWelcome',
+            array_merge(
+                $this->resolveMailLayoutVariables($settings, $unsubscribeUrl),
+                [
+                    'preheader' => 'Newsletter Anmeldung bestätigt',
+                    'recipientName' => $recipientName,
+                ]
+            )
         );
 
         $this->sendMail($participant->getEmail(), $participant->getFullName(), $subject, $text, $html, $settings);
@@ -217,30 +260,94 @@ final class MailService
         }
 
         $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
-        $normalizedContent = trim($content);
+        $normalizedContent = trim($this->sanitizeNewsletterContent($content));
 
         if ($normalizedContent === '') {
             return false;
         }
 
         $text = trim(strip_tags(str_replace(['<br>', '<br/>', '<br />'], "\n", $normalizedContent)));
-        $html = $normalizedContent;
+        $recipientName = trim($toName) !== '' ? trim($toName) : 'du';
 
         if ($unsubscribeUrl !== '') {
             $text .= "\n\nAbmelden: " . $unsubscribeUrl;
-            $html .= sprintf(
-                '<p><a href="%s">Newsletter abbestellen</a></p>',
-                htmlspecialchars($unsubscribeUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
-            );
         }
 
         $text .= "\n\n" . $siteName;
-        $html .= sprintf(
-            '<p>%s</p>',
-            htmlspecialchars($siteName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+        $html = $this->renderMailTemplate(
+            'NewsletterBroadcast',
+            array_merge(
+                $this->resolveMailLayoutVariables($settings, $unsubscribeUrl),
+                [
+                    'preheader' => $subject,
+                    'subject' => $subject,
+                    'recipientName' => $recipientName,
+                    'contentHtml' => $normalizedContent,
+                ]
+            )
         );
 
         return $this->sendMail($toEmail, $toName, $subject, $text, $html, $settings);
+    }
+
+    /**
+     * @param array<string, mixed> $settings
+     * @return array{siteName: string, contactEmail: string, unsubscribeUrl: string}
+     */
+    private function resolveMailLayoutVariables(array $settings, string $unsubscribeUrl = ''): array
+    {
+        return [
+            'siteName' => (string) ($settings['siteName'] ?? 'Männerkreis'),
+            'contactEmail' => trim((string) ($settings['contactEmail'] ?? '')),
+            'unsubscribeUrl' => trim($unsubscribeUrl),
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $variables
+     */
+    private function renderMailTemplate(string $templateName, array $variables): string
+    {
+        $view = new TemplateView();
+        $templatePaths = $view->getRenderingContext()->getTemplatePaths();
+        $templatePaths->setTemplateRootPaths([
+            GeneralUtility::getFileAbsFileName(self::MAIL_TEMPLATE_ROOT_PATH),
+        ]);
+        $templatePaths->setLayoutRootPaths([
+            GeneralUtility::getFileAbsFileName(self::MAIL_LAYOUT_ROOT_PATH),
+        ]);
+
+        $view->assignMultiple($variables);
+
+        return $view->render($templateName);
+    }
+
+    /**
+     * @param array<string, mixed> $settings
+     */
+    private function buildEventUrl(array $settings, string $eventSlug): string
+    {
+        $normalizedSlug = trim($eventSlug);
+        if ($normalizedSlug === '') {
+            return '';
+        }
+
+        $baseUrl = rtrim((string) ($settings['baseUrl'] ?? ''), '/');
+        if ($baseUrl === '') {
+            return '';
+        }
+
+        return $baseUrl . '/event/' . ltrim($normalizedSlug, '/');
+    }
+
+    private function sanitizeNewsletterContent(string $content): string
+    {
+        $sanitized = preg_replace('/<script\b[^>]*>.*?<\/script>/is', '', $content);
+        if (!is_string($sanitized)) {
+            return '';
+        }
+
+        return trim($sanitized);
     }
 
     /**
