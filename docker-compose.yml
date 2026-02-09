@@ -4,7 +4,7 @@
 #
 # Services:
 #   app      – serversideup/php:8.5-fpm-nginx (PHP + Nginx in one container)
-#   mariadb  – MariaDB 11.8 with low-memory config (~100-150 MB RAM)
+#   mariadb  – MariaDB 12 with low-memory config (~100-150 MB RAM)
 #
 # Optimised for: low memory footprint · performance · low latency
 # =============================================================================
@@ -70,7 +70,7 @@ services:
   # MariaDB — low-memory optimised
   # ---------------------------------------------------------------------------
   mariadb:
-    image: mariadb:11.8
+    image: mariadb:12
     restart: unless-stopped
     environment:
       MARIADB_DATABASE: "${TYPO3_DB_NAME:-typo3}"
