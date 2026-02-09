@@ -58,7 +58,10 @@ if (\getenv('TYPO3_MAIL_TRANSPORT')) {
 $context = \getenv('TYPO3_CONTEXT') ?: 'Production';
 if (\str_starts_with($context, 'Production')) {
     // Filesystem caching (no extra services needed)
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['hash']['backend'] = \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['pages']['backend'] = \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['rootline']['backend'] = \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
+    foreach (['hash', 'pages', 'rootline'] as $cacheIdentifier) {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['backend'] = \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
+
+        // `compression` is valid for DB cache backend, but invalid for SimpleFileBackend.
+        unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['options']['compression']);
+    }
 }
