@@ -48,16 +48,6 @@ ExtensionUtility::configurePlugin(
 
 ExtensionUtility::configurePlugin(
     'MensCircle',
-    'Testimonial',
-    [
-        TestimonialController::class => 'list',
-    ],
-    [],
-    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
-);
-
-ExtensionUtility::configurePlugin(
-    'MensCircle',
     'TestimonialForm',
     [
         TestimonialController::class => 'form,thanks',

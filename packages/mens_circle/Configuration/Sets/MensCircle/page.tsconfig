@@ -121,14 +121,6 @@ mod.wizards.newContentElement.wizardItems.plugins {
         CType = menscircle_newsletter
       }
     }
-    menscircle_testimonial {
-      iconIdentifier = plugin-menscircle-testimonial
-      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial.title
-      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial.description
-      tt_content_defValues {
-        CType = menscircle_testimonial
-      }
-    }
     menscircle_testimonial_form {
       iconIdentifier = plugin-menscircle-testimonial-form
       title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial_form.title
@@ -138,5 +130,5 @@ mod.wizards.newContentElement.wizardItems.plugins {
       }
     }
   }
-  show := addToList(menscircle_event,menscircle_event_detail,menscircle_newsletter,menscircle_testimonial,menscircle_testimonial_form)
+  show := addToList(menscircle_event,menscircle_event_detail,menscircle_newsletter,menscircle_testimonial_form)
 }

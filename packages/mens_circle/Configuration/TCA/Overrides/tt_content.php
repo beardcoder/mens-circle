@@ -344,14 +344,6 @@ $pluginSignatures = [
         'plugins',
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.newsletter.description'
     ),
-    'testimonial' => ExtensionUtility::registerPlugin(
-        'MensCircle',
-        'Testimonial',
-        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial.title',
-        'plugin-menscircle-testimonial',
-        'plugins',
-        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial.description'
-    ),
     'testimonialForm' => ExtensionUtility::registerPlugin(
         'MensCircle',
         'TestimonialForm',
