@@ -72,7 +72,7 @@ final class EventController extends ActionController
         if (! $resolvedEvent instanceof Event) {
             $this->addFlashMessage('Aktuell ist kein passender Termin verfügbar.', '', AbstractMessage::WARNING);
 
-            return $this->redirect('list');
+            return $this->redirectToEventOverview();
         }
 
         return $this->renderEventDetail($resolvedEvent);
@@ -81,7 +81,6 @@ final class EventController extends ActionController
     public function registerAction(): ResponseInterface
     {
         $arguments = $this->request->getArguments();
-        $detailAction = $this->getDetailActionName();
         $eventUid = (int) ($arguments['event_id'] ?? $arguments['event'] ?? 0);
 
         /** @var Event|null $event */
@@ -89,7 +88,7 @@ final class EventController extends ActionController
         if (! $event instanceof Event) {
             $this->addFlashMessage('Ungültiger Termin.', '', AbstractMessage::ERROR);
 
-            return $this->redirect('list');
+            return $this->redirectToEventOverview();
         }
 
         $firstName = trim((string) ($arguments['first_name'] ?? $arguments['firstName'] ?? ''));
@@ -102,26 +101,26 @@ final class EventController extends ActionController
         if ($firstName === '' || $lastName === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacyAccepted) {
             $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', AbstractMessage::ERROR);
 
-            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
 
         if (! $event->isPublished()) {
             $this->addFlashMessage('Dieser Termin ist nicht verfügbar.', '', AbstractMessage::ERROR);
 
-            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
 
         if ($event->isPast()) {
             $this->addFlashMessage('Dieser Termin liegt bereits in der Vergangenheit.', '', AbstractMessage::ERROR);
 
-            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
 
         $activeRegistrations = $this->registrationRepository->countActiveByEvent($event);
         if ($activeRegistrations >= $event->getMaxParticipants()) {
             $this->addFlashMessage('Dieser Termin ist leider bereits ausgebucht.', '', AbstractMessage::ERROR);
 
-            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
 
         $participant = $this->participantRepository->findOneByEmail($email);
@@ -143,7 +142,7 @@ final class EventController extends ActionController
         if ($existingRegistration instanceof Registration) {
             $this->addFlashMessage('Du bist bereits für diesen Termin angemeldet.', '', AbstractMessage::WARNING);
 
-            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
+            return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
         }
 
         $registration = new Registration();
@@ -193,10 +192,7 @@ final class EventController extends ActionController
 
     public function registerSuccessAction(Event $event): ResponseInterface
     {
-        $this->view->assignMultiple([
-            'event' => $event,
-            'detailActionName' => $this->getDetailActionName(),
-        ]);
+        $this->view->assign('event', $event);
 
         return $this->htmlResponse();
     }
@@ -238,11 +234,6 @@ final class EventController extends ActionController
         return in_array($normalized, ['1', 'true', 'on', 'yes'], true);
     }
 
-    private function getDetailActionName(): string
-    {
-        return strtolower($this->request->getPluginName()) === 'eventdetail' ? 'detail' : 'show';
-    }
-
     private function resolveDetailEvent(?Event $event): ?Event
     {
         if ($event instanceof Event) {
@@ -256,11 +247,17 @@ final class EventController extends ActionController
             }
         }
 
-        $legacyPluginArguments = GeneralUtility::_GP('tx_menscircle_event');
-        if (is_array($legacyPluginArguments) && array_key_exists('event', $legacyPluginArguments)) {
-            $resolved = $this->resolveEventByIdentifier($legacyPluginArguments['event']);
-            if ($resolved instanceof Event) {
-                return $resolved;
+        $pluginArgumentNamespaces = [
+            'tx_menscircle_eventdetail',
+            'tx_menscircle_event',
+        ];
+        foreach ($pluginArgumentNamespaces as $pluginNamespace) {
+            $pluginArguments = GeneralUtility::_GP($pluginNamespace);
+            if (is_array($pluginArguments) && array_key_exists('event', $pluginArguments)) {
+                $resolved = $this->resolveEventByIdentifier($pluginArguments['event']);
+                if ($resolved instanceof Event) {
+                    return $resolved;
+                }
             }
         }
 
@@ -319,7 +316,7 @@ final class EventController extends ActionController
         if (! $event->isPublished()) {
             $this->addFlashMessage('Dieser Termin ist nicht öffentlich.', '', AbstractMessage::WARNING);
 
-            return $this->redirect('list');
+            return $this->redirectToEventOverview();
         }
 
         $activeRegistrations = $this->registrationRepository->countActiveByEvent($event);
@@ -335,7 +332,6 @@ final class EventController extends ActionController
             'isFull' => $availableSpots <= 0,
             'isPast' => $event->isPast(),
             'canRegister' => !($availableSpots <= 0 || $event->isPast()),
-            'detailActionName' => $this->getDetailActionName(),
             'eventData' => [
                 'title' => $event->getTitle(),
                 'description' => trim(strip_tags($event->getDescription())),
@@ -348,5 +344,18 @@ final class EventController extends ActionController
         ]);
 
         return $this->htmlResponse();
+    }
+
+    private function redirectToEventOverview(): ResponseInterface
+    {
+        $eventOverviewPath = trim((string) ($this->settings['eventOverviewPath'] ?? '/event'));
+        if ($eventOverviewPath === '') {
+            $eventOverviewPath = '/event';
+        }
+        if (!str_starts_with($eventOverviewPath, '/')) {
+            $eventOverviewPath = '/' . $eventOverviewPath;
+        }
+
+        return $this->redirectToUri($eventOverviewPath);
     }
 }

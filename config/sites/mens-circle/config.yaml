@@ -19,12 +19,12 @@ routeEnhancers:
   MensCircleEvent:
     type: Extbase
     extension: MensCircle
-    plugin: Event
-    defaultController: 'Event::list'
+    plugin: EventDetail
+    defaultController: 'Event::detail'
     routes:
       -
         routePath: '/{event}'
-        _controller: 'Event::show'
+        _controller: 'Event::detail'
         _arguments:
           event: event
       -
@@ -61,8 +61,8 @@ routeEnhancers:
   MensCircleTestimonial:
     type: Extbase
     extension: MensCircle
-    plugin: Testimonial
-    defaultController: 'Testimonial::list'
+    plugin: TestimonialForm
+    defaultController: 'Testimonial::form'
     routes:
       -
         routePath: /formular

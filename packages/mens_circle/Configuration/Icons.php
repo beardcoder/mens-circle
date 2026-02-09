@@ -71,6 +71,10 @@ return [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
         'source' => 'EXT:mens_circle/Resources/Public/Icons/Plugin/testimonial.svg',
     ],
+    'plugin-menscircle-testimonial-form' => [
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:mens_circle/Resources/Public/Icons/Plugin/testimonial-form.svg',
+    ],
     'record-menscircle-event' => [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
         'source' => 'EXT:mens_circle/Resources/Public/Icons/Record/event.svg',

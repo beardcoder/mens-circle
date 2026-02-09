@@ -453,8 +453,8 @@
     </unit>
     <unit id="plugin.event.description">
       <segment>
-        <source>Zeigt Terminübersicht, Detailseite und Anmeldung für Events.</source>
-        <target>Shows event overview, detail page, and event registration.</target>
+        <source>Zeigt die Terminübersicht kommender Events.</source>
+        <target>Shows the overview of upcoming events.</target>
       </segment>
     </unit>
     <unit id="plugin.event_detail.title">
@@ -489,8 +489,20 @@
     </unit>
     <unit id="plugin.testimonial.description">
       <segment>
-        <source>Zeigt Testimonials und erlaubt neue Erfahrungsberichte einzureichen.</source>
-        <target>Shows testimonials and allows submitting new reports.</target>
+        <source>Zeigt veröffentlichte Testimonials.</source>
+        <target>Shows published testimonials.</target>
+      </segment>
+    </unit>
+    <unit id="plugin.testimonial_form.title">
+      <segment>
+        <source>Männerkreis: Testimonial Formular</source>
+        <target>Mens Circle: Testimonial Form</target>
+      </segment>
+    </unit>
+    <unit id="plugin.testimonial_form.description">
+      <segment>
+        <source>Formular zum Einreichen neuer Erfahrungsberichte inklusive Dankeseite.</source>
+        <target>Form for submitting new testimonials including a thank-you page.</target>
       </segment>
     </unit>
     <unit id="dashboard.group.menscircle">

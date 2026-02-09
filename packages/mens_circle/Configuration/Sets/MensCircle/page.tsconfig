@@ -129,6 +129,14 @@ mod.wizards.newContentElement.wizardItems.plugins {
         CType = menscircle_testimonial
       }
     }
+    menscircle_testimonial_form {
+      iconIdentifier = plugin-menscircle-testimonial-form
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial_form.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial_form.description
+      tt_content_defValues {
+        CType = menscircle_testimonialform
+      }
+    }
   }
-  show := addToList(menscircle_event,menscircle_event_detail,menscircle_newsletter,menscircle_testimonial)
+  show := addToList(menscircle_event,menscircle_event_detail,menscircle_newsletter,menscircle_testimonial,menscircle_testimonial_form)
 }

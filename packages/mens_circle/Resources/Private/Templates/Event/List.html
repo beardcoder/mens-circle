@@ -23,7 +23,7 @@
                             · {nextEvent.location}
                         </p>
                         <div class="hero__cta fade-in-delay-2">
-                            <f:link.action action="show" arguments="{event: nextEvent.uid}" class="btn btn--primary btn--lg">
+                            <f:link.action action="detail" controller="Event" extensionName="MensCircle" pluginName="EventDetail" arguments="{event: nextEvent.uid}" class="btn btn--primary btn--lg">
                                 Details & Anmeldung
                             </f:link.action>
                         </div>
@@ -49,7 +49,7 @@
                                         · {summary.event.location}
                                     </p>
                                     <p class="event-info__card-sub">{summary.availableSpots} Plätze frei</p>
-                                    <f:link.action action="show" arguments="{event: summary.event.uid}" class="btn btn--secondary btn--sm">
+                                    <f:link.action action="detail" controller="Event" extensionName="MensCircle" pluginName="EventDetail" arguments="{event: summary.event.uid}" class="btn btn--secondary btn--sm">
                                         Details
                                     </f:link.action>
                                 </div>

@@ -774,8 +774,8 @@ final class ImportLaravelSqlCommand extends Command
             $pagesCreated++;
         }
 
-        $eventPluginUid = $this->findContentElementUidByType($connection, $eventPageUid, 'menscircle_event');
-        if ($eventPluginUid <= 0) {
+        $eventDetailPluginUid = $this->findContentElementUidByType($connection, $eventPageUid, 'menscircle_eventdetail');
+        if ($eventDetailPluginUid <= 0) {
             $sorting = $this->getNextSortingValueByPid($connection, 'tt_content', $eventPageUid);
             $now = time();
 
@@ -792,8 +792,8 @@ final class ImportLaravelSqlCommand extends Command
                 'l18n_parent' => 0,
                 'l10n_source' => 0,
                 'colPos' => 0,
-                'CType' => 'menscircle_event',
-                'header' => 'Termine',
+                'CType' => 'menscircle_eventdetail',
+                'header' => 'Nächster Termin',
                 'sorting' => $sorting,
             ]);
         }
