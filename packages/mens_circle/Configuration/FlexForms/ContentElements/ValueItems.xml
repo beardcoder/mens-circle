@@ -1,0 +1,32 @@
+<T3DataStructure>
+  <sheets>
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>Werte Liste</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <settings.item1Number><label>Eintrag 1: Nummer</label><config><type>input</type><size>10</size></config></settings.item1Number>
+          <settings.item1Title><label>Eintrag 1: Titel</label><config><type>input</type><size>40</size></config></settings.item1Title>
+          <settings.item1Description><label>Eintrag 1: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.item1Description>
+          <settings.item2Number><label>Eintrag 2: Nummer</label><config><type>input</type><size>10</size></config></settings.item2Number>
+          <settings.item2Title><label>Eintrag 2: Titel</label><config><type>input</type><size>40</size></config></settings.item2Title>
+          <settings.item2Description><label>Eintrag 2: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.item2Description>
+          <settings.item3Number><label>Eintrag 3: Nummer</label><config><type>input</type><size>10</size></config></settings.item3Number>
+          <settings.item3Title><label>Eintrag 3: Titel</label><config><type>input</type><size>40</size></config></settings.item3Title>
+          <settings.item3Description><label>Eintrag 3: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.item3Description>
+          <settings.item4Number><label>Eintrag 4: Nummer</label><config><type>input</type><size>10</size></config></settings.item4Number>
+          <settings.item4Title><label>Eintrag 4: Titel</label><config><type>input</type><size>40</size></config></settings.item4Title>
+          <settings.item4Description><label>Eintrag 4: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.item4Description>
+          <settings.item5Number><label>Eintrag 5: Nummer</label><config><type>input</type><size>10</size></config></settings.item5Number>
+          <settings.item5Title><label>Eintrag 5: Titel</label><config><type>input</type><size>40</size></config></settings.item5Title>
+          <settings.item5Description><label>Eintrag 5: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.item5Description>
+          <settings.item6Number><label>Eintrag 6: Nummer</label><config><type>input</type><size>10</size></config></settings.item6Number>
+          <settings.item6Title><label>Eintrag 6: Titel</label><config><type>input</type><size>40</size></config></settings.item6Title>
+          <settings.item6Description><label>Eintrag 6: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.item6Description>
+        </el>
+      </ROOT>
+    </sDEF>
+  </sheets>
+</T3DataStructure>

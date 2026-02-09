@@ -1,47 +1,21 @@
 {
-    "$schema": "https://www.schemastore.org/package.json",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "vite build",
-        "dev": "vite",
-        "lint": "eslint . --fix",
-        "lint:check": "eslint .",
-        "typecheck": "tsc --noEmit",
-        "stylelint": "stylelint \"resources/**/*.css\"",
-        "format": "prettier --write \"resources/**/*.{ts,js,css}\" && bun run stylelint -- --fix",
-        "format:check": "prettier --check \"resources/**/*.{ts,js,css}\""
-    },
-    "packageManager": "bun@1.3.7",
-    "devDependencies": {
-        "@eslint/compat": "^2.0.2",
-        "@eslint/js": "^9.39.2",
-        "@stylistic/eslint-plugin": "^5.7.1",
-        "@tailwindcss/vite": "^4.1.18",
-        "@types/node": "^25.2.1",
-        "concurrently": "^9.2.1",
-        "eslint": "^9.39.2",
-        "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-prettier": "^5.5.5",
-        "globals": "^17.3.0",
-        "laravel-vite-plugin": "^2.1.0",
-        "lightningcss": "^1.31.1",
-        "prettier": "^3.8.1",
-        "stylelint": "^17.1.1",
-        "stylelint-config-recess-order": "^7.6.0",
-        "stylelint-config-standard": "^40.0.0",
-        "stylelint-order": "^7.0.1",
-        "stylelint-use-logical": "^2.1.3",
-        "tailwindcss": "^4.1.18",
-        "typescript": "^5.9.3",
-        "typescript-eslint": "^8.54.0",
-        "vite": "^8.0.0-beta.13",
-        "vite-plugin-auto-origin": "^1.2.2"
-    },
-    "dependencies": {
-        "@fontsource-variable/cormorant": "^5.2.8",
-        "@fontsource-variable/dm-sans": "^5.2.8",
-        "@fontsource-variable/playfair-display": "^5.2.8",
-        "motion": "^12.33.0"
-    }
+  "name": "mens-circle-frontend",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.3.9",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173 --strictPort",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "preview": "vite preview --host 0.0.0.0 --port 4173 --strictPort"
+  },
+  "dependencies": {
+    "@fontsource-variable/cormorant": "^5.2.8",
+    "@fontsource-variable/dm-sans": "^5.2.8",
+    "@fontsource-variable/playfair-display": "^5.2.8",
+    "motion": "^12.33.0"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
 }

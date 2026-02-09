@@ -1,3 +1,61 @@
+## Projektkontext TYPO3 (Stand: 2026-02-09)
+
+### Zielsystem
+
+- TYPO3 Core v14.1 mit Extension `mens_circle` in `packages/mens_circle`.
+- Fokus: KISS, Core-nahe Umsetzung, Performance, einfache Wartbarkeit.
+- Frontend Build mit Bun + Vite (`bun run dev`, `bun run build`). Kein npm.
+
+### Aktueller Stand
+
+- Laravel wurde auf TYPO3 umgebaut (Branch: `codex/typo3-v14-rebuild`).
+- Content-Elemente sind Core-nah umgesetzt (keine custom `tt_content` SQL-Spalten, nur Core-Felder + FlexForms).
+- Backend Newsletter Modul ist vorhanden.
+- Eigene Icons sind vorhanden fuer Module, Content-Elemente, Plugins und Domain-Records.
+- Event-Seite inklusive Detailansicht ist vorhanden (`/event` und `/event/{slug}`).
+
+### Wichtige Pfade
+
+- Extension: `packages/mens_circle`
+- Site Config: `config/sites/mens-circle/config.yaml`
+- SQL-Import Datei (aktuell): `packages/mens_circle/live.sql`
+- Import Command: `packages/mens_circle/Classes/Command/ImportLaravelSqlCommand.php`
+
+### Betriebs- und Build-Commands
+
+- Import: `ddev exec vendor/bin/typo3 menscircle:import:laravel-sql packages/mens_circle/live.sql --truncate -n`
+- Cache leeren: `ddev exec vendor/bin/typo3 cache:flush`
+- FE Build: `bun run build`
+- FE Dev: `bun run dev`
+
+### Verhalten vom Import-Command
+
+- Parst Laravel/PostgreSQL Dumps mit `INSERT INTO "public"."..."`.
+- Importiert `participants`, `events`, `registrations`, `newsletter_subscriptions`, `testimonials`, `pages`, `content_blocks`.
+- Legt Seiten sauber an/aktualisiert (u.a. Home, Impressum, Datenschutz).
+- Stellt sicher, dass `/event` existiert und ein Plugin-CE mit `CType=menscircle_event` auf der Event-Seite liegt.
+- Filtert Insert/Update Felder schema-basiert, damit keine Fehler bei fehlenden Spalten auftreten.
+- Schuetzt `tt_content` gegen leeres oder `NULL`-`CType`.
+
+### Bereits geloeste Fehler (Regression vermeiden)
+
+- DBAL4: `setParameter()` mit `Doctrine\DBAL\ParameterType::*` statt `PDO::PARAM_*`.
+- `Connection::count()` korrekt mit 3 Argumenten.
+- Kein blindes Schreiben in nicht vorhandene Spalten (schema-aware Insert/Update).
+- Fluid: `f:link.typolink` akzeptiert kein `rel` Argument, stattdessen `additionalAttributes`.
+- SQL-JSON darf beim Parsen nicht mit `stripcslashes()` zerstoert werden.
+
+### Naechste sinnvolle Schritte
+
+1. Visuellen FE-Abgleich gegen den alten Laravel-Stand finalisieren (Spacing/Typografie/Interaktionen).
+2. Manuellen Smoke-Test dokumentieren: Home, Event-Detail, Newsletter Versand, Impressum, Datenschutz.
+3. Optional: Integrationstests fuer Import-Command und kritische Frontend-Routen ergaenzen.
+
+### Hinweis zu Legacy-Inhalt
+
+- Der nachfolgende `<laravel-boost-guidelines>` Block stammt aus dem Altprojekt.
+- Bei Konflikten gilt fuer dieses Repository der TYPO3-Kontext in diesem Abschnitt.
+
 <laravel-boost-guidelines>
 === foundation rules ===
 

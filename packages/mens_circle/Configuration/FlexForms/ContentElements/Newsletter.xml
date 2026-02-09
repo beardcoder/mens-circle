@@ -1,0 +1,30 @@
+<T3DataStructure>
+  <sheets>
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>Newsletter Einstellungen</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <settings.buttonLabel>
+            <label>Button Text</label>
+            <config>
+              <type>input</type>
+              <size>40</size>
+              <default>Zum Newsletter</default>
+            </config>
+          </settings.buttonLabel>
+          <settings.privacyLabel>
+            <label>Datenschutz Hinweis</label>
+            <config>
+              <type>text</type>
+              <rows>2</rows>
+              <cols>40</cols>
+            </config>
+          </settings.privacyLabel>
+        </el>
+      </ROOT>
+    </sDEF>
+  </sheets>
+</T3DataStructure>

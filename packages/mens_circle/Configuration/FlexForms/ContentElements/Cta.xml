@@ -1,0 +1,22 @@
+<T3DataStructure>
+  <sheets>
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>CTA Einstellungen</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <settings.buttonLabel>
+            <label>Button Text</label>
+            <config>
+              <type>input</type>
+              <size>40</size>
+              <default>Jetzt teilnehmen</default>
+            </config>
+          </settings.buttonLabel>
+        </el>
+      </ROOT>
+    </sDEF>
+  </sheets>
+</T3DataStructure>

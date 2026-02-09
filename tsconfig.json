@@ -13,11 +13,14 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "baseUrl": ".",
+    "baseUrl": "./packages/mens_circle/Resources/Private/Frontend",
     "paths": {
       "@/*": ["resources/js/*"]
     }
   },
-  "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts"],
+  "include": [
+    "packages/mens_circle/Resources/Private/Frontend/resources/js/**/*.ts",
+    "packages/mens_circle/Resources/Private/Frontend/resources/js/**/*.d.ts"
+  ],
   "exclude": ["node_modules", "vendor", "public"]
 }

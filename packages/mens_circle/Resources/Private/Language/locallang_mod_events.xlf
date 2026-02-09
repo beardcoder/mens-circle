@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+  <file source-language="de" datatype="plaintext" original="messages" date="2026-02-09T00:00:00Z" product-name="mens_circle">
+    <header/>
+    <body>
+      <trans-unit id="mlang_tabs_tab"><source>Events verwalten</source></trans-unit>
+      <trans-unit id="mlang_labels_tabdescr"><source>Events anlegen, bearbeiten und Status prüfen</source></trans-unit>
+      <trans-unit id="mlang_labels_tablabel"><source>Events verwalten</source></trans-unit>
+
+      <trans-unit id="headline"><source>Event Verwaltung</source></trans-unit>
+      <trans-unit id="description"><source>Übersicht aller Events mit Teilnehmerstand, Status und direktem Zugriff auf Bearbeitung.</source></trans-unit>
+      <trans-unit id="button.new"><source>Neues Event</source></trans-unit>
+      <trans-unit id="button.records"><source>Listenansicht</source></trans-unit>
+
+      <trans-unit id="events.label"><source>Events</source></trans-unit>
+      <trans-unit id="events.none"><source>Es sind aktuell keine Events vorhanden.</source></trans-unit>
+
+      <trans-unit id="column.date"><source>Datum</source></trans-unit>
+      <trans-unit id="column.title"><source>Titel</source></trans-unit>
+      <trans-unit id="column.location"><source>Ort</source></trans-unit>
+      <trans-unit id="column.capacity"><source>Teilnehmer</source></trans-unit>
+      <trans-unit id="column.status"><source>Status</source></trans-unit>
+      <trans-unit id="column.actions"><source>Aktionen</source></trans-unit>
+
+      <trans-unit id="label.slug"><source>Slug</source></trans-unit>
+      <trans-unit id="label.noTime"><source>Keine Uhrzeit</source></trans-unit>
+      <trans-unit id="label.noLocation"><source>Kein Ort hinterlegt</source></trans-unit>
+
+      <trans-unit id="status.hidden"><source>Versteckt</source></trans-unit>
+      <trans-unit id="status.draft"><source>Entwurf</source></trans-unit>
+      <trans-unit id="status.past"><source>Vergangen</source></trans-unit>
+      <trans-unit id="status.live"><source>Aktiv</source></trans-unit>
+
+      <trans-unit id="action.edit"><source>Bearbeiten</source></trans-unit>
+      <trans-unit id="action.records"><source>Datensätze</source></trans-unit>
+      <trans-unit id="action.frontend"><source>Frontend</source></trans-unit>
+    </body>
+  </file>
+</xliff>

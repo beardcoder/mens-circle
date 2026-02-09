@@ -1,0 +1,126 @@
+TCEMAIN.default.disablePrependAtCopy = 1
+
+mod.wizards.newContentElement.wizardItems.menscircle {
+  header = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.group.title
+  elements {
+    menscircle_hero {
+      iconIdentifier = content-menscircle-hero
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.hero.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.hero.description
+      tt_content_defValues {
+        CType = menscircle_hero
+      }
+    }
+    menscircle_intro {
+      iconIdentifier = content-menscircle-intro
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.intro.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.intro.description
+      tt_content_defValues {
+        CType = menscircle_intro
+      }
+    }
+    menscircle_text_section {
+      iconIdentifier = content-menscircle-text-section
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.text_section.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.text_section.description
+      tt_content_defValues {
+        CType = menscircle_text_section
+      }
+    }
+    menscircle_value_items {
+      iconIdentifier = content-menscircle-value-items
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.value_items.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.value_items.description
+      tt_content_defValues {
+        CType = menscircle_value_items
+      }
+    }
+    menscircle_moderator {
+      iconIdentifier = content-menscircle-moderator
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.moderator.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.moderator.description
+      tt_content_defValues {
+        CType = menscircle_moderator
+      }
+    }
+    menscircle_journey_steps {
+      iconIdentifier = content-menscircle-journey-steps
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.journey_steps.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.journey_steps.description
+      tt_content_defValues {
+        CType = menscircle_journey_steps
+      }
+    }
+    menscircle_testimonials {
+      iconIdentifier = content-menscircle-testimonials
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.testimonials.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.testimonials.description
+      tt_content_defValues {
+        CType = menscircle_testimonials
+      }
+    }
+    menscircle_faq {
+      iconIdentifier = content-menscircle-faq
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.faq.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.faq.description
+      tt_content_defValues {
+        CType = menscircle_faq
+      }
+    }
+    menscircle_newsletter_section {
+      iconIdentifier = content-menscircle-newsletter
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.newsletter.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.newsletter.description
+      tt_content_defValues {
+        CType = menscircle_newsletter_section
+      }
+    }
+    menscircle_cta {
+      iconIdentifier = content-menscircle-cta
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.cta.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.cta.description
+      tt_content_defValues {
+        CType = menscircle_cta
+      }
+    }
+    menscircle_whatsapp_community {
+      iconIdentifier = content-menscircle-whatsapp
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.whatsapp_community.title
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.type.whatsapp_community.description
+      tt_content_defValues {
+        CType = menscircle_whatsapp_community
+      }
+    }
+  }
+  show = *
+}
+
+mod.wizards.newContentElement.wizardItems.plugins {
+  elements {
+    menscircle_event {
+      iconIdentifier = plugin-menscircle-event
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event.title
+      description = Zeigt kommenden Termin, Eventdetails und Anmeldung.
+      tt_content_defValues {
+        CType = menscircle_event
+      }
+    }
+    menscircle_newsletter {
+      iconIdentifier = plugin-menscircle-newsletter
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.newsletter.title
+      description = Newsletter-Anmeldung und Abmelde-Handling.
+      tt_content_defValues {
+        CType = menscircle_newsletter
+      }
+    }
+    menscircle_testimonial {
+      iconIdentifier = plugin-menscircle-testimonial
+      title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial.title
+      description = Testimonials anzeigen und neue Erfahrungsberichte erfassen.
+      tt_content_defValues {
+        CType = menscircle_testimonial
+      }
+    }
+  }
+  show := addToList(menscircle_event,menscircle_newsletter,menscircle_testimonial)
+}

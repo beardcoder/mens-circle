@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="10" y="10" width="44" height="44" rx="8" fill="none" stroke="currentColor" stroke-opacity=".45" stroke-width="4"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+    <circle cx="32" cy="25" r="7" stroke="currentColor"/>
+    <path d="M18 46c1.7-6.7 7-11 14-11s12.3 4.3 14 11" stroke="currentColor"/>
+    <path d="M45 18h10M50 13v10" stroke="var(--icon-color-accent, #ff8700)"/>
+  </g>
+</svg>

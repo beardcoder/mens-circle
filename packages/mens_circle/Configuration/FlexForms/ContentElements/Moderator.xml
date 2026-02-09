@@ -1,0 +1,22 @@
+<T3DataStructure>
+  <sheets>
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>Moderator Einstellungen</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <settings.quote>
+            <label>Zitat</label>
+            <config>
+              <type>text</type>
+              <rows>3</rows>
+              <cols>40</cols>
+            </config>
+          </settings.quote>
+        </el>
+      </ROOT>
+    </sDEF>
+  </sheets>
+</T3DataStructure>

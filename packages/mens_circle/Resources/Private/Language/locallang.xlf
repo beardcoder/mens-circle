@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+  <file source-language="de" datatype="plaintext" original="messages" date="2026-02-09T00:00:00Z" product-name="mens_circle">
+    <header/>
+    <body>
+      <trans-unit id="site.name"><source>Männerkreis Niederbayern/ Straubing</source></trans-unit>
+      <trans-unit id="event.register.success"><source>Danke, deine Anmeldung war erfolgreich.</source></trans-unit>
+      <trans-unit id="testimonial.thanks"><source>Danke, deine Erfahrung wurde eingereicht.</source></trans-unit>
+    </body>
+  </file>
+</xliff>

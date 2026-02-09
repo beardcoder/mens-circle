@@ -1,0 +1,110 @@
+<T3DataStructure>
+  <sheets>
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>Intro Einstellungen</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <settings.quote>
+            <label>Zitat</label>
+            <config>
+              <type>text</type>
+              <rows>3</rows>
+              <cols>40</cols>
+            </config>
+          </settings.quote>
+          <settings.value1Number>
+            <label>Wert 1: Nummer</label>
+            <config>
+              <type>input</type>
+              <size>10</size>
+            </config>
+          </settings.value1Number>
+          <settings.value1Title>
+            <label>Wert 1: Titel</label>
+            <config>
+              <type>input</type>
+              <size>40</size>
+            </config>
+          </settings.value1Title>
+          <settings.value1Description>
+            <label>Wert 1: Beschreibung</label>
+            <config>
+              <type>text</type>
+              <rows>2</rows>
+              <cols>40</cols>
+            </config>
+          </settings.value1Description>
+          <settings.value2Number>
+            <label>Wert 2: Nummer</label>
+            <config>
+              <type>input</type>
+              <size>10</size>
+            </config>
+          </settings.value2Number>
+          <settings.value2Title>
+            <label>Wert 2: Titel</label>
+            <config>
+              <type>input</type>
+              <size>40</size>
+            </config>
+          </settings.value2Title>
+          <settings.value2Description>
+            <label>Wert 2: Beschreibung</label>
+            <config>
+              <type>text</type>
+              <rows>2</rows>
+              <cols>40</cols>
+            </config>
+          </settings.value2Description>
+          <settings.value3Number>
+            <label>Wert 3: Nummer</label>
+            <config>
+              <type>input</type>
+              <size>10</size>
+            </config>
+          </settings.value3Number>
+          <settings.value3Title>
+            <label>Wert 3: Titel</label>
+            <config>
+              <type>input</type>
+              <size>40</size>
+            </config>
+          </settings.value3Title>
+          <settings.value3Description>
+            <label>Wert 3: Beschreibung</label>
+            <config>
+              <type>text</type>
+              <rows>2</rows>
+              <cols>40</cols>
+            </config>
+          </settings.value3Description>
+          <settings.value4Number>
+            <label>Wert 4: Nummer</label>
+            <config>
+              <type>input</type>
+              <size>10</size>
+            </config>
+          </settings.value4Number>
+          <settings.value4Title>
+            <label>Wert 4: Titel</label>
+            <config>
+              <type>input</type>
+              <size>40</size>
+            </config>
+          </settings.value4Title>
+          <settings.value4Description>
+            <label>Wert 4: Beschreibung</label>
+            <config>
+              <type>text</type>
+              <rows>2</rows>
+              <cols>40</cols>
+            </config>
+          </settings.value4Description>
+        </el>
+      </ROOT>
+    </sDEF>
+  </sheets>
+</T3DataStructure>

@@ -1,0 +1,31 @@
+<T3DataStructure>
+  <sheets>
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>Testimonials Einstellungen</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <settings.limit>
+            <label>Maximale Anzahl</label>
+            <config>
+              <type>input</type>
+              <size>10</size>
+              <eval>int</eval>
+              <default>6</default>
+            </config>
+          </settings.limit>
+          <settings.emptyMessage>
+            <label>Text wenn keine Testimonials vorhanden sind</label>
+            <config>
+              <type>input</type>
+              <size>50</size>
+              <default>Aktuell sind noch keine Erfahrungsberichte freigegeben.</default>
+            </config>
+          </settings.emptyMessage>
+        </el>
+      </ROOT>
+    </sDEF>
+  </sheets>
+</T3DataStructure>

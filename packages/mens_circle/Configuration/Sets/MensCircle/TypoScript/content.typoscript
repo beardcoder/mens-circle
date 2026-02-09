@@ -1,0 +1,63 @@
+lib.mensCircleContentElement =< lib.contentElement
+lib.mensCircleContentElement {
+  templateRootPaths.200 = EXT:mens_circle/Resources/Private/Templates/Content/
+
+  dataProcessing {
+    10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
+    10 {
+      references.fieldName = image
+      as = images
+    }
+
+    20 = TYPO3\CMS\Frontend\DataProcessing\FlexFormProcessor
+    20 {
+      fieldName = pi_flexform
+      as = flexFormData
+    }
+  }
+}
+
+tt_content.menscircle_hero =< lib.mensCircleContentElement
+tt_content.menscircle_hero.templateName = Hero
+
+tt_content.menscircle_intro =< lib.mensCircleContentElement
+tt_content.menscircle_intro.templateName = Intro
+
+tt_content.menscircle_text_section =< lib.mensCircleContentElement
+tt_content.menscircle_text_section.templateName = TextSection
+
+tt_content.menscircle_value_items =< lib.mensCircleContentElement
+tt_content.menscircle_value_items.templateName = ValueItems
+
+tt_content.menscircle_moderator =< lib.mensCircleContentElement
+tt_content.menscircle_moderator.templateName = Moderator
+
+tt_content.menscircle_journey_steps =< lib.mensCircleContentElement
+tt_content.menscircle_journey_steps.templateName = JourneySteps
+
+tt_content.menscircle_testimonials =< lib.mensCircleContentElement
+tt_content.menscircle_testimonials {
+  templateName = Testimonials
+  dataProcessing {
+    30 = TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor
+    30 {
+      table = tx_menscircle_domain_model_testimonial
+      pidInList = {$site.configuration.settings.mensCircle.storagePid}
+      where = is_published = 1
+      orderBy = sort_order ASC, published_at DESC
+      as = testimonials
+    }
+  }
+}
+
+tt_content.menscircle_faq =< lib.mensCircleContentElement
+tt_content.menscircle_faq.templateName = Faq
+
+tt_content.menscircle_newsletter_section =< lib.mensCircleContentElement
+tt_content.menscircle_newsletter_section.templateName = Newsletter
+
+tt_content.menscircle_cta =< lib.mensCircleContentElement
+tt_content.menscircle_cta.templateName = Cta
+
+tt_content.menscircle_whatsapp_community =< lib.mensCircleContentElement
+tt_content.menscircle_whatsapp_community.templateName = WhatsappCommunity

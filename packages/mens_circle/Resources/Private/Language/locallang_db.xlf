@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+  <file source-language="de" datatype="plaintext" original="messages" date="2026-02-09T00:00:00Z" product-name="mens_circle">
+    <header/>
+    <body>
+      <trans-unit id="table.event"><source>Event</source></trans-unit>
+      <trans-unit id="table.event.plural"><source>Events</source></trans-unit>
+      <trans-unit id="table.event.title"><source>Titel</source></trans-unit>
+      <trans-unit id="table.event.slug"><source>Slug</source></trans-unit>
+      <trans-unit id="table.event.teaser"><source>Teaser</source></trans-unit>
+      <trans-unit id="table.event.description"><source>Beschreibung</source></trans-unit>
+      <trans-unit id="table.event.event_date"><source>Datum</source></trans-unit>
+      <trans-unit id="table.event.start_time"><source>Startzeit</source></trans-unit>
+      <trans-unit id="table.event.end_time"><source>Endzeit</source></trans-unit>
+      <trans-unit id="table.event.location"><source>Ort</source></trans-unit>
+      <trans-unit id="table.event.street"><source>Straße</source></trans-unit>
+      <trans-unit id="table.event.postal_code"><source>PLZ</source></trans-unit>
+      <trans-unit id="table.event.city"><source>Stadt</source></trans-unit>
+      <trans-unit id="table.event.location_details"><source>Ort-Details</source></trans-unit>
+      <trans-unit id="table.event.max_participants"><source>Max. Teilnehmer</source></trans-unit>
+      <trans-unit id="table.event.cost_basis"><source>Kostenbasis</source></trans-unit>
+      <trans-unit id="table.event.is_published"><source>Veröffentlicht</source></trans-unit>
+      <trans-unit id="table.event.image"><source>Titelbild</source></trans-unit>
+      <trans-unit id="table.event.registrations"><source>Anmeldungen</source></trans-unit>
+
+      <trans-unit id="table.participant"><source>Teilnehmer</source></trans-unit>
+      <trans-unit id="table.participant.plural"><source>Teilnehmer</source></trans-unit>
+      <trans-unit id="table.participant.first_name"><source>Vorname</source></trans-unit>
+      <trans-unit id="table.participant.last_name"><source>Nachname</source></trans-unit>
+      <trans-unit id="table.participant.email"><source>E-Mail</source></trans-unit>
+      <trans-unit id="table.participant.phone"><source>Telefon</source></trans-unit>
+
+      <trans-unit id="table.registration"><source>Anmeldung</source></trans-unit>
+      <trans-unit id="table.registration.plural"><source>Anmeldungen</source></trans-unit>
+      <trans-unit id="table.registration.event"><source>Event</source></trans-unit>
+      <trans-unit id="table.registration.participant"><source>Teilnehmer</source></trans-unit>
+      <trans-unit id="table.registration.status"><source>Status</source></trans-unit>
+      <trans-unit id="table.registration.status.registered"><source>Angemeldet</source></trans-unit>
+      <trans-unit id="table.registration.status.attended"><source>Teilgenommen</source></trans-unit>
+      <trans-unit id="table.registration.status.cancelled"><source>Storniert</source></trans-unit>
+      <trans-unit id="table.registration.registered_at"><source>Angemeldet am</source></trans-unit>
+      <trans-unit id="table.registration.cancelled_at"><source>Storniert am</source></trans-unit>
+
+      <trans-unit id="table.newslettersubscription"><source>Newsletter-Abo</source></trans-unit>
+      <trans-unit id="table.newslettersubscription.plural"><source>Newsletter-Abos</source></trans-unit>
+      <trans-unit id="table.newslettersubscription.participant"><source>Teilnehmer</source></trans-unit>
+      <trans-unit id="table.newslettersubscription.token"><source>Token</source></trans-unit>
+      <trans-unit id="table.newslettersubscription.subscribed_at"><source>Angemeldet am</source></trans-unit>
+      <trans-unit id="table.newslettersubscription.confirmed_at"><source>Bestätigt am</source></trans-unit>
+      <trans-unit id="table.newslettersubscription.unsubscribed_at"><source>Abgemeldet am</source></trans-unit>
+
+      <trans-unit id="table.testimonial"><source>Testimonial</source></trans-unit>
+      <trans-unit id="table.testimonial.plural"><source>Testimonials</source></trans-unit>
+      <trans-unit id="table.testimonial.quote"><source>Erfahrung</source></trans-unit>
+      <trans-unit id="table.testimonial.author_name"><source>Name</source></trans-unit>
+      <trans-unit id="table.testimonial.email"><source>E-Mail</source></trans-unit>
+      <trans-unit id="table.testimonial.role"><source>Rolle</source></trans-unit>
+      <trans-unit id="table.testimonial.is_published"><source>Veröffentlicht</source></trans-unit>
+      <trans-unit id="table.testimonial.published_at"><source>Veröffentlicht am</source></trans-unit>
+      <trans-unit id="table.testimonial.sort_order"><source>Sortierung</source></trans-unit>
+
+      <trans-unit id="content.group.title"><source>Männerkreis Inhalte</source></trans-unit>
+      <trans-unit id="content.type.hero.title"><source>Hero Bereich</source></trans-unit>
+      <trans-unit id="content.type.hero.description"><source>Großer Einstiegsbereich mit Bild, Text und Hauptlink.</source></trans-unit>
+      <trans-unit id="content.type.intro.title"><source>Intro Bereich</source></trans-unit>
+      <trans-unit id="content.type.intro.description"><source>Einführung mit optionalem Zitat und bis zu vier Werten.</source></trans-unit>
+      <trans-unit id="content.type.text_section.title"><source>Text Bereich</source></trans-unit>
+      <trans-unit id="content.type.text_section.description"><source>Einfacher Inhaltsblock mit Titel und Richtext.</source></trans-unit>
+      <trans-unit id="content.type.value_items.title"><source>Werte Liste</source></trans-unit>
+      <trans-unit id="content.type.value_items.description"><source>Liste mit bis zu sechs Werte-Einträgen.</source></trans-unit>
+      <trans-unit id="content.type.moderator.title"><source>Moderator Bereich</source></trans-unit>
+      <trans-unit id="content.type.moderator.description"><source>Vorstellung mit Bild, Text und Zitat.</source></trans-unit>
+      <trans-unit id="content.type.journey_steps.title"><source>Ablauf Schritte</source></trans-unit>
+      <trans-unit id="content.type.journey_steps.description"><source>Schritt-für-Schritt Darstellung mit bis zu sechs Schritten.</source></trans-unit>
+      <trans-unit id="content.type.testimonials.title"><source>Testimonials Bereich</source></trans-unit>
+      <trans-unit id="content.type.testimonials.description"><source>Zeigt veröffentlichte Testimonials aus der Datenbank.</source></trans-unit>
+      <trans-unit id="content.type.faq.title"><source>FAQ Bereich</source></trans-unit>
+      <trans-unit id="content.type.faq.description"><source>Fragen und Antworten als aufklappbare Elemente.</source></trans-unit>
+      <trans-unit id="content.type.newsletter.title"><source>Newsletter Bereich</source></trans-unit>
+      <trans-unit id="content.type.newsletter.description"><source>Newsletter Call-to-Action mit Datenschutzhinweis.</source></trans-unit>
+      <trans-unit id="content.type.cta.title"><source>Call to Action</source></trans-unit>
+      <trans-unit id="content.type.cta.description"><source>Handlungsaufruf mit Titel, Text und Button-Link.</source></trans-unit>
+      <trans-unit id="content.type.whatsapp_community.title"><source>WhatsApp Community</source></trans-unit>
+      <trans-unit id="content.type.whatsapp_community.description"><source>Block für den Einstieg in die WhatsApp Community.</source></trans-unit>
+
+      <trans-unit id="plugin.event.title"><source>Männerkreis: Events</source></trans-unit>
+      <trans-unit id="plugin.event.description"><source>Zeigt Terminübersicht, Detailseite und Anmeldung für Events.</source></trans-unit>
+      <trans-unit id="plugin.newsletter.title"><source>Männerkreis: Newsletter</source></trans-unit>
+      <trans-unit id="plugin.newsletter.description"><source>Newsletter-Formular mit Anmeldung und tokenbasierter Abmeldung.</source></trans-unit>
+      <trans-unit id="plugin.testimonial.title"><source>Männerkreis: Testimonials</source></trans-unit>
+      <trans-unit id="plugin.testimonial.description"><source>Zeigt Testimonials und erlaubt neue Erfahrungsberichte einzureichen.</source></trans-unit>
+    </body>
+  </file>
+</xliff>

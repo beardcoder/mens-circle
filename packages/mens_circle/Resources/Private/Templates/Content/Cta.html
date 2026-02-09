@@ -1,0 +1,32 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<section class="section section--lg cta-section">
+    <div class="container">
+        <div class="cta__content fade-in">
+            <f:if condition="{data.subheader}">
+                <p class="eyebrow">{data.subheader}</p>
+            </f:if>
+
+            <f:if condition="{data.header}">
+                <h2 class="section-title cta__title">
+                    <f:format.raw>{data.header}</f:format.raw>
+                </h2>
+            </f:if>
+
+            <f:if condition="{data.bodytext}">
+                <div class="cta__text">
+                    <f:format.raw>{data.bodytext}</f:format.raw>
+                </div>
+            </f:if>
+
+            <f:if condition="{data.header_link}">
+                <f:link.typolink parameter="{data.header_link}" class="btn btn--primary btn--lg">
+                    <f:if condition="{flexFormData.settings.buttonLabel}">
+                        <f:then>{flexFormData.settings.buttonLabel}</f:then>
+                        <f:else>Jetzt teilnehmen</f:else>
+                    </f:if>
+                </f:link.typolink>
+            </f:if>
+        </div>
+    </div>
+</section>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "markussommer/mens-circle-sitepackage",
+  "version": "1.0.0",
+  "description": "TYPO3 Sitepackage and business logic for Männerkreis Niederbayern/ Straubing",
+  "type": "typo3-cms-extension",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Markus Sommer"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "typo3/cms-backend": "^14.1",
+    "typo3/cms-core": "^14.1",
+    "typo3/cms-extbase": "^14.1",
+    "typo3/cms-fluid": "^14.1",
+    "typo3/cms-frontend": "^14.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "MarkusSommer\\MensCircle\\": "Classes/"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "mens_circle"
+    }
+  }
+}

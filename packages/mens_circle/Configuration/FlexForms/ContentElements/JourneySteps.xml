@@ -1,0 +1,39 @@
+<T3DataStructure>
+  <sheets>
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>Ablauf Schritte</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <settings.subtitle>
+            <label>Untertitel</label>
+            <config>
+              <type>input</type>
+              <size>40</size>
+            </config>
+          </settings.subtitle>
+          <settings.step1Number><label>Schritt 1: Nummer</label><config><type>input</type><size>10</size></config></settings.step1Number>
+          <settings.step1Title><label>Schritt 1: Titel</label><config><type>input</type><size>40</size></config></settings.step1Title>
+          <settings.step1Description><label>Schritt 1: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.step1Description>
+          <settings.step2Number><label>Schritt 2: Nummer</label><config><type>input</type><size>10</size></config></settings.step2Number>
+          <settings.step2Title><label>Schritt 2: Titel</label><config><type>input</type><size>40</size></config></settings.step2Title>
+          <settings.step2Description><label>Schritt 2: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.step2Description>
+          <settings.step3Number><label>Schritt 3: Nummer</label><config><type>input</type><size>10</size></config></settings.step3Number>
+          <settings.step3Title><label>Schritt 3: Titel</label><config><type>input</type><size>40</size></config></settings.step3Title>
+          <settings.step3Description><label>Schritt 3: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.step3Description>
+          <settings.step4Number><label>Schritt 4: Nummer</label><config><type>input</type><size>10</size></config></settings.step4Number>
+          <settings.step4Title><label>Schritt 4: Titel</label><config><type>input</type><size>40</size></config></settings.step4Title>
+          <settings.step4Description><label>Schritt 4: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.step4Description>
+          <settings.step5Number><label>Schritt 5: Nummer</label><config><type>input</type><size>10</size></config></settings.step5Number>
+          <settings.step5Title><label>Schritt 5: Titel</label><config><type>input</type><size>40</size></config></settings.step5Title>
+          <settings.step5Description><label>Schritt 5: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.step5Description>
+          <settings.step6Number><label>Schritt 6: Nummer</label><config><type>input</type><size>10</size></config></settings.step6Number>
+          <settings.step6Title><label>Schritt 6: Titel</label><config><type>input</type><size>40</size></config></settings.step6Title>
+          <settings.step6Description><label>Schritt 6: Beschreibung</label><config><type>text</type><rows>2</rows><cols>40</cols></config></settings.step6Description>
+        </el>
+      </ROOT>
+    </sDEF>
+  </sheets>
+</T3DataStructure>

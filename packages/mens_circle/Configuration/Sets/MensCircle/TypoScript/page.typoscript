@@ -1,0 +1,26 @@
+lib.fluidPage = PAGEVIEW
+lib.fluidPage {
+  paths.10 = EXT:mens_circle/Resources/Private/Templates/
+
+  dataProcessing {
+    5 = page-content
+    5.as = content
+
+    10 = menu
+    10 {
+      as = mainMenu
+      levels = 2
+      expandAll = 1
+    }
+
+    20 = menu
+    20 {
+      special = rootline
+      as = breadcrumb
+      dataProcessing.10 = record-transformation
+    }
+
+    30 = site
+    30.as = site
+  }
+}

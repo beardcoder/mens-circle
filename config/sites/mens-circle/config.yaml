@@ -1,0 +1,82 @@
+base: /
+dependencies:
+  - markussommer/mens-circle
+languages:
+  -
+    title: Deutsch
+    enabled: true
+    languageId: 0
+    base: /
+    typo3Language: de
+    locale: de_DE.UTF-8
+    iso-639-1: de
+    navigationTitle: Deutsch
+    hreflang: de-DE
+    direction: ltr
+    flag: de
+rootPageId: 1
+routeEnhancers:
+  MensCircleEvent:
+    type: Extbase
+    extension: MensCircle
+    plugin: Event
+    defaultController: 'Event::list'
+    routes:
+      -
+        routePath: '/{event}'
+        _controller: 'Event::show'
+        _arguments:
+          event: event
+      -
+        routePath: '/success/{event}'
+        _controller: 'Event::registerSuccess'
+        _arguments:
+          event: event
+      -
+        routePath: '/ical/{event}'
+        _controller: 'Event::ical'
+        _arguments:
+          event: event
+    aspects:
+      event:
+        type: PersistedAliasMapper
+        tableName: tx_menscircle_domain_model_event
+        routeFieldName: slug
+  MensCircleNewsletter:
+    type: Extbase
+    extension: MensCircle
+    plugin: Newsletter
+    defaultController: 'Newsletter::form'
+    routes:
+      -
+        routePath: '/abmeldung/{token}'
+        _controller: 'Newsletter::unsubscribe'
+        _arguments:
+          token: token
+    aspects:
+      token:
+        type: PersistedAliasMapper
+        tableName: tx_menscircle_domain_model_newslettersubscription
+        routeFieldName: token
+  MensCircleTestimonial:
+    type: Extbase
+    extension: MensCircle
+    plugin: Testimonial
+    defaultController: 'Testimonial::list'
+    routes:
+      -
+        routePath: /formular
+        _controller: 'Testimonial::form'
+      -
+        routePath: /danke
+        _controller: 'Testimonial::thanks'
+settings:
+  mensCircle:
+    siteName: 'Männerkreis Niederbayern/ Straubing'
+    contactEmail: hallo@example.com
+    baseUrl: 'https://mens-circle.local/'
+    theme: earth
+    storagePid: 2
+    newsletterPid: 4
+    whatsappCommunityLink: ''
+websiteTitle: 'Männerkreis Niederbayern/ Straubing'
