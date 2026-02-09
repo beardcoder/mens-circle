@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xliff version="2.0" srcLang="de" xmlns="urn:oasis:names:tc:xliff:document:2.0">
+<xliff version="2.0" srcLang="de" trgLang="en" xmlns="urn:oasis:names:tc:xliff:document:2.0">
   <file id="messages" original="messages">
     <unit id="site.name">
       <segment>
         <source>Männerkreis Niederbayern/ Straubing</source>
+        <target>Mens Circle Lower Bavaria / Straubing</target>
       </segment>
     </unit>
     <unit id="event.register.success">
       <segment>
         <source>Danke, deine Anmeldung war erfolgreich.</source>
+        <target>Thank you, your registration was successful.</target>
       </segment>
     </unit>
     <unit id="testimonial.thanks">
       <segment>
         <source>Danke, deine Erfahrung wurde eingereicht.</source>
+        <target>Thank you, your testimonial has been submitted.</target>
       </segment>
     </unit>
     <unit id="setup.theme.menscircle">
       <segment>
         <source>Männerkreis</source>
+        <target>Mens Circle</target>
       </segment>
     </unit>
   </file>

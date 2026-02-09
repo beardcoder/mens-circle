@@ -1,64 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xliff version="2.0" srcLang="de" xmlns="urn:oasis:names:tc:xliff:document:2.0">
+<xliff version="2.0" srcLang="de" trgLang="en" xmlns="urn:oasis:names:tc:xliff:document:2.0">
   <file id="messages" original="messages">
     <unit id="mlang_tabs_tab">
       <segment>
         <source>Newsletter Versand</source>
+        <target>Newsletter Delivery</target>
       </segment>
     </unit>
     <unit id="mlang_labels_tabdescr">
       <segment>
         <source>Newsletter an aktive Abonnenten versenden</source>
+        <target>Send newsletters to active subscribers.</target>
       </segment>
     </unit>
     <unit id="mlang_labels_tablabel">
       <segment>
         <source>Newsletter Versand</source>
+        <target>Newsletter Delivery</target>
       </segment>
     </unit>
     <unit id="headline">
       <segment>
         <source>Newsletter versenden</source>
+        <target>Send Newsletter</target>
       </segment>
     </unit>
     <unit id="description">
       <segment>
         <source>Versendet den Newsletter direkt aus dem TYPO3 Backend über den TYPO3 Message Bus.</source>
+        <target>Sends the newsletter from TYPO3 Backend via the TYPO3 Message Bus.</target>
       </segment>
     </unit>
     <unit id="recipients.label">
       <segment>
         <source>Aktive Empfänger</source>
+        <target>Active Recipients</target>
       </segment>
     </unit>
     <unit id="recipients.column.name">
       <segment>
         <source>Name</source>
+        <target>Name</target>
       </segment>
     </unit>
     <unit id="recipients.column.email">
       <segment>
         <source>E-Mail</source>
+        <target>Email</target>
       </segment>
     </unit>
     <unit id="recipients.none">
       <segment>
         <source>Es sind aktuell keine aktiven Newsletter-Abonnenten vorhanden.</source>
+        <target>There are currently no active newsletter subscribers.</target>
       </segment>
     </unit>
     <unit id="field.subject">
       <segment>
         <source>Betreff</source>
+        <target>Subject</target>
       </segment>
     </unit>
     <unit id="field.content">
       <segment>
         <source>Inhalt</source>
+        <target>Content</target>
       </segment>
     </unit>
     <unit id="button.send">
       <segment>
         <source>Newsletter über Message Bus senden</source>
+        <target>Send newsletter via Message Bus</target>
       </segment>
     </unit>
   </file>

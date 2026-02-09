@@ -1,0 +1,56 @@
+[data-theme=menscircle] {
+  --typo3-color-neutral-mix: 16%;
+  --token-color-primary-base: #ba6b4c;
+  --token-color-secondary-base: #51675a;
+  --typo3-scaffold-header-color: #f4ede2;
+  --typo3-scaffold-header-bg: light-dark(#3a2d25, #221a15);
+  --typo3-scaffold-header-box-shadow: none;
+  --typo3-scaffold-sidebar-color: #f1e8dd;
+  --typo3-scaffold-sidebar-bg: light-dark(#2e241e, #1c1511);
+  --typo3-scaffold-sidebar-border-width: 0;
+  --typo3-scaffold-bg: light-dark(#f8f4ef, #17110e);
+}
+
+[data-theme=menscircle] .scaffold-sidebar {
+  --typo3-icons-accent: light-dark(#e6b08f, #d8926b);
+}
+
+[data-theme=menscircle] .topbar {
+  --topbar-item-hover-bg: color-mix(in srgb, var(--topbar-item-bg), #ffffff 12%);
+  --topbar-item-focus-bg: color-mix(in srgb, var(--topbar-item-bg), #ffffff 18%);
+}
+
+[data-theme=menscircle] .modulemenu-item.active > .modulemenu-action {
+  background-color: color-mix(in srgb, var(--token-color-primary-40), transparent 72%);
+  border-color: color-mix(in srgb, var(--token-color-primary-30), transparent 52%);
+}
+
+[data-theme=menscircle] .topbar-site-name {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+@media (min-width: 992px) {
+  [data-theme=menscircle] .scaffold-content::before {
+    --size: 1rem;
+    position: absolute;
+    z-index: calc(var(--typo3-zindex-header) + 2);
+    top: calc(var(--size) * -1);
+    inset-inline-start: calc(var(--size) * -1);
+    width: calc(var(--size) * 2);
+    height: calc(var(--size) * 2);
+    content: '';
+    user-select: none;
+    background-color: var(--typo3-scaffold-sidebar-bg);
+    -webkit-mask: radial-gradient(
+      circle at 100% 100%,
+      transparent calc(var(--size) - 0.5px),
+      #000 calc(var(--size) + 0.5px)
+    );
+    mask: radial-gradient(
+      circle at 100% 100%,
+      transparent calc(var(--size) - 0.5px),
+      #000 calc(var(--size) + 0.5px)
+    );
+  }
+}

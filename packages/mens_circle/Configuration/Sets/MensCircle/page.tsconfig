@@ -100,7 +100,7 @@ mod.wizards.newContentElement.wizardItems.plugins {
     menscircle_event {
       iconIdentifier = plugin-menscircle-event
       title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event.title
-      description = Zeigt kommenden Termin, Eventdetails und Anmeldung.
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event.description
       tt_content_defValues {
         CType = menscircle_event
       }
@@ -108,7 +108,7 @@ mod.wizards.newContentElement.wizardItems.plugins {
     menscircle_newsletter {
       iconIdentifier = plugin-menscircle-newsletter
       title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.newsletter.title
-      description = Newsletter-Anmeldung und Abmelde-Handling.
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.newsletter.description
       tt_content_defValues {
         CType = menscircle_newsletter
       }
@@ -116,7 +116,7 @@ mod.wizards.newContentElement.wizardItems.plugins {
     menscircle_testimonial {
       iconIdentifier = plugin-menscircle-testimonial
       title = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial.title
-      description = Testimonials anzeigen und neue Erfahrungsberichte erfassen.
+      description = LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial.description
       tt_content_defValues {
         CType = menscircle_testimonial
       }

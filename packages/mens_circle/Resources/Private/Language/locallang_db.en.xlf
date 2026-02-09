@@ -1,459 +1,550 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="de">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="de" trgLang="en">
   <file id="messages" original="messages">
     <unit id="table.event">
       <segment>
         <source>Event</source>
+        <target>Event</target>
       </segment>
     </unit>
     <unit id="table.event.plural">
       <segment>
         <source>Events</source>
+        <target>Events</target>
       </segment>
     </unit>
     <unit id="table.event.title">
       <segment>
         <source>Titel</source>
+        <target>Title</target>
       </segment>
     </unit>
     <unit id="table.event.slug">
       <segment>
         <source>Slug</source>
+        <target>Slug</target>
       </segment>
     </unit>
     <unit id="table.event.teaser">
       <segment>
         <source>Teaser</source>
+        <target>Teaser</target>
       </segment>
     </unit>
     <unit id="table.event.description">
       <segment>
         <source>Beschreibung</source>
+        <target>Description</target>
       </segment>
     </unit>
     <unit id="table.event.event_date">
       <segment>
         <source>Datum</source>
+        <target>Date</target>
       </segment>
     </unit>
     <unit id="table.event.start_time">
       <segment>
         <source>Startzeit</source>
+        <target>Start time</target>
       </segment>
     </unit>
     <unit id="table.event.end_time">
       <segment>
         <source>Endzeit</source>
+        <target>End time</target>
       </segment>
     </unit>
     <unit id="table.event.location">
       <segment>
         <source>Ort</source>
+        <target>Location</target>
       </segment>
     </unit>
     <unit id="table.event.street">
       <segment>
         <source>Straße</source>
+        <target>Street</target>
       </segment>
     </unit>
     <unit id="table.event.postal_code">
       <segment>
         <source>PLZ</source>
+        <target>ZIP code</target>
       </segment>
     </unit>
     <unit id="table.event.city">
       <segment>
         <source>Stadt</source>
+        <target>City</target>
       </segment>
     </unit>
     <unit id="table.event.location_details">
       <segment>
         <source>Ort-Details</source>
+        <target>Location details</target>
       </segment>
     </unit>
     <unit id="table.event.max_participants">
       <segment>
         <source>Max. Teilnehmer</source>
+        <target>Max participants</target>
       </segment>
     </unit>
     <unit id="table.event.cost_basis">
       <segment>
         <source>Kostenbasis</source>
+        <target>Cost basis</target>
       </segment>
     </unit>
     <unit id="table.event.is_published">
       <segment>
         <source>Veröffentlicht</source>
+        <target>Published</target>
       </segment>
     </unit>
     <unit id="table.event.image">
       <segment>
         <source>Titelbild</source>
+        <target>Cover image</target>
       </segment>
     </unit>
     <unit id="table.event.registrations">
       <segment>
         <source>Anmeldungen</source>
+        <target>Registrations</target>
       </segment>
     </unit>
     <unit id="table.participant">
       <segment>
         <source>Teilnehmer</source>
+        <target>Participant</target>
       </segment>
     </unit>
     <unit id="table.participant.plural">
       <segment>
         <source>Teilnehmer</source>
+        <target>Participants</target>
       </segment>
     </unit>
     <unit id="table.participant.first_name">
       <segment>
         <source>Vorname</source>
+        <target>First name</target>
       </segment>
     </unit>
     <unit id="table.participant.last_name">
       <segment>
         <source>Nachname</source>
+        <target>Last name</target>
       </segment>
     </unit>
     <unit id="table.participant.email">
       <segment>
         <source>E-Mail</source>
+        <target>Email</target>
       </segment>
     </unit>
     <unit id="table.participant.phone">
       <segment>
         <source>Telefon</source>
+        <target>Phone</target>
       </segment>
     </unit>
     <unit id="table.registration">
       <segment>
         <source>Anmeldung</source>
+        <target>Registration</target>
       </segment>
     </unit>
     <unit id="table.registration.plural">
       <segment>
         <source>Anmeldungen</source>
+        <target>Registrations</target>
       </segment>
     </unit>
     <unit id="table.registration.event">
       <segment>
         <source>Event</source>
+        <target>Event</target>
       </segment>
     </unit>
     <unit id="table.registration.participant">
       <segment>
         <source>Teilnehmer</source>
+        <target>Participant</target>
       </segment>
     </unit>
     <unit id="table.registration.status">
       <segment>
         <source>Status</source>
+        <target>Status</target>
       </segment>
     </unit>
     <unit id="table.registration.status.registered">
       <segment>
         <source>Angemeldet</source>
+        <target>Registered</target>
       </segment>
     </unit>
     <unit id="table.registration.status.attended">
       <segment>
         <source>Teilgenommen</source>
+        <target>Attended</target>
       </segment>
     </unit>
     <unit id="table.registration.status.cancelled">
       <segment>
         <source>Storniert</source>
+        <target>Cancelled</target>
       </segment>
     </unit>
     <unit id="table.registration.registered_at">
       <segment>
         <source>Angemeldet am</source>
+        <target>Registered at</target>
       </segment>
     </unit>
     <unit id="table.registration.cancelled_at">
       <segment>
         <source>Storniert am</source>
+        <target>Cancelled at</target>
       </segment>
     </unit>
     <unit id="table.newslettersubscription">
       <segment>
         <source>Newsletter-Abo</source>
+        <target>Newsletter subscription</target>
       </segment>
     </unit>
     <unit id="table.newslettersubscription.plural">
       <segment>
         <source>Newsletter-Abos</source>
+        <target>Newsletter subscriptions</target>
       </segment>
     </unit>
     <unit id="table.newslettersubscription.participant">
       <segment>
         <source>Teilnehmer</source>
+        <target>Participant</target>
       </segment>
     </unit>
     <unit id="table.newslettersubscription.token">
       <segment>
         <source>Token</source>
+        <target>Token</target>
       </segment>
     </unit>
     <unit id="table.newslettersubscription.subscribed_at">
       <segment>
         <source>Angemeldet am</source>
+        <target>Subscribed at</target>
       </segment>
     </unit>
     <unit id="table.newslettersubscription.confirmed_at">
       <segment>
         <source>Bestätigt am</source>
+        <target>Confirmed at</target>
       </segment>
     </unit>
     <unit id="table.newslettersubscription.unsubscribed_at">
       <segment>
         <source>Abgemeldet am</source>
+        <target>Unsubscribed at</target>
       </segment>
     </unit>
     <unit id="table.testimonial">
       <segment>
         <source>Testimonial</source>
+        <target>Testimonial</target>
       </segment>
     </unit>
     <unit id="table.testimonial.plural">
       <segment>
         <source>Testimonials</source>
+        <target>Testimonials</target>
       </segment>
     </unit>
     <unit id="table.testimonial.quote">
       <segment>
         <source>Erfahrung</source>
+        <target>Testimonial</target>
       </segment>
     </unit>
     <unit id="table.testimonial.author_name">
       <segment>
         <source>Name</source>
+        <target>Name</target>
       </segment>
     </unit>
     <unit id="table.testimonial.email">
       <segment>
         <source>E-Mail</source>
+        <target>Email</target>
       </segment>
     </unit>
     <unit id="table.testimonial.role">
       <segment>
         <source>Rolle</source>
+        <target>Role</target>
       </segment>
     </unit>
     <unit id="table.testimonial.is_published">
       <segment>
         <source>Veröffentlicht</source>
+        <target>Published</target>
       </segment>
     </unit>
     <unit id="table.testimonial.published_at">
       <segment>
         <source>Veröffentlicht am</source>
+        <target>Published at</target>
       </segment>
     </unit>
     <unit id="table.testimonial.sort_order">
       <segment>
         <source>Sortierung</source>
+        <target>Sorting</target>
       </segment>
     </unit>
     <unit id="content.group.title">
       <segment>
         <source>Männerkreis Inhalte</source>
+        <target>Mens Circle Content</target>
       </segment>
     </unit>
     <unit id="content.type.hero.title">
       <segment>
         <source>Hero Bereich</source>
+        <target>Hero Section</target>
       </segment>
     </unit>
     <unit id="content.type.hero.description">
       <segment>
         <source>Großer Einstiegsbereich mit Bild, Text und Hauptlink.</source>
+        <target>Large entry section with image, text, and primary link.</target>
       </segment>
     </unit>
     <unit id="content.type.intro.title">
       <segment>
         <source>Intro Bereich</source>
+        <target>Intro Section</target>
       </segment>
     </unit>
     <unit id="content.type.intro.description">
       <segment>
         <source>Einführung mit optionalem Zitat und bis zu vier Werten.</source>
+        <target>Intro section with optional quote and up to four values.</target>
       </segment>
     </unit>
     <unit id="content.type.text_section.title">
       <segment>
         <source>Text Bereich</source>
+        <target>Text Section</target>
       </segment>
     </unit>
     <unit id="content.type.text_section.description">
       <segment>
         <source>Einfacher Inhaltsblock mit Titel und Richtext.</source>
+        <target>Simple content block with heading and rich text.</target>
       </segment>
     </unit>
     <unit id="content.type.value_items.title">
       <segment>
         <source>Werte Liste</source>
+        <target>Value List</target>
       </segment>
     </unit>
     <unit id="content.type.value_items.description">
       <segment>
         <source>Liste mit bis zu sechs Werte-Einträgen.</source>
+        <target>List with up to six value items.</target>
       </segment>
     </unit>
     <unit id="content.type.moderator.title">
       <segment>
         <source>Moderator Bereich</source>
+        <target>Moderator Section</target>
       </segment>
     </unit>
     <unit id="content.type.moderator.description">
       <segment>
         <source>Vorstellung mit Bild, Text und Zitat.</source>
+        <target>Profile section with image, text, and quote.</target>
       </segment>
     </unit>
     <unit id="content.type.journey_steps.title">
       <segment>
         <source>Ablauf Schritte</source>
+        <target>Journey Steps</target>
       </segment>
     </unit>
     <unit id="content.type.journey_steps.description">
       <segment>
         <source>Schritt-für-Schritt Darstellung mit bis zu sechs Schritten.</source>
+        <target>Step-by-step presentation with up to six steps.</target>
       </segment>
     </unit>
     <unit id="content.type.testimonials.title">
       <segment>
         <source>Testimonials Bereich</source>
+        <target>Testimonials Section</target>
       </segment>
     </unit>
     <unit id="content.type.testimonials.description">
       <segment>
         <source>Zeigt veröffentlichte Testimonials aus der Datenbank.</source>
+        <target>Shows published testimonials from the database.</target>
       </segment>
     </unit>
     <unit id="content.type.faq.title">
       <segment>
         <source>FAQ Bereich</source>
+        <target>FAQ Section</target>
       </segment>
     </unit>
     <unit id="content.type.faq.description">
       <segment>
         <source>Fragen und Antworten als aufklappbare Elemente.</source>
+        <target>Questions and answers as collapsible items.</target>
       </segment>
     </unit>
     <unit id="content.type.newsletter.title">
       <segment>
         <source>Newsletter Bereich</source>
+        <target>Newsletter Section</target>
       </segment>
     </unit>
     <unit id="content.type.newsletter.description">
       <segment>
         <source>Newsletter Call-to-Action mit Datenschutzhinweis.</source>
+        <target>Newsletter call-to-action with privacy notice.</target>
       </segment>
     </unit>
     <unit id="content.type.cta.title">
       <segment>
         <source>Call to Action</source>
+        <target>Call to Action</target>
       </segment>
     </unit>
     <unit id="content.type.cta.description">
       <segment>
         <source>Handlungsaufruf mit Titel, Text und Button-Link.</source>
+        <target>Call-to-action with title, text, and button link.</target>
       </segment>
     </unit>
     <unit id="content.type.whatsapp_community.title">
       <segment>
         <source>WhatsApp Community</source>
+        <target>WhatsApp Community</target>
       </segment>
     </unit>
     <unit id="content.type.whatsapp_community.description">
       <segment>
         <source>Block für den Einstieg in die WhatsApp Community.</source>
+        <target>Section for joining the WhatsApp community.</target>
       </segment>
     </unit>
     <unit id="plugin.event.title">
       <segment>
         <source>Männerkreis: Events</source>
+        <target>Mens Circle: Events</target>
       </segment>
     </unit>
     <unit id="plugin.event.description">
       <segment>
         <source>Zeigt Terminübersicht, Detailseite und Anmeldung für Events.</source>
+        <target>Shows event overview, detail page, and event registration.</target>
       </segment>
     </unit>
     <unit id="plugin.newsletter.title">
       <segment>
         <source>Männerkreis: Newsletter</source>
+        <target>Mens Circle: Newsletter</target>
       </segment>
     </unit>
     <unit id="plugin.newsletter.description">
       <segment>
         <source>Newsletter-Formular mit Anmeldung und tokenbasierter Abmeldung.</source>
+        <target>Newsletter form with signup and token-based unsubscribe.</target>
       </segment>
     </unit>
     <unit id="plugin.testimonial.title">
       <segment>
         <source>Männerkreis: Testimonials</source>
+        <target>Mens Circle: Testimonials</target>
       </segment>
     </unit>
     <unit id="plugin.testimonial.description">
       <segment>
         <source>Zeigt Testimonials und erlaubt neue Erfahrungsberichte einzureichen.</source>
+        <target>Shows testimonials and allows submitting new reports.</target>
       </segment>
     </unit>
     <unit id="dashboard.group.menscircle">
       <segment>
         <source>Männerkreis</source>
+        <target>Mens Circle</target>
       </segment>
     </unit>
     <unit id="dashboard.preset.events.title">
       <segment>
         <source>Männerkreis Events</source>
+        <target>Mens Circle Events</target>
       </segment>
     </unit>
     <unit id="dashboard.preset.events.description">
       <segment>
         <source>Wichtige Kennzahlen und das nächste Event im Überblick.</source>
+        <target>Key metrics and the next event at a glance.</target>
       </segment>
     </unit>
     <unit id="dashboard.widget.upcomingEvents.title">
       <segment>
         <source>Kommende Events</source>
+        <target>Upcoming Events</target>
       </segment>
     </unit>
     <unit id="dashboard.widget.upcomingEvents.subtitle">
       <segment>
         <source>Veröffentlichte Termine ab heute</source>
+        <target>Published events from today</target>
       </segment>
     </unit>
     <unit id="dashboard.widget.upcomingEvents.description">
       <segment>
         <source>Anzahl kommender, veröffentlichter Events.</source>
+        <target>Number of upcoming, published events.</target>
       </segment>
     </unit>
     <unit id="dashboard.widget.upcomingRegistrations.title">
       <segment>
         <source>Aktive Anmeldungen</source>
+        <target>Active Registrations</target>
       </segment>
     </unit>
     <unit id="dashboard.widget.upcomingRegistrations.subtitle">
       <segment>
         <source>Für kommende Events</source>
+        <target>For upcoming events</target>
       </segment>
     </unit>
     <unit id="dashboard.widget.upcomingRegistrations.description">
       <segment>
         <source>Anzahl aktiver Anmeldungen für kommende Events.</source>
+        <target>Number of active registrations for upcoming events.</target>
       </segment>
     </unit>
     <unit id="dashboard.widget.nextEvent.title">
       <segment>
         <source>Nächstes Event</source>
+        <target>Next Event</target>
       </segment>
     </unit>
     <unit id="dashboard.widget.nextEvent.description">
       <segment>
         <source>Zeigt das zeitlich nächste veröffentlichte Event.</source>
+        <target>Shows the chronologically next published event.</target>
       </segment>
     </unit>
   </file>

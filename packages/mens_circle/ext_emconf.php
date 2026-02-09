@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'Männerkreis Sitepackage',
-    'description' => 'Core-nahes TYPO3-Sitepackage mit Events, Newsletter und Testimonials.',
+    'title' => 'Mens Circle Sitepackage',
+    'description' => 'Core-oriented TYPO3 sitepackage with events, newsletter, and testimonials.',
     'category' => 'plugin',
     'author' => 'Markus Sommer',
     'author_email' => '',

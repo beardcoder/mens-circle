@@ -8,6 +8,7 @@ use MarkusSommer\MensCircle\Controller\TestimonialController;
 use MarkusSommer\MensCircle\Message\SendEventMailMessage;
 use MarkusSommer\MensCircle\Message\SendEventSmsMessage;
 use MarkusSommer\MensCircle\Message\SendNewsletterMessage;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') or die();
@@ -49,3 +50,10 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'] ??= [];
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'][SendNewsletterMessage::class] = 'doctrine';
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'][SendEventMailMessage::class] = 'doctrine';
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'][SendEventSmsMessage::class] = 'doctrine';
+
+$GLOBALS['TYPO3_CONF_VARS']['BE']['stylesheets']['menscircle-backend-theme']
+    = 'EXT:mens_circle/Resources/Public/Css/backend-theme.css';
+
+ExtensionManagementUtility::addUserTSConfig('
+setup.fields.theme.default = menscircle
+');

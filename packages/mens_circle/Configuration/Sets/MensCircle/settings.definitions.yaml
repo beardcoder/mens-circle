@@ -1,20 +1,20 @@
 categories:
   mensCircle:
-    label: 'Männerkreis'
+    label: 'Mens Circle'
 
 settings:
   mensCircle.siteName:
-    label: 'Seitenname'
+    label: 'Site name'
     category: mensCircle
     type: string
     default: 'Männerkreis Niederbayern/ Straubing'
   mensCircle.contactEmail:
-    label: 'Kontakt E-Mail'
+    label: 'Contact email'
     category: mensCircle
     type: string
     default: 'hallo@example.com'
   mensCircle.baseUrl:
-    label: 'Basis-URL für Links in E-Mails'
+    label: 'Base URL for links in emails'
     category: mensCircle
     type: string
     default: ''
@@ -43,12 +43,12 @@ settings:
     type: string
     default: ''
   mensCircle.smsEnabled:
-    label: 'SMS Benachrichtigungen aktiv'
+    label: 'Enable SMS notifications'
     category: mensCircle
     type: bool
     default: false
   mensCircle.smsSender:
-    label: 'SMS Absender'
+    label: 'SMS sender'
     category: mensCircle
     type: string
     default: 'MensCircle'

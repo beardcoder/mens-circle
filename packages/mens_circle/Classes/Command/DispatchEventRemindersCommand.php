@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 
 #[AsCommand(
     name: 'menscircle:events:dispatch-reminders',
-    description: 'Queuet Erinnerungs-Nachrichten für bevorstehende Events über den TYPO3 Message Bus.'
+    description: 'Queues reminder messages for upcoming events via TYPO3 Message Bus.'
 )]
 final class DispatchEventRemindersCommand extends Command
 {
@@ -41,9 +41,9 @@ final class DispatchEventRemindersCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('hours-before', null, InputOption::VALUE_REQUIRED, 'Wieviele Stunden vor Eventbeginn erinnert wird.', '24')
-            ->addOption('window-minutes', null, InputOption::VALUE_REQUIRED, 'Zeitfenster in Minuten fuer den Dispatch.', '120')
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Nur pruefen, keine Nachrichten dispatchen.');
+            ->addOption('hours-before', null, InputOption::VALUE_REQUIRED, 'Hours before event start when reminders are sent.', '24')
+            ->addOption('window-minutes', null, InputOption::VALUE_REQUIRED, 'Dispatch time window in minutes.', '120')
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Validate only, do not dispatch messages.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
