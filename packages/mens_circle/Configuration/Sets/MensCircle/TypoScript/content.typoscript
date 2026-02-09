@@ -1,6 +1,9 @@
-lib.mensCircleContentElement =< lib.contentElement
+lib.mensCircleContentElement = FLUIDTEMPLATE
 lib.mensCircleContentElement {
   templateRootPaths.200 = EXT:mens_circle/Resources/Private/Templates/Content/
+  partialRootPaths.200 = EXT:mens_circle/Resources/Private/Templates/Partials/
+  layoutRootPaths.200 = EXT:mens_circle/Resources/Private/Templates/Layouts/
+  templateName = Default
 
   dataProcessing {
     10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor

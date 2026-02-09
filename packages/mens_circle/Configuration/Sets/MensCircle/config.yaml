@@ -1,6 +1,5 @@
 name: markussommer/mens-circle
 label: 'Mens Circle Site Set'
 dependencies:
-  - typo3/fluid-styled-content
   - typo3/form
   - typo3/seo-sitemap
