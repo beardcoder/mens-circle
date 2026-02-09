@@ -70,3 +70,75 @@ bun run build
 - Nicht schreibende Seiten/Plugins bleiben cachebar.
 - Nur Submit-Actions sind non-cacheable.
 - CSS/JS werden über Vite gebaut und als statische Dateien aus `EXT:mens_circle/Resources/Public/Build` ausgeliefert.
+
+## Prompt: TYPO3 Core-nahe Icon-Erstellung
+
+```markdown
+Du bist Senior Product Icon Designer mit Fokus auf TYPO3 Backend-Icons.
+
+Ziel:
+Erstelle ein konsistentes SVG-Iconset fuer EXT:mens_circle, das stilistisch zu TYPO3 Core Icons passt:
+- klar, reduziert, technisch sauber
+- 1-farbige Vektoricons
+- 16x16 Grid als Primarrahmen
+- auch in 32x32 sauber skalierend
+- keine Farbverlaeufe, keine Schatten, keine 3D-Effekte
+- Strichstaerke optisch konsistent (ca. 1.5-1.75px bei 16x16)
+- runde Kappen/Ecken nur wenn sinnvoll
+
+Visueller Stil:
+- geometrisch, ruhige Formen, gute Lesbarkeit bei kleiner Groesse
+- positive/negative Flaechen klar trennen
+- typo3-core-aehnliche Semantik statt illustrativer Details
+
+Kontext:
+Die Icons werden in TYPO3 fuer Module, Content-Elemente, Plugins und Datensaetze genutzt.
+Dateien muessen direkt als `SvgIconProvider` funktionieren.
+
+Erzeuge Icons fuer:
+1) Backend Module
+- events
+- newsletter
+
+2) Content Elemente
+- hero
+- intro
+- text-section
+- value-items
+- moderator
+- journey-steps
+- testimonials
+- faq
+- newsletter
+- cta
+- whatsapp
+
+3) Plugins
+- event
+- newsletter
+- testimonial
+
+4) Domain Datensaetze
+- event
+- participant
+- registration
+- newsletter-subscription
+- testimonial
+
+Technische Vorgaben:
+- reines SVG, kein eingebettetes Rasterbild
+- `viewBox="0 0 16 16"` bevorzugt
+- moeglichst wenige Pfade, optimiert fuer Dateigroesse
+- konsistente Benennung nach Dateiname
+- Icons muessen auch invertiert (dark/light backend) lesbar bleiben
+- keine Inline-Styles, nur saubere SVG-Attribute
+
+Output-Format:
+1) Kurze Design-System-Zusammenfassung (5-8 Punkte)
+2) Fuer jedes Icon:
+   - Dateiname
+   - semantische Begruendung in 1 Satz
+   - komplettes SVG in einem eigenen Codeblock
+3) Zum Schluss:
+   - kurze QA-Checkliste fuer TYPO3 (Groesse, Kontrast, Lesbarkeit, Konsistenz)
+```
