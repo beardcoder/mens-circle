@@ -13,8 +13,10 @@ use MarkusSommer\MensCircle\Domain\Repository\EventRepository;
 use MarkusSommer\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
 use MarkusSommer\MensCircle\Domain\Repository\ParticipantRepository;
 use MarkusSommer\MensCircle\Domain\Repository\RegistrationRepository;
-use MarkusSommer\MensCircle\Service\MailService;
+use MarkusSommer\MensCircle\Message\SendEventMailMessage;
+use MarkusSommer\MensCircle\Message\SendEventSmsMessage;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\StreamFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -29,7 +31,7 @@ final class EventController extends ActionController
         private readonly RegistrationRepository $registrationRepository,
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
         private readonly PersistenceManager $persistenceManager,
-        private readonly MailService $mailService,
+        private readonly MessageBusInterface $messageBus,
         private readonly ResponseFactory $httpResponseFactory,
         private readonly StreamFactory $httpStreamFactory
     ) {
@@ -186,7 +188,21 @@ final class EventController extends ActionController
         }
 
         $this->persistenceManager->persistAll();
-        $this->mailService->sendEventRegistrationConfirmation($registration, $event, $this->settings);
+
+        $notificationSettings = is_array($this->settings) ? $this->settings : [];
+        $this->messageBus->dispatch(new SendEventMailMessage(
+            registrationUid: (int) $registration->getUid(),
+            type: SendEventMailMessage::TYPE_REGISTRATION_CONFIRMATION,
+            settings: $notificationSettings
+        ));
+
+        if ($participant->getPhone() !== '') {
+            $this->messageBus->dispatch(new SendEventSmsMessage(
+                registrationUid: (int) $registration->getUid(),
+                type: SendEventSmsMessage::TYPE_REGISTRATION_CONFIRMATION,
+                settings: $notificationSettings
+            ));
+        }
 
         return $this->redirect('registerSuccess', null, null, ['event' => $event->getUid()]);
     }

@@ -15,5 +15,7 @@ plugin.tx_menscircle {
     baseUrl = {$site.configuration.settings.mensCircle.baseUrl}
     newsletterPid = {$site.configuration.settings.mensCircle.newsletterPid}
     whatsappCommunityLink = {$site.configuration.settings.mensCircle.whatsappCommunityLink}
+    smsEnabled = {$site.configuration.settings.mensCircle.smsEnabled}
+    smsSender = {$site.configuration.settings.mensCircle.smsSender}
   }
 }

@@ -32,34 +32,142 @@ final class MailService
             return;
         }
 
-        $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
-        $subject = sprintf('Anmeldung bestätigt: %s', $event->getTitle());
+        $this->sendEventRegistrationConfirmationFromData(
+            [
+                'participantEmail' => $participant->getEmail(),
+                'participantFirstName' => $participant->getFirstName(),
+                'participantLastName' => $participant->getLastName(),
+                'eventTitle' => $event->getTitle(),
+                'eventDate' => $event->getEventDate()?->format('Y-m-d H:i:s') ?? '',
+                'eventStartTime' => $event->getStartTime()?->format('H:i:s') ?? '',
+                'eventLocation' => $event->getLocation(),
+            ],
+            $settings
+        );
+    }
 
-        $date = $event->getEventDate()?->format('d.m.Y') ?? 'tba';
-        $startTime = $event->getStartTime()?->format('H:i') ?? '--:--';
+    /**
+     * @param array{
+     *   participantEmail: string,
+     *   participantFirstName: string,
+     *   participantLastName: string,
+     *   eventTitle: string,
+     *   eventDate: string,
+     *   eventStartTime: string,
+     *   eventLocation: string
+     * } $notificationData
+     * @param array<string, mixed> $settings
+     */
+    public function sendEventRegistrationConfirmationFromData(array $notificationData, array $settings): bool
+    {
+        $participantEmail = strtolower(trim((string) ($notificationData['participantEmail'] ?? '')));
+        if ($participantEmail === '' || !filter_var($participantEmail, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        $firstName = trim((string) ($notificationData['participantFirstName'] ?? ''));
+        $lastName = trim((string) ($notificationData['participantLastName'] ?? ''));
+        $eventTitle = trim((string) ($notificationData['eventTitle'] ?? ''));
+        $eventLocation = trim((string) ($notificationData['eventLocation'] ?? ''));
+
+        $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
+        $subject = sprintf('Anmeldung bestaetigt: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
+
+        $date = $this->formatDate((string) ($notificationData['eventDate'] ?? ''));
+        $startTime = $this->formatTime((string) ($notificationData['eventStartTime'] ?? ''));
 
         $text = implode("\n", [
-            'Servus ' . ($participant->getFirstName() !== '' ? $participant->getFirstName() : 'du'),
+            'Servus ' . ($firstName !== '' ? $firstName : 'du'),
             '',
             'deine Anmeldung war erfolgreich.',
             '',
-            sprintf('Termin: %s am %s um %s Uhr', $event->getTitle(), $date, $startTime),
-            'Ort: ' . $event->getLocation(),
+            sprintf('Termin: %s am %s%s', $eventTitle, $date !== '' ? $date : 'tba', $startTime !== '' ? ' um ' . $startTime . ' Uhr' : ''),
+            'Ort: ' . ($eventLocation !== '' ? $eventLocation : '-'),
             '',
             $siteName,
         ]);
 
         $html = sprintf(
-            '<p>Servus %s,</p><p>deine Anmeldung war erfolgreich.</p><p><strong>Termin:</strong> %s am %s um %s Uhr<br><strong>Ort:</strong> %s</p><p>%s</p>',
-            htmlspecialchars($participant->getFirstName() !== '' ? $participant->getFirstName() : 'du', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($event->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($date, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($startTime, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            htmlspecialchars($event->getLocation(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+            '<p>Servus %s,</p><p>deine Anmeldung war erfolgreich.</p><p><strong>Termin:</strong> %s am %s%s<br><strong>Ort:</strong> %s</p><p>%s</p>',
+            htmlspecialchars($firstName !== '' ? $firstName : 'du', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+            htmlspecialchars($eventTitle, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+            htmlspecialchars($date !== '' ? $date : 'tba', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+            $startTime !== '' ? ' um ' . htmlspecialchars($startTime, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' Uhr' : '',
+            htmlspecialchars($eventLocation !== '' ? $eventLocation : '-', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
             htmlspecialchars($siteName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
         );
 
-        $this->sendMail($participant->getEmail(), $participant->getFullName(), $subject, $text, $html, $settings);
+        return $this->sendMail(
+            $participantEmail,
+            trim($firstName . ' ' . $lastName),
+            $subject,
+            $text,
+            $html,
+            $settings
+        );
+    }
+
+    /**
+     * @param array{
+     *   participantEmail: string,
+     *   participantFirstName: string,
+     *   participantLastName: string,
+     *   eventTitle: string,
+     *   eventDate: string,
+     *   eventStartTime: string,
+     *   eventLocation: string
+     * } $notificationData
+     * @param array<string, mixed> $settings
+     */
+    public function sendEventReminderFromData(array $notificationData, array $settings): bool
+    {
+        $participantEmail = strtolower(trim((string) ($notificationData['participantEmail'] ?? '')));
+        if ($participantEmail === '' || !filter_var($participantEmail, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        $firstName = trim((string) ($notificationData['participantFirstName'] ?? ''));
+        $lastName = trim((string) ($notificationData['participantLastName'] ?? ''));
+        $eventTitle = trim((string) ($notificationData['eventTitle'] ?? ''));
+        $eventLocation = trim((string) ($notificationData['eventLocation'] ?? ''));
+
+        $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
+        $subject = sprintf('Erinnerung: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
+
+        $date = $this->formatDate((string) ($notificationData['eventDate'] ?? ''));
+        $startTime = $this->formatTime((string) ($notificationData['eventStartTime'] ?? ''));
+
+        $text = implode("\n", [
+            'Servus ' . ($firstName !== '' ? $firstName : 'du'),
+            '',
+            'kurze Erinnerung an den Männerkreis Termin.',
+            '',
+            sprintf('Termin: %s am %s%s', $eventTitle, $date !== '' ? $date : 'tba', $startTime !== '' ? ' um ' . $startTime . ' Uhr' : ''),
+            'Ort: ' . ($eventLocation !== '' ? $eventLocation : '-'),
+            '',
+            'Wir freuen uns auf dich.',
+            '',
+            $siteName,
+        ]);
+
+        $html = sprintf(
+            '<p>Servus %s,</p><p>kurze Erinnerung an den Männerkreis Termin.</p><p><strong>Termin:</strong> %s am %s%s<br><strong>Ort:</strong> %s</p><p>Wir freuen uns auf dich.</p><p>%s</p>',
+            htmlspecialchars($firstName !== '' ? $firstName : 'du', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+            htmlspecialchars($eventTitle, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+            htmlspecialchars($date !== '' ? $date : 'tba', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+            $startTime !== '' ? ' um ' . htmlspecialchars($startTime, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' Uhr' : '',
+            htmlspecialchars($eventLocation !== '' ? $eventLocation : '-', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+            htmlspecialchars($siteName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+        );
+
+        return $this->sendMail(
+            $participantEmail,
+            trim($firstName . ' ' . $lastName),
+            $subject,
+            $text,
+            $html,
+            $settings
+        );
     }
 
     /**
@@ -173,6 +281,34 @@ final class MailService
             ]);
 
             return false;
+        }
+    }
+
+    private function formatDate(string $dateValue): string
+    {
+        $dateValue = trim($dateValue);
+        if ($dateValue === '' || $dateValue === '0000-00-00 00:00:00') {
+            return '';
+        }
+
+        try {
+            return (new \DateTimeImmutable($dateValue))->format('d.m.Y');
+        } catch (\Throwable) {
+            return '';
+        }
+    }
+
+    private function formatTime(string $timeValue): string
+    {
+        $timeValue = trim($timeValue);
+        if ($timeValue === '' || $timeValue === '00:00:00') {
+            return '';
+        }
+
+        try {
+            return (new \DateTimeImmutable($timeValue))->format('H:i');
+        } catch (\Throwable) {
+            return '';
         }
     }
 }

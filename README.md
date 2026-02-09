@@ -71,6 +71,36 @@ bun run build
 - Nur Submit-Actions sind non-cacheable.
 - CSS/JS werden über Vite gebaut und als statische Dateien aus `EXT:mens_circle/Resources/Public/Build` ausgeliefert.
 
+## Asynchrone Benachrichtigungen (Messenger)
+
+- Newsletter, Event-Bestaetigung und Event-Reminder werden an den TYPO3 Message Bus uebergeben.
+- Routing ist auf `doctrine` gesetzt (Queue in DB), daher muss der Worker laufen.
+
+```bash
+vendor/bin/typo3 messenger:consume doctrine
+```
+
+Reminder-Dispatch (nur Queueing, Versand erfolgt im Worker):
+
+```bash
+vendor/bin/typo3 menscircle:events:dispatch-reminders --hours-before=24 --window-minutes=120
+```
+
+Dry-Run:
+
+```bash
+vendor/bin/typo3 menscircle:events:dispatch-reminders --dry-run
+```
+
+## SMS Konfiguration
+
+- SMS Versand ist optional und laeuft asynchron ueber den Message Bus.
+- Konfiguration in Extension Settings (`ext_conf_template.txt`) oder per Umgebungsvariable:
+
+```bash
+export MENSCIRCLE_SMS_API_KEY="dein-key"
+```
+
 ## Prompt: TYPO3 Core-nahe Icon-Erstellung
 
 ```markdown

@@ -150,6 +150,7 @@ final class EventBackendController extends ActionController
             )
             ->from(self::EVENT_TABLE)
             ->orderBy('event_date', 'ASC')
+            ->addOrderBy('start_time', 'ASC')
             ->addOrderBy('uid', 'DESC')
             ->executeQuery()
             ->fetchAllAssociative();

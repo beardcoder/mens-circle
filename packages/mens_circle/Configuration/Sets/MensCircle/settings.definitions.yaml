@@ -42,3 +42,13 @@ settings:
     category: mensCircle
     type: string
     default: ''
+  mensCircle.smsEnabled:
+    label: 'SMS Benachrichtigungen aktiv'
+    category: mensCircle
+    type: bool
+    default: false
+  mensCircle.smsSender:
+    label: 'SMS Absender'
+    category: mensCircle
+    type: string
+    default: 'MensCircle'

@@ -10,3 +10,53 @@ services:
   MarkusSommer\MensCircle\Controller\:
     resource: '../Classes/Controller/*'
     public: true
+
+  dashboard.widget.menscircleUpcomingEvents:
+    class: TYPO3\CMS\Dashboard\Widgets\NumberWithIconWidget
+    arguments:
+      $dataProvider: '@MarkusSommer\MensCircle\Dashboard\Provider\UpcomingEventsCountDataProvider'
+      $options:
+        icon: 'record-menscircle-event'
+        title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingEvents.title'
+        subtitle: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingEvents.subtitle'
+    tags:
+      - name: dashboard.widget
+        identifier: 'menscircleUpcomingEvents'
+        groupNames: 'menscircle'
+        title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingEvents.title'
+        description: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingEvents.description'
+        iconIdentifier: 'record-menscircle-event'
+        height: 'small'
+        width: 'small'
+
+  dashboard.widget.menscircleUpcomingRegistrations:
+    class: TYPO3\CMS\Dashboard\Widgets\NumberWithIconWidget
+    arguments:
+      $dataProvider: '@MarkusSommer\MensCircle\Dashboard\Provider\UpcomingRegistrationsCountDataProvider'
+      $options:
+        icon: 'record-menscircle-registration'
+        title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingRegistrations.title'
+        subtitle: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingRegistrations.subtitle'
+    tags:
+      - name: dashboard.widget
+        identifier: 'menscircleUpcomingRegistrations'
+        groupNames: 'menscircle'
+        title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingRegistrations.title'
+        description: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingRegistrations.description'
+        iconIdentifier: 'record-menscircle-registration'
+        height: 'small'
+        width: 'small'
+
+  dashboard.widget.menscircleNextEvent:
+    class: TYPO3\CMS\Dashboard\Widgets\ListWidget
+    arguments:
+      $dataProvider: '@MarkusSommer\MensCircle\Dashboard\Provider\NextEventListDataProvider'
+    tags:
+      - name: dashboard.widget
+        identifier: 'menscircleNextEvent'
+        groupNames: 'menscircle'
+        title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.nextEvent.title'
+        description: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.nextEvent.description'
+        iconIdentifier: 'module-menscircle-events'
+        height: 'medium'
+        width: 'medium'

@@ -1,0 +1,8 @@
+# cat=notifications/basic; type=boolean; label=SMS Versand aktivieren
+smsEnabled = 0
+
+# cat=notifications/basic; type=string; label=SMS Absender (z. B. MensCircle)
+smsSender = MensCircle
+
+# cat=notifications/secrets; type=string; label=Seven.io API Key (alternativ Umgebungsvariable MENSCIRCLE_SMS_API_KEY)
+smsApiKey =

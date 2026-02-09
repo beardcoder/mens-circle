@@ -89,6 +89,21 @@
       <trans-unit id="plugin.newsletter.description"><source>Newsletter-Formular mit Anmeldung und tokenbasierter Abmeldung.</source></trans-unit>
       <trans-unit id="plugin.testimonial.title"><source>Männerkreis: Testimonials</source></trans-unit>
       <trans-unit id="plugin.testimonial.description"><source>Zeigt Testimonials und erlaubt neue Erfahrungsberichte einzureichen.</source></trans-unit>
+
+      <trans-unit id="dashboard.group.menscircle"><source>Männerkreis</source></trans-unit>
+      <trans-unit id="dashboard.preset.events.title"><source>Männerkreis Events</source></trans-unit>
+      <trans-unit id="dashboard.preset.events.description"><source>Wichtige Kennzahlen und das nächste Event im Überblick.</source></trans-unit>
+
+      <trans-unit id="dashboard.widget.upcomingEvents.title"><source>Kommende Events</source></trans-unit>
+      <trans-unit id="dashboard.widget.upcomingEvents.subtitle"><source>Veröffentlichte Termine ab heute</source></trans-unit>
+      <trans-unit id="dashboard.widget.upcomingEvents.description"><source>Anzahl kommender, veröffentlichter Events.</source></trans-unit>
+
+      <trans-unit id="dashboard.widget.upcomingRegistrations.title"><source>Aktive Anmeldungen</source></trans-unit>
+      <trans-unit id="dashboard.widget.upcomingRegistrations.subtitle"><source>Für kommende Events</source></trans-unit>
+      <trans-unit id="dashboard.widget.upcomingRegistrations.description"><source>Anzahl aktiver Anmeldungen für kommende Events.</source></trans-unit>
+
+      <trans-unit id="dashboard.widget.nextEvent.title"><source>Nächstes Event</source></trans-unit>
+      <trans-unit id="dashboard.widget.nextEvent.description"><source>Zeigt das zeitlich nächste veröffentlichte Event.</source></trans-unit>
     </body>
   </file>
 </xliff>

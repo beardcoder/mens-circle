@@ -5,6 +5,9 @@ declare(strict_types=1);
 use MarkusSommer\MensCircle\Controller\EventController;
 use MarkusSommer\MensCircle\Controller\NewsletterController;
 use MarkusSommer\MensCircle\Controller\TestimonialController;
+use MarkusSommer\MensCircle\Message\SendEventMailMessage;
+use MarkusSommer\MensCircle\Message\SendEventSmsMessage;
+use MarkusSommer\MensCircle\Message\SendNewsletterMessage;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') or die();
@@ -41,3 +44,8 @@ ExtensionUtility::configurePlugin(
         TestimonialController::class => 'submit',
     ]
 );
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'] ??= [];
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'][SendNewsletterMessage::class] = 'doctrine';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'][SendEventMailMessage::class] = 'doctrine';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'][SendEventSmsMessage::class] = 'doctrine';

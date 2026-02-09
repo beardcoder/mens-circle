@@ -13,6 +13,7 @@ final class EventRepository extends Repository
 {
     protected $defaultOrderings = [
         'eventDate' => QueryInterface::ORDER_ASCENDING,
+        'startTime' => QueryInterface::ORDER_ASCENDING,
     ];
 
     /**
@@ -27,7 +28,10 @@ final class EventRepository extends Repository
                 $query->greaterThanOrEqual('eventDate', new \DateTime('today'))
             )
         );
-        $query->setOrderings(['eventDate' => QueryInterface::ORDER_ASCENDING]);
+        $query->setOrderings([
+            'eventDate' => QueryInterface::ORDER_ASCENDING,
+            'startTime' => QueryInterface::ORDER_ASCENDING,
+        ]);
         $query->setLimit($limit);
 
         /** @var QueryResultInterface<Event> $result */
@@ -45,7 +49,10 @@ final class EventRepository extends Repository
                 $query->greaterThanOrEqual('eventDate', new \DateTime('today'))
             )
         );
-        $query->setOrderings(['eventDate' => QueryInterface::ORDER_ASCENDING]);
+        $query->setOrderings([
+            'eventDate' => QueryInterface::ORDER_ASCENDING,
+            'startTime' => QueryInterface::ORDER_ASCENDING,
+        ]);
         $query->setLimit(1);
 
         $result = $query->execute();

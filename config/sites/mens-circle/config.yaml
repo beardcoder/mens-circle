@@ -79,4 +79,6 @@ settings:
     storagePid: 2
     newsletterPid: 4
     whatsappCommunityLink: ''
+    smsEnabled: false
+    smsSender: 'MensCircle'
 websiteTitle: 'Männerkreis Niederbayern/ Straubing'
