@@ -59,6 +59,10 @@ return [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
         'source' => 'EXT:mens_circle/Resources/Public/Icons/Plugin/event.svg',
     ],
+    'plugin-menscircle-event-detail' => [
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:mens_circle/Resources/Public/Icons/Plugin/event-detail.svg',
+    ],
     'plugin-menscircle-newsletter' => [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
         'source' => 'EXT:mens_circle/Resources/Public/Icons/Plugin/newsletter.svg',

@@ -20,6 +20,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\StreamFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
@@ -62,42 +63,25 @@ final class EventController extends ActionController
 
     public function showAction(Event $event): ResponseInterface
     {
-        if (! $event->isPublished()) {
-            $this->addFlashMessage('Dieser Termin ist nicht öffentlich.', '', AbstractMessage::WARNING);
+        return $this->renderEventDetail($event);
+    }
+
+    public function detailAction(?Event $event = null): ResponseInterface
+    {
+        $resolvedEvent = $this->resolveDetailEvent($event);
+        if (! $resolvedEvent instanceof Event) {
+            $this->addFlashMessage('Aktuell ist kein passender Termin verfügbar.', '', AbstractMessage::WARNING);
 
             return $this->redirect('list');
         }
 
-        $activeRegistrations = $this->registrationRepository->countActiveByEvent($event);
-        $availableSpots = max(0, $event->getMaxParticipants() - $activeRegistrations);
-        $eventDate = $event->getEventDate();
-        $startTime = $event->getStartTime();
-        $endTime = $event->getEndTime();
-
-        $this->view->assignMultiple([
-            'event' => $event,
-            'activeRegistrations' => $activeRegistrations,
-            'availableSpots' => $availableSpots,
-            'isFull' => $availableSpots <= 0,
-            'isPast' => $event->isPast(),
-            'canRegister' => !($availableSpots <= 0 || $event->isPast()),
-            'eventData' => [
-                'title' => $event->getTitle(),
-                'description' => trim(strip_tags($event->getDescription())),
-                'location' => $event->getLocation(),
-                'startDate' => $eventDate?->format('Y-m-d') ?? '',
-                'startTime' => $startTime?->format('H:i') ?? '19:00',
-                'endDate' => $eventDate?->format('Y-m-d') ?? '',
-                'endTime' => $endTime?->format('H:i') ?? '21:30',
-            ],
-        ]);
-
-        return $this->htmlResponse();
+        return $this->renderEventDetail($resolvedEvent);
     }
 
     public function registerAction(): ResponseInterface
     {
         $arguments = $this->request->getArguments();
+        $detailAction = $this->getDetailActionName();
         $eventUid = (int) ($arguments['event_id'] ?? $arguments['event'] ?? 0);
 
         /** @var Event|null $event */
@@ -118,26 +102,26 @@ final class EventController extends ActionController
         if ($firstName === '' || $lastName === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacyAccepted) {
             $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', AbstractMessage::ERROR);
 
-            return $this->redirect('show', null, null, ['event' => $event->getUid()]);
+            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
         }
 
         if (! $event->isPublished()) {
             $this->addFlashMessage('Dieser Termin ist nicht verfügbar.', '', AbstractMessage::ERROR);
 
-            return $this->redirect('show', null, null, ['event' => $event->getUid()]);
+            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
         }
 
         if ($event->isPast()) {
             $this->addFlashMessage('Dieser Termin liegt bereits in der Vergangenheit.', '', AbstractMessage::ERROR);
 
-            return $this->redirect('show', null, null, ['event' => $event->getUid()]);
+            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
         }
 
         $activeRegistrations = $this->registrationRepository->countActiveByEvent($event);
         if ($activeRegistrations >= $event->getMaxParticipants()) {
             $this->addFlashMessage('Dieser Termin ist leider bereits ausgebucht.', '', AbstractMessage::ERROR);
 
-            return $this->redirect('show', null, null, ['event' => $event->getUid()]);
+            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
         }
 
         $participant = $this->participantRepository->findOneByEmail($email);
@@ -159,7 +143,7 @@ final class EventController extends ActionController
         if ($existingRegistration instanceof Registration) {
             $this->addFlashMessage('Du bist bereits für diesen Termin angemeldet.', '', AbstractMessage::WARNING);
 
-            return $this->redirect('show', null, null, ['event' => $event->getUid()]);
+            return $this->redirect($detailAction, null, null, ['event' => $event->getUid()]);
         }
 
         $registration = new Registration();
@@ -209,7 +193,10 @@ final class EventController extends ActionController
 
     public function registerSuccessAction(Event $event): ResponseInterface
     {
-        $this->view->assign('event', $event);
+        $this->view->assignMultiple([
+            'event' => $event,
+            'detailActionName' => $this->getDetailActionName(),
+        ]);
 
         return $this->htmlResponse();
     }
@@ -249,5 +236,117 @@ final class EventController extends ActionController
         $normalized = strtolower(trim((string) $value));
 
         return in_array($normalized, ['1', 'true', 'on', 'yes'], true);
+    }
+
+    private function getDetailActionName(): string
+    {
+        return strtolower($this->request->getPluginName()) === 'eventdetail' ? 'detail' : 'show';
+    }
+
+    private function resolveDetailEvent(?Event $event): ?Event
+    {
+        if ($event instanceof Event) {
+            return $event;
+        }
+
+        if ($this->request->hasArgument('event')) {
+            $resolved = $this->resolveEventByIdentifier($this->request->getArgument('event'));
+            if ($resolved instanceof Event) {
+                return $resolved;
+            }
+        }
+
+        $legacyPluginArguments = GeneralUtility::_GP('tx_menscircle_event');
+        if (is_array($legacyPluginArguments) && array_key_exists('event', $legacyPluginArguments)) {
+            $resolved = $this->resolveEventByIdentifier($legacyPluginArguments['event']);
+            if ($resolved instanceof Event) {
+                return $resolved;
+            }
+        }
+
+        if (array_key_exists('event', $this->settings)) {
+            $resolved = $this->resolveEventByIdentifier($this->settings['event']);
+            if ($resolved instanceof Event) {
+                return $resolved;
+            }
+        }
+
+        return $this->eventRepository->findNextEvent();
+    }
+
+    private function resolveEventByIdentifier(mixed $identifier): ?Event
+    {
+        if ($identifier instanceof Event) {
+            return $identifier;
+        }
+
+        if (is_array($identifier)) {
+            if (array_key_exists('__identity', $identifier)) {
+                return $this->resolveEventByIdentifier($identifier['__identity']);
+            }
+
+            return null;
+        }
+
+        if (!is_scalar($identifier)) {
+            return null;
+        }
+
+        $value = trim((string) $identifier);
+        if ($value === '') {
+            return null;
+        }
+
+        if (ctype_digit($value)) {
+            /** @var Event|null $event */
+            $event = $this->eventRepository->findByUid((int) $value);
+
+            return $event;
+        }
+
+        if (preg_match('/^tx_menscircle_domain_model_event_(\d+)$/', $value, $matches) === 1) {
+            /** @var Event|null $event */
+            $event = $this->eventRepository->findByUid((int) $matches[1]);
+
+            return $event;
+        }
+
+        return $this->eventRepository->findOneBySlug($value);
+    }
+
+    private function renderEventDetail(Event $event): ResponseInterface
+    {
+        if (! $event->isPublished()) {
+            $this->addFlashMessage('Dieser Termin ist nicht öffentlich.', '', AbstractMessage::WARNING);
+
+            return $this->redirect('list');
+        }
+
+        $activeRegistrations = $this->registrationRepository->countActiveByEvent($event);
+        $availableSpots = max(0, $event->getMaxParticipants() - $activeRegistrations);
+        $eventDate = $event->getEventDate();
+        $startTime = $event->getStartTime();
+        $endTime = $event->getEndTime();
+
+        $this->view->assignMultiple([
+            'event' => $event,
+            'activeRegistrations' => $activeRegistrations,
+            'availableSpots' => $availableSpots,
+            'isFull' => $availableSpots <= 0,
+            'isPast' => $event->isPast(),
+            'canRegister' => !($availableSpots <= 0 || $event->isPast()),
+            'detailActionName' => $this->getDetailActionName(),
+            'eventData' => [
+                'title' => $event->getTitle(),
+                'description' => trim(strip_tags($event->getDescription())),
+                'location' => $event->getLocation(),
+                'startDate' => $eventDate?->format('Y-m-d') ?? '',
+                'startTime' => $startTime?->format('H:i') ?? '19:00',
+                'endDate' => $eventDate?->format('Y-m-d') ?? '',
+                'endTime' => $endTime?->format('H:i') ?? '21:30',
+            ],
+        ]);
+
+        return $this->htmlResponse();
     }
 }

@@ -457,6 +457,18 @@
         <target>Shows event overview, detail page, and event registration.</target>
       </segment>
     </unit>
+    <unit id="plugin.event_detail.title">
+      <segment>
+        <source>Männerkreis: Event Detail</source>
+        <target>Mens Circle: Event Detail</target>
+      </segment>
+    </unit>
+    <unit id="plugin.event_detail.description">
+      <segment>
+        <source>Zeigt die vollständige Event-Detailansicht mit Anmeldung wie in der vorherigen Laravel-Version.</source>
+        <target>Shows the full event detail view including registration, matching the previous Laravel version.</target>
+      </segment>
+    </unit>
     <unit id="plugin.newsletter.title">
       <segment>
         <source>Männerkreis: Newsletter</source>

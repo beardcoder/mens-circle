@@ -320,7 +320,7 @@ foreach ($contentTypes as $contentType => $configuration) {
 }
 
 $pluginSignatures = [
-    ExtensionUtility::registerPlugin(
+    'event' => ExtensionUtility::registerPlugin(
         'MensCircle',
         'Event',
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event.title',
@@ -328,7 +328,15 @@ $pluginSignatures = [
         'plugins',
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event.description'
     ),
-    ExtensionUtility::registerPlugin(
+    'eventDetail' => ExtensionUtility::registerPlugin(
+        'MensCircle',
+        'EventDetail',
+        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event_detail.title',
+        'plugin-menscircle-event-detail',
+        'plugins',
+        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event_detail.description'
+    ),
+    'newsletter' => ExtensionUtility::registerPlugin(
         'MensCircle',
         'Newsletter',
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.newsletter.title',
@@ -336,7 +344,7 @@ $pluginSignatures = [
         'plugins',
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.newsletter.description'
     ),
-    ExtensionUtility::registerPlugin(
+    'testimonial' => ExtensionUtility::registerPlugin(
         'MensCircle',
         'Testimonial',
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial.title',
@@ -352,3 +360,6 @@ foreach ($pluginSignatures as $pluginSignature) {
         pi_flexform,
     ' . $commonTabs;
 }
+
+$GLOBALS['TCA']['tt_content']['types'][$pluginSignatures['eventDetail']]['columnsOverrides']['pi_flexform']['config']['ds']
+    = 'FILE:EXT:mens_circle/Configuration/FlexForms/Plugins/EventDetail.xml';

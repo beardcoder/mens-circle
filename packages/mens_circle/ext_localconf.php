@@ -25,6 +25,17 @@ ExtensionUtility::configurePlugin(
 
 ExtensionUtility::configurePlugin(
     'MensCircle',
+    'EventDetail',
+    [
+        EventController::class => 'list,detail,registerSuccess,ical',
+    ],
+    [
+        EventController::class => 'register',
+    ]
+);
+
+ExtensionUtility::configurePlugin(
+    'MensCircle',
     'Newsletter',
     [
         NewsletterController::class => 'form,unsubscribe',

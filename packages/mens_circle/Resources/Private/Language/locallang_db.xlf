@@ -381,6 +381,16 @@
         <source>Zeigt Terminübersicht, Detailseite und Anmeldung für Events.</source>
       </segment>
     </unit>
+    <unit id="plugin.event_detail.title">
+      <segment>
+        <source>Männerkreis: Event Detail</source>
+      </segment>
+    </unit>
+    <unit id="plugin.event_detail.description">
+      <segment>
+        <source>Zeigt die vollständige Event-Detailansicht mit Anmeldung wie in der vorherigen Laravel-Version.</source>
+      </segment>
+    </unit>
     <unit id="plugin.newsletter.title">
       <segment>
         <source>Männerkreis: Newsletter</source>
