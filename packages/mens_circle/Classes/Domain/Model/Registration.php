@@ -44,9 +44,14 @@ final class Registration extends AbstractEntity
         return $this->status;
     }
 
-    public function setStatus(string|RegistrationStatus $status): void
+    public function setStatus(string $status): void
     {
-        $this->status = $status instanceof RegistrationStatus ? $status->value : $status;
+        $this->status = $status;
+    }
+
+    public function setStatusEnum(RegistrationStatus $status): void
+    {
+        $this->status = $status->value;
     }
 
     public function getRegisteredAt(): ?\DateTime

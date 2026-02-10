@@ -149,7 +149,7 @@ final class EventController extends ActionController
         $registration = new Registration();
         $registration->setEvent($resolvedEvent);
         $registration->setParticipant($participant);
-        $registration->setStatus(RegistrationStatus::Registered);
+        $registration->setStatusEnum(RegistrationStatus::Registered);
         $registration->setRegisteredAt(new \DateTime());
         $this->registrationRepository->add($registration);
 
