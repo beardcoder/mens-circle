@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en" trgLang="de">
+  <file id="f1">
+    <unit id="title">
+      <segment state="final">
+        <source>Status</source>
+        <target>Status</target>
+      </segment>
+    </unit>
+    <unit id="short_description">
+      <segment state="final">
+        <source>Overview of site and page status information</source>
+        <target>Übersicht über Standort- und Seitenstatusinformationen</target>
+      </segment>
+    </unit>
+    <unit id="description">
+      <segment state="final">
+        <source>The Status module provides an overview of site- and page-level
+information. Depending on installed extensions and user permissions,
+it may include additional sections offering details that help assess
+the state and structure of individual sites or pages.</source>
+        <target>Das Statusmodul bietet einen Überblick über Informationen auf Website- und Seitenebene. Je nach installierten Erweiterungen und Benutzerberechtigungen kann es zusätzliche Abschnitte mit Details enthalten, die bei der Beurteilung des Zustands und der Struktur einzelner Websites oder Seiten hilfreich sind.</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

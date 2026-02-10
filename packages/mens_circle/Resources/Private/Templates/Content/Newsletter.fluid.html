@@ -1,0 +1,78 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<section class="section newsletter-section" id="newsletter" aria-labelledby="newsletter-title">
+    <div class="container">
+        <div class="newsletter__layout fade-in">
+            <div class="newsletter__content">
+                <p class="eyebrow eyebrow--secondary">
+                    <f:if condition="{data.subheader}">
+                        <f:then>{data.subheader}</f:then>
+                        <f:else>Newsletter</f:else>
+                    </f:if>
+                </p>
+
+                <h2 class="section-title newsletter__title" id="newsletter-title">
+                    <f:if condition="{data.header}">
+                        <f:then>
+                            <f:format.raw>{data.header}</f:format.raw>
+                        </f:then>
+                        <f:else>Bleib <span class="text-italic">informiert</span></f:else>
+                    </f:if>
+                </h2>
+
+                <f:if condition="{data.bodytext}">
+                    <div class="newsletter__text">
+                        <f:format.raw>{data.bodytext}</f:format.raw>
+                    </div>
+                </f:if>
+            </div>
+
+            <div class="newsletter__form-wrapper">
+                <f:if condition="{data.header_link}">
+                    <f:then>
+                        <form action="{f:uri.typolink(parameter: data.header_link)}" method="get" class="newsletter__form" aria-label="Newsletter-Anmeldung">
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Deine E-Mail-Adresse"
+                                required="required"
+                                class="newsletter__input"
+                                autocomplete="email"
+                                inputmode="email"
+                            />
+                            <button type="submit" class="btn btn--primary">
+                                <f:if condition="{flexFormData.settings.buttonLabel}">
+                                    <f:then>{flexFormData.settings.buttonLabel}</f:then>
+                                    <f:else>Anmelden</f:else>
+                                </f:if>
+                            </button>
+                        </form>
+                    </f:then>
+                    <f:else>
+                        <form action="{f:uri.page(pageUid: site.configuration.settings.mensCircle.newsletterPid)}" method="get" class="newsletter__form" aria-label="Newsletter-Anmeldung">
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Deine E-Mail-Adresse"
+                                required="required"
+                                class="newsletter__input"
+                                autocomplete="email"
+                                inputmode="email"
+                            />
+                            <button type="submit" class="btn btn--primary">
+                                <f:if condition="{flexFormData.settings.buttonLabel}">
+                                    <f:then>{flexFormData.settings.buttonLabel}</f:then>
+                                    <f:else>Anmelden</f:else>
+                                </f:if>
+                            </button>
+                        </form>
+                    </f:else>
+                </f:if>
+
+                <f:if condition="{flexFormData.settings.privacyLabel}">
+                    <p class="form-helper">{flexFormData.settings.privacyLabel}</p>
+                </f:if>
+            </div>
+        </div>
+    </div>
+</section>
+</html>

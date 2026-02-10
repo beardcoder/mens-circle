@@ -1,0 +1,52 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:variable name="items" value="{
+    0: {question: flexFormData.settings.item1Question, answer: flexFormData.settings.item1Answer},
+    1: {question: flexFormData.settings.item2Question, answer: flexFormData.settings.item2Answer},
+    2: {question: flexFormData.settings.item3Question, answer: flexFormData.settings.item3Answer},
+    3: {question: flexFormData.settings.item4Question, answer: flexFormData.settings.item4Answer},
+    4: {question: flexFormData.settings.item5Question, answer: flexFormData.settings.item5Answer},
+    5: {question: flexFormData.settings.item6Question, answer: flexFormData.settings.item6Answer}
+}" />
+
+<section class="section section--lg faq-section" id="faq">
+    <div class="container">
+        <div class="faq__layout">
+            <div class="faq__header fade-in">
+                <f:if condition="{data.subheader}">
+                    <p class="eyebrow">{data.subheader}</p>
+                </f:if>
+
+                <f:if condition="{data.header}">
+                    <h2 class="section-title faq__title">
+                        <f:format.raw>{data.header}</f:format.raw>
+                    </h2>
+                </f:if>
+
+                <f:if condition="{data.bodytext}">
+                    <div class="faq__intro">
+                        <f:format.raw>{data.bodytext}</f:format.raw>
+                    </div>
+                </f:if>
+            </div>
+
+            <div class="faq__list fade-in fade-in-delay-1">
+                <f:for each="{items}" as="item">
+                    <f:if condition="{item.question}">
+                        <details class="faq-item" name="faq-accordion">
+                            <summary class="faq-item__question">
+                                <span>{item.question}</span>
+                                <span class="faq-item__icon" aria-hidden="true"></span>
+                            </summary>
+                            <div class="faq-item__answer">
+                                <div class="faq-item__answer-inner">
+                                    <f:format.nl2br>{item.answer}</f:format.nl2br>
+                                </div>
+                            </div>
+                        </details>
+                    </f:if>
+                </f:for>
+            </div>
+        </div>
+    </div>
+</section>
+</html>

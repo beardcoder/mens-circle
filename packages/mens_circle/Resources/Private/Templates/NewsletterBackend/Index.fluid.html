@@ -1,0 +1,117 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+<f:layout name="Module" />
+
+<f:section name="Content">
+    <f:be.pageRenderer
+        includeCssFiles="{0: 'EXT:rte_ckeditor/Resources/Public/Css/editor.css'}"
+        includeJavaScriptModules="{0: '@typo3/rte-ckeditor/ckeditor5.js'}"
+    />
+
+    <div class="container-fluid">
+        <div class="row g-3">
+            <div class="col-12 col-xxl-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="h3 mb-1">
+                            <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:headline" />
+                        </h1>
+                        <p class="text-body-secondary mb-0">
+                            <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:description" />
+                        </p>
+                    </div>
+
+                    <div class="card-body">
+                        <f:form action="send" method="post" name="newsletterSend">
+                            <div class="mb-3">
+                                <label for="newsletter-subject" class="form-label">
+                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:field.subject" />
+                                </label>
+                                <f:form.textfield
+                                    id="newsletter-subject"
+                                    name="subject"
+                                    value=""
+                                    required="required"
+                                    class="form-control"
+                                />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="newsletter-content" class="form-label">
+                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:field.content" />
+                                </label>
+                                <typo3-rte-ckeditor-ckeditor5
+                                    id="newsletter-content-rte"
+                                    options="{rteOptionsJson -> f:format.raw()}"
+                                >
+                                    <f:form.textarea
+                                        id="newsletter-content"
+                                        name="content"
+                                        rows="14"
+                                        value=""
+                                        required="required"
+                                        class="form-control"
+                                        additionalAttributes="{slot: 'textarea'}"
+                                    />
+                                </typo3-rte-ckeditor-ckeditor5>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:button.send" />
+                            </button>
+                        </f:form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-xxl-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold">
+                            <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:recipients.label" />
+                        </span>
+                        <span class="badge text-bg-secondary">{recipientCount}</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <f:if condition="{recipientCount}">
+                            <f:then>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">
+                                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:recipients.column.name" />
+                                                </th>
+                                                <th scope="col">
+                                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:recipients.column.email" />
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <f:for each="{recipients}" as="recipient">
+                                                <tr>
+                                                    <td>{recipient.name}</td>
+                                                    <td>
+                                                        <a href="mailto:{recipient.email}">{recipient.email}</a>
+                                                    </td>
+                                                </tr>
+                                            </f:for>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </f:then>
+                            <f:else>
+                                <p class="text-body-secondary px-3 py-3 mb-0">
+                                    <f:translate key="LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:recipients.none" />
+                                </p>
+                            </f:else>
+                        </f:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</f:section>
+</html>

@@ -1,0 +1,101 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:if condition="{nextEvent}">
+    <f:then>
+        <section class="hero event-hero">
+            <div class="hero__bg"></div>
+            <div class="hero__circles" aria-hidden="true">
+                <div class="hero__circle hero__circle--1"></div>
+                <div class="hero__circle hero__circle--2"></div>
+                <div class="hero__circle hero__circle--3"></div>
+                <div class="hero__circle hero__circle--4"></div>
+            </div>
+
+            <div class="container">
+                <div class="hero__content">
+                    <p class="hero__label">Nächstes Treffen</p>
+                    <h1 class="hero__title">
+                        <span class="hero__title-line">{nextEvent.title}</span>
+                    </h1>
+                    <div class="hero__bottom">
+                        <p class="hero__description">
+                            {nextEvent.eventDate -> f:format.date(format: 'l, d.m.Y')}
+                            <f:if condition="{nextEvent.startTime}"> · {nextEvent.startTime -> f:format.date(format: 'H:i')} Uhr</f:if>
+                            · {nextEvent.location}
+                        </p>
+                        <div class="hero__cta fade-in-delay-2">
+                            <f:link.action action="detail" controller="Event" extensionName="MensCircle" pluginName="EventDetail" arguments="{event: nextEvent.uid}" class="btn btn--primary btn--lg">
+                                Details & Anmeldung
+                            </f:link.action>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <f:if condition="{eventSummaries}">
+            <section class="event-info-section">
+                <div class="event-info__bg-text" aria-hidden="true">TERMINE</div>
+                <div class="container">
+                    <div class="event-info__grid stagger-children">
+                        <f:for each="{eventSummaries}" as="summary">
+                            <div class="event-info__card">
+                                <div class="event-info__card-circle" aria-hidden="true"></div>
+                                <div class="event-info__card-content">
+                                    <h3>Termin</h3>
+                                    <p class="event-info__card-value">{summary.event.title}</p>
+                                    <p class="event-info__card-sub">
+                                        {summary.event.eventDate -> f:format.date(format: 'd.m.Y')}
+                                        <f:if condition="{summary.event.startTime}"> · {summary.event.startTime -> f:format.date(format: 'H:i')} Uhr</f:if>
+                                        · {summary.event.location}
+                                    </p>
+                                    <p class="event-info__card-sub">{summary.availableSpots} Plätze frei</p>
+                                    <f:link.action action="detail" controller="Event" extensionName="MensCircle" pluginName="EventDetail" arguments="{event: summary.event.uid}" class="btn btn--secondary btn--sm">
+                                        Details
+                                    </f:link.action>
+                                </div>
+                            </div>
+                        </f:for>
+                    </div>
+                </div>
+            </section>
+        </f:if>
+    </f:then>
+    <f:else>
+        <section class="hero no-event-hero">
+            <div class="hero__circles" aria-hidden="true">
+                <div class="hero__circle hero__circle--1"></div>
+                <div class="hero__circle hero__circle--2"></div>
+                <div class="hero__circle hero__circle--3"></div>
+                <div class="hero__circle hero__circle--4"></div>
+            </div>
+
+            <div class="container">
+                <div class="hero__content">
+                    <p class="hero__label">Männerkreis Niederbayern/ Straubing</p>
+                    <h1 class="hero__title">
+                        <span class="hero__title-line">Aktuell ist kein</span>
+                        <span class="hero__title-line"><span class="text-italic">Termin</span> geplant</span>
+                    </h1>
+                    <div class="hero__bottom">
+                        <p class="hero__description">
+                            Wir planen gerade unser nächstes Treffen. Trag dich gerne für Updates ein.
+                        </p>
+                        <div class="hero__cta fade-in-delay-2">
+                            <f:link.action
+                                action="form"
+                                controller="Newsletter"
+                                extensionName="MensCircle"
+                                pluginName="Newsletter"
+                                pageUid="{settings.newsletterPid}"
+                                class="btn btn--primary btn--lg"
+                            >
+                                Zum Newsletter
+                            </f:link.action>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </f:else>
+</f:if>
+</html>

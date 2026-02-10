@@ -1,0 +1,43 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:if condition="{preheader}">
+    <div style="display:none !important; visibility:hidden; mso-hide:all; opacity:0; color:transparent; height:0; width:0; overflow:hidden;">
+        {preheader}
+    </div>
+</f:if>
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f5f0ea; margin:0; padding:24px 0; font-family:'DM Sans','Segoe UI',Arial,sans-serif; color:#251a12;">
+    <tr>
+        <td align="center" style="padding:0 12px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:680px; background:#fffdf9; border:1px solid #e5d5c6; border-radius:14px; overflow:hidden;">
+                <tr>
+                    <td style="padding:28px 30px; background:linear-gradient(135deg, #2f2118 0%, #4a3221 100%); color:#f4ece2;">
+                        <p style="margin:0 0 8px 0; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#d8bfaa;">Männerkreis</p>
+                        <h1 style="margin:0; font-family:'Playfair Display', Georgia, serif; font-size:30px; line-height:1.15; font-weight:500; color:#f8f2eb;">{siteName}</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:30px 30px 16px;">
+                        <f:render section="Content" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:18px 30px 26px; border-top:1px solid #ecdccd; color:#6f5543; font-size:13px; line-height:1.6;">
+                        <p style="margin:0 0 8px 0;">{siteName}</p>
+                        <f:if condition="{contactEmail}">
+                            <p style="margin:0 0 8px 0;">
+                                Kontakt:
+                                <a href="mailto:{contactEmail}" style="color:#b65f3a; text-decoration:none;">{contactEmail}</a>
+                            </p>
+                        </f:if>
+                        <f:if condition="{unsubscribeUrl}">
+                            <p style="margin:0;">
+                                <a href="{unsubscribeUrl}" style="color:#b65f3a; text-decoration:none;">Newsletter abbestellen</a>
+                            </p>
+                        </f:if>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</html>

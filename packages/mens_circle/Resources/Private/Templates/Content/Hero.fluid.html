@@ -1,0 +1,65 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:variable name="buttonLabel">
+    <f:if condition="{flexFormData.settings.buttonLabel}">
+        <f:then>{flexFormData.settings.buttonLabel}</f:then>
+        <f:else>Mehr erfahren</f:else>
+    </f:if>
+</f:variable>
+<f:variable
+    name="useNextEventLink"
+    value="{nextEvent.url} && ({buttonLabel} == 'Nächster Termin' || {buttonLabel} == 'Naechster Termin' || {data.header_link} == '/event' || {data.header_link} == '/event/')"
+/>
+<section class="hero" role="banner">
+    <div class="hero__bg">
+        <f:if condition="{images.0}">
+            <f:image image="{images.0}" loading="eager" alt="{images.0.alternative}" class="hero__bg-image" />
+        </f:if>
+    </div>
+
+    <div class="hero__circles" aria-hidden="true">
+        <div class="hero__circle hero__circle--1"></div>
+        <div class="hero__circle hero__circle--2"></div>
+        <div class="hero__circle hero__circle--3"></div>
+        <div class="hero__circle hero__circle--4"></div>
+    </div>
+
+    <div class="container">
+        <div class="hero__content">
+            <f:if condition="{data.subheader}">
+                <p class="hero__label">{data.subheader}</p>
+            </f:if>
+
+            <f:if condition="{data.header}">
+                <h1 class="hero__title">
+                    <f:format.raw>{data.header}</f:format.raw>
+                </h1>
+            </f:if>
+
+            <div class="hero__bottom">
+                <f:if condition="{data.bodytext}">
+                    <div class="hero__description">
+                        <f:format.raw>{data.bodytext}</f:format.raw>
+                    </div>
+                </f:if>
+
+                <f:if condition="{data.header_link} || {useNextEventLink}">
+                    <div class="hero__cta fade-in-delay-3">
+                        <f:if condition="{useNextEventLink}">
+                            <f:then>
+                                <a href="{nextEvent.url}" class="btn btn--primary btn--lg">{buttonLabel}</a>
+                            </f:then>
+                            <f:else>
+                                <f:link.typolink parameter="{data.header_link}" class="btn btn--primary btn--lg">{buttonLabel}</f:link.typolink>
+                            </f:else>
+                        </f:if>
+                        <div class="hero__scroll fade-in-delay-4">
+                            <span>Entdecken</span>
+                            <div class="hero__scroll-line" aria-hidden="true"></div>
+                        </div>
+                    </div>
+                </f:if>
+            </div>
+        </div>
+    </div>
+</section>
+</html>
