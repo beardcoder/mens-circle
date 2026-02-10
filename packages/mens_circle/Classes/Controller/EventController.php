@@ -68,7 +68,7 @@ final class EventController extends ActionController
     }
 
     public function registerAction(
-        mixed $event = null,
+        string $event = '',
         string $firstName = '',
         string $lastName = '',
         string $email = '',

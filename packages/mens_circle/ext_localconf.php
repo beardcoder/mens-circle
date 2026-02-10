@@ -16,7 +16,7 @@ ExtensionUtility::configurePlugin(
     'MensCircle',
     'Event',
     [
-        EventController::class => 'list',
+        EventController::class => ['list'],
     ],
     [],
     ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
@@ -26,10 +26,10 @@ ExtensionUtility::configurePlugin(
     'MensCircle',
     'EventDetail',
     [
-        EventController::class => 'detail,registerSuccess,ical',
+        EventController::class => ['detail', 'register', 'registerSuccess', 'ical'],
     ],
     [
-        EventController::class => 'register',
+        EventController::class => ['register'],
     ],
     ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
@@ -38,10 +38,10 @@ ExtensionUtility::configurePlugin(
     'MensCircle',
     'Newsletter',
     [
-        NewsletterController::class => 'form,unsubscribe',
+        NewsletterController::class => ['form', 'subscribe', 'unsubscribe'],
     ],
     [
-        NewsletterController::class => 'subscribe,unsubscribe',
+        NewsletterController::class => ['subscribe', 'unsubscribe'],
     ],
     ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
@@ -50,10 +50,10 @@ ExtensionUtility::configurePlugin(
     'MensCircle',
     'TestimonialForm',
     [
-        TestimonialController::class => 'form,thanks',
+        TestimonialController::class => ['form', 'submit', 'thanks'],
     ],
     [
-        TestimonialController::class => 'submit',
+        TestimonialController::class => ['submit'],
     ],
     ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
