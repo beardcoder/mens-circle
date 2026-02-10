@@ -48,5 +48,8 @@
             "type": "path",
             "url": "./packages/*"
         }
+    },
+    "require-dev": {
+        "yiisoft/var-dumper": "^1.7"
     }
 }

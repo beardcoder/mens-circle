@@ -8,13 +8,10 @@ return [
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
-        'sortby' => 'sorting',
+        'sortby' => 'event_date',
         'delete' => 'deleted',
         'enablecolumns' => [
             'disabled' => 'hidden',
-            'starttime' => 'starttime',
-            'endtime' => 'endtime',
         ],
         'searchFields' => 'title,slug,location,city',
         'languageField' => 'sys_language_uid',
@@ -25,11 +22,9 @@ return [
     'types' => [
         '1' => [
             'showitem' => '
-                --palette--;;language,
-                --palette--;;visibility,
+                --palette--;;date,
                 title, slug, teaser, description,
                 --div--;Termin,
-                    event_date, start_time, end_time,
                     location, street, postal_code, city, location_details,
                     max_participants, cost_basis, is_published,
                     image,
@@ -42,56 +37,16 @@ return [
         'language' => [
             'showitem' => 'sys_language_uid, l10n_parent',
         ],
-        'visibility' => [
-            'showitem' => 'hidden, starttime, endtime',
+        'date' => [
+            'showitem' => 'event_date, start_time, end_time',
         ],
     ],
     'columns' => [
-        'sys_language_uid' => [
-            'config' => [
-                'type' => 'language',
-            ],
-        ],
-        'l10n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'default' => 0,
-                'items' => [
-                    ['', 0],
-                ],
-                'foreign_table' => 'tx_menscircle_domain_model_event',
-                'foreign_table_where' => 'AND {#tx_menscircle_domain_model_event}.{#pid}=###CURRENT_PID### AND {#tx_menscircle_domain_model_event}.{#sys_language_uid} IN (-1,0)',
-            ],
-        ],
-        'l10n_diffsource' => [
-            'config' => [
-                'type' => 'passthrough',
-            ],
-        ],
         'hidden' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
                 'default' => 0,
-            ],
-        ],
-        'starttime' => [
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-            'config' => [
-                'type' => 'datetime',
-                'default' => 0,
-            ],
-        ],
-        'endtime' => [
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-            'config' => [
-                'type' => 'datetime',
-                'default' => 0,
-                'range' => [
-                    'upper' => mktime(0, 0, 0, 1, 1, 2106),
-                ],
             ],
         ],
         'title' => [
@@ -136,6 +91,7 @@ return [
             'label' => 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:table.event.event_date',
             'config' => [
                 'type' => 'datetime',
+                'format' => 'date',
                 'required' => true,
                 'default' => time(),
             ],

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MarkusSommer\MensCircle\Controller;
 
 use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use MarkusSommer\MensCircle\Domain\Enum\RegistrationStatus;
 use Psr\Http\Message\ResponseInterface;
@@ -80,6 +81,7 @@ final class EventBackendController extends ActionController
      *   recordsUrl: string,
      *   frontendUrl: string
      * }>
+     * @throws Exception
      */
     private function buildEventRows(string $returnUrl, string $moduleIdentifier): array
     {
@@ -95,12 +97,10 @@ final class EventBackendController extends ActionController
             }
 
             $eventDate = $this->createDateTimeImmutable($event['event_date'] ?? null);
-            $isPast = $eventDate instanceof \DateTimeImmutable
-                ? $eventDate->setTime(23, 59, 59) < new \DateTimeImmutable('now')
-                : false;
+            $isPast = $eventDate instanceof \DateTimeImmutable && $eventDate->setTime(23, 59, 59) < new \DateTimeImmutable('now');
 
             $maxParticipants = max(0, (int) ($event['max_participants'] ?? 0));
-            $activeRegistrations = (int) ($registrationCounts[$eventUid] ?? 0);
+            $activeRegistrations = $registrationCounts[$eventUid] ?? 0;
             $availableSpots = max(0, $maxParticipants - $activeRegistrations);
 
             $locationParts = array_filter([
@@ -145,6 +145,7 @@ final class EventBackendController extends ActionController
 
     /**
      * @return list<array<string, mixed>>
+     * @throws Exception
      */
     private function fetchEvents(): array
     {
@@ -168,8 +169,8 @@ final class EventBackendController extends ActionController
                 'hidden'
             )
             ->from(self::EVENT_TABLE)
-            ->orderBy('event_date', 'ASC')
-            ->addOrderBy('start_time', 'ASC')
+            ->orderBy('event_date', 'DESC')
+            ->addOrderBy('start_time', 'DESC')
             ->addOrderBy('uid', 'DESC')
             ->executeQuery()
             ->fetchAllAssociative();

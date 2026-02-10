@@ -1,194 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xliff version="2.0" srcLang="en" xmlns="urn:oasis:names:tc:xliff:document:2.0">
+<xliff version="2.0" srcLang="en" trgLang="de" xmlns="urn:oasis:names:tc:xliff:document:2.0">
     <file id="messages" original="messages">
         <unit id="mlang_tabs_tab">
             <segment>
                 <source>Manage Events</source>
+                <target>Events verwalten</target>
             </segment>
         </unit>
         <unit id="mlang_labels_tabdescr">
             <segment>
                 <source>Create, edit, and monitor event status.</source>
+                <target>Events anlegen, bearbeiten und Status prüfen</target>
             </segment>
         </unit>
         <unit id="mlang_labels_tablabel">
             <segment>
                 <source>Manage Events</source>
+                <target>Events verwalten</target>
             </segment>
         </unit>
         <unit id="headline">
             <segment>
                 <source>Event Management</source>
+                <target>Event Verwaltung</target>
             </segment>
         </unit>
         <unit id="description">
             <segment>
                 <source>Overview of all events with registrations, status, and direct edit access.</source>
+                <target>Übersicht aller Events mit Teilnehmerstand, Status und direktem Zugriff auf Bearbeitung.</target>
             </segment>
         </unit>
         <unit id="button.new">
             <segment>
                 <source>New Event</source>
+                <target>Neues Event</target>
             </segment>
         </unit>
         <unit id="button.records">
             <segment>
                 <source>Record List</source>
+                <target>Listenansicht</target>
             </segment>
         </unit>
         <unit id="events.label">
             <segment>
                 <source>Events</source>
+                <target>Events</target>
             </segment>
         </unit>
         <unit id="events.none">
             <segment>
                 <source>There are currently no events available.</source>
+                <target>Es sind aktuell keine Events vorhanden.</target>
             </segment>
         </unit>
         <unit id="column.date">
             <segment>
                 <source>Date</source>
+                <target>Datum</target>
             </segment>
         </unit>
         <unit id="column.title">
             <segment>
                 <source>Title</source>
+                <target>Titel</target>
             </segment>
         </unit>
         <unit id="column.location">
             <segment>
                 <source>Location</source>
+                <target>Ort</target>
             </segment>
         </unit>
         <unit id="column.capacity">
             <segment>
                 <source>Participants</source>
+                <target>Teilnehmer</target>
             </segment>
         </unit>
         <unit id="column.status">
             <segment>
                 <source>Status</source>
+                <target>Status</target>
             </segment>
         </unit>
         <unit id="column.actions">
             <segment>
                 <source>Actions</source>
+                <target>Aktionen</target>
             </segment>
         </unit>
         <unit id="participants.summary">
             <segment>
                 <source>Participant list (%s)</source>
+                <target>Teilnehmerliste (%s)</target>
             </segment>
         </unit>
         <unit id="participants.column.name">
             <segment>
                 <source>Participant</source>
+                <target>Teilnehmer</target>
             </segment>
         </unit>
         <unit id="participants.column.contact">
             <segment>
                 <source>Contact</source>
+                <target>Kontakt</target>
             </segment>
         </unit>
         <unit id="participants.column.registration">
             <segment>
                 <source>Registration</source>
+                <target>Anmeldung</target>
             </segment>
         </unit>
         <unit id="participants.column.newsletter">
             <segment>
                 <source>Newsletter</source>
+                <target>Newsletter</target>
             </segment>
         </unit>
         <unit id="participants.none">
             <segment>
                 <source>No registrations are available for this event yet.</source>
+                <target>Für dieses Event gibt es noch keine Anmeldungen.</target>
             </segment>
         </unit>
         <unit id="label.slug">
             <segment>
                 <source>Slug</source>
+                <target>Slug</target>
             </segment>
         </unit>
         <unit id="label.noTime">
             <segment>
                 <source>No time specified</source>
+                <target>Keine Uhrzeit</target>
             </segment>
         </unit>
         <unit id="label.noLocation">
             <segment>
                 <source>No location set</source>
+                <target>Kein Ort hinterlegt</target>
             </segment>
         </unit>
         <unit id="status.hidden">
             <segment>
                 <source>Hidden</source>
+                <target>Versteckt</target>
             </segment>
         </unit>
         <unit id="status.draft">
             <segment>
                 <source>Draft</source>
+                <target>Entwurf</target>
             </segment>
         </unit>
         <unit id="status.past">
             <segment>
                 <source>Past</source>
+                <target>Vergangen</target>
             </segment>
         </unit>
         <unit id="status.live">
             <segment>
                 <source>Active</source>
+                <target>Aktiv</target>
             </segment>
         </unit>
         <unit id="registrationStatus.registered">
             <segment>
                 <source>Registered</source>
+                <target>Angemeldet</target>
             </segment>
         </unit>
         <unit id="registrationStatus.attended">
             <segment>
                 <source>Attended</source>
+                <target>Teilgenommen</target>
             </segment>
         </unit>
         <unit id="registrationStatus.cancelled">
             <segment>
                 <source>Cancelled</source>
+                <target>Abgemeldet</target>
             </segment>
         </unit>
         <unit id="newsletterStatus.none">
             <segment>
                 <source>Not subscribed</source>
+                <target>Nicht abonniert</target>
             </segment>
         </unit>
         <unit id="newsletterStatus.pending">
             <segment>
                 <source>Pending</source>
+                <target>Ausstehend</target>
             </segment>
         </unit>
         <unit id="newsletterStatus.confirmed">
             <segment>
                 <source>Confirmed</source>
+                <target>Bestätigt</target>
             </segment>
         </unit>
         <unit id="newsletterStatus.unsubscribed">
             <segment>
                 <source>Unsubscribed</source>
+                <target>Abgemeldet</target>
             </segment>
         </unit>
         <unit id="action.edit">
             <segment>
                 <source>Edit</source>
+                <target>Bearbeiten</target>
             </segment>
         </unit>
         <unit id="action.records">
             <segment>
                 <source>Records</source>
+                <target>Datensätze</target>
             </segment>
         </unit>
         <unit id="action.frontend">
             <segment>
                 <source>Frontend</source>
+                <target>Frontend</target>
             </segment>
         </unit>
     </file>

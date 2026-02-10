@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace MarkusSommer\MensCircle\Domain\Repository;
 
 use MarkusSommer\MensCircle\Domain\Model\Event;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -16,8 +19,17 @@ final class EventRepository extends Repository
         'startTime' => QueryInterface::ORDER_ASCENDING,
     ];
 
+    public function initializeObject(): void
+    {
+        /** @var Typo3QuerySettings $querySettings */
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
+        $querySettings->setRespectStoragePage(false);
+        $this->setDefaultQuerySettings($querySettings);
+    }
+
     /**
      * @return QueryResultInterface<Event>
+     * @throws InvalidQueryException
      */
     public function findUpcomingPublished(int $limit = 50): QueryResultInterface
     {
