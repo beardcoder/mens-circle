@@ -9,3 +9,4 @@ nbproject
 !/public/.htaccess
 !/public/index.php
 /config/system/settings.php
+.env

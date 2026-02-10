@@ -5,6 +5,7 @@
     "type": "project",
     "config": {
         "allow-plugins": {
+            "helhum/dotenv-connector": true,
             "typo3/class-alias-loader": true,
             "typo3/cms-composer-installers": true
         },
@@ -14,6 +15,7 @@
         "sort-packages": true
     },
     "require": {
+        "helhum/dotenv-connector": "^3.2",
         "markussommer/mens-circle-sitepackage": "^1.0",
         "typo3/cms-backend": "^14.0",
         "typo3/cms-belog": "^14.0",
