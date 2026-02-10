@@ -31,28 +31,78 @@ final class NewsletterController extends ActionController
 
     public function subscribeAction(string $email = '', bool $privacy = false): ResponseInterface
     {
-        $email = strtolower(trim($email));
-
-        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacy) {
-            $this->addFlashMessage('Bitte gib eine gültige E-Mail-Adresse ein und bestätige den Datenschutz.', '', ContextualFeedbackSeverity::ERROR);
-
-            return $this->redirect('form');
+        $normalizedEmail = strtolower(trim($email));
+        if (! $this->isSubscriptionInputValid($normalizedEmail, $privacy)) {
+            return $this->redirectToFormWithMessage(
+                'Bitte gib eine gültige E-Mail-Adresse ein und bestätige den Datenschutz.',
+                ContextualFeedbackSeverity::ERROR
+            );
         }
 
-        $participant = $this->participantRepository->findOneByEmail($email);
-        if (! $participant instanceof Participant) {
-            $participant = new Participant();
-            $participant->setEmail($email);
-            $this->participantRepository->add($participant);
-        }
-
+        $participant = $this->findOrCreateParticipant($normalizedEmail);
         $subscription = $this->newsletterSubscriptionRepository->findOneByParticipant($participant);
         if ($subscription instanceof NewsletterSubscription && $subscription->isActive()) {
-            $this->addFlashMessage('Diese E-Mail-Adresse ist bereits angemeldet.', '', ContextualFeedbackSeverity::INFO);
-
-            return $this->redirect('form');
+            return $this->redirectToFormWithMessage('Diese E-Mail-Adresse ist bereits angemeldet.', ContextualFeedbackSeverity::INFO);
         }
 
+        $subscription = $this->activateSubscription($participant, $subscription);
+        $this->persistenceManager->persistAll();
+
+        $unsubscribeUrl = $this->buildUnsubscribeUrl($subscription->getToken());
+        $this->mailService->sendNewsletterWelcome($subscription, $unsubscribeUrl, $this->settings);
+
+        return $this->redirectToFormWithMessage('Danke! Du bist jetzt für den Newsletter angemeldet.', ContextualFeedbackSeverity::OK);
+    }
+
+    public function unsubscribeAction(string $token = ''): ResponseInterface
+    {
+        if ($token === '') {
+            return $this->renderUnsubscribeMessage('Ungültiger Abmeldelink.');
+        }
+
+        $subscription = $this->newsletterSubscriptionRepository->findOneByToken($token);
+        if (! $subscription instanceof NewsletterSubscription) {
+            return $this->renderUnsubscribeMessage('Dieser Abmeldelink ist nicht mehr gültig.');
+        }
+
+        if (! $subscription->isActive()) {
+            return $this->renderUnsubscribeMessage('Diese E-Mail-Adresse wurde bereits abgemeldet.');
+        }
+
+        $subscription->setUnsubscribedAt(new \DateTime());
+        $this->newsletterSubscriptionRepository->update($subscription);
+        $this->persistenceManager->persistAll();
+
+        return $this->renderUnsubscribeMessage('Du wurdest erfolgreich vom Newsletter abgemeldet.');
+    }
+
+    private function isSubscriptionInputValid(string $email, bool $privacy): bool
+    {
+        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        return $privacy;
+    }
+
+    private function findOrCreateParticipant(string $email): Participant
+    {
+        $participant = $this->participantRepository->findOneByEmail($email);
+        if ($participant instanceof Participant) {
+            return $participant;
+        }
+
+        $participant = new Participant();
+        $participant->setEmail($email);
+        $this->participantRepository->add($participant);
+
+        return $participant;
+    }
+
+    private function activateSubscription(
+        Participant $participant,
+        ?NewsletterSubscription $subscription
+    ): NewsletterSubscription {
         if (! $subscription instanceof NewsletterSubscription) {
             $subscription = new NewsletterSubscription();
             $subscription->setParticipant($participant);
@@ -60,16 +110,22 @@ final class NewsletterController extends ActionController
             $subscription->setSubscribedAt(new \DateTime());
             $subscription->setUnsubscribedAt(null);
             $this->newsletterSubscriptionRepository->add($subscription);
-        } else {
-            $subscription->setSubscribedAt(new \DateTime());
-            $subscription->setUnsubscribedAt(null);
-            if ($subscription->getToken() === '') {
-                $subscription->setToken(bin2hex(random_bytes(32)));
-            }
-            $this->newsletterSubscriptionRepository->update($subscription);
-        }
-        $this->persistenceManager->persistAll();
 
+            return $subscription;
+        }
+
+        $subscription->setSubscribedAt(new \DateTime());
+        $subscription->setUnsubscribedAt(null);
+        if ($subscription->getToken() === '') {
+            $subscription->setToken(bin2hex(random_bytes(32)));
+        }
+        $this->newsletterSubscriptionRepository->update($subscription);
+
+        return $subscription;
+    }
+
+    private function buildUnsubscribeUrl(string $token): string
+    {
         $newsletterPid = (int) ($this->settings['newsletterPid'] ?? 0);
         $uriBuilder = $this->uriBuilder
             ->reset()
@@ -79,46 +135,27 @@ final class NewsletterController extends ActionController
             $uriBuilder->setTargetPageUid($newsletterPid);
         }
 
-        $unsubscribeUrl = $uriBuilder->uriFor(
+        return $uriBuilder->uriFor(
             'unsubscribe',
-            ['token' => $subscription->getToken()],
+            ['token' => $token],
             'Newsletter',
             'MensCircle',
             'Newsletter'
         );
+    }
 
-        $this->mailService->sendNewsletterWelcome($subscription, $unsubscribeUrl, $this->settings);
-        $this->addFlashMessage('Danke! Du bist jetzt für den Newsletter angemeldet.', '', ContextualFeedbackSeverity::OK);
+    private function redirectToFormWithMessage(
+        string $message,
+        ContextualFeedbackSeverity $severity
+    ): ResponseInterface {
+        $this->addFlashMessage($message, '', $severity);
 
         return $this->redirect('form');
     }
 
-    public function unsubscribeAction(string $token = ''): ResponseInterface
+    private function renderUnsubscribeMessage(string $message): ResponseInterface
     {
-        if ($token === '') {
-            $this->view->assign('message', 'Ungültiger Abmeldelink.');
-
-            return $this->htmlResponse();
-        }
-
-        $subscription = $this->newsletterSubscriptionRepository->findOneByToken($token);
-        if (! $subscription instanceof NewsletterSubscription) {
-            $this->view->assign('message', 'Dieser Abmeldelink ist nicht mehr gültig.');
-
-            return $this->htmlResponse();
-        }
-
-        if (! $subscription->isActive()) {
-            $this->view->assign('message', 'Diese E-Mail-Adresse wurde bereits abgemeldet.');
-
-            return $this->htmlResponse();
-        }
-
-        $subscription->setUnsubscribedAt(new \DateTime());
-        $this->newsletterSubscriptionRepository->update($subscription);
-        $this->persistenceManager->persistAll();
-
-        $this->view->assign('message', 'Du wurdest erfolgreich vom Newsletter abgemeldet.');
+        $this->view->assign('message', $message);
 
         return $this->htmlResponse();
     }

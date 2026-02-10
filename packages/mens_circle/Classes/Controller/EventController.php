@@ -40,21 +40,11 @@ final class EventController extends ActionController
     public function listAction(): ResponseInterface
     {
         $events = $this->eventRepository->findUpcomingPublished();
-        $nextEvent = $this->eventRepository->findNextEvent();
-
-        $eventSummaries = [];
-        foreach ($events as $event) {
-            $registrations = $this->registrationRepository->countActiveByEvent($event);
-            $eventSummaries[] = [
-                'event' => $event,
-                'availableSpots' => max(0, $event->getMaxParticipants() - $registrations),
-            ];
-        }
 
         $this->view->assignMultiple([
             'events' => $events,
-            'eventSummaries' => $eventSummaries,
-            'nextEvent' => $nextEvent,
+            'eventSummaries' => $this->buildEventSummaries($events),
+            'nextEvent' => $this->eventRepository->findNextEvent(),
         ]);
 
         return $this->htmlResponse();
@@ -94,99 +84,69 @@ final class EventController extends ActionController
             return $this->redirectToEventOverview();
         }
 
-        $firstName = trim($firstName);
-        $lastName = trim($lastName);
-        $email = strtolower(trim($email));
-        $phoneNumber = trim($phoneNumber);
+        $normalizedFirstName = trim($firstName);
+        $normalizedLastName = trim($lastName);
+        $normalizedEmail = strtolower(trim($email));
+        $normalizedPhoneNumber = trim($phoneNumber);
 
-        if ($firstName === '' || $lastName === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacy) {
-            $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', ContextualFeedbackSeverity::ERROR);
-
-            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
+        if (! $this->isRegistrationInputValid($normalizedFirstName, $normalizedLastName, $normalizedEmail, $privacy)) {
+            return $this->redirectToEventDetailWithMessage(
+                $resolvedEvent,
+                'Bitte fülle alle Pflichtfelder korrekt aus.',
+                ContextualFeedbackSeverity::ERROR
+            );
         }
 
         if (! $resolvedEvent->isPublished()) {
-            $this->addFlashMessage('Dieser Termin ist nicht verfügbar.', '', ContextualFeedbackSeverity::ERROR);
-
-            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
+            return $this->redirectToEventDetailWithMessage(
+                $resolvedEvent,
+                'Dieser Termin ist nicht verfügbar.',
+                ContextualFeedbackSeverity::ERROR
+            );
         }
 
         if ($resolvedEvent->isPast()) {
-            $this->addFlashMessage('Dieser Termin liegt bereits in der Vergangenheit.', '', ContextualFeedbackSeverity::ERROR);
-
-            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
+            return $this->redirectToEventDetailWithMessage(
+                $resolvedEvent,
+                'Dieser Termin liegt bereits in der Vergangenheit.',
+                ContextualFeedbackSeverity::ERROR
+            );
         }
 
         $activeRegistrations = $this->registrationRepository->countActiveByEvent($resolvedEvent);
         if ($activeRegistrations >= $resolvedEvent->getMaxParticipants()) {
-            $this->addFlashMessage('Dieser Termin ist leider bereits ausgebucht.', '', ContextualFeedbackSeverity::ERROR);
-
-            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
+            return $this->redirectToEventDetailWithMessage(
+                $resolvedEvent,
+                'Dieser Termin ist leider bereits ausgebucht.',
+                ContextualFeedbackSeverity::ERROR
+            );
         }
 
-        $participant = $this->participantRepository->findOneByEmail($email);
-        if (! $participant instanceof Participant) {
-            $participant = new Participant();
-            $participant->setEmail($email);
-            $participant->setFirstName($firstName);
-            $participant->setLastName($lastName);
-            $participant->setPhone($phoneNumber);
-            $this->participantRepository->add($participant);
-        } else {
-            $participant->setFirstName($firstName);
-            $participant->setLastName($lastName);
-            $participant->setPhone($phoneNumber);
-            $this->participantRepository->update($participant);
-        }
+        $participant = $this->upsertParticipant(
+            email: $normalizedEmail,
+            firstName: $normalizedFirstName,
+            lastName: $normalizedLastName,
+            phoneNumber: $normalizedPhoneNumber
+        );
 
         $existingRegistration = $this->registrationRepository->findActiveByEventAndParticipant($resolvedEvent, $participant);
         if ($existingRegistration instanceof Registration) {
-            $this->addFlashMessage('Du bist bereits für diesen Termin angemeldet.', '', ContextualFeedbackSeverity::WARNING);
-
-            return $this->redirect('detail', null, null, ['event' => $resolvedEvent->getUid()]);
+            return $this->redirectToEventDetailWithMessage(
+                $resolvedEvent,
+                'Du bist bereits für diesen Termin angemeldet.',
+                ContextualFeedbackSeverity::WARNING
+            );
         }
 
-        $registration = new Registration();
-        $registration->setEvent($resolvedEvent);
-        $registration->setParticipant($participant);
-        $registration->setStatusEnum(RegistrationStatus::Registered);
-        $registration->setRegisteredAt(new \DateTime());
+        $registration = $this->createRegistration($resolvedEvent, $participant);
         $this->registrationRepository->add($registration);
 
         if ($newsletterOptIn) {
-            $subscription = $this->newsletterSubscriptionRepository->findOneByParticipant($participant);
-            if (! $subscription instanceof NewsletterSubscription) {
-                $subscription = new NewsletterSubscription();
-                $subscription->setParticipant($participant);
-                $subscription->setToken(bin2hex(random_bytes(32)));
-                $subscription->setSubscribedAt(new \DateTime());
-                $this->newsletterSubscriptionRepository->add($subscription);
-            } else {
-                if ($subscription->getToken() === '') {
-                    $subscription->setToken(bin2hex(random_bytes(32)));
-                }
-                $subscription->setSubscribedAt(new \DateTime());
-                $subscription->setUnsubscribedAt(null);
-                $this->newsletterSubscriptionRepository->update($subscription);
-            }
+            $this->activateNewsletterSubscription($participant);
         }
 
         $this->persistenceManager->persistAll();
-
-        $notificationSettings = is_array($this->settings) ? $this->settings : [];
-        $this->messageBus->dispatch(new SendEventMailMessage(
-            registrationUid: (int) $registration->getUid(),
-            type: SendEventMailMessage::TYPE_REGISTRATION_CONFIRMATION,
-            settings: $notificationSettings
-        ));
-
-        if ($participant->getPhone() !== '') {
-            $this->messageBus->dispatch(new SendEventSmsMessage(
-                registrationUid: (int) $registration->getUid(),
-                type: SendEventSmsMessage::TYPE_REGISTRATION_CONFIRMATION,
-                settings: $notificationSettings
-            ));
-        }
+        $this->dispatchRegistrationNotifications($registration, $participant);
 
         return $this->redirect('registerSuccess', null, null, ['event' => $resolvedEvent->getUid()]);
     }
@@ -222,29 +182,24 @@ final class EventController extends ActionController
             return $event;
         }
 
+        $candidateIdentifiers = [];
         if ($this->request->hasArgument('event')) {
-            $resolved = $this->resolveEventByIdentifier($this->request->getArgument('event'));
-            if ($resolved instanceof Event) {
-                return $resolved;
-            }
+            $candidateIdentifiers[] = $this->request->getArgument('event');
         }
 
-        $pluginArgumentNamespaces = [
-            'tx_menscircle_eventdetail',
-            'tx_menscircle_event',
-        ];
-        foreach ($pluginArgumentNamespaces as $pluginNamespace) {
+        foreach (['tx_menscircle_eventdetail', 'tx_menscircle_event'] as $pluginNamespace) {
             $pluginArguments = $this->resolveNamespacedPluginArguments($pluginNamespace);
             if (is_array($pluginArguments) && array_key_exists('event', $pluginArguments)) {
-                $resolved = $this->resolveEventByIdentifier($pluginArguments['event']);
-                if ($resolved instanceof Event) {
-                    return $resolved;
-                }
+                $candidateIdentifiers[] = $pluginArguments['event'];
             }
         }
 
         if (array_key_exists('event', $this->settings)) {
-            $resolved = $this->resolveEventByIdentifier($this->settings['event']);
+            $candidateIdentifiers[] = $this->settings['event'];
+        }
+
+        foreach ($candidateIdentifiers as $candidateIdentifier) {
+            $resolved = $this->resolveEventByIdentifier($candidateIdentifier);
             if ($resolved instanceof Event) {
                 return $resolved;
             }
@@ -348,14 +303,140 @@ final class EventController extends ActionController
 
     private function redirectToEventOverview(): ResponseInterface
     {
-        $eventOverviewPath = trim((string) ($this->settings['eventOverviewPath'] ?? '/event'));
-        if ($eventOverviewPath === '') {
-            $eventOverviewPath = '/event';
-        }
-        if (!str_starts_with($eventOverviewPath, '/')) {
-            $eventOverviewPath = '/' . $eventOverviewPath;
-        }
+        $eventOverviewPath = $this->normalizeOverviewPath((string) ($this->settings['eventOverviewPath'] ?? '/event'));
 
         return $this->redirectToUri($eventOverviewPath);
+    }
+
+    private function normalizeOverviewPath(string $path): string
+    {
+        $normalizedPath = trim($path);
+        if ($normalizedPath === '') {
+            return '/event';
+        }
+
+        return str_starts_with($normalizedPath, '/') ? $normalizedPath : '/' . $normalizedPath;
+    }
+
+    /**
+     * @param iterable<Event> $events
+     * @return list<array{event: Event, availableSpots: int}>
+     */
+    private function buildEventSummaries(iterable $events): array
+    {
+        $eventSummaries = [];
+        foreach ($events as $event) {
+            $registrations = $this->registrationRepository->countActiveByEvent($event);
+            $eventSummaries[] = [
+                'event' => $event,
+                'availableSpots' => max(0, $event->getMaxParticipants() - $registrations),
+            ];
+        }
+
+        return $eventSummaries;
+    }
+
+    private function isRegistrationInputValid(
+        string $firstName,
+        string $lastName,
+        string $email,
+        bool $privacy
+    ): bool {
+        if ($firstName === '' || $lastName === '' || $email === '') {
+            return false;
+        }
+
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        return $privacy;
+    }
+
+    private function redirectToEventDetailWithMessage(
+        Event $event,
+        string $message,
+        ContextualFeedbackSeverity $severity
+    ): ResponseInterface {
+        $this->addFlashMessage($message, '', $severity);
+
+        return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
+    }
+
+    private function upsertParticipant(
+        string $email,
+        string $firstName,
+        string $lastName,
+        string $phoneNumber
+    ): Participant {
+        $participant = $this->participantRepository->findOneByEmail($email);
+        if (! $participant instanceof Participant) {
+            $participant = new Participant();
+            $participant->setEmail($email);
+        }
+
+        $participant->setFirstName($firstName);
+        $participant->setLastName($lastName);
+        $participant->setPhone($phoneNumber);
+
+        if ((int) $participant->getUid() > 0) {
+            $this->participantRepository->update($participant);
+        } else {
+            $this->participantRepository->add($participant);
+        }
+
+        return $participant;
+    }
+
+    private function createRegistration(Event $event, Participant $participant): Registration
+    {
+        $registration = new Registration();
+        $registration->setEvent($event);
+        $registration->setParticipant($participant);
+        $registration->setStatusEnum(RegistrationStatus::Registered);
+        $registration->setRegisteredAt(new \DateTime());
+
+        return $registration;
+    }
+
+    private function activateNewsletterSubscription(Participant $participant): void
+    {
+        $subscription = $this->newsletterSubscriptionRepository->findOneByParticipant($participant);
+        if (! $subscription instanceof NewsletterSubscription) {
+            $subscription = new NewsletterSubscription();
+            $subscription->setParticipant($participant);
+            $subscription->setToken(bin2hex(random_bytes(32)));
+            $subscription->setSubscribedAt(new \DateTime());
+            $this->newsletterSubscriptionRepository->add($subscription);
+
+            return;
+        }
+
+        if ($subscription->getToken() === '') {
+            $subscription->setToken(bin2hex(random_bytes(32)));
+        }
+        $subscription->setSubscribedAt(new \DateTime());
+        $subscription->setUnsubscribedAt(null);
+        $this->newsletterSubscriptionRepository->update($subscription);
+    }
+
+    private function dispatchRegistrationNotifications(Registration $registration, Participant $participant): void
+    {
+        $notificationSettings = is_array($this->settings) ? $this->settings : [];
+        $this->messageBus->dispatch(new SendEventMailMessage(
+            registrationUid: (int) $registration->getUid(),
+            type: SendEventMailMessage::TYPE_REGISTRATION_CONFIRMATION,
+            settings: $notificationSettings
+        ));
+
+        if ($participant->getPhone() === '') {
+            return;
+        }
+
+        $this->messageBus->dispatch(new SendEventSmsMessage(
+            registrationUid: (int) $registration->getUid(),
+            type: SendEventSmsMessage::TYPE_REGISTRATION_CONFIRMATION,
+            settings: $notificationSettings
+        ));
     }
 }

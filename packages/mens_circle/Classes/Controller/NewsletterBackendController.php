@@ -45,13 +45,8 @@ final class NewsletterBackendController extends ActionController
 
     public function sendAction(): ResponseInterface
     {
-        try {
-            $subject = trim((string) ($this->request->hasArgument('subject') ? $this->request->getArgument('subject') : ''));
-            $content = (string) ($this->request->hasArgument('content') ? $this->request->getArgument('content') : '');
-        } catch (NoSuchArgumentException) {
-            $subject = '';
-            $content = '';
-        }
+        $subject = trim($this->resolveRequestArgument('subject'));
+        $content = $this->resolveRequestArgument('content');
 
         if ($subject === '' || $this->isNewsletterContentEmpty($content)) {
             $this->addFlashMessage(
@@ -74,31 +69,13 @@ final class NewsletterBackendController extends ActionController
             return $this->redirect('index');
         }
 
-        $baseUrl = rtrim((string) ($this->settings['baseUrl'] ?? ''), '/');
-        $newsletterPid = (int) ($this->settings['newsletterPid'] ?? 0);
-        $settings = is_array($this->settings) ? $this->settings : [];
-
-        $dispatchedCount = 0;
-        $failedCount = 0;
-        foreach ($recipients as $recipient) {
-            try {
-                $this->messageBus->dispatch(new SendNewsletterMessage(
-                    toEmail: (string) ($recipient['email'] ?? ''),
-                    toName: $this->buildRecipientName($recipient),
-                    subject: $subject,
-                    content: $content,
-                    unsubscribeUrl: $this->buildUnsubscribeUrl(
-                        $baseUrl,
-                        $newsletterPid,
-                        (string) ($recipient['token'] ?? '')
-                    ),
-                    settings: $settings
-                ));
-                $dispatchedCount++;
-            } catch (\Throwable) {
-                $failedCount++;
-            }
-        }
+        $dispatchResult = $this->dispatchMessages(
+            recipients: $recipients,
+            subject: $subject,
+            content: $content
+        );
+        $dispatchedCount = $dispatchResult['dispatched'];
+        $failedCount = $dispatchResult['failed'];
 
         if ($dispatchedCount > 0) {
             $this->addFlashMessage(
@@ -162,15 +139,15 @@ final class NewsletterBackendController extends ActionController
      */
     private function buildRecipientPreview(array $recipients): array
     {
-        $preview = [];
-        foreach ($recipients as $recipient) {
-            $preview[] = [
+        return array_map(
+            function (array $recipient): array {
+                return [
                 'name' => $this->buildRecipientName($recipient),
                 'email' => (string) ($recipient['email'] ?? ''),
-            ];
-        }
-
-        return $preview;
+                ];
+            },
+            $recipients
+        );
     }
 
     /**
@@ -210,6 +187,57 @@ final class NewsletterBackendController extends ActionController
         $normalizedContent = str_replace("\xc2\xa0", ' ', $normalizedContent);
 
         return trim(strip_tags($normalizedContent)) === '';
+    }
+
+    /**
+     * @param list<array<string, mixed>> $recipients
+     * @return array{dispatched: int, failed: int}
+     */
+    private function dispatchMessages(array $recipients, string $subject, string $content): array
+    {
+        $baseUrl = rtrim((string) ($this->settings['baseUrl'] ?? ''), '/');
+        $newsletterPid = (int) ($this->settings['newsletterPid'] ?? 0);
+        $settings = is_array($this->settings) ? $this->settings : [];
+
+        $dispatchedCount = 0;
+        $failedCount = 0;
+        foreach ($recipients as $recipient) {
+            try {
+                $this->messageBus->dispatch(new SendNewsletterMessage(
+                    toEmail: (string) ($recipient['email'] ?? ''),
+                    toName: $this->buildRecipientName($recipient),
+                    subject: $subject,
+                    content: $content,
+                    unsubscribeUrl: $this->buildUnsubscribeUrl(
+                        $baseUrl,
+                        $newsletterPid,
+                        (string) ($recipient['token'] ?? '')
+                    ),
+                    settings: $settings
+                ));
+                $dispatchedCount++;
+            } catch (\Throwable) {
+                $failedCount++;
+            }
+        }
+
+        return [
+            'dispatched' => $dispatchedCount,
+            'failed' => $failedCount,
+        ];
+    }
+
+    private function resolveRequestArgument(string $name): string
+    {
+        try {
+            if (! $this->request->hasArgument($name)) {
+                return '';
+            }
+
+            return (string) $this->request->getArgument($name);
+        } catch (NoSuchArgumentException) {
+            return '';
+        }
     }
 
     private function buildRteOptionsJson(): string

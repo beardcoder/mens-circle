@@ -12,6 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -22,6 +23,7 @@ final class EventBackendController extends ActionController
     private const REGISTRATION_TABLE = 'tx_menscircle_domain_model_registration';
     private const PARTICIPANT_TABLE = 'tx_menscircle_domain_model_participant';
     private const NEWSLETTER_SUBSCRIPTION_TABLE = 'tx_menscircle_domain_model_newslettersubscription';
+    private const LANGUAGE_FILE_PREFIX = 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_events.xlf:';
 
     public function __construct(
         private readonly ConnectionPool $connectionPool,
@@ -91,56 +93,105 @@ final class EventBackendController extends ActionController
         $eventRows = [];
 
         foreach ($events as $event) {
-            $eventUid = (int) ($event['uid'] ?? 0);
-            if ($eventUid <= 0) {
-                continue;
+            $eventRow = $this->buildEventRow($event, $registrationCounts, $participantsByEvent, $returnUrl, $moduleIdentifier);
+            if (is_array($eventRow)) {
+                $eventRows[] = $eventRow;
             }
-
-            $eventDate = $this->createDateTimeImmutable($event['event_date'] ?? null);
-            $isPast = $eventDate instanceof \DateTimeImmutable && $eventDate->setTime(23, 59, 59) < new \DateTimeImmutable('now');
-
-            $maxParticipants = max(0, (int) ($event['max_participants'] ?? 0));
-            $activeRegistrations = $registrationCounts[$eventUid] ?? 0;
-            $availableSpots = max(0, $maxParticipants - $activeRegistrations);
-
-            $locationParts = array_filter([
-                trim((string) ($event['location'] ?? '')),
-                trim((string) ($event['city'] ?? '')),
-            ]);
-            $locationLabel = $locationParts === []
-                ? $this->translate('label.noLocation')
-                : implode(', ', $locationParts);
-
-            $status = $this->resolveStatus(
-                isHidden: (int) ($event['hidden'] ?? 0) === 1,
-                isPublished: (int) ($event['is_published'] ?? 0) === 1,
-                isPast: $isPast
-            );
-
-            $slug = trim((string) ($event['slug'] ?? ''));
-            $participants = $participantsByEvent[$eventUid] ?? [];
-
-            $eventRows[] = [
-                'uid' => $eventUid,
-                'title' => trim((string) ($event['title'] ?? '')) !== '' ? trim((string) ($event['title'] ?? '')) : '-',
-                'slug' => $slug,
-                'dateLabel' => $eventDate?->format('d.m.Y') ?? '-',
-                'timeLabel' => $this->formatTimeRange($event['start_time'] ?? null, $event['end_time'] ?? null),
-                'locationLabel' => $locationLabel,
-                'activeRegistrations' => $activeRegistrations,
-                'maxParticipants' => $maxParticipants,
-                'availableSpots' => $availableSpots,
-                'statusLabel' => $status['label'],
-                'statusClass' => $status['class'],
-                'participantsCount' => count($participants),
-                'participants' => $participants,
-                'editUrl' => $this->buildEditEventUrl($eventUid, $returnUrl, $moduleIdentifier),
-                'recordsUrl' => $this->buildRecordsModuleUrl((int) ($event['pid'] ?? 0)),
-                'frontendUrl' => $this->buildFrontendEventUrl($slug),
-            ];
         }
 
         return $eventRows;
+    }
+
+    /**
+     * @param array<string, mixed> $event
+     * @param array<int, int> $registrationCounts
+     * @param array<int, list<array{
+     *   uid: int,
+     *   name: string,
+     *   email: string,
+     *   phone: string,
+     *   registrationStatusLabel: string,
+     *   registrationStatusClass: string,
+     *   registrationDateLabel: string,
+     *   newsletterStatusLabel: string,
+     *   newsletterStatusClass: string,
+     *   newsletterDateLabel: string
+     * }>> $participantsByEvent
+     * @return array{
+     *   uid: int,
+     *   title: string,
+     *   slug: string,
+     *   dateLabel: string,
+     *   timeLabel: string,
+     *   locationLabel: string,
+     *   activeRegistrations: int,
+     *   maxParticipants: int,
+     *   availableSpots: int,
+     *   statusLabel: string,
+     *   statusClass: string,
+     *   participantsCount: int,
+     *   participants: list<array{
+     *     uid: int,
+     *     name: string,
+     *     email: string,
+     *     phone: string,
+     *     registrationStatusLabel: string,
+     *     registrationStatusClass: string,
+     *     registrationDateLabel: string,
+     *     newsletterStatusLabel: string,
+     *     newsletterStatusClass: string,
+     *     newsletterDateLabel: string
+     *   }>,
+     *   editUrl: string,
+     *   recordsUrl: string,
+     *   frontendUrl: string
+     * }|null
+     */
+    private function buildEventRow(
+        array $event,
+        array $registrationCounts,
+        array $participantsByEvent,
+        string $returnUrl,
+        string $moduleIdentifier
+    ): ?array {
+        $eventUid = (int) ($event['uid'] ?? 0);
+        if ($eventUid <= 0) {
+            return null;
+        }
+
+        $eventDate = $this->createDateTimeImmutable($event['event_date'] ?? null);
+        $isPast = $eventDate instanceof \DateTimeImmutable && $eventDate->setTime(23, 59, 59) < new \DateTimeImmutable('now');
+
+        $maxParticipants = max(0, (int) ($event['max_participants'] ?? 0));
+        $activeRegistrations = $registrationCounts[$eventUid] ?? 0;
+        $availableSpots = max(0, $maxParticipants - $activeRegistrations);
+
+        $slug = trim((string) ($event['slug'] ?? ''));
+        $participants = $participantsByEvent[$eventUid] ?? [];
+        $status = $this->resolveStatus(
+            isHidden: (int) ($event['hidden'] ?? 0) === 1,
+            isPublished: (int) ($event['is_published'] ?? 0) === 1,
+            isPast: $isPast
+        );
+
+        return [
+            'uid' => $eventUid,
+            'title' => $this->normalizeTextOrFallback($event['title'] ?? null, '-'),
+            'slug' => $slug,
+            'dateLabel' => $eventDate?->format('d.m.Y') ?? '-',
+            'timeLabel' => $this->formatTimeRange($event['start_time'] ?? null, $event['end_time'] ?? null),
+            'locationLabel' => $this->buildLocationLabel($event['location'] ?? null, $event['city'] ?? null),
+            'activeRegistrations' => $activeRegistrations,
+            'maxParticipants' => $maxParticipants,
+            'availableSpots' => $availableSpots,
+            'statusLabel' => $status['label'],
+            'statusClass' => $status['class'],
+            'participantsCount' => count($participants),
+            'participants' => $participants,
+            'editUrl' => $this->buildEditEventUrl($eventUid, $returnUrl, $moduleIdentifier),
+            'recordsUrl' => $this->buildRecordsModuleUrl((int) ($event['pid'] ?? 0)),
+            'frontendUrl' => $this->buildFrontendEventUrl($slug),
+        ];
     }
 
     /**
@@ -149,9 +200,7 @@ final class EventBackendController extends ActionController
      */
     private function fetchEvents(): array
     {
-        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::EVENT_TABLE);
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder = $this->createDeletedOnlyQueryBuilder(self::EVENT_TABLE);
 
         $rows = $queryBuilder
             ->select(
@@ -183,9 +232,7 @@ final class EventBackendController extends ActionController
      */
     private function fetchActiveRegistrationCountsByEvent(): array
     {
-        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::REGISTRATION_TABLE);
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder = $this->createDeletedOnlyQueryBuilder(self::REGISTRATION_TABLE);
 
         $rows = $queryBuilder
             ->select('event')
@@ -234,9 +281,7 @@ final class EventBackendController extends ActionController
      */
     private function fetchParticipantsByEvent(): array
     {
-        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::REGISTRATION_TABLE);
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder = $this->createDeletedOnlyQueryBuilder(self::REGISTRATION_TABLE);
 
         $rows = $queryBuilder
             ->select(
@@ -327,9 +372,7 @@ final class EventBackendController extends ActionController
             return [];
         }
 
-        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::NEWSLETTER_SUBSCRIPTION_TABLE);
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder = $this->createDeletedOnlyQueryBuilder(self::NEWSLETTER_SUBSCRIPTION_TABLE);
 
         $rows = $queryBuilder
             ->select('uid', 'participant', 'subscribed_at', 'confirmed_at', 'unsubscribed_at')
@@ -436,12 +479,12 @@ final class EventBackendController extends ActionController
 
     private function buildParticipantName(string $firstName, string $lastName, string $email): string
     {
-        $fullName = trim(trim($firstName) . ' ' . trim($lastName));
+        $fullName = trim($this->normalizeText($firstName) . ' ' . $this->normalizeText($lastName));
         if ($fullName !== '') {
             return $fullName;
         }
 
-        return trim($email) !== '' ? trim($email) : '-';
+        return $this->normalizeTextOrFallback($email, '-');
     }
 
     /**
@@ -449,31 +492,24 @@ final class EventBackendController extends ActionController
      */
     private function resolveStatus(bool $isHidden, bool $isPublished, bool $isPast): array
     {
-        if ($isHidden) {
-            return [
+        return match (true) {
+            $isHidden => [
                 'label' => $this->translate('status.hidden'),
                 'class' => 'text-bg-secondary',
-            ];
-        }
-
-        if (!$isPublished) {
-            return [
+            ],
+            ! $isPublished => [
                 'label' => $this->translate('status.draft'),
                 'class' => 'text-bg-warning',
-            ];
-        }
-
-        if ($isPast) {
-            return [
+            ],
+            $isPast => [
                 'label' => $this->translate('status.past'),
                 'class' => 'text-bg-light',
-            ];
-        }
-
-        return [
-            'label' => $this->translate('status.live'),
-            'class' => 'text-bg-success',
-        ];
+            ],
+            default => [
+                'label' => $this->translate('status.live'),
+                'class' => 'text-bg-success',
+            ],
+        };
     }
 
     private function formatTimeRange(mixed $startTime, mixed $endTime): string
@@ -529,36 +565,12 @@ final class EventBackendController extends ActionController
 
     private function buildEditEventUrl(int $eventUid, string $returnUrl, string $moduleIdentifier): string
     {
-        $parameters = [
-            'edit' => [
-                self::EVENT_TABLE => [
-                    $eventUid => 'edit',
-                ],
-            ],
-            'returnUrl' => $returnUrl,
-        ];
-        if ($moduleIdentifier !== '') {
-            $parameters['module'] = $moduleIdentifier;
-        }
-
-        return (string) $this->backendUriBuilder->buildUriFromRoute('record_edit', $parameters);
+        return $this->buildRecordEditUrl($eventUid, 'edit', $returnUrl, $moduleIdentifier);
     }
 
     private function buildNewEventUrl(int $storagePid, string $returnUrl, string $moduleIdentifier): string
     {
-        $parameters = [
-            'edit' => [
-                self::EVENT_TABLE => [
-                    $storagePid => 'new',
-                ],
-            ],
-            'returnUrl' => $returnUrl,
-        ];
-        if ($moduleIdentifier !== '') {
-            $parameters['module'] = $moduleIdentifier;
-        }
-
-        return (string) $this->backendUriBuilder->buildUriFromRoute('record_edit', $parameters);
+        return $this->buildRecordEditUrl($storagePid, 'new', $returnUrl, $moduleIdentifier);
     }
 
     private function buildRecordsModuleUrl(int $pageUid): string
@@ -586,9 +598,65 @@ final class EventBackendController extends ActionController
 
     private function translate(string $key): string
     {
-        $languageKey = 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_events.xlf:' . $key;
+        $languageKey = self::LANGUAGE_FILE_PREFIX . $key;
         $translated = $GLOBALS['LANG']?->sL($languageKey);
 
         return is_string($translated) && $translated !== '' ? $translated : $key;
+    }
+
+    private function buildLocationLabel(mixed $location, mixed $city): string
+    {
+        $locationParts = array_filter([
+            $this->normalizeText($location),
+            $this->normalizeText($city),
+        ]);
+
+        if ($locationParts === []) {
+            return $this->translate('label.noLocation');
+        }
+
+        return implode(', ', $locationParts);
+    }
+
+    private function normalizeText(mixed $value): string
+    {
+        return trim((string) $value);
+    }
+
+    private function normalizeTextOrFallback(mixed $value, string $fallback): string
+    {
+        $normalized = $this->normalizeText($value);
+
+        return $normalized !== '' ? $normalized : $fallback;
+    }
+
+    private function buildRecordEditUrl(
+        int $targetUid,
+        string $mode,
+        string $returnUrl,
+        string $moduleIdentifier
+    ): string {
+        $parameters = [
+            'edit' => [
+                self::EVENT_TABLE => [
+                    $targetUid => $mode,
+                ],
+            ],
+            'returnUrl' => $returnUrl,
+        ];
+        if ($moduleIdentifier !== '') {
+            $parameters['module'] = $moduleIdentifier;
+        }
+
+        return (string) $this->backendUriBuilder->buildUriFromRoute('record_edit', $parameters);
+    }
+
+    private function createDeletedOnlyQueryBuilder(string $table): QueryBuilder
+    {
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
+        $queryBuilder->getRestrictions()->removeAll();
+        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+
+        return $queryBuilder;
     }
 }

@@ -13,6 +13,8 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 final class TestimonialController extends ActionController
 {
+    private const MIN_QUOTE_LENGTH = 10;
+
     public function __construct(
         private readonly TestimonialRepository $testimonialRepository,
         private readonly PersistenceManager $persistenceManager
@@ -39,25 +41,21 @@ final class TestimonialController extends ActionController
         bool $privacy = false
     ): ResponseInterface
     {
-        $quote = trim($quote);
-        $authorName = trim($authorName);
-        $role = trim($role);
-        $email = strtolower(trim($email));
+        $normalizedQuote = trim($quote);
+        $normalizedAuthorName = trim($authorName);
+        $normalizedRole = trim($role);
+        $normalizedEmail = strtolower(trim($email));
 
-        if ($quote === '' || mb_strlen($quote) < 10 || $email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || ! $privacy) {
-            $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', ContextualFeedbackSeverity::ERROR);
-
-            return $this->redirect('form');
+        if (! $this->isSubmissionValid($normalizedQuote, $normalizedEmail, $privacy)) {
+            return $this->redirectToFormWithError();
         }
 
-        $testimonial = new Testimonial();
-        $testimonial->setQuote($quote);
-        $testimonial->setAuthorName($authorName);
-        $testimonial->setRole($role);
-        $testimonial->setEmail($email);
-        $testimonial->setIsPublished(false);
-        $testimonial->setSortOrder(0);
-
+        $testimonial = $this->createPendingTestimonial(
+            quote: $normalizedQuote,
+            authorName: $normalizedAuthorName,
+            role: $normalizedRole,
+            email: $normalizedEmail
+        );
         $this->testimonialRepository->add($testimonial);
         $this->persistenceManager->persistAll();
 
@@ -67,5 +65,42 @@ final class TestimonialController extends ActionController
     public function thanksAction(): ResponseInterface
     {
         return $this->htmlResponse();
+    }
+
+    private function isSubmissionValid(string $quote, string $email, bool $privacy): bool
+    {
+        if ($quote === '' || mb_strlen($quote) < self::MIN_QUOTE_LENGTH) {
+            return false;
+        }
+
+        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        return $privacy;
+    }
+
+    private function redirectToFormWithError(): ResponseInterface
+    {
+        $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', ContextualFeedbackSeverity::ERROR);
+
+        return $this->redirect('form');
+    }
+
+    private function createPendingTestimonial(
+        string $quote,
+        string $authorName,
+        string $role,
+        string $email
+    ): Testimonial {
+        $testimonial = new Testimonial();
+        $testimonial->setQuote($quote);
+        $testimonial->setAuthorName($authorName);
+        $testimonial->setRole($role);
+        $testimonial->setEmail($email);
+        $testimonial->setIsPublished(false);
+        $testimonial->setSortOrder(0);
+
+        return $testimonial;
     }
 }
