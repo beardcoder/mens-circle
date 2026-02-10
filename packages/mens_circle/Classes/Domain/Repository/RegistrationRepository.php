@@ -8,11 +8,21 @@ use MarkusSommer\MensCircle\Domain\Enum\RegistrationStatus;
 use MarkusSommer\MensCircle\Domain\Model\Event;
 use MarkusSommer\MensCircle\Domain\Model\Participant;
 use MarkusSommer\MensCircle\Domain\Model\Registration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 final class RegistrationRepository extends Repository
 {
+    public function initializeObject(): void
+    {
+        /** @var Typo3QuerySettings $querySettings */
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
+        $querySettings->setRespectStoragePage(false);
+        $this->setDefaultQuerySettings($querySettings);
+    }
+
     /**
      * @return QueryResultInterface<Registration>
      */

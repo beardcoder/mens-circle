@@ -37,7 +37,6 @@
         "typo3/cms-seo": "^14.0",
         "typo3/cms-setup": "^14.0",
         "typo3/cms-sys-note": "^14.0",
-        "typo3/cms-tstemplate": "^14.0",
         "typo3/cms-viewpage": "^14.0",
         "typo3/cms-webhooks": "^14.0"
     },
@@ -52,6 +51,9 @@
         }
     },
     "require-dev": {
-        "yiisoft/var-dumper": "^1.7"
+        "phpstan/phpstan": "^2.1",
+        "symfony/var-dumper": "^7.4",
+        "typo3/cms-lowlevel": "^14.1",
+        "typo3/cms-tstemplate": "^14.1"
     }
 }
