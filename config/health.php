@@ -126,6 +126,8 @@ return [
      */
     'schedule' => [
         'heartbeat_url' => env('SCHEDULE_HEARTBEAT_URL'),
+        'cache_store' => env('HEALTH_SCHEDULE_CACHE_STORE', 'health'),
+        'heartbeat_max_age_in_minutes' => (int) env('HEALTH_SCHEDULE_HEARTBEAT_MAX_AGE_MINUTES', 10),
     ],
 
     /*

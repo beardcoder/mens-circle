@@ -53,6 +53,12 @@ return [
             'lock_path' => storage_path('framework/cache/data'),
         ],
 
+        'health' => [
+            'driver' => 'file',
+            'path' => storage_path('framework/cache/health'),
+            'lock_path' => storage_path('framework/cache/health'),
+        ],
+
         'memcached' => [
             'driver' => 'memcached',
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),

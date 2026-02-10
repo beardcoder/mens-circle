@@ -81,7 +81,8 @@ class AppServiceProvider extends ServiceProvider
 
             // Schedule Check - wichtig für Event-Reminders und Sitemap
             ScheduleCheck::new()
-                ->heartbeatMaxAgeInMinutes(10),
+                ->useCacheStore((string) config('health.schedule.cache_store', 'health'))
+                ->heartbeatMaxAgeInMinutes((int) config('health.schedule.heartbeat_max_age_in_minutes', 10)),
 
             // Queue Check - wichtig für asynchrone Jobs
             QueueHealthCheck::new()
