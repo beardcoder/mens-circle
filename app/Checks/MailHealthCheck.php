@@ -60,13 +60,7 @@ class MailHealthCheck extends Check
                 default => 'smtp',
             };
 
-            $dsn = new Dsn(
-                $scheme,
-                $host,
-                $username,
-                $password,
-                $port,
-            );
+            $dsn = new Dsn($scheme, $host, $username, $password, $port,);
 
             $factory = new EsmtpTransportFactory();
             $transport = $factory->create($dsn);
@@ -88,7 +82,9 @@ class MailHealthCheck extends Check
             return $result
                 ->failed('SMTP-Verbindungsfehler: ' . $throwable->getMessage())
                 ->shortSummary('Verbindungsfehler')
-                ->meta(['error' => $throwable->getMessage()]);
+                ->meta([
+'error' => $throwable->getMessage()
+]);
         }
     }
 }

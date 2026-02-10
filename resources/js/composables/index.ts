@@ -27,6 +27,7 @@ export function useIntersectionObserver(options: AnimationOptions = {}): void {
     inView(
       section,
       () => {
+        // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
         animate(
           section,
           { opacity: [0, 1], y: [20, 0] },
@@ -48,6 +49,7 @@ export function useIntersectionObserver(options: AnimationOptions = {}): void {
     inView(
       list,
       () => {
+        // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
         animate(
           items,
           { opacity: [0, 1], y: [20, 0] },
@@ -67,6 +69,7 @@ export function useIntersectionObserver(options: AnimationOptions = {}): void {
     inView(
       el,
       () => {
+        // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
         animate(
           el,
           { opacity: [0, 1], scale: [0.9, 1] },
@@ -213,6 +216,7 @@ export function showToast(
   document.body.appendChild(toast);
 
   // Animate in
+  // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
   animate(
     toast,
     { opacity: [0, 1], y: [-20, 0], scale: [0.95, 1] },
@@ -221,6 +225,7 @@ export function showToast(
 
   // Auto-dismiss after 5 seconds
   setTimeout(() => {
+    // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
     animate(
       toast,
       { opacity: 0, y: -20, scale: 0.95 },

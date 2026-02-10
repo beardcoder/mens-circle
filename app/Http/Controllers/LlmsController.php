@@ -16,7 +16,8 @@ class LlmsController extends Controller
 {
     public function __construct(
         private readonly GeneralSettings $settings,
-    ) {}
+    ) {
+    }
 
     public function show(): Response
     {
@@ -210,7 +211,8 @@ class LlmsController extends Controller
                 $lines[] = $this->convertHtmlToMarkdown($event->description);
             }
 
-            $url = url()->route('event.show.slug', $event->slug);
+            $url = url()
+->route('event.show.slug', $event->slug);
             $lines[] = '';
             $lines[] = '**Mehr Informationen und Anmeldung:** ' . $url;
             $lines[] = '';
@@ -242,7 +244,8 @@ class LlmsController extends Controller
 
         foreach ($pastEvents as $event) {
             $date = $event->event_date->format('d.m.Y');
-            $url = url()->route('event.show.slug', $event->slug);
+            $url = url()
+->route('event.show.slug', $event->slug);
             $lines[] = "- **[{$event->title}]({$url})** - {$date}";
         }
 
@@ -277,7 +280,8 @@ class LlmsController extends Controller
         foreach ($pages as $page) {
             $lines[] = '### ' . $page->title;
             $lines[] = '';
-            $url = url()->route('page.show', $page->slug);
+            $url = url()
+->route('page.show', $page->slug);
             $lines[] = '**URL:** ' . $url;
             $lines[] = '';
 
@@ -312,22 +316,22 @@ class LlmsController extends Controller
                 continue;
             }
 
-            if (! \is_array($faq['items'])) {
+            if (!\is_array($faq['items'])) {
                 continue;
             }
 
-            if (! empty($faq['title']) && \is_string($faq['title'])) {
+            if (!empty($faq['title']) && \is_string($faq['title'])) {
                 $lines[] = '### ' . $this->convertHtmlToMarkdown($faq['title']);
                 $lines[] = '';
             }
 
-            if (! empty($faq['intro']) && \is_string($faq['intro'])) {
+            if (!empty($faq['intro']) && \is_string($faq['intro'])) {
                 $lines[] = $faq['intro'];
                 $lines[] = '';
             }
 
             foreach ($faq['items'] as $item) {
-                if (! \is_array($item)) {
+                if (!\is_array($item)) {
                     continue;
                 }
 
@@ -335,7 +339,7 @@ class LlmsController extends Controller
                     continue;
                 }
 
-                if (! \is_string($item['question'])) {
+                if (!\is_string($item['question'])) {
                     continue;
                 }
 
@@ -343,7 +347,7 @@ class LlmsController extends Controller
                     continue;
                 }
 
-                if (! \is_string($item['answer'])) {
+                if (!\is_string($item['answer'])) {
                     continue;
                 }
 
@@ -460,23 +464,23 @@ class LlmsController extends Controller
 
         switch ($block->type) {
             case 'hero':
-                if (! empty($data['label']) && \is_string($data['label'])) {
+                if (!empty($data['label']) && \is_string($data['label'])) {
                     $lines[] = "*{$data['label']}*";
                     $lines[] = '';
                 }
 
-                if (! empty($data['title']) && \is_string($data['title'])) {
+                if (!empty($data['title']) && \is_string($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
-                if (! empty($data['description']) && \is_string($data['description'])) {
+                if (!empty($data['description']) && \is_string($data['description'])) {
                     $lines[] = $data['description'];
                     $lines[] = '';
                 }
 
-                $hasButtonText = ! empty($data['button_text']) && \is_string($data['button_text']);
-                $hasButtonLink = ! empty($data['button_link']) && \is_string($data['button_link']);
+                $hasButtonText = !empty($data['button_text']) && \is_string($data['button_text']);
+                $hasButtonLink = !empty($data['button_link']) && \is_string($data['button_link']);
 
                 if ($hasButtonText && $hasButtonLink) {
                     \assert(\is_string($data['button_text']));
@@ -488,17 +492,17 @@ class LlmsController extends Controller
                 break;
 
             case 'text_section':
-                if (! empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
+                if (!empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
                     $lines[] = "*{$data['eyebrow']}*";
                     $lines[] = '';
                 }
 
-                if (! empty($data['title']) && \is_string($data['title'])) {
+                if (!empty($data['title']) && \is_string($data['title'])) {
                     $lines[] = '#### ' . $data['title'];
                     $lines[] = '';
                 }
 
-                if (! empty($data['content']) && \is_string($data['content'])) {
+                if (!empty($data['content']) && \is_string($data['content'])) {
                     $lines[] = $this->convertHtmlToMarkdown($data['content']);
                     $lines[] = '';
                 }
@@ -506,29 +510,29 @@ class LlmsController extends Controller
                 break;
 
             case 'intro':
-                if (! empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
+                if (!empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
                     $lines[] = "*{$data['eyebrow']}*";
                     $lines[] = '';
                 }
 
-                if (! empty($data['title']) && \is_string($data['title'])) {
+                if (!empty($data['title']) && \is_string($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
-                if (! empty($data['text']) && \is_string($data['text'])) {
+                if (!empty($data['text']) && \is_string($data['text'])) {
                     $lines[] = $data['text'];
                     $lines[] = '';
                 }
 
-                if (! empty($data['quote']) && \is_string($data['quote'])) {
+                if (!empty($data['quote']) && \is_string($data['quote'])) {
                     $lines[] = '> ' . $this->convertHtmlToMarkdown($data['quote']);
                     $lines[] = '';
                 }
 
-                if (! empty($data['values']) && \is_array($data['values'])) {
+                if (!empty($data['values']) && \is_array($data['values'])) {
                     foreach ($data['values'] as $value) {
-                        if (! \is_array($value)) {
+                        if (!\is_array($value)) {
                             continue;
                         }
 
@@ -536,13 +540,13 @@ class LlmsController extends Controller
                             continue;
                         }
 
-                        if (! \is_string($value['title'])) {
+                        if (!\is_string($value['title'])) {
                             continue;
                         }
 
                         $prefix = $this->getListPrefix($value['number'] ?? null);
                         $lines[] = "{$prefix}**{$value['title']}**";
-                        if (! empty($value['description']) && \is_string($value['description'])) {
+                        if (!empty($value['description']) && \is_string($value['description'])) {
                             $lines[] = '  ' . $value['description'];
                         }
 
@@ -554,25 +558,25 @@ class LlmsController extends Controller
 
             case 'value_items':
             case 'journey_steps':
-                if (! empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
+                if (!empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
                     $lines[] = "*{$data['eyebrow']}*";
                     $lines[] = '';
                 }
 
-                if (! empty($data['title']) && \is_string($data['title'])) {
+                if (!empty($data['title']) && \is_string($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
-                if (! empty($data['subtitle']) && \is_string($data['subtitle'])) {
+                if (!empty($data['subtitle']) && \is_string($data['subtitle'])) {
                     $lines[] = $data['subtitle'];
                     $lines[] = '';
                 }
 
                 $items = $data['items'] ?? $data['steps'] ?? [];
-                if (! empty($items) && \is_array($items)) {
+                if (!empty($items) && \is_array($items)) {
                     foreach ($items as $item) {
-                        if (! \is_array($item)) {
+                        if (!\is_array($item)) {
                             continue;
                         }
 
@@ -580,14 +584,14 @@ class LlmsController extends Controller
                             continue;
                         }
 
-                        if (! \is_string($item['title'])) {
+                        if (!\is_string($item['title'])) {
                             continue;
                         }
 
                         $prefix = $this->getListPrefix($item['number'] ?? null);
                         $lines[] = "{$prefix}**{$item['title']}**";
 
-                        if (! empty($item['description']) && \is_string($item['description'])) {
+                        if (!empty($item['description']) && \is_string($item['description'])) {
                             $lines[] = '  ' . $item['description'];
                         }
 
@@ -598,22 +602,22 @@ class LlmsController extends Controller
                 break;
 
             case 'moderator':
-                if (! empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
+                if (!empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
                     $lines[] = "*{$data['eyebrow']}*";
                     $lines[] = '';
                 }
 
-                if (! empty($data['name']) && \is_string($data['name'])) {
+                if (!empty($data['name']) && \is_string($data['name'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['name']);
                     $lines[] = '';
                 }
 
-                if (! empty($data['bio']) && \is_string($data['bio'])) {
+                if (!empty($data['bio']) && \is_string($data['bio'])) {
                     $lines[] = $this->convertHtmlToMarkdown($data['bio']);
                     $lines[] = '';
                 }
 
-                if (! empty($data['quote']) && \is_string($data['quote'])) {
+                if (!empty($data['quote']) && \is_string($data['quote'])) {
                     $lines[] = '> ' . $data['quote'];
                     $lines[] = '';
                 }
@@ -621,23 +625,23 @@ class LlmsController extends Controller
                 break;
 
             case 'cta':
-                if (! empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
+                if (!empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
                     $lines[] = "*{$data['eyebrow']}*";
                     $lines[] = '';
                 }
 
-                if (! empty($data['title']) && \is_string($data['title'])) {
+                if (!empty($data['title']) && \is_string($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
-                if (! empty($data['text']) && \is_string($data['text'])) {
+                if (!empty($data['text']) && \is_string($data['text'])) {
                     $lines[] = $data['text'];
                     $lines[] = '';
                 }
 
-                $hasButtonText = ! empty($data['button_text']) && \is_string($data['button_text']);
-                $hasButtonLink = ! empty($data['button_link']) && \is_string($data['button_link']);
+                $hasButtonText = !empty($data['button_text']) && \is_string($data['button_text']);
+                $hasButtonLink = !empty($data['button_link']) && \is_string($data['button_link']);
 
                 if ($hasButtonText && $hasButtonLink) {
                     \assert(\is_string($data['button_text']));
@@ -649,17 +653,17 @@ class LlmsController extends Controller
                 break;
 
             case 'newsletter':
-                if (! empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
+                if (!empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
                     $lines[] = "*{$data['eyebrow']}*";
                     $lines[] = '';
                 }
 
-                if (! empty($data['title']) && \is_string($data['title'])) {
+                if (!empty($data['title']) && \is_string($data['title'])) {
                     $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
                     $lines[] = '';
                 }
 
-                if (! empty($data['text']) && \is_string($data['text'])) {
+                if (!empty($data['text']) && \is_string($data['text'])) {
                     $lines[] = $data['text'];
                     $lines[] = '';
                 }
@@ -708,7 +712,7 @@ class LlmsController extends Controller
 
         foreach ($pages as $page) {
             foreach ($page->contentBlocks as $block) {
-                if ($block->type === 'faq' && ! empty($block->data['items'])) {
+                if ($block->type === 'faq' && !empty($block->data['items'])) {
                     $faqBlocks[] = $block->data;
                 }
             }
@@ -799,7 +803,7 @@ class LlmsController extends Controller
      */
     private function getListPrefix(mixed $number): string
     {
-        if (empty($number) || ! \is_scalar($number)) {
+        if (empty($number) || !\is_scalar($number)) {
             return '- ';
         }
 

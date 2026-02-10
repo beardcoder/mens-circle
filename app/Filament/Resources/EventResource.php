@@ -183,9 +183,9 @@ class EventResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->description(
-                        fn ($record): ?string => $record->description ? str($record->description)->limit(
-                            50,
-                        )->toString() : null,
+                        fn ($record): ?string => $record->description ? str($record->description)
+->limit(50,)
+->toString() : null,
                     )
                     ->wrap(),
                 TextColumn::make('event_date')
@@ -193,7 +193,9 @@ class EventResource extends Resource
                     ->dateTime('d.m.Y')
                     ->sortable()
                     ->description(
-                        fn ($record): string => $record->start_time->format('H:i') . ' - ' . $record->end_time->format('H:i'),
+                        fn ($record): string => $record->start_time->format('H:i') . ' - ' . $record->end_time->format(
+                            'H:i'
+                        ),
                     )
                     ->color(
                         fn ($record): string => $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary'),

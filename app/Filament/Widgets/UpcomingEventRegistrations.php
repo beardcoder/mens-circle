@@ -28,7 +28,7 @@ class UpcomingEventRegistrations extends TableWidget
     {
         $nextEvent = Event::nextEvent();
 
-        if (! $nextEvent instanceof Event) {
+        if (!$nextEvent instanceof Event) {
             return $table
                 ->query(Registration::query()->whereRaw('1 = 0'))
                 ->columns([]);

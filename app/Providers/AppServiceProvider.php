@@ -25,7 +25,9 @@ use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register(): void {}
+    public function register(): void
+    {
+    }
 
     public function boot(): void
     {
@@ -55,11 +57,8 @@ class AppServiceProvider extends ServiceProvider
         ], function (ViewContract $view): void {
             try {
                 $view->with([
-                    'hasNextEvent' => cache()->remember(
-                        'has_next_event',
-                        300,
-                        fn () => Event::published()->upcoming()->exists(),
-                    ),
+                    'hasNextEvent' => cache()
+->remember('has_next_event', 300, fn () => Event::published()->upcoming()->exists(),),
                 ]);
             } catch (Throwable) {
                 $view->with([
@@ -81,8 +80,10 @@ class AppServiceProvider extends ServiceProvider
 
             // Schedule Check - wichtig für Event-Reminders und Sitemap
             ScheduleCheck::new()
-                ->useCacheStore((string) config('health.schedule.cache_store', 'health'))
-                ->heartbeatMaxAgeInMinutes((int) config('health.schedule.heartbeat_max_age_in_minutes', 10)),
+                ->useCacheStore(\Illuminate\Support\Facades\Config::string('health.schedule.cache_store', 'health'))
+                ->heartbeatMaxAgeInMinutes(
+                    \Illuminate\Support\Facades\Config::integer('health.schedule.heartbeat_max_age_in_minutes', 10)
+                ),
 
             // Queue Check - wichtig für asynchrone Jobs
             QueueHealthCheck::new()

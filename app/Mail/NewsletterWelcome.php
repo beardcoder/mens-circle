@@ -18,7 +18,8 @@ class NewsletterWelcome extends Mailable
 
     public function __construct(
         public readonly NewsletterSubscription $subscription,
-    ) {}
+    ) {
+    }
 
     public function envelope(): Envelope
     {

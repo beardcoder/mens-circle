@@ -162,11 +162,11 @@ class ManageGeneralSettings extends SettingsPage
      */
     private function getIconLabel(array $state): ?string
     {
-        if (! empty($state['icon']) && \is_string($state['icon'])) {
+        if (!empty($state['icon']) && \is_string($state['icon'])) {
             return SocialHeroicon::tryFrom($state['icon'])?->getLabel();
         }
 
-        if (! empty($state['type']) && \is_string($state['type'])) {
+        if (!empty($state['type']) && \is_string($state['type'])) {
             return ucwords(str_replace(['-', '_'], ' ', $state['type']));
         }
 

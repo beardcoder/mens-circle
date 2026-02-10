@@ -26,7 +26,8 @@ class SendNewsletterJob implements ShouldQueue
 
     public function __construct(
         public readonly Newsletter $newsletter,
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
@@ -45,10 +46,7 @@ class SendNewsletterJob implements ShouldQueue
         NewsletterSubscription::query()
             ->whereNull('unsubscribed_at')
             ->with('participant')
-            ->chunk(100, function (Collection $subscriptions) use (
-                &$recipientCount,
-                &$failedRecipients
-            ): void {
+            ->chunk(100, function (Collection $subscriptions) use (&$recipientCount, &$failedRecipients): void {
                 /** @var NewsletterSubscription $subscription */
                 foreach ($subscriptions as $subscription) {
                     try {

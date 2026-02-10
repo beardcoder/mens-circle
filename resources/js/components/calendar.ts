@@ -29,15 +29,14 @@ export function useCalendarIntegration(): void {
     endTime: '21:30',
   };
 
-  // Pre-generate URLs once instead of on every click
-  let icsBlobUrl: string | null = null;
-
   if (calendarICS) {
     const icsContent = generateICS(eventData);
     const blob = new Blob([icsContent], {
       type: 'text/calendar;charset=utf-8',
     });
-    icsBlobUrl = URL.createObjectURL(blob);
+
+    const icsBlobUrl = URL.createObjectURL(blob);
+
     calendarICS.href = icsBlobUrl;
   }
 
@@ -76,6 +75,7 @@ export function useCalendarIntegration(): void {
 
 function formatICSDate(date: string, time: string): string {
   const d = new Date(`${date}T${time}:00`);
+
   return d
     .toISOString()
     .replace(/[-:]/g, '')

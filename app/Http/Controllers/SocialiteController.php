@@ -36,19 +36,26 @@ class SocialiteController extends Controller
             $response = Socialite::driver($provider)->user();
         } catch (\Throwable) {
             return redirect()->route('filament.admin.auth.login')
-                ->withErrors(['email' => 'Authentifizierung fehlgeschlagen. Bitte versuche es erneut.']);
+                ->withErrors([
+'email' => 'Authentifizierung fehlgeschlagen. Bitte versuche es erneut.'
+]);
         }
 
         $user = User::firstWhere('email', $response->getEmail());
 
-        if (! $user) {
+        if (!$user) {
             return redirect()->route('filament.admin.auth.login')
-                ->withErrors(['email' => 'Kein Benutzer mit dieser E-Mail-Adresse gefunden.']);
+                ->withErrors([
+'email' => 'Kein Benutzer mit dieser E-Mail-Adresse gefunden.'
+]);
         }
 
-        $user->update(['github_id' => $response->getId()]);
+        $user->update([
+'github_id' => $response->getId()
+]);
 
-        auth()->login($user);
+        auth()
+->login($user);
 
         return redirect()->intended(route('filament.admin.pages.dashboard'));
     }

@@ -135,9 +135,10 @@ class ParticipantResource extends Resource
                 Filter::make('newsletter_subscriber')
                     ->label('Newsletter-Abonnent')
                     ->query(
-                        fn (Builder $query): Builder => $query->whereHas('newsletterSubscription', fn (Builder $q) => $q->whereNull(
-                            'unsubscribed_at',
-                        )),
+                        fn (Builder $query): Builder => $query->whereHas(
+                            'newsletterSubscription',
+                            fn (Builder $q) => $q->whereNull('unsubscribed_at',)
+                        ),
                     ),
             ])
             ->recordActions([EditAction::make(), DeleteAction::make(), ])
@@ -168,7 +169,8 @@ class ParticipantResource extends Resource
         }
 
         if (!$subscription instanceof NewsletterSubscription) {
-            $record->newsletterSubscription()->create([]);
+            $record->newsletterSubscription()
+->create([]);
         }
     }
 

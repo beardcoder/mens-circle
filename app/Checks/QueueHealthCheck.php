@@ -62,7 +62,9 @@ class QueueHealthCheck extends Check
             return $result
                 ->failed('Queue-Verbindungsfehler: ' . $throwable->getMessage())
                 ->shortSummary('Verbindungsfehler')
-                ->meta(['error' => $throwable->getMessage()]);
+                ->meta([
+'error' => $throwable->getMessage()
+]);
         }
     }
 
@@ -72,12 +74,12 @@ class QueueHealthCheck extends Check
     private function checkDatabaseQueue(): void
     {
         // Check if jobs table exists
-        if (! DB::getSchemaBuilder()->hasTable('jobs')) {
+        if (!DB::getSchemaBuilder()->hasTable('jobs')) {
             throw new RuntimeException('Queue-Tabelle "jobs" existiert nicht');
         }
 
         // Check if failed_jobs table exists
-        if (! DB::getSchemaBuilder()->hasTable('failed_jobs')) {
+        if (!DB::getSchemaBuilder()->hasTable('failed_jobs')) {
             throw new RuntimeException('Queue-Tabelle "failed_jobs" existiert nicht');
         }
     }
@@ -87,7 +89,8 @@ class QueueHealthCheck extends Check
         /** @var string $redisConnection */
         $redisConnection = Config::get('queue.connections.redis.connection', 'default');
         // Try to ping redis
-        $redis = app('redis')->connection($redisConnection);
+        $redis = app('redis')
+->connection($redisConnection);
         $redis->ping();
     }
 }

@@ -36,13 +36,17 @@ class SevenIoHealthCheck extends Check
                     return $result
                         ->warning("Niedriges Guthaben: {$balance}€")
                         ->shortSummary("{$balance}€")
-                        ->meta(['balance' => $balance]);
+                        ->meta([
+'balance' => $balance
+]);
                 }
 
                 return $result
                     ->ok()
                     ->shortSummary("{$balance}€")
-                    ->meta(['balance' => $balance]);
+                    ->meta([
+'balance' => $balance
+]);
             }
 
             $statusCode = $response->status();

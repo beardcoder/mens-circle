@@ -24,8 +24,10 @@ class SendEventReminders extends Command
     {
         $this->info('Searching for events happening in 24 hours...');
 
-        $startWindow = now()->addHours(self::REMINDER_WINDOW_START_HOURS);
-        $endWindow = now()->addHours(self::REMINDER_WINDOW_END_HOURS);
+        $startWindow = now()
+->addHours(self::REMINDER_WINDOW_START_HOURS);
+        $endWindow = now()
+->addHours(self::REMINDER_WINDOW_END_HOURS);
 
         $upcomingEvents = Event::published()
             ->whereBetween('event_date', [$startWindow, $endWindow])
@@ -53,7 +55,11 @@ class SendEventReminders extends Command
             $eventDate = $event->event_date->format('d.m.Y H:i');
             $this->info("Processing event: {$event->title} ({$eventDate})");
 
-            $registrations->each(function (Registration $registration) use ($event, &$totalEmailsSent, &$totalSmsSent): void {
+            $registrations->each(function (Registration $registration) use (
+                $event,
+                &$totalEmailsSent,
+                &$totalSmsSent
+            ): void {
                 $participant = $registration->participant;
 
                 // Send email reminder
@@ -72,7 +78,9 @@ class SendEventReminders extends Command
 
         $this->newLine();
         $eventCount = $upcomingEvents->count();
-        $this->info("Successfully sent {$totalEmailsSent} email(s) and {$totalSmsSent} SMS for {$eventCount} event(s).");
+        $this->info(
+            "Successfully sent {$totalEmailsSent} email(s) and {$totalSmsSent} SMS for {$eventCount} event(s)."
+        );
 
         return self::SUCCESS;
     }

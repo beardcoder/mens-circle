@@ -137,6 +137,7 @@ function initFadeAnimations(): void {
     inView(
       element,
       () => {
+        // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
         animate(
           element,
           { opacity: config.animate.opacity },
@@ -147,6 +148,7 @@ function initFadeAnimations(): void {
           }
         );
 
+        // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
         animate(
           element,
           { transform: buildTransform(config.animate) },
@@ -187,7 +189,6 @@ function initStaggerAnimations(): void {
               {
                 duration: TIMING.opacityDuration,
                 delay,
-                easing: EASING.decelerate as unknown as string,
               }
             );
 
@@ -197,7 +198,6 @@ function initStaggerAnimations(): void {
               {
                 duration: TIMING.transformDuration,
                 delay,
-                easing: EASING.gentle as unknown as string,
               }
             );
           });

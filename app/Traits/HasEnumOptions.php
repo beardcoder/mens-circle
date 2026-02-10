@@ -15,7 +15,10 @@ trait HasEnumOptions
     {
         return array_column(
             array_map(
-                static fn (self $case): array => ['value' => $case->value, 'label' => $case->getLabel()],
+                static fn (self $case): array => [
+'value' => $case->value,
+'label' => $case->getLabel()
+],
                 self::cases(),
             ),
             'label',

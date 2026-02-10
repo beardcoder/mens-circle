@@ -142,14 +142,11 @@ class Event extends Model implements HasMedia
     {
         return Attribute::make(
             get: function (): ?string {
-                if (! $this->street || ! $this->city) {
+                if (!$this->street || !$this->city) {
                     return null;
                 }
 
-                $parts = [
-                    $this->street,
-                    $this->postal_code ? "{$this->postal_code} {$this->city}" : $this->city,
-                ];
+                $parts = [$this->street, $this->postal_code ? "{$this->postal_code} {$this->city}" : $this->city, ];
 
                 return implode(', ', $parts);
             },
