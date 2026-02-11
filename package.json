@@ -1,12 +1,13 @@
 {
   "name": "mens-circle",
   "private": true,
+  "workspaces": ["cms", "web"],
   "scripts": {
-    "dev": "pnpm -r --parallel dev",
-    "dev:cms": "pnpm --filter cms dev",
-    "dev:web": "pnpm --filter web dev",
-    "build": "pnpm --filter cms build && pnpm --filter web build",
-    "build:cms": "pnpm --filter cms build",
-    "build:web": "pnpm --filter web build"
+    "dev": "bun run --filter '*' dev",
+    "dev:cms": "bun run --filter cms dev",
+    "dev:web": "bun run --filter web dev",
+    "build": "bun run --filter cms build && bun run --filter web build",
+    "build:cms": "bun run --filter cms build",
+    "build:web": "bun run --filter web build"
   }
 }

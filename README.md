@@ -23,14 +23,14 @@ Community platform for organizing men's circle events, managing registrations, a
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Copy environment files
 cp cms/.env.example cms/.env
 cp web/.env.example web/.env
 
 # Start both apps
-pnpm dev
+bun dev
 ```
 
 - **CMS Admin:** http://localhost:3001/admin
@@ -87,7 +87,7 @@ Pages use a dynamic block system. Available blocks:
 ## Development
 
 ```bash
-pnpm dev:cms    # Only CMS
-pnpm dev:web    # Only Frontend
-pnpm build      # Production build
+bun dev:cms    # Only CMS
+bun dev:web    # Only Frontend
+bun run build  # Production build
 ```

@@ -10,3 +10,4 @@ media/
 .vercel/
 cms/data/
 pnpm-lock.yaml
+bun.lock
