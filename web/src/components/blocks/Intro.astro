@@ -1,0 +1,29 @@
+---
+interface Props {
+  eyebrow?: string
+  title: string
+  text: string
+  quote?: string
+}
+
+const { eyebrow, title, text, quote } = Astro.props
+---
+
+<section class="intro" id="ueber">
+  <div class="intro__layout">
+    <div class="intro__content fade-in">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h2 class="section-title section-title--lg intro__title">{title}</h2>
+      <p class="intro__text">{text}</p>
+    </div>
+    <div class="intro__visual fade-in fade-in-delay-1">
+      <div class="intro__image-area">
+        <div class="intro__circles" aria-hidden="true">
+          <div class="intro__circle intro__circle--1"></div>
+          <div class="intro__circle intro__circle--2"></div>
+        </div>
+        {quote && <p class="intro__quote">{quote}</p>}
+      </div>
+    </div>
+  </div>
+</section>

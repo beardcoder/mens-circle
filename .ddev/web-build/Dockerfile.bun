@@ -1,1 +1,0 @@
-RUN curl -fsSL https://bun.com/install | BUN_INSTALL="/usr/local" bash

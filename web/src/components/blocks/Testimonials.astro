@@ -1,0 +1,34 @@
+---
+import type { Testimonial } from '@/lib/payload'
+
+interface Props {
+  eyebrow?: string
+  title?: string
+  testimonials: Testimonial[]
+}
+
+const { eyebrow, title, testimonials } = Astro.props
+---
+
+<section class="testimonials" id="stimmen">
+  <div class="container">
+    <div class="testimonials__header fade-in">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      {title && <h2 class="section-title">{title}</h2>}
+    </div>
+    <div class="testimonials__grid stagger-children">
+      {testimonials.map((t) => (
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-card__quote-icon" aria-hidden="true">»</div>
+          <blockquote class="testimonial-card__quote">
+            <p>{t.quote}</p>
+          </blockquote>
+          <div class="testimonial-card__author">
+            <span class="testimonial-card__name">{t.anonymous ? 'Anonym' : t.name}</span>
+            {t.role && !t.anonymous && <span class="testimonial-card__role">{t.role}</span>}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

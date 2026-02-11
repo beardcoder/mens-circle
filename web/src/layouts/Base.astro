@@ -1,0 +1,169 @@
+---
+import type { SiteSettings } from '@/lib/payload'
+import { getSettings, getNextEvent } from '@/lib/payload'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const { title, description } = Astro.props
+
+let settings: SiteSettings | null = null
+let hasNextEvent = false
+
+try {
+  settings = await getSettings()
+  const nextEvent = await getNextEvent()
+  hasNextEvent = !!nextEvent
+} catch {
+  // CMS not available
+}
+
+const siteName = settings?.siteName || 'Männerkreis Niederbayern/ Straubing'
+const pageTitle = title ? `${title} – ${siteName}` : siteName
+const pageDescription = description || settings?.siteDescription || 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.'
+---
+
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDescription} />
+  <meta name="theme-color" content="#3d2817" />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDescription} />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="de_DE" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body>
+  <a href="#main" class="skip-link">Zum Inhalt springen</a>
+
+  <header class="header" id="header">
+    <div class="container">
+      <div class="header__inner">
+        <a href="/" class="logo" aria-label={`${siteName} - Startseite`}>
+          <svg class="logo__icon" viewBox="0 0 512 512" aria-hidden="true">
+            <path fill="currentColor" d="M256 0c141.31 0 256 114.73 256 256S397.31 512 256 512 0 397.27 0 256 114.69 0 256 0Zm0 10.53C120.47 10.53 10.4 120.5 10.4 256S120.47 501.47 256 501.47 501.6 391.5 501.6 256 391.53 10.53 256 10.53Z"/>
+            <path fill="currentColor" d="M256 24.06c126.47 0 229.15 103.93 229.15 231.94S382.47 487.94 256 487.94 26.86 384.01 26.86 256 129.53 24.06 256 24.06Zm0 10.53C135.27 34.59 37.26 133.8 37.26 256S135.28 477.41 256 477.41 474.74 378.2 474.74 256 376.73 34.59 256 34.59Z"/>
+            <path fill="currentColor" d="M155.85 283.39c-4.66-4.7-13.29-15.46-15.5-32.34-1.96-14.97 1.1-34.99 17.42-59.95a4.7 4.7 0 0 1 6.24-1.54c11.13 6.3 39.38 28.43 48.05 35.29 7.01-4.09 25.49-13.74 43.95-13.74s36.95 9.64 43.96 13.72c8.73-6.86 37.32-29.06 49.94-35.38 2.15-1.09 4.78-.35 6.08 1.73 15.59 24.95 18.24 44.97 16.03 59.95-2.49 16.86-11.2 27.59-15.86 32.27 10.54 21.18 22.69 53.12 22.69 87.47 0 2.64-2.1 4.77-4.71 4.77-30.56 0-50.43 16.01-54.83 19.91-1.44 5.66-7.27 26.31-19.57 43.33-10.07 13.94-24.37 25.34-43.74 25.34s-33.67-11.4-43.74-25.34c-12.3-17.02-18.13-37.66-19.57-43.33-4.4-3.9-24.26-19.91-54.83-19.91-2.61 0-4.71-2.12-4.71-4.77 0-34.37 12.17-66.32 22.69-87.49Z"/>
+          </svg>
+          <span class="logo__text">Männerkreis</span>
+        </a>
+
+        <nav class="nav" id="nav">
+          <a href="/#ueber" class="nav__link">Über</a>
+          <a href="/#reise" class="nav__link">Die Reise</a>
+          <a href="/#faq" class="nav__link">Fragen</a>
+          {hasNextEvent && (
+            <a href="/event" class="btn btn--primary btn--large nav__cta">Nächster Termin</a>
+          )}
+        </nav>
+
+        <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top stagger-children">
+        <div class="footer__brand">
+          <a href="/" class="footer__logo">
+            <svg class="footer__logo-icon" viewBox="0 0 512 512" aria-hidden="true">
+              <path fill="currentColor" d="M256 0c141.31 0 256 114.73 256 256S397.31 512 256 512 0 397.27 0 256 114.69 0 256 0Zm0 10.53C120.47 10.53 10.4 120.5 10.4 256S120.47 501.47 256 501.47 501.6 391.5 501.6 256 391.53 10.53 256 10.53Z"/>
+              <path fill="currentColor" d="M256 24.06c126.47 0 229.15 103.93 229.15 231.94S382.47 487.94 256 487.94 26.86 384.01 26.86 256 129.53 24.06 256 24.06Zm0 10.53C135.27 34.59 37.26 133.8 37.26 256S135.28 477.41 256 477.41 474.74 378.2 474.74 256 376.73 34.59 256 34.59Z"/>
+              <path fill="currentColor" d="M155.85 283.39c-4.66-4.7-13.29-15.46-15.5-32.34-1.96-14.97 1.1-34.99 17.42-59.95a4.7 4.7 0 0 1 6.24-1.54c11.13 6.3 39.38 28.43 48.05 35.29 7.01-4.09 25.49-13.74 43.95-13.74s36.95 9.64 43.96 13.72c8.73-6.86 37.32-29.06 49.94-35.38 2.15-1.09 4.78-.35 6.08 1.73 15.59 24.95 18.24 44.97 16.03 59.95-2.49 16.86-11.2 27.59-15.86 32.27 10.54 21.18 22.69 53.12 22.69 87.47 0 2.64-2.1 4.77-4.71 4.77-30.56 0-50.43 16.01-54.83 19.91-1.44 5.66-7.27 26.31-19.57 43.33-10.07 13.94-24.37 25.34-43.74 25.34s-33.67-11.4-43.74-25.34c-12.3-17.02-18.13-37.66-19.57-43.33-4.4-3.9-24.26-19.91-54.83-19.91-2.61 0-4.71-2.12-4.71-4.77 0-34.37 12.17-66.32 22.69-87.49Z"/>
+            </svg>
+            <span>{siteName}</span>
+          </a>
+          <p class="footer__text">{settings?.siteDescription || 'Ein Raum für echte Begegnung unter Männern.'}</p>
+        </div>
+
+        <div class="footer__nav">
+          <h3 class="footer__heading">Navigation</h3>
+          <ul class="footer__links">
+            <li><a href="/#ueber">Über uns</a></li>
+            <li><a href="/#reise">Die Reise</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+            {hasNextEvent && <li><a href="/event">Nächster Termin</a></li>}
+          </ul>
+        </div>
+
+        <div class="footer__contact">
+          <h3 class="footer__heading">Kontakt</h3>
+          <ul class="footer__links">
+            {settings?.contactEmail && <li><a href={`mailto:${settings.contactEmail}`}>E-Mail schreiben</a></li>}
+            {settings?.contactPhone && <li><a href={`tel:${settings.contactPhone.replace(/[\s\-()]/g, '')}`}>{settings.contactPhone}</a></li>}
+            <li><a href="/#newsletter">Newsletter</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom fade-in">
+        <p class="footer__copyright">{settings?.footerText || '© 2025 Männerkreis Niederbayern'}</p>
+        <div class="footer__legal">
+          <a href="/impressum">Impressum</a>
+          <a href="/datenschutz">Datenschutz</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile navigation toggle
+    const toggle = document.getElementById('navToggle')
+    const nav = document.getElementById('nav')
+    const header = document.getElementById('header')
+
+    toggle?.addEventListener('click', () => {
+      nav?.classList.toggle('is-open')
+      toggle.classList.toggle('is-active')
+    })
+
+    // Header scroll behavior
+    let lastScroll = 0
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY
+      if (scrollY > 50) {
+        header?.classList.add('is-scrolled')
+      } else {
+        header?.classList.remove('is-scrolled')
+      }
+      lastScroll = scrollY
+    })
+
+    // Intersection Observer for fade-in animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.1 },
+    )
+
+    document.querySelectorAll('.fade-in, .fade-in-delay-1, .fade-in-delay-2, .stagger-children').forEach((el) => {
+      observer.observe(el)
+    })
+  </script>
+</body>
+</html>
+
+<style is:global>
+  @import '../styles/app.css';
+</style>

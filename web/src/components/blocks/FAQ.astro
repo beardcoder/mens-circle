@@ -1,0 +1,31 @@
+---
+interface Props {
+  eyebrow?: string
+  title?: string
+  items: { question: string; answer: string }[]
+}
+
+const { eyebrow, title, items } = Astro.props
+---
+
+<section class="faq" id="faq">
+  <div class="faq__layout">
+    <div class="faq__header fade-in">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      {title && <h2 class="section-title">{title}</h2>}
+    </div>
+    <div class="faq__list stagger-children">
+      {items.map((item) => (
+        <details class="accordion fade-in">
+          <summary class="accordion__trigger">
+            <span>{item.question}</span>
+            <span class="accordion__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="accordion__content">
+            <p>{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

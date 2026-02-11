@@ -1,0 +1,38 @@
+---
+interface Props {
+  label?: string
+  title: string
+  description?: string
+  ctaText?: string
+  ctaLink?: string
+}
+
+const { label, title, description, ctaText, ctaLink } = Astro.props
+---
+
+<section class="hero" id="hero">
+  <div class="hero__bg"></div>
+  <div class="hero__circles" aria-hidden="true">
+    <div class="hero__circle hero__circle--1"></div>
+    <div class="hero__circle hero__circle--2"></div>
+    <div class="hero__circle hero__circle--3"></div>
+    <div class="hero__circle hero__circle--4"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero__content">
+      {label && <p class="hero__label">{label}</p>}
+      <h1 class="hero__title">
+        <span class="hero__title-line">{title}</span>
+      </h1>
+      <div class="hero__bottom">
+        {description && <p class="hero__description">{description}</p>}
+        {ctaText && ctaLink && (
+          <div class="hero__cta fade-in-delay-2">
+            <a href={ctaLink} class="btn btn--primary btn--large">{ctaText}</a>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

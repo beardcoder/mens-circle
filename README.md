@@ -1,280 +1,93 @@
 # Männerkreis Niederbayern / Straubing
 
-A modern web application for managing and organizing men's circle events in Lower Bavaria/Straubing, Germany. This platform enables event management, participant registration, newsletter distribution, and testimonial sharing.
-
-## Features
-
-### Event Management
-- Create, manage, and publish events with rich content
-- Support for images and detailed descriptions
-- Event capacity management with automatic status updates
-- Slug-based URLs for SEO-friendly event pages
-- Automatic redirection to upcoming events
-
-### Participant Registration
-- Online registration form for events
-- Support for single or multiple participants
-- Phone number validation with German format
-- Automatic confirmation emails
-- Admin panel for managing registrations
-
-### Newsletter System
-- Email subscription management
-- Double opt-in workflow
-- Unsubscribe functionality with secure tokens
-- Integration with SMTP email providers
-- Newsletter campaigns with HTML templates
-
-### Testimonials
-- Public form for sharing experiences
-- Optional participant approval before publication
-- Rich text support for testimonials
-- Display on website with author attribution
-
-### Content Management
-- Dynamic page creation and management
-- Support for multiple content block types
-- SEO-friendly slugs for all pages
-- Dedicated pages for Impressum and Datenschutz (legal requirements)
-
-### Admin Panel
-- Powered by Filament 5 for modern admin experience
-- Dashboard with statistics and overview widgets
-- Health monitoring for system components
-- Log viewer for debugging
-- User management with authentication
-- Media library integration
+Community platform for organizing men's circle events, managing registrations, and newsletters.
 
 ## Tech Stack
 
-- **Backend**: Laravel 12 (PHP 8.3-8.5)
-- **Admin Panel**: Filament 5
-- **Frontend**: 
-  - Vanilla TypeScript with modern composables pattern
-  - Modern CSS (native nesting, custom properties, OKLCH colors, container queries, logical properties)
-  - Motion library for animations
-  - Blade templates for server-side rendering
-- **Build Tools**: Vite, Bun
-- **Database**: SQLite (default) / MySQL
-- **Server**: Laravel Octane with FrankenPHP
-- **Email**: SMTP with configurable providers
-- **SMS**: Seven.io API integration
-- **Monitoring**: Sentry, Laravel Health, Umami Analytics (optional)
-- **Media**: Spatie Media Library
-- **Code Quality**: PHPStan, Laravel Pint, ECS, Rector
+| Component | Technology |
+|-----------|-----------|
+| **CMS** | Payload CMS 3 (Next.js) |
+| **Frontend** | Astro.js 5 (SSR with Node adapter) |
+| **Database** | SQLite |
+| **Styling** | Custom CSS (OKLCH color system) |
 
-## Prerequisites
+## Architecture
 
-- PHP 8.3 or higher
-- Composer
-- Bun (recommended) or npm
-- SQLite or MySQL database
-
-## Installation
-
-### Quick Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/beardcoder/mens-circle.git
-cd mens-circle
-
-# Run the setup script (installs dependencies, generates keys, runs migrations)
-composer run setup
+```
+├── cms/           # Payload CMS – Admin Panel + REST API (port 3001)
+├── web/           # Astro.js – Frontend Website (port 4321)
+└── media/         # Uploaded media files
 ```
 
-### Manual Setup
+## Getting Started
 
 ```bash
-# Install PHP dependencies
-composer install
+# Install dependencies
+pnpm install
 
-# Copy environment file
-cp .env.example .env
+# Copy environment files
+cp cms/.env.example cms/.env
+cp web/.env.example web/.env
 
-# Generate application key
-php artisan key:generate
-
-# Run database migrations
-php artisan migrate
-
-# Install JavaScript dependencies
-bun install
-
-# Build frontend assets
-bun run build
+# Start both apps
+pnpm dev
 ```
 
-### Configuration
+- **CMS Admin:** http://localhost:3001/admin
+- **Frontend:** http://localhost:4321
 
-Edit `.env` file and configure:
-- `APP_NAME` - Your application name
-- `APP_URL` - Your application URL
-- Database settings (SQLite by default)
-- Mail configuration (SMTP settings)
-- Seven.io API key for SMS notifications
-- Optional: Umami analytics, Sentry error tracking
+On first launch, create an admin user at `/admin`.
+
+## Data Model
+
+```
+Events ──hasMany──> Registrations ──belongsTo──> Participants
+                                                     │
+Newsletters                                         hasOne
+NewsletterSubscriptions ──belongsTo─────────────────┘
+Testimonials (standalone)
+Pages ──has──> Content Blocks
+SiteSettings (global)
+```
+
+## Content Blocks
+
+Pages use a dynamic block system. Available blocks:
+- `hero` – Full-screen hero section
+- `intro` – Two-column intro layout
+- `textSection` – Rich text content
+- `valueItems` – Value cards grid
+- `moderator` – Profile/bio section
+- `journeySteps` – Step-by-step process
+- `testimonials` – Community quotes (auto-loaded)
+- `faq` – Accordion FAQ
+- `newsletter` – Email signup form
+- `cta` – Call-to-action section
+- `whatsappCommunity` – WhatsApp join section
+
+## API Endpoints
+
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| POST | `/api/register` | Event registration |
+| POST | `/api/subscribe` | Newsletter subscription |
+| GET | `/api/unsubscribe/:token` | Newsletter unsubscribe |
+| POST | `/api/send-newsletter` | Send newsletter (admin) |
+
+## Routes (Frontend)
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Homepage (dynamic blocks from CMS) |
+| `/event` | Redirect to next event |
+| `/event/[slug]` | Event detail + registration |
+| `/newsletter/unsubscribe/[token]` | Unsubscribe |
+| `/[slug]` | Dynamic CMS pages |
 
 ## Development
 
-### Start Development Server
-
 ```bash
-# Start all development services at once (recommended)
-composer run dev
+pnpm dev:cms    # Only CMS
+pnpm dev:web    # Only Frontend
+pnpm build      # Production build
 ```
-
-This command starts:
-- PHP development server (port 8000)
-- Queue worker for background jobs
-- Laravel Pail for real-time logs
-- Schedule worker for scheduled tasks
-- Vite dev server for hot module replacement
-
-### Individual Commands
-
-```bash
-# Start web server only
-php artisan serve
-
-# Run queue worker
-php artisan queue:listen
-
-# Build frontend assets
-bun run build
-
-# Watch frontend assets for changes
-bun run dev
-
-# View logs in real-time
-php artisan pail
-```
-
-### Code Quality
-
-```bash
-# Format PHP code
-composer run format
-# or
-./vendor/bin/pint
-
-# Static analysis
-composer run lint
-# or
-./vendor/bin/phpstan analyse
-
-# Refactor code with Rector
-composer run rector
-
-# Format JavaScript/TypeScript
-bun run format
-
-# Lint JavaScript/TypeScript
-bun run lint
-
-# Type check TypeScript
-bun run typecheck
-
-# Lint CSS
-bun run stylelint
-```
-
-## Project Structure
-
-```
-├── app/
-│   ├── Actions/          # Single-purpose action classes
-│   ├── Filament/         # Admin panel resources and pages
-│   ├── Http/             # Controllers, middleware, requests
-│   ├── Models/           # Eloquent models
-│   ├── Mail/             # Email templates
-│   ├── Services/         # Business logic services
-│   └── Settings/         # Application settings
-├── config/               # Configuration files
-├── database/
-│   ├── factories/        # Model factories
-│   ├── migrations/       # Database migrations
-│   └── seeders/          # Database seeders
-├── public/               # Web server document root
-├── resources/
-│   ├── css/              # Stylesheets
-│   ├── js/               # JavaScript/TypeScript
-│   └── views/            # Blade templates
-├── routes/
-│   ├── web.php           # Web routes
-│   └── console.php       # Console commands
-├── storage/              # Application storage
-└── tests/                # PHPUnit/Pest tests
-```
-
-## Available Scripts
-
-### Composer Scripts
-
-- `composer run dev` - Start all development services
-- `composer run setup` - Complete project setup
-- `composer run format` - Format code with Pint
-- `composer run lint` - Run PHPStan analysis
-- `composer run rector` - Run Rector refactoring
-
-### Bun/npm Scripts
-
-- `bun run dev` - Start Vite dev server
-- `bun run build` - Build for production
-- `bun run lint` - Lint JavaScript/TypeScript
-- `bun run format` - Format JS/TS/CSS files
-- `bun run typecheck` - Run TypeScript type checking
-- `bun run stylelint` - Lint CSS files
-
-## Testing
-
-```bash
-# Run all tests
-php artisan test
-
-# Run specific test file
-php artisan test tests/Feature/EventTest.php
-
-# Run tests with coverage
-php artisan test --coverage
-```
-
-## Deployment
-
-### Production Build
-
-```bash
-# Install dependencies (production only)
-composer install --no-dev --optimize-autoloader
-
-# Build frontend assets
-bun run build
-
-# Optimize Laravel
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Run migrations
-php artisan migrate --force
-```
-
-### Server Requirements
-
-- PHP 8.3+ with required extensions (see composer.json)
-- Web server (Nginx/Apache) or FrankenPHP
-- SQLite or MySQL database
-- Composer
-- Node.js/Bun for asset compilation
-
-## License
-
-MIT License. See LICENSE file for details.
-
-## Support
-
-For issues and questions, please use the GitHub issue tracker.
-
----
-
-**Männerkreis Niederbayern / Straubing** - Building community through meaningful connections.

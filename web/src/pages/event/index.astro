@@ -1,0 +1,32 @@
+---
+import Base from '@/layouts/Base.astro'
+import { getNextEvent } from '@/lib/payload'
+
+const event = await getNextEvent()
+
+if (event) {
+  return Astro.redirect(`/event/${event.slug}`)
+}
+---
+
+<Base title="Kein Termin">
+  <section class="hero">
+    <div class="hero__bg"></div>
+    <div class="hero__circles" aria-hidden="true">
+      <div class="hero__circle hero__circle--1"></div>
+      <div class="hero__circle hero__circle--2"></div>
+    </div>
+    <div class="container">
+      <div class="hero__content">
+        <p class="hero__label">Männerkreis</p>
+        <h1 class="hero__title"><span class="hero__title-line">Aktuell kein Termin</span></h1>
+        <div class="hero__bottom">
+          <p class="hero__description">Derzeit ist kein Treffen geplant. Melde dich für unseren Newsletter an, um über kommende Termine informiert zu werden.</p>
+          <div class="hero__cta fade-in-delay-2">
+            <a href="/#newsletter" class="btn btn--primary btn--large">Newsletter abonnieren</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
