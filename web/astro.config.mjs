@@ -7,7 +7,7 @@ export default defineConfig({
     mode: 'standalone',
   }),
   server: {
-    port: 4321,
+    port: 4400,
   },
   vite: {
     css: {
