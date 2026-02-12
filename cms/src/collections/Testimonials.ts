@@ -10,13 +10,13 @@ export const Testimonials: CollectionConfig = {
     update: isAuthenticated,
     delete: isAuthenticated,
   },
+  defaultSort: 'sortOrder',
   admin: {
     useAsTitle: 'authorName',
     defaultColumns: ['authorName', 'published', 'sortOrder', 'createdAt'],
     group: 'Inhalte',
     description: 'Erfahrungsberichte moderieren',
     listSearchableFields: ['authorName', 'content'],
-    defaultSort: 'sortOrder',
   },
   fields: [
     {

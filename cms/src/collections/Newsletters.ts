@@ -10,13 +10,13 @@ export const Newsletters: CollectionConfig = {
     update: isAuthenticated,
     delete: isAuthenticated,
   },
+  defaultSort: '-createdAt',
   admin: {
     useAsTitle: 'subject',
     defaultColumns: ['subject', 'status', 'recipientsCount', 'sentAt'],
     group: 'Newsletter',
     description: 'Kampagnen erstellen und versenden',
     listSearchableFields: ['subject'],
-    defaultSort: '-createdAt',
   },
   fields: [
     {

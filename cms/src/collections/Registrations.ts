@@ -10,11 +10,11 @@ export const Registrations: CollectionConfig = {
     update: isAuthenticated,
     delete: isAuthenticated,
   },
+  defaultSort: '-createdAt',
   admin: {
     defaultColumns: ['event', 'participant', 'status', 'createdAt'],
     group: 'Veranstaltungen',
     description: 'Event-Anmeldungen verwalten',
-    defaultSort: '-createdAt',
   },
   fields: [
     {

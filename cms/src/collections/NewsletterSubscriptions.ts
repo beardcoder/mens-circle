@@ -11,11 +11,11 @@ export const NewsletterSubscriptions: CollectionConfig = {
     update: isAuthenticated,
     delete: isAuthenticated,
   },
+  defaultSort: '-createdAt',
   admin: {
     defaultColumns: ['participant', 'status', 'confirmedAt', 'createdAt'],
     group: 'Newsletter',
     description: 'Abonnenten verwalten',
-    defaultSort: '-createdAt',
   },
   fields: [
     {
