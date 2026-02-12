@@ -10,23 +10,26 @@ interface Props {
 const { eyebrow, title, text, buttonText, buttonLink } = Astro.props;
 ---
 
-<section class="cta-section">
-  <div class="cta__circles" aria-hidden="true">
-    <div class="cta__circle cta__circle--1"></div>
-    <div class="cta__circle cta__circle--2"></div>
-  </div>
+<section class="section section--large cta-section">
   <div class="container">
     <div class="cta__content fade-in">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+
       <h2 class="section-title cta__title" set:html={title}></h2>
+
       {text && <p class="cta__text">{text}</p>}
-      {
-        buttonText && buttonLink && (
-          <a href={buttonLink} class="btn btn--primary btn--large">
-            {buttonText}
-          </a>
-        )
-      }
+
+      {buttonText && buttonLink && (
+        <a
+          href={buttonLink}
+          class="btn btn--primary btn--large"
+          data-umami-event="cta-click"
+          data-umami-event-location="cta-block"
+          data-umami-event-text={buttonText}
+        >
+          {buttonText}
+        </a>
+      )}
     </div>
   </div>
 </section>

@@ -4,25 +4,40 @@ interface Props {
   title: string;
   text: string;
   quote?: string;
+  values?: { number?: string; title: string; description?: string }[];
 }
 
-const { eyebrow, title, text, quote } = Astro.props;
+const { eyebrow, title, text, quote, values } = Astro.props;
 ---
 
-<section class="intro" id="ueber">
+<section class="intro-section" id="ueber" aria-labelledby="intro-title">
   <div class="intro__layout">
-    <div class="intro__content fade-in">
-      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h2 class="section-title section-title--lg intro__title" set:html={title}></h2>
-      <p class="intro__text">{text}</p>
-    </div>
-    <div class="intro__visual fade-in fade-in-delay-1">
-      <div class="intro__image-area">
-        <div class="intro__circles" aria-hidden="true">
-          <div class="intro__circle intro__circle--1"></div>
-          <div class="intro__circle intro__circle--2"></div>
+    <div class="intro__left">
+      {eyebrow && <p class="eyebrow fade-in">{eyebrow}</p>}
+
+      <h2 class="section-title intro__title fade-in fade-in-delay-1" id="intro-title" set:html={title}></h2>
+
+      <p class="intro__text fade-in fade-in-delay-2">{text}</p>
+
+      {values && values.length > 0 && (
+        <div class="intro__values stagger-children">
+          {values.map((value) => (
+            <div class="value-item">
+              {value.number && <span class="value-item__number">{value.number}</span>}
+              <div class="value-item__content">
+                {value.title && <h3>{value.title}</h3>}
+                {value.description && <p>{value.description}</p>}
+              </div>
+            </div>
+          ))}
         </div>
-        {quote && <p class="intro__quote" set:html={quote}></p>}
+      )}
+    </div>
+
+    <div class="intro__right">
+      <div class="intro__image-area">
+        <div class="intro__image-circles"></div>
+        {quote && <p class="intro__image-text" set:html={quote}></p>}
       </div>
     </div>
   </div>

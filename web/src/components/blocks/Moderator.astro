@@ -1,30 +1,55 @@
 ---
 interface Props {
+  eyebrow?: string;
   name: string;
-  role?: string;
   bio: string;
   quote?: string;
+  photo?: any;
 }
 
-const { name, role, bio, quote } = Astro.props;
+const { eyebrow, name, bio, quote, photo } = Astro.props;
 ---
 
-<section class="moderator" id="moderator">
-  <div class="moderator__layout">
-    <div class="moderator__photo-wrap fade-in">
-      <div class="moderator__decorative" aria-hidden="true">BEGLEITER</div>
-    </div>
-    <div class="moderator__content fade-in fade-in-delay-1">
-      <p class="moderator__name" set:html={name}></p>
-      {role && <p class="moderator__role">{role}</p>}
-      <div class="moderator__bio" set:html={bio}></div>
-      {
-        quote && (
+<section class="section moderator-section" id="moderator">
+  <div class="container">
+    <div class="moderator__layout">
+      <div class="moderator__photo-wrapper fade-in">
+        <div class="moderator__photo">
+          {photo ? (
+            <img
+              src={photo.url}
+              alt={photo.alt || name}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="moderator__photo-placeholder">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+              </svg>
+              <span>Foto</span>
+            </div>
+          )}
+        </div>
+        <div class="moderator__photo-accent"></div>
+      </div>
+
+      <div class="moderator__content fade-in fade-in-delay-1">
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+
+        {name && <h2 class="moderator__name" set:html={name}></h2>}
+
+        {bio && (
+          <div class="moderator__bio" set:html={bio}></div>
+        )}
+
+        {quote && (
           <blockquote class="moderator__quote">
-            <p set:html={`»${quote}«`}></p>
+            <p>{quote}</p>
           </blockquote>
-        )
-      }
+        )}
+      </div>
     </div>
   </div>
 </section>

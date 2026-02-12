@@ -5,13 +5,26 @@ interface Props {
   description?: string;
   ctaText?: string;
   ctaLink?: string;
+  backgroundImage?: any;
 }
 
-const { label, title, description, ctaText, ctaLink } = Astro.props;
+const { label, title, description, ctaText, ctaLink, backgroundImage } = Astro.props;
 ---
 
-<section class="hero" id="hero">
-  <div class="hero__bg"></div>
+<section class="hero" role="banner">
+  <div class="hero__bg">
+    {backgroundImage && (
+      <img
+        src={backgroundImage.url}
+        alt={backgroundImage.alt || title}
+        class="hero__bg-image"
+        loading="eager"
+        fetchpriority="high"
+        aria-hidden="true"
+      />
+    )}
+  </div>
+
   <div class="hero__circles" aria-hidden="true">
     <div class="hero__circle hero__circle--1"></div>
     <div class="hero__circle hero__circle--2"></div>
@@ -22,20 +35,27 @@ const { label, title, description, ctaText, ctaLink } = Astro.props;
   <div class="container">
     <div class="hero__content">
       {label && <p class="hero__label">{label}</p>}
-      <h1 class="hero__title">
-        <span class="hero__title-line" set:html={title}></span>
-      </h1>
+
+      {title && (
+        <h1 class="hero__title">
+          <span set:html={title}></span>
+        </h1>
+      )}
+
       <div class="hero__bottom">
         {description && <p class="hero__description">{description}</p>}
-        {
-          ctaText && ctaLink && (
-            <div class="hero__cta fade-in-delay-2">
-              <a href={ctaLink} class="btn btn--primary btn--large">
-                {ctaText}
-              </a>
+
+        {ctaText && ctaLink && (
+          <div class="hero__cta fade-in-delay-3">
+            <a href={ctaLink} class="btn btn--primary btn--large">
+              {ctaText}
+            </a>
+            <div class="hero__scroll fade-in-delay-4">
+              <span>Entdecken</span>
+              <div class="hero__scroll-line" aria-hidden="true"></div>
             </div>
-          )
-        }
+          </div>
+        )}
       </div>
     </div>
   </div>

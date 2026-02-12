@@ -2,26 +2,32 @@
 interface Props {
   eyebrow?: string;
   title?: string;
-  items: { number?: string; title: string; text: string }[];
+  items: { number?: string; title: string; description?: string }[];
 }
 
 const { eyebrow, title, items } = Astro.props;
 ---
 
-<section class="values-section">
+<section class="section values-section">
   <div class="container">
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    {title && <h2 class="section-title">{title}</h2>}
-    <div class="values__grid stagger-children">
-      {
-        items.map((item) => (
-          <div class="value-card fade-in">
-            {item.number && <span class="value-card__number">{item.number}</span>}
-            <h3 class="value-card__title">{item.title}</h3>
-            <p class="value-card__text">{item.text}</p>
+    <div class="section__header fade-in">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+
+      {title && <h2 class="section-title">{title}</h2>}
+    </div>
+
+    <div class="intro__values stagger-children">
+      {items.map((item) => (
+        <div class="value-item">
+          {item.number && <span class="value-item__number">{item.number}</span>}
+
+          <div class="value-item__content">
+            {item.title && <h3>{item.title}</h3>}
+
+            {item.description && <p>{item.description}</p>}
           </div>
-        ))
-      }
+        </div>
+      ))}
     </div>
   </div>
 </section>

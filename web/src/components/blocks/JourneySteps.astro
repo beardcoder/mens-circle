@@ -2,28 +2,51 @@
 interface Props {
   eyebrow?: string;
   title?: string;
-  steps: { number?: string; title: string; text: string }[];
+  subtitle?: string;
+  steps: { number?: string; title: string; description?: string }[];
 }
 
-const { eyebrow, title, steps } = Astro.props;
+const { eyebrow, title, subtitle, steps } = Astro.props;
+
+// HowTo Schema.org Structured Data
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: title || 'Deine Reise zum Männerkreis',
+  description: subtitle || 'Wie du Teil des Männerkreis wirst',
+  step: steps.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.title,
+    text: step.description || step.title,
+  })),
+};
 ---
 
-<section class="journey" id="reise">
+<script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+
+<section class="section section--large journey-section" id="reise" aria-labelledby="journey-title">
   <div class="container">
     <div class="journey__header fade-in">
-      {eyebrow && <p class="eyebrow eyebrow--secondary">{eyebrow}</p>}
-      {title && <h2 class="section-title section-title--light" set:html={title}></h2>}
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+
+      {title && <h2 class="section-title journey__title" id="journey-title" set:html={title}></h2>}
+
+      {subtitle && <p class="journey__subtitle">{subtitle}</p>}
     </div>
-    <div class="journey__grid stagger-children">
-      {
-        steps.map((step) => (
-          <div class="journey__step fade-in">
-            {step.number && <span class="journey__step-number">{step.number}</span>}
-            <h3 class="journey__step-title">{step.title}</h3>
-            <p class="journey__step-text">{step.text}</p>
-          </div>
-        ))
-      }
+
+    <div class="journey__steps stagger-children">
+      {steps.map((step) => (
+        <div class="journey__step">
+          {step.number && (
+            <div class="journey__step-number" aria-hidden="true">{step.number}</div>
+          )}
+
+          {step.title && <h3 class="journey__step-title">{step.title}</h3>}
+
+          {step.description && <p class="journey__step-text">{step.description}</p>}
+        </div>
+      ))}
     </div>
   </div>
 </section>

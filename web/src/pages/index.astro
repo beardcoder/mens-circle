@@ -10,6 +10,7 @@ import FAQ from '@/components/blocks/FAQ.astro';
 import Newsletter from '@/components/blocks/Newsletter.astro';
 import CTA from '@/components/blocks/CTA.astro';
 import WhatsAppCommunity from '@/components/blocks/WhatsAppCommunity.astro';
+import TextSection from '@/components/blocks/TextSection.astro';
 import { getSettings, getPage, getTestimonials } from '@/lib/payload';
 import type { ContentBlock } from '@/lib/payload';
 
@@ -43,20 +44,21 @@ const blocks = page?.content || [];
               description={block.description}
               ctaText={block.ctaText}
               ctaLink={block.ctaLink}
+              backgroundImage={block.backgroundImage}
             />
           );
         case 'intro':
-          return <Intro eyebrow={block.eyebrow} title={block.title} text={block.text} quote={block.quote} />;
+          return <Intro eyebrow={block.eyebrow} title={block.title} text={block.text} quote={block.quote} values={block.values} />;
         case 'valueItems':
           return <ValueItems eyebrow={block.eyebrow} title={block.title} items={block.items} />;
         case 'moderator':
-          return <Moderator name={block.name} role={block.role} bio={block.bio} quote={block.quote} />;
+          return <Moderator eyebrow={block.eyebrow} name={block.name} bio={block.bio} quote={block.quote} photo={block.photo} />;
         case 'journeySteps':
-          return <JourneySteps eyebrow={block.eyebrow} title={block.title} steps={block.steps} />;
+          return <JourneySteps eyebrow={block.eyebrow} title={block.title} subtitle={block.subtitle} steps={block.steps} />;
         case 'testimonials':
-          return <Testimonials eyebrow={block.eyebrow} title={block.title} testimonials={testimonials} />;
+          return <Testimonials eyebrow={block.eyebrow} title={block.title} subtitle={block.subtitle} testimonials={testimonials} />;
         case 'faq':
-          return <FAQ eyebrow={block.eyebrow} title={block.title} items={block.items} />;
+          return <FAQ eyebrow={block.eyebrow} title={block.title} intro={block.intro} items={block.items} />;
         case 'newsletter':
           return <Newsletter eyebrow={block.eyebrow} title={block.title} text={block.text} />;
         case 'cta':
@@ -70,7 +72,9 @@ const blocks = page?.content || [];
             />
           );
         case 'whatsappCommunity':
-          return <WhatsAppCommunity title={block.title} text={block.text} link={block.link} />;
+          return <WhatsAppCommunity eyebrow={block.eyebrow} title={block.title} text={block.text} link={block.link} hint={block.hint} />;
+        case 'textSection':
+          return <TextSection eyebrow={block.eyebrow} title={block.title} content={block.content} />;
         default:
           return null;
       }
