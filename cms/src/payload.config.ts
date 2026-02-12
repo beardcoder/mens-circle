@@ -1,7 +1,8 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { buildConfig } from 'payload';
 import { postgresAdapter } from '@payloadcms/db-postgres';
+import sharp from 'sharp';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { Users } from './collections/Users';
 import { Events } from './collections/Events';
@@ -75,6 +76,7 @@ export default buildConfig({
   globals: [SiteSettings],
   editor: lexicalEditor(),
   db: postgresAdapter({
+    push: true,
     pool: process.env.DATABASE_URL
       ? { connectionString: process.env.DATABASE_URL }
       : {
@@ -85,6 +87,7 @@ export default buildConfig({
           database: process.env.DB_NAME || 'maennerkreis',
         },
   }),
+  sharp,
   plugins: [],
   endpoints: [
     {
