@@ -52,16 +52,18 @@ Payload CMS (Port 3001)
 
 #### Payload CMS (`cms/.env`)
 ```bash
-# Astro URL für Revalidierung
+# Astro URL für Revalidierung (ERFORDERLICH in Produktion)
 ASTRO_REVALIDATE_URL=http://localhost:4400
 
-# Shared Secret für Authentifizierung
+# Shared Secret für Authentifizierung (ERFORDERLICH)
 REVALIDATE_SECRET=your-secret-here
 ```
 
+**Wichtig:** Beide Umgebungsvariablen müssen gesetzt sein, sonst wird die Revalidierung übersprungen.
+
 #### Astro (`web/.env`)
 ```bash
-# Shared Secret (muss mit Payload CMS übereinstimmen)
+# Shared Secret (muss mit Payload CMS übereinstimmen, ERFORDERLICH)
 REVALIDATE_SECRET=your-secret-here
 ```
 
