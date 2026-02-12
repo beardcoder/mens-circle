@@ -12,21 +12,35 @@ export const Registrations: CollectionConfig = {
   },
   admin: {
     defaultColumns: ['event', 'participant', 'status', 'createdAt'],
+    group: 'Veranstaltungen',
+    description: 'Event-Anmeldungen verwalten',
+    defaultSort: '-createdAt',
   },
   fields: [
     {
-      name: 'event',
-      type: 'relationship',
-      relationTo: 'events',
-      required: true,
-      label: 'Veranstaltung',
-    },
-    {
-      name: 'participant',
-      type: 'relationship',
-      relationTo: 'participants',
-      required: true,
-      label: 'Teilnehmer',
+      type: 'row',
+      fields: [
+        {
+          name: 'event',
+          type: 'relationship',
+          relationTo: 'events',
+          required: true,
+          label: 'Veranstaltung',
+          admin: {
+            width: '50%',
+          },
+        },
+        {
+          name: 'participant',
+          type: 'relationship',
+          relationTo: 'participants',
+          required: true,
+          label: 'Teilnehmer',
+          admin: {
+            width: '50%',
+          },
+        },
+      ],
     },
     {
       name: 'status',
@@ -40,17 +54,32 @@ export const Registrations: CollectionConfig = {
       ],
     },
     {
-      name: 'consentTimestamp',
-      type: 'date',
-      label: 'Einwilligung erteilt am',
+      name: 'note',
+      type: 'textarea',
+      label: 'Anmerkung vom Teilnehmer',
       admin: {
-        position: 'sidebar',
+        rows: 3,
       },
     },
     {
-      name: 'note',
-      type: 'textarea',
-      label: 'Anmerkung',
+      type: 'collapsible',
+      label: 'Datenschutz & Metadaten',
+      admin: {
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          name: 'consentTimestamp',
+          type: 'date',
+          label: 'Einwilligung erteilt am',
+          admin: {
+            readOnly: true,
+            date: {
+              displayFormat: 'dd.MM.yyyy HH:mm',
+            },
+          },
+        },
+      ],
     },
   ],
 };

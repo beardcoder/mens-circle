@@ -1,0 +1,68 @@
+/* Custom Admin Styles für Männerkreis CMS */
+
+:root {
+  /* Brand Colors */
+  --brand-primary: #2c5f2d;
+  --brand-secondary: #97bc62;
+}
+
+/* Sidebar Group Headers */
+.nav-group__label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+/* Improve table readability */
+.table__row:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Status badges styling */
+.pill--style-positive {
+  background-color: var(--brand-primary) !important;
+}
+
+/* Better spacing for collapsible sections */
+.collapsible {
+  margin-top: 1rem;
+}
+
+/* Improve form field spacing */
+.field-type--row {
+  gap: 1rem;
+}
+
+/* Better visual hierarchy for tabs */
+.tabs-field__tab-button {
+  font-weight: 500;
+}
+
+.tabs-field__tab-button--active {
+  border-bottom-color: var(--brand-primary);
+}
+
+/* Description text styling */
+.field-description {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+/* Improve preview button visibility */
+.preview-button {
+  background-color: var(--brand-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.preview-button:hover {
+  background-color: var(--brand-secondary);
+}
+

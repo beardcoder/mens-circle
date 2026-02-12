@@ -13,7 +13,7 @@ const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001';
   <div class="newsletter__layout">
     <div class="newsletter__content fade-in">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h2 class="section-title">{title || 'Bleib informiert'}</h2>
+      <h2 class="section-title" set:html={title || 'Bleib informiert'}></h2>
       {text && <p class="newsletter__text">{text}</p>}
     </div>
     <div class="newsletter__form-wrap fade-in fade-in-delay-1">

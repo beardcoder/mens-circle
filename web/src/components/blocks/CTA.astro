@@ -18,7 +18,7 @@ const { eyebrow, title, text, buttonText, buttonLink } = Astro.props;
   <div class="container">
     <div class="cta__content fade-in">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h2 class="section-title cta__title">{title}</h2>
+      <h2 class="section-title cta__title" set:html={title}></h2>
       {text && <p class="cta__text">{text}</p>}
       {
         buttonText && buttonLink && (

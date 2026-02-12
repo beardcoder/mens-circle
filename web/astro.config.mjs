@@ -1,11 +1,9 @@
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+import bun from "@wyattjoh/astro-bun-adapter";
 
 export default defineConfig({
   output: 'server',
-  adapter: node({
-    mode: 'standalone',
-  }),
+  adapter: bun(),
   server: {
     port: 4400,
   },

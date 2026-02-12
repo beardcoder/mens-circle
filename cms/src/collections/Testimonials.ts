@@ -13,6 +13,10 @@ export const Testimonials: CollectionConfig = {
   admin: {
     useAsTitle: 'authorName',
     defaultColumns: ['authorName', 'published', 'sortOrder', 'createdAt'],
+    group: 'Inhalte',
+    description: 'Erfahrungsberichte moderieren',
+    listSearchableFields: ['authorName', 'content'],
+    defaultSort: 'sortOrder',
   },
   fields: [
     {
@@ -20,16 +24,32 @@ export const Testimonials: CollectionConfig = {
       type: 'textarea',
       required: true,
       label: 'Erfahrungsbericht',
+      admin: {
+        rows: 5,
+      },
     },
     {
-      name: 'authorName',
-      type: 'text',
-      label: 'Name',
-    },
-    {
-      name: 'authorRole',
-      type: 'text',
-      label: 'Rolle / Beschreibung',
+      type: 'row',
+      fields: [
+        {
+          name: 'authorName',
+          type: 'text',
+          label: 'Name',
+          admin: {
+            width: '50%',
+            description: 'Optional - kann auch anonym bleiben',
+          },
+        },
+        {
+          name: 'authorRole',
+          type: 'text',
+          label: 'Rolle / Beschreibung',
+          admin: {
+            width: '50%',
+            placeholder: 'z.B. Teilnehmer seit 2024',
+          },
+        },
+      ],
     },
     {
       name: 'email',
@@ -41,30 +61,35 @@ export const Testimonials: CollectionConfig = {
       },
     },
     {
-      name: 'published',
-      type: 'checkbox',
-      defaultValue: false,
-      label: 'Veröffentlicht',
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'publishedAt',
-      type: 'date',
-      label: 'Veröffentlicht am',
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'sortOrder',
-      type: 'number',
-      label: 'Reihenfolge',
-      defaultValue: 0,
-      admin: {
-        position: 'sidebar',
-      },
+      type: 'collapsible',
+      label: 'Veröffentlichung',
+      fields: [
+        {
+          name: 'published',
+          type: 'checkbox',
+          defaultValue: false,
+          label: 'Veröffentlicht',
+        },
+        {
+          name: 'publishedAt',
+          type: 'date',
+          label: 'Veröffentlicht am',
+          admin: {
+            date: {
+              displayFormat: 'dd.MM.yyyy',
+            },
+          },
+        },
+        {
+          name: 'sortOrder',
+          type: 'number',
+          label: 'Reihenfolge',
+          defaultValue: 0,
+          admin: {
+            description: 'Kleinere Zahlen erscheinen zuerst',
+          },
+        },
+      ],
     },
   ],
 };

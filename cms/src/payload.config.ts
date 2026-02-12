@@ -29,6 +29,43 @@ export default buildConfig({
     user: Users.slug,
     meta: {
       titleSuffix: '– Männerkreis CMS',
+      favicon: '/favicon.ico',
+      ogImage: '/og-image.jpg',
+    },
+    components: {},
+    dateFormat: 'dd.MM.yyyy HH:mm',
+    pagination: {
+      defaultLimit: 25,
+      limits: [10, 25, 50, 100],
+    },
+    livePreview: {
+      url: ({ data }) => {
+        if (data.slug) {
+          return `${process.env.SITE_URL || 'http://localhost:4321'}/${data.slug}`;
+        }
+        return process.env.SITE_URL || 'http://localhost:4321';
+      },
+      collections: ['pages', 'events'],
+      breakpoints: [
+        {
+          label: 'Mobile',
+          name: 'mobile',
+          width: 375,
+          height: 667,
+        },
+        {
+          label: 'Tablet',
+          name: 'tablet',
+          width: 768,
+          height: 1024,
+        },
+        {
+          label: 'Desktop',
+          name: 'desktop',
+          width: 1440,
+          height: 900,
+        },
+      ],
     },
   },
   collections: [

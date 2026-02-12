@@ -133,12 +133,15 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * Benutzer & Zugriffe
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: number;
   name?: string | null;
+  role: 'admin' | 'editor';
   updatedAt: string;
   createdAt: string;
   enableAPIKey?: boolean | null;
@@ -162,14 +165,20 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Verwalte Events und Termine für den Männerkreis
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
   id: number;
   title: string;
+  /**
+   * Wird für die URL verwendet: /events/[slug]
+   */
   slug: string;
   description: string;
+  image?: (number | null) | Media;
   eventDate: string;
   startTime: string;
   endTime: string;
@@ -177,14 +186,21 @@ export interface Event {
   street?: string | null;
   zip?: string | null;
   city?: string | null;
+  /**
+   * Maximale Anzahl an Teilnehmern für dieses Event
+   */
   maxParticipants: number;
   costBasis?: string | null;
-  image?: (number | null) | Media;
+  /**
+   * Event auf der Website sichtbar machen
+   */
   published?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Bilder und Dateien
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -202,8 +218,36 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
+ * Teilnehmer-Stammdaten
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "participants".
  */
@@ -217,6 +261,8 @@ export interface Participant {
   createdAt: string;
 }
 /**
+ * Event-Anmeldungen verwalten
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "registrations".
  */
@@ -225,18 +271,27 @@ export interface Registration {
   event: number | Event;
   participant: number | Participant;
   status: 'confirmed' | 'cancelled';
-  consentTimestamp?: string | null;
   note?: string | null;
+  consentTimestamp?: string | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Kampagnen erstellen und versenden
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "newsletters".
  */
 export interface Newsletter {
   id: number;
+  /**
+   * Der Betreff der E-Mail
+   */
   subject: string;
+  /**
+   * Optional: Wird in vielen E-Mail-Clients als Vorschau angezeigt
+   */
+  preheader?: string | null;
   content: {
     root: {
       type: string;
@@ -252,13 +307,21 @@ export interface Newsletter {
     };
     [k: string]: unknown;
   };
+  /**
+   * Status wird automatisch aktualisiert
+   */
   status: 'draft' | 'sending' | 'sent';
   sentAt?: string | null;
+  /**
+   * Anzahl der Empfänger beim Versand
+   */
   recipientsCount?: number | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Abonnenten verwalten
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "newsletter-subscriptions".
  */
@@ -275,12 +338,17 @@ export interface NewsletterSubscription {
   createdAt: string;
 }
 /**
+ * Erfahrungsberichte moderieren
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials".
  */
 export interface Testimonial {
   id: number;
   content: string;
+  /**
+   * Optional - kann auch anonym bleiben
+   */
   authorName?: string | null;
   authorRole?: string | null;
   /**
@@ -289,17 +357,25 @@ export interface Testimonial {
   email: string;
   published?: boolean | null;
   publishedAt?: string | null;
+  /**
+   * Kleinere Zahlen erscheinen zuerst
+   */
   sortOrder?: number | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Seiten verwalten
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
   id: number;
   title: string;
+  /**
+   * Wird für die URL verwendet: /[slug]
+   */
   slug: string;
   content?:
     | (
@@ -436,10 +512,22 @@ export interface Page {
       )[]
     | null;
   meta?: {
+    /**
+     * Falls leer, wird der Seitentitel verwendet
+     */
     metaTitle?: string | null;
+    /**
+     * Empfohlen: 150-160 Zeichen
+     */
     metaDescription?: string | null;
+    /**
+     * Bild für Facebook, Twitter, etc.
+     */
     ogImage?: (number | null) | Media;
   };
+  /**
+   * Seite auf der Website sichtbar machen
+   */
   published?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -552,6 +640,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   enableAPIKey?: T;
@@ -580,6 +669,7 @@ export interface EventsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   description?: T;
+  image?: T;
   eventDate?: T;
   startTime?: T;
   endTime?: T;
@@ -589,7 +679,6 @@ export interface EventsSelect<T extends boolean = true> {
   city?: T;
   maxParticipants?: T;
   costBasis?: T;
-  image?: T;
   published?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -614,8 +703,8 @@ export interface RegistrationsSelect<T extends boolean = true> {
   event?: T;
   participant?: T;
   status?: T;
-  consentTimestamp?: T;
   note?: T;
+  consentTimestamp?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -625,6 +714,7 @@ export interface RegistrationsSelect<T extends boolean = true> {
  */
 export interface NewslettersSelect<T extends boolean = true> {
   subject?: T;
+  preheader?: T;
   content?: T;
   status?: T;
   sentAt?: T;
@@ -828,6 +918,40 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -870,6 +994,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Allgemeine Website-Einstellungen
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */

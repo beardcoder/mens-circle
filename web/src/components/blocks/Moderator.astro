@@ -15,13 +15,13 @@ const { name, role, bio, quote } = Astro.props;
       <div class="moderator__decorative" aria-hidden="true">BEGLEITER</div>
     </div>
     <div class="moderator__content fade-in fade-in-delay-1">
-      <p class="moderator__name">{name}</p>
+      <p class="moderator__name" set:html={name}></p>
       {role && <p class="moderator__role">{role}</p>}
-      <p class="moderator__bio">{bio}</p>
+      <div class="moderator__bio" set:html={bio}></div>
       {
         quote && (
           <blockquote class="moderator__quote">
-            <p>»{quote}«</p>
+            <p set:html={`»${quote}«`}></p>
           </blockquote>
         )
       }

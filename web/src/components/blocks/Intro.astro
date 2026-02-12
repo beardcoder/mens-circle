@@ -13,7 +13,7 @@ const { eyebrow, title, text, quote } = Astro.props;
   <div class="intro__layout">
     <div class="intro__content fade-in">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h2 class="section-title section-title--lg intro__title">{title}</h2>
+      <h2 class="section-title section-title--lg intro__title" set:html={title}></h2>
       <p class="intro__text">{text}</p>
     </div>
     <div class="intro__visual fade-in fade-in-delay-1">
@@ -22,7 +22,7 @@ const { eyebrow, title, text, quote } = Astro.props;
           <div class="intro__circle intro__circle--1"></div>
           <div class="intro__circle intro__circle--2"></div>
         </div>
-        {quote && <p class="intro__quote">{quote}</p>}
+        {quote && <p class="intro__quote" set:html={quote}></p>}
       </div>
     </div>
   </div>

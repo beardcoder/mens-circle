@@ -12,7 +12,11 @@ export const Newsletters: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'subject',
-    defaultColumns: ['subject', 'status', 'sentAt'],
+    defaultColumns: ['subject', 'status', 'recipientsCount', 'sentAt'],
+    group: 'Newsletter',
+    description: 'Kampagnen erstellen und versenden',
+    listSearchableFields: ['subject'],
+    defaultSort: '-createdAt',
   },
   fields: [
     {
@@ -20,6 +24,18 @@ export const Newsletters: CollectionConfig = {
       type: 'text',
       required: true,
       label: 'Betreff',
+      admin: {
+        description: 'Der Betreff der E-Mail',
+      },
+    },
+    {
+      name: 'preheader',
+      type: 'text',
+      label: 'Vorschautext',
+      maxLength: 100,
+      admin: {
+        description: 'Optional: Wird in vielen E-Mail-Clients als Vorschau angezeigt',
+      },
     },
     {
       name: 'content',
@@ -28,35 +44,49 @@ export const Newsletters: CollectionConfig = {
       label: 'Inhalt',
     },
     {
-      name: 'status',
-      type: 'select',
-      required: true,
-      defaultValue: 'draft',
-      label: 'Status',
-      options: [
-        { label: 'Entwurf', value: 'draft' },
-        { label: 'Wird gesendet', value: 'sending' },
-        { label: 'Gesendet', value: 'sent' },
+      type: 'collapsible',
+      label: 'Versand-Informationen',
+      admin: {
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          name: 'status',
+          type: 'select',
+          required: true,
+          defaultValue: 'draft',
+          label: 'Status',
+          options: [
+            { label: 'Entwurf', value: 'draft' },
+            { label: 'Wird gesendet', value: 'sending' },
+            { label: 'Gesendet', value: 'sent' },
+          ],
+          admin: {
+            readOnly: true,
+            description: 'Status wird automatisch aktualisiert',
+          },
+        },
+        {
+          name: 'sentAt',
+          type: 'date',
+          label: 'Gesendet am',
+          admin: {
+            readOnly: true,
+            date: {
+              displayFormat: 'dd.MM.yyyy HH:mm',
+            },
+          },
+        },
+        {
+          name: 'recipientsCount',
+          type: 'number',
+          label: 'Anzahl Empfänger',
+          admin: {
+            readOnly: true,
+            description: 'Anzahl der Empfänger beim Versand',
+          },
+        },
       ],
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'sentAt',
-      type: 'date',
-      label: 'Gesendet am',
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'recipientsCount',
-      type: 'number',
-      label: 'Empfänger',
-      admin: {
-        position: 'sidebar',
-      },
     },
   ],
 };

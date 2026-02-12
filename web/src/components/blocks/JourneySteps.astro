@@ -12,7 +12,7 @@ const { eyebrow, title, steps } = Astro.props;
   <div class="container">
     <div class="journey__header fade-in">
       {eyebrow && <p class="eyebrow eyebrow--secondary">{eyebrow}</p>}
-      {title && <h2 class="section-title section-title--light">{title}</h2>}
+      {title && <h2 class="section-title section-title--light" set:html={title}></h2>}
     </div>
     <div class="journey__grid stagger-children">
       {

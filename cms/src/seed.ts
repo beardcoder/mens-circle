@@ -357,126 +357,144 @@ function parseInlineHtml(html: string): any[] {
 }
 
 // --- Content block converters ---
-function convertContentBlock(block: SourceContentBlock): any | null {
+// Returns an array of blocks (some source blocks map to multiple Payload blocks)
+function convertContentBlock(block: SourceContentBlock): any[] {
   const data = JSON.parse(block.data);
 
   switch (block.type) {
     case 'hero':
-      return {
-        blockType: 'hero',
-        id: block.block_id,
-        label: data.label || null,
-        title: stripHtmlClasses(data.title),
-        description: data.description || null,
-        ctaText: data.button_text || null,
-        ctaLink: data.button_link || null,
-      };
+      return [
+        {
+          blockType: 'hero',
+          id: block.block_id,
+          label: data.label || null,
+          title: data.title || '',
+          description: data.description || null,
+          ctaText: data.button_text || null,
+          ctaLink: data.button_link || null,
+        },
+      ];
 
-    case 'intro':
-      return {
-        blockType: 'intro',
-        id: block.block_id,
-        eyebrow: data.eyebrow || null,
-        title: stripHtmlClasses(data.title),
-        text: data.text || '',
-        quote: data.quote ? stripHtmlClasses(data.quote) : null,
-      };
+    case 'intro': {
+      const blocks: any[] = [
+        {
+          blockType: 'intro',
+          id: block.block_id,
+          eyebrow: data.eyebrow || null,
+          title: data.title || '',
+          text: data.text || '',
+          quote: data.quote || null,
+        },
+      ];
+      // Source intro block may contain a 'values' array -> separate valueItems block
+      if (data.values && data.values.length > 0) {
+        blocks.push({
+          blockType: 'valueItems',
+          items: data.values.map((v: any) => ({
+            number: v.number || null,
+            title: v.title,
+            text: v.description,
+          })),
+        });
+      }
+      return blocks;
+    }
 
     case 'text_section':
-      return {
-        blockType: 'textSection',
-        id: block.block_id,
-        eyebrow: data.eyebrow || null,
-        title: data.title || null,
-        content: htmlToLexical(data.content || ''),
-      };
+      return [
+        {
+          blockType: 'textSection',
+          id: block.block_id,
+          eyebrow: data.eyebrow || null,
+          title: data.title || null,
+          content: htmlToLexical(data.content || ''),
+        },
+      ];
 
     case 'testimonials':
-      return {
-        blockType: 'testimonials',
-        id: block.block_id,
-      };
+      return [
+        {
+          blockType: 'testimonials',
+          id: block.block_id,
+        },
+      ];
 
     case 'moderator':
-      return {
-        blockType: 'moderator',
-        id: block.block_id,
-        name: stripHtmlClasses(data.name) || '',
-        bio: stripHtmlTags(data.bio) || '',
-        quote: data.quote ? stripHtmlClasses(data.quote) : null,
-      };
+      return [
+        {
+          blockType: 'moderator',
+          id: block.block_id,
+          name: data.name || '',
+          bio: data.bio || '',
+          quote: data.quote || null,
+        },
+      ];
 
     case 'journey_steps':
-      return {
-        blockType: 'journeySteps',
-        id: block.block_id,
-        eyebrow: data.eyebrow || null,
-        title: stripHtmlClasses(data.title) || null,
-        steps: (data.steps || []).map((step: any) => ({
-          number: String(step.number),
-          title: step.title,
-          text: step.description,
-        })),
-      };
+      return [
+        {
+          blockType: 'journeySteps',
+          id: block.block_id,
+          eyebrow: data.eyebrow || null,
+          title: data.title || null,
+          steps: (data.steps || []).map((step: any) => ({
+            number: String(step.number),
+            title: step.title,
+            text: step.description,
+          })),
+        },
+      ];
 
     case 'faq':
-      return {
-        blockType: 'faq',
-        id: block.block_id,
-        eyebrow: data.eyebrow || null,
-        title: stripHtmlClasses(data.title) || null,
-        items: (data.items || []).map((item: any) => ({
-          question: item.question,
-          answer: item.answer,
-        })),
-      };
+      return [
+        {
+          blockType: 'faq',
+          id: block.block_id,
+          eyebrow: data.eyebrow || null,
+          title: data.title || null,
+          items: (data.items || []).map((item: any) => ({
+            question: item.question,
+            answer: item.answer,
+          })),
+        },
+      ];
 
     case 'newsletter':
-      return {
-        blockType: 'newsletter',
-        id: block.block_id,
-        eyebrow: data.eyebrow || null,
-        title: stripHtmlClasses(data.title) || null,
-        text: data.text || null,
-      };
+      return [
+        {
+          blockType: 'newsletter',
+          id: block.block_id,
+          eyebrow: data.eyebrow || null,
+          title: data.title || null,
+          text: data.text || null,
+        },
+      ];
 
     case 'cta':
-      return {
-        blockType: 'cta',
-        id: block.block_id,
-        eyebrow: data.eyebrow || null,
-        title: stripHtmlClasses(data.title),
-        text: data.text || null,
-        buttonText: data.button_text || null,
-        buttonLink: data.button_link || null,
-      };
+      return [
+        {
+          blockType: 'cta',
+          id: block.block_id,
+          eyebrow: data.eyebrow || null,
+          title: data.title || '',
+          text: data.text || null,
+          buttonText: data.button_text || null,
+          buttonLink: data.button_link || null,
+        },
+      ];
 
     case 'whatsapp_community':
-      return {
-        blockType: 'whatsappCommunity',
-        id: block.block_id,
-      };
+      return [
+        {
+          blockType: 'whatsappCommunity',
+          id: block.block_id,
+        },
+      ];
 
     default:
       console.warn(`  Unknown block type: ${block.type}`);
-      return null;
+      return [];
   }
-}
-
-function stripHtmlClasses(html: string): string {
-  if (!html) return '';
-  // Remove class attributes and span/br tags but keep text
-  return html
-    .replace(/<span[^>]*>/gi, '')
-    .replace(/<\/span>/gi, '')
-    .replace(/<br\s*\/?>/gi, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function stripHtmlTags(html: string): string {
-  if (!html) return '';
-  return html.replace(/<[^>]*>/g, '').trim();
 }
 
 // --- Main migration ---
@@ -712,10 +730,8 @@ async function seed() {
         .filter((b) => b.page_id === page.id)
         .sort((a, b) => a.order - b.order);
 
-      // Convert blocks
-      const content = pageBlocks
-        .map((block) => convertContentBlock(block))
-        .filter(Boolean);
+      // Convert blocks (flatMap because one source block may become multiple Payload blocks)
+      const content = pageBlocks.flatMap((block) => convertContentBlock(block));
 
       const created = await payload.create({
         collection: 'pages',

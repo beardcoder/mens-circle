@@ -9,6 +9,10 @@ export const SiteSettings: GlobalConfig = {
     read: () => true,
     update: isAuthenticated,
   },
+  admin: {
+    group: 'System',
+    description: 'Allgemeine Website-Einstellungen',
+  },
   fields: [
     {
       name: 'siteName',
