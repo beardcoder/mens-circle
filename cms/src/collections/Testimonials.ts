@@ -15,7 +15,8 @@ export const Testimonials: CollectionConfig = {
   hooks: {
     afterChange: [
       async ({ doc, previousDoc }) => {
-        // Trigger revalidation when testimonial is published or unpublished
+        // Trigger revalidation when testimonial publish status changes or when published content is updated
+        // This ensures both publishing/unpublishing and content updates trigger revalidation
         if (doc.published !== previousDoc?.published || doc.published) {
           await triggerRevalidate('testimonials');
         }

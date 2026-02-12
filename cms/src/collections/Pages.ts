@@ -24,9 +24,9 @@ export const Pages: CollectionConfig = {
   },
   hooks: {
     afterChange: [
-      async ({ doc }) => {
-        // Trigger Astro revalidation when page is published
-        if (doc.published) {
+      async ({ doc, previousDoc }) => {
+        // Trigger Astro revalidation when page publish status changes or content is updated while published
+        if (doc.published !== previousDoc?.published || doc.published) {
           await triggerRevalidate('pages', doc.slug);
         }
       },

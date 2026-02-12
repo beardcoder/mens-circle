@@ -13,9 +13,9 @@ export const Events: CollectionConfig = {
   },
   hooks: {
     afterChange: [
-      async ({ doc }) => {
-        // Trigger Astro revalidation when event is published
-        if (doc.published) {
+      async ({ doc, previousDoc }) => {
+        // Trigger Astro revalidation when event publish status changes or content is updated while published
+        if (doc.published !== previousDoc?.published || doc.published) {
           await triggerRevalidate('events', doc.slug);
         }
       },

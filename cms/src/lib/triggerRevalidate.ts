@@ -3,8 +3,13 @@
  * Called from Payload hooks when content changes
  */
 export async function triggerRevalidate(collection?: string, slug?: string): Promise<void> {
-  const revalidateUrl = process.env.ASTRO_REVALIDATE_URL || 'http://localhost:4400';
+  const revalidateUrl = process.env.ASTRO_REVALIDATE_URL;
   const secret = process.env.REVALIDATE_SECRET;
+
+  if (!revalidateUrl) {
+    console.warn('ASTRO_REVALIDATE_URL not set, skipping Astro revalidation');
+    return;
+  }
 
   if (!secret) {
     console.warn('REVALIDATE_SECRET not set, skipping Astro revalidation');
