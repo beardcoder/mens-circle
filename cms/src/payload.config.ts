@@ -29,8 +29,6 @@ export default buildConfig({
     user: Users.slug,
     meta: {
       titleSuffix: '– Männerkreis CMS',
-      favicon: '/favicon.ico',
-      ogImage: '/og-image.jpg',
     },
     components: {},
     dateFormat: 'dd.MM.yyyy HH:mm',
