@@ -80,6 +80,7 @@ export default buildConfig({
     client: {
       url: process.env.DATABASE_URL || 'file:./data/payload.db',
     },
+    push: false,
     prodMigrations: migrations,
   }),
   sharp,
