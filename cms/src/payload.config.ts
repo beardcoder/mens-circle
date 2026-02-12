@@ -14,7 +14,6 @@ import { Testimonials } from './collections/Testimonials';
 import { Pages } from './collections/Pages';
 import { Media } from './collections/Media';
 import { SiteSettings } from './globals/SiteSettings';
-import { migrations } from './migrations';
 
 import { registerEndpoint } from './endpoints/register';
 import { subscribeEndpoint } from './endpoints/subscribe';
@@ -81,7 +80,6 @@ export default buildConfig({
       url: process.env.DATABASE_URL || 'file:./data/payload.db',
     },
     push: false,
-    prodMigrations: migrations,
   }),
   sharp,
   plugins: [],
