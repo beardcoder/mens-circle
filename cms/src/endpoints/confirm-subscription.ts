@@ -19,10 +19,7 @@ export const confirmSubscriptionEndpoint: PayloadHandler = async (req) => {
   });
 
   if (subscriptions.docs.length === 0) {
-    return Response.json(
-      { error: 'Bestätigungslink ungültig oder bereits verwendet.' },
-      { status: 404 },
-    );
+    return Response.json({ error: 'Bestätigungslink ungültig oder bereits verwendet.' }, { status: 404 });
   }
 
   const subscription = subscriptions.docs[0];
@@ -47,8 +44,7 @@ export const confirmSubscriptionEndpoint: PayloadHandler = async (req) => {
 
   // Send welcome email
   try {
-    const participant =
-      typeof subscription.participant === 'object' ? subscription.participant : null;
+    const participant = typeof subscription.participant === 'object' ? subscription.participant : null;
     if (participant?.email) {
       const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,

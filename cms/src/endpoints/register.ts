@@ -78,10 +78,7 @@ export const registerEndpoint: PayloadHandler = async (req) => {
   });
 
   if (existingReg.docs.length > 0) {
-    return Response.json(
-      { error: 'Du bist bereits für diese Veranstaltung angemeldet.' },
-      { status: 409 },
-    );
+    return Response.json({ error: 'Du bist bereits für diese Veranstaltung angemeldet.' }, { status: 409 });
   }
 
   // Check capacity (race-condition-safe: check right before create)

@@ -34,11 +34,7 @@ if (hasTestimonialsBlock) {
 const blocks = page.content || [];
 ---
 
-<Base
-  title={page.meta?.metaTitle || page.title}
-  description={page.meta?.metaDescription}
-  ogImage={ogImageUrl}
->
+<Base title={page.meta?.metaTitle || page.title} description={page.meta?.metaDescription} ogImage={ogImageUrl}>
   {
     blocks.map((block: ContentBlock) => {
       switch (block.blockType) {
@@ -54,15 +50,40 @@ const blocks = page.content || [];
             />
           );
         case 'intro':
-          return <Intro eyebrow={block.eyebrow} title={block.title} text={block.text} quote={block.quote} values={block.values} />;
+          return (
+            <Intro
+              eyebrow={block.eyebrow}
+              title={block.title}
+              text={block.text}
+              quote={block.quote}
+              values={block.values}
+            />
+          );
         case 'valueItems':
           return <ValueItems eyebrow={block.eyebrow} title={block.title} items={block.items} />;
         case 'moderator':
-          return <Moderator eyebrow={block.eyebrow} name={block.name} bio={block.bio} quote={block.quote} photo={block.photo} />;
+          return (
+            <Moderator
+              eyebrow={block.eyebrow}
+              name={block.name}
+              bio={block.bio}
+              quote={block.quote}
+              photo={block.photo}
+            />
+          );
         case 'journeySteps':
-          return <JourneySteps eyebrow={block.eyebrow} title={block.title} subtitle={block.subtitle} steps={block.steps} />;
+          return (
+            <JourneySteps eyebrow={block.eyebrow} title={block.title} subtitle={block.subtitle} steps={block.steps} />
+          );
         case 'testimonials':
-          return <Testimonials eyebrow={block.eyebrow} title={block.title} subtitle={block.subtitle} testimonials={testimonials} />;
+          return (
+            <Testimonials
+              eyebrow={block.eyebrow}
+              title={block.title}
+              subtitle={block.subtitle}
+              testimonials={testimonials}
+            />
+          );
         case 'faq':
           return <FAQ eyebrow={block.eyebrow} title={block.title} intro={block.intro} items={block.items} />;
         case 'newsletter':
@@ -78,7 +99,15 @@ const blocks = page.content || [];
             />
           );
         case 'whatsappCommunity':
-          return <WhatsAppCommunity eyebrow={block.eyebrow} title={block.title} text={block.text} link={block.link} hint={block.hint} />;
+          return (
+            <WhatsAppCommunity
+              eyebrow={block.eyebrow}
+              title={block.title}
+              text={block.text}
+              link={block.link}
+              hint={block.hint}
+            />
+          );
         case 'textSection':
           return <TextSection eyebrow={block.eyebrow} title={block.title} content={block.content} />;
         default:

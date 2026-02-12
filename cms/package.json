@@ -11,23 +11,23 @@
     "seed": "tsx src/seed.ts"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.0.0",
-    "@payloadcms/next": "^3.0.0",
-    "@payloadcms/richtext-lexical": "^3.0.0",
-    "cross-env": "^7.0.3",
-    "next": "15.4.11",
-    "nodemailer": "^6.9.0",
-    "payload": "^3.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "sharp": "^0.33.0"
+    "@payloadcms/db-postgres": "^3.76.1",
+    "@payloadcms/next": "^3.76.1",
+    "@payloadcms/richtext-lexical": "^3.76.1",
+    "cross-env": "^10.1.0",
+    "next": "^16.2.0-canary.37",
+    "nodemailer": "^8.0.1",
+    "payload": "^3.76.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@types/nodemailer": "^6.4.0",
+    "@types/node": "^25.2.3",
+    "@types/nodemailer": "^7.0.9",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "tsx": "^4.0.0",
-    "typescript": "^5.7.0"
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }

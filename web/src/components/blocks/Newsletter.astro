@@ -15,7 +15,7 @@ const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001';
       <div class="newsletter__content">
         {eyebrow && <p class="eyebrow eyebrow--secondary">{eyebrow}</p>}
 
-        <h2 class="section-title newsletter__title" id="newsletter-title" set:html={title || 'Bleib informiert'}></h2>
+        <h2 class="section-title newsletter__title" id="newsletter-title" set:html={title || 'Bleib informiert'} />
 
         {text && <p class="newsletter__text">{text}</p>}
       </div>
@@ -33,9 +33,7 @@ const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001';
             autocomplete="email"
             inputmode="email"
           />
-          <button type="submit" class="btn btn--primary">
-            Anmelden
-          </button>
+          <button type="submit" class="btn btn--primary"> Anmelden </button>
           <div id="newsletterMessage" role="status" aria-live="polite"></div>
         </form>
       </div>

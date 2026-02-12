@@ -46,10 +46,7 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
   });
 
   if (existingSub.docs.length > 0) {
-    return Response.json(
-      { error: 'Du bist bereits für den Newsletter angemeldet.' },
-      { status: 409 },
-    );
+    return Response.json({ error: 'Du bist bereits für den Newsletter angemeldet.' }, { status: 409 });
   }
 
   // Check for existing pending subscription and resend confirmation
@@ -110,7 +107,6 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
 
   return Response.json({
     success: true,
-    message:
-      'Bitte bestätige deine Anmeldung über den Link in der E-Mail, die wir dir geschickt haben.',
+    message: 'Bitte bestätige deine Anmeldung über den Link in der E-Mail, die wir dir geschickt haben.',
   });
 };

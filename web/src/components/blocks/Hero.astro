@@ -13,16 +13,18 @@ const { label, title, description, ctaText, ctaLink, backgroundImage } = Astro.p
 
 <section class="hero" role="banner">
   <div class="hero__bg">
-    {backgroundImage && (
-      <img
-        src={backgroundImage.url}
-        alt={backgroundImage.alt || title}
-        class="hero__bg-image"
-        loading="eager"
-        fetchpriority="high"
-        aria-hidden="true"
-      />
-    )}
+    {
+      backgroundImage && (
+        <img
+          src={backgroundImage.url}
+          alt={backgroundImage.alt || title}
+          class="hero__bg-image"
+          loading="eager"
+          fetchpriority="high"
+          aria-hidden="true"
+        />
+      )
+    }
   </div>
 
   <div class="hero__circles" aria-hidden="true">
@@ -36,26 +38,30 @@ const { label, title, description, ctaText, ctaLink, backgroundImage } = Astro.p
     <div class="hero__content">
       {label && <p class="hero__label">{label}</p>}
 
-      {title && (
-        <h1 class="hero__title">
-          <span set:html={title}></span>
-        </h1>
-      )}
+      {
+        title && (
+          <h1 class="hero__title">
+            <span set:html={title} />
+          </h1>
+        )
+      }
 
       <div class="hero__bottom">
         {description && <p class="hero__description">{description}</p>}
 
-        {ctaText && ctaLink && (
-          <div class="hero__cta fade-in-delay-3">
-            <a href={ctaLink} class="btn btn--primary btn--large">
-              {ctaText}
-            </a>
-            <div class="hero__scroll fade-in-delay-4">
-              <span>Entdecken</span>
-              <div class="hero__scroll-line" aria-hidden="true"></div>
+        {
+          ctaText && ctaLink && (
+            <div class="hero__cta fade-in-delay-3">
+              <a href={ctaLink} class="btn btn--primary btn--large">
+                {ctaText}
+              </a>
+              <div class="hero__scroll fade-in-delay-4">
+                <span>Entdecken</span>
+                <div class="hero__scroll-line" aria-hidden="true" />
+              </div>
             </div>
-          </div>
-        )}
+          )
+        }
       </div>
     </div>
   </div>

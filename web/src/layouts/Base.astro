@@ -111,33 +111,36 @@ const umamiScriptUrl = import.meta.env.PUBLIC_UMAMI_SCRIPT_URL || 'https://cloud
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 
     <!-- Organization Schema.org -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      '@id': `${Astro.site}#organization`,
-      name: siteName,
-      url: Astro.site,
-      logo: `${Astro.site}images/logo-color.png`,
-      description: pageDescription,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Straubing',
-        addressRegion: 'Niederbayern',
-        addressCountry: 'DE'
-      },
-      contactPoint: settings?.contactEmail ? {
-        '@type': 'ContactPoint',
-        email: settings.contactEmail,
-        contactType: 'customer service',
-        availableLanguage: 'German'
-      } : undefined,
-      sameAs: settings?.socialLinks?.map((link: any) => link.value).filter(Boolean) || []
-    })} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        '@id': `${Astro.site}#organization`,
+        name: siteName,
+        url: Astro.site,
+        logo: `${Astro.site}images/logo-color.png`,
+        description: pageDescription,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Straubing',
+          addressRegion: 'Niederbayern',
+          addressCountry: 'DE',
+        },
+        contactPoint: settings?.contactEmail
+          ? {
+              '@type': 'ContactPoint',
+              email: settings.contactEmail,
+              contactType: 'customer service',
+              availableLanguage: 'German',
+            }
+          : undefined,
+        sameAs: settings?.socialLinks?.map((link: any) => link.value).filter(Boolean) || [],
+      })}
+    />
 
     <!-- Umami Analytics -->
-    {umamiEnabled && umamiWebsiteId && (
-      <script defer src={umamiScriptUrl} data-website-id={umamiWebsiteId}></script>
-    )}
+    {umamiEnabled && umamiWebsiteId && <script defer src={umamiScriptUrl} data-website-id={umamiWebsiteId} />}
   </head>
   <body>
     <a href="#main" class="skip-link">Zum Inhalt springen</a>

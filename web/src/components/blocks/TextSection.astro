@@ -16,9 +16,6 @@ const { eyebrow, title, content } = Astro.props;
       {title && <h2 class="section-title">{title}</h2>}
     </div>
 
-    {content && (
-      <div class="section__content fade-in fade-in-delay-1" set:html={content}></div>
-    )}
+    {content && <div class="section__content fade-in fade-in-delay-1" set:html={content} />}
   </div>
 </section>
-

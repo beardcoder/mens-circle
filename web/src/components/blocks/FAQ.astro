@@ -31,23 +31,25 @@ const faqSchema = {
       <div class="faq__header fade-in">
         {eyebrow && <p class="eyebrow">{eyebrow}</p>}
 
-        {title && <h2 class="section-title faq__title" set:html={title}></h2>}
+        {title && <h2 class="section-title faq__title" set:html={title} />}
 
         {intro && <p class="faq__intro">{intro}</p>}
       </div>
 
       <div class="faq__list fade-in fade-in-delay-1">
-        {items.map((item) => (
-          <details class="faq-item" name="faq-accordion">
-            <summary class="faq-item__question">
-              <span>{item.question}</span>
-              <span class="faq-item__icon" aria-hidden="true"></span>
-            </summary>
-            <div class="faq-item__answer">
-              <div class="faq-item__answer-inner" set:html={item.answer}></div>
-            </div>
-          </details>
-        ))}
+        {
+          items.map((item) => (
+            <details class="faq-item" name="faq-accordion">
+              <summary class="faq-item__question">
+                <span>{item.question}</span>
+                <span class="faq-item__icon" aria-hidden="true" />
+              </summary>
+              <div class="faq-item__answer">
+                <div class="faq-item__answer-inner" set:html={item.answer} />
+              </div>
+            </details>
+          ))
+        }
       </div>
     </div>
   </div>

@@ -17,17 +17,19 @@ const { eyebrow, title, items } = Astro.props;
     </div>
 
     <div class="intro__values stagger-children">
-      {items.map((item) => (
-        <div class="value-item">
-          {item.number && <span class="value-item__number">{item.number}</span>}
+      {
+        items.map((item) => (
+          <div class="value-item">
+            {item.number && <span class="value-item__number">{item.number}</span>}
 
-          <div class="value-item__content">
-            {item.title && <h3>{item.title}</h3>}
+            <div class="value-item__content">
+              {item.title && <h3>{item.title}</h3>}
 
-            {item.description && <p>{item.description}</p>}
+              {item.description && <p>{item.description}</p>}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </div>
 </section>

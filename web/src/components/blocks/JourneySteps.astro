@@ -30,23 +30,27 @@ const howToSchema = {
     <div class="journey__header fade-in">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
 
-      {title && <h2 class="section-title journey__title" id="journey-title" set:html={title}></h2>}
+      {title && <h2 class="section-title journey__title" id="journey-title" set:html={title} />}
 
       {subtitle && <p class="journey__subtitle">{subtitle}</p>}
     </div>
 
     <div class="journey__steps stagger-children">
-      {steps.map((step) => (
-        <div class="journey__step">
-          {step.number && (
-            <div class="journey__step-number" aria-hidden="true">{step.number}</div>
-          )}
+      {
+        steps.map((step) => (
+          <div class="journey__step">
+            {step.number && (
+              <div class="journey__step-number" aria-hidden="true">
+                {step.number}
+              </div>
+            )}
 
-          {step.title && <h3 class="journey__step-title">{step.title}</h3>}
+            {step.title && <h3 class="journey__step-title">{step.title}</h3>}
 
-          {step.description && <p class="journey__step-text">{step.description}</p>}
-        </div>
-      ))}
+            {step.description && <p class="journey__step-text">{step.description}</p>}
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

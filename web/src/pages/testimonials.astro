@@ -18,9 +18,7 @@ const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001';
         <p class="hero__label">Stimmen</p>
         <h1 class="hero__title"><span class="hero__title-line">Erfahrungsberichte</span></h1>
         <div class="hero__bottom">
-          <p class="hero__description">
-            Was Teilnehmer über den Männerkreis sagen.
-          </p>
+          <p class="hero__description">Was Teilnehmer über den Männerkreis sagen.</p>
         </div>
       </div>
     </div>
@@ -28,26 +26,30 @@ const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001';
 
   <section class="testimonials-page-section">
     <div class="container">
-      {testimonials.length > 0 ? (
-        <div class="testimonials-page__grid stagger-children">
-          {testimonials.map((t) => (
-            <div class="testimonial-card fade-in">
-              <div class="testimonial-card__quote-icon" aria-hidden="true">»</div>
-              <blockquote class="testimonial-card__quote">
-                <p>{t.content}</p>
-              </blockquote>
-              <div class="testimonial-card__author">
-                <span class="testimonial-card__name">{t.authorName || 'Anonym'}</span>
-                {t.authorRole && <span class="testimonial-card__role">{t.authorRole}</span>}
+      {
+        testimonials.length > 0 ? (
+          <div class="testimonials-page__grid stagger-children">
+            {testimonials.map((t) => (
+              <div class="testimonial-card fade-in">
+                <div class="testimonial-card__quote-icon" aria-hidden="true">
+                  »
+                </div>
+                <blockquote class="testimonial-card__quote">
+                  <p>{t.content}</p>
+                </blockquote>
+                <div class="testimonial-card__author">
+                  <span class="testimonial-card__name">{t.authorName || 'Anonym'}</span>
+                  {t.authorRole && <span class="testimonial-card__role">{t.authorRole}</span>}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div class="testimonials-page__empty fade-in">
-          <p>Noch keine Erfahrungsberichte vorhanden.</p>
-        </div>
-      )}
+            ))}
+          </div>
+        ) : (
+          <div class="testimonials-page__empty fade-in">
+            <p>Noch keine Erfahrungsberichte vorhanden.</p>
+          </div>
+        )
+      }
     </div>
   </section>
 
@@ -57,8 +59,8 @@ const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001';
         <p class="eyebrow">Deine Erfahrung</p>
         <h2 class="section-title">Erfahrung <span class="text-italic">teilen</span></h2>
         <p class="testimonial-submit__text">
-          Warst du schon bei einem Männerkreis dabei? Teile deine Erfahrung mit anderen.
-          Dein Bericht wird nach Prüfung veröffentlicht.
+          Warst du schon bei einem Männerkreis dabei? Teile deine Erfahrung mit anderen. Dein Bericht wird nach Prüfung
+          veröffentlicht.
         </p>
       </div>
       <form id="testimonialForm" class="testimonial-submit__form fade-in">
@@ -69,31 +71,20 @@ const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001';
             name="content"
             required
             rows="5"
-            placeholder="Was hat dich am Männerkreis bewegt?"
-          ></textarea>
+            placeholder="Was hat dich am Männerkreis bewegt?"></textarea>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="testimonialName">
               Name <span class="form-label-optional">(optional)</span>
             </label>
-            <input
-              type="text"
-              id="testimonialName"
-              name="authorName"
-              placeholder="Dein Name"
-            />
+            <input type="text" id="testimonialName" name="authorName" placeholder="Dein Name" />
           </div>
           <div class="form-group">
             <label for="testimonialRole">
               Rolle <span class="form-label-optional">(optional)</span>
             </label>
-            <input
-              type="text"
-              id="testimonialRole"
-              name="authorRole"
-              placeholder="z.B. Teilnehmer seit 2024"
-            />
+            <input type="text" id="testimonialRole" name="authorRole" placeholder="z.B. Teilnehmer seit 2024" />
           </div>
         </div>
         <div class="form-group">

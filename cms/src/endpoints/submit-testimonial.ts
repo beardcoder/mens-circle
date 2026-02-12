@@ -34,7 +34,6 @@ export const submitTestimonialEndpoint: PayloadHandler = async (req) => {
 
   return Response.json({
     success: true,
-    message:
-      'Vielen Dank für deinen Erfahrungsbericht! Er wird nach Prüfung veröffentlicht.',
+    message: 'Vielen Dank für deinen Erfahrungsbericht! Er wird nach Prüfung veröffentlicht.',
   });
 };

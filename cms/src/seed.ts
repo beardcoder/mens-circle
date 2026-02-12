@@ -162,7 +162,17 @@ function htmlToLexical(html: string) {
   if (root.children.length === 0) {
     root.children.push({
       type: 'paragraph',
-      children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: html.replace(/<[^>]*>/g, ''), version: 1 }],
+      children: [
+        {
+          type: 'text',
+          detail: 0,
+          format: 0,
+          mode: 'normal',
+          style: '',
+          text: html.replace(/<[^>]*>/g, ''),
+          version: 1,
+        },
+      ],
       direction: 'ltr',
       format: '',
       indent: 0,
@@ -208,7 +218,10 @@ function parseHtmlBlocks(html: string): any[] {
         children: items.map((item) => {
           const innerHtml = item.replace(/<li[^>]*>/, '').replace(/<\/li>/, '');
           // Remove wrapping <p> tags inside list items
-          const cleanInner = innerHtml.replace(/^<p[^>]*>/, '').replace(/<\/p>$/, '').trim();
+          const cleanInner = innerHtml
+            .replace(/^<p[^>]*>/, '')
+            .replace(/<\/p>$/, '')
+            .trim();
           return {
             type: 'listitem',
             children: [
@@ -315,9 +328,7 @@ function parseInlineHtml(html: string): any[] {
         const linkText = closeMatch[1].replace(/<[^>]*>/g, '');
         nodes.push({
           type: 'link',
-          children: [
-            { type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: linkText, version: 1 },
-          ],
+          children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: linkText, version: 1 }],
           direction: 'ltr',
           format: '',
           indent: 0,
@@ -726,9 +737,7 @@ async function seed() {
       const meta = JSON.parse(page.meta || '{}');
 
       // Get content blocks for this page, sorted by order
-      const pageBlocks = sourceContentBlocks
-        .filter((b) => b.page_id === page.id)
-        .sort((a, b) => a.order - b.order);
+      const pageBlocks = sourceContentBlocks.filter((b) => b.page_id === page.id).sort((a, b) => a.order - b.order);
 
       // Convert blocks (flatMap because one source block may become multiple Payload blocks)
       const content = pageBlocks.flatMap((block) => convertContentBlock(block));
