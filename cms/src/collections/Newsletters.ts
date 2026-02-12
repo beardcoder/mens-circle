@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload';
-
-const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+import { isAuthenticated, isAdmin } from '@/access';
 
 export const Newsletters: CollectionConfig = {
   slug: 'newsletters',
@@ -8,7 +7,7 @@ export const Newsletters: CollectionConfig = {
     read: isAuthenticated,
     create: isAuthenticated,
     update: isAuthenticated,
-    delete: isAuthenticated,
+    delete: isAdmin,
   },
   defaultSort: '-createdAt',
   admin: {

@@ -1,14 +1,19 @@
 import type { CollectionConfig } from 'payload';
+import { isAuthenticated, isAdmin, publicReadOnly } from '@/access';
+import { autoSlug } from '@/hooks/slugify';
 
-const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+const timeFormatRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
 export const Events: CollectionConfig = {
   slug: 'events',
   access: {
-    read: () => true,
+    read: publicReadOnly,
     create: isAuthenticated,
     update: isAuthenticated,
-    delete: isAuthenticated,
+    delete: isAdmin,
+  },
+  hooks: {
+    beforeChange: [autoSlug],
   },
   admin: {
     useAsTitle: 'title',
@@ -35,15 +40,18 @@ export const Events: CollectionConfig = {
               type: 'text',
               required: true,
               label: 'Titel',
+              index: true,
             },
             {
               name: 'slug',
               type: 'text',
               required: true,
               unique: true,
+              index: true,
               label: 'URL-Slug',
               admin: {
-                description: 'Wird für die URL verwendet: /events/[slug]',
+                description:
+                  'Wird automatisch aus dem Titel generiert. Manuelle Anpassung möglich.',
               },
             },
             {
@@ -68,6 +76,7 @@ export const Events: CollectionConfig = {
               type: 'date',
               required: true,
               label: 'Datum',
+              index: true,
               admin: {
                 date: {
                   pickerAppearance: 'dayOnly',
@@ -83,9 +92,17 @@ export const Events: CollectionConfig = {
                   type: 'text',
                   required: true,
                   label: 'Startzeit',
+                  validate: (value: string | null | undefined) => {
+                    if (!value) return 'Startzeit ist erforderlich';
+                    if (!timeFormatRegex.test(value)) {
+                      return 'Format: HH:MM (z.B. 19:00)';
+                    }
+                    return true;
+                  },
                   admin: {
                     placeholder: '19:00',
                     width: '50%',
+                    description: 'Format: HH:MM',
                   },
                 },
                 {
@@ -93,9 +110,17 @@ export const Events: CollectionConfig = {
                   type: 'text',
                   required: true,
                   label: 'Endzeit',
+                  validate: (value: string | null | undefined) => {
+                    if (!value) return 'Endzeit ist erforderlich';
+                    if (!timeFormatRegex.test(value)) {
+                      return 'Format: HH:MM (z.B. 21:30)';
+                    }
+                    return true;
+                  },
                   admin: {
                     placeholder: '21:30',
                     width: '50%',
+                    description: 'Format: HH:MM',
                   },
                 },
               ],
@@ -167,6 +192,15 @@ export const Events: CollectionConfig = {
           ],
         },
       ],
+    },
+    {
+      name: 'registrations',
+      type: 'join',
+      collection: 'registrations',
+      on: 'event',
+      admin: {
+        description: 'Anmeldungen für dieses Event',
+      },
     },
   ],
 };

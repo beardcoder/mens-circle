@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload';
-
-const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+import { isAuthenticated, isAdmin } from '@/access';
 
 export const Participants: CollectionConfig = {
   slug: 'participants',
@@ -8,7 +7,7 @@ export const Participants: CollectionConfig = {
     read: isAuthenticated,
     create: isAuthenticated,
     update: isAuthenticated,
-    delete: isAuthenticated,
+    delete: isAdmin,
   },
   admin: {
     useAsTitle: 'email',
@@ -49,6 +48,7 @@ export const Participants: CollectionConfig = {
           type: 'email',
           required: true,
           unique: true,
+          index: true,
           label: 'E-Mail',
           admin: {
             width: '50%',

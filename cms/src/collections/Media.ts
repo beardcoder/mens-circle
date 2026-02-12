@@ -1,11 +1,10 @@
 import type { CollectionConfig } from 'payload';
-
-const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+import { isAuthenticated, publicReadOnly } from '@/access';
 
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
-    read: () => true,
+    read: publicReadOnly,
     create: isAuthenticated,
     update: isAuthenticated,
     delete: isAuthenticated,
@@ -45,6 +44,9 @@ export const Media: CollectionConfig = {
       type: 'text',
       required: true,
       label: 'Alt-Text',
+      admin: {
+        description: 'Beschreibung für Barrierefreiheit und SEO',
+      },
     },
   ],
 };

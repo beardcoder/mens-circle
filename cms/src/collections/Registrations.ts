@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload';
-
-const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+import { isAuthenticated, isAdmin } from '@/access';
 
 export const Registrations: CollectionConfig = {
   slug: 'registrations',
@@ -8,7 +7,7 @@ export const Registrations: CollectionConfig = {
     read: isAuthenticated,
     create: isAuthenticated,
     update: isAuthenticated,
-    delete: isAuthenticated,
+    delete: isAdmin,
   },
   defaultSort: '-createdAt',
   admin: {
@@ -25,6 +24,7 @@ export const Registrations: CollectionConfig = {
           type: 'relationship',
           relationTo: 'events',
           required: true,
+          index: true,
           label: 'Veranstaltung',
           admin: {
             width: '50%',
@@ -35,6 +35,7 @@ export const Registrations: CollectionConfig = {
           type: 'relationship',
           relationTo: 'participants',
           required: true,
+          index: true,
           label: 'Teilnehmer',
           admin: {
             width: '50%',

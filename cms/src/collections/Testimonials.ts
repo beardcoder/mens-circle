@@ -1,16 +1,19 @@
 import type { CollectionConfig } from 'payload';
-
-const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+import { isAuthenticated, isAdmin, publicReadOnly } from '@/access';
+import { autoPublishedAt } from '@/hooks/autoPublishedAt';
 
 export const Testimonials: CollectionConfig = {
   slug: 'testimonials',
   access: {
-    read: () => true,
+    read: publicReadOnly,
     create: () => true,
     update: isAuthenticated,
-    delete: isAuthenticated,
+    delete: isAdmin,
   },
   defaultSort: 'sortOrder',
+  hooks: {
+    beforeChange: [autoPublishedAt],
+  },
   admin: {
     useAsTitle: 'authorName',
     defaultColumns: ['authorName', 'published', 'sortOrder', 'createdAt'],
@@ -75,6 +78,8 @@ export const Testimonials: CollectionConfig = {
           type: 'date',
           label: 'Veröffentlicht am',
           admin: {
+            readOnly: true,
+            description: 'Wird automatisch gesetzt bei Veröffentlichung',
             date: {
               displayFormat: 'dd.MM.yyyy',
             },

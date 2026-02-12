@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import crypto from 'crypto';
-
-const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+import { isAuthenticated, isAdmin } from '@/access';
 
 export const NewsletterSubscriptions: CollectionConfig = {
   slug: 'newsletter-subscriptions',
@@ -9,7 +8,7 @@ export const NewsletterSubscriptions: CollectionConfig = {
     read: isAuthenticated,
     create: isAuthenticated,
     update: isAuthenticated,
-    delete: isAuthenticated,
+    delete: isAdmin,
   },
   defaultSort: '-createdAt',
   admin: {
@@ -23,6 +22,7 @@ export const NewsletterSubscriptions: CollectionConfig = {
       type: 'relationship',
       relationTo: 'participants',
       required: true,
+      index: true,
       label: 'Teilnehmer',
     },
     {
@@ -30,6 +30,7 @@ export const NewsletterSubscriptions: CollectionConfig = {
       type: 'select',
       required: true,
       defaultValue: 'pending',
+      index: true,
       label: 'Status',
       options: [
         { label: 'Ausstehend', value: 'pending' },
@@ -41,6 +42,7 @@ export const NewsletterSubscriptions: CollectionConfig = {
       name: 'token',
       type: 'text',
       unique: true,
+      index: true,
       admin: {
         readOnly: true,
         position: 'sidebar',
@@ -60,6 +62,7 @@ export const NewsletterSubscriptions: CollectionConfig = {
       name: 'confirmToken',
       type: 'text',
       unique: true,
+      index: true,
       admin: {
         readOnly: true,
         position: 'sidebar',

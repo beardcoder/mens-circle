@@ -10,20 +10,23 @@ import { FAQBlock } from '@/blocks/FAQ';
 import { NewsletterBlock } from '@/blocks/Newsletter';
 import { CTABlock } from '@/blocks/CTA';
 import { WhatsAppCommunityBlock } from '@/blocks/WhatsAppCommunity';
-
-const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+import { isAuthenticated, isAdmin, publicReadOnly } from '@/access';
+import { autoSlug } from '@/hooks/slugify';
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
   access: {
-    read: () => true,
+    read: publicReadOnly,
     create: isAuthenticated,
     update: isAuthenticated,
-    delete: isAuthenticated,
+    delete: isAdmin,
+  },
+  hooks: {
+    beforeChange: [autoSlug],
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'published'],
+    defaultColumns: ['title', 'slug', 'published', 'updatedAt'],
     group: 'Inhalte',
     description: 'Seiten verwalten',
     listSearchableFields: ['title', 'slug'],
@@ -46,15 +49,18 @@ export const Pages: CollectionConfig = {
               type: 'text',
               required: true,
               label: 'Seitentitel',
+              index: true,
             },
             {
               name: 'slug',
               type: 'text',
               required: true,
               unique: true,
+              index: true,
               label: 'URL-Slug',
               admin: {
-                description: 'Wird für die URL verwendet: /[slug]',
+                description:
+                  'Wird automatisch aus dem Titel generiert. Manuelle Anpassung möglich.',
               },
             },
             {
