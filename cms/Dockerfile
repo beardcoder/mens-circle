@@ -1,4 +1,4 @@
-# Payload CMS + Next.js Dockerfile mit Bun
+# Payload CMS + Next.js Dockerfile mit Bun (Standalone Output)
 FROM oven/bun:1-alpine AS base
 WORKDIR /app
 
@@ -17,6 +17,11 @@ COPY . .
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Payload braucht diese Werte beim Build (next build), sonst hängt der Build.
+# Zur Laufzeit werden die echten Werte per docker-compose injiziert.
+ENV PAYLOAD_SECRET=build-time-dummy-secret-replace-at-runtime
+ENV DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
+
 RUN bun run build
 
 # --- Production Runner ---
@@ -30,10 +35,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3001
 ENV HOSTNAME=0.0.0.0
 
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/next.config.mjs ./next.config.mjs
+# Standalone Output kopieren (enthält nur die nötigen Dateien)
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 # Media-Upload Verzeichnis
 RUN mkdir -p /app/media
@@ -47,4 +51,4 @@ USER payload
 EXPOSE 3001
 
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["sh", "-c", "bunx payload migrate && bun run start"]
+CMD ["bun", "run", "server.js"]
