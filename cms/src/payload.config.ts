@@ -30,12 +30,7 @@ export default buildConfig({
     meta: {
       titleSuffix: '– Männerkreis CMS',
     },
-    components: {},
     dateFormat: 'dd.MM.yyyy HH:mm',
-    pagination: {
-      defaultLimit: 25,
-      limits: [10, 25, 50, 100],
-    },
     livePreview: {
       url: ({ data }) => {
         if (data.slug) {
