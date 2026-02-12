@@ -25,10 +25,6 @@ services:
       - OCTANE_SERVER=frankenphp
       - OCTANE_HTTPS=false
 
-      # Deployment Options
-      - MIGRATE_ON_START=true
-      - OPTIMIZE_ON_START=true
-
       # FrankenPHP Worker Configuration
       - FRANKENPHP_WORKERS=auto
 
