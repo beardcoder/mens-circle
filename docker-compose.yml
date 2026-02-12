@@ -53,11 +53,11 @@ services:
     volumes:
       - cms-media:/app/media
     healthcheck:
-      test: ['CMD-SHELL', 'wget -q --spider http://localhost:3001/admin || exit 1']
-      interval: 30s
+      test: ['CMD-SHELL', 'wget -qO /dev/null http://localhost:3001/api/access 2>&1 || exit 1']
+      interval: 15s
       timeout: 10s
-      retries: 5
-      start_period: 60s
+      retries: 10
+      start_period: 120s
 
   web:
     build:
