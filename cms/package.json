@@ -11,11 +11,10 @@
     "seed": "tsx src/seed.ts"
   },
   "dependencies": {
-    "@payloadcms/db-sqlite": "^3.0.0",
+    "@payloadcms/db-postgres": "^3.0.0",
     "@payloadcms/next": "^3.0.0",
     "@payloadcms/richtext-lexical": "^3.0.0",
     "cross-env": "^7.0.3",
-    "libsql": "^0.5.22",
     "next": "15.4.11",
     "nodemailer": "^6.9.0",
     "payload": "^3.0.0",
