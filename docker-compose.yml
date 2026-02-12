@@ -4,8 +4,6 @@
 # Coolify Magic Variables (werden automatisch generiert):
 #   SERVICE_FQDN_CMS_3001   → FQDN + Proxy auf Port 3001
 #   SERVICE_FQDN_WEB_4400   → FQDN + Proxy auf Port 4400
-#   SERVICE_USER_POSTGRES    → Generierter DB-Username
-#   SERVICE_PASSWORD_POSTGRES → Generiertes DB-Passwort
 #   SERVICE_PASSWORD_64_PAYLOAD → Generiertes 64-Zeichen Payload Secret
 #
 # Manuell in Coolify setzen:
@@ -14,24 +12,11 @@
 #   ADMIN_EMAIL      → Admin-Benachrichtigungen
 
 services:
-  postgres:
-    image: postgres:18-alpine
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB:-maennerkreis}
-      - POSTGRES_USER=$SERVICE_USER_POSTGRES
-      - POSTGRES_PASSWORD=$SERVICE_PASSWORD_POSTGRES
-
   cms:
     build: ./cms
     environment:
       - SERVICE_FQDN_CMS_3001
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=$SERVICE_USER_POSTGRES
-      - DB_PASSWORD=$SERVICE_PASSWORD_POSTGRES
-      - DB_NAME=${POSTGRES_DB:-maennerkreis}
+      - DATABASE_URL=file:/app/data/payload.db
       - PAYLOAD_SECRET=$SERVICE_PASSWORD_64_PAYLOAD
       - NODE_ENV=production
       - SITE_URL=$SERVICE_FQDN_WEB
@@ -42,11 +27,9 @@ services:
       - SMTP_PASS=${SMTP_PASS}
       - MAIL_FROM=${MAIL_FROM:-hallo@mens-circle.de}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
-    depends_on:
-      postgres:
-        condition: service_healthy
     volumes:
-      - cms-media:/app/media   
+      - cms-media:/app/media
+      - cms-data:/app/data
 
   web:
     build:
@@ -65,5 +48,5 @@ services:
       - PUBLIC_UMAMI_SCRIPT_URL=${PUBLIC_UMAMI_SCRIPT_URL:-}
 
 volumes:
-  postgres-data:
   cms-media:
+  cms-data:

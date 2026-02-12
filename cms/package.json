@@ -11,7 +11,7 @@
     "seed": "tsx src/seed.ts"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.76.1",
+    "@payloadcms/db-sqlite": "^3.76.1",
     "@payloadcms/next": "^3.76.1",
     "@payloadcms/richtext-lexical": "^3.76.1",
     "cross-env": "^10.1.0",

@@ -20,7 +20,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Payload braucht diese Werte beim Build (next build), sonst hängt der Build.
 # Zur Laufzeit werden die echten Werte per docker-compose injiziert.
 ENV PAYLOAD_SECRET=build-time-dummy-secret-replace-at-runtime
-ENV DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
+ENV DATABASE_URL=file:./data/payload.db
 
 RUN bun run build
 
@@ -39,8 +39,8 @@ ENV HOSTNAME=0.0.0.0
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Media-Upload Verzeichnis
-RUN mkdir -p /app/media
+# Media-Upload Verzeichnis & SQLite Database Verzeichnis
+RUN mkdir -p /app/media /app/data
 
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S payload -u 1001 && \

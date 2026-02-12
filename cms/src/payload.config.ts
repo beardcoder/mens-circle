@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildConfig } from 'payload';
-import { postgresAdapter } from '@payloadcms/db-postgres';
+import { sqliteAdapter } from '@payloadcms/db-sqlite';
 import sharp from 'sharp';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import { Users } from './collections/Users';
@@ -75,17 +75,11 @@ export default buildConfig({
   ],
   globals: [SiteSettings],
   editor: lexicalEditor(),
-  db: postgresAdapter({
+  db: sqliteAdapter({
+    client: {
+      url: process.env.DATABASE_URL || 'file:./data/payload.db',
+    },
     push: true,
-    pool: process.env.DATABASE_URL
-      ? { connectionString: process.env.DATABASE_URL }
-      : {
-          host: process.env.DB_HOST || 'localhost',
-          port: Number(process.env.DB_PORT || 5432),
-          user: process.env.DB_USER || 'postgres',
-          password: process.env.DB_PASSWORD || '',
-          database: process.env.DB_NAME || 'maennerkreis',
-        },
   }),
   sharp,
   plugins: [],
