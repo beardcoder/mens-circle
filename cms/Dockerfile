@@ -50,5 +50,4 @@ USER payload
 
 EXPOSE 3001
 
-ENTRYPOINT ["dumb-init", "--"]
 CMD ["bun", "run", "server.js"]
