@@ -18,8 +18,8 @@
   transition-timing-function: var(--ease-out);
   transition-duration: var(--duration-normal);
   transition-property:
-    color, background-color, border-color, text-decoration-color, fill, stroke,
-    opacity, box-shadow, transform, filter, backdrop-filter;
+    color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
 }
 
 .transition-fast {
@@ -37,8 +37,7 @@
 .transition-colors {
   transition-timing-function: var(--ease-out);
   transition-duration: var(--duration-normal);
-  transition-property:
-    color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
 }
 
 .transition-transform {
@@ -302,8 +301,7 @@
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 30px
-    color-mix(in oklch, var(--accent-primary) 30%, transparent);
+  box-shadow: 0 0 30px color-mix(in oklch, var(--accent-primary) 30%, transparent);
 }
 
 /* ============================================

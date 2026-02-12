@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block } from 'payload';
 
 export const WhatsAppCommunityBlock: Block = {
   slug: 'whatsappCommunity',
@@ -8,4 +8,4 @@ export const WhatsAppCommunityBlock: Block = {
     { name: 'text', type: 'textarea', label: 'Text' },
     { name: 'link', type: 'text', label: 'WhatsApp Link' },
   ],
-}
+};

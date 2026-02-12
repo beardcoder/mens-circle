@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block } from 'payload';
 
 export const TestimonialsBlock: Block = {
   slug: 'testimonials',
@@ -7,4 +7,4 @@ export const TestimonialsBlock: Block = {
     { name: 'eyebrow', type: 'text', label: 'Eyebrow', defaultValue: 'Stimmen aus der Gemeinschaft' },
     { name: 'title', type: 'text', label: 'Titel', defaultValue: 'Was Teilnehmer sagen' },
   ],
-}
+};

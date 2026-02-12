@@ -1,13 +1,13 @@
 ---
-import Base from '@/layouts/Base.astro'
-import { getPage } from '@/lib/payload'
+import Base from '@/layouts/Base.astro';
+import { getPage } from '@/lib/payload';
 
-const { slug } = Astro.params
-if (!slug) return Astro.redirect('/')
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect('/');
 
-const page = await getPage(slug)
+const page = await getPage(slug);
 if (!page) {
-  return new Response(null, { status: 404 })
+  return new Response(null, { status: 404 });
 }
 ---
 
@@ -16,17 +16,19 @@ if (!page) {
     <div class="container container--narrow">
       <h1 class="legal__title">{page.title}</h1>
       <div class="legal__content">
-        {page.content?.map((block: any) => {
-          if (block.blockType === 'textSection') {
-            return (
-              <div class="legal__block">
-                {block.title && <h2>{block.title}</h2>}
-                <div set:html={JSON.stringify(block.content)} />
-              </div>
-            )
-          }
-          return null
-        })}
+        {
+          page.content?.map((block: any) => {
+            if (block.blockType === 'textSection') {
+              return (
+                <div class="legal__block">
+                  {block.title && <h2>{block.title}</h2>}
+                  <div set:html={JSON.stringify(block.content)} />
+                </div>
+              );
+            }
+            return null;
+          })
+        }
       </div>
     </div>
   </section>

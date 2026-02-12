@@ -11,3 +11,5 @@ media/
 cms/data/
 pnpm-lock.yaml
 bun.lock
+.idea
+.vscode/

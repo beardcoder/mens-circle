@@ -10,11 +10,7 @@
   position: relative;
   overflow: hidden;
   color: var(--text-on-dark);
-  background: linear-gradient(
-    135deg,
-    oklch(35% 0.08 145deg) 0%,
-    oklch(28% 0.06 150deg) 100%
-  );
+  background: linear-gradient(135deg, oklch(35% 0.08 145deg) 0%, oklch(28% 0.06 150deg) 100%);
 }
 
 /* Noise texture */
@@ -36,11 +32,7 @@
   block-size: 160%;
   pointer-events: none;
   content: '';
-  background: radial-gradient(
-    ellipse at center,
-    oklch(50% 0.15 145deg / 20%) 0%,
-    transparent 50%
-  );
+  background: radial-gradient(ellipse at center, oklch(50% 0.15 145deg / 20%) 0%, transparent 50%);
 }
 
 /* ============================================

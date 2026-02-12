@@ -29,11 +29,7 @@
 .hero__bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    var(--color-earth-deep) 0%,
-    var(--color-earth-dark) 100%
-  );
+  background: linear-gradient(180deg, var(--color-earth-deep) 0%, var(--color-earth-dark) 100%);
 }
 
 /* Noise texture */

@@ -1,17 +1,14 @@
-import type { PayloadHandler } from 'payload'
-import nodemailer from 'nodemailer'
+import type { PayloadHandler } from 'payload';
+import nodemailer from 'nodemailer';
 
 export const registerEndpoint: PayloadHandler = async (req) => {
-  const { payload } = req
-  const data = await req.json!()
+  const { payload } = req;
+  const data = await req.json!();
 
-  const { firstName, lastName, email, phone, eventId } = data
+  const { firstName, lastName, email, phone, eventId } = data;
 
   if (!firstName || !lastName || !email || !eventId) {
-    return Response.json(
-      { error: 'Bitte fülle alle Pflichtfelder aus.' },
-      { status: 400 },
-    )
+    return Response.json({ error: 'Bitte fülle alle Pflichtfelder aus.' }, { status: 400 });
   }
 
   // Find or create participant
@@ -19,22 +16,22 @@ export const registerEndpoint: PayloadHandler = async (req) => {
     collection: 'participants',
     where: { email: { equals: email } },
     limit: 1,
-  })
+  });
 
-  let participant
+  let participant;
   if (existingParticipants.docs.length > 0) {
-    participant = existingParticipants.docs[0]
+    participant = existingParticipants.docs[0];
     // Update name/phone if changed
     await payload.update({
       collection: 'participants',
       id: participant.id,
       data: { firstName, lastName, phone: phone || participant.phone },
-    })
+    });
   } else {
     participant = await payload.create({
       collection: 'participants',
       data: { firstName, lastName, email, phone },
-    })
+    });
   }
 
   // Check if already registered
@@ -48,30 +45,24 @@ export const registerEndpoint: PayloadHandler = async (req) => {
       ],
     },
     limit: 1,
-  })
+  });
 
   if (existingReg.docs.length > 0) {
-    return Response.json(
-      { error: 'Du bist bereits für diese Veranstaltung angemeldet.' },
-      { status: 409 },
-    )
+    return Response.json({ error: 'Du bist bereits für diese Veranstaltung angemeldet.' }, { status: 409 });
   }
 
   // Check capacity
-  const event = await payload.findByID({ collection: 'events', id: eventId })
+  const event = await payload.findByID({ collection: 'events', id: eventId });
   const registrations = await payload.find({
     collection: 'registrations',
     where: {
-      and: [
-        { event: { equals: eventId } },
-        { status: { in: ['registered', 'attended'] } },
-      ],
+      and: [{ event: { equals: eventId } }, { status: { in: ['registered', 'attended'] } }],
     },
     limit: 0,
-  })
+  });
 
-  const spotsUsed = registrations.totalDocs
-  const isFull = spotsUsed >= (event.maxParticipants as number)
+  const spotsUsed = registrations.totalDocs;
+  const isFull = spotsUsed >= (event.maxParticipants as number);
 
   const registration = await payload.create({
     collection: 'registrations',
@@ -80,7 +71,7 @@ export const registerEndpoint: PayloadHandler = async (req) => {
       participant: participant.id,
       status: isFull ? 'waitlist' : 'registered',
     },
-  })
+  });
 
   // Send confirmation email
   try {
@@ -91,7 +82,7 @@ export const registerEndpoint: PayloadHandler = async (req) => {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-    })
+    });
 
     await transporter.sendMail({
       from: process.env.MAIL_FROM || 'hallo@mens-circle.de',
@@ -106,9 +97,9 @@ export const registerEndpoint: PayloadHandler = async (req) => {
         <p>Wir freuen uns auf dich!</p>
         <p>Dein Männerkreis-Team</p>
       `,
-    })
+    });
   } catch (e) {
-    console.error('Email send error:', e)
+    console.error('Email send error:', e);
   }
 
   return Response.json({
@@ -117,5 +108,5 @@ export const registerEndpoint: PayloadHandler = async (req) => {
       ? 'Du wurdest auf die Warteliste gesetzt. Wir melden uns, sobald ein Platz frei wird.'
       : 'Deine Anmeldung war erfolgreich! Du erhältst eine Bestätigung per E-Mail.',
     status: registration.status,
-  })
-}
+  });
+};

@@ -164,14 +164,10 @@
      Shadows & Effects
      ============================================ */
   --shadow-sm: 0 1px 2px color-mix(in oklch, var(--color-ink) 5%, transparent);
-  --shadow-md: 0 4px 6px -1px
-    color-mix(in oklch, var(--color-ink) 10%, transparent);
-  --shadow-lg: 0 10px 15px -3px
-    color-mix(in oklch, var(--color-ink) 10%, transparent);
-  --shadow-xl: 0 20px 25px -5px
-    color-mix(in oklch, var(--color-ink) 10%, transparent);
-  --shadow-2xl: 0 25px 50px -12px
-    color-mix(in oklch, var(--color-ink) 25%, transparent);
+  --shadow-md: 0 4px 6px -1px color-mix(in oklch, var(--color-ink) 10%, transparent);
+  --shadow-lg: 0 10px 15px -3px color-mix(in oklch, var(--color-ink) 10%, transparent);
+  --shadow-xl: 0 20px 25px -5px color-mix(in oklch, var(--color-ink) 10%, transparent);
+  --shadow-2xl: 0 25px 50px -12px color-mix(in oklch, var(--color-ink) 25%, transparent);
 
   /* ============================================
      Border Radius
@@ -214,11 +210,7 @@
     --bg-section-alt: var(--color-earth-deep);
     --bg-light: var(--color-earth-dark);
     --bg-input: color-mix(in oklch, var(--color-earth-dark) 80%, transparent);
-    --bg-input-focus: color-mix(
-      in oklch,
-      var(--color-earth-mid) 90%,
-      transparent
-    );
+    --bg-input-focus: color-mix(in oklch, var(--color-earth-mid) 90%, transparent);
     --bg-overlay: color-mix(in oklch, var(--color-ink) 85%, transparent);
 
     /* Dark Theme Text - Enhanced Contrast */
@@ -232,16 +224,8 @@
     --text-light: var(--color-ink);
 
     /* Dark Theme Borders */
-    --border-light: color-mix(
-      in oklch,
-      var(--color-earth-mid) 40%,
-      transparent
-    );
-    --border-medium: color-mix(
-      in oklch,
-      var(--color-earth-mid) 50%,
-      transparent
-    );
+    --border-light: color-mix(in oklch, var(--color-earth-mid) 40%, transparent);
+    --border-medium: color-mix(in oklch, var(--color-earth-mid) 50%, transparent);
     --border-dark: var(--color-earth-warm);
     --border-on-dark: color-mix(in oklch, var(--color-sand) 30%, transparent);
 

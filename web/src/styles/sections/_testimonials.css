@@ -47,13 +47,13 @@
 
 .testimonials__title .highlight {
   color: var(--accent-primary);
-    margin-inline-start: -0.05em;
-    margin-inline-end: 0.08em;
+  margin-inline-start: -0.05em;
+  margin-inline-end: 0.08em;
 }
 
 .testimonials__subtitle {
-    margin-inline-start: -0.05em;
-    margin-inline-end: 0.08em;
+  margin-inline-start: -0.05em;
+  margin-inline-end: 0.08em;
   font-style: italic;
   line-height: 1.6;
   color: var(--text-muted);
@@ -114,8 +114,8 @@
 .testimonial-card__quote {
   flex-grow: 1;
   margin: 0 0 var(--space-lg) 0;
-    margin-inline-start: -0.05em;
-    margin-inline-end: 0.08em;
+  margin-inline-start: -0.05em;
+  margin-inline-end: 0.08em;
   font-style: italic;
   line-height: 1.7;
   color: var(--text-primary);

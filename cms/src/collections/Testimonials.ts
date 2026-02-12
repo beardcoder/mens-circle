@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
 
 export const Testimonials: CollectionConfig = {
   slug: 'testimonials',
@@ -40,4 +40,4 @@ export const Testimonials: CollectionConfig = {
       },
     },
   ],
-}
+};

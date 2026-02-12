@@ -1,36 +1,33 @@
-import type { PayloadHandler } from 'payload'
-import nodemailer from 'nodemailer'
+import type { PayloadHandler } from 'payload';
+import nodemailer from 'nodemailer';
 
 interface Participant {
-  email: string
-  firstName: string
+  email: string;
+  firstName: string;
 }
 
 interface Subscription {
-  participant: Participant
-  token: string
-  status: string
+  participant: Participant;
+  token: string;
+  status: string;
 }
 
 export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
-  const { payload } = req
-  const data = await req.json!()
-  const { newsletterId } = data
+  const { payload } = req;
+  const data = await req.json!();
+  const { newsletterId } = data;
 
   if (!newsletterId) {
-    return Response.json({ error: 'Newsletter ID fehlt.' }, { status: 400 })
+    return Response.json({ error: 'Newsletter ID fehlt.' }, { status: 400 });
   }
 
   const newsletter = await payload.findByID({
     collection: 'newsletters',
     id: newsletterId,
-  })
+  });
 
   if (newsletter.status !== 'draft') {
-    return Response.json(
-      { error: 'Newsletter wurde bereits gesendet.' },
-      { status: 400 },
-    )
+    return Response.json({ error: 'Newsletter wurde bereits gesendet.' }, { status: 400 });
   }
 
   // Mark as sending
@@ -38,7 +35,7 @@ export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
     collection: 'newsletters',
     id: newsletterId,
     data: { status: 'sending' },
-  })
+  });
 
   // Get all active subscriptions
   const subscriptions = await payload.find({
@@ -46,7 +43,7 @@ export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
     where: { status: { equals: 'active' } },
     limit: 10000,
     depth: 1,
-  })
+  });
 
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -55,24 +52,24 @@ export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
-  })
+  });
 
-  const siteUrl = process.env.SITE_URL || 'http://localhost:4321'
-  let sent = 0
-  let failed = 0
+  const siteUrl = process.env.SITE_URL || 'http://localhost:4321';
+  let sent = 0;
+  let failed = 0;
 
   // Send in chunks of 50
-  const chunks: Subscription[][] = []
-  const docs = subscriptions.docs as unknown as Subscription[]
+  const chunks: Subscription[][] = [];
+  const docs = subscriptions.docs as unknown as Subscription[];
   for (let i = 0; i < docs.length; i += 50) {
-    chunks.push(docs.slice(i, i + 50))
+    chunks.push(docs.slice(i, i + 50));
   }
 
   for (const chunk of chunks) {
     await Promise.allSettled(
       chunk.map(async (sub) => {
         try {
-          const participant = sub.participant as Participant
+          const participant = sub.participant as Participant;
           await transporter.sendMail({
             from: process.env.MAIL_FROM || 'hallo@mens-circle.de',
             to: participant.email,
@@ -88,13 +85,13 @@ export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
                 </p>
               </div>
             `,
-          })
-          sent++
+          });
+          sent++;
         } catch {
-          failed++
+          failed++;
         }
       }),
-    )
+    );
   }
 
   // Mark as sent
@@ -102,12 +99,12 @@ export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
     collection: 'newsletters',
     id: newsletterId,
     data: { status: 'sent', sentAt: new Date().toISOString() },
-  })
+  });
 
   return Response.json({
     success: true,
     message: `Newsletter an ${sent} Empfänger gesendet. ${failed > 0 ? `${failed} fehlgeschlagen.` : ''}`,
     sent,
     failed,
-  })
-}
+  });
+};

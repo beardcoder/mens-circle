@@ -1,12 +1,12 @@
 ---
 interface Props {
-  name: string
-  role?: string
-  bio: string
-  quote?: string
+  name: string;
+  role?: string;
+  bio: string;
+  quote?: string;
 }
 
-const { name, role, bio, quote } = Astro.props
+const { name, role, bio, quote } = Astro.props;
 ---
 
 <section class="moderator" id="moderator">
@@ -18,11 +18,13 @@ const { name, role, bio, quote } = Astro.props
       <p class="moderator__name">{name}</p>
       {role && <p class="moderator__role">{role}</p>}
       <p class="moderator__bio">{bio}</p>
-      {quote && (
-        <blockquote class="moderator__quote">
-          <p>»{quote}«</p>
-        </blockquote>
-      )}
+      {
+        quote && (
+          <blockquote class="moderator__quote">
+            <p>»{quote}«</p>
+          </blockquote>
+        )
+      }
     </div>
   </div>
 </section>

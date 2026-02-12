@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block } from 'payload';
 
 export const HeroBlock: Block = {
   slug: 'hero',
@@ -11,4 +11,4 @@ export const HeroBlock: Block = {
     { name: 'ctaLink', type: 'text', label: 'CTA Link' },
     { name: 'backgroundImage', type: 'upload', relationTo: 'media', label: 'Hintergrundbild' },
   ],
-}
+};

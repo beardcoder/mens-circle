@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block } from 'payload';
 
 export const TextSectionBlock: Block = {
   slug: 'textSection',
@@ -8,4 +8,4 @@ export const TextSectionBlock: Block = {
     { name: 'title', type: 'text', label: 'Titel' },
     { name: 'content', type: 'richText', required: true, label: 'Inhalt' },
   ],
-}
+};

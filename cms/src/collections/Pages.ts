@@ -1,15 +1,15 @@
-import type { CollectionConfig } from 'payload'
-import { HeroBlock } from '@/blocks/Hero'
-import { IntroBlock } from '@/blocks/Intro'
-import { TextSectionBlock } from '@/blocks/TextSection'
-import { ValueItemsBlock } from '@/blocks/ValueItems'
-import { ModeratorBlock } from '@/blocks/Moderator'
-import { JourneyStepsBlock } from '@/blocks/JourneySteps'
-import { TestimonialsBlock } from '@/blocks/Testimonials'
-import { FAQBlock } from '@/blocks/FAQ'
-import { NewsletterBlock } from '@/blocks/Newsletter'
-import { CTABlock } from '@/blocks/CTA'
-import { WhatsAppCommunityBlock } from '@/blocks/WhatsAppCommunity'
+import type { CollectionConfig } from 'payload';
+import { HeroBlock } from '@/blocks/Hero';
+import { IntroBlock } from '@/blocks/Intro';
+import { TextSectionBlock } from '@/blocks/TextSection';
+import { ValueItemsBlock } from '@/blocks/ValueItems';
+import { ModeratorBlock } from '@/blocks/Moderator';
+import { JourneyStepsBlock } from '@/blocks/JourneySteps';
+import { TestimonialsBlock } from '@/blocks/Testimonials';
+import { FAQBlock } from '@/blocks/FAQ';
+import { NewsletterBlock } from '@/blocks/Newsletter';
+import { CTABlock } from '@/blocks/CTA';
+import { WhatsAppCommunityBlock } from '@/blocks/WhatsAppCommunity';
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -65,4 +65,4 @@ export const Pages: CollectionConfig = {
       admin: { position: 'sidebar' },
     },
   ],
-}
+};

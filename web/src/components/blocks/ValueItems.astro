@@ -1,11 +1,11 @@
 ---
 interface Props {
-  eyebrow?: string
-  title?: string
-  items: { number?: string; title: string; text: string }[]
+  eyebrow?: string;
+  title?: string;
+  items: { number?: string; title: string; text: string }[];
 }
 
-const { eyebrow, title, items } = Astro.props
+const { eyebrow, title, items } = Astro.props;
 ---
 
 <section class="values-section">
@@ -13,13 +13,15 @@ const { eyebrow, title, items } = Astro.props
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
     {title && <h2 class="section-title">{title}</h2>}
     <div class="values__grid stagger-children">
-      {items.map((item) => (
-        <div class="value-card fade-in">
-          {item.number && <span class="value-card__number">{item.number}</span>}
-          <h3 class="value-card__title">{item.title}</h3>
-          <p class="value-card__text">{item.text}</p>
-        </div>
-      ))}
+      {
+        items.map((item) => (
+          <div class="value-card fade-in">
+            {item.number && <span class="value-card__number">{item.number}</span>}
+            <h3 class="value-card__title">{item.title}</h3>
+            <p class="value-card__text">{item.text}</p>
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

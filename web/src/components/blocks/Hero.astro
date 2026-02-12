@@ -1,13 +1,13 @@
 ---
 interface Props {
-  label?: string
-  title: string
-  description?: string
-  ctaText?: string
-  ctaLink?: string
+  label?: string;
+  title: string;
+  description?: string;
+  ctaText?: string;
+  ctaLink?: string;
 }
 
-const { label, title, description, ctaText, ctaLink } = Astro.props
+const { label, title, description, ctaText, ctaLink } = Astro.props;
 ---
 
 <section class="hero" id="hero">
@@ -23,15 +23,19 @@ const { label, title, description, ctaText, ctaLink } = Astro.props
     <div class="hero__content">
       {label && <p class="hero__label">{label}</p>}
       <h1 class="hero__title">
-        <span class="hero__title-line">{title}</span>
+        <span class="hero__title-line" set:html={title}></span>
       </h1>
       <div class="hero__bottom">
         {description && <p class="hero__description">{description}</p>}
-        {ctaText && ctaLink && (
-          <div class="hero__cta fade-in-delay-2">
-            <a href={ctaLink} class="btn btn--primary btn--large">{ctaText}</a>
-          </div>
-        )}
+        {
+          ctaText && ctaLink && (
+            <div class="hero__cta fade-in-delay-2">
+              <a href={ctaLink} class="btn btn--primary btn--large">
+                {ctaText}
+              </a>
+            </div>
+          )
+        }
       </div>
     </div>
   </div>

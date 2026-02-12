@@ -14,8 +14,7 @@
   background: linear-gradient(
     135deg,
     var(--color-earth-deep) 0%,
-    color-mix(in oklch, var(--color-earth-deep) 90%, var(--color-terracotta))
-      100%
+    color-mix(in oklch, var(--color-earth-deep) 90%, var(--color-terracotta)) 100%
   );
 }
 
@@ -139,8 +138,7 @@
   outline: none;
   background: var(--bg-primary);
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px
-    color-mix(in oklch, var(--accent-primary) 15%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent-primary) 15%, transparent);
 }
 
 /* Hints */

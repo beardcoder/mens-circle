@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block } from 'payload';
 
 export const IntroBlock: Block = {
   slug: 'intro',
@@ -10,4 +10,4 @@ export const IntroBlock: Block = {
     { name: 'image', type: 'upload', relationTo: 'media', label: 'Bild' },
     { name: 'quote', type: 'text', label: 'Zitat' },
   ],
-}
+};

@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block } from 'payload';
 
 export const NewsletterBlock: Block = {
   slug: 'newsletter',
@@ -8,4 +8,4 @@ export const NewsletterBlock: Block = {
     { name: 'title', type: 'text', label: 'Titel', defaultValue: 'Bleib informiert' },
     { name: 'text', type: 'textarea', label: 'Text' },
   ],
-}
+};

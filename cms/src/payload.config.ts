@@ -1,26 +1,26 @@
-import path from 'path'
-import { fileURLToPath } from 'url'
-import { buildConfig } from 'payload'
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { Users } from './collections/Users'
-import { Events } from './collections/Events'
-import { Participants } from './collections/Participants'
-import { Registrations } from './collections/Registrations'
-import { Newsletters } from './collections/Newsletters'
-import { NewsletterSubscriptions } from './collections/NewsletterSubscriptions'
-import { Testimonials } from './collections/Testimonials'
-import { Pages } from './collections/Pages'
-import { Media } from './collections/Media'
-import { SiteSettings } from './globals/SiteSettings'
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { buildConfig } from 'payload';
+import { sqliteAdapter } from '@payloadcms/db-sqlite';
+import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { Users } from './collections/Users';
+import { Events } from './collections/Events';
+import { Participants } from './collections/Participants';
+import { Registrations } from './collections/Registrations';
+import { Newsletters } from './collections/Newsletters';
+import { NewsletterSubscriptions } from './collections/NewsletterSubscriptions';
+import { Testimonials } from './collections/Testimonials';
+import { Pages } from './collections/Pages';
+import { Media } from './collections/Media';
+import { SiteSettings } from './globals/SiteSettings';
 
-import { registerEndpoint } from './endpoints/register'
-import { subscribeEndpoint } from './endpoints/subscribe'
-import { unsubscribeEndpoint } from './endpoints/unsubscribe'
-import { sendNewsletterEndpoint } from './endpoints/send-newsletter'
+import { registerEndpoint } from './endpoints/register';
+import { subscribeEndpoint } from './endpoints/subscribe';
+import { unsubscribeEndpoint } from './endpoints/unsubscribe';
+import { sendNewsletterEndpoint } from './endpoints/send-newsletter';
 
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 export default buildConfig({
   admin: {
@@ -75,4 +75,4 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   secret: process.env.PAYLOAD_SECRET || 'your-secret-key-change-in-production',
-})
+});

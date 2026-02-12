@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block } from 'payload';
 
 export const CTABlock: Block = {
   slug: 'cta',
@@ -10,4 +10,4 @@ export const CTABlock: Block = {
     { name: 'buttonText', type: 'text', label: 'Button Text' },
     { name: 'buttonLink', type: 'text', label: 'Button Link' },
   ],
-}
+};

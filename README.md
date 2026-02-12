@@ -4,12 +4,12 @@ Community platform for organizing men's circle events, managing registrations, a
 
 ## Tech Stack
 
-| Component | Technology |
-|-----------|-----------|
-| **CMS** | Payload CMS 3 (Next.js) |
+| Component    | Technology                         |
+| ------------ | ---------------------------------- |
+| **CMS**      | Payload CMS 3 (Next.js)            |
 | **Frontend** | Astro.js 5 (SSR with Node adapter) |
-| **Database** | SQLite |
-| **Styling** | Custom CSS (OKLCH color system) |
+| **Database** | SQLite                             |
+| **Styling**  | Custom CSS (OKLCH color system)    |
 
 ## Architecture
 
@@ -53,6 +53,7 @@ SiteSettings (global)
 ## Content Blocks
 
 Pages use a dynamic block system. Available blocks:
+
 - `hero` – Full-screen hero section
 - `intro` – Two-column intro layout
 - `textSection` – Rich text content
@@ -67,22 +68,22 @@ Pages use a dynamic block system. Available blocks:
 
 ## API Endpoints
 
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| POST | `/api/register` | Event registration |
-| POST | `/api/subscribe` | Newsletter subscription |
-| GET | `/api/unsubscribe/:token` | Newsletter unsubscribe |
-| POST | `/api/send-newsletter` | Send newsletter (admin) |
+| Method | Endpoint                  | Purpose                 |
+| ------ | ------------------------- | ----------------------- |
+| POST   | `/api/register`           | Event registration      |
+| POST   | `/api/subscribe`          | Newsletter subscription |
+| GET    | `/api/unsubscribe/:token` | Newsletter unsubscribe  |
+| POST   | `/api/send-newsletter`    | Send newsletter (admin) |
 
 ## Routes (Frontend)
 
-| Route | Purpose |
-|-------|---------|
-| `/` | Homepage (dynamic blocks from CMS) |
-| `/event` | Redirect to next event |
-| `/event/[slug]` | Event detail + registration |
-| `/newsletter/unsubscribe/[token]` | Unsubscribe |
-| `/[slug]` | Dynamic CMS pages |
+| Route                             | Purpose                            |
+| --------------------------------- | ---------------------------------- |
+| `/`                               | Homepage (dynamic blocks from CMS) |
+| `/event`                          | Redirect to next event             |
+| `/event/[slug]`                   | Event detail + registration        |
+| `/newsletter/unsubscribe/[token]` | Unsubscribe                        |
+| `/[slug]`                         | Dynamic CMS pages                  |
 
 ## Development
 

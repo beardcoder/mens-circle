@@ -1,11 +1,11 @@
 ---
 interface Props {
-  eyebrow?: string
-  title?: string
-  steps: { number?: string; title: string; text: string }[]
+  eyebrow?: string;
+  title?: string;
+  steps: { number?: string; title: string; text: string }[];
 }
 
-const { eyebrow, title, steps } = Astro.props
+const { eyebrow, title, steps } = Astro.props;
 ---
 
 <section class="journey" id="reise">
@@ -15,13 +15,15 @@ const { eyebrow, title, steps } = Astro.props
       {title && <h2 class="section-title section-title--light">{title}</h2>}
     </div>
     <div class="journey__grid stagger-children">
-      {steps.map((step) => (
-        <div class="journey__step fade-in">
-          {step.number && <span class="journey__step-number">{step.number}</span>}
-          <h3 class="journey__step-title">{step.title}</h3>
-          <p class="journey__step-text">{step.text}</p>
-        </div>
-      ))}
+      {
+        steps.map((step) => (
+          <div class="journey__step fade-in">
+            {step.number && <span class="journey__step-number">{step.number}</span>}
+            <h3 class="journey__step-title">{step.title}</h3>
+            <p class="journey__step-text">{step.text}</p>
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

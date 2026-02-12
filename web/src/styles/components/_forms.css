@@ -103,8 +103,7 @@
 
 .form-input.error:focus,
 .form-input[aria-invalid='true']:focus {
-  box-shadow: 0 0 0 3px
-    color-mix(in oklch, var(--accent-primary) 20%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent-primary) 20%, transparent);
 }
 
 /* ============================================
@@ -229,8 +228,7 @@
 .form-message--error {
   color: var(--color-bone);
   background: var(--accent-primary);
-  border: 1px solid
-    color-mix(in oklch, var(--accent-primary) 80%, var(--color-earth-deep));
+  border: 1px solid color-mix(in oklch, var(--accent-primary) 80%, var(--color-earth-deep));
 }
 
 .form-message--info {

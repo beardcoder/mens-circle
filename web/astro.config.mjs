@@ -1,5 +1,5 @@
-import { defineConfig } from 'astro/config'
-import node from '@astrojs/node'
+import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
 
 export default defineConfig({
   output: 'server',
@@ -14,4 +14,4 @@ export default defineConfig({
       preprocessorOptions: {},
     },
   },
-})
+});

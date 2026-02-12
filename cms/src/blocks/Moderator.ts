@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block } from 'payload';
 
 export const ModeratorBlock: Block = {
   slug: 'moderator',
@@ -10,4 +10,4 @@ export const ModeratorBlock: Block = {
     { name: 'quote', type: 'text', label: 'Zitat' },
     { name: 'photo', type: 'upload', relationTo: 'media', label: 'Foto' },
   ],
-}
+};

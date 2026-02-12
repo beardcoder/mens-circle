@@ -1,12 +1,12 @@
 ---
 interface Props {
-  eyebrow?: string
-  title?: string
-  text?: string
+  eyebrow?: string;
+  title?: string;
+  text?: string;
 }
 
-const { eyebrow, title, text } = Astro.props
-const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001'
+const { eyebrow, title, text } = Astro.props;
+const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001';
 ---
 
 <section class="newsletter-section" id="newsletter">
@@ -27,9 +27,7 @@ const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001'
             autocomplete="email"
             class="newsletter-form__input"
           />
-          <button type="submit" class="btn btn--primary newsletter-form__submit">
-            Anmelden
-          </button>
+          <button type="submit" class="btn btn--primary newsletter-form__submit"> Anmelden </button>
         </div>
         <div id="newsletterMessage" class="form-message"></div>
       </form>
@@ -38,32 +36,32 @@ const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3001'
 </section>
 
 <script define:vars={{ cmsUrl }}>
-  const form = document.getElementById('newsletterForm')
-  const message = document.getElementById('newsletterMessage')
+  const form = document.getElementById('newsletterForm');
+  const message = document.getElementById('newsletterMessage');
 
   form?.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    const formData = new FormData(form)
-    const email = formData.get('email')
+    e.preventDefault();
+    const formData = new FormData(form);
+    const email = formData.get('email');
 
     try {
       const res = await fetch(`${cmsUrl}/api/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
-      })
-      const data = await res.json()
+      });
+      const data = await res.json();
 
       if (message) {
-        message.textContent = data.message || data.error
-        message.className = `form-message form-message--${data.success ? 'success' : 'error'}`
+        message.textContent = data.message || data.error;
+        message.className = `form-message form-message--${data.success ? 'success' : 'error'}`;
       }
-      if (data.success) form.reset()
+      if (data.success) form.reset();
     } catch {
       if (message) {
-        message.textContent = 'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.'
-        message.className = 'form-message form-message--error'
+        message.textContent = 'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.';
+        message.className = 'form-message form-message--error';
       }
     }
-  })
+  });
 </script>

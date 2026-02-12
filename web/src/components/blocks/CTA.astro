@@ -1,13 +1,13 @@
 ---
 interface Props {
-  eyebrow?: string
-  title: string
-  text?: string
-  buttonText?: string
-  buttonLink?: string
+  eyebrow?: string;
+  title: string;
+  text?: string;
+  buttonText?: string;
+  buttonLink?: string;
 }
 
-const { eyebrow, title, text, buttonText, buttonLink } = Astro.props
+const { eyebrow, title, text, buttonText, buttonLink } = Astro.props;
 ---
 
 <section class="cta-section">
@@ -20,9 +20,13 @@ const { eyebrow, title, text, buttonText, buttonLink } = Astro.props
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
       <h2 class="section-title cta__title">{title}</h2>
       {text && <p class="cta__text">{text}</p>}
-      {buttonText && buttonLink && (
-        <a href={buttonLink} class="btn btn--primary btn--large">{buttonText}</a>
-      )}
+      {
+        buttonText && buttonLink && (
+          <a href={buttonLink} class="btn btn--primary btn--large">
+            {buttonText}
+          </a>
+        )
+      }
     </div>
   </div>
 </section>

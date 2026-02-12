@@ -1,5 +1,5 @@
-import type { CollectionConfig } from 'payload'
-import crypto from 'crypto'
+import type { CollectionConfig } from 'payload';
+import crypto from 'crypto';
 
 export const NewsletterSubscriptions: CollectionConfig = {
   slug: 'newsletter-subscriptions',
@@ -38,12 +38,12 @@ export const NewsletterSubscriptions: CollectionConfig = {
         beforeValidate: [
           ({ value }) => {
             if (!value) {
-              return crypto.randomBytes(32).toString('hex')
+              return crypto.randomBytes(32).toString('hex');
             }
-            return value
+            return value;
           },
         ],
       },
     },
   ],
-}
+};

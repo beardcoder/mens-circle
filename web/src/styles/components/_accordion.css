@@ -37,11 +37,7 @@
   inline-size: 3px;
   pointer-events: none;
   content: '';
-  background: linear-gradient(
-    180deg,
-    var(--accent-primary),
-    var(--color-earth-warm)
-  );
+  background: linear-gradient(180deg, var(--accent-primary), var(--color-earth-warm));
   border-radius: var(--radius-full);
   opacity: 0;
   transform: scaleY(0);
@@ -158,8 +154,7 @@
 .faq-item[open] .faq-item__icon {
   background: var(--accent-primary);
   border-color: var(--accent-primary);
-  box-shadow: 0 8px 24px
-    color-mix(in oklch, var(--accent-primary) 30%, transparent);
+  box-shadow: 0 8px 24px color-mix(in oklch, var(--accent-primary) 30%, transparent);
 }
 
 .accordion-item[open] .accordion-item__icon::before,

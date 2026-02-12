@@ -124,8 +124,8 @@ p:last-child {
    Font Style Modifiers
    ============================================ */
 .text-italic {
-    margin-inline-start: -0.05em;
-    margin-inline-end: 0.08em;
+  margin-inline-start: -0.05em;
+  margin-inline-end: 0.08em;
   font-style: italic;
 }
 
@@ -196,8 +196,8 @@ p:last-child {
 }
 
 .mixed-headline .italic {
-    margin-inline-start: -0.05em;
-    margin-inline-end: 0.08em;
+  margin-inline-start: -0.05em;
+  margin-inline-end: 0.08em;
   font-style: italic;
 }
 
@@ -259,8 +259,8 @@ p:last-child {
 
 .section-title .text-italic,
 .section-title .highlight {
-    margin-inline-start: -0.05em;
-    margin-inline-end: 0.08em;
+  margin-inline-start: -0.05em;
+  margin-inline-end: 0.08em;
   font-style: italic;
   color: var(--color-earth-warm);
 }

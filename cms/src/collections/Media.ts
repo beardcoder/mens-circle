@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -16,4 +16,4 @@ export const Media: CollectionConfig = {
       label: 'Alt-Text',
     },
   ],
-}
+};

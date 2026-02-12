@@ -1,13 +1,13 @@
 ---
-import type { Testimonial } from '@/lib/payload'
+import type { Testimonial } from '@/lib/payload';
 
 interface Props {
-  eyebrow?: string
-  title?: string
-  testimonials: Testimonial[]
+  eyebrow?: string;
+  title?: string;
+  testimonials: Testimonial[];
 }
 
-const { eyebrow, title, testimonials } = Astro.props
+const { eyebrow, title, testimonials } = Astro.props;
 ---
 
 <section class="testimonials" id="stimmen">
@@ -17,18 +17,22 @@ const { eyebrow, title, testimonials } = Astro.props
       {title && <h2 class="section-title">{title}</h2>}
     </div>
     <div class="testimonials__grid stagger-children">
-      {testimonials.map((t) => (
-        <div class="testimonial-card fade-in">
-          <div class="testimonial-card__quote-icon" aria-hidden="true">»</div>
-          <blockquote class="testimonial-card__quote">
-            <p>{t.quote}</p>
-          </blockquote>
-          <div class="testimonial-card__author">
-            <span class="testimonial-card__name">{t.anonymous ? 'Anonym' : t.name}</span>
-            {t.role && !t.anonymous && <span class="testimonial-card__role">{t.role}</span>}
+      {
+        testimonials.map((t) => (
+          <div class="testimonial-card fade-in">
+            <div class="testimonial-card__quote-icon" aria-hidden="true">
+              »
+            </div>
+            <blockquote class="testimonial-card__quote">
+              <p>{t.quote}</p>
+            </blockquote>
+            <div class="testimonial-card__author">
+              <span class="testimonial-card__name">{t.anonymous ? 'Anonym' : t.name}</span>
+              {t.role && !t.anonymous && <span class="testimonial-card__role">{t.role}</span>}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </div>
 </section>

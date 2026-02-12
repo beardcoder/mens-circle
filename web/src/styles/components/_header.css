@@ -159,11 +159,7 @@ body:not(:has(.hero)) .nav-toggle span {
    Header States - On Hero
    ============================================ */
 .header--on-hero:not(.scrolled) {
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklch, var(--bg-dark) 12%, transparent) 0%,
-    transparent 85%
-  );
+  background: linear-gradient(180deg, color-mix(in oklch, var(--bg-dark) 12%, transparent) 0%, transparent 85%);
 }
 
 .header--on-hero:not(.scrolled) .logo,
@@ -368,14 +364,12 @@ body:not(:has(.hero)) .nav-toggle span {
 
 @keyframes nav-pulse {
   0% {
-    box-shadow: 0 0 0 0
-      color-mix(in oklch, var(--accent-primary) 25%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent-primary) 25%, transparent);
     opacity: 0.35;
   }
 
   60% {
-    box-shadow: 0 0 0 24px
-      color-mix(in oklch, var(--accent-primary) 0%, transparent);
+    box-shadow: 0 0 0 24px color-mix(in oklch, var(--accent-primary) 0%, transparent);
     opacity: 0.12;
   }
 

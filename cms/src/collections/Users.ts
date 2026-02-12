@@ -1,8 +1,10 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
 
 export const Users: CollectionConfig = {
   slug: 'users',
-  auth: true,
+  auth: {
+    useAPIKey: true,
+  },
   admin: {
     useAsTitle: 'email',
   },
@@ -13,4 +15,4 @@ export const Users: CollectionConfig = {
       label: 'Name',
     },
   ],
-}
+};

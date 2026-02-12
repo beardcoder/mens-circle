@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block } from 'payload';
 
 export const FAQBlock: Block = {
   slug: 'faq',
@@ -16,4 +16,4 @@ export const FAQBlock: Block = {
       ],
     },
   ],
-}
+};

@@ -1,17 +1,14 @@
-import type { PayloadHandler } from 'payload'
-import nodemailer from 'nodemailer'
+import type { PayloadHandler } from 'payload';
+import nodemailer from 'nodemailer';
 
 export const subscribeEndpoint: PayloadHandler = async (req) => {
-  const { payload } = req
-  const data = await req.json!()
+  const { payload } = req;
+  const data = await req.json!();
 
-  const { email, firstName, lastName } = data
+  const { email, firstName, lastName } = data;
 
   if (!email) {
-    return Response.json(
-      { error: 'Bitte gib deine E-Mail-Adresse an.' },
-      { status: 400 },
-    )
+    return Response.json({ error: 'Bitte gib deine E-Mail-Adresse an.' }, { status: 400 });
   }
 
   // Find or create participant
@@ -19,11 +16,11 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
     collection: 'participants',
     where: { email: { equals: email } },
     limit: 1,
-  })
+  });
 
-  let participant
+  let participant;
   if (existingParticipants.docs.length > 0) {
-    participant = existingParticipants.docs[0]
+    participant = existingParticipants.docs[0];
   } else {
     participant = await payload.create({
       collection: 'participants',
@@ -32,26 +29,20 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
         lastName: lastName || 'Abonnent',
         email,
       },
-    })
+    });
   }
 
   // Check if already subscribed
   const existingSub = await payload.find({
     collection: 'newsletter-subscriptions',
     where: {
-      and: [
-        { participant: { equals: participant.id } },
-        { status: { equals: 'active' } },
-      ],
+      and: [{ participant: { equals: participant.id } }, { status: { equals: 'active' } }],
     },
     limit: 1,
-  })
+  });
 
   if (existingSub.docs.length > 0) {
-    return Response.json(
-      { error: 'Du bist bereits für den Newsletter angemeldet.' },
-      { status: 409 },
-    )
+    return Response.json({ error: 'Du bist bereits für den Newsletter angemeldet.' }, { status: 409 });
   }
 
   const subscription = await payload.create({
@@ -60,7 +51,7 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
       participant: participant.id,
       status: 'active',
     },
-  })
+  });
 
   // Send welcome email
   try {
@@ -71,9 +62,9 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-    })
+    });
 
-    const siteUrl = process.env.SITE_URL || 'http://localhost:4321'
+    const siteUrl = process.env.SITE_URL || 'http://localhost:4321';
 
     await transporter.sendMail({
       from: process.env.MAIL_FROM || 'hallo@mens-circle.de',
@@ -86,13 +77,13 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
         <p>Falls du den Newsletter abbestellen möchtest, klicke <a href="${siteUrl}/newsletter/unsubscribe/${subscription.token}">hier</a>.</p>
         <p>Dein Männerkreis-Team</p>
       `,
-    })
+    });
   } catch (e) {
-    console.error('Email send error:', e)
+    console.error('Email send error:', e);
   }
 
   return Response.json({
     success: true,
     message: 'Du hast dich erfolgreich für den Newsletter angemeldet!',
-  })
-}
+  });
+};
