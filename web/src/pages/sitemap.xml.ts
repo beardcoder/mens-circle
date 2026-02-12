@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getUpcomingEvents, getPastEvents } from '@/lib/payload';
 
-const SITE_URL = import.meta.env.SITE_URL || 'https://maennerkreis-niederbayern.de';
+const SITE_URL = import.meta.env.SITE_URL || 'https://mens-circle.de';
 
 export const GET: APIRoute = async () => {
   const upcoming = await getUpcomingEvents();

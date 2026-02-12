@@ -1,0 +1,27 @@
+# Coolify Configuration
+# This file is used by Coolify for automatic deployment
+
+version: '3.8'
+
+services:
+  cms:
+    labels:
+      - 'coolify.managed=true'
+      - 'coolify.name=maennerkreis-cms'
+      - 'coolify.port=3001'
+      - 'coolify.domain=cms.mens-circle.de'
+      - 'coolify.https=true'
+      - 'coolify.healthcheck.enabled=true'
+      - 'coolify.healthcheck.path=/admin'
+      - 'coolify.healthcheck.interval=30s'
+
+  web:
+    labels:
+      - 'coolify.managed=true'
+      - 'coolify.name=maennerkreis-web'
+      - 'coolify.port=4400'
+      - 'coolify.domain=mens-circle.de'
+      - 'coolify.https=true'
+      - 'coolify.healthcheck.enabled=true'
+      - 'coolify.healthcheck.path=/'
+      - 'coolify.healthcheck.interval=30s'

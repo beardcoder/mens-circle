@@ -1,0 +1,20 @@
+# Dockerignore for Root
+node_modules
+.git
+.github
+*.md
+!DOCKER_DEPLOYMENT.md
+.env
+.env.*
+!.env.production.example
+.DS_Store
+*.log
+.vscode
+.idea
+tests
+*.test.js
+*.spec.js
+coverage
+.turbo
+.ddev
+
