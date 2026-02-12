@@ -47,4 +47,4 @@ USER payload
 EXPOSE 3001
 
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["bun", "run", "start"]
+CMD ["sh", "-c", "bunx payload migrate && bun run start"]
