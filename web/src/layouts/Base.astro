@@ -5,9 +5,12 @@ import { getSettings, getNextEvent } from '@/lib/payload';
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown>;
+  canonicalUrl?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, ogImage, jsonLd, canonicalUrl } = Astro.props;
 
 let settings: SiteSettings | null = null;
 let hasNextEvent = false;
@@ -40,7 +43,14 @@ const pageDescription =
     <meta property="og:description" content={pageDescription} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="de_DE" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
     <a href="#main" class="skip-link">Zum Inhalt springen</a>
@@ -68,11 +78,12 @@ const pageDescription =
 
           <nav class="nav" id="nav">
             <a href="/#ueber" class="nav__link">Über</a>
-            <a href="/#reise" class="nav__link">Die Reise</a>
+            <a href="/events" class="nav__link">Veranstaltungen</a>
+            <a href="/testimonials" class="nav__link">Stimmen</a>
             <a href="/#faq" class="nav__link">Fragen</a>
             {
               hasNextEvent && (
-                <a href="/event" class="btn btn--primary btn--large nav__cta">
+                <a href="/events" class="btn btn--primary btn--large nav__cta">
                   Nächster Termin
                 </a>
               )
@@ -120,15 +131,9 @@ const pageDescription =
             <h3 class="footer__heading">Navigation</h3>
             <ul class="footer__links">
               <li><a href="/#ueber">Über uns</a></li>
-              <li><a href="/#reise">Die Reise</a></li>
+              <li><a href="/events">Veranstaltungen</a></li>
+              <li><a href="/testimonials">Stimmen</a></li>
               <li><a href="/#faq">FAQ</a></li>
-              {
-                hasNextEvent && (
-                  <li>
-                    <a href="/event">Nächster Termin</a>
-                  </li>
-                )
-              }
             </ul>
           </div>
 

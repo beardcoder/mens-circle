@@ -1,40 +1,67 @@
 import type { CollectionConfig } from 'payload';
 
+const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+
 export const Testimonials: CollectionConfig = {
   slug: 'testimonials',
+  access: {
+    read: () => true,
+    create: () => true,
+    update: isAuthenticated,
+    delete: isAuthenticated,
+  },
   admin: {
-    useAsTitle: 'name',
-    defaultColumns: ['name', 'published', 'createdAt'],
+    useAsTitle: 'authorName',
+    defaultColumns: ['authorName', 'published', 'sortOrder', 'createdAt'],
   },
   fields: [
     {
-      name: 'name',
-      type: 'text',
+      name: 'content',
+      type: 'textarea',
       required: true,
+      label: 'Erfahrungsbericht',
+    },
+    {
+      name: 'authorName',
+      type: 'text',
       label: 'Name',
     },
     {
-      name: 'role',
+      name: 'authorRole',
       type: 'text',
       label: 'Rolle / Beschreibung',
     },
     {
-      name: 'quote',
-      type: 'textarea',
+      name: 'email',
+      type: 'email',
       required: true,
-      label: 'Zitat',
-    },
-    {
-      name: 'anonymous',
-      type: 'checkbox',
-      defaultValue: false,
-      label: 'Anonym',
+      label: 'E-Mail (nicht öffentlich)',
+      admin: {
+        description: 'Nur für Rückfragen, wird nicht öffentlich angezeigt.',
+      },
     },
     {
       name: 'published',
       type: 'checkbox',
       defaultValue: false,
       label: 'Veröffentlicht',
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      label: 'Veröffentlicht am',
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'sortOrder',
+      type: 'number',
+      label: 'Reihenfolge',
+      defaultValue: 0,
       admin: {
         position: 'sidebar',
       },

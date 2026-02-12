@@ -11,8 +11,16 @@ import { NewsletterBlock } from '@/blocks/Newsletter';
 import { CTABlock } from '@/blocks/CTA';
 import { WhatsAppCommunityBlock } from '@/blocks/WhatsAppCommunity';
 
+const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+
 export const Pages: CollectionConfig = {
   slug: 'pages',
+  access: {
+    read: () => true,
+    create: isAuthenticated,
+    update: isAuthenticated,
+    delete: isAuthenticated,
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'published'],
@@ -55,6 +63,12 @@ export const Pages: CollectionConfig = {
       fields: [
         { name: 'metaTitle', type: 'text', label: 'Meta-Titel' },
         { name: 'metaDescription', type: 'textarea', label: 'Meta-Beschreibung' },
+        {
+          name: 'ogImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'OG Image',
+        },
       ],
     },
     {

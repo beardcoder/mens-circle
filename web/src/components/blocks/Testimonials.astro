@@ -24,11 +24,11 @@ const { eyebrow, title, testimonials } = Astro.props;
               »
             </div>
             <blockquote class="testimonial-card__quote">
-              <p>{t.quote}</p>
+              <p>{t.content}</p>
             </blockquote>
             <div class="testimonial-card__author">
-              <span class="testimonial-card__name">{t.anonymous ? 'Anonym' : t.name}</span>
-              {t.role && !t.anonymous && <span class="testimonial-card__role">{t.role}</span>}
+              <span class="testimonial-card__name">{t.authorName || 'Anonym'}</span>
+              {t.authorRole && <span class="testimonial-card__role">{t.authorRole}</span>}
             </div>
           </div>
         ))

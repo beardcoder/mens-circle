@@ -1,7 +1,15 @@
 import type { CollectionConfig } from 'payload';
 
+const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+
 export const Newsletters: CollectionConfig = {
   slug: 'newsletters',
+  access: {
+    read: isAuthenticated,
+    create: isAuthenticated,
+    update: isAuthenticated,
+    delete: isAuthenticated,
+  },
   admin: {
     useAsTitle: 'subject',
     defaultColumns: ['subject', 'status', 'sentAt'],
@@ -40,7 +48,14 @@ export const Newsletters: CollectionConfig = {
       label: 'Gesendet am',
       admin: {
         position: 'sidebar',
-        readOnly: true,
+      },
+    },
+    {
+      name: 'recipientsCount',
+      type: 'number',
+      label: 'Empfänger',
+      admin: {
+        position: 'sidebar',
       },
     },
   ],

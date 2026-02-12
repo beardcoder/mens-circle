@@ -174,6 +174,8 @@ export interface Event {
   startTime: string;
   endTime: string;
   location: string;
+  street?: string | null;
+  zip?: string | null;
   city?: string | null;
   maxParticipants: number;
   costBasis?: string | null;
@@ -222,7 +224,9 @@ export interface Registration {
   id: number;
   event: number | Event;
   participant: number | Participant;
-  status: 'registered' | 'waitlist' | 'cancelled' | 'attended';
+  status: 'confirmed' | 'cancelled';
+  consentTimestamp?: string | null;
+  note?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -250,6 +254,7 @@ export interface Newsletter {
   };
   status: 'draft' | 'sending' | 'sent';
   sentAt?: string | null;
+  recipientsCount?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -260,8 +265,12 @@ export interface Newsletter {
 export interface NewsletterSubscription {
   id: number;
   participant: number | Participant;
-  status: 'active' | 'unsubscribed';
-  token: string;
+  status: 'pending' | 'confirmed' | 'unsubscribed';
+  token?: string | null;
+  confirmToken?: string | null;
+  requestedAt?: string | null;
+  confirmedAt?: string | null;
+  unsubscribedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -271,11 +280,16 @@ export interface NewsletterSubscription {
  */
 export interface Testimonial {
   id: number;
-  name: string;
-  role?: string | null;
-  quote: string;
-  anonymous?: boolean | null;
+  content: string;
+  authorName?: string | null;
+  authorRole?: string | null;
+  /**
+   * Nur für Rückfragen, wird nicht öffentlich angezeigt.
+   */
+  email: string;
   published?: boolean | null;
+  publishedAt?: string | null;
+  sortOrder?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -424,6 +438,7 @@ export interface Page {
   meta?: {
     metaTitle?: string | null;
     metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
   };
   published?: boolean | null;
   updatedAt: string;
@@ -569,6 +584,8 @@ export interface EventsSelect<T extends boolean = true> {
   startTime?: T;
   endTime?: T;
   location?: T;
+  street?: T;
+  zip?: T;
   city?: T;
   maxParticipants?: T;
   costBasis?: T;
@@ -597,6 +614,8 @@ export interface RegistrationsSelect<T extends boolean = true> {
   event?: T;
   participant?: T;
   status?: T;
+  consentTimestamp?: T;
+  note?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -609,6 +628,7 @@ export interface NewslettersSelect<T extends boolean = true> {
   content?: T;
   status?: T;
   sentAt?: T;
+  recipientsCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -620,6 +640,10 @@ export interface NewsletterSubscriptionsSelect<T extends boolean = true> {
   participant?: T;
   status?: T;
   token?: T;
+  confirmToken?: T;
+  requestedAt?: T;
+  confirmedAt?: T;
+  unsubscribedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -628,11 +652,13 @@ export interface NewsletterSubscriptionsSelect<T extends boolean = true> {
  * via the `definition` "testimonials_select".
  */
 export interface TestimonialsSelect<T extends boolean = true> {
-  name?: T;
-  role?: T;
-  quote?: T;
-  anonymous?: T;
+  content?: T;
+  authorName?: T;
+  authorRole?: T;
+  email?: T;
   published?: T;
+  publishedAt?: T;
+  sortOrder?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -779,6 +805,7 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         metaTitle?: T;
         metaDescription?: T;
+        ogImage?: T;
       };
   published?: T;
   updatedAt?: T;

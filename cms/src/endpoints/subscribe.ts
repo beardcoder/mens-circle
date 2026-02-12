@@ -16,6 +16,7 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
     collection: 'participants',
     where: { email: { equals: email } },
     limit: 1,
+    overrideAccess: true,
   });
 
   let participant;
@@ -24,6 +25,8 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
   } else {
     participant = await payload.create({
       collection: 'participants',
+      overrideAccess: true,
+      draft: false,
       data: {
         firstName: firstName || 'Newsletter',
         lastName: lastName || 'Abonnent',
@@ -32,28 +35,50 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
     });
   }
 
-  // Check if already subscribed
+  // Check if already confirmed
   const existingSub = await payload.find({
     collection: 'newsletter-subscriptions',
     where: {
-      and: [{ participant: { equals: participant.id } }, { status: { equals: 'active' } }],
+      and: [{ participant: { equals: participant.id } }, { status: { equals: 'confirmed' } }],
     },
     limit: 1,
+    overrideAccess: true,
   });
 
   if (existingSub.docs.length > 0) {
-    return Response.json({ error: 'Du bist bereits für den Newsletter angemeldet.' }, { status: 409 });
+    return Response.json(
+      { error: 'Du bist bereits für den Newsletter angemeldet.' },
+      { status: 409 },
+    );
   }
 
-  const subscription = await payload.create({
+  // Check for existing pending subscription and resend confirmation
+  const pendingSub = await payload.find({
     collection: 'newsletter-subscriptions',
-    data: {
-      participant: participant.id,
-      status: 'active',
+    where: {
+      and: [{ participant: { equals: participant.id } }, { status: { equals: 'pending' } }],
     },
+    limit: 1,
+    overrideAccess: true,
   });
 
-  // Send welcome email
+  let subscription;
+  if (pendingSub.docs.length > 0) {
+    subscription = pendingSub.docs[0];
+  } else {
+    subscription = await payload.create({
+      collection: 'newsletter-subscriptions',
+      overrideAccess: true,
+      draft: false,
+      data: {
+        participant: participant.id,
+        status: 'pending',
+        requestedAt: new Date().toISOString(),
+      },
+    });
+  }
+
+  // Send Double Opt-In confirmation email
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
@@ -64,17 +89,18 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
       },
     });
 
-    const siteUrl = process.env.SITE_URL || 'http://localhost:4321';
+    const siteUrl = process.env.SITE_URL || 'http://localhost:4400';
 
     await transporter.sendMail({
       from: process.env.MAIL_FROM || 'hallo@mens-circle.de',
       to: email,
-      subject: 'Willkommen beim Männerkreis Newsletter',
+      subject: 'Bitte bestätige deine Newsletter-Anmeldung',
       html: `
-        <h2>Willkommen!</h2>
-        <p>Du hast dich erfolgreich für den Newsletter des Männerkreis Niederbayern/ Straubing angemeldet.</p>
-        <p>Wir informieren dich über kommende Treffen und Neuigkeiten.</p>
-        <p>Falls du den Newsletter abbestellen möchtest, klicke <a href="${siteUrl}/newsletter/unsubscribe/${subscription.token}">hier</a>.</p>
+        <h2>Fast geschafft!</h2>
+        <p>Du hast dich für den Newsletter des Männerkreis Niederbayern/Straubing angemeldet.</p>
+        <p>Bitte bestätige deine Anmeldung, indem du auf den folgenden Link klickst:</p>
+        <p><a href="${siteUrl}/newsletter/confirm/${subscription.confirmToken}">Newsletter-Anmeldung bestätigen</a></p>
+        <p>Falls du dich nicht angemeldet hast, kannst du diese E-Mail einfach ignorieren.</p>
         <p>Dein Männerkreis-Team</p>
       `,
     });
@@ -84,6 +110,7 @@ export const subscribeEndpoint: PayloadHandler = async (req) => {
 
   return Response.json({
     success: true,
-    message: 'Du hast dich erfolgreich für den Newsletter angemeldet!',
+    message:
+      'Bitte bestätige deine Anmeldung über den Link in der E-Mail, die wir dir geschickt haben.',
   });
 };

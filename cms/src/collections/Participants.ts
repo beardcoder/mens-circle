@@ -1,7 +1,15 @@
 import type { CollectionConfig } from 'payload';
 
+const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+
 export const Participants: CollectionConfig = {
   slug: 'participants',
+  access: {
+    read: isAuthenticated,
+    create: isAuthenticated,
+    update: isAuthenticated,
+    delete: isAuthenticated,
+  },
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['firstName', 'lastName', 'email'],

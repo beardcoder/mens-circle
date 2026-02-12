@@ -18,6 +18,8 @@ import { registerEndpoint } from './endpoints/register';
 import { subscribeEndpoint } from './endpoints/subscribe';
 import { unsubscribeEndpoint } from './endpoints/unsubscribe';
 import { sendNewsletterEndpoint } from './endpoints/send-newsletter';
+import { confirmSubscriptionEndpoint } from './endpoints/confirm-subscription';
+import { submitTestimonialEndpoint } from './endpoints/submit-testimonial';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -68,6 +70,16 @@ export default buildConfig({
       path: '/send-newsletter',
       method: 'post',
       handler: sendNewsletterEndpoint,
+    },
+    {
+      path: '/confirm-subscription/:token',
+      method: 'get',
+      handler: confirmSubscriptionEndpoint,
+    },
+    {
+      path: '/submit-testimonial',
+      method: 'post',
+      handler: submitTestimonialEndpoint,
     },
   ],
   cors: [process.env.SITE_URL || 'http://localhost:4321'],

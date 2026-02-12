@@ -1,8 +1,14 @@
 import type { GlobalConfig } from 'payload';
 
+const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Einstellungen',
+  access: {
+    read: () => true,
+    update: isAuthenticated,
+  },
   fields: [
     {
       name: 'siteName',

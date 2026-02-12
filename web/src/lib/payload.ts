@@ -10,6 +10,8 @@ export interface Event {
   startTime: string;
   endTime: string;
   location: string;
+  street?: string;
+  zip?: string;
   city: string;
   maxParticipants: number;
   costBasis: string;
@@ -37,16 +39,20 @@ export interface Registration {
   id: string;
   event: Event | string;
   participant: Participant | string;
-  status: 'registered' | 'waitlist' | 'cancelled' | 'attended';
+  status: 'confirmed' | 'cancelled';
+  consentTimestamp?: string;
+  note?: string;
 }
 
 export interface Testimonial {
   id: string;
-  name: string;
-  role?: string;
-  quote: string;
-  anonymous: boolean;
+  content: string;
+  authorName?: string;
+  authorRole?: string;
+  email: string;
   published: boolean;
+  publishedAt?: string;
+  sortOrder: number;
 }
 
 export interface Page {
@@ -54,7 +60,7 @@ export interface Page {
   title: string;
   slug: string;
   content: ContentBlock[];
-  meta?: { metaTitle?: string; metaDescription?: string };
+  meta?: { metaTitle?: string; metaDescription?: string; ogImage?: Media };
   published: boolean;
 }
 
@@ -198,6 +204,22 @@ export async function getPage(slug: string): Promise<Page | null> {
   return res.docs[0] || null;
 }
 
+export async function getUpcomingEvents(): Promise<Event[]> {
+  const today = new Date().toISOString().split('T')[0];
+  const res = await fetchAPI<PayloadResponse<Event>>(
+    `/events?where[eventDate][greater_than_equal]=${today}&where[published][equals]=true&sort=eventDate&limit=50&depth=1`,
+  );
+  return res.docs;
+}
+
+export async function getPastEvents(): Promise<Event[]> {
+  const today = new Date().toISOString().split('T')[0];
+  const res = await fetchAPI<PayloadResponse<Event>>(
+    `/events?where[eventDate][less_than]=${today}&where[published][equals]=true&sort=-eventDate&limit=50&depth=1`,
+  );
+  return res.docs;
+}
+
 export async function getNextEvent(): Promise<Event | null> {
   const today = new Date().toISOString().split('T')[0];
   const res = await fetchAPI<PayloadResponse<Event>>(
@@ -215,14 +237,14 @@ export async function getEvent(slug: string): Promise<Event | null> {
 
 export async function getEventRegistrationCount(eventId: string): Promise<number> {
   const res = await fetchAPI<PayloadResponse<Registration>>(
-    `/registrations?where[event][equals]=${eventId}&where[status][in]=registered,attended&limit=0`,
+    `/registrations?where[event][equals]=${eventId}&where[status][equals]=confirmed&limit=0`,
   );
   return res.totalDocs;
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   const res = await fetchAPI<PayloadResponse<Testimonial>>(
-    '/testimonials?where[published][equals]=true&limit=20&sort=-createdAt',
+    '/testimonials?where[published][equals]=true&limit=20&sort=sortOrder,-createdAt',
   );
   return res.docs;
 }

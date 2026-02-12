@@ -24,6 +24,7 @@ export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
   const newsletter = await payload.findByID({
     collection: 'newsletters',
     id: newsletterId,
+    overrideAccess: true,
   });
 
   if (newsletter.status !== 'draft') {
@@ -34,15 +35,17 @@ export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
   await payload.update({
     collection: 'newsletters',
     id: newsletterId,
+    overrideAccess: true,
     data: { status: 'sending' },
   });
 
   // Get all active subscriptions
   const subscriptions = await payload.find({
     collection: 'newsletter-subscriptions',
-    where: { status: { equals: 'active' } },
+    where: { status: { equals: 'confirmed' } },
     limit: 10000,
     depth: 1,
+    overrideAccess: true,
   });
 
   const transporter = nodemailer.createTransport({
@@ -54,7 +57,7 @@ export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
     },
   });
 
-  const siteUrl = process.env.SITE_URL || 'http://localhost:4321';
+  const siteUrl = process.env.SITE_URL || 'http://localhost:4400';
   let sent = 0;
   let failed = 0;
 
@@ -98,7 +101,8 @@ export const sendNewsletterEndpoint: PayloadHandler = async (req) => {
   await payload.update({
     collection: 'newsletters',
     id: newsletterId,
-    data: { status: 'sent', sentAt: new Date().toISOString() },
+    overrideAccess: true,
+    data: { status: 'sent', sentAt: new Date().toISOString(), recipientsCount: sent },
   });
 
   return Response.json({

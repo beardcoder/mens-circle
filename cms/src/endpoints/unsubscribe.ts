@@ -12,6 +12,7 @@ export const unsubscribeEndpoint: PayloadHandler = async (req) => {
     collection: 'newsletter-subscriptions',
     where: { token: { equals: token } },
     limit: 1,
+    overrideAccess: true,
   });
 
   if (subscriptions.docs.length === 0) {
@@ -30,7 +31,8 @@ export const unsubscribeEndpoint: PayloadHandler = async (req) => {
   await payload.update({
     collection: 'newsletter-subscriptions',
     id: subscription.id,
-    data: { status: 'unsubscribed' },
+    overrideAccess: true,
+    data: { status: 'unsubscribed', unsubscribedAt: new Date().toISOString() },
   });
 
   return Response.json({

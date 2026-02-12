@@ -1,7 +1,15 @@
 import type { CollectionConfig } from 'payload';
 
+const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+
 export const Events: CollectionConfig = {
   slug: 'events',
+  access: {
+    read: () => true,
+    create: isAuthenticated,
+    update: isAuthenticated,
+    delete: isAuthenticated,
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'eventDate', 'location', 'published'],
@@ -62,7 +70,17 @@ export const Events: CollectionConfig = {
       name: 'location',
       type: 'text',
       required: true,
-      label: 'Ort',
+      label: 'Ortsname',
+    },
+    {
+      name: 'street',
+      type: 'text',
+      label: 'Straße',
+    },
+    {
+      name: 'zip',
+      type: 'text',
+      label: 'PLZ',
     },
     {
       name: 'city',

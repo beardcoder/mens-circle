@@ -1,7 +1,15 @@
 import type { CollectionConfig } from 'payload';
 
+const isAuthenticated = ({ req: { user } }: { req: { user: unknown } }) => Boolean(user);
+
 export const Registrations: CollectionConfig = {
   slug: 'registrations',
+  access: {
+    read: isAuthenticated,
+    create: isAuthenticated,
+    update: isAuthenticated,
+    delete: isAuthenticated,
+  },
   admin: {
     defaultColumns: ['event', 'participant', 'status', 'createdAt'],
   },
@@ -24,14 +32,25 @@ export const Registrations: CollectionConfig = {
       name: 'status',
       type: 'select',
       required: true,
-      defaultValue: 'registered',
+      defaultValue: 'confirmed',
       label: 'Status',
       options: [
-        { label: 'Angemeldet', value: 'registered' },
-        { label: 'Warteliste', value: 'waitlist' },
-        { label: 'Abgesagt', value: 'cancelled' },
-        { label: 'Teilgenommen', value: 'attended' },
+        { label: 'Bestätigt', value: 'confirmed' },
+        { label: 'Storniert', value: 'cancelled' },
       ],
+    },
+    {
+      name: 'consentTimestamp',
+      type: 'date',
+      label: 'Einwilligung erteilt am',
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'note',
+      type: 'textarea',
+      label: 'Anmerkung',
     },
   ],
 };
