@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Domain\Model;
 
+use DateTime;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 final class NewsletterSubscription extends AbstractEntity
@@ -12,11 +13,11 @@ final class NewsletterSubscription extends AbstractEntity
 
     protected string $token = '';
 
-    protected ?\DateTime $subscribedAt = null;
+    protected ?DateTime $subscribedAt = null;
 
-    protected ?\DateTime $confirmedAt = null;
+    protected ?DateTime $confirmedAt = null;
 
-    protected ?\DateTime $unsubscribedAt = null;
+    protected ?DateTime $unsubscribedAt = null;
 
     public function getParticipant(): ?Participant
     {
@@ -38,32 +39,32 @@ final class NewsletterSubscription extends AbstractEntity
         $this->token = $token;
     }
 
-    public function getSubscribedAt(): ?\DateTime
+    public function getSubscribedAt(): ?DateTime
     {
         return $this->subscribedAt;
     }
 
-    public function setSubscribedAt(?\DateTime $subscribedAt): void
+    public function setSubscribedAt(?DateTime $subscribedAt): void
     {
         $this->subscribedAt = $subscribedAt;
     }
 
-    public function getConfirmedAt(): ?\DateTime
+    public function getConfirmedAt(): ?DateTime
     {
         return $this->confirmedAt;
     }
 
-    public function setConfirmedAt(?\DateTime $confirmedAt): void
+    public function setConfirmedAt(?DateTime $confirmedAt): void
     {
         $this->confirmedAt = $confirmedAt;
     }
 
-    public function getUnsubscribedAt(): ?\DateTime
+    public function getUnsubscribedAt(): ?DateTime
     {
         return $this->unsubscribedAt;
     }
 
-    public function setUnsubscribedAt(?\DateTime $unsubscribedAt): void
+    public function setUnsubscribedAt(?DateTime $unsubscribedAt): void
     {
         $this->unsubscribedAt = $unsubscribedAt;
     }

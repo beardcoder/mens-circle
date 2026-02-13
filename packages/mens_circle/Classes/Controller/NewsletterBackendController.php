@@ -7,6 +7,7 @@ namespace BeardCoder\MensCircle\Controller;
 use BeardCoder\MensCircle\Message\SendNewsletterMessage;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Throwable;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
@@ -23,7 +24,7 @@ final class NewsletterBackendController extends ActionController
         private readonly ModuleTemplateFactory $moduleTemplateFactory,
         private readonly MessageBusInterface $messageBus,
         private readonly SystemResourceFactory $systemResourceFactory,
-        private readonly SystemResourcePublisherInterface $systemResourcePublisher
+        private readonly SystemResourcePublisherInterface $systemResourcePublisher,
     ) {}
 
     public function indexAction(): ResponseInterface
@@ -51,7 +52,7 @@ final class NewsletterBackendController extends ActionController
             $this->addFlashMessage(
                 'Betreff und Inhalt sind Pflichtfelder.',
                 '',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
             return $this->redirect('index');
@@ -62,7 +63,7 @@ final class NewsletterBackendController extends ActionController
             $this->addFlashMessage(
                 'Es sind keine aktiven Newsletter-Abonnenten vorhanden.',
                 '',
-                ContextualFeedbackSeverity::INFO
+                ContextualFeedbackSeverity::INFO,
             );
 
             return $this->redirect('index');
@@ -71,7 +72,7 @@ final class NewsletterBackendController extends ActionController
         $dispatchResult = $this->dispatchMessages(
             recipients: $recipients,
             subject: $subject,
-            content: $content
+            content: $content,
         );
         $dispatchedCount = $dispatchResult['dispatched'];
         $failedCount = $dispatchResult['failed'];
@@ -80,7 +81,7 @@ final class NewsletterBackendController extends ActionController
             $this->addFlashMessage(
                 \sprintf('Newsletter an den Message Bus übergeben: %d Empfänger.', $dispatchedCount),
                 '',
-                ContextualFeedbackSeverity::OK
+                ContextualFeedbackSeverity::OK,
             );
         }
 
@@ -88,7 +89,7 @@ final class NewsletterBackendController extends ActionController
             $this->addFlashMessage(
                 \sprintf('Übergabe an den Message Bus nicht vollständig: %d Empfänger konnten nicht übergeben werden.', $failedCount),
                 '',
-                ContextualFeedbackSeverity::WARNING
+                ContextualFeedbackSeverity::WARNING,
             );
         }
 
@@ -108,14 +109,14 @@ final class NewsletterBackendController extends ActionController
                 'subscription.token',
                 'participant.email',
                 'participant.first_name',
-                'participant.last_name'
+                'participant.last_name',
             )
             ->from('tx_menscircle_domain_model_newslettersubscription', 'subscription')
             ->innerJoin(
                 'subscription',
                 'tx_menscircle_domain_model_participant',
                 'participant',
-                $queryBuilder->expr()->eq('participant.uid', $queryBuilder->quoteIdentifier('subscription.participant'))
+                $queryBuilder->expr()->eq('participant.uid', $queryBuilder->quoteIdentifier('subscription.participant')),
             )
             ->where(
                 $queryBuilder->expr()->eq('subscription.deleted', $queryBuilder->createNamedParameter(0)),
@@ -123,7 +124,7 @@ final class NewsletterBackendController extends ActionController
                 $queryBuilder->expr()->isNull('subscription.unsubscribed_at'),
                 $queryBuilder->expr()->eq('participant.deleted', $queryBuilder->createNamedParameter(0)),
                 $queryBuilder->expr()->eq('participant.hidden', $queryBuilder->createNamedParameter(0)),
-                $queryBuilder->expr()->neq('participant.email', $queryBuilder->createNamedParameter(''))
+                $queryBuilder->expr()->neq('participant.email', $queryBuilder->createNamedParameter('')),
             )
             ->orderBy('participant.email', 'ASC')
             ->executeQuery()
@@ -141,9 +142,9 @@ final class NewsletterBackendController extends ActionController
         return array_map(
             fn(array $recipient): array => [
                 'name' => $this->buildRecipientName($recipient),
-                'email' => (string) ($recipient['email'] ?? ''),
+                'email' => (string)($recipient['email'] ?? ''),
             ],
-            $recipients
+            $recipients,
         );
     }
 
@@ -152,8 +153,8 @@ final class NewsletterBackendController extends ActionController
      */
     private function buildRecipientName(array $recipient): string
     {
-        $firstName = trim((string) ($recipient['first_name'] ?? ''));
-        $lastName = trim((string) ($recipient['last_name'] ?? ''));
+        $firstName = trim((string)($recipient['first_name'] ?? ''));
+        $lastName = trim((string)($recipient['last_name'] ?? ''));
 
         $fullName = trim($firstName . ' ' . $lastName);
 
@@ -192,8 +193,8 @@ final class NewsletterBackendController extends ActionController
      */
     private function dispatchMessages(array $recipients, string $subject, string $content): array
     {
-        $baseUrl = rtrim((string) ($this->settings['baseUrl'] ?? ''), '/');
-        $newsletterPid = (int) ($this->settings['newsletterPid'] ?? 0);
+        $baseUrl = rtrim((string)($this->settings['baseUrl'] ?? ''), '/');
+        $newsletterPid = (int)($this->settings['newsletterPid'] ?? 0);
         $settings = \is_array($this->settings) ? $this->settings : [];
 
         $dispatchedCount = 0;
@@ -201,19 +202,19 @@ final class NewsletterBackendController extends ActionController
         foreach ($recipients as $recipient) {
             try {
                 $this->messageBus->dispatch(new SendNewsletterMessage(
-                    toEmail: (string) ($recipient['email'] ?? ''),
+                    toEmail: (string)($recipient['email'] ?? ''),
                     toName: $this->buildRecipientName($recipient),
                     subject: $subject,
                     content: $content,
                     unsubscribeUrl: $this->buildUnsubscribeUrl(
                         $baseUrl,
                         $newsletterPid,
-                        (string) ($recipient['token'] ?? '')
+                        (string)($recipient['token'] ?? ''),
                     ),
-                    settings: $settings
+                    settings: $settings,
                 ));
                 $dispatchedCount++;
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 $failedCount++;
             }
         }
@@ -231,7 +232,7 @@ final class NewsletterBackendController extends ActionController
                 return '';
             }
 
-            return (string) $this->request->getArgument($name);
+            return (string)$this->request->getArgument($name);
         } catch (NoSuchArgumentException) {
             return '';
         }
@@ -275,9 +276,9 @@ final class NewsletterBackendController extends ActionController
         ];
 
         return htmlspecialchars(
-            (string) json_encode($rteOptions, JSON_THROW_ON_ERROR),
+            (string)json_encode($rteOptions, JSON_THROW_ON_ERROR),
             ENT_QUOTES | ENT_SUBSTITUTE,
-            'UTF-8'
+            'UTF-8',
         );
     }
 
@@ -285,12 +286,12 @@ final class NewsletterBackendController extends ActionController
     {
         $resource = $this->systemResourceFactory->createPublicResource($resourceIdentifier);
 
-        return (string) $this->systemResourcePublisher->generateUri($resource, null);
+        return (string)$this->systemResourcePublisher->generateUri($resource, null);
     }
 
     private function resolveBackendLanguage(): string
     {
-        $backendUserLanguage = (string) ($GLOBALS['BE_USER']->uc['lang'] ?? 'en');
+        $backendUserLanguage = (string)($GLOBALS['BE_USER']->uc['lang'] ?? 'en');
         if ($backendUserLanguage === '' || $backendUserLanguage === 'default') {
             return 'en';
         }

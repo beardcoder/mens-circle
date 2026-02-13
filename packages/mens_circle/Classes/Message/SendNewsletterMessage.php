@@ -15,7 +15,7 @@ final readonly class SendNewsletterMessage
         private string $subject,
         private string $content,
         private string $unsubscribeUrl,
-        private array $settings
+        private array $settings,
     ) {}
 
     public function getToEmail(): string

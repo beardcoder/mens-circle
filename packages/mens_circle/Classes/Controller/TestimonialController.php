@@ -17,7 +17,7 @@ final class TestimonialController extends ActionController
 
     public function __construct(
         private readonly TestimonialRepository $testimonialRepository,
-        private readonly PersistenceManager $persistenceManager
+        private readonly PersistenceManager $persistenceManager,
     ) {}
 
     public function listAction(): ResponseInterface
@@ -37,7 +37,7 @@ final class TestimonialController extends ActionController
         string $authorName = '',
         string $role = '',
         string $email = '',
-        bool $privacy = false
+        bool $privacy = false,
     ): ResponseInterface {
         $normalizedQuote = trim($quote);
         $normalizedAuthorName = trim($authorName);
@@ -52,7 +52,7 @@ final class TestimonialController extends ActionController
             quote: $normalizedQuote,
             authorName: $normalizedAuthorName,
             role: $normalizedRole,
-            email: $normalizedEmail
+            email: $normalizedEmail,
         );
         $this->testimonialRepository->add($testimonial);
         $this->persistenceManager->persistAll();
@@ -89,7 +89,7 @@ final class TestimonialController extends ActionController
         string $quote,
         string $authorName,
         string $role,
-        string $email
+        string $email,
     ): Testimonial {
         $testimonial = new Testimonial();
         $testimonial->setQuote($quote);

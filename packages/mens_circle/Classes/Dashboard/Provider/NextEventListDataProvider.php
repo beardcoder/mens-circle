@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Dashboard\Provider;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\ParameterType;
+use Throwable;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Dashboard\Widgets\ListDataProviderInterface;
 
@@ -13,7 +15,7 @@ final readonly class NextEventListDataProvider implements ListDataProviderInterf
     private const EVENT_TABLE = 'tx_menscircle_domain_model_event';
 
     public function __construct(
-        private ConnectionPool $connectionPool
+        private ConnectionPool $connectionPool,
     ) {}
 
     /**
@@ -32,7 +34,7 @@ final readonly class NextEventListDataProvider implements ListDataProviderInterf
                 'start_time',
                 'location',
                 'city',
-                'max_participants'
+                'max_participants',
             )
             ->from(self::EVENT_TABLE)
             ->where(
@@ -41,8 +43,8 @@ final readonly class NextEventListDataProvider implements ListDataProviderInterf
                 $queryBuilder->expr()->eq('is_published', $queryBuilder->createNamedParameter(1, ParameterType::INTEGER)),
                 $queryBuilder->expr()->gte(
                     'event_date',
-                    $queryBuilder->createNamedParameter(new \DateTimeImmutable('today')->format('Y-m-d 00:00:00'), ParameterType::STRING)
-                )
+                    $queryBuilder->createNamedParameter((new DateTimeImmutable('today'))->format('Y-m-d 00:00:00'), ParameterType::STRING),
+                ),
             )
             ->orderBy('event_date', 'ASC')
             ->addOrderBy('start_time', 'ASC')
@@ -55,24 +57,24 @@ final readonly class NextEventListDataProvider implements ListDataProviderInterf
             return ['Kein kommendes Event vorhanden.'];
         }
 
-        $eventDate = $this->formatDate((string) ($row['event_date'] ?? ''));
-        $eventTime = $this->formatTime((string) ($row['start_time'] ?? ''));
+        $eventDate = $this->formatDate((string)($row['event_date'] ?? ''));
+        $eventTime = $this->formatTime((string)($row['start_time'] ?? ''));
         $locationParts = array_filter([
-            trim((string) ($row['location'] ?? '')),
-            trim((string) ($row['city'] ?? '')),
+            trim((string)($row['location'] ?? '')),
+            trim((string)($row['city'] ?? '')),
         ]);
         $locationLabel = $locationParts === [] ? '-' : implode(', ', $locationParts);
-        $slug = trim((string) ($row['slug'] ?? ''));
+        $slug = trim((string)($row['slug'] ?? ''));
 
         $items = [
             \sprintf(
                 '%s am %s%s',
-                trim((string) ($row['title'] ?? 'Termin')),
+                trim((string)($row['title'] ?? 'Termin')),
                 $eventDate !== '' ? $eventDate : 'tba',
-                $eventTime !== '' ? ' um ' . $eventTime . ' Uhr' : ''
+                $eventTime !== '' ? ' um ' . $eventTime . ' Uhr' : '',
             ),
             'Ort: ' . $locationLabel,
-            'Max. Teilnehmer: ' . (int) ($row['max_participants'] ?? 0),
+            'Max. Teilnehmer: ' . (int)($row['max_participants'] ?? 0),
         ];
 
         if ($slug !== '') {
@@ -90,8 +92,8 @@ final readonly class NextEventListDataProvider implements ListDataProviderInterf
         }
 
         try {
-            return new \DateTimeImmutable($value)->format('d.m.Y');
-        } catch (\Throwable) {
+            return (new DateTimeImmutable($value))->format('d.m.Y');
+        } catch (Throwable) {
             return '';
         }
     }
@@ -104,8 +106,8 @@ final readonly class NextEventListDataProvider implements ListDataProviderInterf
         }
 
         try {
-            return new \DateTimeImmutable($value)->format('H:i');
-        } catch (\Throwable) {
+            return (new DateTimeImmutable($value))->format('H:i');
+        } catch (Throwable) {
             return '';
         }
     }

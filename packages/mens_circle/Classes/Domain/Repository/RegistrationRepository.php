@@ -32,8 +32,8 @@ final class RegistrationRepository extends Repository
         $query->matching(
             $query->logicalAnd(
                 $query->equals('event', $event),
-                $query->in('status', RegistrationStatus::activeValues())
-            )
+                $query->in('status', RegistrationStatus::activeValues()),
+            ),
         );
 
         /** @var QueryResultInterface<Registration> $result */
@@ -54,8 +54,8 @@ final class RegistrationRepository extends Repository
             $query->logicalAnd(
                 $query->equals('event', $event),
                 $query->equals('participant', $participant),
-                $query->in('status', RegistrationStatus::activeValues())
-            )
+                $query->in('status', RegistrationStatus::activeValues()),
+            ),
         );
         $query->setLimit(1);
 

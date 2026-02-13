@@ -12,7 +12,7 @@ ExtensionManagementUtility::addTcaSelectItemGroup(
     'CType',
     'menscircle',
     'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:content.group.title',
-    'after:default'
+    'after:default',
 );
 
 $commonTabs = '
@@ -315,7 +315,7 @@ foreach ($contentTypes as $contentType => $configuration) {
         $configuration['showitem'] . $commonTabs,
         [
             'columnsOverrides' => $configuration['columnsOverrides'],
-        ]
+        ],
     );
 }
 
@@ -326,7 +326,7 @@ $pluginSignatures = [
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event.title',
         'plugin-menscircle-event',
         'plugins',
-        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event.description'
+        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event.description',
     ),
     'eventDetail' => ExtensionUtility::registerPlugin(
         'MensCircle',
@@ -334,7 +334,7 @@ $pluginSignatures = [
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event_detail.title',
         'plugin-menscircle-event-detail',
         'plugins',
-        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event_detail.description'
+        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.event_detail.description',
     ),
     'newsletter' => ExtensionUtility::registerPlugin(
         'MensCircle',
@@ -342,7 +342,7 @@ $pluginSignatures = [
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.newsletter.title',
         'plugin-menscircle-newsletter',
         'plugins',
-        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.newsletter.description'
+        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.newsletter.description',
     ),
     'testimonialForm' => ExtensionUtility::registerPlugin(
         'MensCircle',
@@ -350,7 +350,7 @@ $pluginSignatures = [
         'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial_form.title',
         'plugin-menscircle-testimonial-form',
         'plugins',
-        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial_form.description'
+        'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:plugin.testimonial_form.description',
     ),
 ];
 

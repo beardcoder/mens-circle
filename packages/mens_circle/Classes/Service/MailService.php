@@ -7,9 +7,11 @@ namespace BeardCoder\MensCircle\Service;
 use BeardCoder\MensCircle\Domain\Model\Event;
 use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
 use BeardCoder\MensCircle\Domain\Model\Registration;
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Mime\Address;
+use Throwable;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -48,7 +50,7 @@ final class MailService
                 'eventStartTime' => $event->getStartTime()?->format('H:i:s') ?? '',
                 'eventLocation' => $event->getLocation(),
             ],
-            $settings
+            $settings,
         );
     }
 
@@ -67,22 +69,22 @@ final class MailService
      */
     public function sendEventRegistrationConfirmationFromData(array $notificationData, array $settings): bool
     {
-        $participantEmail = strtolower(trim((string) ($notificationData['participantEmail'] ?? '')));
+        $participantEmail = strtolower(trim((string)($notificationData['participantEmail'] ?? '')));
         if ($participantEmail === '' || !filter_var($participantEmail, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
-        $firstName = trim((string) ($notificationData['participantFirstName'] ?? ''));
-        $lastName = trim((string) ($notificationData['participantLastName'] ?? ''));
-        $eventTitle = trim((string) ($notificationData['eventTitle'] ?? ''));
-        $eventSlug = trim((string) ($notificationData['eventSlug'] ?? ''));
-        $eventLocation = trim((string) ($notificationData['eventLocation'] ?? ''));
+        $firstName = trim((string)($notificationData['participantFirstName'] ?? ''));
+        $lastName = trim((string)($notificationData['participantLastName'] ?? ''));
+        $eventTitle = trim((string)($notificationData['eventTitle'] ?? ''));
+        $eventSlug = trim((string)($notificationData['eventSlug'] ?? ''));
+        $eventLocation = trim((string)($notificationData['eventLocation'] ?? ''));
 
-        $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
+        $siteName = (string)($settings['siteName'] ?? 'Männerkreis');
         $subject = \sprintf('Anmeldung bestaetigt: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
 
-        $date = $this->formatDate((string) ($notificationData['eventDate'] ?? ''));
-        $startTime = $this->formatTime((string) ($notificationData['eventStartTime'] ?? ''));
+        $date = $this->formatDate((string)($notificationData['eventDate'] ?? ''));
+        $startTime = $this->formatTime((string)($notificationData['eventStartTime'] ?? ''));
         $eventTitleLabel = $eventTitle !== '' ? $eventTitle : 'Männerkreis';
         $dateLabel = $date !== '' ? $date : 'tba';
         $timeLabel = $startTime !== '' ? $startTime . ' Uhr' : 'offen';
@@ -115,8 +117,8 @@ final class MailService
                     'eventTime' => $timeLabel,
                     'eventLocation' => $locationLabel,
                     'eventUrl' => $eventUrl,
-                ]
-            )
+                ],
+            ),
         );
 
         return $this->sendMail(
@@ -125,7 +127,7 @@ final class MailService
             $subject,
             $text,
             $html,
-            $settings
+            $settings,
         );
     }
 
@@ -144,22 +146,22 @@ final class MailService
      */
     public function sendEventReminderFromData(array $notificationData, array $settings): bool
     {
-        $participantEmail = strtolower(trim((string) ($notificationData['participantEmail'] ?? '')));
+        $participantEmail = strtolower(trim((string)($notificationData['participantEmail'] ?? '')));
         if ($participantEmail === '' || !filter_var($participantEmail, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
-        $firstName = trim((string) ($notificationData['participantFirstName'] ?? ''));
-        $lastName = trim((string) ($notificationData['participantLastName'] ?? ''));
-        $eventTitle = trim((string) ($notificationData['eventTitle'] ?? ''));
-        $eventSlug = trim((string) ($notificationData['eventSlug'] ?? ''));
-        $eventLocation = trim((string) ($notificationData['eventLocation'] ?? ''));
+        $firstName = trim((string)($notificationData['participantFirstName'] ?? ''));
+        $lastName = trim((string)($notificationData['participantLastName'] ?? ''));
+        $eventTitle = trim((string)($notificationData['eventTitle'] ?? ''));
+        $eventSlug = trim((string)($notificationData['eventSlug'] ?? ''));
+        $eventLocation = trim((string)($notificationData['eventLocation'] ?? ''));
 
-        $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
+        $siteName = (string)($settings['siteName'] ?? 'Männerkreis');
         $subject = \sprintf('Erinnerung: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
 
-        $date = $this->formatDate((string) ($notificationData['eventDate'] ?? ''));
-        $startTime = $this->formatTime((string) ($notificationData['eventStartTime'] ?? ''));
+        $date = $this->formatDate((string)($notificationData['eventDate'] ?? ''));
+        $startTime = $this->formatTime((string)($notificationData['eventStartTime'] ?? ''));
         $eventTitleLabel = $eventTitle !== '' ? $eventTitle : 'Männerkreis';
         $dateLabel = $date !== '' ? $date : 'tba';
         $timeLabel = $startTime !== '' ? $startTime . ' Uhr' : 'offen';
@@ -194,8 +196,8 @@ final class MailService
                     'eventTime' => $timeLabel,
                     'eventLocation' => $locationLabel,
                     'eventUrl' => $eventUrl,
-                ]
-            )
+                ],
+            ),
         );
 
         return $this->sendMail(
@@ -204,7 +206,7 @@ final class MailService
             $subject,
             $text,
             $html,
-            $settings
+            $settings,
         );
     }
 
@@ -218,7 +220,7 @@ final class MailService
             return;
         }
 
-        $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
+        $siteName = (string)($settings['siteName'] ?? 'Männerkreis');
         $subject = \sprintf('%s Newsletter Anmeldung', $siteName);
         $recipientName = trim($participant->getFirstName()) !== '' ? trim($participant->getFirstName()) : 'du';
 
@@ -237,8 +239,8 @@ final class MailService
                 [
                     'preheader' => 'Newsletter Anmeldung bestätigt',
                     'recipientName' => $recipientName,
-                ]
-            )
+                ],
+            ),
         );
 
         $this->sendMail($participant->getEmail(), $participant->getFullName(), $subject, $text, $html, $settings);
@@ -253,13 +255,13 @@ final class MailService
         string $subject,
         string $content,
         string $unsubscribeUrl,
-        array $settings
+        array $settings,
     ): bool {
         if ($toEmail === '' || !filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
-        $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
+        $siteName = (string)($settings['siteName'] ?? 'Männerkreis');
         $normalizedContent = trim($this->sanitizeNewsletterContent($content));
 
         if ($normalizedContent === '') {
@@ -283,8 +285,8 @@ final class MailService
                     'subject' => $subject,
                     'recipientName' => $recipientName,
                     'contentHtml' => $normalizedContent,
-                ]
-            )
+                ],
+            ),
         );
 
         return $this->sendMail($toEmail, $toName, $subject, $text, $html, $settings);
@@ -297,8 +299,8 @@ final class MailService
     private function resolveMailLayoutVariables(array $settings, string $unsubscribeUrl = ''): array
     {
         return [
-            'siteName' => (string) ($settings['siteName'] ?? 'Männerkreis'),
-            'contactEmail' => trim((string) ($settings['contactEmail'] ?? '')),
+            'siteName' => (string)($settings['siteName'] ?? 'Männerkreis'),
+            'contactEmail' => trim((string)($settings['contactEmail'] ?? '')),
             'unsubscribeUrl' => trim($unsubscribeUrl),
         ];
     }
@@ -332,7 +334,7 @@ final class MailService
             return '';
         }
 
-        $baseUrl = rtrim((string) ($settings['baseUrl'] ?? ''), '/');
+        $baseUrl = rtrim((string)($settings['baseUrl'] ?? ''), '/');
         if ($baseUrl === '') {
             return '';
         }
@@ -359,10 +361,10 @@ final class MailService
         string $subject,
         string $textBody,
         string $htmlBody,
-        array $settings
+        array $settings,
     ): bool {
-        $fromAddress = (string) ($settings['contactEmail'] ?? $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] ?? '');
-        $fromName = (string) ($settings['siteName'] ?? $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'] ?? 'Männerkreis');
+        $fromAddress = (string)($settings['contactEmail'] ?? $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] ?? '');
+        $fromName = (string)($settings['siteName'] ?? $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'] ?? 'Männerkreis');
 
         if ($fromAddress === '') {
             $this->logger->warning('Mail skipped: no sender address configured.');
@@ -381,7 +383,7 @@ final class MailService
                 ->send();
 
             return true;
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->logger->log(LogLevel::ERROR, 'Mail delivery failed', [
                 'to' => $toEmail,
                 'subject' => $subject,
@@ -400,8 +402,8 @@ final class MailService
         }
 
         try {
-            return new \DateTimeImmutable($dateValue)->format('d.m.Y');
-        } catch (\Throwable) {
+            return (new DateTimeImmutable($dateValue))->format('d.m.Y');
+        } catch (Throwable) {
             return '';
         }
     }
@@ -414,8 +416,8 @@ final class MailService
         }
 
         try {
-            return new \DateTimeImmutable($timeValue)->format('H:i');
-        } catch (\Throwable) {
+            return (new DateTimeImmutable($timeValue))->format('H:i');
+        } catch (Throwable) {
             return '';
         }
     }

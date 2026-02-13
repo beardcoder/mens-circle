@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Service;
 
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Throwable;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Log\LogManager;
@@ -17,7 +19,7 @@ final class SmsService
 
     public function __construct(
         private readonly RequestFactory $requestFactory,
-        private readonly ExtensionConfiguration $extensionConfiguration
+        private readonly ExtensionConfiguration $extensionConfiguration,
     ) {
         $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(self::class);
     }
@@ -34,13 +36,13 @@ final class SmsService
      */
     public function sendRegistrationConfirmation(array $notificationData, array $settings): bool
     {
-        $phone = trim((string) ($notificationData['participantPhone'] ?? ''));
+        $phone = trim((string)($notificationData['participantPhone'] ?? ''));
         if ($phone === '') {
             return false;
         }
 
-        $firstName = trim((string) ($notificationData['participantFirstName'] ?? ''));
-        $eventTitle = trim((string) ($notificationData['eventTitle'] ?? ''));
+        $firstName = trim((string)($notificationData['participantFirstName'] ?? ''));
+        $eventTitle = trim((string)($notificationData['eventTitle'] ?? ''));
         $eventDate = $this->formatDate($notificationData['eventDate'] ?? '');
         $eventTime = $this->formatTime($notificationData['eventStartTime'] ?? '');
 
@@ -49,7 +51,7 @@ final class SmsService
             $firstName !== '' ? $firstName : 'du',
             $eventTitle !== '' ? $eventTitle : 'den Maennerkreis',
             $eventDate !== '' ? $eventDate : 'dem naechsten Termin',
-            $eventTime !== '' ? ' um ' . $eventTime . ' Uhr' : ''
+            $eventTime !== '' ? ' um ' . $eventTime . ' Uhr' : '',
         ));
 
         return $this->sendSms($phone, $messageText, $settings);
@@ -67,13 +69,13 @@ final class SmsService
      */
     public function sendReminder(array $notificationData, array $settings): bool
     {
-        $phone = trim((string) ($notificationData['participantPhone'] ?? ''));
+        $phone = trim((string)($notificationData['participantPhone'] ?? ''));
         if ($phone === '') {
             return false;
         }
 
-        $firstName = trim((string) ($notificationData['participantFirstName'] ?? ''));
-        $eventTitle = trim((string) ($notificationData['eventTitle'] ?? ''));
+        $firstName = trim((string)($notificationData['participantFirstName'] ?? ''));
+        $eventTitle = trim((string)($notificationData['eventTitle'] ?? ''));
         $eventDate = $this->formatDate($notificationData['eventDate'] ?? '');
         $eventTime = $this->formatTime($notificationData['eventStartTime'] ?? '');
 
@@ -82,7 +84,7 @@ final class SmsService
             $firstName !== '' ? $firstName : '',
             $eventTitle !== '' ? $eventTitle : 'Maennerkreis',
             $eventDate !== '' ? $eventDate : 'Termin',
-            $eventTime !== '' ? ' um ' . $eventTime . ' Uhr' : ''
+            $eventTime !== '' ? ' um ' . $eventTime . ' Uhr' : '',
         ));
 
         return $this->sendSms($phone, $messageText, $settings);
@@ -119,7 +121,7 @@ final class SmsService
                         'text' => $messageText,
                     ],
                     'timeout' => 10.0,
-                ]
+                ],
             );
 
             if ($response->getStatusCode() >= 400) {
@@ -132,7 +134,7 @@ final class SmsService
             }
 
             return true;
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->logger->log(LogLevel::ERROR, 'SMS delivery failed', [
                 'phone' => $phone,
                 'error' => $throwable->getMessage(),
@@ -151,13 +153,13 @@ final class SmsService
         $extensionConfiguration = [];
         try {
             $extensionConfiguration = $this->extensionConfiguration->get('mens_circle');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             $extensionConfiguration = [];
         }
 
         $enabled = $this->toBool($settings['smsEnabled'] ?? $extensionConfiguration['smsEnabled'] ?? false);
-        $apiKey = trim((string) ($extensionConfiguration['smsApiKey'] ?? getenv('MENSCIRCLE_SMS_API_KEY') ?: ''));
-        $sender = trim((string) ($settings['smsSender'] ?? $extensionConfiguration['smsSender'] ?? 'MensCircle'));
+        $apiKey = trim((string)($extensionConfiguration['smsApiKey'] ?? getenv('MENSCIRCLE_SMS_API_KEY') ?: ''));
+        $sender = trim((string)($settings['smsSender'] ?? $extensionConfiguration['smsSender'] ?? 'MensCircle'));
         if ($sender === '') {
             $sender = 'MensCircle';
         }
@@ -171,28 +173,28 @@ final class SmsService
 
     private function formatDate(mixed $dateValue): string
     {
-        $dateString = trim((string) $dateValue);
+        $dateString = trim((string)$dateValue);
         if ($dateString === '' || $dateString === '0000-00-00 00:00:00') {
             return '';
         }
 
         try {
-            return new \DateTimeImmutable($dateString)->format('d.m.Y');
-        } catch (\Throwable) {
+            return (new DateTimeImmutable($dateString))->format('d.m.Y');
+        } catch (Throwable) {
             return '';
         }
     }
 
     private function formatTime(mixed $timeValue): string
     {
-        $timeString = trim((string) $timeValue);
+        $timeString = trim((string)$timeValue);
         if ($timeString === '' || $timeString === '00:00:00') {
             return '';
         }
 
         try {
-            return new \DateTimeImmutable($timeString)->format('H:i');
-        } catch (\Throwable) {
+            return (new DateTimeImmutable($timeString))->format('H:i');
+        } catch (Throwable) {
             return '';
         }
     }
@@ -203,7 +205,7 @@ final class SmsService
             return $value;
         }
 
-        $normalized = strtolower(trim((string) $value));
+        $normalized = strtolower(trim((string)$value));
 
         return \in_array($normalized, ['1', 'true', 'yes', 'on'], true);
     }

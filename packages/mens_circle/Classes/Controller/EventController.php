@@ -15,6 +15,7 @@ use BeardCoder\MensCircle\Domain\Repository\ParticipantRepository;
 use BeardCoder\MensCircle\Domain\Repository\RegistrationRepository;
 use BeardCoder\MensCircle\Message\SendEventMailMessage;
 use BeardCoder\MensCircle\Message\SendEventSmsMessage;
+use DateTime;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use TYPO3\CMS\Core\Http\ResponseFactory;
@@ -33,7 +34,7 @@ final class EventController extends ActionController
         private readonly PersistenceManager $persistenceManager,
         private readonly MessageBusInterface $messageBus,
         private readonly ResponseFactory $httpResponseFactory,
-        private readonly StreamFactory $httpStreamFactory
+        private readonly StreamFactory $httpStreamFactory,
     ) {}
 
     public function listAction(): ResponseInterface
@@ -73,7 +74,7 @@ final class EventController extends ActionController
         string $email = '',
         string $phoneNumber = '',
         bool $privacy = false,
-        bool $newsletterOptIn = false
+        bool $newsletterOptIn = false,
     ): ResponseInterface {
         $resolvedEvent = $this->resolveEventByIdentifier($event);
         if (! $resolvedEvent instanceof Event) {
@@ -91,7 +92,7 @@ final class EventController extends ActionController
             return $this->redirectToEventDetailWithMessage(
                 $resolvedEvent,
                 'Bitte fülle alle Pflichtfelder korrekt aus.',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -99,7 +100,7 @@ final class EventController extends ActionController
             return $this->redirectToEventDetailWithMessage(
                 $resolvedEvent,
                 'Dieser Termin ist nicht verfügbar.',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -107,7 +108,7 @@ final class EventController extends ActionController
             return $this->redirectToEventDetailWithMessage(
                 $resolvedEvent,
                 'Dieser Termin liegt bereits in der Vergangenheit.',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -116,7 +117,7 @@ final class EventController extends ActionController
             return $this->redirectToEventDetailWithMessage(
                 $resolvedEvent,
                 'Dieser Termin ist leider bereits ausgebucht.',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -124,7 +125,7 @@ final class EventController extends ActionController
             email: $normalizedEmail,
             firstName: $normalizedFirstName,
             lastName: $normalizedLastName,
-            phoneNumber: $normalizedPhoneNumber
+            phoneNumber: $normalizedPhoneNumber,
         );
 
         $existingRegistration = $this->registrationRepository->findActiveByEventAndParticipant($resolvedEvent, $participant);
@@ -132,7 +133,7 @@ final class EventController extends ActionController
             return $this->redirectToEventDetailWithMessage(
                 $resolvedEvent,
                 'Du bist bereits für diesen Termin angemeldet.',
-                ContextualFeedbackSeverity::WARNING
+                ContextualFeedbackSeverity::WARNING,
             );
         }
 
@@ -158,7 +159,7 @@ final class EventController extends ActionController
 
     public function icalAction(Event $event): ResponseInterface
     {
-        $domain = (string) parse_url((string) ($this->settings['baseUrl'] ?? ''), PHP_URL_HOST);
+        $domain = (string)parse_url((string)($this->settings['baseUrl'] ?? ''), PHP_URL_HOST);
         if ($domain === '') {
             $domain = 'mens-circle.local';
         }
@@ -242,21 +243,21 @@ final class EventController extends ActionController
             return null;
         }
 
-        $value = trim((string) $identifier);
+        $value = trim((string)$identifier);
         if ($value === '') {
             return null;
         }
 
         if (ctype_digit($value)) {
             /** @var Event|null $event */
-            $event = $this->eventRepository->findByUid((int) $value);
+            $event = $this->eventRepository->findByUid((int)$value);
 
             return $event;
         }
 
         if (preg_match('/^tx_menscircle_domain_model_event_(\d+)$/', $value, $matches) === 1) {
             /** @var Event|null $event */
-            $event = $this->eventRepository->findByUid((int) $matches[1]);
+            $event = $this->eventRepository->findByUid((int)$matches[1]);
 
             return $event;
         }
@@ -301,7 +302,7 @@ final class EventController extends ActionController
 
     private function redirectToEventOverview(): ResponseInterface
     {
-        $eventOverviewPath = $this->normalizeOverviewPath((string) ($this->settings['eventOverviewPath'] ?? '/event'));
+        $eventOverviewPath = $this->normalizeOverviewPath((string)($this->settings['eventOverviewPath'] ?? '/event'));
 
         return $this->redirectToUri($eventOverviewPath);
     }
@@ -338,7 +339,7 @@ final class EventController extends ActionController
         string $firstName,
         string $lastName,
         string $email,
-        bool $privacy
+        bool $privacy,
     ): bool {
         if ($firstName === '' || $lastName === '' || $email === '') {
             return false;
@@ -354,7 +355,7 @@ final class EventController extends ActionController
     private function redirectToEventDetailWithMessage(
         Event $event,
         string $message,
-        ContextualFeedbackSeverity $severity
+        ContextualFeedbackSeverity $severity,
     ): ResponseInterface {
         $this->addFlashMessage($message, '', $severity);
 
@@ -365,7 +366,7 @@ final class EventController extends ActionController
         string $email,
         string $firstName,
         string $lastName,
-        string $phoneNumber
+        string $phoneNumber,
     ): Participant {
         $participant = $this->participantRepository->findOneByEmail($email);
         if (! $participant instanceof Participant) {
@@ -377,7 +378,7 @@ final class EventController extends ActionController
         $participant->setLastName($lastName);
         $participant->setPhone($phoneNumber);
 
-        if ((int) $participant->getUid() > 0) {
+        if ((int)$participant->getUid() > 0) {
             $this->participantRepository->update($participant);
         } else {
             $this->participantRepository->add($participant);
@@ -392,7 +393,7 @@ final class EventController extends ActionController
         $registration->setEvent($event);
         $registration->setParticipant($participant);
         $registration->setStatusEnum(RegistrationStatus::Registered);
-        $registration->setRegisteredAt(new \DateTime());
+        $registration->setRegisteredAt(new DateTime());
 
         return $registration;
     }
@@ -404,7 +405,7 @@ final class EventController extends ActionController
             $subscription = new NewsletterSubscription();
             $subscription->setParticipant($participant);
             $subscription->setToken(bin2hex(random_bytes(32)));
-            $subscription->setSubscribedAt(new \DateTime());
+            $subscription->setSubscribedAt(new DateTime());
             $this->newsletterSubscriptionRepository->add($subscription);
 
             return;
@@ -413,7 +414,7 @@ final class EventController extends ActionController
         if ($subscription->getToken() === '') {
             $subscription->setToken(bin2hex(random_bytes(32)));
         }
-        $subscription->setSubscribedAt(new \DateTime());
+        $subscription->setSubscribedAt(new DateTime());
         $subscription->setUnsubscribedAt(null);
         $this->newsletterSubscriptionRepository->update($subscription);
     }
@@ -422,9 +423,9 @@ final class EventController extends ActionController
     {
         $notificationSettings = \is_array($this->settings) ? $this->settings : [];
         $this->messageBus->dispatch(new SendEventMailMessage(
-            registrationUid: (int) $registration->getUid(),
+            registrationUid: (int)$registration->getUid(),
             type: SendEventMailMessage::TYPE_REGISTRATION_CONFIRMATION,
-            settings: $notificationSettings
+            settings: $notificationSettings,
         ));
 
         if ($participant->getPhone() === '') {
@@ -432,9 +433,9 @@ final class EventController extends ActionController
         }
 
         $this->messageBus->dispatch(new SendEventSmsMessage(
-            registrationUid: (int) $registration->getUid(),
+            registrationUid: (int)$registration->getUid(),
             type: SendEventSmsMessage::TYPE_REGISTRATION_CONFIRMATION,
-            settings: $notificationSettings
+            settings: $notificationSettings,
         ));
     }
 }

@@ -15,7 +15,7 @@ final readonly class SendEventMailMessage
     public function __construct(
         private int $registrationUid,
         private string $type,
-        private array $settings = []
+        private array $settings = [],
     ) {}
 
     public function getRegistrationUid(): int

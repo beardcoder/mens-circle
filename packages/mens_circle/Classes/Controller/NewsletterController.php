@@ -9,6 +9,7 @@ use BeardCoder\MensCircle\Domain\Model\Participant;
 use BeardCoder\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
 use BeardCoder\MensCircle\Domain\Repository\ParticipantRepository;
 use BeardCoder\MensCircle\Service\MailService;
+use DateTime;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -20,7 +21,7 @@ final class NewsletterController extends ActionController
         private readonly ParticipantRepository $participantRepository,
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
         private readonly PersistenceManager $persistenceManager,
-        private readonly MailService $mailService
+        private readonly MailService $mailService,
     ) {}
 
     public function formAction(): ResponseInterface
@@ -34,7 +35,7 @@ final class NewsletterController extends ActionController
         if (! $this->isSubscriptionInputValid($normalizedEmail, $privacy)) {
             return $this->redirectToFormWithMessage(
                 'Bitte gib eine gültige E-Mail-Adresse ein und bestätige den Datenschutz.',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -68,7 +69,7 @@ final class NewsletterController extends ActionController
             return $this->renderUnsubscribeMessage('Diese E-Mail-Adresse wurde bereits abgemeldet.');
         }
 
-        $subscription->setUnsubscribedAt(new \DateTime());
+        $subscription->setUnsubscribedAt(new DateTime());
         $this->newsletterSubscriptionRepository->update($subscription);
         $this->persistenceManager->persistAll();
 
@@ -100,20 +101,20 @@ final class NewsletterController extends ActionController
 
     private function activateSubscription(
         Participant $participant,
-        ?NewsletterSubscription $subscription
+        ?NewsletterSubscription $subscription,
     ): NewsletterSubscription {
         if (! $subscription instanceof NewsletterSubscription) {
             $subscription = new NewsletterSubscription();
             $subscription->setParticipant($participant);
             $subscription->setToken(bin2hex(random_bytes(32)));
-            $subscription->setSubscribedAt(new \DateTime());
+            $subscription->setSubscribedAt(new DateTime());
             $subscription->setUnsubscribedAt(null);
             $this->newsletterSubscriptionRepository->add($subscription);
 
             return $subscription;
         }
 
-        $subscription->setSubscribedAt(new \DateTime());
+        $subscription->setSubscribedAt(new DateTime());
         $subscription->setUnsubscribedAt(null);
         if ($subscription->getToken() === '') {
             $subscription->setToken(bin2hex(random_bytes(32)));
@@ -125,7 +126,7 @@ final class NewsletterController extends ActionController
 
     private function buildUnsubscribeUrl(string $token): string
     {
-        $newsletterPid = (int) ($this->settings['newsletterPid'] ?? 0);
+        $newsletterPid = (int)($this->settings['newsletterPid'] ?? 0);
         $uriBuilder = $this->uriBuilder
             ->reset()
             ->setCreateAbsoluteUri(true);
@@ -139,13 +140,13 @@ final class NewsletterController extends ActionController
             ['token' => $token],
             'Newsletter',
             'MensCircle',
-            'Newsletter'
+            'Newsletter',
         );
     }
 
     private function redirectToFormWithMessage(
         string $message,
-        ContextualFeedbackSeverity $severity
+        ContextualFeedbackSeverity $severity,
     ): ResponseInterface {
         $this->addFlashMessage($message, '', $severity);
 

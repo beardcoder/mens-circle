@@ -12,12 +12,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 
 #[AsCommand(
     name: 'menscircle:repair:legacy-datetime',
-    description: 'Repairs legacy imported datetime and time values in mens_circle tables.'
+    description: 'Repairs legacy imported datetime and time values in mens_circle tables.',
 )]
 final class RepairLegacyDateValuesCommand extends Command
 {
@@ -85,7 +86,7 @@ final class RepairLegacyDateValuesCommand extends Command
             $io->success(\sprintf('Repair completed. Updated values: %d', $changes));
 
             return Command::SUCCESS;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             if ($connection->isTransactionActive()) {
                 $connection->rollBack();
             }
@@ -116,16 +117,16 @@ final class RepairLegacyDateValuesCommand extends Command
                 'UPDATE %1$s SET %2$s = %3$s WHERE %2$s IS NOT NULL AND %2$s > 4102444800 AND CHAR_LENGTH(CAST(%2$s AS CHAR)) = 14',
                 $quotedTable,
                 $quotedField,
-                $timestampExpression
-            )
+                $timestampExpression,
+            ),
         );
 
         $changes += $connection->executeStatement(
             \sprintf(
                 'UPDATE %1$s SET %2$s = FLOOR(%2$s / 1000) WHERE %2$s IS NOT NULL AND %2$s > 4102444800 AND CHAR_LENGTH(CAST(%2$s AS CHAR)) = 13',
                 $quotedTable,
-                $quotedField
-            )
+                $quotedField,
+            ),
         );
 
         if ($dateOnly) {
@@ -133,16 +134,16 @@ final class RepairLegacyDateValuesCommand extends Command
                 \sprintf(
                     'UPDATE %1$s SET %2$s = UNIX_TIMESTAMP(STR_TO_DATE(CAST(%2$s AS CHAR), "%%Y%%m%%d")) WHERE %2$s IS NOT NULL AND %2$s > 4102444800 AND CHAR_LENGTH(CAST(%2$s AS CHAR)) = 8',
                     $quotedTable,
-                    $quotedField
-                )
+                    $quotedField,
+                ),
             );
 
             $changes += $connection->executeStatement(
                 \sprintf(
                     'UPDATE %1$s SET %2$s = UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(%2$s))) WHERE %2$s IS NOT NULL AND %2$s > 0 AND %2$s <= 4102444800 AND %2$s <> UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(%2$s)))',
                     $quotedTable,
-                    $quotedField
-                )
+                    $quotedField,
+                ),
             );
         }
 
@@ -159,16 +160,16 @@ final class RepairLegacyDateValuesCommand extends Command
             \sprintf(
                 'UPDATE %1$s SET %2$s = TIME_TO_SEC(TIME(STR_TO_DATE(CAST(%2$s AS CHAR), "%%Y%%m%%d%%H%%i%%s"))) WHERE %2$s IS NOT NULL AND %2$s > 4102444800 AND CHAR_LENGTH(CAST(%2$s AS CHAR)) = 14',
                 $quotedTable,
-                $quotedField
-            )
+                $quotedField,
+            ),
         );
 
         $changes += $connection->executeStatement(
             \sprintf(
                 'UPDATE %1$s SET %2$s = ((%2$s DIV 10000) * 3600) + (((%2$s DIV 100) %% 100) * 60) + (%2$s %% 100) WHERE %2$s IS NOT NULL AND %2$s > 86400 AND %2$s <= 235959',
                 $quotedTable,
-                $quotedField
-            )
+                $quotedField,
+            ),
         );
 
         return $changes;
@@ -198,7 +199,7 @@ final class RepairLegacyDateValuesCommand extends Command
         $columnTypes = [];
         foreach ($connection->createSchemaManager()->listTableColumns($table) as $columnName => $columnDefinition) {
             $type = $columnDefinition->getType();
-            $columnTypes[strtolower((string) $columnName)] = $type instanceof IntegerType
+            $columnTypes[strtolower((string)$columnName)] = $type instanceof IntegerType
                 || $type instanceof BigIntType
                 || $type instanceof SmallIntType;
         }

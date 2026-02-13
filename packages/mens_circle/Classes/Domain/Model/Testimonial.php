@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Domain\Model;
 
+use DateTime;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 final class Testimonial extends AbstractEntity
@@ -18,7 +19,7 @@ final class Testimonial extends AbstractEntity
 
     protected bool $isPublished = false;
 
-    protected ?\DateTime $publishedAt = null;
+    protected ?DateTime $publishedAt = null;
 
     protected int $sortOrder = 0;
 
@@ -72,12 +73,12 @@ final class Testimonial extends AbstractEntity
         $this->isPublished = $isPublished;
     }
 
-    public function getPublishedAt(): ?\DateTime
+    public function getPublishedAt(): ?DateTime
     {
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(?\DateTime $publishedAt): void
+    public function setPublishedAt(?DateTime $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
     }

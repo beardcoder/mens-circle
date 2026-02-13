@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\DataProcessing;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\ParameterType;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -18,14 +19,14 @@ final class NextEventDataProcessor implements DataProcessorInterface
         ContentObjectRenderer $cObj,
         array $contentObjectConfiguration,
         array $processorConfiguration,
-        array $processedData
+        array $processedData,
     ) {
-        $variableName = trim((string) ($processorConfiguration['as'] ?? 'nextEvent'));
+        $variableName = trim((string)($processorConfiguration['as'] ?? 'nextEvent'));
         if ($variableName === '') {
             $variableName = 'nextEvent';
         }
 
-        $eventBasePath = trim((string) ($processorConfiguration['eventBasePath'] ?? '/event'));
+        $eventBasePath = trim((string)($processorConfiguration['eventBasePath'] ?? '/event'));
         if ($eventBasePath === '') {
             $eventBasePath = '/event';
         }
@@ -47,14 +48,14 @@ final class NextEventDataProcessor implements DataProcessorInterface
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable(self::EVENT_TABLE);
 
-        $todayMidnight = new \DateTimeImmutable('today')->getTimestamp();
+        $todayMidnight = (new DateTimeImmutable('today'))->getTimestamp();
 
         $row = $queryBuilder
             ->select('uid', 'title', 'slug')
             ->from(self::EVENT_TABLE)
             ->where(
                 $queryBuilder->expr()->eq('is_published', $queryBuilder->createNamedParameter(1, ParameterType::INTEGER)),
-                $queryBuilder->expr()->gte('event_date', $queryBuilder->createNamedParameter($todayMidnight, ParameterType::INTEGER))
+                $queryBuilder->expr()->gte('event_date', $queryBuilder->createNamedParameter($todayMidnight, ParameterType::INTEGER)),
             )
             ->orderBy('event_date', 'ASC')
             ->addOrderBy('start_time', 'ASC')
@@ -67,7 +68,7 @@ final class NextEventDataProcessor implements DataProcessorInterface
             return null;
         }
 
-        $slug = trim((string) ($row['slug'] ?? ''));
+        $slug = trim((string)($row['slug'] ?? ''));
         $url = rtrim($eventBasePath, '/');
         if ($slug !== '') {
             $url .= '/' . ltrim($slug, '/');
@@ -77,8 +78,8 @@ final class NextEventDataProcessor implements DataProcessorInterface
         }
 
         return [
-            'uid' => (int) ($row['uid'] ?? 0),
-            'title' => trim((string) ($row['title'] ?? '')),
+            'uid' => (int)($row['uid'] ?? 0),
+            'title' => trim((string)($row['title'] ?? '')),
             'slug' => $slug,
             'url' => $url,
         ];
