@@ -4,6 +4,7 @@
  */
 
 import './types';
+import { onTurboLoad } from './components/turbo';
 import { useNavigation, useScrollHeader } from './components/navigation';
 import { useFAQ } from './components/faq';
 import {
@@ -15,9 +16,10 @@ import { useCalendarIntegration } from './components/calendar';
 import { useIntersectionObserver, useParallax } from './composables';
 
 /**
- * Initialize all application features when DOM is ready
+ * Initialize all application features.
+ * Runs on initial load and after every Turbo navigation.
  */
-document.addEventListener('DOMContentLoaded', () => {
+function initComponents(): void {
   // Navigation and header
   useNavigation();
   useScrollHeader();
@@ -32,7 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Enhanced UX composables
   useIntersectionObserver({ threshold: 0.1, amount: 0.3 });
   useParallax();
-});
+}
+
+// Run once on first load
+initComponents();
+
+// Re-run after each Turbo page navigation
+onTurboLoad(initComponents);
 
 // Performance monitoring (only in development)
 if (import.meta.env.DEV && 'PerformanceObserver' in globalThis) {

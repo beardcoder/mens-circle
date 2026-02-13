@@ -13,6 +13,7 @@
     "@fontsource-variable/cormorant": "^5.2.8",
     "@fontsource-variable/dm-sans": "^5.2.8",
     "@fontsource-variable/playfair-display": "^5.2.8",
+    "@hotwired/turbo": "^8.0.23",
     "motion": "^12.33.0"
   },
   "devDependencies": {
