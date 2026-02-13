@@ -1,6 +1,6 @@
 base: /
 dependencies:
-  - markussommer/mens-circle
+  - beardcoder/mens-circle
 languages:
   -
     title: Deutsch
