@@ -12,7 +12,6 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Mime\Address;
 use Throwable;
-use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\View\TemplateView;
@@ -22,12 +21,9 @@ final class MailService
     private const MAIL_TEMPLATE_ROOT_PATH = 'EXT:mens_circle/Resources/Private/Templates/Mail/';
     private const MAIL_LAYOUT_ROOT_PATH = 'EXT:mens_circle/Resources/Private/Templates/Layouts/Mail/';
 
-    private readonly LoggerInterface $logger;
-
-    public function __construct()
-    {
-        $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(self::class);
-    }
+    public function __construct(
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * @param array<string, mixed> $settings

@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Command;
 
 use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
-use BeardCoder\MensCircle\Message\SendEventMailMessage;
-use BeardCoder\MensCircle\Message\SendEventSmsMessage;
+use BeardCoder\MensCircle\Message\SendEventNotificationMessage;
 use DateTimeImmutable;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
@@ -109,9 +108,10 @@ final class DispatchEventRemindersCommand extends Command
             }
 
             if (!$dryRun) {
-                $this->messageBus->dispatch(new SendEventMailMessage(
+                $this->messageBus->dispatch(new SendEventNotificationMessage(
                     registrationUid: $registrationUid,
-                    type: SendEventMailMessage::TYPE_REMINDER,
+                    type: SendEventNotificationMessage::TYPE_REMINDER,
+                    channel: SendEventNotificationMessage::CHANNEL_EMAIL,
                     settings: $settings,
                 ));
             }
@@ -119,9 +119,10 @@ final class DispatchEventRemindersCommand extends Command
 
             if ($phone !== '') {
                 if (!$dryRun) {
-                    $this->messageBus->dispatch(new SendEventSmsMessage(
+                    $this->messageBus->dispatch(new SendEventNotificationMessage(
                         registrationUid: $registrationUid,
-                        type: SendEventSmsMessage::TYPE_REMINDER,
+                        type: SendEventNotificationMessage::TYPE_REMINDER,
+                        channel: SendEventNotificationMessage::CHANNEL_SMS,
                         settings: $settings,
                     ));
                 }

@@ -10,19 +10,14 @@ use Psr\Log\LogLevel;
 use Throwable;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
-use TYPO3\CMS\Core\Log\LogManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class SmsService
 {
-    private readonly LoggerInterface $logger;
-
     public function __construct(
         private readonly RequestFactory $requestFactory,
         private readonly ExtensionConfiguration $extensionConfiguration,
-    ) {
-        $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(self::class);
-    }
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * @param array{

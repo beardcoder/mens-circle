@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Service;
 
-use Doctrine\DBAL\ParameterType;
-use TYPO3\CMS\Core\Database\ConnectionPool;
+use BeardCoder\MensCircle\Domain\Model\Registration;
+use BeardCoder\MensCircle\Domain\Repository\RegistrationRepository;
 
 final readonly class RegistrationNotificationDataService
 {
-    private const REGISTRATION_TABLE = 'tx_menscircle_domain_model_registration';
-    private const EVENT_TABLE = 'tx_menscircle_domain_model_event';
-    private const PARTICIPANT_TABLE = 'tx_menscircle_domain_model_participant';
-
     public function __construct(
-        private ConnectionPool $connectionPool,
+        private RegistrationRepository $registrationRepository,
     ) {}
 
     /**
@@ -40,78 +36,33 @@ final readonly class RegistrationNotificationDataService
             return null;
         }
 
-        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::REGISTRATION_TABLE);
-        $queryBuilder->getRestrictions()->removeAll();
+        /** @var Registration|null $registration */
+        $registration = $this->registrationRepository->findByUid($registrationUid);
+        if (!$registration instanceof Registration) {
+            return null;
+        }
 
-        $row = $queryBuilder
-            ->select(
-                'registration.uid',
-                'registration.status',
-                'participant.email',
-                'participant.first_name',
-                'participant.last_name',
-                'participant.phone',
-                'event.title',
-                'event.slug',
-                'event.event_date',
-                'event.start_time',
-                'event.end_time',
-                'event.location',
-                'event.city',
-            )
-            ->from(self::REGISTRATION_TABLE, 'registration')
-            ->innerJoin(
-                'registration',
-                self::PARTICIPANT_TABLE,
-                'participant',
-                $queryBuilder->expr()->eq(
-                    'participant.uid',
-                    $queryBuilder->quoteIdentifier('registration.participant'),
-                ),
-            )
-            ->innerJoin(
-                'registration',
-                self::EVENT_TABLE,
-                'event',
-                $queryBuilder->expr()->eq(
-                    'event.uid',
-                    $queryBuilder->quoteIdentifier('registration.event'),
-                ),
-            )
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'registration.uid',
-                    $queryBuilder->createNamedParameter($registrationUid, ParameterType::INTEGER),
-                ),
-                $queryBuilder->expr()->eq('registration.deleted', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
-                $queryBuilder->expr()->eq('registration.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
-                $queryBuilder->expr()->eq('participant.deleted', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
-                $queryBuilder->expr()->eq('participant.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
-                $queryBuilder->expr()->eq('event.deleted', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
-                $queryBuilder->expr()->eq('event.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
-            )
-            ->setMaxResults(1)
-            ->executeQuery()
-            ->fetchAssociative();
+        $participant = $registration->getParticipant();
+        $event = $registration->getEvent();
 
-        if (!\is_array($row)) {
+        if ($participant === null || $event === null) {
             return null;
         }
 
         return [
-            'registrationUid' => (int)($row['uid'] ?? 0),
-            'status' => trim((string)($row['status'] ?? '')),
-            'participantEmail' => strtolower(trim((string)($row['email'] ?? ''))),
-            'participantFirstName' => trim((string)($row['first_name'] ?? '')),
-            'participantLastName' => trim((string)($row['last_name'] ?? '')),
-            'participantPhone' => trim((string)($row['phone'] ?? '')),
-            'eventTitle' => trim((string)($row['title'] ?? '')),
-            'eventSlug' => trim((string)($row['slug'] ?? '')),
-            'eventDate' => trim((string)($row['event_date'] ?? '')),
-            'eventStartTime' => trim((string)($row['start_time'] ?? '')),
-            'eventEndTime' => trim((string)($row['end_time'] ?? '')),
-            'eventLocation' => trim((string)($row['location'] ?? '')),
-            'eventCity' => trim((string)($row['city'] ?? '')),
+            'registrationUid' => (int)$registration->getUid(),
+            'status' => $registration->getStatus(),
+            'participantEmail' => strtolower(trim($participant->getEmail())),
+            'participantFirstName' => $participant->getFirstName(),
+            'participantLastName' => $participant->getLastName(),
+            'participantPhone' => $participant->getPhone(),
+            'eventTitle' => $event->getTitle(),
+            'eventSlug' => $event->getSlug(),
+            'eventDate' => $event->getEventDate()?->format('Y-m-d H:i:s') ?? '',
+            'eventStartTime' => $event->getStartTime()?->format('H:i:s') ?? '',
+            'eventEndTime' => $event->getEndTime()?->format('H:i:s') ?? '',
+            'eventLocation' => $event->getLocation(),
+            'eventCity' => $event->getCity(),
         ];
     }
 }

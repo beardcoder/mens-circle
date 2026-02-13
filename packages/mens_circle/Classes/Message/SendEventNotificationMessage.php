@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Message;
 
-final readonly class SendEventMailMessage
+final readonly class SendEventNotificationMessage
 {
     public const TYPE_REGISTRATION_CONFIRMATION = 'registration_confirmation';
     public const TYPE_REMINDER = 'reminder';
+
+    public const CHANNEL_EMAIL = 'email';
+    public const CHANNEL_SMS = 'sms';
 
     /**
      * @param array<string, mixed> $settings
@@ -15,6 +18,7 @@ final readonly class SendEventMailMessage
     public function __construct(
         private int $registrationUid,
         private string $type,
+        private string $channel,
         private array $settings = [],
     ) {}
 
@@ -26,6 +30,11 @@ final readonly class SendEventMailMessage
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getChannel(): string
+    {
+        return $this->channel;
     }
 
     /**
