@@ -1,6 +1,6 @@
 /**
- * Form enhancements for Extbase forms.
- * Native submit/redirect stays untouched.
+ * Form enhancements for Extbase forms with Hotwired Turbo support.
+ * Forms work seamlessly with Turbo Drive for SPA-like navigation and submissions.
  */
 
 import { validateEmail } from '../utils/helpers';
@@ -20,13 +20,18 @@ function clearValidationError(
   input.setCustomValidity('');
 }
 
+/**
+ * Newsletter form with Turbo support
+ * Turbo automatically handles form submissions as AJAX requests
+ */
 export function useNewsletterForm(): void {
   const form = document.querySelector<HTMLFormElement>('.newsletter__form');
   if (!form) {
     return;
   }
 
-  form.addEventListener('submit', (event) => {
+  // Use turbo:submit-start for validation before Turbo submits
+  form.addEventListener('turbo:submit-start', (event) => {
     const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
     const email = emailInput?.value.trim() ?? '';
 
@@ -41,15 +46,28 @@ export function useNewsletterForm(): void {
     clearValidationError(emailInput);
     trackEvent(TRACKING_EVENTS.NEWSLETTER_SUBMIT);
   });
+
+  // Handle successful submission
+  form.addEventListener('turbo:submit-end', (event: Event) => {
+    const customEvent = event as CustomEvent;
+    if (customEvent.detail.success) {
+      // Form submitted successfully - Turbo will handle the response
+      form.reset();
+    }
+  });
 }
 
+/**
+ * Event registration form with Turbo support
+ * Validates all required fields before allowing Turbo to submit
+ */
 export function useRegistrationForm(): void {
   const form = document.querySelector<HTMLFormElement>('.event-register__form');
   if (!form) {
     return;
   }
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('turbo:submit-start', (event) => {
     const eventInput = form.querySelector<HTMLInputElement>('input[name="event"]');
     const firstNameInput = form.querySelector<HTMLInputElement>('input[name="firstName"]');
     const lastNameInput = form.querySelector<HTMLInputElement>('input[name="lastName"]');
@@ -98,15 +116,28 @@ export function useRegistrationForm(): void {
       has_phone: phoneInput?.value.trim() ? 'yes' : 'no',
     });
   });
+
+  // Handle successful submission
+  form.addEventListener('turbo:submit-end', (event: Event) => {
+    const customEvent = event as CustomEvent;
+    if (customEvent.detail.success) {
+      // Turbo will handle the redirect to success page
+      // No need to manually reset form as user will be redirected
+    }
+  });
 }
 
+/**
+ * Testimonial form with Turbo support
+ * Validates content quality before submission
+ */
 export function useTestimonialForm(): void {
   const form = document.querySelector<HTMLFormElement>('.testimonial-form');
   if (!form) {
     return;
   }
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('turbo:submit-start', (event) => {
     const quoteInput = form.querySelector<HTMLTextAreaElement>('textarea[name="quote"]');
     const nameInput = form.querySelector<HTMLInputElement>('input[name="authorName"]');
     const roleInput = form.querySelector<HTMLInputElement>('input[name="role"]');
@@ -144,5 +175,14 @@ export function useTestimonialForm(): void {
       has_role: roleInput?.value.trim() ? 'yes' : 'no',
       char_count: quote.length,
     });
+  });
+
+  // Handle successful submission
+  form.addEventListener('turbo:submit-end', (event: Event) => {
+    const customEvent = event as CustomEvent;
+    if (customEvent.detail.success) {
+      // Form submitted successfully - Turbo will handle the response
+      form.reset();
+    }
   });
 }

@@ -44,7 +44,19 @@
   },
   "scripts": {
     "typo3": "vendor/bin/typo3",
-    "setup": "vendor/bin/typo3 setup"
+    "setup": "vendor/bin/typo3 setup",
+    "phpstan": "vendor/bin/phpstan analyse --memory-limit=1G",
+    "phpstan:baseline": "vendor/bin/phpstan analyse --memory-limit=1G --generate-baseline",
+    "cs:fix": "vendor/bin/php-cs-fixer fix",
+    "cs:check": "vendor/bin/php-cs-fixer fix --dry-run --diff",
+    "qa": [
+      "@cs:fix",
+      "@phpstan"
+    ],
+    "qa:check": [
+      "@cs:check",
+      "@phpstan"
+    ]
   },
   "repositories": {
     "packages": {

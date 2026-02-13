@@ -1,9 +1,10 @@
 /**
  * Männerkreis Niederbayern / Straubing - Application Entry Point
- * Modern, performant, and accessible web application
+ * Modern, performant, and accessible web application with Hotwired Turbo
  */
 
 import './types';
+import * as Turbo from '@hotwired/turbo';
 import { useNavigation, useScrollHeader } from './components/navigation';
 import { useFAQ } from './components/faq';
 import {
@@ -14,10 +15,14 @@ import {
 import { useCalendarIntegration } from './components/calendar';
 import { useIntersectionObserver, useParallax } from './composables';
 
+// Enable Turbo Drive for SPA-like navigation
+Turbo.start();
+
 /**
  * Initialize all application features when DOM is ready
+ * With Turbo, this needs to be bound to turbo:load instead of DOMContentLoaded
  */
-document.addEventListener('DOMContentLoaded', () => {
+function initializeApp(): void {
   // Navigation and header
   useNavigation();
   useScrollHeader();
@@ -32,7 +37,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Enhanced UX composables
   useIntersectionObserver({ threshold: 0.1, amount: 0.3 });
   useParallax();
-});
+}
+
+// Initial load
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Turbo navigation (when navigating between pages)
+document.addEventListener('turbo:load', initializeApp);
+
+// Turbo form submissions (re-initialize after form submit)
+document.addEventListener('turbo:frame-load', initializeApp);
 
 // Performance monitoring (only in development)
 if (import.meta.env.DEV && 'PerformanceObserver' in globalThis) {
@@ -47,3 +61,4 @@ if (import.meta.env.DEV && 'PerformanceObserver' in globalThis) {
 
   perfObserver.observe({ entryTypes: ['largest-contentful-paint'] });
 }
+

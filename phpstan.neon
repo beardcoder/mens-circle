@@ -1,0 +1,53 @@
+# PHPStan configuration for TYPO3 v14.1
+# Documentation: https://phpstan.org/config-reference
+
+parameters:
+	level: 5
+
+	paths:
+		- packages/mens_circle/Classes
+		- packages/mens_circle/Configuration
+		- packages/mens_circle/ext_localconf.php
+		- packages/mens_circle/ext_tables.php
+
+	excludePaths:
+		- */vendor/*
+		- */var/*
+		- */public/*
+		- */Resources/*
+
+	# TYPO3-specific bootstrapping
+	bootstrapFiles:
+		- %currentWorkingDirectory%/vendor/autoload.php
+
+	# Ignore common TYPO3 patterns
+	ignoreErrors:
+		# TYPO3 global arrays
+		- '#Undefined variable: \$GLOBALS#'
+
+		# TYPO3 TCA patterns
+		- '#Cannot access offset .* on mixed#'
+
+		# Allow dynamic properties in legacy code (will be addressed gradually)
+		- '#Access to an undefined property.*#'
+
+	# Check for dead code
+	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false
+
+	# Strict rules
+	checkAlwaysTrueCheckTypeFunctionCall: true
+	checkAlwaysTrueInstanceof: true
+	checkAlwaysTrueStrictComparison: true
+	checkExplicitMixedMissingReturn: true
+	checkFunctionNameCase: true
+	checkInternalClassCaseSensitivity: true
+
+	# Report unused private elements
+	reportUnmatchedIgnoredErrors: true
+	checkTooWideReturnTypesInProtectedAndPublicMethods: true
+	checkUninitializedProperties: true
+	checkMissingCallableSignature: true
+
+	# Better error messages
+	treatPhpDocTypesAsCertain: false
