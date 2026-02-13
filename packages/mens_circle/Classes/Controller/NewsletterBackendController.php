@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Controller;
+namespace BeardCoder\MensCircle\Controller;
 
-use MarkusSommer\MensCircle\Message\SendNewsletterMessage;
+use BeardCoder\MensCircle\Message\SendNewsletterMessage;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
@@ -24,8 +24,7 @@ final class NewsletterBackendController extends ActionController
         private readonly MessageBusInterface $messageBus,
         private readonly SystemResourceFactory $systemResourceFactory,
         private readonly SystemResourcePublisherInterface $systemResourcePublisher
-    ) {
-    }
+    ) {}
 
     public function indexAction(): ResponseInterface
     {
@@ -36,7 +35,7 @@ final class NewsletterBackendController extends ActionController
             ->setFlashMessageQueue($this->getFlashMessageQueue())
             ->setTitle($this->translate('headline'))
             ->assignMultiple([
-                'recipientCount' => count($recipients),
+                'recipientCount' => \count($recipients),
                 'recipients' => $this->buildRecipientPreview($recipients),
                 'rteOptionsJson' => $this->buildRteOptionsJson(),
             ])
@@ -79,7 +78,7 @@ final class NewsletterBackendController extends ActionController
 
         if ($dispatchedCount > 0) {
             $this->addFlashMessage(
-                sprintf('Newsletter an den Message Bus übergeben: %d Empfänger.', $dispatchedCount),
+                \sprintf('Newsletter an den Message Bus übergeben: %d Empfänger.', $dispatchedCount),
                 '',
                 ContextualFeedbackSeverity::OK
             );
@@ -87,7 +86,7 @@ final class NewsletterBackendController extends ActionController
 
         if ($failedCount > 0) {
             $this->addFlashMessage(
-                sprintf('Übergabe an den Message Bus nicht vollständig: %d Empfänger konnten nicht übergeben werden.', $failedCount),
+                \sprintf('Übergabe an den Message Bus nicht vollständig: %d Empfänger konnten nicht übergeben werden.', $failedCount),
                 '',
                 ContextualFeedbackSeverity::WARNING
             );
@@ -130,7 +129,7 @@ final class NewsletterBackendController extends ActionController
             ->executeQuery()
             ->fetchAllAssociative();
 
-        return is_array($rows) ? $rows : [];
+        return \is_array($rows) ? $rows : [];
     }
 
     /**
@@ -140,12 +139,10 @@ final class NewsletterBackendController extends ActionController
     private function buildRecipientPreview(array $recipients): array
     {
         return array_map(
-            function (array $recipient): array {
-                return [
+            fn(array $recipient): array => [
                 'name' => $this->buildRecipientName($recipient),
                 'email' => (string) ($recipient['email'] ?? ''),
-                ];
-            },
+            ],
             $recipients
         );
     }
@@ -197,7 +194,7 @@ final class NewsletterBackendController extends ActionController
     {
         $baseUrl = rtrim((string) ($this->settings['baseUrl'] ?? ''), '/');
         $newsletterPid = (int) ($this->settings['newsletterPid'] ?? 0);
-        $settings = is_array($this->settings) ? $this->settings : [];
+        $settings = \is_array($this->settings) ? $this->settings : [];
 
         $dispatchedCount = 0;
         $failedCount = 0;
@@ -308,6 +305,6 @@ final class NewsletterBackendController extends ActionController
         $languageKey = 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_mod_newsletter.xlf:' . $key;
         $translated = $GLOBALS['LANG']?->sL($languageKey);
 
-        return is_string($translated) && $translated !== '' ? $translated : $key;
+        return \is_string($translated) && $translated !== '' ? $translated : $key;
     }
 }

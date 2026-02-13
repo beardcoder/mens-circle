@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Domain\Repository;
+namespace BeardCoder\MensCircle\Domain\Repository;
 
-use MarkusSommer\MensCircle\Domain\Model\Event;
+use BeardCoder\MensCircle\Domain\Model\Event;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;

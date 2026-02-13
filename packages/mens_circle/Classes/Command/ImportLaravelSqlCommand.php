@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Command;
+namespace BeardCoder\MensCircle\Command;
 
 use Doctrine\DBAL\ParameterType;
 use TYPO3\CMS\Core\Database\Connection;
@@ -176,7 +176,7 @@ final class ImportLaravelSqlCommand extends Command
         $sqlFile = (string) $input->getArgument('sql-file');
         $realPath = realpath($sqlFile);
         if ($realPath === false || !is_file($realPath)) {
-            $this->writeError($io, sprintf('SQL-Datei nicht gefunden: %s', $sqlFile));
+            $this->writeError($io, \sprintf('SQL-Datei nicht gefunden: %s', $sqlFile));
 
             return Command::FAILURE;
         }
@@ -201,10 +201,10 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         $io->title('Laravel -> TYPO3 Import (EXT:mens_circle)');
-        $io->text(sprintf('SQL: %s', $realPath));
-        $io->text(sprintf('Storage PID: %d', $pid));
-        $io->text(sprintf('Content PID: %d', $contentPid));
-        $io->text(sprintf('Source Page Slug: %s', $sourcePageSlug));
+        $io->text(\sprintf('SQL: %s', $realPath));
+        $io->text(\sprintf('Storage PID: %d', $pid));
+        $io->text(\sprintf('Content PID: %d', $contentPid));
+        $io->text(\sprintf('Source Page Slug: %s', $sourcePageSlug));
 
         $sqlContent = (string) file_get_contents($realPath);
         if ($sqlContent === '') {
@@ -214,7 +214,7 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         $sourceData = $this->parseInsertStatements($sqlContent);
-        $sourceData['registrations'] = $sourceData['registrations'] ?? $sourceData['event_registrations'] ?? [];
+        $sourceData['registrations'] ??= $sourceData['event_registrations'] ?? [];
 
         $participants = $sourceData['participants'] ?? [];
         $events = $sourceData['events'] ?? [];
@@ -226,7 +226,7 @@ final class ImportLaravelSqlCommand extends Command
         $selectedPageId = $this->resolveSourcePageId($pages, $sourcePageSlug);
 
         if ($contentBlocks !== [] && $pages !== [] && $selectedPageId <= 0) {
-            $this->writeError($io, sprintf('Der angegebene Source-Page-Slug "%s" wurde in der Tabelle "pages" nicht gefunden.', $sourcePageSlug));
+            $this->writeError($io, \sprintf('Der angegebene Source-Page-Slug "%s" wurde in der Tabelle "pages" nicht gefunden.', $sourcePageSlug));
 
             return Command::FAILURE;
         }
@@ -247,18 +247,18 @@ final class ImportLaravelSqlCommand extends Command
 
         $io->section('Quell-Daten');
         $sourceStats = [
-            sprintf('participants: %d', count($participants)),
-            sprintf('events: %d', count($events)),
-            sprintf('registrations: %d', count($registrations)),
-            sprintf('newsletter_subscriptions: %d', count($newsletterSubscriptions)),
-            sprintf('testimonials: %d', count($testimonials)),
-            sprintf('pages: %d', count($pages)),
-            sprintf('content_blocks: %d', count($contentBlocks)),
+            \sprintf('participants: %d', \count($participants)),
+            \sprintf('events: %d', \count($events)),
+            \sprintf('registrations: %d', \count($registrations)),
+            \sprintf('newsletter_subscriptions: %d', \count($newsletterSubscriptions)),
+            \sprintf('testimonials: %d', \count($testimonials)),
+            \sprintf('pages: %d', \count($pages)),
+            \sprintf('content_blocks: %d', \count($contentBlocks)),
         ];
         if ($selectedPageId > 0) {
-            $sourceStats[] = sprintf('selected page id (%s): %d', $sourcePageSlug, $selectedPageId);
+            $sourceStats[] = \sprintf('selected page id (%s): %d', $sourcePageSlug, $selectedPageId);
         } else {
-            $sourceStats[] = sprintf('selected page id (%s): not found', $sourcePageSlug);
+            $sourceStats[] = \sprintf('selected page id (%s): not found', $sourcePageSlug);
         }
         $io->listing($sourceStats);
 
@@ -304,17 +304,17 @@ final class ImportLaravelSqlCommand extends Command
 
             $io->section('Import Ergebnis');
             $io->listing([
-                sprintf('participants importiert: %d', $importStats['participantsImported']),
-                sprintf('events importiert: %d', $importStats['eventsImported']),
-                sprintf('registrations importiert: %d', $importStats['registrationsImported']),
-                sprintf('registrations übersprungen: %d', $importStats['registrationsSkipped']),
-                sprintf('newsletter_subscriptions importiert: %d', $importStats['newsletterImported']),
-                sprintf('newsletter_subscriptions übersprungen: %d', $importStats['newsletterSkipped']),
-                sprintf('testimonials importiert: %d', $importStats['testimonialsImported']),
-                sprintf('pages erstellt: %d', $importStats['pagesCreated']),
-                sprintf('pages aktualisiert: %d', $importStats['pagesUpdated']),
-                sprintf('content_blocks importiert: %d', $importStats['contentBlocksImported']),
-                sprintf('content_blocks übersprungen: %d', $importStats['contentBlocksSkipped']),
+                \sprintf('participants importiert: %d', $importStats['participantsImported']),
+                \sprintf('events importiert: %d', $importStats['eventsImported']),
+                \sprintf('registrations importiert: %d', $importStats['registrationsImported']),
+                \sprintf('registrations übersprungen: %d', $importStats['registrationsSkipped']),
+                \sprintf('newsletter_subscriptions importiert: %d', $importStats['newsletterImported']),
+                \sprintf('newsletter_subscriptions übersprungen: %d', $importStats['newsletterSkipped']),
+                \sprintf('testimonials importiert: %d', $importStats['testimonialsImported']),
+                \sprintf('pages erstellt: %d', $importStats['pagesCreated']),
+                \sprintf('pages aktualisiert: %d', $importStats['pagesUpdated']),
+                \sprintf('content_blocks importiert: %d', $importStats['contentBlocksImported']),
+                \sprintf('content_blocks übersprungen: %d', $importStats['contentBlocksSkipped']),
             ]);
 
             $io->success('Import abgeschlossen.');
@@ -461,7 +461,7 @@ final class ImportLaravelSqlCommand extends Command
             if ($status === 'confirmed') {
                 $status = 'registered';
             }
-            if (!in_array($status, ['registered', 'attended', 'cancelled'], true)) {
+            if (!\in_array($status, ['registered', 'attended', 'cancelled'], true)) {
                 $status = 'registered';
             }
 
@@ -618,7 +618,7 @@ final class ImportLaravelSqlCommand extends Command
 
         usort(
             $sourcePages,
-            static fn (array $left, array $right): int => (int) ($left['id'] ?? 0) <=> (int) ($right['id'] ?? 0)
+            static fn(array $left, array $right): int => (int) ($left['id'] ?? 0) <=> (int) ($right['id'] ?? 0)
         );
 
         if ($selectedSourcePageId <= 0) {
@@ -725,7 +725,7 @@ final class ImportLaravelSqlCommand extends Command
                 $newPageUid = $this->findPageUidBySlug($connection, $targetPid, $targetSlug);
             }
             if ($newPageUid <= 0) {
-                throw new \RuntimeException(sprintf('Import fehlgeschlagen: Konnte Zielseite für Source-Page %d nicht ermitteln.', $sourcePageId));
+                throw new \RuntimeException(\sprintf('Import fehlgeschlagen: Konnte Zielseite für Source-Page %d nicht ermitteln.', $sourcePageId));
             }
 
             $pageMap[$sourcePageId] = $newPageUid;
@@ -836,7 +836,7 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         $quotedTypes = array_map(
-            static fn (string $type): string => $connection->quote($type),
+            static fn(string $type): string => $connection->quote($type),
             $contentTypes
         );
         $inList = implode(',', $quotedTypes);
@@ -846,7 +846,7 @@ final class ImportLaravelSqlCommand extends Command
             ->count('*')
             ->from('tt_content')
             ->where(
-                sprintf('(CType IN (%s) OR CType = :emptyType OR CType IS NULL)', $inList)
+                \sprintf('(CType IN (%s) OR CType = :emptyType OR CType IS NULL)', $inList)
             )
             ->setParameter('emptyType', '', ParameterType::STRING)
             ->executeQuery()
@@ -863,7 +863,7 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         $quotedTypes = array_map(
-            static fn (string $type): string => $connection->quote($type),
+            static fn(string $type): string => $connection->quote($type),
             $contentTypes
         );
         $inList = implode(',', $quotedTypes);
@@ -872,7 +872,7 @@ final class ImportLaravelSqlCommand extends Command
         $queryBuilder
             ->delete('tt_content')
             ->where(
-                sprintf('(CType IN (%s) OR CType = :emptyType OR CType IS NULL)', $inList)
+                \sprintf('(CType IN (%s) OR CType = :emptyType OR CType IS NULL)', $inList)
             )
             ->setParameter('emptyType', '', ParameterType::STRING)
             ->executeStatement();
@@ -885,7 +885,7 @@ final class ImportLaravelSqlCommand extends Command
     {
         $filteredRow = $this->filterRowForExistingColumns($connection, $table, $row);
         if ($filteredRow === []) {
-            throw new \RuntimeException(sprintf('Import fehlgeschlagen: Keine passenden Spalten für Tabelle "%s".', $table));
+            throw new \RuntimeException(\sprintf('Import fehlgeschlagen: Keine passenden Spalten für Tabelle "%s".', $table));
         }
         if ($table === 'tt_content') {
             $recordTypeValue = null;
@@ -916,7 +916,7 @@ final class ImportLaravelSqlCommand extends Command
 
         $filteredCriteria = $this->filterRowForExistingColumns($connection, $table, $criteria);
         if ($filteredCriteria === []) {
-            throw new \RuntimeException(sprintf('Import fehlgeschlagen: Keine gültigen Update-Kriterien für Tabelle "%s".', $table));
+            throw new \RuntimeException(\sprintf('Import fehlgeschlagen: Keine gültigen Update-Kriterien für Tabelle "%s".', $table));
         }
 
         $connection->update($table, $filteredRow, $filteredCriteria);
@@ -975,7 +975,7 @@ final class ImportLaravelSqlCommand extends Command
 
             if ($columnsPart !== '') {
                 $columns = array_map(
-                    static fn (string $column): string => trim($column, " \t\n\r\0\x0B`\""),
+                    static fn(string $column): string => trim($column, " \t\n\r\0\x0B`\""),
                     explode(',', $columnsPart)
                 );
             } else {
@@ -989,7 +989,7 @@ final class ImportLaravelSqlCommand extends Command
             $tuples = $this->splitSqlTuples((string) $match[3]);
             foreach ($tuples as $tuple) {
                 $values = $this->splitSqlFields($tuple);
-                if (count($values) !== count($columns)) {
+                if (\count($values) !== \count($columns)) {
                     continue;
                 }
 
@@ -1015,7 +1015,7 @@ final class ImportLaravelSqlCommand extends Command
         $depth = 0;
         $inString = false;
         $escaped = false;
-        $length = strlen($valuesPart);
+        $length = \strlen($valuesPart);
 
         for ($i = 0; $i < $length; $i++) {
             $char = $valuesPart[$i];
@@ -1082,7 +1082,7 @@ final class ImportLaravelSqlCommand extends Command
         $buffer = '';
         $inString = false;
         $escaped = false;
-        $length = strlen($tuple);
+        $length = \strlen($tuple);
 
         for ($i = 0; $i < $length; $i++) {
             $char = $tuple[$i];
@@ -1144,8 +1144,8 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         $lowerValue = strtolower($trimmed);
-        if (in_array($lowerValue, ['true', 'false', 't', 'f'], true)) {
-            return in_array($lowerValue, ['true', 't'], true);
+        if (\in_array($lowerValue, ['true', 'false', 't', 'f'], true)) {
+            return \in_array($lowerValue, ['true', 't'], true);
         }
 
         if (preg_match('/^-?\d+$/', $trimmed) === 1) {
@@ -1201,7 +1201,7 @@ final class ImportLaravelSqlCommand extends Command
         return array_values(
             array_filter(
                 $contentBlocks,
-                static fn (array $row): bool => (int) ($row['page_id'] ?? 0) === $sourcePageId
+                static fn(array $row): bool => (int) ($row['page_id'] ?? 0) === $sourcePageId
             )
         );
     }
@@ -1353,9 +1353,9 @@ final class ImportLaravelSqlCommand extends Command
                 $values = $this->toArray($data['values'] ?? []);
                 for ($index = 1; $index <= 4; $index++) {
                     $valueRow = $this->toArray($values[$index - 1] ?? []);
-                    $flexFormValues[sprintf('settings.value%dNumber', $index)] = $this->toString($valueRow['number'] ?? '');
-                    $flexFormValues[sprintf('settings.value%dTitle', $index)] = $this->toString($valueRow['title'] ?? '');
-                    $flexFormValues[sprintf('settings.value%dDescription', $index)] = $this->toString($valueRow['description'] ?? '');
+                    $flexFormValues[\sprintf('settings.value%dNumber', $index)] = $this->toString($valueRow['number'] ?? '');
+                    $flexFormValues[\sprintf('settings.value%dTitle', $index)] = $this->toString($valueRow['title'] ?? '');
+                    $flexFormValues[\sprintf('settings.value%dDescription', $index)] = $this->toString($valueRow['description'] ?? '');
                 }
                 break;
 
@@ -1373,9 +1373,9 @@ final class ImportLaravelSqlCommand extends Command
                 $items = $this->toArray($data['items'] ?? []);
                 for ($index = 1; $index <= 6; $index++) {
                     $itemRow = $this->toArray($items[$index - 1] ?? []);
-                    $flexFormValues[sprintf('settings.item%dNumber', $index)] = $this->toString($itemRow['number'] ?? '');
-                    $flexFormValues[sprintf('settings.item%dTitle', $index)] = $this->toString($itemRow['title'] ?? '');
-                    $flexFormValues[sprintf('settings.item%dDescription', $index)] = $this->toString($itemRow['description'] ?? '');
+                    $flexFormValues[\sprintf('settings.item%dNumber', $index)] = $this->toString($itemRow['number'] ?? '');
+                    $flexFormValues[\sprintf('settings.item%dTitle', $index)] = $this->toString($itemRow['title'] ?? '');
+                    $flexFormValues[\sprintf('settings.item%dDescription', $index)] = $this->toString($itemRow['description'] ?? '');
                 }
                 break;
 
@@ -1395,9 +1395,9 @@ final class ImportLaravelSqlCommand extends Command
                 $steps = $this->toArray($data['steps'] ?? []);
                 for ($index = 1; $index <= 6; $index++) {
                     $stepRow = $this->toArray($steps[$index - 1] ?? []);
-                    $flexFormValues[sprintf('settings.step%dNumber', $index)] = $this->toString($stepRow['number'] ?? '');
-                    $flexFormValues[sprintf('settings.step%dTitle', $index)] = $this->toString($stepRow['title'] ?? '');
-                    $flexFormValues[sprintf('settings.step%dDescription', $index)] = $this->toString($stepRow['description'] ?? '');
+                    $flexFormValues[\sprintf('settings.step%dNumber', $index)] = $this->toString($stepRow['number'] ?? '');
+                    $flexFormValues[\sprintf('settings.step%dTitle', $index)] = $this->toString($stepRow['title'] ?? '');
+                    $flexFormValues[\sprintf('settings.step%dDescription', $index)] = $this->toString($stepRow['description'] ?? '');
                 }
                 break;
 
@@ -1417,8 +1417,8 @@ final class ImportLaravelSqlCommand extends Command
                 $items = $this->toArray($data['items'] ?? []);
                 for ($index = 1; $index <= 6; $index++) {
                     $itemRow = $this->toArray($items[$index - 1] ?? []);
-                    $flexFormValues[sprintf('settings.item%dQuestion', $index)] = $this->toString($itemRow['question'] ?? '');
-                    $flexFormValues[sprintf('settings.item%dAnswer', $index)] = $this->toString($itemRow['answer'] ?? '');
+                    $flexFormValues[\sprintf('settings.item%dQuestion', $index)] = $this->toString($itemRow['question'] ?? '');
+                    $flexFormValues[\sprintf('settings.item%dAnswer', $index)] = $this->toString($itemRow['answer'] ?? '');
                 }
                 break;
 
@@ -1496,7 +1496,7 @@ final class ImportLaravelSqlCommand extends Command
 
         $xml = new \SimpleXMLElement('<T3FlexForms><data><sheet index="sDEF"><language index="lDEF"></language></sheet></data></T3FlexForms>');
         $languageNodes = $xml->xpath('/T3FlexForms/data/sheet/language');
-        if (!is_array($languageNodes) || !isset($languageNodes[0]) || !$languageNodes[0] instanceof \SimpleXMLElement) {
+        if (!\is_array($languageNodes) || !isset($languageNodes[0]) || !$languageNodes[0] instanceof \SimpleXMLElement) {
             return '';
         }
         $languageNode = $languageNodes[0];
@@ -1519,11 +1519,11 @@ final class ImportLaravelSqlCommand extends Command
      */
     private function decodeJsonAssociative(mixed $value): array
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             return $value;
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             return [];
         }
 
@@ -1533,7 +1533,7 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         $decoded = json_decode($json, true);
-        if (is_array($decoded)) {
+        if (\is_array($decoded)) {
             return $decoded;
         }
 
@@ -1545,7 +1545,7 @@ final class ImportLaravelSqlCommand extends Command
      */
     private function toArray(mixed $value): array
     {
-        return is_array($value) ? $value : [];
+        return \is_array($value) ? $value : [];
     }
 
     private function toUnixTimestamp(mixed $value): int
@@ -1654,7 +1654,7 @@ final class ImportLaravelSqlCommand extends Command
             return null;
         }
 
-        if (is_int($value) || is_float($value)) {
+        if (\is_int($value) || \is_float($value)) {
             $numeric = (int) $value;
             if ($numeric <= 0) {
                 return null;
@@ -1674,7 +1674,7 @@ final class ImportLaravelSqlCommand extends Command
             }
 
             if ($numeric <= 4102444800) {
-                return (new \DateTimeImmutable())->setTimestamp($numeric);
+                return new \DateTimeImmutable()->setTimestamp($numeric);
             }
 
             return null;
@@ -1700,7 +1700,7 @@ final class ImportLaravelSqlCommand extends Command
 
             $numeric = (int) $string;
             if ($numeric > 0 && $numeric <= 4102444800) {
-                return (new \DateTimeImmutable())->setTimestamp($numeric);
+                return new \DateTimeImmutable()->setTimestamp($numeric);
             }
 
             return null;
@@ -1738,16 +1738,16 @@ final class ImportLaravelSqlCommand extends Command
 
     private function toBoolInt(mixed $value): int
     {
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value ? 1 : 0;
         }
 
-        if (is_int($value)) {
+        if (\is_int($value)) {
             return $value > 0 ? 1 : 0;
         }
 
         $string = strtolower(trim((string) $value));
 
-        return in_array($string, ['1', 'true', 'yes', 't'], true) ? 1 : 0;
+        return \in_array($string, ['1', 'true', 'yes', 't'], true) ? 1 : 0;
     }
 }

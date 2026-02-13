@@ -4,17 +4,17 @@ services:
     autoconfigure: true
     public: false
 
-  MarkusSommer\MensCircle\:
+  BeardCoder\MensCircle\:
     resource: '../Classes/*'
 
-  MarkusSommer\MensCircle\Controller\:
+  BeardCoder\MensCircle\Controller\:
     resource: '../Classes/Controller/*'
     public: true
 
   dashboard.widget.menscircleUpcomingEvents:
     class: TYPO3\CMS\Dashboard\Widgets\NumberWithIconWidget
     arguments:
-      $dataProvider: '@MarkusSommer\MensCircle\Dashboard\Provider\UpcomingEventsCountDataProvider'
+      $dataProvider: '@BeardCoder\MensCircle\Dashboard\Provider\UpcomingEventsCountDataProvider'
       $options:
         icon: 'record-menscircle-event'
         title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingEvents.title'
@@ -32,7 +32,7 @@ services:
   dashboard.widget.menscircleUpcomingRegistrations:
     class: TYPO3\CMS\Dashboard\Widgets\NumberWithIconWidget
     arguments:
-      $dataProvider: '@MarkusSommer\MensCircle\Dashboard\Provider\UpcomingRegistrationsCountDataProvider'
+      $dataProvider: '@BeardCoder\MensCircle\Dashboard\Provider\UpcomingRegistrationsCountDataProvider'
       $options:
         icon: 'record-menscircle-registration'
         title: 'LLL:EXT:mens_circle/Resources/Private/Language/locallang_db.xlf:dashboard.widget.upcomingRegistrations.title'
@@ -50,7 +50,7 @@ services:
   dashboard.widget.menscircleNextEvent:
     class: TYPO3\CMS\Dashboard\Widgets\ListWidget
     arguments:
-      $dataProvider: '@MarkusSommer\MensCircle\Dashboard\Provider\NextEventListDataProvider'
+      $dataProvider: '@BeardCoder\MensCircle\Dashboard\Provider\NextEventListDataProvider'
     tags:
       - name: dashboard.widget
         identifier: 'menscircleNextEvent'

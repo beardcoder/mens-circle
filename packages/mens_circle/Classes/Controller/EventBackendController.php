@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Controller;
+namespace BeardCoder\MensCircle\Controller;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
-use MarkusSommer\MensCircle\Domain\Enum\RegistrationStatus;
+use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
@@ -29,8 +29,7 @@ final class EventBackendController extends ActionController
         private readonly ConnectionPool $connectionPool,
         private readonly ModuleTemplateFactory $moduleTemplateFactory,
         private readonly UriBuilder $backendUriBuilder
-    ) {
-    }
+    ) {}
 
     public function indexAction(): ResponseInterface
     {
@@ -46,7 +45,7 @@ final class EventBackendController extends ActionController
             ->setTitle($this->translate('headline'))
             ->assignMultiple([
                 'events' => $events,
-                'eventsCount' => count($events),
+                'eventsCount' => \count($events),
                 'newEventUrl' => $this->buildNewEventUrl($storagePid, $returnUrl, $moduleIdentifier),
                 'storageRecordsUrl' => $this->buildRecordsModuleUrl($storagePid),
             ])
@@ -94,7 +93,7 @@ final class EventBackendController extends ActionController
 
         foreach ($events as $event) {
             $eventRow = $this->buildEventRow($event, $registrationCounts, $participantsByEvent, $returnUrl, $moduleIdentifier);
-            if (is_array($eventRow)) {
+            if (\is_array($eventRow)) {
                 $eventRows[] = $eventRow;
             }
         }
@@ -186,7 +185,7 @@ final class EventBackendController extends ActionController
             'availableSpots' => $availableSpots,
             'statusLabel' => $status['label'],
             'statusClass' => $status['class'],
-            'participantsCount' => count($participants),
+            'participantsCount' => \count($participants),
             'participants' => $participants,
             'editUrl' => $this->buildEditEventUrl($eventUid, $returnUrl, $moduleIdentifier),
             'recordsUrl' => $this->buildRecordsModuleUrl((int) ($event['pid'] ?? 0)),
@@ -224,7 +223,7 @@ final class EventBackendController extends ActionController
             ->executeQuery()
             ->fetchAllAssociative();
 
-        return is_array($rows) ? $rows : [];
+        return \is_array($rows) ? $rows : [];
     }
 
     /**
@@ -249,7 +248,7 @@ final class EventBackendController extends ActionController
             ->executeQuery()
             ->fetchAllAssociative();
 
-        if (!is_array($rows)) {
+        if (!\is_array($rows)) {
             return [];
         }
 
@@ -313,7 +312,7 @@ final class EventBackendController extends ActionController
             ->executeQuery()
             ->fetchAllAssociative();
 
-        if (!is_array($rows) || $rows === []) {
+        if (!\is_array($rows) || $rows === []) {
             return [];
         }
 
@@ -389,7 +388,7 @@ final class EventBackendController extends ActionController
             ->executeQuery()
             ->fetchAllAssociative();
 
-        if (!is_array($rows)) {
+        if (!\is_array($rows)) {
             return [];
         }
 
@@ -601,7 +600,7 @@ final class EventBackendController extends ActionController
         $languageKey = self::LANGUAGE_FILE_PREFIX . $key;
         $translated = $GLOBALS['LANG']?->sL($languageKey);
 
-        return is_string($translated) && $translated !== '' ? $translated : $key;
+        return \is_string($translated) && $translated !== '' ? $translated : $key;
     }
 
     private function buildLocationLabel(mixed $location, mixed $city): string

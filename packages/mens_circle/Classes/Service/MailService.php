@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Service;
+namespace BeardCoder\MensCircle\Service;
 
-use MarkusSommer\MensCircle\Domain\Model\Event;
-use MarkusSommer\MensCircle\Domain\Model\NewsletterSubscription;
-use MarkusSommer\MensCircle\Domain\Model\Registration;
+use BeardCoder\MensCircle\Domain\Model\Event;
+use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
+use BeardCoder\MensCircle\Domain\Model\Registration;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Mime\Address;
@@ -79,7 +79,7 @@ final class MailService
         $eventLocation = trim((string) ($notificationData['eventLocation'] ?? ''));
 
         $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
-        $subject = sprintf('Anmeldung bestaetigt: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
+        $subject = \sprintf('Anmeldung bestaetigt: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
 
         $date = $this->formatDate((string) ($notificationData['eventDate'] ?? ''));
         $startTime = $this->formatTime((string) ($notificationData['eventStartTime'] ?? ''));
@@ -95,7 +95,7 @@ final class MailService
             '',
             'deine Anmeldung war erfolgreich.',
             '',
-            sprintf('Termin: %s am %s', $eventTitleLabel, $dateLabel),
+            \sprintf('Termin: %s am %s', $eventTitleLabel, $dateLabel),
             'Uhrzeit: ' . $timeLabel,
             'Ort: ' . $locationLabel,
             $eventUrl !== '' ? 'Termin öffnen: ' . $eventUrl : '',
@@ -156,7 +156,7 @@ final class MailService
         $eventLocation = trim((string) ($notificationData['eventLocation'] ?? ''));
 
         $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
-        $subject = sprintf('Erinnerung: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
+        $subject = \sprintf('Erinnerung: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
 
         $date = $this->formatDate((string) ($notificationData['eventDate'] ?? ''));
         $startTime = $this->formatTime((string) ($notificationData['eventStartTime'] ?? ''));
@@ -172,7 +172,7 @@ final class MailService
             '',
             'kurze Erinnerung an den Männerkreis Termin.',
             '',
-            sprintf('Termin: %s am %s', $eventTitleLabel, $dateLabel),
+            \sprintf('Termin: %s am %s', $eventTitleLabel, $dateLabel),
             'Uhrzeit: ' . $timeLabel,
             'Ort: ' . $locationLabel,
             $eventUrl !== '' ? 'Termin öffnen: ' . $eventUrl : '',
@@ -219,7 +219,7 @@ final class MailService
         }
 
         $siteName = (string) ($settings['siteName'] ?? 'Männerkreis');
-        $subject = sprintf('%s Newsletter Anmeldung', $siteName);
+        $subject = \sprintf('%s Newsletter Anmeldung', $siteName);
         $recipientName = trim($participant->getFirstName()) !== '' ? trim($participant->getFirstName()) : 'du';
 
         $text = implode("\n", [
@@ -343,7 +343,7 @@ final class MailService
     private function sanitizeNewsletterContent(string $content): string
     {
         $sanitized = preg_replace('/<script\b[^>]*>.*?<\/script>/is', '', $content);
-        if (!is_string($sanitized)) {
+        if (!\is_string($sanitized)) {
             return '';
         }
 
@@ -400,7 +400,7 @@ final class MailService
         }
 
         try {
-            return (new \DateTimeImmutable($dateValue))->format('d.m.Y');
+            return new \DateTimeImmutable($dateValue)->format('d.m.Y');
         } catch (\Throwable) {
             return '';
         }
@@ -414,7 +414,7 @@ final class MailService
         }
 
         try {
-            return (new \DateTimeImmutable($timeValue))->format('H:i');
+            return new \DateTimeImmutable($timeValue)->format('H:i');
         } catch (\Throwable) {
             return '';
         }

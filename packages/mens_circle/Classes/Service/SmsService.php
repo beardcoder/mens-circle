@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Service;
+namespace BeardCoder\MensCircle\Service;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -44,7 +44,7 @@ final class SmsService
         $eventDate = $this->formatDate($notificationData['eventDate'] ?? '');
         $eventTime = $this->formatTime($notificationData['eventStartTime'] ?? '');
 
-        $messageText = trim(sprintf(
+        $messageText = trim(\sprintf(
             'Servus %s, deine Anmeldung fuer "%s" am %s%s ist bestaetigt.',
             $firstName !== '' ? $firstName : 'du',
             $eventTitle !== '' ? $eventTitle : 'den Maennerkreis',
@@ -77,7 +77,7 @@ final class SmsService
         $eventDate = $this->formatDate($notificationData['eventDate'] ?? '');
         $eventTime = $this->formatTime($notificationData['eventStartTime'] ?? '');
 
-        $messageText = trim(sprintf(
+        $messageText = trim(\sprintf(
             'Erinnerung %s: "%s" ist am %s%s.',
             $firstName !== '' ? $firstName : '',
             $eventTitle !== '' ? $eventTitle : 'Maennerkreis',
@@ -177,7 +177,7 @@ final class SmsService
         }
 
         try {
-            return (new \DateTimeImmutable($dateString))->format('d.m.Y');
+            return new \DateTimeImmutable($dateString)->format('d.m.Y');
         } catch (\Throwable) {
             return '';
         }
@@ -191,7 +191,7 @@ final class SmsService
         }
 
         try {
-            return (new \DateTimeImmutable($timeString))->format('H:i');
+            return new \DateTimeImmutable($timeString)->format('H:i');
         } catch (\Throwable) {
             return '';
         }
@@ -199,12 +199,12 @@ final class SmsService
 
     private function toBool(mixed $value): bool
     {
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value;
         }
 
         $normalized = strtolower(trim((string) $value));
 
-        return in_array($normalized, ['1', 'true', 'yes', 'on'], true);
+        return \in_array($normalized, ['1', 'true', 'yes', 'on'], true);
     }
 }

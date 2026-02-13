@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Controller;
+namespace BeardCoder\MensCircle\Controller;
 
-use MarkusSommer\MensCircle\Domain\Model\NewsletterSubscription;
-use MarkusSommer\MensCircle\Domain\Model\Participant;
-use MarkusSommer\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
-use MarkusSommer\MensCircle\Domain\Repository\ParticipantRepository;
-use MarkusSommer\MensCircle\Service\MailService;
+use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
+use BeardCoder\MensCircle\Domain\Model\Participant;
+use BeardCoder\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
+use BeardCoder\MensCircle\Domain\Repository\ParticipantRepository;
+use BeardCoder\MensCircle\Service\MailService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -21,8 +21,7 @@ final class NewsletterController extends ActionController
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
         private readonly PersistenceManager $persistenceManager,
         private readonly MailService $mailService
-    ) {
-    }
+    ) {}
 
     public function formAction(): ResponseInterface
     {

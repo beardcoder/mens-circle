@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Service;
+namespace BeardCoder\MensCircle\Service;
 
 use Doctrine\DBAL\ParameterType;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -15,8 +15,7 @@ final readonly class RegistrationNotificationDataService
 
     public function __construct(
         private ConnectionPool $connectionPool
-    ) {
-    }
+    ) {}
 
     /**
      * @return array{
@@ -95,7 +94,7 @@ final readonly class RegistrationNotificationDataService
             ->executeQuery()
             ->fetchAssociative();
 
-        if (!is_array($row)) {
+        if (!\is_array($row)) {
             return null;
         }
 

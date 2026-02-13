@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Command;
+namespace BeardCoder\MensCircle\Command;
 
 use Doctrine\DBAL\Types\BigIntType;
 use Doctrine\DBAL\Types\IntegerType;
@@ -82,7 +82,7 @@ final class RepairLegacyDateValuesCommand extends Command
 
             $connection->commit();
 
-            $io->success(sprintf('Repair completed. Updated values: %d', $changes));
+            $io->success(\sprintf('Repair completed. Updated values: %d', $changes));
 
             return Command::SUCCESS;
         } catch (\Throwable $exception) {
@@ -108,11 +108,11 @@ final class RepairLegacyDateValuesCommand extends Command
         $quotedTable = $connection->quoteIdentifier($table);
 
         $timestampExpression = $dateOnly
-            ? sprintf('UNIX_TIMESTAMP(DATE(STR_TO_DATE(CAST(%1$s AS CHAR), "%%Y%%m%%d%%H%%i%%s")))', $quotedField)
-            : sprintf('UNIX_TIMESTAMP(STR_TO_DATE(CAST(%1$s AS CHAR), "%%Y%%m%%d%%H%%i%%s"))', $quotedField);
+            ? \sprintf('UNIX_TIMESTAMP(DATE(STR_TO_DATE(CAST(%1$s AS CHAR), "%%Y%%m%%d%%H%%i%%s")))', $quotedField)
+            : \sprintf('UNIX_TIMESTAMP(STR_TO_DATE(CAST(%1$s AS CHAR), "%%Y%%m%%d%%H%%i%%s"))', $quotedField);
 
         $changes += $connection->executeStatement(
-            sprintf(
+            \sprintf(
                 'UPDATE %1$s SET %2$s = %3$s WHERE %2$s IS NOT NULL AND %2$s > 4102444800 AND CHAR_LENGTH(CAST(%2$s AS CHAR)) = 14',
                 $quotedTable,
                 $quotedField,
@@ -121,7 +121,7 @@ final class RepairLegacyDateValuesCommand extends Command
         );
 
         $changes += $connection->executeStatement(
-            sprintf(
+            \sprintf(
                 'UPDATE %1$s SET %2$s = FLOOR(%2$s / 1000) WHERE %2$s IS NOT NULL AND %2$s > 4102444800 AND CHAR_LENGTH(CAST(%2$s AS CHAR)) = 13',
                 $quotedTable,
                 $quotedField
@@ -130,7 +130,7 @@ final class RepairLegacyDateValuesCommand extends Command
 
         if ($dateOnly) {
             $changes += $connection->executeStatement(
-                sprintf(
+                \sprintf(
                     'UPDATE %1$s SET %2$s = UNIX_TIMESTAMP(STR_TO_DATE(CAST(%2$s AS CHAR), "%%Y%%m%%d")) WHERE %2$s IS NOT NULL AND %2$s > 4102444800 AND CHAR_LENGTH(CAST(%2$s AS CHAR)) = 8',
                     $quotedTable,
                     $quotedField
@@ -138,7 +138,7 @@ final class RepairLegacyDateValuesCommand extends Command
             );
 
             $changes += $connection->executeStatement(
-                sprintf(
+                \sprintf(
                     'UPDATE %1$s SET %2$s = UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(%2$s))) WHERE %2$s IS NOT NULL AND %2$s > 0 AND %2$s <= 4102444800 AND %2$s <> UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(%2$s)))',
                     $quotedTable,
                     $quotedField
@@ -156,7 +156,7 @@ final class RepairLegacyDateValuesCommand extends Command
         $quotedTable = $connection->quoteIdentifier($table);
 
         $changes += $connection->executeStatement(
-            sprintf(
+            \sprintf(
                 'UPDATE %1$s SET %2$s = TIME_TO_SEC(TIME(STR_TO_DATE(CAST(%2$s AS CHAR), "%%Y%%m%%d%%H%%i%%s"))) WHERE %2$s IS NOT NULL AND %2$s > 4102444800 AND CHAR_LENGTH(CAST(%2$s AS CHAR)) = 14',
                 $quotedTable,
                 $quotedField
@@ -164,7 +164,7 @@ final class RepairLegacyDateValuesCommand extends Command
         );
 
         $changes += $connection->executeStatement(
-            sprintf(
+            \sprintf(
                 'UPDATE %1$s SET %2$s = ((%2$s DIV 10000) * 3600) + (((%2$s DIV 100) %% 100) * 60) + (%2$s %% 100) WHERE %2$s IS NOT NULL AND %2$s > 86400 AND %2$s <= 235959',
                 $quotedTable,
                 $quotedField

@@ -8,3 +8,4 @@ nbproject
 /public/*
 /config/system/settings.php
 .env
+.php-cs-fixer.cache

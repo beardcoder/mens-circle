@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Controller;
+namespace BeardCoder\MensCircle\Controller;
 
-use MarkusSommer\MensCircle\Domain\Enum\RegistrationStatus;
-use MarkusSommer\MensCircle\Domain\Model\Event;
-use MarkusSommer\MensCircle\Domain\Model\NewsletterSubscription;
-use MarkusSommer\MensCircle\Domain\Model\Participant;
-use MarkusSommer\MensCircle\Domain\Model\Registration;
-use MarkusSommer\MensCircle\Domain\Repository\EventRepository;
-use MarkusSommer\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
-use MarkusSommer\MensCircle\Domain\Repository\ParticipantRepository;
-use MarkusSommer\MensCircle\Domain\Repository\RegistrationRepository;
-use MarkusSommer\MensCircle\Message\SendEventMailMessage;
-use MarkusSommer\MensCircle\Message\SendEventSmsMessage;
+use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
+use BeardCoder\MensCircle\Domain\Model\Event;
+use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
+use BeardCoder\MensCircle\Domain\Model\Participant;
+use BeardCoder\MensCircle\Domain\Model\Registration;
+use BeardCoder\MensCircle\Domain\Repository\EventRepository;
+use BeardCoder\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
+use BeardCoder\MensCircle\Domain\Repository\ParticipantRepository;
+use BeardCoder\MensCircle\Domain\Repository\RegistrationRepository;
+use BeardCoder\MensCircle\Message\SendEventMailMessage;
+use BeardCoder\MensCircle\Message\SendEventSmsMessage;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use TYPO3\CMS\Core\Http\ResponseFactory;
@@ -34,8 +34,7 @@ final class EventController extends ActionController
         private readonly MessageBusInterface $messageBus,
         private readonly ResponseFactory $httpResponseFactory,
         private readonly StreamFactory $httpStreamFactory
-    ) {
-    }
+    ) {}
 
     public function listAction(): ResponseInterface
     {
@@ -75,8 +74,7 @@ final class EventController extends ActionController
         string $phoneNumber = '',
         bool $privacy = false,
         bool $newsletterOptIn = false
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $resolvedEvent = $this->resolveEventByIdentifier($event);
         if (! $resolvedEvent instanceof Event) {
             $this->addFlashMessage('Ungültiger Termin.', '', ContextualFeedbackSeverity::ERROR);
@@ -166,7 +164,7 @@ final class EventController extends ActionController
         }
 
         $ical = $event->generateIcalContent($domain);
-        $filename = sprintf('mens-circle-%s.ics', $event->getSlug() !== '' ? $event->getSlug() : $event->getUid());
+        $filename = \sprintf('mens-circle-%s.ics', $event->getSlug() !== '' ? $event->getSlug() : $event->getUid());
 
         $response = $this->httpResponseFactory->createResponse(200)
             ->withHeader('Content-Type', 'text/calendar; charset=utf-8')
@@ -189,12 +187,12 @@ final class EventController extends ActionController
 
         foreach (['tx_menscircle_eventdetail', 'tx_menscircle_event'] as $pluginNamespace) {
             $pluginArguments = $this->resolveNamespacedPluginArguments($pluginNamespace);
-            if (is_array($pluginArguments) && array_key_exists('event', $pluginArguments)) {
+            if (\is_array($pluginArguments) && \array_key_exists('event', $pluginArguments)) {
                 $candidateIdentifiers[] = $pluginArguments['event'];
             }
         }
 
-        if (array_key_exists('event', $this->settings)) {
+        if (\array_key_exists('event', $this->settings)) {
             $candidateIdentifiers[] = $this->settings['event'];
         }
 
@@ -214,12 +212,12 @@ final class EventController extends ActionController
     private function resolveNamespacedPluginArguments(string $pluginNamespace): ?array
     {
         $queryParams = $this->request->getQueryParams();
-        if (isset($queryParams[$pluginNamespace]) && is_array($queryParams[$pluginNamespace])) {
+        if (isset($queryParams[$pluginNamespace]) && \is_array($queryParams[$pluginNamespace])) {
             return $queryParams[$pluginNamespace];
         }
 
         $parsedBody = $this->request->getParsedBody();
-        if (is_array($parsedBody) && isset($parsedBody[$pluginNamespace]) && is_array($parsedBody[$pluginNamespace])) {
+        if (\is_array($parsedBody) && isset($parsedBody[$pluginNamespace]) && \is_array($parsedBody[$pluginNamespace])) {
             return $parsedBody[$pluginNamespace];
         }
 
@@ -232,15 +230,15 @@ final class EventController extends ActionController
             return $identifier;
         }
 
-        if (is_array($identifier)) {
-            if (array_key_exists('__identity', $identifier)) {
+        if (\is_array($identifier)) {
+            if (\array_key_exists('__identity', $identifier)) {
                 return $this->resolveEventByIdentifier($identifier['__identity']);
             }
 
             return null;
         }
 
-        if (!is_scalar($identifier)) {
+        if (!\is_scalar($identifier)) {
             return null;
         }
 
@@ -422,7 +420,7 @@ final class EventController extends ActionController
 
     private function dispatchRegistrationNotifications(Registration $registration, Participant $participant): void
     {
-        $notificationSettings = is_array($this->settings) ? $this->settings : [];
+        $notificationSettings = \is_array($this->settings) ? $this->settings : [];
         $this->messageBus->dispatch(new SendEventMailMessage(
             registrationUid: (int) $registration->getUid(),
             type: SendEventMailMessage::TYPE_REGISTRATION_CONFIRMATION,

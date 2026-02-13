@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\DataProcessing;
+namespace BeardCoder\MensCircle\DataProcessing;
 
 use Doctrine\DBAL\ParameterType;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -47,7 +47,7 @@ final class NextEventDataProcessor implements DataProcessorInterface
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable(self::EVENT_TABLE);
 
-        $todayMidnight = (new \DateTimeImmutable('today'))->getTimestamp();
+        $todayMidnight = new \DateTimeImmutable('today')->getTimestamp();
 
         $row = $queryBuilder
             ->select('uid', 'title', 'slug')
@@ -63,7 +63,7 @@ final class NextEventDataProcessor implements DataProcessorInterface
             ->executeQuery()
             ->fetchAssociative();
 
-        if (!is_array($row)) {
+        if (!\is_array($row)) {
             return null;
         }
 

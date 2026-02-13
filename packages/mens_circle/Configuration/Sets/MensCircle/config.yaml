@@ -1,4 +1,4 @@
-name: markussommer/mens-circle
+name: beardcoder/mens-circle
 label: 'Mens Circle Site Set'
 dependencies:
   - typo3/form

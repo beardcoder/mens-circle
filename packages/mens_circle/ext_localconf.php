@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use MarkusSommer\MensCircle\Controller\EventController;
-use MarkusSommer\MensCircle\Controller\NewsletterController;
-use MarkusSommer\MensCircle\Controller\TestimonialController;
-use MarkusSommer\MensCircle\Message\SendEventMailMessage;
-use MarkusSommer\MensCircle\Message\SendEventSmsMessage;
-use MarkusSommer\MensCircle\Message\SendNewsletterMessage;
+use BeardCoder\MensCircle\Controller\EventController;
+use BeardCoder\MensCircle\Controller\NewsletterController;
+use BeardCoder\MensCircle\Controller\TestimonialController;
+use BeardCoder\MensCircle\Message\SendEventMailMessage;
+use BeardCoder\MensCircle\Message\SendEventSmsMessage;
+use BeardCoder\MensCircle\Message\SendNewsletterMessage;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
-defined('TYPO3') or die();
+defined('TYPO3') || die();
 
 ExtensionUtility::configurePlugin(
     'MensCircle',

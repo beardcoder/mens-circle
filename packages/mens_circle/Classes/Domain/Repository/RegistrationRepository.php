@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Domain\Repository;
+namespace BeardCoder\MensCircle\Domain\Repository;
 
-use MarkusSommer\MensCircle\Domain\Enum\RegistrationStatus;
-use MarkusSommer\MensCircle\Domain\Model\Event;
-use MarkusSommer\MensCircle\Domain\Model\Participant;
-use MarkusSommer\MensCircle\Domain\Model\Registration;
+use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
+use BeardCoder\MensCircle\Domain\Model\Event;
+use BeardCoder\MensCircle\Domain\Model\Participant;
+use BeardCoder\MensCircle\Domain\Model\Registration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Message;
+namespace BeardCoder\MensCircle\Message;
 
 final readonly class SendEventSmsMessage
 {
@@ -16,8 +16,7 @@ final readonly class SendEventSmsMessage
         private int $registrationUid,
         private string $type,
         private array $settings = []
-    ) {
-    }
+    ) {}
 
     public function getRegistrationUid(): int
     {

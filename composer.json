@@ -1,59 +1,63 @@
 {
-    "name": "markussommer/mens-circle",
-    "description": "TYPO3 14.1 rebuild for Männerkreis Niederbayern / Straubing",
-    "license": "GPL-2.0-or-later",
-    "type": "project",
-    "config": {
-        "allow-plugins": {
-            "helhum/dotenv-connector": true,
-            "typo3/class-alias-loader": true,
-            "typo3/cms-composer-installers": true
-        },
-        "platform": {
-            "php": "8.2.0"
-        },
-        "sort-packages": true
+  "name": "beardcoder/mens-circle",
+  "description": "TYPO3 14.1 rebuild for Männerkreis Niederbayern / Straubing",
+  "license": "GPL-2.0-or-later",
+  "type": "project",
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true,
+      "helhum/dotenv-connector": true,
+      "typo3/class-alias-loader": true,
+      "typo3/cms-composer-installers": true
     },
-    "require": {
-        "helhum/dotenv-connector": "^3.2",
-        "markussommer/mens-circle-sitepackage": "^1.0",
-        "typo3/cms-backend": "^14.0",
-        "typo3/cms-belog": "^14.0",
-        "typo3/cms-beuser": "^14.0",
-        "typo3/cms-core": "^14.0",
-        "typo3/cms-dashboard": "^14.0",
-        "typo3/cms-extbase": "^14.0",
-        "typo3/cms-felogin": "^14.0",
-        "typo3/cms-filelist": "^14.0",
-        "typo3/cms-fluid": "^14.0",
-        "typo3/cms-form": "^14.0",
-        "typo3/cms-frontend": "^14.0",
-        "typo3/cms-impexp": "^14.0",
-        "typo3/cms-info": "^14.0",
-        "typo3/cms-install": "^14.0",
-        "typo3/cms-reactions": "^14.0",
-        "typo3/cms-recycler": "^14.0",
-        "typo3/cms-rte-ckeditor": "^14.0",
-        "typo3/cms-seo": "^14.0",
-        "typo3/cms-setup": "^14.0",
-        "typo3/cms-sys-note": "^14.0",
-        "typo3/cms-viewpage": "^14.0",
-        "typo3/cms-webhooks": "^14.0"
+    "platform": {
+      "php": "8.5.0"
     },
-    "scripts": {
-        "typo3": "vendor/bin/typo3",
-        "setup": "vendor/bin/typo3 setup"
-    },
-    "repositories": {
-        "packages": {
-            "type": "path",
-            "url": "./packages/*"
-        }
-    },
-    "require-dev": {
-        "phpstan/phpstan": "^2.1",
-        "symfony/var-dumper": "^7.4",
-        "typo3/cms-lowlevel": "^14.1",
-        "typo3/cms-tstemplate": "^14.1"
+    "sort-packages": true
+  },
+  "require": {
+    "php": "^8.5",
+    "helhum/dotenv-connector": "^3.2",
+    "beardcoder/mens-circle-sitepackage": "^1.0",
+    "typo3/cms-backend": "^14.0",
+    "typo3/cms-belog": "^14.0",
+    "typo3/cms-beuser": "^14.0",
+    "typo3/cms-core": "^14.0",
+    "typo3/cms-dashboard": "^14.0",
+    "typo3/cms-extbase": "^14.0",
+    "typo3/cms-felogin": "^14.0",
+    "typo3/cms-filelist": "^14.0",
+    "typo3/cms-fluid": "^14.0",
+    "typo3/cms-form": "^14.0",
+    "typo3/cms-frontend": "^14.0",
+    "typo3/cms-impexp": "^14.0",
+    "typo3/cms-info": "^14.0",
+    "typo3/cms-install": "^14.0",
+    "typo3/cms-reactions": "^14.0",
+    "typo3/cms-recycler": "^14.0",
+    "typo3/cms-rte-ckeditor": "^14.0",
+    "typo3/cms-seo": "^14.0",
+    "typo3/cms-setup": "^14.0",
+    "typo3/cms-sys-note": "^14.0",
+    "typo3/cms-viewpage": "^14.0",
+    "typo3/cms-webhooks": "^14.0"
+  },
+  "scripts": {
+    "typo3": "vendor/bin/typo3",
+    "setup": "vendor/bin/typo3 setup"
+  },
+  "repositories": {
+    "packages": {
+      "type": "path",
+      "url": "./packages/*"
     }
+  },
+  "require-dev": {
+    "ergebnis/composer-normalize": "^2.50",
+    "friendsofphp/php-cs-fixer": "^3.94",
+    "phpstan/phpstan": "^2.1",
+    "symfony/var-dumper": "^8.0",
+    "typo3/cms-lowlevel": "^14.1",
+    "typo3/cms-tstemplate": "^14.1"
+  }
 }

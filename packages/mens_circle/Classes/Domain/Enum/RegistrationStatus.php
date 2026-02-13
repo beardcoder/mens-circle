@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Domain\Enum;
+namespace BeardCoder\MensCircle\Domain\Enum;
 
 enum RegistrationStatus: string
 {

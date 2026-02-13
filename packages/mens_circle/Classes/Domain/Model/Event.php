@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Domain\Model;
+namespace BeardCoder\MensCircle\Domain\Model;
 
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -279,7 +279,7 @@ final class Event extends AbstractEntity
             $end = (clone $start)->modify('+2 hours');
         }
 
-        $uid = sprintf('%s@%s', $this->uid, $siteDomain);
+        $uid = \sprintf('%s@%s', $this->uid, $siteDomain);
         $description = preg_replace('/\s+/', ' ', strip_tags($this->description)) ?: '';
 
         return implode("\r\n", [

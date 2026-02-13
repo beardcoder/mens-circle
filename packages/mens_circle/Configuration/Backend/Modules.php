@@ -1,7 +1,9 @@
 <?php
 
-use MarkusSommer\MensCircle\Controller\EventBackendController;
-use MarkusSommer\MensCircle\Controller\NewsletterBackendController;
+declare(strict_types=1);
+
+use BeardCoder\MensCircle\Controller\EventBackendController;
+use BeardCoder\MensCircle\Controller\NewsletterBackendController;
 
 return [
     'web_menscircle_events' => [

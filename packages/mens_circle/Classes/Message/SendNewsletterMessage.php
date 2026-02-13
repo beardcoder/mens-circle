@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Message;
+namespace BeardCoder\MensCircle\Message;
 
 final readonly class SendNewsletterMessage
 {
@@ -16,8 +16,7 @@ final readonly class SendNewsletterMessage
         private string $content,
         private string $unsubscribeUrl,
         private array $settings
-    ) {
-    }
+    ) {}
 
     public function getToEmail(): string
     {

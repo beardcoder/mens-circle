@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Dashboard\Provider;
+namespace BeardCoder\MensCircle\Dashboard\Provider;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
-use MarkusSommer\MensCircle\Domain\Enum\RegistrationStatus;
+use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Dashboard\Widgets\NumberWithIconDataProviderInterface;
 
@@ -17,8 +17,7 @@ final readonly class UpcomingRegistrationsCountDataProvider implements NumberWit
 
     public function __construct(
         private ConnectionPool $connectionPool
-    ) {
-    }
+    ) {}
 
     public function getNumber(): int
     {
@@ -46,7 +45,7 @@ final readonly class UpcomingRegistrationsCountDataProvider implements NumberWit
                 $queryBuilder->expr()->eq('event.is_published', $queryBuilder->createNamedParameter(1, ParameterType::INTEGER)),
                 $queryBuilder->expr()->gte(
                     'event.event_date',
-                    $queryBuilder->createNamedParameter((new \DateTimeImmutable('today'))->format('Y-m-d 00:00:00'), ParameterType::STRING)
+                    $queryBuilder->createNamedParameter(new \DateTimeImmutable('today')->format('Y-m-d 00:00:00'), ParameterType::STRING)
                 )
             )
             ->executeQuery()

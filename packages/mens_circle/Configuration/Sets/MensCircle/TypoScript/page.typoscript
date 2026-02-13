@@ -23,7 +23,7 @@ lib.fluidPage {
     30 = site
     30.as = site
 
-    40 = MarkusSommer\MensCircle\DataProcessing\NextEventDataProcessor
+    40 = BeardCoder\MensCircle\DataProcessing\NextEventDataProcessor
     40 {
       as = nextEvent
       eventBasePath = /event

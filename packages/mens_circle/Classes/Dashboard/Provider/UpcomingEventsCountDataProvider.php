@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Dashboard\Provider;
+namespace BeardCoder\MensCircle\Dashboard\Provider;
 
 use Doctrine\DBAL\ParameterType;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -14,8 +14,7 @@ final readonly class UpcomingEventsCountDataProvider implements NumberWithIconDa
 
     public function __construct(
         private ConnectionPool $connectionPool
-    ) {
-    }
+    ) {}
 
     public function getNumber(): int
     {
@@ -31,7 +30,7 @@ final readonly class UpcomingEventsCountDataProvider implements NumberWithIconDa
                 $queryBuilder->expr()->eq('is_published', $queryBuilder->createNamedParameter(1, ParameterType::INTEGER)),
                 $queryBuilder->expr()->gte(
                     'event_date',
-                    $queryBuilder->createNamedParameter((new \DateTimeImmutable('today'))->format('Y-m-d 00:00:00'), ParameterType::STRING)
+                    $queryBuilder->createNamedParameter(new \DateTimeImmutable('today')->format('Y-m-d 00:00:00'), ParameterType::STRING)
                 )
             )
             ->executeQuery()

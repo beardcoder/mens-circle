@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Controller;
+namespace BeardCoder\MensCircle\Controller;
 
-use MarkusSommer\MensCircle\Domain\Model\Testimonial;
-use MarkusSommer\MensCircle\Domain\Repository\TestimonialRepository;
+use BeardCoder\MensCircle\Domain\Model\Testimonial;
+use BeardCoder\MensCircle\Domain\Repository\TestimonialRepository;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -18,8 +18,7 @@ final class TestimonialController extends ActionController
     public function __construct(
         private readonly TestimonialRepository $testimonialRepository,
         private readonly PersistenceManager $persistenceManager
-    ) {
-    }
+    ) {}
 
     public function listAction(): ResponseInterface
     {
@@ -39,8 +38,7 @@ final class TestimonialController extends ActionController
         string $role = '',
         string $email = '',
         bool $privacy = false
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $normalizedQuote = trim($quote);
         $normalizedAuthorName = trim($authorName);
         $normalizedRole = trim($role);

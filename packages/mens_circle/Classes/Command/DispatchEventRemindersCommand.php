@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Command;
+namespace BeardCoder\MensCircle\Command;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
-use MarkusSommer\MensCircle\Domain\Enum\RegistrationStatus;
-use MarkusSommer\MensCircle\Message\SendEventMailMessage;
-use MarkusSommer\MensCircle\Message\SendEventSmsMessage;
+use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
+use BeardCoder\MensCircle\Message\SendEventMailMessage;
+use BeardCoder\MensCircle\Message\SendEventSmsMessage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -66,7 +66,7 @@ final class DispatchEventRemindersCommand extends Command
         $cache = $this->cacheManager->getCache('hash');
 
         $stats = [
-            'candidates' => count($rows),
+            'candidates' => \count($rows),
             'queuedMails' => 0,
             'queuedSms' => 0,
             'skippedOutsideWindow' => 0,
@@ -207,7 +207,7 @@ final class DispatchEventRemindersCommand extends Command
             ->executeQuery()
             ->fetchAllAssociative();
 
-        return is_array($rows) ? $rows : [];
+        return \is_array($rows) ? $rows : [];
     }
 
     private function resolveEventStart(string $eventDate, string $startTime): ?\DateTimeImmutable

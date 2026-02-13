@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MarkusSommer\MensCircle\Domain\Model;
+namespace BeardCoder\MensCircle\Domain\Model;
 
-use MarkusSommer\MensCircle\Domain\Enum\RegistrationStatus;
+use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 final class Registration extends AbstractEntity
@@ -76,6 +76,6 @@ final class Registration extends AbstractEntity
 
     public function isActive(): bool
     {
-        return in_array($this->status, RegistrationStatus::activeValues(), true);
+        return \in_array($this->status, RegistrationStatus::activeValues(), true);
     }
 }
