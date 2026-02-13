@@ -29,6 +29,7 @@ final class ParticipantRepository extends Repository
 
         $result = $query->execute();
 
+        /** @var Participant|null */
         return $result->getFirst();
     }
 }

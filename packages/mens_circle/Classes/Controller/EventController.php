@@ -421,7 +421,7 @@ final class EventController extends ActionController
 
     private function dispatchRegistrationNotifications(Registration $registration, Participant $participant): void
     {
-        $notificationSettings = \is_array($this->settings) ? $this->settings : [];
+        $notificationSettings = $this->settings;
         $this->messageBus->dispatch(new SendEventMailMessage(
             registrationUid: (int)$registration->getUid(),
             type: SendEventMailMessage::TYPE_REGISTRATION_CONFIRMATION,

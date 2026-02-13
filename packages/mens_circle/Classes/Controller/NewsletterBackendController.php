@@ -195,7 +195,7 @@ final class NewsletterBackendController extends ActionController
     {
         $baseUrl = rtrim((string)($this->settings['baseUrl'] ?? ''), '/');
         $newsletterPid = (int)($this->settings['newsletterPid'] ?? 0);
-        $settings = \is_array($this->settings) ? $this->settings : [];
+        $settings = $this->settings;
 
         $dispatchedCount = 0;
         $failedCount = 0;

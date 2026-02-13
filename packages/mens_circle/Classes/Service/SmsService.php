@@ -36,15 +36,15 @@ final class SmsService
      */
     public function sendRegistrationConfirmation(array $notificationData, array $settings): bool
     {
-        $phone = trim((string)($notificationData['participantPhone'] ?? ''));
+        $phone = trim($notificationData['participantPhone']);
         if ($phone === '') {
             return false;
         }
 
-        $firstName = trim((string)($notificationData['participantFirstName'] ?? ''));
-        $eventTitle = trim((string)($notificationData['eventTitle'] ?? ''));
-        $eventDate = $this->formatDate($notificationData['eventDate'] ?? '');
-        $eventTime = $this->formatTime($notificationData['eventStartTime'] ?? '');
+        $firstName = trim($notificationData['participantFirstName']);
+        $eventTitle = trim($notificationData['eventTitle']);
+        $eventDate = $this->formatDate($notificationData['eventDate']);
+        $eventTime = $this->formatTime($notificationData['eventStartTime']);
 
         $messageText = trim(\sprintf(
             'Servus %s, deine Anmeldung fuer "%s" am %s%s ist bestaetigt.',
@@ -69,15 +69,15 @@ final class SmsService
      */
     public function sendReminder(array $notificationData, array $settings): bool
     {
-        $phone = trim((string)($notificationData['participantPhone'] ?? ''));
+        $phone = trim($notificationData['participantPhone']);
         if ($phone === '') {
             return false;
         }
 
-        $firstName = trim((string)($notificationData['participantFirstName'] ?? ''));
-        $eventTitle = trim((string)($notificationData['eventTitle'] ?? ''));
-        $eventDate = $this->formatDate($notificationData['eventDate'] ?? '');
-        $eventTime = $this->formatTime($notificationData['eventStartTime'] ?? '');
+        $firstName = trim($notificationData['participantFirstName']);
+        $eventTitle = trim($notificationData['eventTitle']);
+        $eventDate = $this->formatDate($notificationData['eventDate']);
+        $eventTime = $this->formatTime($notificationData['eventStartTime']);
 
         $messageText = trim(\sprintf(
             'Erinnerung %s: "%s" ist am %s%s.',

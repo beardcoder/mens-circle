@@ -61,6 +61,7 @@ final class RegistrationRepository extends Repository
 
         $result = $query->execute();
 
+        /** @var Registration|null */
         return $result->getFirst();
     }
 }

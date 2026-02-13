@@ -26,7 +26,7 @@ final readonly class SendEventMailMessageHandler
         }
 
         if ($message->getType() === SendEventMailMessage::TYPE_REMINDER) {
-            if (!\in_array((string)($notificationData['status'] ?? ''), RegistrationStatus::activeValues(), true)) {
+            if (!\in_array($notificationData['status'], RegistrationStatus::activeValues(), true)) {
                 return;
             }
 
