@@ -1,76 +1,44 @@
-# =============================================================================
-# Multi-stage Dockerfile for TYPO3 v14 — Coolify Deployment
-# Base: serversideup/php:8.5-fpm-nginx
-# =============================================================================
+ARG PHP_IMAGE=serversideup/php:8.5-fpm-nginx
 
-# ---------------------------------------------------------------------------
-# Stage 1: Build frontend assets with Bun + Vite
-# ---------------------------------------------------------------------------
-FROM oven/bun:1 AS frontend
+# ----------------------------
+# 2) PHP dependencies (Composer) using same PHP as prod
+# ----------------------------
+FROM ${PHP_IMAGE} AS vendor
+WORKDIR /app
 
-WORKDIR /build
+# Note: serversideup/php images come with Composer pre-installed
+COPY . .
 
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
+RUN --mount=type=cache,target=/root/.composer/cache \
+    composer install \
+      --no-dev \
+      --no-interaction \
+      --no-progress \
+      --no-scripts \
+      --prefer-dist \
+      --ignore-platform-reqs \
+      --optimize-autoloader
 
-COPY vite.config.mjs tsconfig.json ./
-COPY packages/mens_circle/Resources/Private/Frontend packages/mens_circle/Resources/Private/Frontend
-
-RUN bun run build
-
-# ---------------------------------------------------------------------------
-# Stage 2: Install PHP dependencies with Composer
-# ---------------------------------------------------------------------------
-FROM composer:2 AS composer
-
-WORKDIR /build
-
-COPY composer.json composer.lock ./
-COPY packages/mens_circle/composer.json packages/mens_circle/composer.json
-
-RUN composer install \
-    --no-dev \
-    --no-interaction \
-    --no-progress \
-    --optimize-autoloader \
-    --prefer-dist \
-    --ignore-platform-reqs
-
-# ---------------------------------------------------------------------------
-# Stage 3: Production image
-# ---------------------------------------------------------------------------
-FROM serversideup/php:8.5-fpm-nginx AS production
+# ----------------------------
+# 3) Production image
+# ----------------------------
+FROM ${PHP_IMAGE} AS production
 
 LABEL maintainer="Markus Sommer"
-LABEL description="TYPO3 v14 – Männerkreis Niederbayern / Straubing"
 
-# Install TYPO3-required PHP extensions
 USER root
-RUN install-php-extensions intl gd zip pdo_mysql opcache bcmath
-
-# Custom nginx config for TYPO3
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
-
-# Set working directory
-WORKDIR /var/www/html
+RUN install-php-extensions intl
+USER www-data
 
 # Copy application code
 COPY --chown=www-data:www-data . .
 
 # Copy Composer vendor from build stage
-COPY --chown=www-data:www-data --from=composer /build/vendor vendor
+COPY --chown=www-data:www-data --from=vendor /app/vendor vendor
 
-# Copy built frontend assets from build stage
-COPY --chown=www-data:www-data --from=frontend /build/packages/mens_circle/Resources/Public/Build packages/mens_circle/Resources/Public/Build
-
-# Ensure writable directories exist
-RUN mkdir -p var/cache var/lock var/log var/session public/typo3temp public/fileadmin config/system \
-    && chown -R www-data:www-data var public/typo3temp public/fileadmin config/system
-
-# Remove build-only files from final image
-RUN rm -rf node_modules docker .dockerignore .ddev .claude .codex
-
-USER www-data
-
-# PHP-FPM + Nginx via S6 overlay (handled by base image)
-EXPOSE 8080
+# Update and Optimize autoloader
+RUN composer dump-autoload \
+      --no-dev \
+      --ignore-platform-reqs \
+      --classmap-authoritative \
+      --no-interaction
