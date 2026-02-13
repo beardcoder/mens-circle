@@ -15,7 +15,7 @@ final readonly class SendEventSmsMessageHandler
 {
     public function __construct(
         private RegistrationNotificationDataService $notificationDataService,
-        private SmsService $smsService
+        private SmsService $smsService,
     ) {}
 
     public function __invoke(SendEventSmsMessage $message): void
@@ -26,7 +26,7 @@ final readonly class SendEventSmsMessageHandler
         }
 
         if ($message->getType() === SendEventSmsMessage::TYPE_REMINDER) {
-            if (!\in_array((string) ($notificationData['status'] ?? ''), RegistrationStatus::activeValues(), true)) {
+            if (!\in_array((string)($notificationData['status'] ?? ''), RegistrationStatus::activeValues(), true)) {
                 return;
             }
 

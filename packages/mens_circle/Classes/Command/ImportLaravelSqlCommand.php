@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Command;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\ParameterType;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
+use RuntimeException;
+use SimpleXMLElement;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,10 +15,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
+use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 
 #[AsCommand(
     name: 'menscircle:import:laravel-sql',
-    description: 'Importiert Daten aus einem Laravel SQL-Dump in die TYPO3 Tabellen von EXT:mens_circle.'
+    description: 'Importiert Daten aus einem Laravel SQL-Dump in die TYPO3 Tabellen von EXT:mens_circle.',
 )]
 final class ImportLaravelSqlCommand extends Command
 {
@@ -173,7 +177,7 @@ final class ImportLaravelSqlCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $sqlFile = (string) $input->getArgument('sql-file');
+        $sqlFile = (string)$input->getArgument('sql-file');
         $realPath = realpath($sqlFile);
         if ($realPath === false || !is_file($realPath)) {
             $this->writeError($io, \sprintf('SQL-Datei nicht gefunden: %s', $sqlFile));
@@ -181,21 +185,21 @@ final class ImportLaravelSqlCommand extends Command
             return Command::FAILURE;
         }
 
-        $pid = (int) $input->getOption('pid');
+        $pid = (int)$input->getOption('pid');
         if ($pid <= 0) {
             $this->writeError($io, '--pid muss größer als 0 sein.');
 
             return Command::FAILURE;
         }
 
-        $contentPid = (int) $input->getOption('content-pid');
+        $contentPid = (int)$input->getOption('content-pid');
         if ($contentPid <= 0) {
             $this->writeError($io, '--content-pid muss größer als 0 sein.');
 
             return Command::FAILURE;
         }
 
-        $sourcePageSlug = trim((string) $input->getOption('source-page-slug'));
+        $sourcePageSlug = trim((string)$input->getOption('source-page-slug'));
         if ($sourcePageSlug === '') {
             $sourcePageSlug = 'home';
         }
@@ -206,7 +210,7 @@ final class ImportLaravelSqlCommand extends Command
         $io->text(\sprintf('Content PID: %d', $contentPid));
         $io->text(\sprintf('Source Page Slug: %s', $sourcePageSlug));
 
-        $sqlContent = (string) file_get_contents($realPath);
+        $sqlContent = (string)file_get_contents($realPath);
         if ($sqlContent === '') {
             $this->writeError($io, 'Die SQL-Datei ist leer oder konnte nicht gelesen werden.');
 
@@ -262,7 +266,7 @@ final class ImportLaravelSqlCommand extends Command
         }
         $io->listing($sourceStats);
 
-        if ((bool) $input->getOption('dry-run')) {
+        if ((bool)$input->getOption('dry-run')) {
             $io->success('Dry-Run erfolgreich. Keine Daten wurden geschrieben.');
 
             return Command::SUCCESS;
@@ -275,10 +279,10 @@ final class ImportLaravelSqlCommand extends Command
 
             $hasRows = $this->targetTablesContainRows($connection);
             $hasContentRows = $this->contentElementsContainRows($connection);
-            $truncate = (bool) $input->getOption('truncate');
+            $truncate = (bool)$input->getOption('truncate');
 
             if (($hasRows || $hasContentRows) && !$truncate) {
-                throw new \RuntimeException('Zieltabellen oder Content-Elemente sind nicht leer. Starte mit --truncate oder leere die Datensätze manuell.');
+                throw new RuntimeException('Zieltabellen oder Content-Elemente sind nicht leer. Starte mit --truncate oder leere die Datensätze manuell.');
             }
 
             if ($truncate) {
@@ -297,7 +301,7 @@ final class ImportLaravelSqlCommand extends Command
                 newsletterSubscriptions: $newsletterSubscriptions,
                 testimonials: $testimonials,
                 pages: $pages,
-                contentBlocks: $contentBlocks
+                contentBlocks: $contentBlocks,
             );
 
             $connection->commit();
@@ -320,7 +324,7 @@ final class ImportLaravelSqlCommand extends Command
             $io->success('Import abgeschlossen.');
 
             return Command::SUCCESS;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             if ($connection->isTransactionActive()) {
                 $connection->rollBack();
             }
@@ -347,7 +351,7 @@ final class ImportLaravelSqlCommand extends Command
         array $newsletterSubscriptions,
         array $testimonials,
         array $pages,
-        array $contentBlocks
+        array $contentBlocks,
     ): array {
         $stats = [
             'participantsImported' => 0,
@@ -367,7 +371,7 @@ final class ImportLaravelSqlCommand extends Command
             connection: $connection,
             rootPageUid: $contentPid,
             sourcePages: $pages,
-            selectedSourcePageId: $selectedSourcePageId
+            selectedSourcePageId: $selectedSourcePageId,
         );
         $sourcePageToTargetPageMap = $pageImportResult['pageMap'];
         $stats['pagesCreated'] = $pageImportResult['pagesCreated'];
@@ -375,14 +379,14 @@ final class ImportLaravelSqlCommand extends Command
 
         $eventPageResult = $this->ensureEventPageAndPlugin(
             connection: $connection,
-            rootPageUid: $contentPid
+            rootPageUid: $contentPid,
         );
         $stats['pagesCreated'] += $eventPageResult['pagesCreated'];
         $stats['pagesUpdated'] += $eventPageResult['pagesUpdated'];
 
         $participantIds = [];
         foreach ($participants as $row) {
-            $uid = (int) ($row['id'] ?? 0);
+            $uid = (int)($row['id'] ?? 0);
             if ($uid <= 0) {
                 continue;
             }
@@ -407,7 +411,7 @@ final class ImportLaravelSqlCommand extends Command
 
         $eventIds = [];
         foreach ($events as $row) {
-            $uid = (int) ($row['id'] ?? 0);
+            $uid = (int)($row['id'] ?? 0);
             if ($uid <= 0) {
                 continue;
             }
@@ -448,9 +452,9 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         foreach ($registrations as $row) {
-            $uid = (int) ($row['id'] ?? 0);
-            $eventUid = (int) ($row['event_id'] ?? 0);
-            $participantUid = (int) ($row['participant_id'] ?? 0);
+            $uid = (int)($row['id'] ?? 0);
+            $eventUid = (int)($row['event_id'] ?? 0);
+            $participantUid = (int)($row['participant_id'] ?? 0);
 
             if ($uid <= 0 || !isset($eventIds[$eventUid]) || !isset($participantIds[$participantUid])) {
                 $stats['registrationsSkipped']++;
@@ -487,18 +491,18 @@ final class ImportLaravelSqlCommand extends Command
         foreach ($participants as $row) {
             $email = strtolower(trim($this->toString($row['email'] ?? '')));
             if ($email !== '' && isset($row['id'])) {
-                $participantByEmail[$email] = (int) $row['id'];
+                $participantByEmail[$email] = (int)$row['id'];
             }
         }
 
         foreach ($newsletterSubscriptions as $row) {
-            $uid = (int) ($row['id'] ?? 0);
+            $uid = (int)($row['id'] ?? 0);
             if ($uid <= 0) {
                 $stats['newsletterSkipped']++;
                 continue;
             }
 
-            $participantUid = (int) ($row['participant_id'] ?? 0);
+            $participantUid = (int)($row['participant_id'] ?? 0);
             if ($participantUid <= 0 && isset($row['email'])) {
                 $email = strtolower(trim($this->toString($row['email'])));
                 $participantUid = $participantByEmail[$email] ?? 0;
@@ -533,7 +537,7 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         foreach ($testimonials as $row) {
-            $uid = (int) ($row['id'] ?? 0);
+            $uid = (int)($row['id'] ?? 0);
             if ($uid <= 0) {
                 continue;
             }
@@ -562,20 +566,20 @@ final class ImportLaravelSqlCommand extends Command
             usort(
                 $contentBlocks,
                 static function (array $left, array $right): int {
-                    $leftOrder = (int) ($left['order'] ?? 0);
-                    $rightOrder = (int) ($right['order'] ?? 0);
+                    $leftOrder = (int)($left['order'] ?? 0);
+                    $rightOrder = (int)($right['order'] ?? 0);
                     if ($leftOrder === $rightOrder) {
-                        return (int) ($left['id'] ?? 0) <=> (int) ($right['id'] ?? 0);
+                        return (int)($left['id'] ?? 0) <=> (int)($right['id'] ?? 0);
                     }
 
                     return $leftOrder <=> $rightOrder;
-                }
+                },
             );
         }
 
         $pagePositions = [];
         foreach ($contentBlocks as $row) {
-            $sourcePageId = (int) ($row['page_id'] ?? 0);
+            $sourcePageId = (int)($row['page_id'] ?? 0);
             $targetPageUid = $sourcePageToTargetPageMap[$sourcePageId] ?? $contentPid;
             $position = $pagePositions[$targetPageUid] ?? 0;
 
@@ -602,7 +606,7 @@ final class ImportLaravelSqlCommand extends Command
         Connection $connection,
         int $rootPageUid,
         array $sourcePages,
-        int $selectedSourcePageId
+        int $selectedSourcePageId,
     ): array {
         $pageMap = [];
         $pagesCreated = 0;
@@ -618,26 +622,26 @@ final class ImportLaravelSqlCommand extends Command
 
         usort(
             $sourcePages,
-            static fn(array $left, array $right): int => (int) ($left['id'] ?? 0) <=> (int) ($right['id'] ?? 0)
+            static fn(array $left, array $right): int => (int)($left['id'] ?? 0) <=> (int)($right['id'] ?? 0),
         );
 
         if ($selectedSourcePageId <= 0) {
             foreach ($sourcePages as $sourcePage) {
                 $slug = strtolower($this->toString($sourcePage['slug'] ?? ''));
                 if ($slug === 'home') {
-                    $selectedSourcePageId = (int) ($sourcePage['id'] ?? 0);
+                    $selectedSourcePageId = (int)($sourcePage['id'] ?? 0);
                     break;
                 }
             }
         }
 
         if ($selectedSourcePageId <= 0) {
-            $selectedSourcePageId = (int) ($sourcePages[0]['id'] ?? 0);
+            $selectedSourcePageId = (int)($sourcePages[0]['id'] ?? 0);
         }
 
         $sortingByPid = [];
         foreach ($sourcePages as $sourcePage) {
-            $sourcePageId = (int) ($sourcePage['id'] ?? 0);
+            $sourcePageId = (int)($sourcePage['id'] ?? 0);
             if ($sourcePageId <= 0) {
                 continue;
             }
@@ -720,12 +724,12 @@ final class ImportLaravelSqlCommand extends Command
             ]);
             $sortingByPid[$targetPid] = $sorting + 256;
 
-            $newPageUid = (int) $connection->lastInsertId();
+            $newPageUid = (int)$connection->lastInsertId();
             if ($newPageUid <= 0) {
                 $newPageUid = $this->findPageUidBySlug($connection, $targetPid, $targetSlug);
             }
             if ($newPageUid <= 0) {
-                throw new \RuntimeException(\sprintf('Import fehlgeschlagen: Konnte Zielseite für Source-Page %d nicht ermitteln.', $sourcePageId));
+                throw new RuntimeException(\sprintf('Import fehlgeschlagen: Konnte Zielseite für Source-Page %d nicht ermitteln.', $sourcePageId));
             }
 
             $pageMap[$sourcePageId] = $newPageUid;
@@ -768,12 +772,12 @@ final class ImportLaravelSqlCommand extends Command
                 'description' => 'Aktuelle und kommende Termine vom Männerkreis.',
             ]);
 
-            $eventPageUid = (int) $connection->lastInsertId();
+            $eventPageUid = (int)$connection->lastInsertId();
             if ($eventPageUid <= 0) {
                 $eventPageUid = $this->findPageUidBySlug($connection, $rootPageUid, '/event');
             }
             if ($eventPageUid <= 0) {
-                throw new \RuntimeException('Import fehlgeschlagen: Event-Seite (/event) konnte nicht erstellt werden.');
+                throw new RuntimeException('Import fehlgeschlagen: Event-Seite (/event) konnte nicht erstellt werden.');
             }
 
             $pagesCreated++;
@@ -812,7 +816,7 @@ final class ImportLaravelSqlCommand extends Command
     private function targetTablesContainRows(Connection $connection): bool
     {
         foreach (self::TARGET_TABLES as $table) {
-            $count = (int) $connection->count('*', $table, []);
+            $count = (int)$connection->count('*', $table, []);
             if ($count > 0) {
                 return true;
             }
@@ -837,16 +841,16 @@ final class ImportLaravelSqlCommand extends Command
 
         $quotedTypes = array_map(
             static fn(string $type): string => $connection->quote($type),
-            $contentTypes
+            $contentTypes,
         );
         $inList = implode(',', $quotedTypes);
 
         $queryBuilder = $connection->createQueryBuilder();
-        $count = (int) $queryBuilder
+        $count = (int)$queryBuilder
             ->count('*')
             ->from('tt_content')
             ->where(
-                \sprintf('(CType IN (%s) OR CType = :emptyType OR CType IS NULL)', $inList)
+                \sprintf('(CType IN (%s) OR CType = :emptyType OR CType IS NULL)', $inList),
             )
             ->setParameter('emptyType', '', ParameterType::STRING)
             ->executeQuery()
@@ -864,7 +868,7 @@ final class ImportLaravelSqlCommand extends Command
 
         $quotedTypes = array_map(
             static fn(string $type): string => $connection->quote($type),
-            $contentTypes
+            $contentTypes,
         );
         $inList = implode(',', $quotedTypes);
 
@@ -872,7 +876,7 @@ final class ImportLaravelSqlCommand extends Command
         $queryBuilder
             ->delete('tt_content')
             ->where(
-                \sprintf('(CType IN (%s) OR CType = :emptyType OR CType IS NULL)', $inList)
+                \sprintf('(CType IN (%s) OR CType = :emptyType OR CType IS NULL)', $inList),
             )
             ->setParameter('emptyType', '', ParameterType::STRING)
             ->executeStatement();
@@ -885,18 +889,18 @@ final class ImportLaravelSqlCommand extends Command
     {
         $filteredRow = $this->filterRowForExistingColumns($connection, $table, $row);
         if ($filteredRow === []) {
-            throw new \RuntimeException(\sprintf('Import fehlgeschlagen: Keine passenden Spalten für Tabelle "%s".', $table));
+            throw new RuntimeException(\sprintf('Import fehlgeschlagen: Keine passenden Spalten für Tabelle "%s".', $table));
         }
         if ($table === 'tt_content') {
             $recordTypeValue = null;
             foreach ($filteredRow as $column => $value) {
-                if (strtolower((string) $column) === 'ctype') {
-                    $recordTypeValue = trim((string) $value);
+                if (strtolower((string)$column) === 'ctype') {
+                    $recordTypeValue = trim((string)$value);
                     break;
                 }
             }
             if ($recordTypeValue === null || $recordTypeValue === '') {
-                throw new \RuntimeException('Import fehlgeschlagen: Für tt_content fehlt das Pflichtfeld "CType".');
+                throw new RuntimeException('Import fehlgeschlagen: Für tt_content fehlt das Pflichtfeld "CType".');
             }
         }
 
@@ -916,7 +920,7 @@ final class ImportLaravelSqlCommand extends Command
 
         $filteredCriteria = $this->filterRowForExistingColumns($connection, $table, $criteria);
         if ($filteredCriteria === []) {
-            throw new \RuntimeException(\sprintf('Import fehlgeschlagen: Keine gültigen Update-Kriterien für Tabelle "%s".', $table));
+            throw new RuntimeException(\sprintf('Import fehlgeschlagen: Keine gültigen Update-Kriterien für Tabelle "%s".', $table));
         }
 
         $connection->update($table, $filteredRow, $filteredCriteria);
@@ -931,7 +935,7 @@ final class ImportLaravelSqlCommand extends Command
         $availableColumns = $this->getAvailableColumns($connection, $table);
         $filteredRow = [];
         foreach ($row as $column => $value) {
-            $normalizedColumnName = strtolower((string) $column);
+            $normalizedColumnName = strtolower((string)$column);
             if (isset($availableColumns[$normalizedColumnName])) {
                 $filteredRow[$availableColumns[$normalizedColumnName]] = $value;
             }
@@ -951,7 +955,7 @@ final class ImportLaravelSqlCommand extends Command
 
         $columns = [];
         foreach (array_keys($connection->createSchemaManager()->listTableColumns($table)) as $columnName) {
-            $columns[strtolower((string) $columnName)] = (string) $columnName;
+            $columns[strtolower((string)$columnName)] = (string)$columnName;
         }
 
         $this->tableColumnCache[$table] = $columns;
@@ -970,13 +974,13 @@ final class ImportLaravelSqlCommand extends Command
         preg_match_all($pattern, $sql, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $match) {
-            $table = strtolower((string) $match[1]);
-            $columnsPart = isset($match[2]) ? trim((string) $match[2]) : '';
+            $table = strtolower((string)$match[1]);
+            $columnsPart = isset($match[2]) ? trim((string)$match[2]) : '';
 
             if ($columnsPart !== '') {
                 $columns = array_map(
                     static fn(string $column): string => trim($column, " \t\n\r\0\x0B`\""),
-                    explode(',', $columnsPart)
+                    explode(',', $columnsPart),
                 );
             } else {
                 $columns = self::SOURCE_DEFAULT_COLUMNS[$table] ?? [];
@@ -986,7 +990,7 @@ final class ImportLaravelSqlCommand extends Command
                 continue;
             }
 
-            $tuples = $this->splitSqlTuples((string) $match[3]);
+            $tuples = $this->splitSqlTuples((string)$match[3]);
             foreach ($tuples as $tuple) {
                 $values = $this->splitSqlFields($tuple);
                 if (\count($values) !== \count($columns)) {
@@ -1132,7 +1136,7 @@ final class ImportLaravelSqlCommand extends Command
         $trimmed = trim($value);
 
         if (preg_match('/^(.*?)(::[a-zA-Z0-9_ \[\]]+)$/', $trimmed, $matches) === 1) {
-            $trimmed = trim((string) $matches[1]);
+            $trimmed = trim((string)$matches[1]);
         }
 
         if (strtoupper($trimmed) === 'NULL') {
@@ -1149,11 +1153,11 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         if (preg_match('/^-?\d+$/', $trimmed) === 1) {
-            return (int) $trimmed;
+            return (int)$trimmed;
         }
 
         if (preg_match('/^-?\d+\.\d+$/', $trimmed) === 1) {
-            return (float) $trimmed;
+            return (float)$trimmed;
         }
 
         if ($trimmed[0] === "'" && str_ends_with($trimmed, "'")) {
@@ -1180,7 +1184,7 @@ final class ImportLaravelSqlCommand extends Command
         foreach ($pages as $page) {
             $pageSlug = strtolower(trim($this->toString($page['slug'] ?? '')));
             if ($pageSlug === $slug) {
-                return (int) ($page['id'] ?? 0);
+                return (int)($page['id'] ?? 0);
             }
         }
 
@@ -1201,8 +1205,8 @@ final class ImportLaravelSqlCommand extends Command
         return array_values(
             array_filter(
                 $contentBlocks,
-                static fn(array $row): bool => (int) ($row['page_id'] ?? 0) === $sourcePageId
-            )
+                static fn(array $row): bool => (int)($row['page_id'] ?? 0) === $sourcePageId,
+            ),
         );
     }
 
@@ -1218,7 +1222,7 @@ final class ImportLaravelSqlCommand extends Command
             ->from('pages')
             ->where(
                 $queryBuilder->expr()->eq('pid', ':pid'),
-                $queryBuilder->expr()->eq('slug', ':slug')
+                $queryBuilder->expr()->eq('slug', ':slug'),
             )
             ->setParameter('pid', $pid, ParameterType::INTEGER)
             ->setParameter('slug', $slug, ParameterType::STRING)
@@ -1227,7 +1231,7 @@ final class ImportLaravelSqlCommand extends Command
             ->executeQuery()
             ->fetchOne();
 
-        return $uid === false ? 0 : (int) $uid;
+        return $uid === false ? 0 : (int)$uid;
     }
 
     private function findContentElementUidByType(Connection $connection, int $pid, string $cType): int
@@ -1243,7 +1247,7 @@ final class ImportLaravelSqlCommand extends Command
             ->where(
                 $queryBuilder->expr()->eq('pid', ':pid'),
                 $queryBuilder->expr()->eq('CType', ':ctype'),
-                $queryBuilder->expr()->eq('deleted', ':deleted')
+                $queryBuilder->expr()->eq('deleted', ':deleted'),
             )
             ->setParameter('pid', $pid, ParameterType::INTEGER)
             ->setParameter('ctype', $cType, ParameterType::STRING)
@@ -1253,7 +1257,7 @@ final class ImportLaravelSqlCommand extends Command
             ->executeQuery()
             ->fetchOne();
 
-        return $uid === false ? 0 : (int) $uid;
+        return $uid === false ? 0 : (int)$uid;
     }
 
     private function getNextSortingValueByPid(Connection $connection, string $table, int $pid): int
@@ -1263,13 +1267,13 @@ final class ImportLaravelSqlCommand extends Command
             ->selectLiteral('MAX(sorting)')
             ->from($table)
             ->where(
-                $queryBuilder->expr()->eq('pid', ':pid')
+                $queryBuilder->expr()->eq('pid', ':pid'),
             )
             ->setParameter('pid', $pid, ParameterType::INTEGER)
             ->executeQuery()
             ->fetchOne();
 
-        $nextSorting = (int) $maxSorting + 256;
+        $nextSorting = (int)$maxSorting + 256;
         if ($nextSorting <= 0) {
             return 256;
         }
@@ -1494,9 +1498,9 @@ final class ImportLaravelSqlCommand extends Command
             return '';
         }
 
-        $xml = new \SimpleXMLElement('<T3FlexForms><data><sheet index="sDEF"><language index="lDEF"></language></sheet></data></T3FlexForms>');
+        $xml = new SimpleXMLElement('<T3FlexForms><data><sheet index="sDEF"><language index="lDEF"></language></sheet></data></T3FlexForms>');
         $languageNodes = $xml->xpath('/T3FlexForms/data/sheet/language');
-        if (!\is_array($languageNodes) || !isset($languageNodes[0]) || !$languageNodes[0] instanceof \SimpleXMLElement) {
+        if (!\is_array($languageNodes) || !isset($languageNodes[0]) || !$languageNodes[0] instanceof SimpleXMLElement) {
             return '';
         }
         $languageNode = $languageNodes[0];
@@ -1565,7 +1569,7 @@ final class ImportLaravelSqlCommand extends Command
     private function toDateTimestamp(mixed $value): int
     {
         $dateTime = $this->createDateTimeImmutable($value);
-        if (!$dateTime instanceof \DateTimeImmutable) {
+        if (!$dateTime instanceof DateTimeImmutable) {
             return strtotime('today') ?: time();
         }
 
@@ -1585,7 +1589,7 @@ final class ImportLaravelSqlCommand extends Command
             return null;
         }
 
-        $string = trim((string) $value);
+        $string = trim((string)$value);
         if ($string === '' || $string === '0000-00-00 00:00:00') {
             return null;
         }
@@ -1609,15 +1613,15 @@ final class ImportLaravelSqlCommand extends Command
             return null;
         }
 
-        $string = trim((string) $value);
+        $string = trim((string)$value);
         if ($string === '' || $string === '0000-00-00 00:00:00') {
             return null;
         }
 
         if (preg_match('/^(\d{2}):(\d{2})(?::(\d{2}))?$/', $string, $matches) === 1) {
-            $hours = (int) $matches[1];
-            $minutes = (int) $matches[2];
-            $seconds = isset($matches[3]) ? (int) $matches[3] : 0;
+            $hours = (int)$matches[1];
+            $minutes = (int)$matches[2];
+            $seconds = isset($matches[3]) ? (int)$matches[3] : 0;
 
             if ($hours > 23 || $minutes > 59 || $seconds > 59) {
                 return null;
@@ -1627,9 +1631,9 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         if (preg_match('/^(\d{2})(\d{2})(\d{2})$/', $string, $matches) === 1) {
-            $hours = (int) $matches[1];
-            $minutes = (int) $matches[2];
-            $seconds = (int) $matches[3];
+            $hours = (int)$matches[1];
+            $minutes = (int)$matches[2];
+            $seconds = (int)$matches[3];
 
             if ($hours > 23 || $minutes > 59 || $seconds > 59) {
                 return null;
@@ -1639,83 +1643,83 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         $dateTime = $this->createDateTimeImmutable($value);
-        if (!$dateTime instanceof \DateTimeImmutable) {
+        if (!$dateTime instanceof DateTimeImmutable) {
             return null;
         }
 
-        return ((int) $dateTime->format('H') * 3600)
-            + ((int) $dateTime->format('i') * 60)
-            + (int) $dateTime->format('s');
+        return ((int)$dateTime->format('H') * 3600)
+            + ((int)$dateTime->format('i') * 60)
+            + (int)$dateTime->format('s');
     }
 
-    private function createDateTimeImmutable(mixed $value): ?\DateTimeImmutable
+    private function createDateTimeImmutable(mixed $value): ?DateTimeImmutable
     {
         if ($value === null) {
             return null;
         }
 
         if (\is_int($value) || \is_float($value)) {
-            $numeric = (int) $value;
+            $numeric = (int)$value;
             if ($numeric <= 0) {
                 return null;
             }
 
-            $numericString = (string) $numeric;
+            $numericString = (string)$numeric;
             if (preg_match('/^\d{14}$/', $numericString) === 1) {
-                $dateTime = \DateTimeImmutable::createFromFormat('YmdHis', $numericString);
+                $dateTime = DateTimeImmutable::createFromFormat('YmdHis', $numericString);
 
-                return $dateTime instanceof \DateTimeImmutable ? $dateTime : null;
+                return $dateTime instanceof DateTimeImmutable ? $dateTime : null;
             }
 
             if (preg_match('/^\d{8}$/', $numericString) === 1) {
-                $dateTime = \DateTimeImmutable::createFromFormat('Ymd', $numericString);
+                $dateTime = DateTimeImmutable::createFromFormat('Ymd', $numericString);
 
-                return $dateTime instanceof \DateTimeImmutable ? $dateTime : null;
+                return $dateTime instanceof DateTimeImmutable ? $dateTime : null;
             }
 
             if ($numeric <= 4102444800) {
-                return new \DateTimeImmutable()->setTimestamp($numeric);
+                return (new DateTimeImmutable())->setTimestamp($numeric);
             }
 
             return null;
         }
 
-        $string = trim((string) $value);
+        $string = trim((string)$value);
         if ($string === '' || $string === '0000-00-00 00:00:00') {
             return null;
         }
 
         if (preg_match('/^\d+$/', $string) === 1) {
             if (preg_match('/^\d{14}$/', $string) === 1) {
-                $dateTime = \DateTimeImmutable::createFromFormat('YmdHis', $string);
+                $dateTime = DateTimeImmutable::createFromFormat('YmdHis', $string);
 
-                return $dateTime instanceof \DateTimeImmutable ? $dateTime : null;
+                return $dateTime instanceof DateTimeImmutable ? $dateTime : null;
             }
 
             if (preg_match('/^\d{8}$/', $string) === 1) {
-                $dateTime = \DateTimeImmutable::createFromFormat('Ymd', $string);
+                $dateTime = DateTimeImmutable::createFromFormat('Ymd', $string);
 
-                return $dateTime instanceof \DateTimeImmutable ? $dateTime : null;
+                return $dateTime instanceof DateTimeImmutable ? $dateTime : null;
             }
 
-            $numeric = (int) $string;
+            $numeric = (int)$string;
             if ($numeric > 0 && $numeric <= 4102444800) {
-                return new \DateTimeImmutable()->setTimestamp($numeric);
+                return (new DateTimeImmutable())->setTimestamp($numeric);
             }
 
             return null;
         }
 
         try {
-            return new \DateTimeImmutable($string);
-        } catch (\Throwable) {
+            return new DateTimeImmutable($string);
+        } catch (Throwable) {
             return null;
         }
     }
 
     private function toDeletedFlag(mixed $deletedAt): int
     {
-        return $this->createDateTimeImmutable($deletedAt) instanceof \DateTimeImmutable ? 1 : 0;
+        return $this->createDateTimeImmutable($deletedAt) instanceof DateTimeImmutable ? 1 : 0;
     }
 
     private function toString(mixed $value): string
@@ -1724,7 +1728,7 @@ final class ImportLaravelSqlCommand extends Command
             return '';
         }
 
-        return trim((string) $value);
+        return trim((string)$value);
     }
 
     private function toInt(mixed $value, int $fallback = 0): int
@@ -1733,7 +1737,7 @@ final class ImportLaravelSqlCommand extends Command
             return $fallback;
         }
 
-        return (int) $value;
+        return (int)$value;
     }
 
     private function toBoolInt(mixed $value): int
@@ -1746,7 +1750,7 @@ final class ImportLaravelSqlCommand extends Command
             return $value > 0 ? 1 : 0;
         }
 
-        $string = strtolower(trim((string) $value));
+        $string = strtolower(trim((string)$value));
 
         return \in_array($string, ['1', 'true', 'yes', 't'], true) ? 1 : 0;
     }

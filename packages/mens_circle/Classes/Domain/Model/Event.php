@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Domain\Model;
 
+use DateTime;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -18,11 +19,11 @@ final class Event extends AbstractEntity
 
     protected string $description = '';
 
-    protected ?\DateTime $eventDate = null;
+    protected ?DateTime $eventDate = null;
 
-    protected ?\DateTime $startTime = null;
+    protected ?DateTime $startTime = null;
 
-    protected ?\DateTime $endTime = null;
+    protected ?DateTime $endTime = null;
 
     protected string $location = '';
 
@@ -92,32 +93,32 @@ final class Event extends AbstractEntity
         $this->description = $description;
     }
 
-    public function getEventDate(): ?\DateTime
+    public function getEventDate(): ?DateTime
     {
         return $this->eventDate;
     }
 
-    public function setEventDate(?\DateTime $eventDate): void
+    public function setEventDate(?DateTime $eventDate): void
     {
         $this->eventDate = $eventDate;
     }
 
-    public function getStartTime(): ?\DateTime
+    public function getStartTime(): ?DateTime
     {
         return $this->startTime;
     }
 
-    public function setStartTime(?\DateTime $startTime): void
+    public function setStartTime(?DateTime $startTime): void
     {
         $this->startTime = $startTime;
     }
 
-    public function getEndTime(): ?\DateTime
+    public function getEndTime(): ?DateTime
     {
         return $this->endTime;
     }
 
-    public function setEndTime(?\DateTime $endTime): void
+    public function setEndTime(?DateTime $endTime): void
     {
         $this->endTime = $endTime;
     }
@@ -246,7 +247,7 @@ final class Event extends AbstractEntity
 
         $endOfDay = (clone $this->eventDate)->setTime(23, 59, 59);
 
-        return $endOfDay < new \DateTime();
+        return $endOfDay < new DateTime();
     }
 
     public function getFullAddress(): string
@@ -265,16 +266,16 @@ final class Event extends AbstractEntity
 
     public function generateIcalContent(string $siteDomain = 'mens-circle.local'): string
     {
-        $eventDate = $this->eventDate instanceof \DateTime ? clone $this->eventDate : new \DateTime();
+        $eventDate = $this->eventDate instanceof DateTime ? clone $this->eventDate : new DateTime();
         $start = clone $eventDate;
         $end = clone $eventDate;
 
-        if ($this->startTime instanceof \DateTime) {
-            $start->setTime((int) $this->startTime->format('H'), (int) $this->startTime->format('i'), 0);
+        if ($this->startTime instanceof DateTime) {
+            $start->setTime((int)$this->startTime->format('H'), (int)$this->startTime->format('i'), 0);
         }
 
-        if ($this->endTime instanceof \DateTime) {
-            $end->setTime((int) $this->endTime->format('H'), (int) $this->endTime->format('i'), 0);
+        if ($this->endTime instanceof DateTime) {
+            $end->setTime((int)$this->endTime->format('H'), (int)$this->endTime->format('i'), 0);
         } else {
             $end = (clone $start)->modify('+2 hours');
         }

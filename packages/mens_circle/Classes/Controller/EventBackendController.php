@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Controller;
 
+use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
-use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -28,15 +31,15 @@ final class EventBackendController extends ActionController
     public function __construct(
         private readonly ConnectionPool $connectionPool,
         private readonly ModuleTemplateFactory $moduleTemplateFactory,
-        private readonly UriBuilder $backendUriBuilder
+        private readonly UriBuilder $backendUriBuilder,
     ) {}
 
     public function indexAction(): ResponseInterface
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $returnUrl = (string) $this->backendUriBuilder->buildUriFromRequest($this->request);
-        $moduleIdentifier = (string) ($this->request->getAttribute('module')?->getIdentifier() ?? '');
-        $storagePid = max(1, (int) ($this->settings['storagePid'] ?? 1));
+        $returnUrl = (string)$this->backendUriBuilder->buildUriFromRequest($this->request);
+        $moduleIdentifier = (string)($this->request->getAttribute('module')?->getIdentifier() ?? '');
+        $storagePid = max(1, (int)($this->settings['storagePid'] ?? 1));
 
         $events = $this->buildEventRows($returnUrl, $moduleIdentifier);
 
@@ -53,6 +56,7 @@ final class EventBackendController extends ActionController
     }
 
     /**
+     * @throws Exception
      * @return list<array{
      *   uid: int,
      *   title: string,
@@ -82,7 +86,6 @@ final class EventBackendController extends ActionController
      *   recordsUrl: string,
      *   frontendUrl: string
      * }>
-     * @throws Exception
      */
     private function buildEventRows(string $returnUrl, string $moduleIdentifier): array
     {
@@ -151,26 +154,26 @@ final class EventBackendController extends ActionController
         array $registrationCounts,
         array $participantsByEvent,
         string $returnUrl,
-        string $moduleIdentifier
+        string $moduleIdentifier,
     ): ?array {
-        $eventUid = (int) ($event['uid'] ?? 0);
+        $eventUid = (int)($event['uid'] ?? 0);
         if ($eventUid <= 0) {
             return null;
         }
 
         $eventDate = $this->createDateTimeImmutable($event['event_date'] ?? null);
-        $isPast = $eventDate instanceof \DateTimeImmutable && $eventDate->setTime(23, 59, 59) < new \DateTimeImmutable('now');
+        $isPast = $eventDate instanceof DateTimeImmutable && $eventDate->setTime(23, 59, 59) < new DateTimeImmutable('now');
 
-        $maxParticipants = max(0, (int) ($event['max_participants'] ?? 0));
+        $maxParticipants = max(0, (int)($event['max_participants'] ?? 0));
         $activeRegistrations = $registrationCounts[$eventUid] ?? 0;
         $availableSpots = max(0, $maxParticipants - $activeRegistrations);
 
-        $slug = trim((string) ($event['slug'] ?? ''));
+        $slug = trim((string)($event['slug'] ?? ''));
         $participants = $participantsByEvent[$eventUid] ?? [];
         $status = $this->resolveStatus(
-            isHidden: (int) ($event['hidden'] ?? 0) === 1,
-            isPublished: (int) ($event['is_published'] ?? 0) === 1,
-            isPast: $isPast
+            isHidden: (int)($event['hidden'] ?? 0) === 1,
+            isPublished: (int)($event['is_published'] ?? 0) === 1,
+            isPast: $isPast,
         );
 
         return [
@@ -188,14 +191,14 @@ final class EventBackendController extends ActionController
             'participantsCount' => \count($participants),
             'participants' => $participants,
             'editUrl' => $this->buildEditEventUrl($eventUid, $returnUrl, $moduleIdentifier),
-            'recordsUrl' => $this->buildRecordsModuleUrl((int) ($event['pid'] ?? 0)),
+            'recordsUrl' => $this->buildRecordsModuleUrl((int)($event['pid'] ?? 0)),
             'frontendUrl' => $this->buildFrontendEventUrl($slug),
         ];
     }
 
     /**
-     * @return list<array<string, mixed>>
      * @throws Exception
+     * @return list<array<string, mixed>>
      */
     private function fetchEvents(): array
     {
@@ -214,7 +217,7 @@ final class EventBackendController extends ActionController
                 'city',
                 'max_participants',
                 'is_published',
-                'hidden'
+                'hidden',
             )
             ->from(self::EVENT_TABLE)
             ->orderBy('event_date', 'DESC')
@@ -241,8 +244,8 @@ final class EventBackendController extends ActionController
                 $queryBuilder->expr()->eq('hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
                 $queryBuilder->expr()->in(
                     'status',
-                    $queryBuilder->createNamedParameter(RegistrationStatus::activeValues(), ArrayParameterType::STRING)
-                )
+                    $queryBuilder->createNamedParameter(RegistrationStatus::activeValues(), ArrayParameterType::STRING),
+                ),
             )
             ->groupBy('event')
             ->executeQuery()
@@ -254,11 +257,11 @@ final class EventBackendController extends ActionController
 
         $countsByEvent = [];
         foreach ($rows as $row) {
-            $eventUid = (int) ($row['event'] ?? 0);
+            $eventUid = (int)($row['event'] ?? 0);
             if ($eventUid <= 0) {
                 continue;
             }
-            $countsByEvent[$eventUid] = (int) ($row['registrations_active'] ?? 0);
+            $countsByEvent[$eventUid] = (int)($row['registrations_active'] ?? 0);
         }
 
         return $countsByEvent;
@@ -292,19 +295,19 @@ final class EventBackendController extends ActionController
                 'participant.first_name',
                 'participant.last_name',
                 'participant.email',
-                'participant.phone'
+                'participant.phone',
             )
             ->from(self::REGISTRATION_TABLE, 'registration')
             ->innerJoin(
                 'registration',
                 self::PARTICIPANT_TABLE,
                 'participant',
-                $queryBuilder->expr()->eq('participant.uid', $queryBuilder->quoteIdentifier('registration.participant'))
+                $queryBuilder->expr()->eq('participant.uid', $queryBuilder->quoteIdentifier('registration.participant')),
             )
             ->where(
                 $queryBuilder->expr()->eq('registration.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
                 $queryBuilder->expr()->eq('participant.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
-                $queryBuilder->expr()->eq('participant.deleted', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER))
+                $queryBuilder->expr()->eq('participant.deleted', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
             )
             ->orderBy('registration.event', 'ASC')
             ->addOrderBy('registration.registered_at', 'DESC')
@@ -318,7 +321,7 @@ final class EventBackendController extends ActionController
 
         $participantUids = [];
         foreach ($rows as $row) {
-            $participantUid = (int) ($row['participant_uid'] ?? 0);
+            $participantUid = (int)($row['participant_uid'] ?? 0);
             if ($participantUid > 0) {
                 $participantUids[] = $participantUid;
             }
@@ -328,24 +331,24 @@ final class EventBackendController extends ActionController
 
         $participantsByEvent = [];
         foreach ($rows as $row) {
-            $eventUid = (int) ($row['event'] ?? 0);
-            $participantUid = (int) ($row['participant_uid'] ?? 0);
+            $eventUid = (int)($row['event'] ?? 0);
+            $participantUid = (int)($row['participant_uid'] ?? 0);
 
             if ($eventUid <= 0 || $participantUid <= 0) {
                 continue;
             }
 
-            $registrationStatus = $this->resolveRegistrationStatus((string) ($row['status'] ?? ''));
+            $registrationStatus = $this->resolveRegistrationStatus((string)($row['status'] ?? ''));
             $newsletterStatus = $this->resolveNewsletterStatus($newsletterByParticipant[$participantUid] ?? null);
-            $email = trim((string) ($row['participant.email'] ?? $row['email'] ?? ''));
-            $phone = trim((string) ($row['participant.phone'] ?? $row['phone'] ?? ''));
+            $email = trim((string)($row['participant.email'] ?? $row['email'] ?? ''));
+            $phone = trim((string)($row['participant.phone'] ?? $row['phone'] ?? ''));
 
             $participantsByEvent[$eventUid][] = [
                 'uid' => $participantUid,
                 'name' => $this->buildParticipantName(
-                    firstName: (string) ($row['participant.first_name'] ?? $row['first_name'] ?? ''),
-                    lastName: (string) ($row['participant.last_name'] ?? $row['last_name'] ?? ''),
-                    email: $email
+                    firstName: (string)($row['participant.first_name'] ?? $row['first_name'] ?? ''),
+                    lastName: (string)($row['participant.last_name'] ?? $row['last_name'] ?? ''),
+                    email: $email,
                 ),
                 'email' => $email !== '' ? $email : '-',
                 'phone' => $phone !== '' ? $phone : '-',
@@ -380,8 +383,8 @@ final class EventBackendController extends ActionController
                 $queryBuilder->expr()->eq('hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
                 $queryBuilder->expr()->in(
                     'participant',
-                    $queryBuilder->createNamedParameter($participantUids, ArrayParameterType::INTEGER)
-                )
+                    $queryBuilder->createNamedParameter($participantUids, ArrayParameterType::INTEGER),
+                ),
             )
             ->orderBy('participant', 'ASC')
             ->addOrderBy('uid', 'DESC')
@@ -394,7 +397,7 @@ final class EventBackendController extends ActionController
 
         $newsletterByParticipant = [];
         foreach ($rows as $row) {
-            $participantUid = (int) ($row['participant'] ?? 0);
+            $participantUid = (int)($row['participant'] ?? 0);
             if ($participantUid <= 0 || isset($newsletterByParticipant[$participantUid])) {
                 continue;
             }
@@ -451,7 +454,7 @@ final class EventBackendController extends ActionController
         }
 
         $unsubscribedAt = $this->createDateTimeImmutable($newsletterRow['unsubscribed_at'] ?? null);
-        if ($unsubscribedAt instanceof \DateTimeImmutable) {
+        if ($unsubscribedAt instanceof DateTimeImmutable) {
             return [
                 'label' => $this->translate('newsletterStatus.unsubscribed'),
                 'class' => 'text-bg-warning',
@@ -460,7 +463,7 @@ final class EventBackendController extends ActionController
         }
 
         $confirmedAt = $this->createDateTimeImmutable($newsletterRow['confirmed_at'] ?? null);
-        if ($confirmedAt instanceof \DateTimeImmutable) {
+        if ($confirmedAt instanceof DateTimeImmutable) {
             return [
                 'label' => $this->translate('newsletterStatus.confirmed'),
                 'class' => 'text-bg-success',
@@ -472,7 +475,7 @@ final class EventBackendController extends ActionController
         return [
             'label' => $this->translate('newsletterStatus.pending'),
             'class' => 'text-bg-info',
-            'dateLabel' => $subscribedAt instanceof \DateTimeImmutable ? $subscribedAt->format('d.m.Y H:i') : '',
+            'dateLabel' => $subscribedAt instanceof DateTimeImmutable ? $subscribedAt->format('d.m.Y H:i') : '',
         ];
     }
 
@@ -516,15 +519,15 @@ final class EventBackendController extends ActionController
         $start = $this->createDateTimeImmutable($startTime);
         $end = $this->createDateTimeImmutable($endTime);
 
-        if (!$start instanceof \DateTimeImmutable && !$end instanceof \DateTimeImmutable) {
+        if (!$start instanceof DateTimeImmutable && !$end instanceof DateTimeImmutable) {
             return $this->translate('label.noTime');
         }
 
-        if ($start instanceof \DateTimeImmutable && $end instanceof \DateTimeImmutable) {
+        if ($start instanceof DateTimeImmutable && $end instanceof DateTimeImmutable) {
             return $start->format('H:i') . ' - ' . $end->format('H:i');
         }
 
-        if ($start instanceof \DateTimeImmutable) {
+        if ($start instanceof DateTimeImmutable) {
             return $start->format('H:i');
         }
 
@@ -536,28 +539,28 @@ final class EventBackendController extends ActionController
         return $this->createDateTimeImmutable($value)?->format('d.m.Y H:i') ?? '-';
     }
 
-    private function createDateTimeImmutable(mixed $value): ?\DateTimeImmutable
+    private function createDateTimeImmutable(mixed $value): ?DateTimeImmutable
     {
         if ($value === null) {
             return null;
         }
 
-        if ($value instanceof \DateTimeImmutable) {
+        if ($value instanceof DateTimeImmutable) {
             return $value;
         }
 
-        if ($value instanceof \DateTimeInterface) {
-            return new \DateTimeImmutable($value->format('Y-m-d H:i:s'));
+        if ($value instanceof DateTimeInterface) {
+            return new DateTimeImmutable($value->format('Y-m-d H:i:s'));
         }
 
-        $stringValue = trim((string) $value);
+        $stringValue = trim((string)$value);
         if ($stringValue === '' || $stringValue === '0000-00-00 00:00:00' || $stringValue === '00:00:00') {
             return null;
         }
 
         try {
-            return new \DateTimeImmutable($stringValue);
-        } catch (\Throwable) {
+            return new DateTimeImmutable($stringValue);
+        } catch (Throwable) {
             return null;
         }
     }
@@ -578,14 +581,14 @@ final class EventBackendController extends ActionController
             return '';
         }
 
-        return (string) $this->backendUriBuilder->buildUriFromRoute('records', [
+        return (string)$this->backendUriBuilder->buildUriFromRoute('records', [
             'id' => $pageUid,
         ]);
     }
 
     private function buildFrontendEventUrl(string $slug): string
     {
-        $baseUrl = rtrim((string) ($this->settings['baseUrl'] ?? ''), '/');
+        $baseUrl = rtrim((string)($this->settings['baseUrl'] ?? ''), '/');
         $normalizedSlug = ltrim(trim($slug), '/');
 
         if ($baseUrl === '' || $normalizedSlug === '') {
@@ -619,7 +622,7 @@ final class EventBackendController extends ActionController
 
     private function normalizeText(mixed $value): string
     {
-        return trim((string) $value);
+        return trim((string)$value);
     }
 
     private function normalizeTextOrFallback(mixed $value, string $fallback): string
@@ -633,7 +636,7 @@ final class EventBackendController extends ActionController
         int $targetUid,
         string $mode,
         string $returnUrl,
-        string $moduleIdentifier
+        string $moduleIdentifier,
     ): string {
         $parameters = [
             'edit' => [
@@ -647,7 +650,7 @@ final class EventBackendController extends ActionController
             $parameters['module'] = $moduleIdentifier;
         }
 
-        return (string) $this->backendUriBuilder->buildUriFromRoute('record_edit', $parameters);
+        return (string)$this->backendUriBuilder->buildUriFromRoute('record_edit', $parameters);
     }
 
     private function createDeletedOnlyQueryBuilder(string $table): QueryBuilder

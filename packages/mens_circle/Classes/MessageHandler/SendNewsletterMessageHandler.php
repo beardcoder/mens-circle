@@ -12,7 +12,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 final readonly class SendNewsletterMessageHandler
 {
     public function __construct(
-        private MailService $mailService
+        private MailService $mailService,
     ) {}
 
     public function __invoke(SendNewsletterMessage $message): void
@@ -23,7 +23,7 @@ final readonly class SendNewsletterMessageHandler
             $message->getSubject(),
             $message->getContent(),
             $message->getUnsubscribeUrl(),
-            $message->getSettings()
+            $message->getSettings(),
         );
     }
 }

@@ -14,7 +14,7 @@ final readonly class RegistrationNotificationDataService
     private const PARTICIPANT_TABLE = 'tx_menscircle_domain_model_participant';
 
     public function __construct(
-        private ConnectionPool $connectionPool
+        private ConnectionPool $connectionPool,
     ) {}
 
     /**
@@ -57,7 +57,7 @@ final readonly class RegistrationNotificationDataService
                 'event.start_time',
                 'event.end_time',
                 'event.location',
-                'event.city'
+                'event.city',
             )
             ->from(self::REGISTRATION_TABLE, 'registration')
             ->innerJoin(
@@ -66,8 +66,8 @@ final readonly class RegistrationNotificationDataService
                 'participant',
                 $queryBuilder->expr()->eq(
                     'participant.uid',
-                    $queryBuilder->quoteIdentifier('registration.participant')
-                )
+                    $queryBuilder->quoteIdentifier('registration.participant'),
+                ),
             )
             ->innerJoin(
                 'registration',
@@ -75,20 +75,20 @@ final readonly class RegistrationNotificationDataService
                 'event',
                 $queryBuilder->expr()->eq(
                     'event.uid',
-                    $queryBuilder->quoteIdentifier('registration.event')
-                )
+                    $queryBuilder->quoteIdentifier('registration.event'),
+                ),
             )
             ->where(
                 $queryBuilder->expr()->eq(
                     'registration.uid',
-                    $queryBuilder->createNamedParameter($registrationUid, ParameterType::INTEGER)
+                    $queryBuilder->createNamedParameter($registrationUid, ParameterType::INTEGER),
                 ),
                 $queryBuilder->expr()->eq('registration.deleted', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
                 $queryBuilder->expr()->eq('registration.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
                 $queryBuilder->expr()->eq('participant.deleted', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
                 $queryBuilder->expr()->eq('participant.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
                 $queryBuilder->expr()->eq('event.deleted', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
-                $queryBuilder->expr()->eq('event.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER))
+                $queryBuilder->expr()->eq('event.hidden', $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)),
             )
             ->setMaxResults(1)
             ->executeQuery()
@@ -99,19 +99,19 @@ final readonly class RegistrationNotificationDataService
         }
 
         return [
-            'registrationUid' => (int) ($row['uid'] ?? 0),
-            'status' => trim((string) ($row['status'] ?? '')),
-            'participantEmail' => strtolower(trim((string) ($row['email'] ?? ''))),
-            'participantFirstName' => trim((string) ($row['first_name'] ?? '')),
-            'participantLastName' => trim((string) ($row['last_name'] ?? '')),
-            'participantPhone' => trim((string) ($row['phone'] ?? '')),
-            'eventTitle' => trim((string) ($row['title'] ?? '')),
-            'eventSlug' => trim((string) ($row['slug'] ?? '')),
-            'eventDate' => trim((string) ($row['event_date'] ?? '')),
-            'eventStartTime' => trim((string) ($row['start_time'] ?? '')),
-            'eventEndTime' => trim((string) ($row['end_time'] ?? '')),
-            'eventLocation' => trim((string) ($row['location'] ?? '')),
-            'eventCity' => trim((string) ($row['city'] ?? '')),
+            'registrationUid' => (int)($row['uid'] ?? 0),
+            'status' => trim((string)($row['status'] ?? '')),
+            'participantEmail' => strtolower(trim((string)($row['email'] ?? ''))),
+            'participantFirstName' => trim((string)($row['first_name'] ?? '')),
+            'participantLastName' => trim((string)($row['last_name'] ?? '')),
+            'participantPhone' => trim((string)($row['phone'] ?? '')),
+            'eventTitle' => trim((string)($row['title'] ?? '')),
+            'eventSlug' => trim((string)($row['slug'] ?? '')),
+            'eventDate' => trim((string)($row['event_date'] ?? '')),
+            'eventStartTime' => trim((string)($row['start_time'] ?? '')),
+            'eventEndTime' => trim((string)($row['end_time'] ?? '')),
+            'eventLocation' => trim((string)($row['location'] ?? '')),
+            'eventCity' => trim((string)($row['city'] ?? '')),
         ];
     }
 }

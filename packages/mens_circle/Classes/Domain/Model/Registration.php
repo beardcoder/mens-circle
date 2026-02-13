@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Domain\Model;
 
 use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
+use DateTime;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 final class Registration extends AbstractEntity
@@ -15,9 +16,9 @@ final class Registration extends AbstractEntity
 
     protected string $status = RegistrationStatus::Registered->value;
 
-    protected ?\DateTime $registeredAt = null;
+    protected ?DateTime $registeredAt = null;
 
-    protected ?\DateTime $cancelledAt = null;
+    protected ?DateTime $cancelledAt = null;
 
     public function getEvent(): ?Event
     {
@@ -54,22 +55,22 @@ final class Registration extends AbstractEntity
         $this->status = $status->value;
     }
 
-    public function getRegisteredAt(): ?\DateTime
+    public function getRegisteredAt(): ?DateTime
     {
         return $this->registeredAt;
     }
 
-    public function setRegisteredAt(?\DateTime $registeredAt): void
+    public function setRegisteredAt(?DateTime $registeredAt): void
     {
         $this->registeredAt = $registeredAt;
     }
 
-    public function getCancelledAt(): ?\DateTime
+    public function getCancelledAt(): ?DateTime
     {
         return $this->cancelledAt;
     }
 
-    public function setCancelledAt(?\DateTime $cancelledAt): void
+    public function setCancelledAt(?DateTime $cancelledAt): void
     {
         $this->cancelledAt = $cancelledAt;
     }

@@ -44,7 +44,10 @@
   },
   "scripts": {
     "typo3": "vendor/bin/typo3",
-    "setup": "vendor/bin/typo3 setup"
+    "setup": "vendor/bin/typo3 setup",
+    "cs:fix": "vendor/bin/php-cs-fixer fix",
+    "cs:check": "vendor/bin/php-cs-fixer fix --dry-run --diff",
+    "stan": "vendor/bin/phpstan analyse"
   },
   "repositories": {
     "packages": {

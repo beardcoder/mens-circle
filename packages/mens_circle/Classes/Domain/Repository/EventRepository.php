@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Domain\Repository;
 
 use BeardCoder\MensCircle\Domain\Model\Event;
+use DateTime;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
@@ -28,8 +29,8 @@ final class EventRepository extends Repository
     }
 
     /**
-     * @return QueryResultInterface<Event>
      * @throws InvalidQueryException
+     * @return QueryResultInterface<Event>
      */
     public function findUpcomingPublished(int $limit = 50): QueryResultInterface
     {
@@ -37,8 +38,8 @@ final class EventRepository extends Repository
         $query->matching(
             $query->logicalAnd(
                 $query->equals('isPublished', true),
-                $query->greaterThanOrEqual('eventDate', new \DateTime('today'))
-            )
+                $query->greaterThanOrEqual('eventDate', new DateTime('today')),
+            ),
         );
         $query->setOrderings([
             'eventDate' => QueryInterface::ORDER_ASCENDING,
@@ -58,8 +59,8 @@ final class EventRepository extends Repository
         $query->matching(
             $query->logicalAnd(
                 $query->equals('isPublished', true),
-                $query->greaterThanOrEqual('eventDate', new \DateTime('today'))
-            )
+                $query->greaterThanOrEqual('eventDate', new DateTime('today')),
+            ),
         );
         $query->setOrderings([
             'eventDate' => QueryInterface::ORDER_ASCENDING,
