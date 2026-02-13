@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\DataProcessing;
 
-use DateTimeImmutable;
-use Doctrine\DBAL\ParameterType;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use BeardCoder\MensCircle\Domain\Model\Event;
+use BeardCoder\MensCircle\Domain\Repository\EventRepository;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
-final class NextEventDataProcessor implements DataProcessorInterface
+final readonly class NextEventDataProcessor implements DataProcessorInterface
 {
-    private const EVENT_TABLE = 'tx_menscircle_domain_model_event';
+    public function __construct(
+        private EventRepository $eventRepository,
+    ) {}
 
     public function process(
         ContentObjectRenderer $cObj,
@@ -34,54 +34,27 @@ final class NextEventDataProcessor implements DataProcessorInterface
             $eventBasePath = '/' . $eventBasePath;
         }
 
-        $nextEvent = $this->fetchNextEvent($eventBasePath);
-        $processedData[$variableName] = $nextEvent;
+        $event = $this->eventRepository->findNextEvent();
+        $processedData[$variableName] = $event instanceof Event
+            ? [
+                'uid' => (int)$event->getUid(),
+                'title' => $event->getTitle(),
+                'slug' => $event->getSlug(),
+                'url' => $this->buildEventUrl($eventBasePath, $event->getSlug()),
+            ]
+            : null;
 
         return $processedData;
     }
 
-    /**
-     * @return array{uid: int, title: string, slug: string, url: string}|null
-     */
-    private function fetchNextEvent(string $eventBasePath): ?array
+    private function buildEventUrl(string $eventBasePath, string $slug): string
     {
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getQueryBuilderForTable(self::EVENT_TABLE);
-
-        $todayMidnight = (new DateTimeImmutable('today'))->getTimestamp();
-
-        $row = $queryBuilder
-            ->select('uid', 'title', 'slug')
-            ->from(self::EVENT_TABLE)
-            ->where(
-                $queryBuilder->expr()->eq('is_published', $queryBuilder->createNamedParameter(1, ParameterType::INTEGER)),
-                $queryBuilder->expr()->gte('event_date', $queryBuilder->createNamedParameter($todayMidnight, ParameterType::INTEGER)),
-            )
-            ->orderBy('event_date', 'ASC')
-            ->addOrderBy('start_time', 'ASC')
-            ->addOrderBy('uid', 'ASC')
-            ->setMaxResults(1)
-            ->executeQuery()
-            ->fetchAssociative();
-
-        if (!\is_array($row)) {
-            return null;
-        }
-
-        $slug = trim((string)($row['slug'] ?? ''));
         $url = rtrim($eventBasePath, '/');
+        $slug = trim($slug);
         if ($slug !== '') {
             $url .= '/' . ltrim($slug, '/');
         }
-        if ($url === '') {
-            $url = '/event';
-        }
 
-        return [
-            'uid' => (int)($row['uid'] ?? 0),
-            'title' => trim((string)($row['title'] ?? '')),
-            'slug' => $slug,
-            'url' => $url,
-        ];
+        return $url !== '' ? $url : '/event';
     }
 }

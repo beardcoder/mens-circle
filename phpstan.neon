@@ -5,10 +5,7 @@ parameters:
     excludePaths:
         - packages/mens_circle/Classes/Command/ImportLaravelSqlCommand.php
     scanDirectories:
-        - vendor/typo3
-        - vendor/symfony
-        - vendor/psr
-        - vendor/doctrine
+        - vendor
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - '#Call to an undefined method TYPO3\\CMS\\Extbase\\Persistence\\QueryResultInterface::#'

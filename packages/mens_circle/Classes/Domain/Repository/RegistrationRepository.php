@@ -8,6 +8,7 @@ use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
 use BeardCoder\MensCircle\Domain\Model\Event;
 use BeardCoder\MensCircle\Domain\Model\Participant;
 use BeardCoder\MensCircle\Domain\Model\Registration;
+use DateTime;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -45,6 +46,20 @@ final class RegistrationRepository extends Repository
     public function countActiveByEvent(Event $event): int
     {
         return $this->findActiveByEvent($event)->count();
+    }
+
+    public function countActiveForUpcomingEvents(): int
+    {
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalAnd(
+                $query->in('status', RegistrationStatus::activeValues()),
+                $query->greaterThanOrEqual('event.eventDate', new DateTime('today')),
+                $query->equals('event.isPublished', true),
+            ),
+        );
+
+        return $query->count();
     }
 
     public function findActiveByEventAndParticipant(Event $event, Participant $participant): ?Registration

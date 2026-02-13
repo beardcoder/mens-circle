@@ -13,13 +13,10 @@ use BeardCoder\MensCircle\Domain\Repository\EventRepository;
 use BeardCoder\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
 use BeardCoder\MensCircle\Domain\Repository\ParticipantRepository;
 use BeardCoder\MensCircle\Domain\Repository\RegistrationRepository;
-use BeardCoder\MensCircle\Message\SendEventMailMessage;
-use BeardCoder\MensCircle\Message\SendEventSmsMessage;
+use BeardCoder\MensCircle\Message\SendEventNotificationMessage;
 use DateTime;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use TYPO3\CMS\Core\Http\ResponseFactory;
-use TYPO3\CMS\Core\Http\StreamFactory;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -33,8 +30,6 @@ final class EventController extends ActionController
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
         private readonly PersistenceManager $persistenceManager,
         private readonly MessageBusInterface $messageBus,
-        private readonly ResponseFactory $httpResponseFactory,
-        private readonly StreamFactory $httpStreamFactory,
     ) {}
 
     public function listAction(): ResponseInterface
@@ -167,12 +162,11 @@ final class EventController extends ActionController
         $ical = $event->generateIcalContent($domain);
         $filename = \sprintf('mens-circle-%s.ics', $event->getSlug() !== '' ? $event->getSlug() : $event->getUid());
 
-        $response = $this->httpResponseFactory->createResponse(200)
+        return $this->responseFactory->createResponse(200)
             ->withHeader('Content-Type', 'text/calendar; charset=utf-8')
             ->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '"')
-            ->withHeader('Cache-Control', 'public, max-age=3600');
-
-        return $response->withBody($this->httpStreamFactory->createStream($ical));
+            ->withHeader('Cache-Control', 'public, max-age=3600')
+            ->withBody($this->streamFactory->createStream($ical));
     }
 
     private function resolveDetailEvent(?Event $event): ?Event
@@ -422,9 +416,10 @@ final class EventController extends ActionController
     private function dispatchRegistrationNotifications(Registration $registration, Participant $participant): void
     {
         $notificationSettings = $this->settings;
-        $this->messageBus->dispatch(new SendEventMailMessage(
+        $this->messageBus->dispatch(new SendEventNotificationMessage(
             registrationUid: (int)$registration->getUid(),
-            type: SendEventMailMessage::TYPE_REGISTRATION_CONFIRMATION,
+            type: SendEventNotificationMessage::TYPE_REGISTRATION_CONFIRMATION,
+            channel: SendEventNotificationMessage::CHANNEL_EMAIL,
             settings: $notificationSettings,
         ));
 
@@ -432,9 +427,10 @@ final class EventController extends ActionController
             return;
         }
 
-        $this->messageBus->dispatch(new SendEventSmsMessage(
+        $this->messageBus->dispatch(new SendEventNotificationMessage(
             registrationUid: (int)$registration->getUid(),
-            type: SendEventSmsMessage::TYPE_REGISTRATION_CONFIRMATION,
+            type: SendEventNotificationMessage::TYPE_REGISTRATION_CONFIRMATION,
+            channel: SendEventNotificationMessage::CHANNEL_SMS,
             settings: $notificationSettings,
         ));
     }
