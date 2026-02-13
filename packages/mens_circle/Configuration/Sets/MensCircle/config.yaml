@@ -1,5 +1,7 @@
 name: beardcoder/mens-circle
-label: 'Mens Circle Site Set'
+label: 'Mens Circle Sitepackage'
 dependencies:
   - typo3/form
   - typo3/seo-sitemap
+optionalDependencies:
+  - typo3/felogin

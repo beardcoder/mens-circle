@@ -2,12 +2,6 @@
 
 config {
   sendCacheHeaders = 1
-  compressCss = 1
-  concatenateCss = 1
-  minifyCss = 1
-  compressJs = 1
-  concatenateJs = 1
-  minifyJs = 1
 }
 
 page = PAGE
