@@ -3,17 +3,16 @@
  * Modern, performant, and accessible web application
  */
 
-import '../css/app.css';
 import './types';
-import { useNavigation, useScrollHeader } from '@/components/navigation';
-import { useFAQ } from '@/components/faq';
+import { useNavigation, useScrollHeader } from './components/navigation';
+import { useFAQ } from './components/faq';
 import {
   useNewsletterForm,
   useRegistrationForm,
   useTestimonialForm,
-} from '@/components/forms';
-import { useCalendarIntegration } from '@/components/calendar';
-import { useIntersectionObserver, useParallax } from '@/composables';
+} from './components/forms';
+import { useCalendarIntegration } from './components/calendar';
+import { useIntersectionObserver, useParallax } from './composables';
 
 /**
  * Initialize all application features when DOM is ready

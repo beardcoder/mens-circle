@@ -3,8 +3,8 @@
  * Native submit/redirect stays untouched.
  */
 
-import { validateEmail } from '@/utils/helpers';
-import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
+import { validateEmail } from '../utils/helpers';
+import { TRACKING_EVENTS, trackEvent } from '../utils/umami';
 
 function setValidationError(
   input: HTMLInputElement | HTMLTextAreaElement,

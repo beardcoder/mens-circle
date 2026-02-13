@@ -3,8 +3,8 @@
  * Handles calendar integration for ICS and Google Calendar export
  */
 
-import type { EventData } from '@/types';
-import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
+import type { EventData } from '../types';
+import { TRACKING_EVENTS, trackEvent } from '../utils/umami';
 
 export function useCalendarIntegration(): void {
   const addToCalendarBtn = document.getElementById('addToCalendar');

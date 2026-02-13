@@ -4,7 +4,7 @@
  */
 
 import { animate, inView, scroll, stagger } from 'motion';
-import type { ApiResponse } from '@/types';
+import type { ApiResponse } from '../types';
 
 export interface AnimationOptions {
   threshold?: number;

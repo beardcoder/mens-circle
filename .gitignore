@@ -6,7 +6,5 @@ nbproject
 /vendor
 /node_modules
 /public/*
-!/public/.htaccess
-!/public/index.php
 /config/system/settings.php
 .env
