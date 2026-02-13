@@ -42,7 +42,7 @@ FROM ${PHP_IMAGE} AS production
 LABEL maintainer="Markus Sommer"
 
 USER root
-RUN install-php-extensions intl
+RUN install-php-extensions intl gd exif
 USER www-data
 
 # Copy application code
