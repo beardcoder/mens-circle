@@ -70,6 +70,7 @@ final class EventRepository extends Repository
 
         $result = $query->execute();
 
+        /** @var Event|null */
         return $result->getFirst();
     }
 
@@ -81,6 +82,7 @@ final class EventRepository extends Repository
 
         $result = $query->execute();
 
+        /** @var Event|null */
         return $result->getFirst();
     }
 }

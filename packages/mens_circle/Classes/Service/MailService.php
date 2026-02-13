@@ -69,22 +69,22 @@ final class MailService
      */
     public function sendEventRegistrationConfirmationFromData(array $notificationData, array $settings): bool
     {
-        $participantEmail = strtolower(trim((string)($notificationData['participantEmail'] ?? '')));
+        $participantEmail = strtolower(trim($notificationData['participantEmail']));
         if ($participantEmail === '' || !filter_var($participantEmail, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
-        $firstName = trim((string)($notificationData['participantFirstName'] ?? ''));
-        $lastName = trim((string)($notificationData['participantLastName'] ?? ''));
-        $eventTitle = trim((string)($notificationData['eventTitle'] ?? ''));
+        $firstName = trim($notificationData['participantFirstName']);
+        $lastName = trim($notificationData['participantLastName']);
+        $eventTitle = trim($notificationData['eventTitle']);
         $eventSlug = trim((string)($notificationData['eventSlug'] ?? ''));
-        $eventLocation = trim((string)($notificationData['eventLocation'] ?? ''));
+        $eventLocation = trim($notificationData['eventLocation']);
 
         $siteName = (string)($settings['siteName'] ?? 'Männerkreis');
         $subject = \sprintf('Anmeldung bestaetigt: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
 
-        $date = $this->formatDate((string)($notificationData['eventDate'] ?? ''));
-        $startTime = $this->formatTime((string)($notificationData['eventStartTime'] ?? ''));
+        $date = $this->formatDate($notificationData['eventDate']);
+        $startTime = $this->formatTime($notificationData['eventStartTime']);
         $eventTitleLabel = $eventTitle !== '' ? $eventTitle : 'Männerkreis';
         $dateLabel = $date !== '' ? $date : 'tba';
         $timeLabel = $startTime !== '' ? $startTime . ' Uhr' : 'offen';
@@ -146,22 +146,22 @@ final class MailService
      */
     public function sendEventReminderFromData(array $notificationData, array $settings): bool
     {
-        $participantEmail = strtolower(trim((string)($notificationData['participantEmail'] ?? '')));
+        $participantEmail = strtolower(trim($notificationData['participantEmail']));
         if ($participantEmail === '' || !filter_var($participantEmail, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
-        $firstName = trim((string)($notificationData['participantFirstName'] ?? ''));
-        $lastName = trim((string)($notificationData['participantLastName'] ?? ''));
-        $eventTitle = trim((string)($notificationData['eventTitle'] ?? ''));
+        $firstName = trim($notificationData['participantFirstName']);
+        $lastName = trim($notificationData['participantLastName']);
+        $eventTitle = trim($notificationData['eventTitle']);
         $eventSlug = trim((string)($notificationData['eventSlug'] ?? ''));
-        $eventLocation = trim((string)($notificationData['eventLocation'] ?? ''));
+        $eventLocation = trim($notificationData['eventLocation']);
 
         $siteName = (string)($settings['siteName'] ?? 'Männerkreis');
         $subject = \sprintf('Erinnerung: %s', $eventTitle !== '' ? $eventTitle : 'Männerkreis');
 
-        $date = $this->formatDate((string)($notificationData['eventDate'] ?? ''));
-        $startTime = $this->formatTime((string)($notificationData['eventStartTime'] ?? ''));
+        $date = $this->formatDate($notificationData['eventDate']);
+        $startTime = $this->formatTime($notificationData['eventStartTime']);
         $eventTitleLabel = $eventTitle !== '' ? $eventTitle : 'Männerkreis';
         $dateLabel = $date !== '' ? $date : 'tba';
         $timeLabel = $startTime !== '' ? $startTime . ' Uhr' : 'offen';

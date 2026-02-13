@@ -28,6 +28,7 @@ final class NewsletterSubscriptionRepository extends Repository
 
         $result = $query->execute();
 
+        /** @var NewsletterSubscription|null */
         return $result->getFirst();
     }
 
@@ -39,6 +40,7 @@ final class NewsletterSubscriptionRepository extends Repository
 
         $result = $query->execute();
 
+        /** @var NewsletterSubscription|null */
         return $result->getFirst();
     }
 }

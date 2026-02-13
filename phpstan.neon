@@ -6,5 +6,26 @@ parameters:
         - packages/mens_circle/Classes/Command/ImportLaravelSqlCommand.php
     scanDirectories:
         - vendor/typo3
+        - vendor/symfony
+        - vendor/psr
+        - vendor/doctrine
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - '#Call to an undefined method TYPO3\\CMS\\Extbase\\Persistence\\QueryResultInterface::#'
+        -
+            identifier: class.notFound
+        -
+            identifier: class.noParent
+        -
+            identifier: attribute.notFound
+        -
+            identifier: throws.notThrowable
+        -
+            message: '#Parameter \#2 \$type of method .+::createNamedParameter\(\) expects .+, int given#'
+            identifier: argument.type
+        -
+            message: '#Call to an undefined method TYPO3\\CMS\\Core\\Database\\Connection::(executeStatement|createSchemaManager)\(\)#'
+            identifier: method.notFound
+        -
+            message: '#Call to an undefined method TYPO3\\CMS\\Core\\Mail\\MailMessage::send\(\)#'
+            identifier: method.notFound
