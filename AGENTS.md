@@ -45,6 +45,24 @@
 - Fluid: `f:link.typolink` akzeptiert kein `rel` Argument, stattdessen `additionalAttributes`.
 - SQL-JSON darf beim Parsen nicht mit `stripcslashes()` zerstoert werden.
 
+### Verfuegbare Claude Skills
+
+Das Projekt hat spezialisierte TYPO3 Skills in `.claude/skills/`:
+
+- **typo3-architect** - System-Architektur, Multi-Site Setup, Performance, Content-Strategie
+- **typo3-content-blocks** - Content-Elemente, FlexForms, TCA, Template-Integration
+- **typo3-extension-dev** - Extension-Entwicklung, Extbase, Domain-Models, Repositories, CLI Commands
+- **typo3-fluid** - Fluid Templates, ViewHelpers, Responsive Design, Template-Optimierung
+- **typo3-typoscript** - TypoScript, Site-Config, Routing, Caching, Conditions
+
+Weitere Skills:
+
+- **pest-testing** - PHP Testing mit Pest 4
+- **php-modernizer** - PHP 8.4+ Modernisierung (inkl. TYPO3-Optimierungen)
+- **tailwindcss-development** - Tailwind CSS v4 Styling
+
+Diese Skills werden automatisch aktiviert, wenn relevante Aufgaben erkannt werden.
+
 ### Naechste sinnvolle Schritte
 
 1. Visuellen FE-Abgleich gegen den alten Laravel-Stand finalisieren (Spacing/Typografie/Interaktionen).
