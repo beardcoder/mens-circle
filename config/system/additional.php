@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-if (!defined('TYPO3')) {
-    die('Access denied.');
-}
-
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['trustedHostsPattern'] = '.*';
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'] = 'Männerkreis Niederbayern/ Straubing';
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask'] = '';
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['displayErrors'] = 0;
 $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] = false;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxySSL'] = '*';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP'] = '*';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['trustedHostsPattern'] = '*';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyHeaderMultiValue'] = 'first';
 
 // ---------------------------------------------------------------------------
 // Docker / Coolify: configure database from environment variables
@@ -32,9 +32,6 @@ if (getenv('TYPO3_DB_HOST')) {
     ];
 }
 
-// ---------------------------------------------------------------------------
-// Docker / Coolify: mail transport from environment variables
-// ---------------------------------------------------------------------------
 if (getenv('TYPO3_MAIL_TRANSPORT')) {
     $GLOBALS['TYPO3_CONF_VARS']['MAIL']['transport'] = getenv('TYPO3_MAIL_TRANSPORT');
 
@@ -49,19 +46,5 @@ if (getenv('TYPO3_MAIL_TRANSPORT')) {
     }
     if (getenv('TYPO3_MAIL_SMTP_PASSWORD')) {
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['transport_smtp_password'] = getenv('TYPO3_MAIL_SMTP_PASSWORD');
-    }
-}
-
-// ---------------------------------------------------------------------------
-// Production context: performance tuning
-// ---------------------------------------------------------------------------
-$context = getenv('TYPO3_CONTEXT') ?: 'Production';
-if (str_starts_with($context, 'Production')) {
-    // Filesystem caching (no extra services needed)
-    foreach (['hash', 'pages', 'rootline'] as $cacheIdentifier) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['backend'] = \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
-
-        // `compression` is valid for DB cache backend, but invalid for SimpleFileBackend.
-        unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['options']['compression']);
     }
 }
