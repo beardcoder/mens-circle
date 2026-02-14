@@ -9,7 +9,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['displayErrors'] = env('DISPLAY_ERRORS', 0);
 $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] = env('DEBUG', false);
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxySSL'] = env('REVERSE_PROXY_SSL', '*');
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP'] = env('REVERSE_PROXY_IP', '*');
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['trustedHostsPattern'] = env('TRUSTED_HOSTS_PATTERN', '*');
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyHeaderMultiValue'] = env('REVERSE_PROXY_HEADER_MULTI_VALUE', 'first');
 
 if (env('TYPO3_DB_HOST')) {
