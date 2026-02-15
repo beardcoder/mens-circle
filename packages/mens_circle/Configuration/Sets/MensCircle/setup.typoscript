@@ -2,6 +2,7 @@
 
 config {
   sendCacheHeaders = 1
+  contentObjectExceptionHandler = BeardCoder\MensCircle\Sentry\SentryContentExceptionHandler
 }
 
 page = PAGE
