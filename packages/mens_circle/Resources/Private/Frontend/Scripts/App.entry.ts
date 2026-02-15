@@ -3,6 +3,7 @@
  * Modern, performant, and accessible web application
  */
 
+import './utils/sentry';
 import './types';
 import { onTurboLoad } from './components/turbo';
 import { useNavigation, useScrollHeader } from './components/navigation';

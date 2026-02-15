@@ -194,6 +194,13 @@ Configured in `config/system/additional.php` via `env()` helper:
 | `TYPO3_DB_HOST`, `_PORT`, `_NAME`, `_USER`, `_PASSWORD`, `_DRIVER` | Database connection |
 | `TYPO3_MAIL_TRANSPORT`, `_SMTP_SERVER`, `_SMTP_ENCRYPT`, `_SMTP_USERNAME`, `_SMTP_PASSWORD` | Mail transport |
 | `REVERSE_PROXY_SSL`, `_IP`, `_HEADER_MULTI_VALUE` | Reverse proxy settings |
+| `SENTRY_DSN` | Sentry DSN for PHP error tracking |
+| `SENTRY_ENVIRONMENT` | Sentry environment label (default: `production`) |
+| `SENTRY_RELEASE` | Sentry release identifier |
+| `SENTRY_TRACES_SAMPLE_RATE` | Sentry performance tracing sample rate (default: `0`) |
+| `VITE_SENTRY_DSN` | Sentry DSN for frontend JS error tracking (build-time) |
+| `VITE_SENTRY_ENVIRONMENT` | Sentry environment for frontend (build-time) |
+| `VITE_SENTRY_RELEASE` | Sentry release for frontend (build-time) |
 | `MENSCIRCLE_SMS_API_KEY` | Optional SMS delivery key |
 | `DEV_IPMASK`, `DISPLAY_ERRORS`, `DEBUG` | Development settings |
 
