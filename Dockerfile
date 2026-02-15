@@ -42,7 +42,23 @@ FROM ${PHP_IMAGE} AS production
 LABEL maintainer="Markus Sommer"
 
 USER root
-RUN install-php-extensions intl gd exif
+
+# Install system packages: GraphicsMagick for image processing and German locale
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        graphicsmagick \
+        locales && \
+    # Generate German locale
+    echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen de_DE.UTF-8 && \
+    update-locale LANG=de_DE.UTF-8 && \
+    # Clean up
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN install-php-extensions intl gd exif imagick
+
 USER www-data
 
 # Copy application code
