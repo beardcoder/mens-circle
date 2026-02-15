@@ -20,8 +20,9 @@
   },
   "require": {
     "php": "^8.5",
-    "helhum/dotenv-connector": "^3.2",
     "beardcoder/mens-circle-sitepackage": "^1.0",
+    "helhum/dotenv-connector": "^3.2",
+    "sentry/sentry": "^4.19",
     "typo3/cms-backend": "^14.0",
     "typo3/cms-belog": "^14.0",
     "typo3/cms-beuser": "^14.0",
