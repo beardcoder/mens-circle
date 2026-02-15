@@ -25,7 +25,6 @@ export interface ApiResponse {
 
 declare global {
   interface Window {
-    eventData?: EventData;
     routes?: Routes;
   }
 }

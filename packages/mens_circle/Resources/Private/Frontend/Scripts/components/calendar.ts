@@ -18,16 +18,20 @@ export function useCalendarIntegration(): void {
 
   if (!addToCalendarBtn) return;
 
-  const eventData: EventData = window.eventData ?? {
-    title: 'Männerkreis Niederbayern/ Straubing',
-    description:
-      'Treffen des Männerkreis Niederbayern/ Straubing. Ein Raum für echte Begegnung unter Männern.',
-    location: 'Straubing (genaue Adresse nach Anmeldung)',
-    startDate: '2025-01-24',
-    startTime: '19:00',
-    endDate: '2025-01-24',
-    endTime: '21:30',
-  };
+  const dataSource = document.getElementById('eventDataSource');
+  const rawData = dataSource?.dataset.eventData;
+  const eventData: EventData = rawData
+    ? (JSON.parse(rawData) as EventData)
+    : {
+        title: 'Männerkreis Niederbayern/ Straubing',
+        description:
+          'Treffen des Männerkreis Niederbayern/ Straubing. Ein Raum für echte Begegnung unter Männern.',
+        location: 'Straubing (genaue Adresse nach Anmeldung)',
+        startDate: '2025-01-24',
+        startTime: '19:00',
+        endDate: '2025-01-24',
+        endTime: '21:30',
+      };
 
   // Pre-generate URLs once instead of on every click
   let icsBlobUrl: string | null = null;
