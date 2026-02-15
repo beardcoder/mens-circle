@@ -17,6 +17,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Set default locale environment variables
+# Note: These are also set in .ddev/config.yaml's web_environment section.
+# Both are needed: ENV sets container defaults, web_environment ensures they're
+# passed through to all processes started by DDEV.
 ENV LANG=de_DE.UTF-8 \
     LANGUAGE=de_DE:de \
     LC_ALL=de_DE.UTF-8

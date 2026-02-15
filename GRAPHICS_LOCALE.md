@@ -35,6 +35,7 @@ The German locale is installed and configured as the default system locale:
 - Locale configured in `.ddev/web-build/Dockerfile.typo3`
 - Environment variables added to `.ddev/config.yaml`
 - Timezone set to `Europe/Berlin`
+- Note: Locale environment variables are set in both the Dockerfile (container defaults) and config.yaml (DDEV process environment) to ensure proper propagation
 
 **TYPO3 Site Configuration**:
 The site is already configured with German as the default language in `config/sites/mens-circle/config.yaml`:
@@ -60,6 +61,11 @@ Run the included verification script to check all components:
 
 # For production Docker container
 CONTAINER_ID=<your-container-id> ./verify-setup.sh docker
+```
+
+**Note**: The script is already executable. If you need to set permissions manually:
+```bash
+chmod +x verify-setup.sh
 ```
 
 The script checks:
