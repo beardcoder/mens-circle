@@ -8,11 +8,21 @@ interface NavigationState {
   scrollPosition: number;
 }
 
+/** Cleanup function returned by composables for Turbo teardown */
+type Cleanup = () => void;
+
+let navCleanup: Cleanup | null = null;
+let scrollCleanup: Cleanup | null = null;
+
 /**
  * Mobile navigation composable
- * Handles mobile menu with CSS-only animations and accessibility
+ * Handles mobile menu with CSS-only animations and accessibility.
+ * Safe to call multiple times — previous listeners are removed first.
  */
 export function useNavigation(): void {
+  navCleanup?.();
+  navCleanup = null;
+
   const navToggle = document.getElementById('navToggle');
   const nav = document.getElementById('nav');
 
@@ -44,6 +54,8 @@ export function useNavigation(): void {
   };
 
   const close = (): void => {
+    if (!state.isOpen) return;
+
     state.isOpen = false;
 
     nav.classList.remove('open');
@@ -68,18 +80,7 @@ export function useNavigation(): void {
     }
   };
 
-  // Event listeners
-  navToggle.addEventListener('click', toggle);
-
-  const navLinks = nav.querySelectorAll<HTMLAnchorElement>(
-    '.nav__link, .nav__cta'
-  );
-
-  navLinks.forEach((link) => {
-    link.addEventListener('click', () => close());
-  });
-
-  document.addEventListener('click', (e) => {
+  const onOutsideClick = (e: MouseEvent): void => {
     if (
       state.isOpen &&
       !nav.contains(e.target as Node) &&
@@ -87,20 +88,50 @@ export function useNavigation(): void {
     ) {
       close();
     }
-  });
+  };
 
-  document.addEventListener('keydown', (e) => {
+  const onEscape = (e: KeyboardEvent): void => {
     if (e.key === 'Escape' && state.isOpen) {
       close();
     }
+  };
+
+  const onLinkClick = (): void => close();
+
+  // Attach listeners
+  navToggle.addEventListener('click', toggle);
+  document.addEventListener('click', onOutsideClick);
+  document.addEventListener('keydown', onEscape);
+
+  const navLinks = nav.querySelectorAll<HTMLAnchorElement>(
+    '.nav__link, .nav__cta',
+  );
+
+  navLinks.forEach((link) => {
+    link.addEventListener('click', onLinkClick);
   });
+
+  // Cleanup for next Turbo navigation
+  navCleanup = (): void => {
+    close();
+    navToggle.removeEventListener('click', toggle);
+    document.removeEventListener('click', onOutsideClick);
+    document.removeEventListener('keydown', onEscape);
+    navLinks.forEach((link) => {
+      link.removeEventListener('click', onLinkClick);
+    });
+  };
 }
 
 /**
  * Header scroll effect composable
- * Updates header appearance based on scroll position and hero presence
+ * Updates header appearance based on scroll position and hero presence.
+ * Safe to call multiple times — previous listeners/observers are removed first.
  */
 export function useScrollHeader(): void {
+  scrollCleanup?.();
+  scrollCleanup = null;
+
   const header = document.getElementById('header');
 
   if (!header) return;
@@ -119,26 +150,33 @@ export function useScrollHeader(): void {
   updateScrollState();
   window.addEventListener('scroll', updateScrollState, { passive: true });
 
+  let observer: IntersectionObserver | null = null;
+
   if (hasHero) {
     const hero = document.querySelector<HTMLElement>('.hero');
 
-    if (!hero) return;
+    if (hero) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            header.classList.toggle(
+              'header--on-hero',
+              entry.isIntersecting && entry.intersectionRatio > 0.15,
+            );
+          });
+        },
+        {
+          threshold: [0, 0.15, 0.35, 0.5],
+          rootMargin: '-10% 0px 0px 0px',
+        },
+      );
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          header.classList.toggle(
-            'header--on-hero',
-            entry.isIntersecting && entry.intersectionRatio > 0.15
-          );
-        });
-      },
-      {
-        threshold: [0, 0.15, 0.35, 0.5],
-        rootMargin: '-10% 0px 0px 0px',
-      }
-    );
-
-    observer.observe(hero);
+      observer.observe(hero);
+    }
   }
+
+  scrollCleanup = (): void => {
+    window.removeEventListener('scroll', updateScrollState);
+    observer?.disconnect();
+  };
 }

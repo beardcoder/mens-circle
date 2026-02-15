@@ -9,6 +9,21 @@ page = PAGE
 page {
   typeNum = 0
 
+  shortcutIcon = EXT:mens_circle/Resources/Public/Icons/favicon.svg
+
+  meta {
+    og:title.field = title
+    og:title.attribute = property
+    og:description.field = description
+    og:description.attribute = property
+    og:type = website
+    og:type.attribute = property
+    og:site_name.data = sitesettings:mensCircle.siteName
+    og:site_name.attribute = property
+    og:locale = de_DE
+    og:locale.attribute = property
+  }
+
   bodyTagCObject = TEXT
   bodyTagCObject {
     data = sitesettings:mensCircle.theme

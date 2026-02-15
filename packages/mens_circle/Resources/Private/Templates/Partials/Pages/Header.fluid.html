@@ -9,10 +9,17 @@
     <div class="container">
         <div class="header__inner">
             <a href="{breadcrumb.0.link}" class="logo" aria-label="{site.configuration.settings.mensCircle.siteName} - Startseite">
-                <svg class="logo__icon" viewBox="0 0 512 512" aria-hidden="true">
-                    <path fill="currentColor" d="M256 0c141.31 0 256 114.73 256 256S397.31 512 256 512 0 397.27 0 256 114.69 0 256 0Zm0 10.53C120.47 10.53 10.4 120.5 10.4 256S120.47 501.47 256 501.47 501.6 391.5 501.6 256 391.53 10.53 256 10.53Z"/>
-                    <path fill="currentColor" d="M256 24.06c126.47 0 229.15 103.93 229.15 231.94S382.47 487.94 256 487.94 26.86 384.01 26.86 256 129.53 24.06 256 24.06Zm0 10.53C135.27 34.59 37.26 133.8 37.26 256S135.28 477.41 256 477.41 474.74 378.2 474.74 256 376.73 34.59 256 34.59Z"/>
-                    <circle cx="256" cy="256" r="38" fill="currentColor" />
+                <svg class="logo__icon" viewBox="0 0 64 64" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0" x2="1" y1="0" y2="1">
+                            <stop offset="0%" stop-color="#7a3f2a"/>
+                            <stop offset="100%" stop-color="#c98953"/>
+                        </linearGradient>
+                    </defs>
+                    <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#logo-gradient)"/>
+                    <circle cx="32" cy="32" r="16" fill="none" stroke="#fff" stroke-width="3"/>
+                    <path d="M22 38c2.7-4.6 7-7 10-7s7.3 2.4 10 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="32" cy="24" r="4" fill="#fff"/>
                 </svg>
                 <span class="logo__text">Männerkreis</span>
             </a>
