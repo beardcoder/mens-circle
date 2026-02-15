@@ -9,10 +9,12 @@ Rebuild on **TYPO3 Core 14.1** with focus on:
 ## Stack
 
 - TYPO3 CMS 14.1 (Composer setup)
-- PHP 8.2+
+- PHP 8.5
 - Core modules: Extbase, Fluid, Form, SEO
-- Sitepackage: `markussommer/mens-circle-sitepackage` (`EXT:mens_circle`)
+- Sitepackage: `beardcoder/mens-circle-sitepackage` (`EXT:mens_circle`)
 - Frontend build: Bun + Vite
+- Image processing: GraphicsMagick with imagick PHP extension
+- System locale: German (de_DE.UTF-8)
 
 ## Implemented Features
 
@@ -95,6 +97,21 @@ Flush caches:
 vendor/bin/typo3 cache:flush
 ```
 
+## Image Processing
+
+The project uses GraphicsMagick for high-performance image processing with the imagick PHP extension.
+
+**Verify installation:**
+```bash
+# Check GraphicsMagick
+ddev exec gm version
+
+# Check PHP extensions
+ddev exec php -m | grep -E "(gd|exif|imagick|intl)"
+```
+
+For detailed information about GraphicsMagick and locale setup, see `GRAPHICS_LOCALE.md`.
+
 ## SMS Configuration
 
 SMS is optional and processed asynchronously via TYPO3 Messenger.
@@ -117,6 +134,8 @@ export MENSCIRCLE_SMS_API_KEY="your-key"
 - Language files use **XLIFF 2.0**.
 - Default source language is German (`*.xlf`).
 - English translations are available in `*.en.xlf`.
+- System locale is set to `de_DE.UTF-8` for proper character encoding and date/time formatting.
+- See `GRAPHICS_LOCALE.md` for details on locale configuration.
 
 ## Prompt: Core-aligned TYPO3 Icon Creation
 
