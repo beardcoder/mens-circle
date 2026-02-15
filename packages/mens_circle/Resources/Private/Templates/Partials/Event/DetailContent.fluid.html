@@ -113,7 +113,7 @@
                 </div>
 
                 <div class="event-register__form-wrap fade-in fade-in-delay-1">
-                    <f:flashMessages />
+                    <div aria-live="polite"><f:flashMessages /></div>
                     <f:form action="register" method="post" class="event-register__form" additionalAttributes="{autocomplete: 'on'}">
                         <f:form.hidden name="event" value="{event.uid}" />
 
@@ -357,6 +357,4 @@
     </div>
 </div>
 
-<script>
-window.eventData = {eventData -> f:format.json() -> f:format.raw()};
-</script>
+<div id="eventDataSource" data-event-data='{eventData -> f:format.json() -> f:format.raw()}' hidden></div>

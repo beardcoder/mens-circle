@@ -11,7 +11,7 @@
             </div>
 
             <div class="newsletter__form-wrapper">
-                <f:flashMessages />
+                <div aria-live="polite"><f:flashMessages /></div>
                 <f:form action="subscribe" method="post" class="newsletter__form" additionalAttributes="{aria-label: 'Newsletter-Anmeldung'}">
                     <f:form.textfield
                         type="email"
