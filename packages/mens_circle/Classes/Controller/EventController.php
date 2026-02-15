@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Controller;
 
+use BeardCoder\MensCircle\Domain\Enum\NotificationChannel;
+use BeardCoder\MensCircle\Domain\Enum\NotificationType;
 use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
 use BeardCoder\MensCircle\Domain\Model\Event;
 use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
@@ -53,7 +55,7 @@ final class EventController extends ActionController
     public function detailAction(?Event $event = null): ResponseInterface
     {
         $resolvedEvent = $this->resolveDetailEvent($event);
-        if (! $resolvedEvent instanceof Event) {
+        if (!$resolvedEvent instanceof Event) {
             $this->addFlashMessage('Aktuell ist kein passender Termin verfügbar.', '', ContextualFeedbackSeverity::WARNING);
 
             return $this->redirectToEventOverview();
@@ -72,7 +74,7 @@ final class EventController extends ActionController
         bool $newsletterOptIn = false,
     ): ResponseInterface {
         $resolvedEvent = $this->resolveEventByIdentifier($event);
-        if (! $resolvedEvent instanceof Event) {
+        if (!$resolvedEvent instanceof Event) {
             $this->addFlashMessage('Ungültiger Termin.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirectToEventOverview();
@@ -83,7 +85,7 @@ final class EventController extends ActionController
         $normalizedEmail = strtolower(trim($email));
         $normalizedPhoneNumber = trim($phoneNumber);
 
-        if (! $this->isRegistrationInputValid($normalizedFirstName, $normalizedLastName, $normalizedEmail, $privacy)) {
+        if (!$this->isRegistrationInputValid($normalizedFirstName, $normalizedLastName, $normalizedEmail, $privacy)) {
             return $this->redirectToEventDetailWithMessage(
                 $resolvedEvent,
                 'Bitte fülle alle Pflichtfelder korrekt aus.',
@@ -91,7 +93,7 @@ final class EventController extends ActionController
             );
         }
 
-        if (! $resolvedEvent->isPublished()) {
+        if (!$resolvedEvent->isPublished) {
             return $this->redirectToEventDetailWithMessage(
                 $resolvedEvent,
                 'Dieser Termin ist nicht verfügbar.',
@@ -108,7 +110,7 @@ final class EventController extends ActionController
         }
 
         $activeRegistrations = $this->registrationRepository->countActiveByEvent($resolvedEvent);
-        if ($activeRegistrations >= $resolvedEvent->getMaxParticipants()) {
+        if ($activeRegistrations >= $resolvedEvent->maxParticipants) {
             return $this->redirectToEventDetailWithMessage(
                 $resolvedEvent,
                 'Dieser Termin ist leider bereits ausgebucht.',
@@ -160,7 +162,7 @@ final class EventController extends ActionController
         }
 
         $ical = $event->generateIcalContent($domain);
-        $filename = \sprintf('mens-circle-%s.ics', $event->getSlug() !== '' ? $event->getSlug() : $event->getUid());
+        $filename = \sprintf('mens-circle-%s.ics', $event->slug !== '' ? $event->slug : $event->getUid());
 
         return $this->responseFactory->createResponse(200)
             ->withHeader('Content-Type', 'text/calendar; charset=utf-8')
@@ -261,17 +263,14 @@ final class EventController extends ActionController
 
     private function renderEventDetail(Event $event): ResponseInterface
     {
-        if (! $event->isPublished()) {
+        if (!$event->isPublished) {
             $this->addFlashMessage('Dieser Termin ist nicht öffentlich.', '', ContextualFeedbackSeverity::WARNING);
 
             return $this->redirectToEventOverview();
         }
 
         $activeRegistrations = $this->registrationRepository->countActiveByEvent($event);
-        $availableSpots = max(0, $event->getMaxParticipants() - $activeRegistrations);
-        $eventDate = $event->getEventDate();
-        $startTime = $event->getStartTime();
-        $endTime = $event->getEndTime();
+        $availableSpots = max(0, $event->maxParticipants - $activeRegistrations);
 
         $this->view->assignMultiple([
             'event' => $event,
@@ -281,13 +280,13 @@ final class EventController extends ActionController
             'isPast' => $event->isPast(),
             'canRegister' => !($availableSpots <= 0 || $event->isPast()),
             'eventData' => [
-                'title' => $event->getTitle(),
-                'description' => trim(strip_tags($event->getDescription())),
-                'location' => $event->getLocation(),
-                'startDate' => $eventDate?->format('Y-m-d') ?? '',
-                'startTime' => $startTime?->format('H:i') ?? '19:00',
-                'endDate' => $eventDate?->format('Y-m-d') ?? '',
-                'endTime' => $endTime?->format('H:i') ?? '21:30',
+                'title' => $event->title,
+                'description' => trim(strip_tags($event->description)),
+                'location' => $event->location,
+                'startDate' => $event->eventDate?->format('Y-m-d') ?? '',
+                'startTime' => $event->startTime?->format('H:i') ?? '19:00',
+                'endDate' => $event->eventDate?->format('Y-m-d') ?? '',
+                'endTime' => $event->endTime?->format('H:i') ?? '21:30',
             ],
         ]);
 
@@ -322,7 +321,7 @@ final class EventController extends ActionController
             $registrations = $this->registrationRepository->countActiveByEvent($event);
             $eventSummaries[] = [
                 'event' => $event,
-                'availableSpots' => max(0, $event->getMaxParticipants() - $registrations),
+                'availableSpots' => max(0, $event->maxParticipants - $registrations),
             ];
         }
 
@@ -339,7 +338,7 @@ final class EventController extends ActionController
             return false;
         }
 
-        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
@@ -363,14 +362,14 @@ final class EventController extends ActionController
         string $phoneNumber,
     ): Participant {
         $participant = $this->participantRepository->findOneByEmail($email);
-        if (! $participant instanceof Participant) {
+        if (!$participant instanceof Participant) {
             $participant = new Participant();
-            $participant->setEmail($email);
+            $participant->email = $email;
         }
 
-        $participant->setFirstName($firstName);
-        $participant->setLastName($lastName);
-        $participant->setPhone($phoneNumber);
+        $participant->firstName = $firstName;
+        $participant->lastName = $lastName;
+        $participant->phone = $phoneNumber;
 
         if ((int)$participant->getUid() > 0) {
             $this->participantRepository->update($participant);
@@ -384,10 +383,10 @@ final class EventController extends ActionController
     private function createRegistration(Event $event, Participant $participant): Registration
     {
         $registration = new Registration();
-        $registration->setEvent($event);
-        $registration->setParticipant($participant);
+        $registration->event = $event;
+        $registration->participant = $participant;
         $registration->setStatusEnum(RegistrationStatus::Registered);
-        $registration->setRegisteredAt(new DateTime());
+        $registration->registeredAt = new DateTime();
 
         return $registration;
     }
@@ -395,43 +394,42 @@ final class EventController extends ActionController
     private function activateNewsletterSubscription(Participant $participant): void
     {
         $subscription = $this->newsletterSubscriptionRepository->findOneByParticipant($participant);
-        if (! $subscription instanceof NewsletterSubscription) {
+        if (!$subscription instanceof NewsletterSubscription) {
             $subscription = new NewsletterSubscription();
-            $subscription->setParticipant($participant);
-            $subscription->setToken(bin2hex(random_bytes(32)));
-            $subscription->setSubscribedAt(new DateTime());
+            $subscription->participant = $participant;
+            $subscription->token = bin2hex(random_bytes(32));
+            $subscription->subscribedAt = new DateTime();
             $this->newsletterSubscriptionRepository->add($subscription);
 
             return;
         }
 
-        if ($subscription->getToken() === '') {
-            $subscription->setToken(bin2hex(random_bytes(32)));
+        if ($subscription->token === '') {
+            $subscription->token = bin2hex(random_bytes(32));
         }
-        $subscription->setSubscribedAt(new DateTime());
-        $subscription->setUnsubscribedAt(null);
+        $subscription->subscribedAt = new DateTime();
+        $subscription->unsubscribedAt = null;
         $this->newsletterSubscriptionRepository->update($subscription);
     }
 
     private function dispatchRegistrationNotifications(Registration $registration, Participant $participant): void
     {
-        $notificationSettings = $this->settings;
         $this->messageBus->dispatch(new SendEventNotificationMessage(
             registrationUid: (int)$registration->getUid(),
-            type: SendEventNotificationMessage::TYPE_REGISTRATION_CONFIRMATION,
-            channel: SendEventNotificationMessage::CHANNEL_EMAIL,
-            settings: $notificationSettings,
+            type: NotificationType::RegistrationConfirmation,
+            channel: NotificationChannel::Email,
+            settings: $this->settings,
         ));
 
-        if ($participant->getPhone() === '') {
+        if ($participant->phone === '') {
             return;
         }
 
         $this->messageBus->dispatch(new SendEventNotificationMessage(
             registrationUid: (int)$registration->getUid(),
-            type: SendEventNotificationMessage::TYPE_REGISTRATION_CONFIRMATION,
-            channel: SendEventNotificationMessage::CHANNEL_SMS,
-            settings: $notificationSettings,
+            type: NotificationType::RegistrationConfirmation,
+            channel: NotificationChannel::Sms,
+            settings: $this->settings,
         ));
     }
 }

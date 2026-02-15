@@ -44,7 +44,7 @@ final class TestimonialController extends ActionController
         $normalizedRole = trim($role);
         $normalizedEmail = strtolower(trim($email));
 
-        if (! $this->isSubmissionValid($normalizedQuote, $normalizedEmail, $privacy)) {
+        if (!$this->isSubmissionValid($normalizedQuote, $normalizedEmail, $privacy)) {
             return $this->redirectToFormWithError();
         }
 
@@ -71,7 +71,7 @@ final class TestimonialController extends ActionController
             return false;
         }
 
-        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
@@ -92,12 +92,12 @@ final class TestimonialController extends ActionController
         string $email,
     ): Testimonial {
         $testimonial = new Testimonial();
-        $testimonial->setQuote($quote);
-        $testimonial->setAuthorName($authorName);
-        $testimonial->setRole($role);
-        $testimonial->setEmail($email);
-        $testimonial->setIsPublished(false);
-        $testimonial->setSortOrder(0);
+        $testimonial->quote = $quote;
+        $testimonial->authorName = $authorName;
+        $testimonial->role = $role;
+        $testimonial->email = $email;
+        $testimonial->isPublished = false;
+        $testimonial->sortOrder = 0;
 
         return $testimonial;
     }

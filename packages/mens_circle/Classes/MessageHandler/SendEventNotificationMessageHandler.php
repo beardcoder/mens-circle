@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\MessageHandler;
 
+use BeardCoder\MensCircle\Domain\Enum\NotificationChannel;
+use BeardCoder\MensCircle\Domain\Enum\NotificationType;
 use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
 use BeardCoder\MensCircle\Message\SendEventNotificationMessage;
 use BeardCoder\MensCircle\Service\MailService;
@@ -22,29 +24,27 @@ final readonly class SendEventNotificationMessageHandler
 
     public function __invoke(SendEventNotificationMessage $message): void
     {
-        $notificationData = $this->notificationDataService->findByRegistrationUid($message->getRegistrationUid());
+        $notificationData = $this->notificationDataService->findByRegistrationUid($message->registrationUid);
         if (!\is_array($notificationData)) {
             return;
         }
 
-        if ($message->getType() === SendEventNotificationMessage::TYPE_REMINDER) {
+        if ($message->type === NotificationType::Reminder) {
             if (!\in_array($notificationData['status'], RegistrationStatus::activeValues(), true)) {
                 return;
             }
 
-            match ($message->getChannel()) {
-                SendEventNotificationMessage::CHANNEL_EMAIL => $this->mailService->sendEventReminderFromData($notificationData, $message->getSettings()),
-                SendEventNotificationMessage::CHANNEL_SMS => $this->smsService->sendReminder($notificationData, $message->getSettings()),
-                default => null,
+            match ($message->channel) {
+                NotificationChannel::Email => $this->mailService->sendEventReminderFromData($notificationData, $message->settings),
+                NotificationChannel::Sms => $this->smsService->sendReminder($notificationData, $message->settings),
             };
 
             return;
         }
 
-        match ($message->getChannel()) {
-            SendEventNotificationMessage::CHANNEL_EMAIL => $this->mailService->sendEventRegistrationConfirmationFromData($notificationData, $message->getSettings()),
-            SendEventNotificationMessage::CHANNEL_SMS => $this->smsService->sendRegistrationConfirmation($notificationData, $message->getSettings()),
-            default => null,
+        match ($message->channel) {
+            NotificationChannel::Email => $this->mailService->sendEventRegistrationConfirmationFromData($notificationData, $message->settings),
+            NotificationChannel::Sms => $this->smsService->sendRegistrationConfirmation($notificationData, $message->settings),
         };
     }
 }

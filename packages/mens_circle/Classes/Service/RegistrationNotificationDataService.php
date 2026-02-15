@@ -42,8 +42,8 @@ final readonly class RegistrationNotificationDataService
             return null;
         }
 
-        $participant = $registration->getParticipant();
-        $event = $registration->getEvent();
+        $participant = $registration->participant;
+        $event = $registration->event;
 
         if ($participant === null || $event === null) {
             return null;
@@ -51,18 +51,18 @@ final readonly class RegistrationNotificationDataService
 
         return [
             'registrationUid' => (int)$registration->getUid(),
-            'status' => $registration->getStatus(),
-            'participantEmail' => strtolower(trim($participant->getEmail())),
-            'participantFirstName' => $participant->getFirstName(),
-            'participantLastName' => $participant->getLastName(),
-            'participantPhone' => $participant->getPhone(),
-            'eventTitle' => $event->getTitle(),
-            'eventSlug' => $event->getSlug(),
-            'eventDate' => $event->getEventDate()?->format('Y-m-d H:i:s') ?? '',
-            'eventStartTime' => $event->getStartTime()?->format('H:i:s') ?? '',
-            'eventEndTime' => $event->getEndTime()?->format('H:i:s') ?? '',
-            'eventLocation' => $event->getLocation(),
-            'eventCity' => $event->getCity(),
+            'status' => $registration->status,
+            'participantEmail' => $participant->email,
+            'participantFirstName' => $participant->firstName,
+            'participantLastName' => $participant->lastName,
+            'participantPhone' => $participant->phone,
+            'eventTitle' => $event->title,
+            'eventSlug' => $event->slug,
+            'eventDate' => $event->eventDate?->format('Y-m-d H:i:s') ?? '',
+            'eventStartTime' => $event->startTime?->format('H:i:s') ?? '',
+            'eventEndTime' => $event->endTime?->format('H:i:s') ?? '',
+            'eventLocation' => $event->location,
+            'eventCity' => $event->city,
         ];
     }
 }

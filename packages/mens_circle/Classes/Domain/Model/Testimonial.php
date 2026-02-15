@@ -9,87 +9,27 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 final class Testimonial extends AbstractEntity
 {
-    protected string $quote = '';
-
-    protected string $authorName = '';
-
-    protected string $email = '';
-
-    protected string $role = '';
-
-    protected bool $isPublished = false;
-
-    protected ?DateTime $publishedAt = null;
-
-    protected int $sortOrder = 0;
-
-    public function getQuote(): string
-    {
-        return $this->quote;
+    public string $quote = '' {
+        set(string $value) => trim($value);
     }
 
-    public function setQuote(string $quote): void
-    {
-        $this->quote = trim($quote);
+    public string $authorName = '' {
+        set(string $value) => trim($value);
     }
 
-    public function getAuthorName(): string
-    {
-        return $this->authorName;
+    public string $email = '' {
+        set(string $value) => strtolower(trim($value));
     }
 
-    public function setAuthorName(string $authorName): void
-    {
-        $this->authorName = trim($authorName);
+    public string $role = '' {
+        set(string $value) => trim($value);
     }
 
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
+    public bool $isPublished = false;
 
-    public function setEmail(string $email): void
-    {
-        $this->email = strtolower(trim($email));
-    }
+    public ?DateTime $publishedAt = null;
 
-    public function getRole(): string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): void
-    {
-        $this->role = trim($role);
-    }
-
-    public function isPublished(): bool
-    {
-        return $this->isPublished;
-    }
-
-    public function setIsPublished(bool $isPublished): void
-    {
-        $this->isPublished = $isPublished;
-    }
-
-    public function getPublishedAt(): ?DateTime
-    {
-        return $this->publishedAt;
-    }
-
-    public function setPublishedAt(?DateTime $publishedAt): void
-    {
-        $this->publishedAt = $publishedAt;
-    }
-
-    public function getSortOrder(): int
-    {
-        return $this->sortOrder;
-    }
-
-    public function setSortOrder(int $sortOrder): void
-    {
-        $this->sortOrder = max(0, $sortOrder);
+    public int $sortOrder = 0 {
+        set(int $value) => max(0, $value);
     }
 }

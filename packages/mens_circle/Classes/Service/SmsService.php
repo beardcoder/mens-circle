@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Service;
 
-use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Throwable;
@@ -17,6 +16,7 @@ final class SmsService
         private readonly RequestFactory $requestFactory,
         private readonly ExtensionConfiguration $extensionConfiguration,
         private readonly LoggerInterface $logger,
+        private readonly DateTimeFormatter $dateTimeFormatter,
     ) {}
 
     /**
@@ -38,8 +38,8 @@ final class SmsService
 
         $firstName = trim($notificationData['participantFirstName']);
         $eventTitle = trim($notificationData['eventTitle']);
-        $eventDate = $this->formatDate($notificationData['eventDate']);
-        $eventTime = $this->formatTime($notificationData['eventStartTime']);
+        $eventDate = $this->dateTimeFormatter->formatDate($notificationData['eventDate']);
+        $eventTime = $this->dateTimeFormatter->formatTime($notificationData['eventStartTime']);
 
         $messageText = trim(\sprintf(
             'Servus %s, deine Anmeldung fuer "%s" am %s%s ist bestaetigt.',
@@ -71,8 +71,8 @@ final class SmsService
 
         $firstName = trim($notificationData['participantFirstName']);
         $eventTitle = trim($notificationData['eventTitle']);
-        $eventDate = $this->formatDate($notificationData['eventDate']);
-        $eventTime = $this->formatTime($notificationData['eventStartTime']);
+        $eventDate = $this->dateTimeFormatter->formatDate($notificationData['eventDate']);
+        $eventTime = $this->dateTimeFormatter->formatTime($notificationData['eventStartTime']);
 
         $messageText = trim(\sprintf(
             'Erinnerung %s: "%s" ist am %s%s.',
@@ -145,7 +145,6 @@ final class SmsService
      */
     private function resolveSmsConfiguration(array $settings): array
     {
-        $extensionConfiguration = [];
         try {
             $extensionConfiguration = $this->extensionConfiguration->get('mens_circle');
         } catch (Throwable) {
@@ -155,43 +154,12 @@ final class SmsService
         $enabled = $this->toBool($settings['smsEnabled'] ?? $extensionConfiguration['smsEnabled'] ?? false);
         $apiKey = trim((string)($extensionConfiguration['smsApiKey'] ?? getenv('MENSCIRCLE_SMS_API_KEY') ?: ''));
         $sender = trim((string)($settings['smsSender'] ?? $extensionConfiguration['smsSender'] ?? 'MensCircle'));
-        if ($sender === '') {
-            $sender = 'MensCircle';
-        }
 
         return [
             'enabled' => $enabled,
             'apiKey' => $apiKey,
-            'sender' => $sender,
+            'sender' => $sender !== '' ? $sender : 'MensCircle',
         ];
-    }
-
-    private function formatDate(mixed $dateValue): string
-    {
-        $dateString = trim((string)$dateValue);
-        if ($dateString === '' || $dateString === '0000-00-00 00:00:00') {
-            return '';
-        }
-
-        try {
-            return (new DateTimeImmutable($dateString))->format('d.m.Y');
-        } catch (Throwable) {
-            return '';
-        }
-    }
-
-    private function formatTime(mixed $timeValue): string
-    {
-        $timeString = trim((string)$timeValue);
-        if ($timeString === '' || $timeString === '00:00:00') {
-            return '';
-        }
-
-        try {
-            return (new DateTimeImmutable($timeString))->format('H:i');
-        } catch (Throwable) {
-            return '';
-        }
     }
 
     private function toBool(mixed $value): bool

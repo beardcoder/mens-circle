@@ -32,7 +32,7 @@ final class NewsletterController extends ActionController
     public function subscribeAction(string $email = '', bool $privacy = false): ResponseInterface
     {
         $normalizedEmail = strtolower(trim($email));
-        if (! $this->isSubscriptionInputValid($normalizedEmail, $privacy)) {
+        if (!$this->isSubscriptionInputValid($normalizedEmail, $privacy)) {
             return $this->redirectToFormWithMessage(
                 'Bitte gib eine gültige E-Mail-Adresse ein und bestätige den Datenschutz.',
                 ContextualFeedbackSeverity::ERROR,
@@ -48,7 +48,7 @@ final class NewsletterController extends ActionController
         $subscription = $this->activateSubscription($participant, $subscription);
         $this->persistenceManager->persistAll();
 
-        $unsubscribeUrl = $this->buildUnsubscribeUrl($subscription->getToken());
+        $unsubscribeUrl = $this->buildUnsubscribeUrl($subscription->token);
         $this->mailService->sendNewsletterWelcome($subscription, $unsubscribeUrl, $this->settings);
 
         return $this->redirectToFormWithMessage('Danke! Du bist jetzt für den Newsletter angemeldet.', ContextualFeedbackSeverity::OK);
@@ -61,15 +61,15 @@ final class NewsletterController extends ActionController
         }
 
         $subscription = $this->newsletterSubscriptionRepository->findOneByToken($token);
-        if (! $subscription instanceof NewsletterSubscription) {
+        if (!$subscription instanceof NewsletterSubscription) {
             return $this->renderUnsubscribeMessage('Dieser Abmeldelink ist nicht mehr gültig.');
         }
 
-        if (! $subscription->isActive()) {
+        if (!$subscription->isActive()) {
             return $this->renderUnsubscribeMessage('Diese E-Mail-Adresse wurde bereits abgemeldet.');
         }
 
-        $subscription->setUnsubscribedAt(new DateTime());
+        $subscription->unsubscribedAt = new DateTime();
         $this->newsletterSubscriptionRepository->update($subscription);
         $this->persistenceManager->persistAll();
 
@@ -78,7 +78,7 @@ final class NewsletterController extends ActionController
 
     private function isSubscriptionInputValid(string $email, bool $privacy): bool
     {
-        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
@@ -93,7 +93,7 @@ final class NewsletterController extends ActionController
         }
 
         $participant = new Participant();
-        $participant->setEmail($email);
+        $participant->email = $email;
         $this->participantRepository->add($participant);
 
         return $participant;
@@ -103,21 +103,21 @@ final class NewsletterController extends ActionController
         Participant $participant,
         ?NewsletterSubscription $subscription,
     ): NewsletterSubscription {
-        if (! $subscription instanceof NewsletterSubscription) {
+        if (!$subscription instanceof NewsletterSubscription) {
             $subscription = new NewsletterSubscription();
-            $subscription->setParticipant($participant);
-            $subscription->setToken(bin2hex(random_bytes(32)));
-            $subscription->setSubscribedAt(new DateTime());
-            $subscription->setUnsubscribedAt(null);
+            $subscription->participant = $participant;
+            $subscription->token = bin2hex(random_bytes(32));
+            $subscription->subscribedAt = new DateTime();
+            $subscription->unsubscribedAt = null;
             $this->newsletterSubscriptionRepository->add($subscription);
 
             return $subscription;
         }
 
-        $subscription->setSubscribedAt(new DateTime());
-        $subscription->setUnsubscribedAt(null);
-        if ($subscription->getToken() === '') {
-            $subscription->setToken(bin2hex(random_bytes(32)));
+        $subscription->subscribedAt = new DateTime();
+        $subscription->unsubscribedAt = null;
+        if ($subscription->token === '') {
+            $subscription->token = bin2hex(random_bytes(32));
         }
         $this->newsletterSubscriptionRepository->update($subscription);
 

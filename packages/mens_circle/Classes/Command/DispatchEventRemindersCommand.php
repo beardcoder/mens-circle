@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Command;
 
+use BeardCoder\MensCircle\Domain\Enum\NotificationChannel;
+use BeardCoder\MensCircle\Domain\Enum\NotificationType;
 use BeardCoder\MensCircle\Domain\Enum\RegistrationStatus;
 use BeardCoder\MensCircle\Message\SendEventNotificationMessage;
 use DateTimeImmutable;
@@ -110,8 +112,8 @@ final class DispatchEventRemindersCommand extends Command
             if (!$dryRun) {
                 $this->messageBus->dispatch(new SendEventNotificationMessage(
                     registrationUid: $registrationUid,
-                    type: SendEventNotificationMessage::TYPE_REMINDER,
-                    channel: SendEventNotificationMessage::CHANNEL_EMAIL,
+                    type: NotificationType::Reminder,
+                    channel: NotificationChannel::Email,
                     settings: $settings,
                 ));
             }
@@ -121,8 +123,8 @@ final class DispatchEventRemindersCommand extends Command
                 if (!$dryRun) {
                     $this->messageBus->dispatch(new SendEventNotificationMessage(
                         registrationUid: $registrationUid,
-                        type: SendEventNotificationMessage::TYPE_REMINDER,
-                        channel: SendEventNotificationMessage::CHANNEL_SMS,
+                        type: NotificationType::Reminder,
+                        channel: NotificationChannel::Sms,
                         settings: $settings,
                     ));
                 }
