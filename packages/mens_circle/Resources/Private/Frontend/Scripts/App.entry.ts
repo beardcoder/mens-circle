@@ -8,11 +8,6 @@ import './types';
 import { onTurboLoad } from './components/turbo';
 import { useNavigation, useScrollHeader } from './components/navigation';
 import { useFAQ } from './components/faq';
-import {
-  useNewsletterForm,
-  useRegistrationForm,
-  useTestimonialForm,
-} from './components/forms';
 import { useCalendarIntegration } from './components/calendar';
 import { useIntersectionObserver, useParallax } from './composables';
 
@@ -27,9 +22,6 @@ function initComponents(): void {
 
   // Interactive components
   useFAQ();
-  useNewsletterForm();
-  useRegistrationForm();
-  useTestimonialForm();
   useCalendarIntegration();
 
   // Enhanced UX composables
