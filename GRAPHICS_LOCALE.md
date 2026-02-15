@@ -51,6 +51,26 @@ languages:
 
 ## Testing
 
+### Automated Verification Script
+Run the included verification script to check all components:
+
+```bash
+# For DDEV (default)
+./verify-setup.sh
+
+# For production Docker container
+CONTAINER_ID=<your-container-id> ./verify-setup.sh docker
+```
+
+The script checks:
+- GraphicsMagick installation and version
+- PHP extensions (gd, exif, imagick, intl)
+- German locale availability (de_DE.UTF-8)
+- Locale environment variables (LANG, LANGUAGE, LC_ALL)
+- PHP timezone setting
+
+### Manual Verification
+
 ### Verify GraphicsMagick Installation
 ```bash
 # Production container
