@@ -1,0 +1,22 @@
+# Install GraphicsMagick and German locale for TYPO3 image processing
+# This extends the DDEV web container with additional packages needed for TYPO3 v14
+
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        graphicsmagick \
+        locales && \
+    # Generate German locale
+    echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen de_DE.UTF-8 && \
+    update-locale LANG=de_DE.UTF-8 && \
+    # Clean up
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set default locale environment variables
+ENV LANG=de_DE.UTF-8 \
+    LANGUAGE=de_DE:de \
+    LC_ALL=de_DE.UTF-8
