@@ -11,6 +11,10 @@ services:
     resource: '../Classes/Controller/*'
     public: true
 
+  BeardCoder\MensCircle\DataProcessing\:
+    resource: '../Classes/DataProcessing/*'
+    public: true
+
   dashboard.widget.menscircleUpcomingEvents:
     class: TYPO3\CMS\Dashboard\Widgets\NumberWithIconWidget
     arguments:
