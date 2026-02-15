@@ -24,26 +24,26 @@ final readonly class NextEventListDataProvider implements ListDataProviderInterf
             return ['Kein kommendes Event vorhanden.'];
         }
 
-        $eventDate = $event->getEventDate()?->format('d.m.Y') ?? 'tba';
-        $eventTime = $event->getStartTime()?->format('H:i') ?? '';
+        $eventDate = $event->eventDate?->format('d.m.Y') ?? 'tba';
+        $eventTime = $event->startTime?->format('H:i') ?? '';
         $locationParts = array_filter([
-            trim($event->getLocation()),
-            trim($event->getCity()),
+            trim($event->location),
+            trim($event->city),
         ]);
         $locationLabel = $locationParts === [] ? '-' : implode(', ', $locationParts);
 
         $items = [
             \sprintf(
                 '%s am %s%s',
-                $event->getTitle() !== '' ? $event->getTitle() : 'Termin',
+                $event->title !== '' ? $event->title : 'Termin',
                 $eventDate,
                 $eventTime !== '' ? ' um ' . $eventTime . ' Uhr' : '',
             ),
             'Ort: ' . $locationLabel,
-            'Max. Teilnehmer: ' . $event->getMaxParticipants(),
+            'Max. Teilnehmer: ' . $event->maxParticipants,
         ];
 
-        $slug = trim($event->getSlug());
+        $slug = trim($event->slug);
         if ($slug !== '') {
             $items[] = 'Frontend: /event/' . ltrim($slug, '/');
         }

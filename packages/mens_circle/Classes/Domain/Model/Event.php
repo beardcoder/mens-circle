@@ -11,222 +11,48 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 final class Event extends AbstractEntity
 {
-    protected string $title = '';
+    public string $title = '';
 
-    protected string $slug = '';
+    public string $slug = '';
 
-    protected string $teaser = '';
+    public string $teaser = '';
 
-    protected string $description = '';
+    public string $description = '';
 
-    protected ?DateTime $eventDate = null;
+    public ?DateTime $eventDate = null;
 
-    protected ?DateTime $startTime = null;
+    public ?DateTime $startTime = null;
 
-    protected ?DateTime $endTime = null;
+    public ?DateTime $endTime = null;
 
-    protected string $location = '';
+    public string $location = '';
 
-    protected string $street = '';
+    public string $street = '';
 
-    protected string $postalCode = '';
+    public string $postalCode = '';
 
-    protected string $city = '';
+    public string $city = '';
 
-    protected string $locationDetails = '';
+    public string $locationDetails = '';
 
-    protected int $maxParticipants = 20;
+    public int $maxParticipants = 20 {
+        set(int $value) => max(1, $value);
+    }
 
-    protected string $costBasis = '';
+    public string $costBasis = '';
 
-    protected bool $isPublished = false;
+    public bool $isPublished = false;
 
-    protected ?FileReference $image = null;
+    public ?FileReference $image = null;
 
     /**
      * @var ObjectStorage<Registration>
      */
-    protected ObjectStorage $registrations;
+    public ObjectStorage $registrations;
 
     public function __construct()
     {
         $this->registrations = new ObjectStorage();
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
-    }
-
-    public function getSlug(): string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): void
-    {
-        $this->slug = $slug;
-    }
-
-    public function getTeaser(): string
-    {
-        return $this->teaser;
-    }
-
-    public function setTeaser(string $teaser): void
-    {
-        $this->teaser = $teaser;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
-    }
-
-    public function getEventDate(): ?DateTime
-    {
-        return $this->eventDate;
-    }
-
-    public function setEventDate(?DateTime $eventDate): void
-    {
-        $this->eventDate = $eventDate;
-    }
-
-    public function getStartTime(): ?DateTime
-    {
-        return $this->startTime;
-    }
-
-    public function setStartTime(?DateTime $startTime): void
-    {
-        $this->startTime = $startTime;
-    }
-
-    public function getEndTime(): ?DateTime
-    {
-        return $this->endTime;
-    }
-
-    public function setEndTime(?DateTime $endTime): void
-    {
-        $this->endTime = $endTime;
-    }
-
-    public function getLocation(): string
-    {
-        return $this->location;
-    }
-
-    public function setLocation(string $location): void
-    {
-        $this->location = $location;
-    }
-
-    public function getStreet(): string
-    {
-        return $this->street;
-    }
-
-    public function setStreet(string $street): void
-    {
-        $this->street = $street;
-    }
-
-    public function getPostalCode(): string
-    {
-        return $this->postalCode;
-    }
-
-    public function setPostalCode(string $postalCode): void
-    {
-        $this->postalCode = $postalCode;
-    }
-
-    public function getCity(): string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): void
-    {
-        $this->city = $city;
-    }
-
-    public function getLocationDetails(): string
-    {
-        return $this->locationDetails;
-    }
-
-    public function setLocationDetails(string $locationDetails): void
-    {
-        $this->locationDetails = $locationDetails;
-    }
-
-    public function getMaxParticipants(): int
-    {
-        return $this->maxParticipants;
-    }
-
-    public function setMaxParticipants(int $maxParticipants): void
-    {
-        $this->maxParticipants = max(1, $maxParticipants);
-    }
-
-    public function getCostBasis(): string
-    {
-        return $this->costBasis;
-    }
-
-    public function setCostBasis(string $costBasis): void
-    {
-        $this->costBasis = $costBasis;
-    }
-
-    public function isPublished(): bool
-    {
-        return $this->isPublished;
-    }
-
-    public function setIsPublished(bool $isPublished): void
-    {
-        $this->isPublished = $isPublished;
-    }
-
-    public function getImage(): ?FileReference
-    {
-        return $this->image;
-    }
-
-    public function setImage(?FileReference $image): void
-    {
-        $this->image = $image;
-    }
-
-    /**
-     * @return ObjectStorage<Registration>
-     */
-    public function getRegistrations(): ObjectStorage
-    {
-        return $this->registrations;
-    }
-
-    /**
-     * @param ObjectStorage<Registration> $registrations
-     */
-    public function setRegistrations(ObjectStorage $registrations): void
-    {
-        $this->registrations = $registrations;
     }
 
     public function addRegistration(Registration $registration): void

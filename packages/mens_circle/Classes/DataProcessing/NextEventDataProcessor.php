@@ -38,9 +38,9 @@ final readonly class NextEventDataProcessor implements DataProcessorInterface
         $processedData[$variableName] = $event instanceof Event
             ? [
                 'uid' => (int)$event->getUid(),
-                'title' => $event->getTitle(),
-                'slug' => $event->getSlug(),
-                'url' => $this->buildEventUrl($eventBasePath, $event->getSlug()),
+                'title' => $event->title,
+                'slug' => $event->slug,
+                'url' => $this->buildEventUrl($eventBasePath, $event->slug),
             ]
             : null;
 

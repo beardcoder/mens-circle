@@ -8,52 +8,20 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 final class Participant extends AbstractEntity
 {
-    protected string $firstName = '';
-
-    protected string $lastName = '';
-
-    protected string $email = '';
-
-    protected string $phone = '';
-
-    public function getFirstName(): string
-    {
-        return $this->firstName;
+    public string $firstName = '' {
+        set(string $value) => trim($value);
     }
 
-    public function setFirstName(string $firstName): void
-    {
-        $this->firstName = trim($firstName);
+    public string $lastName = '' {
+        set(string $value) => trim($value);
     }
 
-    public function getLastName(): string
-    {
-        return $this->lastName;
+    public string $email = '' {
+        set(string $value) => strtolower(trim($value));
     }
 
-    public function setLastName(string $lastName): void
-    {
-        $this->lastName = trim($lastName);
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): void
-    {
-        $this->email = strtolower(trim($email));
-    }
-
-    public function getPhone(): string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(string $phone): void
-    {
-        $this->phone = trim($phone);
+    public string $phone = '' {
+        set(string $value) => trim($value);
     }
 
     public function getFullName(): string
