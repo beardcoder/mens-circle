@@ -30,6 +30,7 @@ return (new Config())
         (new Finder())
             ->in([
                 __DIR__ . '/packages',
+                __DIR__ . '/config',
             ])
             ->exclude([
                 'vendor',

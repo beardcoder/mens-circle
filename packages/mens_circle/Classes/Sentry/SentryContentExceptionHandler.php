@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Sentry;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Context\Context;
@@ -26,7 +27,7 @@ class SentryContentExceptionHandler extends ProductionExceptionHandler
     }
 
     public function handle(
-        \Exception $exception,
+        Exception $exception,
         ?AbstractContentObject $contentObject = null,
         $contentObjectConfiguration = [],
     ): string {

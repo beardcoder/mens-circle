@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Sentry;
 
 use Psr\Log\LogLevel;
-use Sentry\Severity;
+
 use function Sentry\captureException;
 use function Sentry\captureMessage;
+
+use Sentry\Severity;
+use Throwable;
 
 final class SentryService
 {
@@ -30,7 +33,7 @@ final class SentryService
             'dsn' => $dsn,
             'environment' => self::getEnv('SENTRY_ENVIRONMENT') ?? 'production',
             'release' => self::getEnv('SENTRY_RELEASE') ?? '',
-            'traces_sample_rate' => (float) (self::getEnv('SENTRY_TRACES_SAMPLE_RATE') ?? 0.0),
+            'traces_sample_rate' => (float)(self::getEnv('SENTRY_TRACES_SAMPLE_RATE') ?? 0.0),
             'send_default_pii' => false,
             'attach_stacktrace' => true,
             'error_types' => E_ALL & ~(E_NOTICE | E_DEPRECATED | E_USER_DEPRECATED),
@@ -46,7 +49,7 @@ final class SentryService
         return self::$initialized === true;
     }
 
-    public static function captureException(\Throwable $exception): void
+    public static function captureException(Throwable $exception): void
     {
         if (!self::isEnabled()) {
             return;

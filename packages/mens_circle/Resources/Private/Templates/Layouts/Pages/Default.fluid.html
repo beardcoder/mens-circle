@@ -1,24 +1,31 @@
-<html data-namespace-typo3-fluid="true" xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+<fluid
+  data-namespace-typo3-fluid="true"
+  xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+  xmlns:vite="http://typo3.org/ns/Praetorius/ViteAssetCollector/ViewHelpers"
+>
+
+<vite:asset entry="EXT:mens_circle/Resources/Private/Frontend/Scripts/App.entry.ts" />
+<vite:asset entry="EXT:mens_circle/Resources/Private/Frontend/Styles/App.entry.css" />
+
 <f:page.meta property="viewport">width=device-width, initial-scale=1.0</f:page.meta>
 <f:page.meta name="turbo-cache-control">no-cache</f:page.meta>
-<f:asset.css href="EXT:mens_circle/Resources/Public/Build/main.css" identifier="mens-circle-main" media="all"/>
-<f:asset.script identifier="mens-circle-main" src="EXT:mens_circle/Resources/Public/Build/main.js" type="module"/>
 
 <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
-<f:render arguments="{_all}" partial="Pages/Header"/>
+<f:render arguments="{_all}" partial="Pages/Header" />
 
 <main id="main">
-    <f:render optional="true" section="Main">
-        <f:for as="record" each="{content.main.records}">
-            <f:cObject
-                    data="{record}"
-                    table="{record.mainType}"
-                    typoscriptObjectPath="{record.mainType}"
-            />
-        </f:for>
-    </f:render>
+  <f:render optional="true" section="Main">
+    <f:for as="record" each="{content.main.records}">
+      <f:cObject
+        data="{record}"
+        table="{record.mainType}"
+        typoscriptObjectPath="{record.mainType}"
+      />
+    </f:for>
+  </f:render>
 </main>
 
-<f:render arguments="{_all}" partial="Pages/Footer"/>
-</html>
+<f:render arguments="{_all}" partial="Pages/Footer" />
+
+</fluid>

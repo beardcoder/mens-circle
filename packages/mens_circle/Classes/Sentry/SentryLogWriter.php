@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace BeardCoder\MensCircle\Sentry;
 
 use Sentry\State\Scope;
-use TYPO3\CMS\Core\Log\LogRecord;
-use TYPO3\CMS\Core\Log\Writer\AbstractWriter;
 
 use function Sentry\withScope;
+
+use Throwable;
+use TYPO3\CMS\Core\Log\LogRecord;
+use TYPO3\CMS\Core\Log\Writer\AbstractWriter;
 
 final class SentryLogWriter extends AbstractWriter
 {
@@ -48,7 +50,7 @@ final class SentryLogWriter extends AbstractWriter
 
             $data = $record->getData();
             if ($data !== []) {
-                if (isset($data['exception']) && $data['exception'] instanceof \Throwable) {
+                if (isset($data['exception']) && $data['exception'] instanceof Throwable) {
                     SentryService::captureException($data['exception']);
 
                     return;

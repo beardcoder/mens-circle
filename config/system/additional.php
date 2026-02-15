@@ -29,14 +29,14 @@ if (env('TYPO3_DB_HOST')) {
 
 // Sentry error tracking — exception handlers, content handler, and log writer
 if (env('SENTRY_DSN')) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] =
-        \BeardCoder\MensCircle\Sentry\SentryProductionExceptionHandler::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] =
-        \BeardCoder\MensCircle\Sentry\SentryDebugExceptionHandler::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler']
+        = \BeardCoder\MensCircle\Sentry\SentryProductionExceptionHandler::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler']
+        = \BeardCoder\MensCircle\Sentry\SentryDebugExceptionHandler::class;
 
-    $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][\Psr\Log\LogLevel::ERROR][
-        \BeardCoder\MensCircle\Sentry\SentryLogWriter::class
-    ] = [];
+    $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][Psr\Log\LogLevel::ERROR][\BeardCoder\MensCircle\Sentry\SentryLogWriter::class] = [];
+
+    $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][Psr\Log\LogLevel::WARNING][\BeardCoder\MensCircle\Sentry\SentryLogWriter::class] = [];
 }
 
 if (env('TYPO3_MAIL_TRANSPORT')) {

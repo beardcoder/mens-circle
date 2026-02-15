@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BeardCoder\MensCircle\Sentry;
 
+use Throwable;
 use TYPO3\CMS\Core\Error\DebugExceptionHandler;
 
 class SentryDebugExceptionHandler extends DebugExceptionHandler
@@ -14,7 +15,7 @@ class SentryDebugExceptionHandler extends DebugExceptionHandler
         parent::__construct();
     }
 
-    public function handleException(\Throwable $exception): void
+    public function handleException(Throwable $exception): void
     {
         SentryService::captureException($exception);
         parent::handleException($exception);
