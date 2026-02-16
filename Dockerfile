@@ -61,6 +61,9 @@ RUN install-php-extensions intl gd exif imagick
 
 USER www-data
 
+# TYPO3 startup scripts (database schema, cache flush/warmup, language warmup)
+COPY --chmod=755 ./entrypoint.d/ /etc/entrypoint.d/
+
 # Copy application code
 COPY --chown=www-data:www-data . .
 
