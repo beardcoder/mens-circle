@@ -1,8 +1,16 @@
 /**
- * Progressive form enhancement via fetch + HTML fragments.
- * Forms with `data-enhance` are intercepted: on submit we fetch the
- * same action URL and display the server-rendered result fragment
- * as a toast. Without JS the normal PRG flow still works.
+ * Progressive form enhancement via fetch + Fluid-rendered HTML fragments.
+ *
+ * Forms with `data-enhance` are intercepted: on submit we POST via fetch
+ * with an XHR header. The server renders a Fluid result template and
+ * short-circuits the page pipeline (PropagateResponseException), so we
+ * receive only the result fragment.
+ *
+ * On success the nearest `[data-enhance-container]` is swapped with the
+ * result content (Turbo Frame-like behaviour). On error a toast is shown
+ * and the form stays in place so the user can correct their input.
+ *
+ * Without JS the normal PRG flow still works — pure progressive enhancement.
  */
 
 import { showToast } from '../composables';
@@ -24,6 +32,8 @@ export function useFormEnhancer(): void {
 }
 
 function enhanceForm(form: HTMLFormElement): void {
+  const container = form.closest<HTMLElement>('[data-enhance-container]');
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -53,8 +63,9 @@ function enhanceForm(form: HTMLFormElement): void {
 
         showToast(toastType, message);
 
-        if (severity === 'success' || severity === 'ok') {
-          form.reset();
+        // On success: swap the container content (like a Turbo Frame)
+        if (severity === 'success' && container) {
+          container.innerHTML = html;
         }
       }
     } catch {

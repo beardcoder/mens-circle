@@ -8,6 +8,7 @@ use BeardCoder\MensCircle\Domain\Model\NewsletterSubscription;
 use BeardCoder\MensCircle\Domain\Model\Participant;
 use BeardCoder\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
 use BeardCoder\MensCircle\Domain\Repository\ParticipantRepository;
+use BeardCoder\MensCircle\Service\FormResultRenderer;
 use BeardCoder\MensCircle\Service\MailService;
 use DateTime;
 use Psr\Http\Message\ResponseInterface;
@@ -22,6 +23,7 @@ final class NewsletterController extends ActionController
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
         private readonly PersistenceManager $persistenceManager,
         private readonly MailService $mailService,
+        private readonly FormResultRenderer $formResultRenderer,
     ) {}
 
     public function formAction(): ResponseInterface
@@ -144,33 +146,12 @@ final class NewsletterController extends ActionController
         );
     }
 
-    private function isEnhancedRequest(): bool
-    {
-        return $this->request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest';
-    }
-
-    private function htmlFormResult(string $message, string $severity): ResponseInterface
-    {
-        $html = \sprintf('<div data-form-result="%s">%s</div>', $severity, htmlspecialchars($message));
-
-        return $this->responseFactory->createResponse()
-            ->withHeader('Content-Type', 'text/html; charset=utf-8')
-            ->withBody($this->streamFactory->createStream($html));
-    }
-
     private function redirectToFormWithMessage(
         string $message,
         ContextualFeedbackSeverity $severity,
     ): ResponseInterface {
-        if ($this->isEnhancedRequest()) {
-            $severityName = match ($severity) {
-                ContextualFeedbackSeverity::OK => 'success',
-                ContextualFeedbackSeverity::WARNING => 'warning',
-                ContextualFeedbackSeverity::INFO => 'info',
-                default => 'error',
-            };
-
-            return $this->htmlFormResult($message, $severityName);
+        if ($this->formResultRenderer->isEnhancedRequest($this->request)) {
+            $this->formResultRenderer->sendFormResult($this->request, $message, $severity);
         }
 
         $this->addFlashMessage($message, '', $severity);

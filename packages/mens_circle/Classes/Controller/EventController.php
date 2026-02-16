@@ -16,6 +16,7 @@ use BeardCoder\MensCircle\Domain\Repository\NewsletterSubscriptionRepository;
 use BeardCoder\MensCircle\Domain\Repository\ParticipantRepository;
 use BeardCoder\MensCircle\Domain\Repository\RegistrationRepository;
 use BeardCoder\MensCircle\Message\SendEventNotificationMessage;
+use BeardCoder\MensCircle\Service\FormResultRenderer;
 use DateTime;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -32,6 +33,7 @@ final class EventController extends ActionController
         private readonly NewsletterSubscriptionRepository $newsletterSubscriptionRepository,
         private readonly PersistenceManager $persistenceManager,
         private readonly MessageBusInterface $messageBus,
+        private readonly FormResultRenderer $formResultRenderer,
     ) {}
 
     public function listAction(): ResponseInterface
@@ -75,6 +77,9 @@ final class EventController extends ActionController
     ): ResponseInterface {
         $resolvedEvent = $this->resolveEventByIdentifier($event);
         if (!$resolvedEvent instanceof Event) {
+            if ($this->formResultRenderer->isEnhancedRequest($this->request)) {
+                $this->formResultRenderer->sendFormResult($this->request, 'Ungültiger Termin.', ContextualFeedbackSeverity::ERROR);
+            }
             $this->addFlashMessage('Ungültiger Termin.', '', ContextualFeedbackSeverity::ERROR);
 
             return $this->redirectToEventOverview();
@@ -146,8 +151,8 @@ final class EventController extends ActionController
 
         $successMessage = \sprintf('Danke! Du bist für „%s" angemeldet.', $resolvedEvent->title);
 
-        if ($this->isEnhancedRequest()) {
-            return $this->htmlFormResult($successMessage, 'success');
+        if ($this->formResultRenderer->isEnhancedRequest($this->request)) {
+            $this->formResultRenderer->sendFormResult($this->request, $successMessage, ContextualFeedbackSeverity::OK);
         }
 
         $this->addFlashMessage($successMessage, '', ContextualFeedbackSeverity::OK);
@@ -358,15 +363,8 @@ final class EventController extends ActionController
         string $message,
         ContextualFeedbackSeverity $severity,
     ): ResponseInterface {
-        if ($this->isEnhancedRequest()) {
-            $severityName = match ($severity) {
-                ContextualFeedbackSeverity::OK => 'success',
-                ContextualFeedbackSeverity::WARNING => 'warning',
-                ContextualFeedbackSeverity::INFO => 'info',
-                default => 'error',
-            };
-
-            return $this->htmlFormResult($message, $severityName);
+        if ($this->formResultRenderer->isEnhancedRequest($this->request)) {
+            $this->formResultRenderer->sendFormResult($this->request, $message, $severity);
         }
 
         $this->addFlashMessage($message, '', $severity);
@@ -429,20 +427,6 @@ final class EventController extends ActionController
         $subscription->subscribedAt = new DateTime();
         $subscription->unsubscribedAt = null;
         $this->newsletterSubscriptionRepository->update($subscription);
-    }
-
-    private function isEnhancedRequest(): bool
-    {
-        return $this->request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest';
-    }
-
-    private function htmlFormResult(string $message, string $severity): ResponseInterface
-    {
-        $html = \sprintf('<div data-form-result="%s">%s</div>', $severity, htmlspecialchars($message));
-
-        return $this->responseFactory->createResponse()
-            ->withHeader('Content-Type', 'text/html; charset=utf-8')
-            ->withBody($this->streamFactory->createStream($html));
     }
 
     private function dispatchRegistrationNotifications(Registration $registration, Participant $participant): void
