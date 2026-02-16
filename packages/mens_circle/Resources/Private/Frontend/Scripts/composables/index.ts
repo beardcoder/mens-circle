@@ -4,7 +4,6 @@
  */
 
 import { animate, inView, scroll, stagger } from 'motion';
-import type { ApiResponse } from '../types';
 
 export interface AnimationOptions {
   threshold?: number;
@@ -92,60 +91,6 @@ export function useParallax(): void {
       target: el,
       offset: ['start end', 'end start'],
     });
-  });
-}
-
-/**
- * Enhanced form handling with better UX
- */
-export interface FormOptions {
-  onSubmit: (data: FormData) => Promise<Response>;
-  onSuccess?: (data: ApiResponse) => void;
-  onError?: (error: Error) => void;
-}
-
-export function useForm(
-  formElement: HTMLFormElement,
-  options: FormOptions
-): void {
-  const submitButton =
-    formElement.querySelector<HTMLButtonElement>('[type="submit"]');
-  const originalButtonText = submitButton?.textContent ?? '';
-
-  formElement.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = 'Wird gesendet...';
-    }
-
-    const formData = new FormData(formElement);
-
-    try {
-      const response = await options.onSubmit(formData);
-      const data = await response.json();
-
-      if (data.success) {
-        formElement.reset();
-        options.onSuccess?.(data);
-        showToast('success', data.message);
-      } else {
-        options.onError?.(new Error(data.message));
-        showToast('error', data.message);
-      }
-    } catch (error) {
-      options.onError?.(error as Error);
-      showToast(
-        'error',
-        'Ein Fehler ist aufgetreten. Bitte versuche es erneut.'
-      );
-    } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = originalButtonText;
-      }
-    }
   });
 }
 

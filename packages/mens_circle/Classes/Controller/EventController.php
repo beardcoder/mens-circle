@@ -144,6 +144,14 @@ final class EventController extends ActionController
         $this->persistenceManager->persistAll();
         $this->dispatchRegistrationNotifications($registration, $participant);
 
+        $successMessage = \sprintf('Danke! Du bist für „%s" angemeldet.', $resolvedEvent->title);
+
+        if ($this->isEnhancedRequest()) {
+            return $this->htmlFormResult($successMessage, 'success');
+        }
+
+        $this->addFlashMessage($successMessage, '', ContextualFeedbackSeverity::OK);
+
         return $this->redirect('registerSuccess', null, null, ['event' => $resolvedEvent->getUid()]);
     }
 
@@ -350,6 +358,17 @@ final class EventController extends ActionController
         string $message,
         ContextualFeedbackSeverity $severity,
     ): ResponseInterface {
+        if ($this->isEnhancedRequest()) {
+            $severityName = match ($severity) {
+                ContextualFeedbackSeverity::OK => 'success',
+                ContextualFeedbackSeverity::WARNING => 'warning',
+                ContextualFeedbackSeverity::INFO => 'info',
+                default => 'error',
+            };
+
+            return $this->htmlFormResult($message, $severityName);
+        }
+
         $this->addFlashMessage($message, '', $severity);
 
         return $this->redirect('detail', null, null, ['event' => $event->getUid()]);
@@ -410,6 +429,20 @@ final class EventController extends ActionController
         $subscription->subscribedAt = new DateTime();
         $subscription->unsubscribedAt = null;
         $this->newsletterSubscriptionRepository->update($subscription);
+    }
+
+    private function isEnhancedRequest(): bool
+    {
+        return $this->request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest';
+    }
+
+    private function htmlFormResult(string $message, string $severity): ResponseInterface
+    {
+        $html = \sprintf('<div data-form-result="%s">%s</div>', $severity, htmlspecialchars($message));
+
+        return $this->responseFactory->createResponse()
+            ->withHeader('Content-Type', 'text/html; charset=utf-8')
+            ->withBody($this->streamFactory->createStream($html));
     }
 
     private function dispatchRegistrationNotifications(Registration $registration, Participant $participant): void

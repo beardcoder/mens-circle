@@ -57,6 +57,10 @@ final class TestimonialController extends ActionController
         $this->testimonialRepository->add($testimonial);
         $this->persistenceManager->persistAll();
 
+        if ($this->isEnhancedRequest()) {
+            return $this->htmlFormResult('Danke für deine Erfahrung! Dein Beitrag wird nach Prüfung veröffentlicht.', 'success');
+        }
+
         return $this->redirect('thanks');
     }
 
@@ -78,9 +82,29 @@ final class TestimonialController extends ActionController
         return $privacy;
     }
 
+    private function isEnhancedRequest(): bool
+    {
+        return $this->request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest';
+    }
+
+    private function htmlFormResult(string $message, string $severity): ResponseInterface
+    {
+        $html = \sprintf('<div data-form-result="%s">%s</div>', $severity, htmlspecialchars($message));
+
+        return $this->responseFactory->createResponse()
+            ->withHeader('Content-Type', 'text/html; charset=utf-8')
+            ->withBody($this->streamFactory->createStream($html));
+    }
+
     private function redirectToFormWithError(): ResponseInterface
     {
-        $this->addFlashMessage('Bitte fülle alle Pflichtfelder korrekt aus.', '', ContextualFeedbackSeverity::ERROR);
+        $errorMessage = 'Bitte fülle alle Pflichtfelder korrekt aus.';
+
+        if ($this->isEnhancedRequest()) {
+            return $this->htmlFormResult($errorMessage, 'error');
+        }
+
+        $this->addFlashMessage($errorMessage, '', ContextualFeedbackSeverity::ERROR);
 
         return $this->redirect('form');
     }

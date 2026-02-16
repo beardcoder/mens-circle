@@ -18,11 +18,6 @@ export interface Routes {
   csrfToken: string;
 }
 
-export interface ApiResponse {
-  success: boolean;
-  message: string;
-}
-
 declare global {
   interface Window {
     routes?: Routes;
