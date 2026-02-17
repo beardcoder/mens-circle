@@ -35,8 +35,6 @@ if (env('SENTRY_DSN')) {
         = \BeardCoder\MensCircle\Sentry\SentryDebugExceptionHandler::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][Psr\Log\LogLevel::ERROR][\BeardCoder\MensCircle\Sentry\SentryLogWriter::class] = [];
-
-    $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][Psr\Log\LogLevel::WARNING][\BeardCoder\MensCircle\Sentry\SentryLogWriter::class] = [];
 }
 
 if (env('TYPO3_MAIL_TRANSPORT')) {
