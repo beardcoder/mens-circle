@@ -15,14 +15,14 @@ use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\View\TemplateView;
 
-final class MailService
+final readonly class MailService
 {
     private const MAIL_TEMPLATE_ROOT_PATH = 'EXT:mens_circle/Resources/Private/Templates/Mail/';
     private const MAIL_LAYOUT_ROOT_PATH = 'EXT:mens_circle/Resources/Private/Templates/Layouts/Mail/';
 
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly DateTimeFormatter $dateTimeFormatter,
+        private LoggerInterface $logger,
+        private DateTimeFormatter $dateTimeFormatter,
     ) {}
 
     /**

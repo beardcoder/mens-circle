@@ -7,7 +7,7 @@ namespace BeardCoder\MensCircle\Service;
 use DateTimeImmutable;
 use Throwable;
 
-final class DateTimeFormatter
+final readonly class DateTimeFormatter
 {
     public function formatDate(string $dateValue): string
     {

@@ -130,7 +130,7 @@ final class NewsletterBackendController extends ActionController
             ->executeQuery()
             ->fetchAllAssociative();
 
-        return \is_array($rows) ? $rows : [];
+        return $rows;
     }
 
     /**

@@ -20,7 +20,7 @@ final readonly class NextEventDataProcessor implements DataProcessorInterface
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData,
-    ) {
+    ): array {
         $variableName = trim((string)($processorConfiguration['as'] ?? 'nextEvent'));
         if ($variableName === '') {
             $variableName = 'nextEvent';

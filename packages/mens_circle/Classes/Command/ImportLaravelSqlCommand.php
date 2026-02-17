@@ -1191,25 +1191,6 @@ final class ImportLaravelSqlCommand extends Command
         return 0;
     }
 
-    /**
-     * @param list<array<string, mixed>> $contentBlocks
-     *
-     * @return list<array<string, mixed>>
-     */
-    private function filterContentBlocksForPage(array $contentBlocks, int $sourcePageId): array
-    {
-        if ($sourcePageId <= 0) {
-            return $contentBlocks;
-        }
-
-        return array_values(
-            array_filter(
-                $contentBlocks,
-                static fn(array $row): bool => (int)($row['page_id'] ?? 0) === $sourcePageId,
-            ),
-        );
-    }
-
     private function findPageUidBySlug(Connection $connection, int $pid, string $slug): int
     {
         if ($pid <= 0 || $slug === '') {
@@ -1574,37 +1555,6 @@ final class ImportLaravelSqlCommand extends Command
         }
 
         return $dateTime->setTime(0, 0, 0)->getTimestamp();
-    }
-
-    private function toDateTimeString(mixed $value): ?string
-    {
-        $dateTime = $this->createDateTimeImmutable($value);
-
-        return $dateTime?->format('Y-m-d H:i:s');
-    }
-
-    private function toTimeString(mixed $value): ?string
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        $string = trim((string)$value);
-        if ($string === '' || $string === '0000-00-00 00:00:00') {
-            return null;
-        }
-
-        if (preg_match('/^\d{2}:\d{2}$/', $string) === 1) {
-            return $string . ':00';
-        }
-
-        if (preg_match('/^\d{2}:\d{2}:\d{2}$/', $string) === 1) {
-            return $string;
-        }
-
-        $dateTime = $this->createDateTimeImmutable($value);
-
-        return $dateTime?->format('H:i:s');
     }
 
     private function toTimeTimestampNullable(mixed $value): ?int

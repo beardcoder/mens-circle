@@ -10,13 +10,13 @@ use Throwable;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 
-final class SmsService
+final readonly class SmsService
 {
     public function __construct(
-        private readonly RequestFactory $requestFactory,
-        private readonly ExtensionConfiguration $extensionConfiguration,
-        private readonly LoggerInterface $logger,
-        private readonly DateTimeFormatter $dateTimeFormatter,
+        private RequestFactory $requestFactory,
+        private ExtensionConfiguration $extensionConfiguration,
+        private LoggerInterface $logger,
+        private DateTimeFormatter $dateTimeFormatter,
     ) {}
 
     /**

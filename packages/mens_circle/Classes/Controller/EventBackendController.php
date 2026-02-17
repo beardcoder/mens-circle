@@ -17,7 +17,6 @@ use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 final class EventBackendController extends ActionController
@@ -226,11 +225,12 @@ final class EventBackendController extends ActionController
             ->executeQuery()
             ->fetchAllAssociative();
 
-        return \is_array($rows) ? $rows : [];
+        return $rows;
     }
 
     /**
      * @return array<int, int>
+     * @throws Exception
      */
     private function fetchActiveRegistrationCountsByEvent(): array
     {
@@ -250,10 +250,6 @@ final class EventBackendController extends ActionController
             ->groupBy('event')
             ->executeQuery()
             ->fetchAllAssociative();
-
-        if (!\is_array($rows)) {
-            return [];
-        }
 
         $countsByEvent = [];
         foreach ($rows as $row) {
@@ -280,6 +276,7 @@ final class EventBackendController extends ActionController
      *   newsletterStatusClass: string,
      *   newsletterDateLabel: string
      * }>>
+     * @throws Exception
      */
     private function fetchParticipantsByEvent(): array
     {
@@ -315,7 +312,7 @@ final class EventBackendController extends ActionController
             ->executeQuery()
             ->fetchAllAssociative();
 
-        if (!\is_array($rows) || $rows === []) {
+        if ($rows === []) {
             return [];
         }
 
@@ -367,6 +364,7 @@ final class EventBackendController extends ActionController
     /**
      * @param list<int> $participantUids
      * @return array<int, array{subscribed_at: mixed, confirmed_at: mixed, unsubscribed_at: mixed}>
+     * @throws Exception
      */
     private function fetchNewsletterByParticipant(array $participantUids): array
     {
@@ -390,10 +388,6 @@ final class EventBackendController extends ActionController
             ->addOrderBy('uid', 'DESC')
             ->executeQuery()
             ->fetchAllAssociative();
-
-        if (!\is_array($rows)) {
-            return [];
-        }
 
         $newsletterByParticipant = [];
         foreach ($rows as $row) {
@@ -657,7 +651,7 @@ final class EventBackendController extends ActionController
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
         $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder->getRestrictions()->add(new DeletedRestriction());
 
         return $queryBuilder;
     }

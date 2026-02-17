@@ -13,6 +13,9 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
+/**
+ * @extends Repository<Event>
+ */
 final class EventRepository extends Repository
 {
     protected $defaultOrderings = [
@@ -22,7 +25,6 @@ final class EventRepository extends Repository
 
     public function initializeObject(): void
     {
-        /** @var Typo3QuerySettings $querySettings */
         $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($querySettings);

@@ -212,7 +212,7 @@ final class DispatchEventRemindersCommand extends Command
             ->executeQuery()
             ->fetchAllAssociative();
 
-        return \is_array($rows) ? $rows : [];
+        return $rows;
     }
 
     private function resolveEventStart(string $eventDate, string $startTime): ?DateTimeImmutable

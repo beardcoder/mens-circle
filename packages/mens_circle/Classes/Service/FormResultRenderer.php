@@ -12,12 +12,12 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 
-final class FormResultRenderer
+final readonly class FormResultRenderer
 {
     public function __construct(
-        private readonly ViewFactoryInterface $viewFactory,
-        private readonly ResponseFactoryInterface $responseFactory,
-        private readonly StreamFactoryInterface $streamFactory,
+        private ViewFactoryInterface $viewFactory,
+        private ResponseFactoryInterface $responseFactory,
+        private StreamFactoryInterface $streamFactory,
     ) {}
 
     public function isEnhancedRequest(ServerRequestInterface $request): bool

@@ -6,6 +6,7 @@ services:
 
   BeardCoder\MensCircle\:
     resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
 
   BeardCoder\MensCircle\Controller\:
     resource: '../Classes/Controller/*'
