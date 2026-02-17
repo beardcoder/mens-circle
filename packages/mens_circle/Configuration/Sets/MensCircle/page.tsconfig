@@ -1,1 +1,2 @@
+@import 'EXT:distribution_package/Configuration/BackendLayouts/*.tsconfig'
 TCEMAIN.default.disablePrependAtCopy = 1
