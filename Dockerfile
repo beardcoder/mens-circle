@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 # ----------------------------
 # 1) Frontend build (Vite) with Bun
 # ----------------------------
-FROM oven/bun:1-slim AS assets
+FROM oven/bun:1 AS assets
 WORKDIR /app
 
 COPY --chown=www-data:www-data --from=vendor /app/vendor vendor
