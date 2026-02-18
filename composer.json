@@ -22,6 +22,7 @@
     "php": "^8.5",
     "beardcoder/mens-circle-sitepackage": "^1.0",
     "helhum/dotenv-connector": "^3.2",
+    "netresearch/nr-passkeys-be": "^0.4.1",
     "praetorius/vite-asset-collector": "^1.15",
     "sentry/sentry": "^4.19",
     "typo3/cms-backend": "^14.0",
