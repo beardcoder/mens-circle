@@ -8,45 +8,43 @@ settings:
     category: mensCircle
     type: string
     default: 'Männerkreis Niederbayern/ Straubing'
+
   mensCircle.contactEmail:
     label: 'Contact email'
     category: mensCircle
     type: string
     default: 'hallo@example.com'
+
   mensCircle.baseUrl:
     label: 'Base URL for links in emails'
     category: mensCircle
     type: string
     default: ''
-  mensCircle.theme:
-    label: 'Theme'
-    category: mensCircle
-    type: string
-    default: 'earth'
-    enum:
-      earth: 'Earth'
-      sand: 'Sand'
-      forest: 'Forest'
+
   mensCircle.storagePid:
     label: 'Storage PID'
     category: mensCircle
     type: int
     default: 1
+
   mensCircle.newsletterPid:
     label: 'Newsletter PID'
     category: mensCircle
     type: int
     default: 1
+
   mensCircle.whatsappCommunityLink:
     label: 'WhatsApp Community Link'
     category: mensCircle
     type: string
     default: ''
+
   mensCircle.smsEnabled:
     label: 'Enable SMS notifications'
     category: mensCircle
     type: bool
     default: false
+
   mensCircle.smsSender:
     label: 'SMS sender'
     category: mensCircle
