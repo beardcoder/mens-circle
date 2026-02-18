@@ -73,12 +73,12 @@ routeEnhancers:
 settings:
   mensCircle:
     siteName: 'Männerkreis Niederbayern/ Straubing'
-    contactEmail: hallo@example.com
+    contactEmail: hallo@mens-circle.de
     baseUrl: 'https://mens-circle.local/'
     theme: earth
     storagePid: 2
     newsletterPid: 4
-    whatsappCommunityLink: ''
+    whatsappCommunityLink: 'https://google.de'
     smsEnabled: false
     smsSender: 'MensCircle'
 websiteTitle: 'Männerkreis Niederbayern/ Straubing'
