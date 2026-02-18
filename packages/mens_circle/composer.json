@@ -1,14 +1,8 @@
 {
   "name": "beardcoder/mens-circle-sitepackage",
   "version": "1.0.0",
-  "description": "TYPO3 Sitepackage and business logic for Männerkreis Niederbayern/ Straubing",
   "type": "typo3-cms-extension",
   "license": "GPL-2.0-or-later",
-  "authors": [
-    {
-      "name": "Markus Sommer"
-    }
-  ],
   "require": {
     "php": "^8.5",
     "typo3/cms-backend": "*",

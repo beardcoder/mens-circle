@@ -9,8 +9,6 @@ use BeardCoder\MensCircle\Message\SendEventNotificationMessage;
 use BeardCoder\MensCircle\Message\SendNewsletterMessage;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
-defined('TYPO3') || die();
-
 ExtensionUtility::configurePlugin(
     'MensCircle',
     'Event',
@@ -61,5 +59,4 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'] ??= [];
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'][SendNewsletterMessage::class] = 'doctrine';
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['messenger']['routing'][SendEventNotificationMessage::class] = 'doctrine';
 
-$GLOBALS['TYPO3_CONF_VARS']['BE']['stylesheets']['menscircle-backend-theme']
-    = 'EXT:mens_circle/Resources/Public/Css/backend-theme.css';
+$GLOBALS['TYPO3_CONF_VARS']['BE']['stylesheets']['menscircle-backend-theme'] = 'EXT:mens_circle/Resources/Public/Css/backend-theme.css';
