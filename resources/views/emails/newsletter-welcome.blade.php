@@ -1,33 +1,31 @@
 <x-mail::message>
-# Willkommen beim Männerkreis Niederbayern/ Straubing!
+# Willkommen im Männerkreis!
 
-Hallo und herzlich willkommen,
+herzlich willkommen – schön, dass du dabei bist.
 
-schön, dass du dich für den **Männerkreis Niederbayern/ Straubing Newsletter** angemeldet hast!
+Du erhältst ab sofort unseren Newsletter und bist als Erster informiert, wenn neue Termine und Impulse erscheinen.
 
 ## Was dich erwartet
 
-Mit diesem Newsletter bleibst du auf dem Laufenden über:
+- **Neue Termine** – Erfahre als Erster von kommenden Treffen
+- **Inspirierende Impulse** – Gedanken zu Männlichkeit, Gemeinschaft und persönlichem Wachstum
+- **Besondere Einladungen** – Exklusive Angebote für Community-Mitglieder
 
-- **Kommende Treffen und Veranstaltungen** – Erfahre als Erster von neuen Terminen
-- **Inspirierende Impulse** – Gedanken rund um Männlichkeit, Gemeinschaft und persönliches Wachstum
-- **Besondere Angebote** – Exklusive Einladungen zu besonderen Events
+## Der erste Schritt
 
-## Der nächste Schritt
-
-Schau dir gerne unsere nächsten Veranstaltungen an und melde dich für ein Treffen an:
+Schau dir gerne unsere nächsten Veranstaltungen an:
 
 <x-mail::button url="{{ route('event.show') }}">
 Nächste Termine ansehen
 </x-mail::button>
 
-## Über uns
+## Über den Männerkreis
 
-Der Männerkreis Niederbayern/ Straubing ist ein Raum für echte Begegnung. Hier können Männer in einer vertrauensvollen Atmosphäre authentisch sein, sich austauschen und gemeinsam wachsen.
+Der Männerkreis Niederbayern / Straubing ist ein Raum für echte Begegnung. Männer in einer vertrauensvollen Atmosphäre – authentisch, offen und im Austausch miteinander.
 
 ---
 
-Wir freuen uns, dass du dabei bist!
+Wir freuen uns, dass du dabei bist.
 
 Herzliche Grüße,<br>
 **{{ config('app.name') }}**

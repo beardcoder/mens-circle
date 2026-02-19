@@ -23,7 +23,9 @@ return [
     | Can be up to 11 alphanumeric characters or a phone number.
     |
     */
-    'from' => env('SEVEN_FROM', 'Männerkreis'),
+    // Alphanumeric sender IDs support max. 11 ASCII characters (no umlauts).
+    // Use SEVEN_FROM env variable to override (e.g. "Maennerkr" for 9 chars).
+    'from' => env('SEVEN_FROM', 'Maennerkr'),
 
     /*
     |--------------------------------------------------------------------------

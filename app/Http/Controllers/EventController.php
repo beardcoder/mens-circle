@@ -130,7 +130,9 @@ class EventController
             }
 
             if ($participant->phone) {
-                $message = "Hallo {$participant->first_name}! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis";
+                $eventDate = $event->event_date->format('d.m.Y');
+                $eventTime = $event->start_time->format('H:i');
+                $message = "Hallo {$participant->first_name}! Deine Anmeldung fuer den Maennerkreis am {$eventDate} um {$eventTime} Uhr ist bestaetigt. Wir freuen uns auf dich!";
                 $this->sendSms($participant->phone, $message, [
                     'registration_id' => $registration->id,
                     'type' => 'registration_confirmation',

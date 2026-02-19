@@ -70,8 +70,11 @@ class SendEventReminders extends Command
                 $this->line("  -> Email reminder sent to: {$participant->email}");
 
                 if ($participant->phone) {
-                    $this->sendSms($participant->phone, 'Erinnerung: Männerkreis findet morgen statt. Details per E-Mail. Bis bald!', [
+                    $eventTime = $event->start_time->format('H:i');
+                    $smsMessage = "Hallo {$participant->first_name}, morgen ist Maennerkreis! {$event->title} um {$eventTime} Uhr in {$event->location}. Bis bald!";
+                    $this->sendSms($participant->phone, $smsMessage, [
                         'registration_id' => $registration->id,
+                        'event_id' => $event->id,
                         'type' => 'event_reminder',
                     ]);
                     $totalSmsSent++;
