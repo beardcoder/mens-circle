@@ -44,9 +44,17 @@
 }
 
 .logo__icon {
+  display: flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
   inline-size: 44px;
   block-size: 44px;
+}
+
+.logo__icon svg {
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 .logo__text {

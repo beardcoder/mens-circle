@@ -1,36 +1,36 @@
 /**
  * Männerkreis Niederbayern / Straubing - Application Entry Point
- * Modern, performant, and accessible web application
+ * Modern, performant, and accessible web application powered by Hotwired Turbo
  */
 
+import '@hotwired/turbo';
 import './utils/sentry';
 import './types';
 import { useNavigation, useScrollHeader } from './components/navigation';
 import { useFAQ } from './components/faq';
 import { useCalendarIntegration } from './components/calendar';
-import { useFormEnhancer } from './components/form-enhancer';
 import { useIntersectionObserver, useParallax } from './composables';
 
 /**
  * Initialize all application features.
+ * Called on initial load and after every Turbo navigation via turbo:load.
  */
 function initComponents(): void {
-  // Navigation and header
+  // Navigation and header (both have internal cleanup for re-initialization)
   useNavigation();
   useScrollHeader();
 
   // Interactive components
   useFAQ();
   useCalendarIntegration();
-  useFormEnhancer();
 
   // Enhanced UX composables
   useIntersectionObserver({ threshold: 0.1, amount: 0.3 });
   useParallax();
 }
 
-// Run once on load
-initComponents();
+// Run on initial page load and every Turbo navigation
+document.addEventListener('turbo:load', initComponents);
 
 // Performance monitoring (only in development)
 if (import.meta.env.DEV && 'PerformanceObserver' in globalThis) {

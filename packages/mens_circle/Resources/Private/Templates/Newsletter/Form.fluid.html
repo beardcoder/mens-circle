@@ -10,9 +10,9 @@
                 </p>
             </div>
 
-            <div class="newsletter__form-wrapper" data-enhance-container>
+            <turbo-frame id="newsletter-form" class="newsletter__form-wrapper">
                 <div aria-live="polite"><f:flashMessages /></div>
-                <f:form action="subscribe" method="post" class="newsletter__form" additionalAttributes="{aria-label: 'Newsletter-Anmeldung', 'data-enhance': '1'}">
+                <f:form action="subscribe" method="post" class="newsletter__form" additionalAttributes="{aria-label: 'Newsletter-Anmeldung'}">
                     <f:form.textfield
                         type="email"
                         name="email"
@@ -25,7 +25,7 @@
                     <button class="btn btn--primary" type="submit">Jetzt anmelden</button>
                 </f:form>
                 <p class="form-helper">Mit dem Absenden stimmst du der Verarbeitung deiner Daten für den Newsletter zu.</p>
-            </div>
+            </turbo-frame>
         </div>
     </div>
 </section>
