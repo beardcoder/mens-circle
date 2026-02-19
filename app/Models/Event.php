@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Services\EventNotificationService;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -186,16 +185,6 @@ class Event extends Model implements HasMedia
             END:VCALENDAR\r
 
             ICAL;
-    }
-
-    public function sendRegistrationConfirmation(Registration $registration): void
-    {
-        app(EventNotificationService::class)->sendRegistrationConfirmation($this, $registration);
-    }
-
-    public function sendEventReminder(Registration $registration): void
-    {
-        app(EventNotificationService::class)->sendEventReminder($this, $registration);
     }
 
     #[Override]

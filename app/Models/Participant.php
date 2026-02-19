@@ -51,14 +51,7 @@ class Participant extends Model
 
     public function isSubscribedToNewsletter(): bool
     {
-        $subscription = $this->newsletterSubscription;
-
-        return $subscription !== null && $subscription->unsubscribed_at === null;
-    }
-
-    public static function findByEmail(string $email): ?self
-    {
-        return static::where('email', $email)->first();
+        return $this->newsletterSubscription?->isActive() ?? false;
     }
 
     /**

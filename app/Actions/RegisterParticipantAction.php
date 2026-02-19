@@ -8,11 +8,13 @@ use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
+use App\Services\EventNotificationService;
 use RuntimeException;
-use Spatie\ResponseCache\Facades\ResponseCache;
 
 class RegisterParticipantAction
 {
+    public function __construct(private readonly EventNotificationService $notificationService) {}
+
     /**
      * @param array<string, mixed> $data
      */
@@ -23,9 +25,7 @@ class RegisterParticipantAction
 
         $registration->setRelation('participant', $participant);
 
-        ResponseCache::clear();
-
-        $event->sendRegistrationConfirmation($registration);
+        $this->notificationService->sendRegistrationConfirmation($event, $registration);
 
         return $registration;
     }

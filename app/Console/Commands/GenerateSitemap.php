@@ -22,14 +22,12 @@ class GenerateSitemap extends Command
 
         $sitemap = Sitemap::create();
 
-        // Add homepage with highest priority
         $sitemap->add(
             Url::create(route('home'))
                 ->setPriority(1.0)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY),
         );
 
-        // Add all published events
         Event::published()
             ->select('slug', 'updated_at')
             ->latest('event_date')
@@ -43,7 +41,6 @@ class GenerateSitemap extends Command
                 );
             });
 
-        // Add all published pages
         Page::published()
             ->select('slug', 'updated_at')
             ->latest('published_at')

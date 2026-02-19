@@ -19,21 +19,14 @@ class EventNotificationService
 {
     public function sendRegistrationConfirmation(Event $event, Registration $registration): void
     {
-        // Ensure participant relationship is loaded
         if (!$registration->relationLoaded('participant')) {
             $registration->load('participant');
         }
 
         $participant = $registration->participant;
 
-        // Send email
         try {
             Mail::queue(new EventRegistrationConfirmation($registration, $event));
-            Log::info('Event registration confirmation sent', [
-                'registration_id' => $registration->id,
-                'email' => $participant->email,
-                'event_id' => $event->id,
-            ]);
         } catch (Exception $exception) {
             Log::error('Failed to send event registration confirmation', [
                 'registration_id' => $registration->id,
@@ -41,13 +34,8 @@ class EventNotificationService
             ]);
         }
 
-        // Send admin notification
         try {
             Mail::queue(new AdminEventRegistrationNotification($registration, $event));
-            Log::info('Admin notification sent for new registration', [
-                'registration_id' => $registration->id,
-                'event_id' => $event->id,
-            ]);
         } catch (Exception $exception) {
             Log::error('Failed to send admin notification for new registration', [
                 'registration_id' => $registration->id,
@@ -55,9 +43,12 @@ class EventNotificationService
             ]);
         }
 
-        // Send SMS if phone number provided
         if ($participant->phone) {
-            $this->sendRegistrationSms($event, $registration);
+            $message = "Hallo {$participant->first_name}! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis";
+            $this->sendSms($event, $participant->phone, $message, [
+                'registration_id' => $registration->id,
+                'type' => 'registration_confirmation',
+            ]);
         }
     }
 
@@ -73,22 +64,6 @@ class EventNotificationService
         $this->sendSms($event, $participant->phone, $message, [
             'registration_id' => $registration->id,
             'type' => 'event_reminder',
-        ]);
-    }
-
-    private function sendRegistrationSms(Event $event, Registration $registration): void
-    {
-        $participant = $registration->participant;
-
-        if (!$participant->phone) {
-            return;
-        }
-
-        $message = "Hallo {$participant->first_name}! Deine Anmeldung ist bestätigt. Details per E-Mail. Männerkreis";
-
-        $this->sendSms($event, $participant->phone, $message, [
-            'registration_id' => $registration->id,
-            'type' => 'registration_confirmation',
         ]);
     }
 
@@ -113,13 +88,7 @@ class EventNotificationService
             $from = config('sevenio.from');
             $params = new SmsParams(text: $message, to: $phoneNumber, from: $from ?? '');
 
-            $response = $smsResource->dispatch($params);
-
-            Log::info('SMS sent successfully', [
-                ...$context,
-                'phone_number' => $phoneNumber,
-                'event_id' => $event->id,
-            ]);
+            $smsResource->dispatch($params);
         } catch (Exception $exception) {
             Log::error('Failed to send SMS', [
                 ...$context,

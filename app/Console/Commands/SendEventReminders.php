@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\Mail\EventReminder;
 use App\Models\Event;
 use App\Models\Registration;
+use App\Services\EventNotificationService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -19,6 +20,11 @@ class SendEventReminders extends Command
     protected $signature = 'events:send-reminders';
 
     protected $description = 'Send reminder emails and SMS to participants for events happening in 24 hours';
+
+    public function __construct(private readonly EventNotificationService $notificationService)
+    {
+        parent::__construct();
+    }
 
     public function handle(): int
     {
@@ -62,14 +68,12 @@ class SendEventReminders extends Command
             ): void {
                 $participant = $registration->participant;
 
-                // Send email reminder
                 Mail::queue(new EventReminder($registration, $event));
                 $totalEmailsSent++;
                 $this->line("  -> Email reminder sent to: {$participant->email}");
 
-                // Send SMS reminder if phone number is provided
                 if ($participant->phone) {
-                    $event->sendEventReminder($registration);
+                    $this->notificationService->sendEventReminder($event, $registration);
                     $totalSmsSent++;
                     $this->line("  -> SMS reminder sent to: {$participant->phone}");
                 }

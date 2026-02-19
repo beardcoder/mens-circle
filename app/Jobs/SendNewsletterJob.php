@@ -40,13 +40,12 @@ class SendNewsletterJob implements ShouldQueue
         ]);
 
         $recipientCount = 0;
-        $failedRecipients = [];
+        $failedCount = 0;
 
-        // Get all active subscribers and send emails in chunks
         NewsletterSubscription::query()
             ->whereNull('unsubscribed_at')
             ->with('participant')
-            ->chunk(100, function (Collection $subscriptions) use (&$recipientCount, &$failedRecipients): void {
+            ->chunk(100, function (Collection $subscriptions) use (&$recipientCount, &$failedCount): void {
                 /** @var NewsletterSubscription $subscription */
                 foreach ($subscriptions as $subscription) {
                     try {
@@ -58,27 +57,24 @@ class SendNewsletterJob implements ShouldQueue
                         Log::error('Failed to send newsletter to subscriber', [
                             'newsletter_id' => $this->newsletter->id,
                             'subscription_id' => $subscription->id,
-                            'email' => $subscription->participant->email ?? 'unknown',
                             'error' => $e->getMessage(),
                         ]);
-                        $failedRecipients[] = $subscription->participant->email ?? 'unknown';
+                        $failedCount++;
                     }
                 }
             });
 
-        // Update newsletter as sent
         $this->newsletter->update([
             'status' => NewsletterStatus::Sent,
             'sent_at' => now(),
             'recipient_count' => $recipientCount,
         ]);
 
-        // Log summary if there were failures
-        if ($failedRecipients !== []) {
+        if ($failedCount > 0) {
             Log::warning('Newsletter sending completed with failures', [
                 'newsletter_id' => $this->newsletter->id,
                 'successful' => $recipientCount,
-                'failed' => \count($failedRecipients),
+                'failed' => $failedCount,
             ]);
         }
     }

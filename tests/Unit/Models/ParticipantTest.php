@@ -97,23 +97,6 @@ test('participant knows if unsubscribed from newsletter', function (): void {
     expect($participant->isSubscribedToNewsletter())->toBeFalse();
 });
 
-test('participant can be found by email', function (): void {
-    $participant = Participant::factory()->create([
-        'email' => 'find@example.com',
-    ]);
-
-    $found = Participant::findByEmail('find@example.com');
-
-    expect($found)->not->toBeNull()
-        ->and($found->id)->toBe($participant->id);
-});
-
-test('find by email returns null when not found', function (): void {
-    $found = Participant::findByEmail('nonexistent@example.com');
-
-    expect($found)->toBeNull();
-});
-
 test('findOrCreateByEmail creates new participant', function (): void {
     $participant = Participant::findOrCreateByEmail('new@example.com', [
         'first_name' => 'New',
