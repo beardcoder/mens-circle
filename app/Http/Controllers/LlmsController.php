@@ -12,12 +12,11 @@ use App\Models\Testimonial;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\Response;
 
-class LlmsController extends Controller
+class LlmsController
 {
     public function __construct(
         private readonly GeneralSettings $settings,
-    ) {
-    }
+    ) {}
 
     public function show(): Response
     {
@@ -212,7 +211,7 @@ class LlmsController extends Controller
             }
 
             $url = url()
-->route('event.show.slug', $event->slug);
+                ->route('event.show.slug', $event->slug);
             $lines[] = '';
             $lines[] = '**Mehr Informationen und Anmeldung:** ' . $url;
             $lines[] = '';
@@ -245,7 +244,7 @@ class LlmsController extends Controller
         foreach ($pastEvents as $event) {
             $date = $event->event_date->format('d.m.Y');
             $url = url()
-->route('event.show.slug', $event->slug);
+                ->route('event.show.slug', $event->slug);
             $lines[] = "- **[{$event->title}]({$url})** - {$date}";
         }
 
@@ -281,7 +280,7 @@ class LlmsController extends Controller
             $lines[] = '### ' . $page->title;
             $lines[] = '';
             $url = url()
-->route('page.show', $page->slug);
+                ->route('page.show', $page->slug);
             $lines[] = '**URL:** ' . $url;
             $lines[] = '';
 

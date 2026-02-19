@@ -9,7 +9,7 @@ use App\Models\Testimonial;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
 
-class PageController extends Controller
+class PageController
 {
     public function home(): View
     {

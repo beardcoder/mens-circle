@@ -137,7 +137,7 @@ class ParticipantResource extends Resource
                     ->query(
                         fn (Builder $query): Builder => $query->whereHas(
                             'newsletterSubscription',
-                            fn (Builder $q) => $q->whereNull('unsubscribed_at',)
+                            fn (Builder $q) => $q->whereNull('unsubscribed_at', ),
                         ),
                     ),
             ])
@@ -170,7 +170,7 @@ class ParticipantResource extends Resource
 
         if (!$subscription instanceof NewsletterSubscription) {
             $record->newsletterSubscription()
-->create([]);
+                ->create([]);
         }
     }
 

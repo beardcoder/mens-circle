@@ -63,8 +63,8 @@ class QueueHealthCheck extends Check
                 ->failed('Queue-Verbindungsfehler: ' . $throwable->getMessage())
                 ->shortSummary('Verbindungsfehler')
                 ->meta([
-'error' => $throwable->getMessage()
-]);
+                    'error' => $throwable->getMessage(),
+                ]);
         }
     }
 
@@ -90,7 +90,7 @@ class QueueHealthCheck extends Check
         $redisConnection = Config::get('queue.connections.redis.connection', 'default');
         // Try to ping redis
         $redis = app('redis')
-->connection($redisConnection);
+            ->connection($redisConnection);
         $redis->ping();
     }
 }

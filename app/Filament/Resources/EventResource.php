@@ -184,8 +184,8 @@ class EventResource extends Resource
                     ->sortable()
                     ->description(
                         fn ($record): ?string => $record->description ? str($record->description)
-->limit(50,)
-->toString() : null,
+                            ->limit(50, )
+                            ->toString() : null,
                     )
                     ->wrap(),
                 TextColumn::make('event_date')
@@ -194,7 +194,7 @@ class EventResource extends Resource
                     ->sortable()
                     ->description(
                         fn ($record): string => $record->start_time->format('H:i') . ' - ' . $record->end_time->format(
-                            'H:i'
+                            'H:i',
                         ),
                     )
                     ->color(

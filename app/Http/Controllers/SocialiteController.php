@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Socialite;
 use Laravel\Socialite\Two\GithubProvider;
 
-class SocialiteController extends Controller
+class SocialiteController
 {
     /**
      * @var array<int, string>
@@ -37,8 +37,8 @@ class SocialiteController extends Controller
         } catch (\Throwable) {
             return redirect()->route('filament.admin.auth.login')
                 ->withErrors([
-'email' => 'Authentifizierung fehlgeschlagen. Bitte versuche es erneut.'
-]);
+                    'email' => 'Authentifizierung fehlgeschlagen. Bitte versuche es erneut.',
+                ]);
         }
 
         $user = User::firstWhere('email', $response->getEmail());
@@ -46,16 +46,16 @@ class SocialiteController extends Controller
         if (!$user) {
             return redirect()->route('filament.admin.auth.login')
                 ->withErrors([
-'email' => 'Kein Benutzer mit dieser E-Mail-Adresse gefunden.'
-]);
+                    'email' => 'Kein Benutzer mit dieser E-Mail-Adresse gefunden.',
+                ]);
         }
 
         $user->update([
-'github_id' => $response->getId()
-]);
+            'github_id' => $response->getId(),
+        ]);
 
         auth()
-->login($user);
+            ->login($user);
 
         return redirect()->intended(route('filament.admin.pages.dashboard'));
     }

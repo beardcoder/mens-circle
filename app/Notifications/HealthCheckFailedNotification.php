@@ -20,8 +20,7 @@ class HealthCheckFailedNotification extends Notification
      */
     public function __construct(
         public readonly array $results,
-    ) {
-    }
+    ) {}
 
     /**
      * Determine if the notification should be sent based on throttle settings.
@@ -57,7 +56,7 @@ class HealthCheckFailedNotification extends Notification
                 $lastNotificationSentAt = Cache::get($cacheKey);
 
                 if ($lastNotificationSentAt === null || $lastNotificationSentAt->diffInMinutes(
-                    now()
+                    now(),
                 ) >= $throttleMinutes) {
                     Cache::put($cacheKey, now(), $throttleMinutes * 60);
 

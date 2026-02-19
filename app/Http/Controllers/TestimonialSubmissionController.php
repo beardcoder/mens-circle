@@ -9,7 +9,7 @@ use App\Models\Testimonial;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
-class TestimonialSubmissionController extends Controller
+class TestimonialSubmissionController
 {
     public function show(): View
     {
@@ -47,7 +47,9 @@ class TestimonialSubmissionController extends Controller
             return 'Vielen Dank! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.';
         }
 
-        $firstName = explode(' ', (string) $validated['author_name'])[0];
+        /** @var string $authorName */
+        $authorName = $validated['author_name'];
+        $firstName = explode(' ', $authorName)[0];
 
         return "Vielen Dank, {$firstName}! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.";
     }

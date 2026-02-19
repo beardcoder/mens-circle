@@ -54,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
             try {
                 $view->with([
                     'hasNextEvent' => cache()
-->remember('has_next_event', 300, fn () => Event::published()->upcoming()->exists(),),
+                        ->remember('has_next_event', 300, fn () => Event::published()->upcoming()->exists(), ),
                 ]);
             } catch (Throwable) {
                 $view->with([
@@ -78,7 +78,7 @@ class AppServiceProvider extends ServiceProvider
             ScheduleCheck::new()
                 ->useCacheStore(\Illuminate\Support\Facades\Config::string('health.schedule.cache_store', 'health'))
                 ->heartbeatMaxAgeInMinutes(
-                    \Illuminate\Support\Facades\Config::integer('health.schedule.heartbeat_max_age_in_minutes', 10)
+                    \Illuminate\Support\Facades\Config::integer('health.schedule.heartbeat_max_age_in_minutes', 10),
                 ),
 
             // Queue Check - wichtig für asynchrone Jobs

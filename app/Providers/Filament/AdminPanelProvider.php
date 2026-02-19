@@ -49,7 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(PanelsRenderHook::TOPBAR_END, fn (): Factory|View => view('filament.components.go-to-website'))
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
-                fn (): Factory|View => view('filament.components.apple-touch-icons')
+                fn (): Factory|View => view('filament.components.apple-touch-icons'),
             )
             ->plugins([FilamentLogViewer::make(), FilamentSpatieLaravelHealthPlugin::make(), ])
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\Filament\Clusters')

@@ -95,8 +95,8 @@ class Page extends Model implements HasMedia
     {
         DB::transaction(function () use ($contentBlocksData): void {
             $existingBlocks = $this->contentBlocks()
-->get()
-->keyBy('block_id');
+                ->get()
+                ->keyBy('block_id');
             $processedBlockIds = $this->processContentBlocks($contentBlocksData);
             $this->cleanupRemovedBlocks($existingBlocks, $processedBlockIds);
         });
@@ -138,16 +138,16 @@ class Page extends Model implements HasMedia
         unset($data['block_id']);
 
         $this->contentBlocks()
-->updateOrCreate(
-    [
-'block_id' => $blockId
-],
-    [
-                'type' => $blockData['type'],
-                'data' => $data,
-                'order' => $order,
-            ],
-);
+            ->updateOrCreate(
+                [
+                    'block_id' => $blockId,
+                ],
+                [
+                    'type' => $blockData['type'],
+                    'data' => $data,
+                    'order' => $order,
+                ],
+            );
 
         return $blockId;
     }

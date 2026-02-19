@@ -26,15 +26,10 @@ class SendNewsletterJob implements ShouldQueue
 
     public function __construct(
         public readonly Newsletter $newsletter,
-    ) {
-    }
+    ) {}
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
-        // Update status to sending
         $this->newsletter->update([
             'status' => NewsletterStatus::Sending,
         ]);
@@ -79,9 +74,6 @@ class SendNewsletterJob implements ShouldQueue
         }
     }
 
-    /**
-     * Handle a job failure.
-     */
     public function failed(Throwable $exception): void
     {
         Log::error('Newsletter job failed completely', [

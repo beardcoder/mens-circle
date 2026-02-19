@@ -21,8 +21,7 @@ class AdminEventRegistrationNotification extends Mailable
     public function __construct(
         public readonly Registration $registration,
         public readonly Event $event,
-    ) {
-    }
+    ) {}
 
     public function envelope(): Envelope
     {
@@ -43,7 +42,7 @@ class AdminEventRegistrationNotification extends Mailable
             markdown: 'emails.admin-event-registration',
             with: [
                 'registrationCount' => $this->event->activeRegistrations()
-->count(),
+                    ->count(),
             ],
         );
     }
