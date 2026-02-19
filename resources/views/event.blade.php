@@ -28,8 +28,8 @@
         "width": 512,
         "height": 512
     },
-    "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}:00+01:00",
-    "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}:00+01:00",
+    "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}:00{{ $event->event_date->format('P') }}",
+    "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}:00{{ $event->event_date->format('P') }}",
     "eventStatus": "{{ $event->isPast ? 'https://schema.org/EventPostponed' : 'https://schema.org/EventScheduled' }}",
     "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
     "location": {
