@@ -48,10 +48,18 @@
 }
 
 .footer__logo-icon {
+  display: flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
   inline-size: 40px;
   block-size: 40px;
   color: var(--accent-secondary);
+}
+
+.footer__logo-icon svg {
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 .footer__text {

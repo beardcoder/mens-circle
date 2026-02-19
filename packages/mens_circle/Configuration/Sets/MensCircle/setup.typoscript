@@ -11,6 +11,16 @@ page {
 
   shortcutIcon = EXT:mens_circle/Resources/Public/Icons/favicon.svg
 
+  headerData {
+    10 = TEXT
+    10.value = EXT:mens_circle/Resources/Public/site.webmanifest
+    10.stdWrap.path = 1
+    10.stdWrap.wrap = <link rel="manifest" href="|">
+
+    20 = TEXT
+    20.value = <meta name="theme-color" content="#b86f52">
+  }
+
   meta {
     og:title.field = title
     og:title.attribute = property
@@ -22,6 +32,7 @@ page {
     og:site_name.attribute = property
     og:locale = de_DE
     og:locale.attribute = property
+    theme-color = #b86f52
   }
 
   bodyTagCObject = TEXT

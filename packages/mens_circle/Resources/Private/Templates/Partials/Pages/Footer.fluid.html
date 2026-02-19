@@ -1,21 +1,10 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-<footer class="footer">
+<footer class="footer" id="site-footer" data-turbo-permanent>
     <div class="container">
         <div class="footer__top stagger-children">
             <div class="footer__brand">
                 <a href="{breadcrumb.0.link}" class="footer__logo">
-                    <svg class="footer__logo-icon" viewBox="0 0 64 64" aria-hidden="true">
-                        <defs>
-                            <linearGradient id="footer-logo-gradient" x1="0" x2="1" y1="0" y2="1">
-                                <stop offset="0%" stop-color="#7a3f2a"/>
-                                <stop offset="100%" stop-color="#c98953"/>
-                            </linearGradient>
-                        </defs>
-                        <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#footer-logo-gradient)"/>
-                        <circle cx="32" cy="32" r="16" fill="none" stroke="#fff" stroke-width="3"/>
-                        <path d="M22 38c2.7-4.6 7-7 10-7s7.3 2.4 10 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-                        <circle cx="32" cy="24" r="4" fill="#fff"/>
-                    </svg>
+                    <span class="footer__logo-icon"><f:render partial="Logo" /></span>
                     <span>{site.configuration.settings.mensCircle.siteName}</span>
                 </a>
                 <p class="footer__text">
