@@ -84,7 +84,3 @@ RUN composer dump-autoload \
 USER root
 COPY --chmod=755 docker/entrypoint.d/ /etc/entrypoint.d/
 USER www-data
-
-EXPOSE 8080
-
-CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--port=8080"]
