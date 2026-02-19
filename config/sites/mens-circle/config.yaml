@@ -16,6 +16,17 @@ languages:
     flag: de
 rootPageId: 1
 websiteTitle: 'Männerkreis Niederbayern/ Straubing'
+settings:
+  mensCircle:
+    siteName: 'Männerkreis Niederbayern/ Straubing'
+    contactEmail: hallo@mens-circle.de
+    baseUrl: 'https://mens-circle.local/'
+    theme: earth
+    storagePid: 2
+    newsletterPid: 4
+    whatsappCommunityLink: 'https://google.de'
+    smsEnabled: false
+    smsSender: 'MensCircle'
 #routeEnhancers:
 #  MensCircleEvent:
 #    type: Extbase

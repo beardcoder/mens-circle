@@ -50,3 +50,9 @@ settings:
     category: mensCircle
     type: string
     default: 'MensCircle'
+
+  mensCircle.theme:
+    label: 'Theme'
+    category: mensCircle
+    type: string
+    default: 'earth'
