@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7-labs
 
-ARG PHP_IMAGE=serversideup/php:8.5-frankenphp
+ARG PHP_IMAGE=serversideup/php:8.4-fpm-nginx
 
 # ----------------------------
 # 1) Frontend build (Vite) with Bun
@@ -51,10 +51,16 @@ ENV APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
     LOG_LEVEL=error \
-    OCTANE_SERVER=frankenphp \
+    PHP_DATE_TIMEZONE=Europe/Berlin \
     PHP_MEMORY_LIMIT=512M \
     PHP_OPCACHE_ENABLE=1 \
-    CADDY_SERVER_ROOT=/app/public \
+    PHP_OPCACHE_JIT=1 \
+    PHP_OPCACHE_JIT_BUFFER_SIZE=64M \
+    AUTORUN_ENABLED=true \
+    HEALTHCHECK_PATH=/up \
+    NGINX_FASTCGI_BUFFERS="16 16k" \
+    NGINX_FASTCGI_BUFFER_SIZE="32k" \
+    NGINX_WEBROOT=/app/public \
     APP_BASE_DIR=/app
 WORKDIR /app
 
@@ -74,15 +80,6 @@ RUN composer dump-autoload \
       --classmap-authoritative \
       --no-interaction
 
-# Ensure runtime dirs exist (do it once at build time)
-RUN mkdir -p \
-      /app/storage/app/public \
-      /app/storage/framework/cache/data \
-      /app/storage/framework/sessions \
-      /app/storage/framework/views \
-      /app/storage/logs \
-      /app/bootstrap/cache
-
 # Copy startup scripts to clear response cache on container start
 USER root
 COPY --chmod=755 docker/entrypoint.d/ /etc/entrypoint.d/
@@ -91,5 +88,3 @@ USER www-data
 EXPOSE 8080
 
 CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--port=8080"]
-
-HEALTHCHECK CMD ["/bin/sh", "-c", "exit 0"]
