@@ -7,12 +7,17 @@
     "guidelines": true,
     "herd_mcp": false,
     "mcp": true,
+    "nightwatch_mcp": false,
     "packages": [
-        "filament/filament"
+        "filament/filament",
+        "spatie/laravel-medialibrary",
+        "spatie/laravel-responsecache"
     ],
     "sail": false,
     "skills": [
         "pest-testing",
-        "tailwindcss-development"
+        "tailwindcss-development",
+        "medialibrary-development",
+        "responsecache-development"
     ]
 }

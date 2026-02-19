@@ -1,12 +1,7 @@
 {
     "name": "beardcoder/mens-circle",
-    "description": "The skeleton application for the Laravel framework.",
     "license": "MIT",
     "type": "project",
-    "keywords": [
-        "laravel",
-        "framework"
-    ],
     "require": {
         "php": "^8.3 || ^8.4 || ^8.5",
         "achyutn/filament-log-viewer": ">=2.1",
@@ -39,7 +34,7 @@
         "friendsofphp/php-cs-fixer": "^3.93",
         "kitloong/laravel-migrations-generator": "^7.2",
         "larastan/larastan": "^3.9.1",
-        "laravel/boost": "^2.0.3",
+        "laravel/boost": "^2.1",
         "laravel/pail": "^1.2.4",
         "laravel/sail": "^1.52",
         "mockery/mockery": "^1.6.12",
