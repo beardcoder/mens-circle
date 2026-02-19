@@ -6,7 +6,6 @@ services:
     container_name: mens-circle-app
     ports:
       - "80:8080"
-      - "443:8443"
     environment:
       # Laravel Environment
       - APP_NAME=Männerkreis Niederbayern/ Straubing
@@ -21,18 +20,11 @@ services:
       - LOG_CHANNEL=stderr
       - LOG_LEVEL=error
 
-      # Laravel Octane
-      - OCTANE_SERVER=frankenphp
-      - OCTANE_HTTPS=false
-
       # Deployment Options
       - MIGRATE_ON_START=true
       - OPTIMIZE_ON_START=true
 
-      # FrankenPHP Worker Configuration
-      - FRANKENPHP_WORKERS=auto
-
-      # PHP Configuration (optional, uses defaults from php.ini)
+      # PHP Configuration
       - PHP_OPCACHE_ENABLE=1
       - PHP_MEMORY_LIMIT=256M
     volumes:

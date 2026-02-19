@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7-labs
 
-ARG PHP_IMAGE=serversideup/php:8.4-fpm-nginx
+ARG PHP_IMAGE=serversideup/php:8.5-fpm-nginx
 
 # ----------------------------
 # 1) Frontend build (Vite) with Bun
@@ -38,7 +38,7 @@ RUN --mount=type=cache,target=/root/.composer/cache \
       --optimize-autoloader
 
 # ----------------------------
-# 3) Production image (FrankenPHP)
+# 3) Production image (PHP-FPM + Nginx)
 # ----------------------------
 FROM ${PHP_IMAGE} AS production
 

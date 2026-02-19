@@ -6,14 +6,14 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 
 | Category | Technology |
 |----------|-----------|
-| Framework | Laravel 12, PHP 8.5, Octane (FrankenPHP) |
+| Framework | Laravel 12, PHP 8.5 |
 | Admin Panel | Filament v5 (Livewire 4, Alpine.js) |
 | Frontend | Blade templates, vanilla TypeScript, Vite 8 |
 | Styling | Custom CSS (OKLCH color system) + Tailwind CSS v4 |
 | Database | SQLite (local/production), migrations via Eloquent |
 | Testing | Pest v4, PHPStan level 9, Rector (PHP 8.5 target) |
 | Auth | Laravel Socialite (GitHub OAuth for admin) |
-| Deployment | Docker with FrankenPHP, `serversideup/php:8.5-frankenphp` |
+| Deployment | Docker with PHP-FPM + Nginx, `serversideup/php:8.5-fpm-nginx` |
 
 ## Project Structure
 
