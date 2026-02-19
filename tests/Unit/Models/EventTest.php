@@ -175,6 +175,8 @@ test('event generates valid ical content', function (): void {
         ->toContain('BEGIN:VCALENDAR')
         ->toContain('BEGIN:VEVENT')
         ->toContain('SUMMARY:Test Event')
+        ->toContain('DTSTART;TZID=Europe/Berlin:')
+        ->toContain('DTEND;TZID=Europe/Berlin:')
         ->toContain('END:VEVENT')
         ->toContain('END:VCALENDAR');
 });

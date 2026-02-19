@@ -176,8 +176,8 @@ class Event extends Model implements HasMedia
             BEGIN:VEVENT\r
             UID:{$uid}\r
             DTSTAMP:{$now}\r
-            DTSTART:{$startDateTime}\r
-            DTEND:{$endDateTime}\r
+            DTSTART;TZID=Europe/Berlin:{$startDateTime}\r
+            DTEND;TZID=Europe/Berlin:{$endDateTime}\r
             SUMMARY:{$this->title}\r
             DESCRIPTION:{$description}\r
             LOCATION:{$location}\r
