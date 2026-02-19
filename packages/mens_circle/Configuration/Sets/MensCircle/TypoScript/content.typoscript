@@ -52,7 +52,7 @@ tt_content.menscircle_testimonials {
     30 = TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor
     30 {
       table = tx_menscircle_domain_model_testimonial
-      pidInList = {$site.configuration.settings.mensCircle.storagePid}
+      pidInList = {$mensCircle.storagePid}
       where = is_published = 1
       orderBy = sort_order ASC, published_at DESC
       as = testimonials

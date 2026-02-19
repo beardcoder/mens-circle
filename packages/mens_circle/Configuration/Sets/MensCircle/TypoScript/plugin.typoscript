@@ -6,16 +6,16 @@ plugin.tx_menscircle {
   }
 
   persistence {
-    storagePid = {$site.configuration.settings.mensCircle.storagePid}
+    storagePid = {$mensCircle.storagePid}
   }
 
   settings {
-    siteName = {$site.configuration.settings.mensCircle.siteName}
-    contactEmail = {$site.configuration.settings.mensCircle.contactEmail}
-    baseUrl = {$site.configuration.settings.mensCircle.baseUrl}
-    newsletterPid = {$site.configuration.settings.mensCircle.newsletterPid}
-    whatsappCommunityLink = {$site.configuration.settings.mensCircle.whatsappCommunityLink}
-    smsEnabled = {$site.configuration.settings.mensCircle.smsEnabled}
-    smsSender = {$site.configuration.settings.mensCircle.smsSender}
+    siteName = {$mensCircle.siteName}
+    contactEmail = {$mensCircle.contactEmail}
+    baseUrl = {$mensCircle.baseUrl}
+    newsletterPid = {$mensCircle.newsletterPid}
+    whatsappCommunityLink = {$mensCircle.whatsappCommunityLink}
+    smsEnabled = {$mensCircle.smsEnabled}
+    smsSender = {$mensCircle.smsSender}
   }
 }
