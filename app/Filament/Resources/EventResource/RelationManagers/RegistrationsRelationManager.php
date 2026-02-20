@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace App\Filament\Resources\EventResource\RelationManagers;
 
 use App\Enums\RegistrationStatus;
+use App\Mail\WaitlistPromotion;
 use App\Models\Participant;
+use App\Models\Registration;
+use Exception;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -131,7 +138,36 @@ class RegistrationsRelationManager extends RelationManager
                     ->options(RegistrationStatus::options()),
             ])
             ->headerActions([CreateAction::make(), ])
-            ->recordActions([EditAction::make(), ])
+            ->recordActions([
+                EditAction::make(),
+                Action::make('promote')
+                    ->label('Befördern')
+                    ->icon('heroicon-o-arrow-up-circle')
+                    ->color('success')
+                    ->visible(fn (Registration $record): bool => $record->status === RegistrationStatus::Waitlist)
+                    ->requiresConfirmation()
+                    ->modalHeading('Von Warteliste befördern')
+                    ->modalDescription('Dieser Teilnehmer wird sofort als angemeldet markiert und erhält eine Bestätigungs-E-Mail.')
+                    ->action(function (Registration $record): void {
+                        $record->promote();
+                        $record->load(['participant', 'event']);
+
+                        try {
+                            Mail::queue(new WaitlistPromotion($record, $record->event));
+                        } catch (Exception $e) {
+                            Log::error('Failed to send waitlist promotion email from admin', [
+                                'registration_id' => $record->id,
+                                'error' => $e->getMessage(),
+                            ]);
+                        }
+
+                        Notification::make()
+                            ->title('Teilnehmer befördert')
+                            ->body("{$record->participant->fullName} wurde von der Warteliste aufgerückt.")
+                            ->success()
+                            ->send();
+                    }),
+            ])
             ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make(), ]), ])
             ->defaultSort('registered_at', 'desc');
     }

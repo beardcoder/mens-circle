@@ -160,18 +160,27 @@
                         <div class="event-register__circle event-register__circle--1"></div>
                         <div class="event-register__circle event-register__circle--2"></div>
                     </div>
-                    <p class="eyebrow eyebrow--secondary">Sei dabei</p>
-                    <h2 class="section-title section-title--lg section-title--light event-register__title">
-                        Sichere dir <br><span class="text-italic">deinen Platz</span>
-                    </h2>
-                    <p class="event-register__spots">
-                        @if($event->isFull)
+                    @if($event->isFull)
+                        <p class="eyebrow eyebrow--secondary">Warteliste</p>
+                        <h2 class="section-title section-title--lg section-title--light event-register__title">
+                            Trag dich auf die <br><span class="text-italic">Warteliste ein</span>
+                        </h2>
+                        <p class="event-register__spots">
                             <span class="event-register__spots-full">Ausgebucht</span>
-                        @else
+                        </p>
+                        <p class="event-register__spots-hint">
+                            Bei Absagen rückt die Warteliste automatisch nach. Du wirst sofort per E-Mail informiert.
+                        </p>
+                    @else
+                        <p class="eyebrow eyebrow--secondary">Sei dabei</p>
+                        <h2 class="section-title section-title--lg section-title--light event-register__title">
+                            Sichere dir <br><span class="text-italic">deinen Platz</span>
+                        </h2>
+                        <p class="event-register__spots">
                             <span class="event-register__spots-available">{{ $event->availableSpots }}</span>
                             <span>von {{ $event->max_participants }} Plätzen frei</span>
-                        @endif
-                    </p>
+                        </p>
+                    @endif
                 </div>
 
                 <div class="event-register__form-wrap fade-in fade-in-delay-1">
@@ -206,8 +215,8 @@
                             <span>Ich habe die <a href="{{ route('page.show', 'datenschutz') }}" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.</span>
                         </label>
 
-                        <button type="submit" class="btn btn--primary btn--large event-register__submit" {{ $event->isFull ? 'disabled' : '' }}>
-                            {{ $event->isFull ? 'Ausgebucht' : 'Verbindlich anmelden' }}
+                        <button type="submit" class="btn btn--primary btn--large event-register__submit">
+                            {{ $event->isFull ? 'Auf Warteliste eintragen' : 'Verbindlich anmelden' }}
                         </button>
 
                         <div id="registrationMessage"></div>

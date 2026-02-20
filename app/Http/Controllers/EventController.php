@@ -8,6 +8,7 @@ use App\Enums\RegistrationStatus;
 use App\Http\Requests\EventRegistrationRequest;
 use App\Mail\AdminEventRegistrationNotification;
 use App\Mail\EventRegistrationConfirmation;
+use App\Mail\WaitlistConfirmation;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
@@ -63,7 +64,6 @@ class EventController
                 'Diese Veranstaltung hat bereits stattgefunden. Eine Anmeldung ist nicht mehr möglich.',
                 410,
             ],
-            $event->isFull => ['Diese Veranstaltung ist leider bereits ausgebucht.', 409],
             default => null,
         };
 
@@ -72,6 +72,8 @@ class EventController
 
             return response()->json(['success' => false, 'message' => $message], $status);
         }
+
+        $isWaitlist = $event->isFull;
 
         try {
             $participant = Participant::updateOrCreate(
@@ -89,13 +91,20 @@ class EventController
                 ->first();
 
             if ($existingRegistration && !$existingRegistration->trashed()) {
-                throw new RuntimeException('Du bist bereits für diese Veranstaltung angemeldet.');
+                $alreadyOnWaitlist = $existingRegistration->status === RegistrationStatus::Waitlist;
+                $message = $alreadyOnWaitlist
+                    ? 'Du bist bereits auf der Warteliste für diese Veranstaltung.'
+                    : 'Du bist bereits für diese Veranstaltung angemeldet.';
+
+                throw new RuntimeException($message);
             }
+
+            $status = $isWaitlist ? RegistrationStatus::Waitlist : RegistrationStatus::Registered;
 
             if ($existingRegistration) {
                 $existingRegistration->restore();
                 $existingRegistration->update([
-                    'status' => RegistrationStatus::Registered,
+                    'status' => $status,
                     'registered_at' => now(),
                     'cancelled_at' => null,
                 ]);
@@ -104,12 +113,32 @@ class EventController
                 $registration = Registration::create([
                     'participant_id' => $participant->id,
                     'event_id' => $event->id,
-                    'status' => RegistrationStatus::Registered,
+                    'status' => $status,
                     'registered_at' => now(),
                 ]);
             }
 
             $registration->setRelation('participant', $participant);
+
+            /** @var string $firstName */
+            $firstName = $validated['first_name'];
+
+            if ($isWaitlist) {
+                try {
+                    Mail::queue(new WaitlistConfirmation($registration, $event));
+                } catch (Exception $e) {
+                    Log::error('Failed to send waitlist confirmation email', [
+                        'registration_id' => $registration->id,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'waitlist' => true,
+                    'message' => "Du wurdest auf die Warteliste eingetragen, {$firstName}. Wir benachrichtigen dich per E-Mail, sobald ein Platz frei wird.",
+                ]);
+            }
 
             try {
                 Mail::queue(new EventRegistrationConfirmation($registration, $event));
@@ -132,15 +161,12 @@ class EventController
             if ($participant->phone) {
                 $eventDate = $event->event_date->format('d.m.Y');
                 $eventTime = $event->start_time->format('H:i');
-                $message = "Hallo {$participant->first_name}! Deine Anmeldung fuer den Maennerkreis am {$eventDate} um {$eventTime} Uhr ist bestaetigt. Wir freuen uns auf dich!";
-                $this->sendSms($participant->phone, $message, [
+                $smsMessage = "Hallo {$participant->first_name}! Deine Anmeldung fuer den Maennerkreis am {$eventDate} um {$eventTime} Uhr ist bestaetigt. Wir freuen uns auf dich!";
+                $this->sendSms($participant->phone, $smsMessage, [
                     'registration_id' => $registration->id,
                     'type' => 'registration_confirmation',
                 ]);
             }
-
-            /** @var string $firstName */
-            $firstName = $validated['first_name'];
 
             return response()->json([
                 'success' => true,

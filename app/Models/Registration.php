@@ -59,6 +59,13 @@ class Registration extends Model
         ]);
     }
 
+    public function promote(): void
+    {
+        $this->update([
+            'status' => RegistrationStatus::Registered->value,
+        ]);
+    }
+
     public function markAsAttended(): void
     {
         $this->update([
@@ -97,6 +104,17 @@ class Registration extends Model
     protected function cancelled(Builder $query): Builder
     {
         return $query->where('status', RegistrationStatus::Cancelled);
+    }
+
+    /**
+     * @param Builder<Registration> $query
+     *
+     * @return Builder<Registration>
+     */
+    #[Scope]
+    protected function waitlisted(Builder $query): Builder
+    {
+        return $query->where('status', RegistrationStatus::Waitlist);
     }
 
     public static function registeredCount(): int
