@@ -140,8 +140,6 @@ class ManageGeneralSettings extends SettingsPage
 
     /**
      * @param array<string, mixed> $state
-     *
-     * @return string
      */
     private function getSocialLinkLabel(array $state): string
     {
@@ -157,8 +155,6 @@ class ManageGeneralSettings extends SettingsPage
 
     /**
      * @param array<string, mixed> $state
-     *
-     * @return string|null
      */
     private function getIconLabel(array $state): ?string
     {

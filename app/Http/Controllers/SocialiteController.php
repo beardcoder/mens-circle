@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Socialite;
@@ -34,7 +35,7 @@ class SocialiteController
 
         try {
             $response = Socialite::driver($provider)->user();
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return redirect()->route('filament.admin.auth.login')
                 ->withErrors([
                     'email' => 'Authentifizierung fehlgeschlagen. Bitte versuche es erneut.',

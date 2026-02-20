@@ -88,8 +88,6 @@ class Page extends Model implements HasMedia
      * Handles creation, update, and deletion of blocks and their media.
      *
      * @param array<int, array<string, mixed>> $contentBlocksData
-     *
-     * @return void
      */
     public function saveContentBlocks(array $contentBlocksData): void
     {
@@ -125,8 +123,6 @@ class Page extends Model implements HasMedia
      * Save or update a single content block.
      *
      * @param array<string, mixed> $blockData
-     *
-     * @return string
      */
     private function saveContentBlock(array $blockData, int $order): string
     {
@@ -157,8 +153,6 @@ class Page extends Model implements HasMedia
      *
      * @param Collection<string, ContentBlock> $existingBlocks
      * @param array<int, string> $processedBlockIds
-     *
-     * @return void
      */
     private function cleanupRemovedBlocks(Collection $existingBlocks, array $processedBlockIds): void
     {
@@ -172,8 +166,6 @@ class Page extends Model implements HasMedia
 
     /**
      * Delete all media associated with a specific block.
-     *
-     * @return void
      */
     private function deleteBlockMedia(string $blockId): void
     {

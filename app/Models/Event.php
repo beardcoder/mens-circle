@@ -162,7 +162,7 @@ class Event extends Model implements HasMedia
             ->setTimeFrom($this->end_time)
             ->format('Ymd\THis');
 
-        $now = now()
+        $now = now()->utc()
             ->format('Ymd\THis\Z');
         $location = $this->fullAddress ?? $this->location;
         $description = str_replace(["\r\n", "\n", "\r"], '\n', strip_tags($this->description ?? ''));
