@@ -1,21 +1,13 @@
 /* ================================================
-   Männerkreis Niederbayern/ Straubing - Email Theme
-   Earthy Design System
+   Männerkreis Niederbayern / Straubing — Email Theme
+   Modern Editorial Design System
    ================================================ */
 
-/* Color Palette Reference:
-   --color-earth-deep: #2c2418
-   --color-earth-dark: #3d3224
-   --color-earth-mid: #5c4a3a
-   --color-earth-warm: #7a6248
-   --color-terracotta: #b86f52
-   --color-terracotta-light: #d4907a
-   --color-sand: #c4b49a
-   --color-sand-light: #e5ded0
-   --color-parchment: #f4f0e8
-   --color-bone: #faf8f4
-   --color-ink: #1c1814
-   --color-ink-soft: #3a342c
+/* Color Palette:
+   Deep:       #2c2418   Earth dark: #3d3224   Earth mid: #5c4a3a
+   Earth warm: #7a6248   Terracotta: #b86f52   Terra-lt:  #d4907a
+   Sand:       #c4b49a   Sand-lt:    #e5ded0   Parchment: #f4f0e8
+   Bone:       #faf8f4   Ink:        #1c1814   Ink-soft:  #3a342c
 */
 
 /* Base */
@@ -65,31 +57,30 @@ a img {
 /* Typography */
 
 h1 {
-    margin-block: 0 16px;
+    margin-block: 0 8px;
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 24px;
+    font-size: 30px;
     font-weight: 400;
     color: #2c2418;
-    text-align: start;
-    letter-spacing: -0.02em;
+    text-align: center;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
 }
 
 h2 {
-    padding-block-end: 8px;
-    margin-block: 24px 12px;
+    margin-block: 36px 12px;
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 400;
     color: #2c2418;
     text-align: start;
     letter-spacing: -0.01em;
-    border-block-end: 1px solid #e5ded0;
 }
 
 h3 {
-    margin-block: 20px 8px;
+    margin-block: 28px 8px;
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 400;
     color: #3d3224;
     text-align: start;
@@ -97,8 +88,8 @@ h3 {
 
 p {
     margin-block: 0 16px;
-    font-size: 16px;
-    line-height: 1.7;
+    font-size: 15px;
+    line-height: 1.75;
     color: #3a342c;
     text-align: start;
 }
@@ -113,8 +104,13 @@ strong {
     color: #2c2418;
 }
 
+em {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+}
+
 hr {
-    margin: 24px 0;
+    margin: 36px 0;
     border: none;
     border-block-start: 1px solid #e5ded0;
 }
@@ -127,7 +123,9 @@ ul, ol {
 }
 
 li {
-    margin-block-end: 8px;
+    margin-block-end: 10px;
+    font-size: 15px;
+    line-height: 1.7;
     color: #3a342c;
 }
 
@@ -155,18 +153,18 @@ li {
 /* Header */
 
 .header {
-    padding: 32px 0 24px;
+    padding: 36px 0 28px;
     text-align: center;
     background-color: #2c2418;
 }
 
 .header a {
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 22px;
+    font-size: 17px;
     font-weight: 400;
     color: #f4f0e8;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.15em;
     text-decoration: none;
 }
 
@@ -199,9 +197,9 @@ li {
     padding: 0;
     margin: 0 auto;
     background-color: #faf8f4;
-    border: 1px solid #e5ded0;
+    border: none;
     border-radius: 0;
-    box-shadow: 0 2px 8px rgb(44 36 24 / 8%);
+    box-shadow: 0 1px 3px rgb(44 36 24 / 6%), 0 8px 24px rgb(44 36 24 / 4%);
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
 }
@@ -213,30 +211,37 @@ li {
 /* Blockquotes */
 
 blockquote {
-    padding: 12px 20px;
-    margin: 20px 0;
+    padding: 16px 24px;
+    margin: 28px 0;
+    font-family: Georgia, 'Times New Roman', serif;
     font-style: italic;
+    font-size: 17px;
+    line-height: 1.6;
     color: #5c4a3a;
-    border-inline-start: 3px solid #c4b49a;
+    border-inline-start: 2px solid #c4b49a;
+    background-color: transparent;
 }
 
 blockquote p {
     margin-block-end: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 17px;
     color: #5c4a3a;
 }
 
 /* Subcopy */
 
 .subcopy {
-    padding-block-start: 24px;
-    margin-block-start: 32px;
+    padding-block-start: 28px;
+    margin-block-start: 40px;
     border-block-start: 1px solid #e5ded0;
 }
 
 .subcopy p {
-    font-size: 13px;
-    line-height: 1.5;
-    color: #5c4a3a;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #7a6248;
 }
 
 .subcopy a {
@@ -301,7 +306,7 @@ blockquote p {
 
 .content-cell {
     max-inline-size: 100vw;
-    padding: 40px 36px;
+    padding: 48px 44px;
 }
 
 /* Buttons */
@@ -311,7 +316,7 @@ blockquote p {
     inline-size: 100%;
     -premailer-width: 100%;
     padding: 0;
-    margin: 28px auto;
+    margin: 32px auto;
     text-align: center;
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
@@ -321,45 +326,45 @@ blockquote p {
     display: inline-block;
     overflow: hidden;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     color: #faf8f4;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
     text-decoration: none;
-    border-radius: 0;
+    border-radius: 50px;
     text-size-adjust: none;
 }
 
 .button-blue,
 .button-primary {
     background-color: #b86f52;
-    border-block-start: 12px solid #b86f52;
-    border-block-end: 12px solid #b86f52;
-    border-inline-start: 28px solid #b86f52;
-    border-inline-end: 28px solid #b86f52;
+    border-block-start: 14px solid #b86f52;
+    border-block-end: 14px solid #b86f52;
+    border-inline-start: 32px solid #b86f52;
+    border-inline-end: 32px solid #b86f52;
 }
 
 .button-green,
 .button-success {
     background-color: #5c7a4a;
-    border-block-start: 12px solid #5c7a4a;
-    border-block-end: 12px solid #5c7a4a;
-    border-inline-start: 28px solid #5c7a4a;
-    border-inline-end: 28px solid #5c7a4a;
+    border-block-start: 14px solid #5c7a4a;
+    border-block-end: 14px solid #5c7a4a;
+    border-inline-start: 32px solid #5c7a4a;
+    border-inline-end: 32px solid #5c7a4a;
 }
 
 .button-red,
 .button-error {
     background-color: #a85454;
-    border-block-start: 12px solid #a85454;
-    border-block-end: 12px solid #a85454;
-    border-inline-start: 28px solid #a85454;
-    border-inline-end: 28px solid #a85454;
+    border-block-start: 14px solid #a85454;
+    border-block-end: 14px solid #a85454;
+    border-inline-start: 32px solid #a85454;
+    border-inline-end: 32px solid #a85454;
 }
 
 /* Secondary/Outline button style */
 .button-secondary {
-    padding: 10px 26px;
+    padding: 12px 30px;
     color: #b86f52;
     background-color: transparent;
     border: 2px solid #b86f52;
@@ -368,8 +373,8 @@ blockquote p {
 /* Panels */
 
 .panel {
-    margin: 24px 0;
-    border-inline-start: 3px solid #b86f52;
+    margin: 28px 0;
+    border-inline-start: 2px solid #c4b49a;
 }
 
 .panel-content {
@@ -433,7 +438,7 @@ pre code {
 /* Decorative Elements */
 
 .divider {
-    margin: 24px 0;
+    margin: 28px 0;
     border-block-start: 1px solid #e5ded0;
 }
 

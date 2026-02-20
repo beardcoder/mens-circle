@@ -12,7 +12,7 @@
 <table border="0" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
 <td>
-<a href="{{ $url }}" class="button button-{{ $color }}" target="_blank" rel="noopener" style="font-family: 'DM Sans', 'Segoe UI', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;">{!! $slot !!}</a>
+<a href="{{ $url }}" class="button button-{{ $color }}" target="_blank" rel="noopener" style="font-family: 'DM Sans', 'Segoe UI', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 50px;">{!! $slot !!}</a>
 </td>
 </tr>
 </table>

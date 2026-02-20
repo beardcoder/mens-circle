@@ -2,12 +2,12 @@
 <td>
 <table class="footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
-<td class="content-cell" align="center" style="padding: 32px 32px 40px 32px;">
+<td class="content-cell" align="center" style="padding: 36px 32px 44px 32px;">
 @php
     $social_links = app(\App\Settings\GeneralSettings::class)->social_links ?? [];
 @endphp
 @if(!empty($social_links))
-<table cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom: 20px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom: 24px;">
 <tr>
 @foreach($social_links as $link)
 @php
@@ -28,10 +28,10 @@
     }
 
     $title = $link['label'] ?? $socialType?->getLabel() ?? 'Link';
-    $iconSvg = $socialType?->getIcon(24) ?? \App\Enums\SocialLinkType::Other->getIcon(24);
+    $iconSvg = $socialType?->getIcon(22) ?? \App\Enums\SocialLinkType::Other->getIcon(22);
 @endphp
 <td style="padding: 0 8px;">
-<a href="{{ $href }}" title="{{ $title }}" style="display: inline-block; width: 24px; height: 24px; color: #7a6248;">
+<a href="{{ $href }}" title="{{ $title }}" style="display: inline-block; width: 22px; height: 22px; color: #7a6248;">
 {!! $iconSvg !!}
 </a>
 </td>
@@ -39,16 +39,16 @@
 </tr>
 </table>
 @endif
-<table cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom: 16px;">
+<table cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom: 18px;">
 <tr>
-<td style="padding: 0 8px;">
-<span style="color: #c4b49a; font-size: 8px;">&#9679;</span>
+<td style="padding: 0 6px;">
+<span style="color: #c4b49a; font-size: 5px;">&#9679;</span>
 </td>
-<td style="padding: 0 8px;">
-<span style="color: #c4b49a; font-size: 8px;">&#9679;</span>
+<td style="padding: 0 6px;">
+<span style="color: #c4b49a; font-size: 5px;">&#9679;</span>
 </td>
-<td style="padding: 0 8px;">
-<span style="color: #c4b49a; font-size: 8px;">&#9679;</span>
+<td style="padding: 0 6px;">
+<span style="color: #c4b49a; font-size: 5px;">&#9679;</span>
 </td>
 </tr>
 </table>

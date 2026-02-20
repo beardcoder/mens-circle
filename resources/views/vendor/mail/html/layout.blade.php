@@ -21,6 +21,10 @@ width: 100% !important;
 .footer {
 width: 100% !important;
 }
+
+.content-cell {
+padding: 36px 24px !important;
+}
 }
 
 @media only screen and (max-width: 500px) {
@@ -38,6 +42,17 @@ width: 100% !important;
 <td align="center">
 <table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
 {!! $header ?? '' !!}
+
+<!-- Accent Line -->
+<tr>
+<td align="center" style="background-color: #f4f0e8; padding-top: 0;">
+<table width="570" align="center" cellpadding="0" cellspacing="0" role="presentation" class="inner-body" style="background-color: transparent; box-shadow: none;">
+<tr>
+<td style="height: 3px; background-color: #b86f52; font-size: 0; line-height: 0;">&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
 
 <!-- Email Body -->
 <tr>

@@ -1,59 +1,34 @@
 <x-mail::message>
+<p style="text-align: center; margin: 0 0 6px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #b86f52; text-transform: uppercase; letter-spacing: 0.2em;">Erinnerung</p>
+
 # Morgen ist es soweit!
 
-Hallo {{ $registration->participant->first_name }},
+<p style="text-align: center; color: #5c4a3a; font-size: 15px; margin-bottom: 32px;">Hallo {{ $registration->participant->first_name }}, dein Termin<br><strong>{{ $event->title }}</strong> findet morgen statt.</p>
 
-eine kurze Erinnerung: **{{ $event->title }}** findet morgen statt – und du bist dabei. Wir freuen uns auf dich!
-
-<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin: 28px 0; border-radius: 0; overflow: hidden;">
+<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 0 36px;">
 <tr>
-<td style="background-color: #2c2418; padding: 16px 24px;">
-<p style="margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 14px; font-weight: 400; color: #c4b49a; text-transform: uppercase; letter-spacing: 0.08em;">Veranstaltungsdetails</p>
-</td>
+<td style="height: 2px; background-color: #c4b49a; font-size: 0; line-height: 0;">&nbsp;</td>
 </tr>
 <tr>
-<td style="background-color: #f4f0e8; border: 1px solid #e5ded0; border-top: none; padding: 24px;">
+<td style="background-color: #f4f0e8; padding: 28px;">
+<p style="margin: 0 0 20px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #b86f52; text-transform: uppercase; letter-spacing: 0.15em;">Dein Termin</p>
 <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
-<td style="padding: 6px 0; border-bottom: 1px solid #e5ded0;">
-<table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-<tr>
-<td width="110" style="font-family: 'DM Sans', sans-serif; font-size: 13px; color: #7a6248; text-transform: uppercase; letter-spacing: 0.05em; padding-right: 16px; vertical-align: top; padding-top: 8px; padding-bottom: 8px;">Datum</td>
-<td style="font-family: 'DM Sans', sans-serif; font-size: 15px; color: #2c2418; font-weight: 600; vertical-align: top; padding-top: 8px; padding-bottom: 8px;">{{ $event->event_date->format('l, d. F Y') }}</td>
-</tr>
-</table>
-</td>
+<td width="90" style="padding: 6px 0; vertical-align: top; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #7a6248; text-transform: uppercase; letter-spacing: 0.08em;">Datum</td>
+<td style="padding: 6px 0; font-family: 'DM Sans', sans-serif; font-size: 15px; color: #2c2418;">{{ $event->event_date->translatedFormat('l, d. F Y') }}</td>
 </tr>
 <tr>
-<td style="padding: 0; border-bottom: 1px solid #e5ded0;">
-<table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-<tr>
-<td width="110" style="font-family: 'DM Sans', sans-serif; font-size: 13px; color: #7a6248; text-transform: uppercase; letter-spacing: 0.05em; padding-right: 16px; vertical-align: top; padding-top: 8px; padding-bottom: 8px;">Uhrzeit</td>
-<td style="font-family: 'DM Sans', sans-serif; font-size: 15px; color: #2c2418; font-weight: 600; vertical-align: top; padding-top: 8px; padding-bottom: 8px;">{{ $event->start_time->format('H:i') }} – {{ $event->end_time->format('H:i') }} Uhr</td>
-</tr>
-</table>
-</td>
+<td width="90" style="padding: 6px 0; vertical-align: top; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #7a6248; text-transform: uppercase; letter-spacing: 0.08em;">Uhrzeit</td>
+<td style="padding: 6px 0; font-family: 'DM Sans', sans-serif; font-size: 15px; color: #2c2418;">{{ $event->start_time->format('H:i') }} – {{ $event->end_time->format('H:i') }} Uhr</td>
 </tr>
 <tr>
-<td style="padding: 0;">
-<table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-<tr>
-<td width="110" style="font-family: 'DM Sans', sans-serif; font-size: 13px; color: #7a6248; text-transform: uppercase; letter-spacing: 0.05em; padding-right: 16px; vertical-align: top; padding-top: 8px; padding-bottom: 8px;">Ort</td>
-<td style="font-family: 'DM Sans', sans-serif; font-size: 15px; color: #2c2418; font-weight: 600; vertical-align: top; padding-top: 8px; padding-bottom: 8px;">{{ $event->location }}</td>
-</tr>
-</table>
-</td>
+<td width="90" style="padding: 6px 0; vertical-align: top; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #7a6248; text-transform: uppercase; letter-spacing: 0.08em;">Ort</td>
+<td style="padding: 6px 0; font-family: 'DM Sans', sans-serif; font-size: 15px; color: #2c2418;">{{ $event->location }}</td>
 </tr>
 @if($event->location_details)
 <tr>
-<td style="padding: 0; border-top: 1px solid #e5ded0;">
-<table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-<tr>
-<td width="110" style="font-family: 'DM Sans', sans-serif; font-size: 13px; color: #7a6248; text-transform: uppercase; letter-spacing: 0.05em; padding-right: 16px; vertical-align: top; padding-top: 8px; padding-bottom: 8px;">Treffpunkt</td>
-<td style="font-family: 'DM Sans', sans-serif; font-size: 15px; color: #3a342c; vertical-align: top; padding-top: 8px; padding-bottom: 8px;">{!! nl2br(e($event->location_details)) !!}</td>
-</tr>
-</table>
-</td>
+<td width="90" style="padding: 6px 0; vertical-align: top; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #7a6248; text-transform: uppercase; letter-spacing: 0.08em;">Treffpunkt</td>
+<td style="padding: 6px 0; font-family: 'DM Sans', sans-serif; font-size: 15px; color: #3a342c;">{!! nl2br(e($event->location_details)) !!}</td>
 </tr>
 @endif
 </table>
@@ -67,19 +42,15 @@ eine kurze Erinnerung: **{{ $event->title }}** findet morgen statt – und du bi
 
 **Teilnahme:** {{ $event->cost_basis }}
 
-## Noch ein paar Hinweise
+## Bitte beachten
 
 - Komm pünktlich – wir starten gemeinsam
-- Bring eine offene Haltung und die Bereitschaft für echte Begegnung mit
-- Falls du kurzfristig verhindert bist, melde dich bitte so schnell wie möglich
-
-## Kurzfristig verhindert?
-
-Schreib uns bitte sofort an [hallo@mens-circle.de](mailto:hallo@mens-circle.de), damit wir planen können.
+- Bring eine offene Haltung und Bereitschaft für echte Begegnung mit
+- Kurzfristig verhindert? Schreib uns bitte an [hallo@mens-circle.de](mailto:hallo@mens-circle.de)
 
 ---
 
-Wir freuen uns auf dich – bis morgen!
+Bis morgen!
 
 Herzliche Grüße,<br>
 **{{ config('app.name') }}**
