@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Config;
 use App\Checks\MailHealthCheck;
 use App\Checks\QueueHealthCheck;
 use App\Checks\SevenIoHealthCheck;
@@ -76,9 +77,9 @@ class AppServiceProvider extends ServiceProvider
 
             // Schedule Check - wichtig für Event-Reminders und Sitemap
             ScheduleCheck::new()
-                ->useCacheStore(\Illuminate\Support\Facades\Config::string('health.schedule.cache_store', 'health'))
+                ->useCacheStore(Config::string('health.schedule.cache_store', 'health'))
                 ->heartbeatMaxAgeInMinutes(
-                    \Illuminate\Support\Facades\Config::integer('health.schedule.heartbeat_max_age_in_minutes', 10),
+                    Config::integer('health.schedule.heartbeat_max_age_in_minutes', 10),
                 ),
 
             // Queue Check - wichtig für asynchrone Jobs

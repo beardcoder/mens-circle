@@ -797,8 +797,6 @@ class LlmsController
 
     /**
      * Get list item prefix based on number value
-     *
-     * @return string
      */
     private function getListPrefix(mixed $number): string
     {
@@ -806,6 +804,6 @@ class LlmsController
             return '- ';
         }
 
-        return (string) $number . '. ';
+        return $number . '. ';
     }
 }
