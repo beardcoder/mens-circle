@@ -28,11 +28,17 @@ class AnalyticsProxyController
         $scriptUrl = config('analytics.umami.script_url');
         $baseUrl = preg_replace('#/[^/]+$#', '', $scriptUrl);
 
+        $data = $request->all();
+
+        if (isset($data['payload']) && is_array($data['payload'])) {
+            $data['payload']['referrer'] = $data['payload']['referrer'] ?? '';
+        }
+
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'User-Agent' => $request->userAgent() ?? '',
             'X-Forwarded-For' => $request->ip(),
-        ])->post($baseUrl . '/api/send', $request->all());
+        ])->post($baseUrl . '/api/send', $data);
 
         return response($response->body(), $response->status(), [
             'Content-Type' => 'application/json',
