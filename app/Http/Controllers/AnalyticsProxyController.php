@@ -48,8 +48,7 @@ class AnalyticsProxyController
             'X-Client-IP' => trim($clientIp),
         ];
 
-        // Forward Cloudflare geolocation headers from the app's own Cloudflare proxy
-        foreach (['CF-IPCountry', 'CF-IPCity', 'CF-RegionCode', 'CF-Connecting-IP', 'Referer', 'Accept-Language'] as $header) {
+        foreach (['Referer', 'Accept-Language'] as $header) {
             if ($request->hasHeader($header)) {
                 $headers[$header] = $request->header($header);
             }
