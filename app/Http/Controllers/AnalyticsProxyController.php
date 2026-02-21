@@ -48,12 +48,11 @@ class AnalyticsProxyController
             'X-Client-IP' => trim($clientIp),
         ];
 
-        if ($request->hasHeader('Referer')) {
-            $headers['Referer'] = $request->header('Referer');
-        }
-
-        if ($request->hasHeader('Accept-Language')) {
-            $headers['Accept-Language'] = $request->header('Accept-Language');
+        // Forward Cloudflare geolocation headers from the app's own Cloudflare proxy
+        foreach (['CF-IPCountry', 'CF-IPCity', 'CF-RegionCode', 'CF-Connecting-IP', 'Referer', 'Accept-Language'] as $header) {
+            if ($request->hasHeader($header)) {
+                $headers[$header] = $request->header($header);
+            }
         }
 
         $response = Http::withHeaders($headers)->post($baseUrl . '/api/send', $data);
