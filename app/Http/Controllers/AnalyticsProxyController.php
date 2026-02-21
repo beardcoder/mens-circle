@@ -45,6 +45,7 @@ class AnalyticsProxyController
             'User-Agent' => $request->userAgent() ?? '',
             'X-Forwarded-For' => trim($clientIp),
             'X-Real-IP' => trim($clientIp),
+            'X-Client-IP' => trim($clientIp),
         ];
 
         if ($request->hasHeader('Referer')) {
