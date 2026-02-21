@@ -32,13 +32,26 @@ class AnalyticsProxyController
 
         if (isset($data['payload']) && is_array($data['payload'])) {
             $data['payload']['referrer'] = $data['payload']['referrer'] ?? '';
+            $data['payload']['language'] = $data['payload']['language'] ?? '';
+            $data['payload']['screen'] = $data['payload']['screen'] ?? '';
+            $data['payload']['title'] = $data['payload']['title'] ?? '';
         }
 
-        $response = Http::withHeaders([
+        $headers = [
             'Content-Type' => 'application/json',
             'User-Agent' => $request->userAgent() ?? '',
             'X-Forwarded-For' => $request->ip(),
-        ])->post($baseUrl . '/api/send', $data);
+        ];
+
+        if ($request->hasHeader('Referer')) {
+            $headers['Referer'] = $request->header('Referer');
+        }
+
+        if ($request->hasHeader('Accept-Language')) {
+            $headers['Accept-Language'] = $request->header('Accept-Language');
+        }
+
+        $response = Http::withHeaders($headers)->post($baseUrl . '/api/send', $data);
 
         return response($response->body(), $response->status(), [
             'Content-Type' => 'application/json',
