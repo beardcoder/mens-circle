@@ -37,10 +37,14 @@ class AnalyticsProxyController
             $data['payload']['title'] = $data['payload']['title'] ?? '';
         }
 
+        $clientIp = $request->header('X-Forwarded-For', $request->ip());
+        $clientIp = explode(',', $clientIp)[0];
+
         $headers = [
             'Content-Type' => 'application/json',
             'User-Agent' => $request->userAgent() ?? '',
-            'X-Forwarded-For' => $request->ip(),
+            'X-Forwarded-For' => trim($clientIp),
+            'X-Real-IP' => trim($clientIp),
         ];
 
         if ($request->hasHeader('Referer')) {
