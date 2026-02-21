@@ -21,9 +21,9 @@
                 </a>
 
                 <nav class="nav" id="nav">
-                    <a href="{{ route('home') }}#ueber" class="nav__link">Über</a>
-                    <a href="{{ route('home') }}#reise" class="nav__link">Die Reise</a>
-                    <a href="{{ route('home') }}#faq" class="nav__link">Fragen</a>
+                    <a href="{{ route('home') }}#ueber" class="nav__link" data-umami-event="nav-click" data-umami-event-target="ueber">Über</a>
+                    <a href="{{ route('home') }}#reise" class="nav__link" data-umami-event="nav-click" data-umami-event-target="reise">Die Reise</a>
+                    <a href="{{ route('home') }}#faq" class="nav__link" data-umami-event="nav-click" data-umami-event-target="faq">Fragen</a>
                     @if($hasNextEvent)
                         <a
                             href="{{ route('event.show') }}"
@@ -85,11 +85,11 @@
                 <div class="footer__nav">
                     <h3 class="footer__heading">Navigation</h3>
                     <ul class="footer__links">
-                        <li><a href="{{ route('home') }}#ueber">Über uns</a></li>
-                        <li><a href="{{ route('home') }}#reise">Die Reise</a></li>
-                        <li><a href="{{ route('home') }}#faq">FAQ</a></li>
+                        <li><a href="{{ route('home') }}#ueber" data-umami-event="footer-link" data-umami-event-target="ueber">Über uns</a></li>
+                        <li><a href="{{ route('home') }}#reise" data-umami-event="footer-link" data-umami-event-target="reise">Die Reise</a></li>
+                        <li><a href="{{ route('home') }}#faq" data-umami-event="footer-link" data-umami-event-target="faq">FAQ</a></li>
                         @if($hasNextEvent)
-                            <li><a href="{{ route('event.show') }}">Nächster Termin</a></li>
+                            <li><a href="{{ route('event.show') }}" data-umami-event="footer-link" data-umami-event-target="event">Nächster Termin</a></li>
                         @endif
                     </ul>
                 </div>
@@ -98,12 +98,12 @@
                     <h3 class="footer__heading">Kontakt</h3>
                     <ul class="footer__links">
                         @if($settings?->contact_email)
-                            <li><a href="mailto:{{ $settings->contact_email }}">E-Mail schreiben</a></li>
+                            <li><a href="mailto:{{ $settings->contact_email }}" data-umami-event="contact-click" data-umami-event-type="email">E-Mail schreiben</a></li>
                         @endif
                         @if($settings?->contact_phone)
-                            <li><a href="tel:{{ str_replace([' ', '-', '(', ')'], '', $settings->contact_phone) }}">{{ $settings->contact_phone }}</a></li>
+                            <li><a href="tel:{{ str_replace([' ', '-', '(', ')'], '', $settings->contact_phone) }}" data-umami-event="contact-click" data-umami-event-type="phone">{{ $settings->contact_phone }}</a></li>
                         @endif
-                        <li><a href="{{ route('home') }}#newsletter">Newsletter</a></li>
+                        <li><a href="{{ route('home') }}#newsletter" data-umami-event="footer-link" data-umami-event-target="newsletter">Newsletter</a></li>
                     </ul>
                 </div>
             </div>
@@ -113,8 +113,8 @@
                     {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
                 </p>
                 <div class="footer__legal">
-                    <a href="{{ route('page.show', 'impressum') }}">Impressum</a>
-                    <a href="{{ route('page.show', 'datenschutz') }}">Datenschutz</a>
+                    <a href="{{ route('page.show', 'impressum') }}" data-umami-event="footer-link" data-umami-event-target="impressum">Impressum</a>
+                    <a href="{{ route('page.show', 'datenschutz') }}" data-umami-event="footer-link" data-umami-event-target="datenschutz">Datenschutz</a>
                 </div>
             </div>
         </div>

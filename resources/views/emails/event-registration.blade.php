@@ -54,7 +54,7 @@ Im Anhang findest du eine iCal-Datei – damit landet der Termin direkt in deine
 
 - Komm pünktlich – wir starten gemeinsam
 - Bring eine offene Haltung und Bereitschaft für echte Begegnung mit
-- Bei Fragen oder falls du doch nicht teilnehmen kannst, schreib uns an [hallo@mens-circle.de](mailto:hallo@mens-circle.de)
+- Bei Fragen oder falls du doch nicht teilnehmen kannst, schreib uns an [hallo@mens-circle.de](mailto:hallo@mens-circle.de?subject=Frage%20zur%20Anmeldung)
 
 ---
 

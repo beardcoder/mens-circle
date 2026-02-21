@@ -2,7 +2,8 @@
     <!-- Umami Analytics -->
     <script
         defer
-        src="{{ config('analytics.umami.script_url') }}"
+        src="/va/script.js"
         data-website-id="{{ config('analytics.umami.website_id') }}"
+        data-host-url="/va"
     ></script>
 @endif

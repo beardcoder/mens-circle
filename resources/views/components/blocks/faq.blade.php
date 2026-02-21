@@ -31,7 +31,7 @@
                     @foreach($faqItems as $item)
                         @if(!empty($item['question']) && !empty($item['answer']))
                             <details class="faq-item" name="faq-accordion" data-m:toggle="action=faq_toggle;element=details;target=question;location=faq_section">
-                                <summary class="faq-item__question">
+                                <summary class="faq-item__question" data-umami-event="faq-expand" data-umami-event-question="{{ Str::limit($item['question'], 50) }}">
                                     <span>{{ $item['question'] }}</span>
                                     <span class="faq-item__icon" aria-hidden="true"></span>
                                 </summary>

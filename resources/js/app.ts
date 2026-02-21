@@ -13,6 +13,7 @@ import {
 } from '@/components/forms';
 import { useCalendarIntegration } from '@/components/calendar';
 import { useIntersectionObserver, useParallax } from '@/composables';
+import { useScrollDepthTracking, useExternalLinkTracking } from '@/utils/umami';
 
 /**
  * Initialize all application features when DOM is ready
@@ -32,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Enhanced UX composables
   useIntersectionObserver({ threshold: 0.1, amount: 0.3 });
   useParallax();
+
+  // Analytics tracking
+  useScrollDepthTracking();
+  useExternalLinkTracking();
 });
 
 // Performance monitoring (only in development)

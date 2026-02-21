@@ -11,7 +11,7 @@
 - **Inspirierende Impulse** – Gedanken zu Männlichkeit, Gemeinschaft und persönlichem Wachstum
 - **Besondere Einladungen** – Exklusive Angebote für die Community
 
-<x-mail::button url="{{ route('event.show') }}">
+<x-mail::button url="{{ route('event.show') }}?utm_source=email&utm_medium=newsletter&utm_campaign=welcome">
 Nächste Termine ansehen
 </x-mail::button>
 
@@ -26,7 +26,7 @@ Herzliche Grüße,<br>
 
 <x-mail::subcopy>
 Du erhältst diese E-Mail an {{ $subscription->participant->email }}, weil du dich für unseren Newsletter angemeldet hast.
-Falls du den Newsletter nicht mehr erhalten möchtest, kannst du dich jederzeit [hier abmelden]({{ route('newsletter.unsubscribe', $subscription->token) }}).
+Falls du den Newsletter nicht mehr erhalten möchtest, kannst du dich jederzeit [hier abmelden]({{ route('newsletter.unsubscribe', $subscription->token) }}?utm_source=email&utm_medium=newsletter&utm_campaign=welcome_unsubscribe).
 </x-mail::subcopy>
 
 <x-analytics.email-pixel :subscriptionId="$subscription->id" eventName="newsletter_welcome_open" />
