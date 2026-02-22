@@ -50,10 +50,6 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.ico') }}">
 <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
 
-<!-- Preload Critical Fonts for LCP -->
-<link rel="preload" as="font" type="font/woff2" href="/build/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2" crossorigin>
-<link rel="preload" as="font" type="font/woff2" href="/build/assets/playfair-display-latin-wght-normal-BOwq7MWX.woff2" crossorigin>
-
 <!-- Styles -->
 @vite(['resources/css/app.css'])
 
