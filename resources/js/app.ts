@@ -11,7 +11,7 @@ import {
   useTestimonialForm,
 } from '@/components/forms';
 import { useCalendarIntegration } from '@/components/calendar';
-import { useScrollDepthTracking, useExternalLinkTracking } from '@/utils/umami';
+import { initUmamiKit } from '@/utils/umami-kit';
 
 /**
  * Initialize all application features when DOM is ready
@@ -28,8 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   useCalendarIntegration();
 
   // Analytics tracking
-  useScrollDepthTracking();
-  useExternalLinkTracking();
+  initUmamiKit();
 });
 
 // Performance monitoring (only in development)

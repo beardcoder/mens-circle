@@ -68,77 +68,17 @@ export const TRACKING_EVENTS = {
   SOCIAL_CLICK: 'social-click',
   WHATSAPP_CLICK: 'whatsapp-click',
   EXTERNAL_LINK: 'external-link',
+  CLICK: 'click',
 
   FAQ_EXPAND: 'faq-expand',
   SCROLL_DEPTH: 'scroll-depth',
+  TIME_ON_PAGE: 'time-on-page',
+  USER_IDLE: 'user-idle',
+  USER_ACTIVE: 'user-active',
+  PAGE_EXIT: 'page-exit',
+  SECTION_VISIBLE: 'section-visible',
 
   NAV_CLICK: 'nav-click',
   FOOTER_LINK: 'footer-link',
   CONTACT_CLICK: 'contact-click',
 } as const;
-
-/**
- * Track scroll depth at 25%, 50%, 75%, 100% milestones
- */
-export function useScrollDepthTracking(): void {
-  const milestones = [25, 50, 75, 100];
-  const reached = new Set<number>();
-
-  const checkScrollDepth = (): void => {
-    const scrollHeight =
-      document.documentElement.scrollHeight - window.innerHeight;
-
-    if (scrollHeight <= 0) return;
-
-    const percent = Math.round((window.scrollY / scrollHeight) * 100);
-
-    for (const milestone of milestones) {
-      if (percent >= milestone && !reached.has(milestone)) {
-        reached.add(milestone);
-        trackEvent(TRACKING_EVENTS.SCROLL_DEPTH, {
-          depth: milestone,
-          page: window.location.pathname,
-        });
-      }
-    }
-  };
-
-  window.addEventListener('scroll', checkScrollDepth, { passive: true });
-}
-
-/**
- * Track clicks on external links automatically
- */
-export function useExternalLinkTracking(): void {
-  document.addEventListener('click', (e) => {
-    const link = (e.target as HTMLElement).closest(
-      'a[href]'
-    ) as HTMLAnchorElement | null;
-
-    if (!link) return;
-
-    const href = link.href;
-
-    if (
-      !href ||
-      href.startsWith('javascript:') ||
-      href.startsWith('#') ||
-      link.hasAttribute('data-umami-event')
-    ) {
-      return;
-    }
-
-    try {
-      const url = new URL(href);
-
-      if (url.hostname !== window.location.hostname) {
-        trackEvent(TRACKING_EVENTS.EXTERNAL_LINK, {
-          url: href,
-          text: (link.textContent ?? '').trim().slice(0, 50),
-        });
-      }
-    } catch {
-      // Invalid URL, ignore
-    }
-  });
-}
