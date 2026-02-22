@@ -7,6 +7,151 @@ import { validateEmail } from '@/utils/helpers';
 import { useForm } from '@/composables';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 
+type FormFieldElement =
+  | HTMLInputElement
+  | HTMLTextAreaElement
+  | HTMLSelectElement;
+
+interface FormCompletionState {
+  requiredFilled: number;
+  requiredTotal: number;
+  filledFields: number;
+  totalFields: number;
+}
+
+function getTrackableFields(form: HTMLFormElement): FormFieldElement[] {
+  return Array.from(
+    form.querySelectorAll<FormFieldElement>('input, textarea, select')
+  ).filter((field) => {
+    if (!field.name || field.disabled) {
+      return false;
+    }
+
+    if (field instanceof HTMLInputElement && field.type === 'hidden') {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+function isFieldFilled(field: FormFieldElement): boolean {
+  if (field instanceof HTMLInputElement) {
+    if (field.type === 'checkbox' || field.type === 'radio') {
+      return field.checked;
+    }
+
+    return field.value.trim().length > 0;
+  }
+
+  if (field instanceof HTMLSelectElement) {
+    return field.value.trim().length > 0;
+  }
+
+  return field.value.trim().length > 0;
+}
+
+function isRequiredFieldComplete(field: FormFieldElement): boolean {
+  if (!field.required) {
+    return true;
+  }
+
+  if (field instanceof HTMLInputElement) {
+    if (field.type === 'checkbox' || field.type === 'radio') {
+      return field.checked && field.validity.valid;
+    }
+
+    return field.value.trim().length > 0 && field.validity.valid;
+  }
+
+  if (field instanceof HTMLSelectElement) {
+    return field.value.trim().length > 0 && field.validity.valid;
+  }
+
+  return field.value.trim().length > 0 && field.validity.valid;
+}
+
+function getFormCompletionState(form: HTMLFormElement): FormCompletionState {
+  const fields = getTrackableFields(form);
+  const requiredFields = fields.filter((field) => field.required);
+
+  const filledFields = fields.filter((field) => isFieldFilled(field)).length;
+  const requiredFilled = requiredFields.filter((field) =>
+    isRequiredFieldComplete(field)
+  ).length;
+
+  return {
+    requiredFilled,
+    requiredTotal: requiredFields.length,
+    filledFields,
+    totalFields: fields.length,
+  };
+}
+
+function useFilledFormAbandonTracking(
+  form: HTMLFormElement,
+  eventName: string,
+  formType: string
+): void {
+  let hasSubmitted = false;
+  let hasTracked = false;
+  let firstInteractionAt: number | null = null;
+
+  const markInteraction = (): void => {
+    if (firstInteractionAt === null) {
+      firstInteractionAt = Date.now();
+    }
+  };
+
+  const markSubmitted = (): void => {
+    hasSubmitted = true;
+  };
+
+  const trackAbandonIfFilled = (): void => {
+    if (hasTracked || hasSubmitted || firstInteractionAt === null) {
+      return;
+    }
+
+    const completion = getFormCompletionState(form);
+
+    if (
+      completion.requiredTotal === 0 ||
+      completion.requiredFilled < completion.requiredTotal
+    ) {
+      return;
+    }
+
+    hasTracked = true;
+
+    const requiredCompletionPercent = Math.round(
+      (completion.requiredFilled / completion.requiredTotal) * 100
+    );
+    const secondsSinceFirstInput = Math.round(
+      (Date.now() - firstInteractionAt) / 1000
+    );
+
+    trackEvent(eventName, {
+      form: formType,
+      required_filled: completion.requiredFilled,
+      required_total: completion.requiredTotal,
+      required_completion_pct: requiredCompletionPercent,
+      filled_fields: completion.filledFields,
+      total_fields: completion.totalFields,
+      seconds_since_first_input: secondsSinceFirstInput,
+      page: window.location.pathname,
+    });
+  };
+
+  form.addEventListener('input', markInteraction);
+  form.addEventListener('change', markInteraction);
+  form.addEventListener('submit', markSubmitted, { capture: true });
+
+  window.addEventListener('pagehide', trackAbandonIfFilled, { capture: true });
+  window.addEventListener('beforeunload', trackAbandonIfFilled, {
+    capture: true,
+  });
+}
+
 /**
  * Newsletter form composable
  * Handles newsletter subscription with validation
@@ -15,6 +160,12 @@ export function useNewsletterForm(): void {
   const form = document.getElementById('newsletterForm') as HTMLFormElement;
 
   if (!form) return;
+
+  useFilledFormAbandonTracking(
+    form,
+    TRACKING_EVENTS.NEWSLETTER_ABANDON_FILLED,
+    'newsletter'
+  );
 
   useForm(form, {
     onSubmit: async (formData) => {
@@ -58,6 +209,12 @@ export function useRegistrationForm(): void {
   const form = document.getElementById('registrationForm') as HTMLFormElement;
 
   if (!form) return;
+
+  useFilledFormAbandonTracking(
+    form,
+    TRACKING_EVENTS.EVENT_REGISTRATION_ABANDON_FILLED,
+    'event-registration'
+  );
 
   useForm(form, {
     onSubmit: async (formData) => {
@@ -127,6 +284,12 @@ export function useTestimonialForm(): void {
   const form = document.getElementById('testimonialForm') as HTMLFormElement;
 
   if (!form) return;
+
+  useFilledFormAbandonTracking(
+    form,
+    TRACKING_EVENTS.TESTIMONIAL_ABANDON_FILLED,
+    'testimonial'
+  );
 
   const quoteTextarea = form.querySelector<HTMLTextAreaElement>('#quote');
   const charCount = document.getElementById('charCount');

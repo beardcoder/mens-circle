@@ -48,14 +48,17 @@ export const TRACKING_EVENTS = {
   NEWSLETTER_SUBMIT: 'newsletter-submit',
   NEWSLETTER_SUCCESS: 'newsletter-success',
   NEWSLETTER_ERROR: 'newsletter-error',
+  NEWSLETTER_ABANDON_FILLED: 'newsletter-abandon-filled',
 
   EVENT_REGISTRATION_SUBMIT: 'event-registration-submit',
   EVENT_REGISTRATION_SUCCESS: 'event-registration-success',
   EVENT_REGISTRATION_ERROR: 'event-registration-error',
+  EVENT_REGISTRATION_ABANDON_FILLED: 'event-registration-abandon-filled',
 
   TESTIMONIAL_SUBMIT: 'testimonial-submit',
   TESTIMONIAL_SUCCESS: 'testimonial-success',
   TESTIMONIAL_ERROR: 'testimonial-error',
+  TESTIMONIAL_ABANDON_FILLED: 'testimonial-abandon-filled',
 
   CALENDAR_OPEN: 'calendar-open',
   CALENDAR_DOWNLOAD_ICS: 'calendar-download-ics',
