@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\RegistrationStatus;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -104,7 +105,7 @@ class Event extends Model implements HasMedia
     public function waitlistRegistrations(): HasMany
     {
         return $this->hasMany(Registration::class)
-            ->where('status', \App\Enums\RegistrationStatus::Waitlist)
+            ->where('status', RegistrationStatus::Waitlist)
             ->orderBy('registered_at');
     }
 

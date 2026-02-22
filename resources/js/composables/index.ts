@@ -1,102 +1,9 @@
 /**
  * Composables for Men's Circle App
- * Modern, reusable functionality with better separation of concerns
+ * Reusable functionality with minimal runtime overhead
  */
 
-import { animate, inView, scroll, stagger } from 'motion';
 import type { ApiResponse } from '@/types';
-
-export interface AnimationOptions {
-  threshold?: number;
-  amount?: number;
-  rootMargin?: string;
-}
-
-/**
- * Modern Intersection Observer wrapper using Motion One
- */
-export function useIntersectionObserver(options: AnimationOptions = {}): void {
-  const { threshold = 0.1, amount = 0.3 } = options;
-
-  // Fade in animations for sections
-  const sections = document.querySelectorAll<HTMLElement>(
-    '[data-animate="fade-in"]'
-  );
-
-  sections.forEach((section) => {
-    inView(
-      section,
-      () => {
-        // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
-        animate(
-          section,
-          { opacity: [0, 1], y: [20, 0] },
-          { duration: 0.6, easing: 'ease-out' }
-        );
-      },
-      { amount }
-    );
-  });
-
-  // Staggered animations for lists
-  const staggeredLists = document.querySelectorAll<HTMLElement>(
-    '[data-animate="stagger"]'
-  );
-
-  staggeredLists.forEach((list) => {
-    const items = list.querySelectorAll<HTMLElement>('[data-animate-item]');
-
-    inView(
-      list,
-      () => {
-        // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
-        animate(
-          items,
-          { opacity: [0, 1], y: [20, 0] },
-          { duration: 0.5, delay: stagger(0.1), easing: 'ease-out' }
-        );
-      },
-      { amount: threshold }
-    );
-  });
-
-  // Scale animations
-  const scaleElements = document.querySelectorAll<HTMLElement>(
-    '[data-animate="scale"]'
-  );
-
-  scaleElements.forEach((el) => {
-    inView(
-      el,
-      () => {
-        // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
-        animate(
-          el,
-          { opacity: [0, 1], scale: [0.9, 1] },
-          { duration: 0.5, easing: 'ease-out' }
-        );
-      },
-      { amount }
-    );
-  });
-}
-
-/**
- * Parallax scroll effects using Motion One
- */
-export function useParallax(): void {
-  const parallaxElements =
-    document.querySelectorAll<HTMLElement>('[data-parallax]');
-
-  parallaxElements.forEach((el) => {
-    const speed = Number.parseFloat(el.dataset.parallax || '0.5');
-
-    scroll(animate(el, { y: [0, -100 * speed] }), {
-      target: el,
-      offset: ['start end', 'end start'],
-    });
-  });
-}
 
 /**
  * Enhanced form handling with better UX
@@ -160,6 +67,11 @@ export function showToast(
   message: string,
   title?: string
 ): void {
+  const TOAST_VISIBLE_CLASS = 'toast--visible';
+  const TOAST_HIDING_CLASS = 'toast--hiding';
+  const TOAST_LIFETIME_MS = 5000;
+  const TOAST_FALLBACK_REMOVE_MS = 400;
+
   // Icon symbols for each type
   const icons = {
     success: '✓',
@@ -215,21 +127,20 @@ export function showToast(
 
   document.body.appendChild(toast);
 
-  // Animate in
-  // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
-  animate(
-    toast,
-    { opacity: [0, 1], y: [-20, 0], scale: [0.95, 1] },
-    { duration: 0.4, easing: [0.16, 1, 0.3, 1] }
-  );
+  requestAnimationFrame(() => {
+    toast.classList.add(TOAST_VISIBLE_CLASS);
+  });
 
-  // Auto-dismiss after 5 seconds
-  setTimeout(() => {
-    // @ts-expect-error - Motion DOM animate: keyframes type not correctly resolved
-    animate(
-      toast,
-      { opacity: 0, y: -20, scale: 0.95 },
-      { duration: 0.3, easing: 'ease-in' }
-    ).finished.then(() => toast.remove());
-  }, 5000);
+  const removeToast = (): void => {
+    if (toast.isConnected) {
+      toast.remove();
+    }
+  };
+
+  window.setTimeout(() => {
+    toast.classList.remove(TOAST_VISIBLE_CLASS);
+    toast.classList.add(TOAST_HIDING_CLASS);
+    toast.addEventListener('transitionend', removeToast, { once: true });
+    window.setTimeout(removeToast, TOAST_FALLBACK_REMOVE_MS);
+  }, TOAST_LIFETIME_MS);
 }

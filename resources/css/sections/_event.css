@@ -131,8 +131,8 @@
 .event-register__spots-hint {
   position: relative;
   z-index: 1;
-  max-width: 32ch;
-  margin-top: var(--space-sm);
+  max-inline-size: 32ch;
+  margin-block-start: var(--space-sm);
   font-size: 0.9rem;
   line-height: 1.5;
   color: oklch(from var(--color-sand) l c h / 75%);

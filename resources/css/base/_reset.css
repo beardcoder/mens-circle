@@ -14,11 +14,12 @@
 
 /* Prevent font size inflation */
 html {
+  scroll-behavior: smooth;
+
   /* Base font size for rem calculations */
   font-size: 16px;
   text-rendering: optimizelegibility;
   text-size-adjust: none;
-  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -164,10 +165,10 @@ table {
   *,
   *::before,
   *::after {
+    scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
   }
 }
 

@@ -43,10 +43,10 @@ class RegistrationObserver
 
         try {
             Mail::queue(new WaitlistPromotion($nextWaitlisted, $nextWaitlisted->event));
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             Log::error('Failed to send waitlist promotion email', [
                 'registration_id' => $nextWaitlisted->id,
-                'error' => $e->getMessage(),
+                'error' => $exception->getMessage(),
             ]);
         }
     }
