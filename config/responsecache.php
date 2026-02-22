@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Spatie\ResponseCache\CacheProfiles\CacheAllSuccessfulGetRequests;
 use Spatie\ResponseCache\Hasher\DefaultHasher;
-use Spatie\ResponseCache\Serializers\JsonSerializer;
 use Spatie\ResponseCache\Replacers\CsrfTokenReplacer;
+use Spatie\ResponseCache\Serializers\JsonSerializer;
 
 return [
     /*

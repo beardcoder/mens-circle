@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Throwable;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Socialite;
 use Laravel\Socialite\Two\GithubProvider;
+use Throwable;
 
 class SocialiteController
 {

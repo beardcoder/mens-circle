@@ -26,7 +26,6 @@
    ============================================ */
 @import url('@fontsource-variable/playfair-display');
 @import url('@fontsource-variable/dm-sans');
-@import url('@fontsource-variable/cormorant');
 @import url('base/_variables.css');
 @import url('base/_reset.css');
 @import url('base/_typography.css');

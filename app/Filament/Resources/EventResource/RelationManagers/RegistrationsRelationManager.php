@@ -14,18 +14,18 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class RegistrationsRelationManager extends RelationManager
 {
@@ -154,10 +154,10 @@ class RegistrationsRelationManager extends RelationManager
 
                         try {
                             Mail::queue(new WaitlistPromotion($record, $record->event));
-                        } catch (Exception $e) {
+                        } catch (Exception $exception) {
                             Log::error('Failed to send waitlist promotion email from admin', [
                                 'registration_id' => $record->id,
-                                'error' => $e->getMessage(),
+                                'error' => $exception->getMessage(),
                             ]);
                         }
 

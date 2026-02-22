@@ -5,14 +5,12 @@
 
 import './types';
 import { useNavigation, useScrollHeader } from '@/components/navigation';
-import { useFAQ } from '@/components/faq';
 import {
   useNewsletterForm,
   useRegistrationForm,
   useTestimonialForm,
 } from '@/components/forms';
 import { useCalendarIntegration } from '@/components/calendar';
-import { useIntersectionObserver, useParallax } from '@/composables';
 import { useScrollDepthTracking, useExternalLinkTracking } from '@/utils/umami';
 
 /**
@@ -24,15 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
   useScrollHeader();
 
   // Interactive components
-  useFAQ();
   useNewsletterForm();
   useRegistrationForm();
   useTestimonialForm();
   useCalendarIntegration();
-
-  // Enhanced UX composables
-  useIntersectionObserver({ threshold: 0.1, amount: 0.3 });
-  useParallax();
 
   // Analytics tracking
   useScrollDepthTracking();

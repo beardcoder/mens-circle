@@ -15,12 +15,28 @@
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2xl);
+  opacity: 0;
   backdrop-filter: blur(12px);
-  transition: transform var(--transition-fast);
+  transform: translateY(-12px) scale(0.98);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-.toast:hover {
-  transform: translateY(-2px);
+.toast--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.toast--visible:hover {
+  transform: translateY(-2px) scale(1);
+}
+
+.toast--hiding {
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-12px) scale(0.98);
 }
 
 .toast__icon {

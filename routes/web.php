@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\AnalyticsProxyController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\LlmsController;
 use App\Http\Controllers\NewsletterController;
@@ -12,13 +11,6 @@ use App\Http\Controllers\TestimonialSubmissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/llms.txt', [LlmsController::class, 'show'])->name('llms.txt');
-
-Route::controller(AnalyticsProxyController::class)
-    ->withoutMiddleware([\Spatie\ResponseCache\Middlewares\CacheResponse::class])
-    ->group(function (): void {
-        Route::get('/va/script.js', 'script');
-        Route::post('/va/api/send', 'collect');
-    });
 
 Route::controller(PageController::class)->group(function (): void {
     Route::get('/', 'home')->name('home');
