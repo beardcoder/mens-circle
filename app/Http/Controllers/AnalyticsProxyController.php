@@ -22,42 +22,4 @@ class AnalyticsProxyController
             'Cache-Control' => 'public, max-age=86400',
         ]);
     }
-
-    public function collect(Request $request): Response
-    {
-        $scriptUrl = config('analytics.umami.script_url');
-        $baseUrl = preg_replace('#/[^/]+$#', '', $scriptUrl);
-
-        $data = $request->all();
-
-        if (isset($data['payload']) && is_array($data['payload'])) {
-            $data['payload']['referrer'] = $data['payload']['referrer'] ?? '';
-            $data['payload']['language'] = $data['payload']['language'] ?? '';
-            $data['payload']['screen'] = $data['payload']['screen'] ?? '';
-            $data['payload']['title'] = $data['payload']['title'] ?? '';
-        }
-
-        $clientIp = $request->header('X-Forwarded-For', $request->ip());
-        $clientIp = explode(',', $clientIp)[0];
-
-        $headers = [
-            'Content-Type' => 'application/json',
-            'User-Agent' => $request->userAgent() ?? '',
-            'X-Forwarded-For' => trim($clientIp),
-            'X-Real-IP' => trim($clientIp),
-            'X-Client-IP' => trim($clientIp),
-        ];
-
-        foreach (['Referer', 'Accept-Language'] as $header) {
-            if ($request->hasHeader($header)) {
-                $headers[$header] = $request->header($header);
-            }
-        }
-
-        $response = Http::withHeaders($headers)->post($baseUrl . '/api/send', $data);
-
-        return response($response->body(), $response->status(), [
-            'Content-Type' => 'application/json',
-        ]);
-    }
 }
