@@ -21,6 +21,12 @@
 .modal.open {
   display: flex;
   animation: modal-backdrop-in 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* Bleeding-edge: @starting-style for entry transition */
+  @starting-style {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
 }
 
 @keyframes modal-backdrop-in {

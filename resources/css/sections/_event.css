@@ -256,7 +256,7 @@
   padding: var(--space-lg);
   overflow: hidden;
   border-inline-end: 1px solid var(--border-light);
-  transition: background-color var(--transition-base);
+  transition: background-color var(--transition-medium);
 }
 
 .event-info__card:last-child {
@@ -301,8 +301,8 @@
   border-radius: 50%;
   opacity: 0.3;
   transition:
-    opacity var(--transition-base),
-    transform var(--transition-base);
+    opacity var(--transition-medium),
+    transform var(--transition-medium);
 }
 
 .event-info__card:hover .event-info__card-circle {

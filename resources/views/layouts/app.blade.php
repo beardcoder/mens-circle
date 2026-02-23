@@ -4,6 +4,9 @@
     @include('partials.seo-head')
 </head>
 <body>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress" aria-hidden="true"></div>
+
     <!-- Skip Link -->
     <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
@@ -119,6 +122,13 @@
             </div>
         </div>
     </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Nach oben scrollen" title="Nach oben">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 
     <!-- Calendar Modal -->
     <div class="calendar-modal" id="calendarModal">

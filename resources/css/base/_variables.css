@@ -24,6 +24,9 @@
 }
 
 :root {
+  /* Enable smooth auto-height transitions (2025+) */
+  interpolate-size: allow-keywords;
+
   /* ============================================
      Color Palette - Using OKLCH for 2025
      OKLCH provides perceptually uniform colors

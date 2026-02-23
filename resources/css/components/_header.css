@@ -87,7 +87,7 @@
   block-size: 1px;
   content: '';
   background: var(--accent-primary);
-  transition: inline-size var(--transition-medium);
+  transition: inline-size var(--transition-medium) var(--ease-spring);
 }
 
 .nav__link:hover::after {

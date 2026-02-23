@@ -46,6 +46,9 @@
   opacity: 0;
   transform: scaleY(0);
   transform-origin: top;
+  transition:
+    opacity var(--transition-medium),
+    transform var(--transition-medium);
 }
 
 /* Open state - accent bar visible */
@@ -176,10 +179,23 @@
 
 /* ============================================
    Accordion Content (Answer Container)
+   Uses interpolate-size: allow-keywords for smooth
+   height animation from 0 to auto (2025+)
    ============================================ */
 .accordion-item__content,
 .faq-item__answer {
+  block-size: 0;
   overflow: hidden;
+  opacity: 0;
+  transition:
+    block-size var(--duration-slow) var(--ease-out),
+    opacity var(--duration-normal) var(--ease-out);
+}
+
+.accordion-item[open] > .accordion-item__content,
+.faq-item[open] > .faq-item__answer {
+  block-size: auto;
+  opacity: 1;
 }
 
 /* Initial hidden state - Motion.dev will animate */
@@ -227,23 +243,25 @@
   .accordion-item__icon,
   .accordion-item__icon::before,
   .accordion-item__icon::after,
+  .accordion-item__content,
   .faq-item::before,
   .faq-item__question,
   .faq-item__icon,
   .faq-item__icon::before,
-  .faq-item__icon::after {
+  .faq-item__icon::after,
+  .faq-item__answer {
     transition: none;
   }
 
   /* Show content immediately without animation */
-  .accordion-item__content,
-  .faq-item__answer {
-    block-size: auto !important;
-    opacity: 1 !important;
+  .accordion-item[open] > .accordion-item__content,
+  .faq-item[open] > .faq-item__answer {
+    block-size: auto;
+    opacity: 1;
   }
 
-  .accordion-item:not([open]) .accordion-item__content,
-  .faq-item:not([open]) .faq-item__answer {
+  .accordion-item:not([open]) > .accordion-item__content,
+  .faq-item:not([open]) > .faq-item__answer {
     display: none;
   }
 }
@@ -254,9 +272,10 @@
 .no-js .accordion-item__content,
 .no-js .faq-item__answer {
   block-size: auto;
+  opacity: 1;
 }
 
-.no-js .accordion-item:not([open]) .accordion-item__content,
-.no-js .faq-item:not([open]) .faq-item__answer {
+.no-js .accordion-item:not([open]) > .accordion-item__content,
+.no-js .faq-item:not([open]) > .faq-item__answer {
   display: none;
 }

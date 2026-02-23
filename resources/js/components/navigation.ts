@@ -142,3 +142,26 @@ export function useScrollHeader(): void {
     observer.observe(hero);
   }
 }
+
+/**
+ * Scroll-to-top button composable
+ * Shows/hides a button based on scroll position
+ */
+export function useScrollToTop(): void {
+  const button = document.getElementById('scrollToTop');
+
+  if (!button) return;
+
+  const SCROLL_THRESHOLD = 400;
+
+  const updateVisibility = (): void => {
+    button.classList.toggle('visible', window.scrollY > SCROLL_THRESHOLD);
+  };
+
+  updateVisibility();
+  window.addEventListener('scroll', updateVisibility, { passive: true });
+
+  button.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}

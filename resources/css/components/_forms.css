@@ -80,7 +80,7 @@
   border-color: var(--accent-primary);
   box-shadow:
     0 0 0 3px color-mix(in oklch, var(--accent-primary) 20%, transparent),
-    0 4px 12px color-mix(in oklch, var(--accent-primary) 15%, transparent);
+    0 4px 16px color-mix(in oklch, var(--accent-primary) 12%, transparent);
   transform: translateY(-1px);
 }
 

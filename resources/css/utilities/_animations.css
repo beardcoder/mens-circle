@@ -327,6 +327,89 @@
 }
 
 /* ============================================
+   Scroll Progress Indicator (Scroll-Driven Animation)
+   Uses bleeding-edge scroll-timeline for a
+   CSS-only reading progress bar
+   ============================================ */
+.scroll-progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: calc(var(--z-header) + 1);
+  inline-size: 0%;
+  block-size: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    var(--color-terracotta-light)
+  );
+  transform-origin: left;
+  animation: scroll-progress-fill auto linear;
+  animation-timeline: scroll(root);
+}
+
+@keyframes scroll-progress-fill {
+  from {
+    inline-size: 0%;
+  }
+
+  to {
+    inline-size: 100%;
+  }
+}
+
+/* ============================================
+   Scroll-to-Top Button
+   Appears after scrolling, smooth reveal
+   ============================================ */
+.scroll-to-top {
+  position: fixed;
+  inset-block-end: var(--space-md);
+  inset-inline-end: var(--space-md);
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 48px;
+  block-size: 48px;
+  color: var(--text-on-dark);
+  pointer-events: none;
+  cursor: pointer;
+  background: var(--accent-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(16px) scale(0.9);
+  transition:
+    opacity var(--transition-medium),
+    transform var(--transition-medium),
+    background-color var(--transition-fast);
+}
+
+.scroll-to-top.visible {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.scroll-to-top:hover {
+  background: var(--bg-dark);
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.scroll-to-top:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.scroll-to-top svg {
+  inline-size: 20px;
+  block-size: 20px;
+}
+
+/* ============================================
    Reduced Motion
    Respects user preference for less motion
    ============================================ */
