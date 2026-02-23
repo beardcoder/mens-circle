@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
-use App\Enums\Heroicon as SocialHeroicon;
+use App\Enums\SocialLinkType;
 use App\Settings\GeneralSettings;
 use BackedEnum;
 use Filament\Forms\Components\Repeater;
@@ -91,12 +91,12 @@ class ManageGeneralSettings extends SettingsPage
                         Repeater::make('social_links')
                             ->label('Social & Kontakt Links')
                             ->schema([
-                                Select::make('icon')
-                                    ->label('Heroicon')
-                                    ->options(SocialHeroicon::options())
+                                Select::make('type')
+                                    ->label('Typ')
+                                    ->options(SocialLinkType::options())
                                     ->required()
                                     ->searchable()
-                                    ->helperText('Wähle ein Heroicon für den Link.'),
+                                    ->helperText('Wähle den Typ des Links.'),
 
                                 TextInput::make('label')
                                     ->label('Beschriftung')
@@ -158,12 +158,8 @@ class ManageGeneralSettings extends SettingsPage
      */
     private function getIconLabel(array $state): ?string
     {
-        if (!empty($state['icon']) && \is_string($state['icon'])) {
-            return SocialHeroicon::tryFrom($state['icon'])?->getLabel();
-        }
-
         if (!empty($state['type']) && \is_string($state['type'])) {
-            return ucwords(str_replace(['-', '_'], ' ', $state['type']));
+            return SocialLinkType::tryFrom($state['type'])?->getLabel();
         }
 
         return null;

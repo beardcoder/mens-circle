@@ -74,7 +74,6 @@
                                 <li>
                                     <x-social-icon
                                         variant="link"
-                                        :icon="$link['icon'] ?? null"
                                         :type="$link['type'] ?? null"
                                         :url="$link['value']"
                                         :label="$link['label'] ?? ''"
