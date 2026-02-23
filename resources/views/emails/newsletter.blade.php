@@ -1,5 +1,5 @@
 <x-mail::message>
-{!! $newsletter->content !!}
+{!! $processedContent !!}
 
 ---
 

@@ -1,7 +1,9 @@
 <x-mail::message>
 <p style="text-align: center; margin: 0 0 6px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #b86f52; text-transform: uppercase; letter-spacing: 0.2em;">Willkommen</p>
 
-# Schön, dass du dabei bist.
+# Hallo {{ $subscription->participant->first_name }},
+
+Schön, dass du dabei bist.
 
 <p style="text-align: center; color: #5c4a3a; font-size: 15px; margin-bottom: 32px;">Du erhältst ab sofort unseren Newsletter – und bist als Erster informiert, wenn neue Termine und Impulse erscheinen.</p>
 
