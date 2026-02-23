@@ -26,41 +26,45 @@ return new class extends SettingsMigration {
 
     public function up(): void
     {
-        /** @var array<int, array<string, string>>|null $socialLinks */
-        $socialLinks = $this->migrator->get('general.social_links', []);
-
-        if (empty($socialLinks) || !is_array($socialLinks)) {
+        if (! $this->migrator->exists('general.social_links')) {
             return;
         }
 
-        $updated = array_map(function (array $link): array {
-            if (!isset($link['type']) && isset($link['icon']) && is_string($link['icon'])) {
-                $link['type'] = $this->heroiconToType[$link['icon']] ?? 'other';
-                unset($link['icon']);
+        $this->migrator->update('general.social_links', function (mixed $socialLinks): mixed {
+            if (empty($socialLinks) || ! is_array($socialLinks)) {
+                return $socialLinks;
             }
-            return $link;
-        }, $socialLinks);
 
-        $this->migrator->update('general.social_links', $updated);
+            return array_map(function (array $link): array {
+                if (! isset($link['type']) && isset($link['icon']) && is_string($link['icon'])) {
+                    $link['type'] = $this->heroiconToType[$link['icon']] ?? 'other';
+                    unset($link['icon']);
+                }
+
+                return $link;
+            }, $socialLinks);
+        });
     }
 
     public function down(): void
     {
-        /** @var array<int, array<string, string>>|null $socialLinks */
-        $socialLinks = $this->migrator->get('general.social_links', []);
-
-        if (empty($socialLinks) || !is_array($socialLinks)) {
+        if (! $this->migrator->exists('general.social_links')) {
             return;
         }
 
-        $reverted = array_map(function (array $link): array {
-            if (!isset($link['icon']) && isset($link['type']) && is_string($link['type'])) {
-                $link['icon'] = $this->typeToHeroicon[$link['type']] ?? 'link';
-                unset($link['type']);
+        $this->migrator->update('general.social_links', function (mixed $socialLinks): mixed {
+            if (empty($socialLinks) || ! is_array($socialLinks)) {
+                return $socialLinks;
             }
-            return $link;
-        }, $socialLinks);
 
-        $this->migrator->update('general.social_links', $reverted);
+            return array_map(function (array $link): array {
+                if (! isset($link['icon']) && isset($link['type']) && is_string($link['type'])) {
+                    $link['icon'] = $this->typeToHeroicon[$link['type']] ?? 'link';
+                    unset($link['type']);
+                }
+
+                return $link;
+            }, $socialLinks);
+        });
     }
 };
