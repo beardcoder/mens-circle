@@ -49,7 +49,12 @@ class EmailTemplateService
     private function buildReplacements(?Event $event): array
     {
         if (!$event) {
-            return array_fill_keys(EmailTemplate::placeholders(), '—');
+            $eventPlaceholders = array_values(array_filter(
+                EmailTemplate::placeholders(),
+                fn (string $p): bool => $p !== '{first_name}',
+            ));
+
+            return array_fill_keys($eventPlaceholders, '—');
         }
 
         $eventUrl = route('event.show.slug', [

@@ -55,6 +55,7 @@ enum EmailTemplate: string
     public static function placeholders(): array
     {
         return [
+            '{first_name}',
             '{event_title}',
             '{event_date}',
             '{event_time}',

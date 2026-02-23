@@ -31,10 +31,14 @@ class EventParticipantMessage extends Mailable
 
     public function content(): Content
     {
+        $processedContent = $this->participantName !== null
+            ? str_replace('{first_name}', e($this->participantName), $this->mailContent)
+            : $this->mailContent;
+
         return new Content(
             markdown: 'emails.event-participant-message',
             with: [
-                'mailContent' => $this->mailContent,
+                'mailContent' => $processedContent,
                 'event' => $this->event,
                 'participantName' => $this->participantName,
             ],
