@@ -48,7 +48,7 @@ class EmailTemplateService
      */
     private function buildReplacements(?Event $event): array
     {
-        if (!$event) {
+        if (!$event instanceof Event) {
             $eventPlaceholders = array_values(array_filter(
                 EmailTemplate::placeholders(),
                 fn (string $p): bool => $p !== '{first_name}',
