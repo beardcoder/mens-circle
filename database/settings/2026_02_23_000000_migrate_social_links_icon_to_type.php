@@ -35,7 +35,9 @@ return new class extends SettingsMigration {
                 return $socialLinks;
             }
 
-            return array_map(function (array $link): array {
+            return array_map(function (mixed $link): array {
+                $link = (array) $link;
+
                 if (! isset($link['type']) && isset($link['icon']) && is_string($link['icon'])) {
                     $link['type'] = $this->heroiconToType[$link['icon']] ?? 'other';
                     unset($link['icon']);
@@ -57,7 +59,9 @@ return new class extends SettingsMigration {
                 return $socialLinks;
             }
 
-            return array_map(function (array $link): array {
+            return array_map(function (mixed $link): array {
+                $link = (array) $link;
+
                 if (! isset($link['icon']) && isset($link['type']) && is_string($link['type'])) {
                     $link['icon'] = $this->typeToHeroicon[$link['type']] ?? 'link';
                     unset($link['type']);
