@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Payload Maximum Nesting Depth
@@ -17,5 +18,4 @@ return [
     'payload' => [
         'max_nesting_depth' => 20,
     ],
-
 ];

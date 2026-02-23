@@ -58,8 +58,8 @@ class EmailTemplateService
         }
 
         $eventUrl = route('event.show.slug', [
-'slug' => $event->slug
-]);
+            'slug' => $event->slug,
+        ]);
 
         /** @var string $siteName */
         $siteName = config('app.name', '');

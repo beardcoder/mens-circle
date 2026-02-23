@@ -21,8 +21,7 @@ class EventParticipantMessage extends Mailable
         public readonly string $mailContent,
         public readonly Event $event,
         public readonly ?string $participantName = null,
-    ) {
-    }
+    ) {}
 
     public function envelope(): Envelope
     {
