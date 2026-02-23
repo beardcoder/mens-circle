@@ -47,14 +47,12 @@ FROM ${PHP_IMAGE} AS production
 # - imagick: ImageMagick for image processing (Spatie Media Library)
 # - gd: GD library for image manipulation
 # - exif: EXIF data extraction from images
-# - gmagick: GraphicsMagick extension for enhanced image processing
 USER root
 RUN install-php-extensions \
     intl \
     imagick \
     gd \
-    exif \
-    gmagick
+    exif
 USER www-data
 
 ENV APP_ENV=production \
