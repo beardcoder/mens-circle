@@ -4,7 +4,11 @@
  */
 
 import './types';
-import { useNavigation, useScrollHeader } from '@/components/navigation';
+import {
+  useNavigation,
+  useScrollHeader,
+  useScrollToTop,
+} from '@/components/navigation';
 import {
   useNewsletterForm,
   useRegistrationForm,
@@ -20,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Navigation and header
   useNavigation();
   useScrollHeader();
+  useScrollToTop();
 
   // Interactive components
   useNewsletterForm();

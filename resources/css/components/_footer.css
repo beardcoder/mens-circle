@@ -140,7 +140,8 @@
   opacity: 0.85;
   transition:
     color var(--transition-fast),
-    opacity var(--transition-fast);
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .footer__legal a {
@@ -155,6 +156,7 @@
 .footer__links a:hover {
   color: var(--text-on-dark);
   opacity: 1;
+  transform: translateX(2px);
 }
 
 .footer__legal a:hover {

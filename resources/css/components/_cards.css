@@ -27,7 +27,7 @@
 
 .card.card--hover:hover {
   box-shadow: var(--shadow-xl);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
 
 /* ============================================
