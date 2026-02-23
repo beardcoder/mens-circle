@@ -15,6 +15,15 @@ return new class extends SettingsMigration {
         'chat-bubble-left-right' => 'whatsapp',
     ];
 
+    /** @var array<string, string> */
+    private array $typeToHeroicon = [
+        'email' => 'envelope',
+        'phone' => 'phone',
+        'website' => 'globe-alt',
+        'whatsapp' => 'chat-bubble-left-right',
+        'other' => 'link',
+    ];
+
     public function up(): void
     {
         /** @var array<int, array<string, string>>|null $socialLinks */
@@ -33,5 +42,25 @@ return new class extends SettingsMigration {
         }, $socialLinks);
 
         $this->migrator->update('general.social_links', $updated);
+    }
+
+    public function down(): void
+    {
+        /** @var array<int, array<string, string>>|null $socialLinks */
+        $socialLinks = $this->migrator->get('general.social_links', []);
+
+        if (empty($socialLinks) || !is_array($socialLinks)) {
+            return;
+        }
+
+        $reverted = array_map(function (array $link): array {
+            if (!isset($link['icon']) && isset($link['type']) && is_string($link['type'])) {
+                $link['icon'] = $this->typeToHeroicon[$link['type']] ?? 'link';
+                unset($link['type']);
+            }
+            return $link;
+        }, $socialLinks);
+
+        $this->migrator->update('general.social_links', $reverted);
     }
 };
