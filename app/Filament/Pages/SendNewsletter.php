@@ -87,7 +87,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
                                 $set('subject', $resolved['subject']);
                                 $set('content', $resolved['content']);
                             })
-                            ->helperText($nextEvent
+                            ->helperText($nextEvent instanceof Event
                                 ? "Platzhalter werden mit Daten vom nächsten Event gefüllt: {$nextEvent->title} ({$nextEvent->event_date->translatedFormat(
                                     'd. F Y',
                                 )})"
