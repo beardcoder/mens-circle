@@ -4,20 +4,26 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Enums\EmailTemplate;
 use App\Enums\NewsletterStatus;
 use App\Jobs\SendNewsletterJob;
+use App\Models\Event;
 use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
+use App\Services\EmailTemplateService;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Override;
@@ -50,8 +56,52 @@ class SendNewsletter extends Page implements HasActions, HasForms
 
     public function form(Schema $schema): Schema
     {
+        $nextEvent = Event::nextEvent();
+
         return $schema
             ->components([
+                Section::make('Vorlage')
+                    ->description('Wähle eine Vorlage, um Betreff und Inhalt automatisch auszufüllen')
+                    ->schema([
+                        Select::make('template')
+                            ->label('E-Mail-Vorlage')
+                            ->options(
+                                collect(EmailTemplate::newsletterTemplates())
+                                    ->mapWithKeys(fn (EmailTemplate $template): array => [
+$template->value => $template->getLabel()
+])
+                                    ->all(),
+                            )
+                            ->placeholder('Vorlage auswählen (optional)')
+                            ->native(false)
+                            ->live()
+                            ->afterStateUpdated(function (?string $state, callable $set): void {
+                                if (!$state) {
+                                    return;
+                                }
+
+                                $template = EmailTemplate::from($state);
+                                $service = new EmailTemplateService();
+                                $resolved = $service->resolve($template);
+
+                                $set('subject', $resolved['subject']);
+                                $set('content', $resolved['content']);
+                            })
+                            ->helperText($nextEvent
+                                ? "Platzhalter werden mit Daten vom nächsten Event gefüllt: {$nextEvent->title} ({$nextEvent->event_date->translatedFormat(
+                                    'd. F Y'
+                                )})"
+                                : 'Kein kommendes Event vorhanden – Platzhalter werden mit „—" gefüllt'),
+
+                        TextEntry::make('placeholders_info')
+                            ->label('Verfügbare Platzhalter')
+                            ->state(implode(', ', EmailTemplate::placeholders()))
+                            ->helperText(
+                                'Diese Platzhalter können im Betreff und Inhalt verwendet werden und werden beim Auswählen einer Vorlage automatisch ersetzt'
+                            ),
+                    ])
+                    ->collapsible(),
+
                 TextInput::make('subject')
                     ->label('Betreff')
                     ->required()
