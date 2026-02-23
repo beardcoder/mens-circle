@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7-labs
 
-ARG PHP_IMAGE=serversideup/php:8.5-fpm-nginx
+ARG PHP_IMAGE=serversideup/php:8.5-frankenphp
 
 # ----------------------------
 # 1) Frontend build (Vite) with Bun
@@ -38,7 +38,7 @@ RUN --mount=type=cache,target=/root/.composer/cache \
       --optimize-autoloader
 
 # ----------------------------
-# 3) Production image (PHP-FPM + Nginx)
+# 3) Production image (FrankenPHP)
 # ----------------------------
 FROM ${PHP_IMAGE} AS production
 
@@ -66,9 +66,7 @@ ENV APP_ENV=production \
     PHP_OPCACHE_JIT_BUFFER_SIZE=64M \
     AUTORUN_ENABLED=true \
     HEALTHCHECK_PATH=/up \
-    NGINX_FASTCGI_BUFFERS="16 16k" \
-    NGINX_FASTCGI_BUFFER_SIZE="32k" \
-    NGINX_WEBROOT=/app/public \
+    CADDY_SERVER_ROOT=/app/public \
     APP_BASE_DIR=/app
 WORKDIR /app
 
