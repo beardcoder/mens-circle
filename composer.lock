@@ -7413,34 +7413,35 @@
         },
         {
             "name": "spatie/laravel-responsecache",
-            "version": "8.1.0",
+            "version": "8.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-responsecache.git",
-                "reference": "22c1964b4ebe650219294b73cbeeb0fa04daaac9"
+                "reference": "0303fd523b98b51ecba0a04ad6d37bd2875bc9a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/22c1964b4ebe650219294b73cbeeb0fa04daaac9",
-                "reference": "22c1964b4ebe650219294b73cbeeb0fa04daaac9",
+                "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/0303fd523b98b51ecba0a04ad6d37bd2875bc9a2",
+                "reference": "0303fd523b98b51ecba0a04ad6d37bd2875bc9a2",
                 "shasum": ""
             },
             "require": {
-                "illuminate/cache": "^12.0",
-                "illuminate/console": "^12.0",
-                "illuminate/container": "^12.0",
-                "illuminate/http": "^12.0",
-                "illuminate/support": "^12.0",
+                "illuminate/cache": "^12.0|^13.0",
+                "illuminate/console": "^12.0|^13.0",
+                "illuminate/container": "^12.0|^13.0",
+                "illuminate/http": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
                 "nesbot/carbon": "^3.0",
                 "php": "^8.4",
-                "spatie/laravel-package-tools": "^1.9"
+                "spatie/laravel-package-tools": "^1.9",
+                "spatie/php-attribute-reader": "^1.0"
             },
             "require-dev": {
                 "larastan/larastan": "^3.9",
-                "laravel/framework": "^12.0",
+                "laravel/framework": "^12.0|^13.0",
                 "laravel/pint": "^1.13.7",
                 "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^10.0",
+                "orchestra/testbench": "^10.0|^11.0",
                 "pestphp/pest": "^4.0"
             },
             "type": "library",
@@ -7483,7 +7484,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-responsecache/issues",
-                "source": "https://github.com/spatie/laravel-responsecache/tree/8.1.0"
+                "source": "https://github.com/spatie/laravel-responsecache/tree/8.2.0"
             },
             "funding": [
                 {
@@ -7495,7 +7496,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-16T16:44:46+00:00"
+            "time": "2026-02-22T23:18:33+00:00"
         },
         {
             "name": "spatie/laravel-settings",
@@ -7713,6 +7714,64 @@
                 }
             ],
             "time": "2026-02-21T14:25:10+00:00"
+        },
+        {
+            "name": "spatie/php-attribute-reader",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/php-attribute-reader.git",
+                "reference": "ba7f1431e0436dad3fcea929e76c1892671a735a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/php-attribute-reader/zipball/ba7f1431e0436dad3fcea929e76c1892671a735a",
+                "reference": "ba7f1431e0436dad3fcea929e76c1892671a735a",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.0|^2.0|^3.0|^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Attributes\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A clean API for working with PHP attributes",
+            "homepage": "https://github.com/spatie/php-attribute-reader",
+            "keywords": [
+                "attributes",
+                "php-attribute-reader",
+                "reflection",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/php-attribute-reader/issues",
+                "source": "https://github.com/spatie/php-attribute-reader/tree/1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-02-22T22:55:15+00:00"
         },
         {
             "name": "spatie/regex",
@@ -16787,5 +16846,5 @@
         "php": "^8.4 || ^8.5"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
