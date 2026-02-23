@@ -57,8 +57,8 @@ class EditEvent extends EditRecord
                             ->options(
                                 collect(EmailTemplate::participantTemplates())
                                     ->mapWithKeys(fn (EmailTemplate $template): array => [
-$template->value => $template->getLabel()
-])
+                                        $template->value => $template->getLabel(),
+                                    ])
                                     ->all(),
                             )
                             ->placeholder('Vorlage auswählen (optional)')

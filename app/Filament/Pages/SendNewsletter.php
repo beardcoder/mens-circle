@@ -68,8 +68,8 @@ class SendNewsletter extends Page implements HasActions, HasForms
                             ->options(
                                 collect(EmailTemplate::newsletterTemplates())
                                     ->mapWithKeys(fn (EmailTemplate $template): array => [
-$template->value => $template->getLabel()
-])
+                                        $template->value => $template->getLabel(),
+                                    ])
                                     ->all(),
                             )
                             ->placeholder('Vorlage auswählen (optional)')
@@ -89,7 +89,7 @@ $template->value => $template->getLabel()
                             })
                             ->helperText($nextEvent
                                 ? "Platzhalter werden mit Daten vom nächsten Event gefüllt: {$nextEvent->title} ({$nextEvent->event_date->translatedFormat(
-                                    'd. F Y'
+                                    'd. F Y',
                                 )})"
                                 : 'Kein kommendes Event vorhanden – Platzhalter werden mit „—" gefüllt'),
 
@@ -97,7 +97,7 @@ $template->value => $template->getLabel()
                             ->label('Verfügbare Platzhalter')
                             ->state(implode(', ', EmailTemplate::placeholders()))
                             ->helperText(
-                                'Diese Platzhalter können im Betreff und Inhalt verwendet werden und werden beim Auswählen einer Vorlage automatisch ersetzt'
+                                'Diese Platzhalter können im Betreff und Inhalt verwendet werden und werden beim Auswählen einer Vorlage automatisch ersetzt',
                             ),
                     ])
                     ->collapsible(),
