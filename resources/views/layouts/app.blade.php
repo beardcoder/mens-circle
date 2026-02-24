@@ -4,157 +4,256 @@
     @include('partials.seo-head')
 </head>
 <body>
-    <!-- Scroll Progress Indicator -->
-    <div class="scroll-progress" aria-hidden="true"></div>
+<!-- Scroll Progress Indicator -->
+<div class="scroll-progress" aria-hidden="true"></div>
 
-    <!-- Skip Link -->
-    <a href="#main" class="skip-link">Zum Inhalt springen</a>
+<!-- Skip Link -->
+<a href="#main" class="skip-link">Zum Inhalt springen</a>
 
-    <!-- Header -->
-    <header class="header" id="header">
-        <div class="container">
-            <div class="header__inner">
-                <a href="{{ route('home') }}" class="logo" aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite">
-                    <svg class="logo__icon" viewBox="0 0 512 512" aria-hidden="true">
-                        <path fill="currentColor" d="M256 0c141.31 0 256 114.73 256 256S397.31 512 256 512 0 397.27 0 256 114.69 0 256 0Zm0 10.53C120.47 10.53 10.4 120.5 10.4 256S120.47 501.47 256 501.47 501.6 391.5 501.6 256 391.53 10.53 256 10.53Z"/>
-                        <path fill="currentColor" d="M256 24.06c126.47 0 229.15 103.93 229.15 231.94S382.47 487.94 256 487.94 26.86 384.01 26.86 256 129.53 24.06 256 24.06Zm0 10.53C135.27 34.59 37.26 133.8 37.26 256S135.28 477.41 256 477.41 474.74 378.2 474.74 256 376.73 34.59 256 34.59Z"/>
-                        <path fill="currentColor" d="M155.85 283.39c-4.66-4.7-13.29-15.46-15.5-32.34-1.96-14.97 1.1-34.99 17.42-59.95a4.7 4.7 0 0 1 6.24-1.54c11.13 6.3 39.38 28.43 48.05 35.29 7.01-4.09 25.49-13.74 43.95-13.74s36.95 9.64 43.96 13.72c8.73-6.86 37.32-29.06 49.94-35.38 2.15-1.09 4.78-.35 6.08 1.73 15.59 24.95 18.24 44.97 16.03 59.95-2.49 16.86-11.2 27.59-15.86 32.27 10.54 21.18 22.69 53.12 22.69 87.47 0 2.64-2.1 4.77-4.71 4.77-30.56 0-50.43 16.01-54.83 19.91-1.44 5.66-7.27 26.31-19.57 43.33-10.07 13.94-24.37 25.34-43.74 25.34s-33.67-11.4-43.74-25.34c-12.3-17.02-18.13-37.66-19.57-43.33-4.4-3.9-24.26-19.91-54.83-19.91-2.61 0-4.71-2.12-4.71-4.77 0-34.37 12.17-66.32 22.69-87.49Zm190.13.84c-6.89-13.26-12.59-21.27-12.59-21.27a4.818 4.818 0 0 1 1.08-6.67c2.11-1.54 5.05-1.05 6.59 1.09 0 0 4.52 6.32 10.44 17.11 3.89-4.5 9.41-12.77 11.18-24.76 1.86-12.59-.45-29.11-12.38-49.62-16.21 9.57-47.07 34.28-47.07 34.28a4.701 4.701 0 0 1-5.53.24s-20.83-13.96-41.7-13.96-41.7 13.98-41.7 13.98a4.702 4.702 0 0 1-5.53-.24S178.29 210 163.2 200.25c-12.48 20.49-15.15 36.97-13.49 49.56 1.56 11.94 6.98 20.18 10.81 24.68 5.92-10.78 10.42-17.1 10.42-17.1 1.54-2.14 4.48-2.63 6.59-1.09a4.818 4.818 0 0 1 1.08 6.67s-5.79 8.13-12.72 21.56c-.05.11-.1.2-.17.29-9.83 19.16-21.97 48.92-23.06 81.42 36.13 1.79 57.6 23.4 57.6 23.4.64.65 1.09 1.46 1.29 2.35 0 0 5.09 22.93 18.34 41.28 8.36 11.57 20.04 21.43 36.12 21.43s27.76-9.86 36.12-21.43c13.24-18.35 18.34-41.28 18.34-41.28.2-.89.64-1.71 1.29-2.35 0 0 21.47-21.6 57.6-23.4-1.09-32.66-13.34-62.56-23.23-81.69-.04-.11-.09-.2-.13-.31Zm-57.83 40.07c4.23-4.28 10.09-5.3 13.07-2.27 2.99 3.03 1.99 8.95-2.24 13.23-4.23 4.29-10.08 5.3-13.07 2.27-2.99-3.02-1.98-8.95 2.24-13.23Zm-62.43 0c4.24 4.28 5.24 10.22 2.24 13.23-2.98 3.03-8.85 2.02-13.07-2.27-4.23-4.28-5.24-10.2-2.24-13.23 2.99-3.03 8.85-2.01 13.07 2.27Zm43.41 77.24c2.6 0 4.71 2.14 4.71 4.77s-2.11 4.77-4.71 4.77h-8.41v8.52c0 2.63-2.11 4.77-4.71 4.77s-4.71-2.14-4.71-4.77v-8.52h-8.41c-2.6 0-4.71-2.14-4.71-4.77s2.11-4.77 4.71-4.77h26.25Zm-44.4-243.31-.32.33a4.55 4.55 0 0 1-3.29 1.44c-2.48 0-4.52-2.06-4.52-4.57 0-1.25.51-2.45 1.41-3.32l.33-.34 6.59-6.67h.01c.05-.07.11-.12.16-.17l.63-.64a4.5 4.5 0 0 1 6.36-.02l.02.02c1.75 1.77 1.75 4.69 0 6.47l-.63.64c-.05.06-.11.11-.16.16l-6.6 6.68Zm35.84-78.09v1.11c0 2.51-2.04 4.57-4.52 4.57s-4.52-2.06-4.52-4.57V70.09a4.6 4.6 0 0 1 1.32-3.07c1.75-1.76 4.6-1.78 6.36-.03l.03.03c.83.84 1.3 1.96 1.32 3.14v9.98Zm26.56 14.93-.77.78a4.5 4.5 0 0 1-6.36.02l-.02-.02c-1.75-1.77-1.75-4.69 0-6.47l.77-.78 6.62-6.7.35-.35.05-.05c.83-.79 1.93-1.23 3.08-1.23 2.48 0 4.52 2.06 4.52 4.57 0 1.18-.45 2.31-1.26 3.17l-.35.36-6.62 6.7Zm-6.39 56.46-.77-.78c-1.75-1.77-1.75-4.69 0-6.47a4.5 4.5 0 0 1 6.36-.02l.02.02.77.78 6.62 6.7.35.36c.81.86 1.26 1.99 1.26 3.17 0 2.51-2.04 4.57-4.52 4.57-1.17 0-2.29-.46-3.13-1.27l-.35-.35-6.62-6.7Zm-29.21 18.41v-11.06c0-2.51 2.04-4.57 4.52-4.57s4.52 2.06 4.52 4.57V169.92c.04 1.26-.44 2.47-1.32 3.37-1.75 1.76-4.6 1.78-6.36.03l-.03-.03a4.6 4.6 0 0 1-1.32-3.35Zm43.96-45.3h-1.09c-2.48 0-4.52-2.06-4.52-4.57s2.04-4.57 4.52-4.57h11.02c1.15.04 2.23.52 3.04 1.34 1.75 1.77 1.75 4.69 0 6.47-.82.83-1.93 1.31-3.1 1.34h-9.86Zm-66.13 6.64a29.306 29.306 0 0 1 0-22.43 28.74 28.74 0 0 1 14.69-15.38c3.76-1.76 7.85-2.67 12-2.67 3.91 0 7.64.81 11.05 2.26 3.52 1.46 6.72 3.6 9.39 6.31 2.94 2.97 5.2 6.55 6.62 10.48a29.21 29.21 0 0 1-.36 21.39c-1.43 3.56-3.56 6.8-6.26 9.53a28.492 28.492 0 0 1-9.41 6.33 28.294 28.294 0 0 1-11.04 2.24c-3.91 0-7.64-.8-11.06-2.25a28.782 28.782 0 0 1-15.63-15.81Zm8.33-18.91a20.583 20.583 0 0 0 0 15.39c2.03 4.89 5.92 8.83 10.75 10.88a19.88 19.88 0 0 0 14.4.31c5.2-1.95 9.41-6.04 11.55-11.2a20.645 20.645 0 0 0-.35-16.19c-2.11-4.52-5.83-8.15-10.4-10.08a19.937 19.937 0 0 0-15.21 0c-4.83 2.05-8.73 5.99-10.75 10.88Zm-15.47 7.7c0 2.51-2.04 4.57-4.52 4.57h-10.46c-2.48 0-4.52-2.06-4.52-4.57s2.04-4.57 4.52-4.57h10.46c2.48 0 4.52 2.06 4.52 4.57Zm3.52-24.22-7.39-7.48c-1.75-1.77-1.75-4.69 0-6.47a4.5 4.5 0 0 1 6.36-.02l.02.02 7.4 7.49c1.75 1.77 1.75 4.69 0 6.47a4.5 4.5 0 0 1-6.36.02l-.02-.02Z"/>
+<!-- Header -->
+<header class="header" id="header">
+    <div class="container">
+        <div class="header__inner">
+            <a
+                href="{{ route('home') }}"
+                class="logo"
+                aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite"
+            >
+                <svg
+                    class="logo__icon"
+                    fill-rule="evenodd"
+                    stroke-linejoin="round"
+                    stroke-miterlimit="2"
+                    clip-rule="evenodd"
+                    viewBox="0 0 396 397"
+                >
+                    <path
+                        fill="currentColor"
+                        d="M19.664 171.425s.655-3.856 6.266-3.446c4.634.339 4.265 5.2 4.265 5.2 2.633 39.979 21.063 70.21 21.063 70.21s-36.274-19.308-31.594-71.964M68.22 80.74s-3.914 6.2 2.715 10.79c7.799 5.401 12.497-.26 12.497-.26s22.94-39.58 78.984-54.41c62.286-16.482 128.715 5.265 128.715 5.265S258.531.245 175.288 9.946C102.037 18.483 68.22 80.74 68.22 80.74"
+                    />
+                    <path
+                        fill="currentColor"
+                        d="M38.474 97.38q1.968-.257 4.01-.258c17.114 0 31.008 13.895 31.008 31.009s-13.894 31.008-31.008 31.008c-26.309 0-54.461-31.126-18.138-87.76 11.882-18.52 33.8-38.704 52.655-49.5C111.64 2.049 144.285 0 144.285 0S72.508 23.758 38.475 97.379M251.649 350.072s-3.667 1.36-6.117-3.703c-2.023-4.183 2.371-6.294 2.371-6.294 33.306-22.27 50.271-53.345 50.271-53.345s1.417 41.068-46.525 63.342M148.832 353.369s7.327.29 7.988-7.747c.778-9.454-6.474-10.693-6.474-10.693s-45.748-.076-86.614-41.197C18.316 248.032 3.935 179.63 3.935 179.63s-19.97 49.173 30.054 116.413c44.02 59.168 114.843 57.327 114.843 57.327"
+                    />
+                    <path
+                        fill="currentColor"
+                        d="M178.118 370.81a31 31 0 0 1-2.227-3.343c-8.558-14.822-3.471-33.802 11.35-42.359s33.801-3.471 42.358 11.35c13.155 22.784.275 62.728-66.934 59.588-21.979-1.03-50.418-9.92-69.196-20.85-34.491-20.082-52.588-47.33-52.588-47.33s56.463 50.281 137.237 42.945M294.606 59.948s3.011 2.495-.149 7.15c-2.61 3.843-6.637 1.092-6.637 1.092-35.938-17.708-71.333-16.863-71.333-16.863s34.858-21.76 78.119 8.62M348.86 147.345s-3.414-6.49-10.704-3.044c-8.576 4.053-6.023 10.952-6.023 10.952s22.808 39.658 7.63 95.608c-16.87 62.183-68.919 108.838-68.919 108.838s52.57-7.292 85.79-84.234c29.232-67.706-7.775-128.12-7.775-128.12"
+                    />
+                    <path
+                        fill="currentColor"
+                        d="M349.324 113.259a31 31 0 0 1-1.782 3.6c-8.557 14.823-27.537 19.908-42.358 11.35-14.822-8.556-19.907-27.536-11.35-42.358 13.154-22.784 54.186-31.601 85.071 28.173 10.098 19.55 16.62 48.623 16.541 70.35-.145 39.912-14.694 69.209-14.694 69.209s15.313-74.04-31.428-140.324"
+                    />
+                </svg>
+
+                <span class="logo__text">Männerkreis</span>
+            </a>
+
+            <nav class="nav" id="nav">
+                <a
+                    href="{{ route('home') }}#ueber"
+                    class="nav__link"
+                    data-umami-event="nav-click"
+                    data-umami-event-target="ueber"
+                >Über</a>
+                <a
+                    href="{{ route('home') }}#reise"
+                    class="nav__link"
+                    data-umami-event="nav-click"
+                    data-umami-event-target="reise"
+                >Die Reise</a>
+                <a
+                    href="{{ route('home') }}#faq"
+                    class="nav__link"
+                    data-umami-event="nav-click"
+                    data-umami-event-target="faq"
+                >Fragen</a>
+                @if($hasNextEvent)
+                    <a
+                        href="{{ $nextEventUrl }}"
+                        class="btn btn--primary btn--large nav__cta"
+                        data-umami-event="cta-click"
+                        data-umami-event-location="header"
+                        data-umami-event-action="go-to-event"
+                    >Nächster Termin</a>
+                @endif
+            </nav>
+
+            <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main id="main">
+    @yield('content')
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer__top stagger-children">
+            <div class="footer__brand">
+                <a href="{{ route('home') }}" class="footer__logo">
+
+                    <svg
+                        class="footer__logo-icon" fill-rule="evenodd" stroke-linejoin="round"
+                        stroke-miterlimit="2" clip-rule="evenodd" viewBox="0 0 396 397"
+                    >
+                        <path
+                            fill="currentColor"
+                            d="M19.664 171.425s.655-3.856 6.266-3.446c4.634.339 4.265 5.2 4.265 5.2 2.633 39.979 21.063 70.21 21.063 70.21s-36.274-19.308-31.594-71.964M68.22 80.74s-3.914 6.2 2.715 10.79c7.799 5.401 12.497-.26 12.497-.26s22.94-39.58 78.984-54.41c62.286-16.482 128.715 5.265 128.715 5.265S258.531.245 175.288 9.946C102.037 18.483 68.22 80.74 68.22 80.74"
+                        />
+                        <path
+                            fill="currentColor"
+                            d="M38.474 97.38q1.968-.257 4.01-.258c17.114 0 31.008 13.895 31.008 31.009s-13.894 31.008-31.008 31.008c-26.309 0-54.461-31.126-18.138-87.76 11.882-18.52 33.8-38.704 52.655-49.5C111.64 2.049 144.285 0 144.285 0S72.508 23.758 38.475 97.379M251.649 350.072s-3.667 1.36-6.117-3.703c-2.023-4.183 2.371-6.294 2.371-6.294 33.306-22.27 50.271-53.345 50.271-53.345s1.417 41.068-46.525 63.342M148.832 353.369s7.327.29 7.988-7.747c.778-9.454-6.474-10.693-6.474-10.693s-45.748-.076-86.614-41.197C18.316 248.032 3.935 179.63 3.935 179.63s-19.97 49.173 30.054 116.413c44.02 59.168 114.843 57.327 114.843 57.327"
+                        />
+                        <path
+                            fill="currentColor"
+                            d="M178.118 370.81a31 31 0 0 1-2.227-3.343c-8.558-14.822-3.471-33.802 11.35-42.359s33.801-3.471 42.358 11.35c13.155 22.784.275 62.728-66.934 59.588-21.979-1.03-50.418-9.92-69.196-20.85-34.491-20.082-52.588-47.33-52.588-47.33s56.463 50.281 137.237 42.945M294.606 59.948s3.011 2.495-.149 7.15c-2.61 3.843-6.637 1.092-6.637 1.092-35.938-17.708-71.333-16.863-71.333-16.863s34.858-21.76 78.119 8.62M348.86 147.345s-3.414-6.49-10.704-3.044c-8.576 4.053-6.023 10.952-6.023 10.952s22.808 39.658 7.63 95.608c-16.87 62.183-68.919 108.838-68.919 108.838s52.57-7.292 85.79-84.234c29.232-67.706-7.775-128.12-7.775-128.12"
+                        />
+                        <path
+                            fill="currentColor"
+                            d="M349.324 113.259a31 31 0 0 1-1.782 3.6c-8.557 14.823-27.537 19.908-42.358 11.35-14.822-8.556-19.907-27.536-11.35-42.358 13.154-22.784 54.186-31.601 85.071 28.173 10.098 19.55 16.62 48.623 16.541 70.35-.145 39.912-14.694 69.209-14.694 69.209s15.313-74.04-31.428-140.324"
+                        />
                     </svg>
-                    <span class="logo__text">Männerkreis</span>
+
+                    <span>{{ $settings?->site_name ?? 'Männerkreis' }}</span>
                 </a>
-
-                <nav class="nav" id="nav">
-                    <a href="{{ route('home') }}#ueber" class="nav__link" data-umami-event="nav-click" data-umami-event-target="ueber">Über</a>
-                    <a href="{{ route('home') }}#reise" class="nav__link" data-umami-event="nav-click" data-umami-event-target="reise">Die Reise</a>
-                    <a href="{{ route('home') }}#faq" class="nav__link" data-umami-event="nav-click" data-umami-event-target="faq">Fragen</a>
-                    @if($hasNextEvent)
-                        <a
-                            href="{{ $nextEventUrl }}"
-                            class="btn btn--primary btn--large nav__cta"
-                            data-umami-event="cta-click"
-                            data-umami-event-location="header"
-                            data-umami-event-action="go-to-event"
-                        >Nächster Termin</a>
-                    @endif
-                </nav>
-
-                <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main id="main">
-        @yield('content')
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer__top stagger-children">
-                <div class="footer__brand">
-                    <a href="{{ route('home') }}" class="footer__logo">
-                        <svg class="footer__logo-icon" viewBox="0 0 512 512" aria-hidden="true">
-                            <path fill="currentColor" d="M256 0c141.31 0 256 114.73 256 256S397.31 512 256 512 0 397.27 0 256 114.69 0 256 0Zm0 10.53C120.47 10.53 10.4 120.5 10.4 256S120.47 501.47 256 501.47 501.6 391.5 501.6 256 391.53 10.53 256 10.53Z"/>
-                            <path fill="currentColor" d="M256 24.06c126.47 0 229.15 103.93 229.15 231.94S382.47 487.94 256 487.94 26.86 384.01 26.86 256 129.53 24.06 256 24.06Zm0 10.53C135.27 34.59 37.26 133.8 37.26 256S135.28 477.41 256 477.41 474.74 378.2 474.74 256 376.73 34.59 256 34.59Z"/>
-                            <path fill="currentColor" d="M155.85 283.39c-4.66-4.7-13.29-15.46-15.5-32.34-1.96-14.97 1.1-34.99 17.42-59.95a4.7 4.7 0 0 1 6.24-1.54c11.13 6.3 39.38 28.43 48.05 35.29 7.01-4.09 25.49-13.74 43.95-13.74s36.95 9.64 43.96 13.72c8.73-6.86 37.32-29.06 49.94-35.38 2.15-1.09 4.78-.35 6.08 1.73 15.59 24.95 18.24 44.97 16.03 59.95-2.49 16.86-11.2 27.59-15.86 32.27 10.54 21.18 22.69 53.12 22.69 87.47 0 2.64-2.1 4.77-4.71 4.77-30.56 0-50.43 16.01-54.83 19.91-1.44 5.66-7.27 26.31-19.57 43.33-10.07 13.94-24.37 25.34-43.74 25.34s-33.67-11.4-43.74-25.34c-12.3-17.02-18.13-37.66-19.57-43.33-4.4-3.9-24.26-19.91-54.83-19.91-2.61 0-4.71-2.12-4.71-4.77 0-34.37 12.17-66.32 22.69-87.49Zm190.13.84c-6.89-13.26-12.59-21.27-12.59-21.27a4.818 4.818 0 0 1 1.08-6.67c2.11-1.54 5.05-1.05 6.59 1.09 0 0 4.52 6.32 10.44 17.11 3.89-4.5 9.41-12.77 11.18-24.76 1.86-12.59-.45-29.11-12.38-49.62-16.21 9.57-47.07 34.28-47.07 34.28a4.701 4.701 0 0 1-5.53.24s-20.83-13.96-41.7-13.96-41.7 13.98-41.7 13.98a4.702 4.702 0 0 1-5.53-.24S178.29 210 163.2 200.25c-12.48 20.49-15.15 36.97-13.49 49.56 1.56 11.94 6.98 20.18 10.81 24.68 5.92-10.78 10.42-17.1 10.42-17.1 1.54-2.14 4.48-2.63 6.59-1.09a4.818 4.818 0 0 1 1.08 6.67s-5.79 8.13-12.72 21.56c-.05.11-.1.2-.17.29-9.83 19.16-21.97 48.92-23.06 81.42 36.13 1.79 57.6 23.4 57.6 23.4.64.65 1.09 1.46 1.29 2.35 0 0 5.09 22.93 18.34 41.28 8.36 11.57 20.04 21.43 36.12 21.43s27.76-9.86 36.12-21.43c13.24-18.35 18.34-41.28 18.34-41.28.2-.89.64-1.71 1.29-2.35 0 0 21.47-21.6 57.6-23.4-1.09-32.66-13.34-62.56-23.23-81.69-.04-.11-.09-.2-.13-.31Zm-57.83 40.07c4.23-4.28 10.09-5.3 13.07-2.27 2.99 3.03 1.99 8.95-2.24 13.23-4.23 4.29-10.08 5.3-13.07 2.27-2.99-3.02-1.98-8.95 2.24-13.23Zm-62.43 0c4.24 4.28 5.24 10.22 2.24 13.23-2.98 3.03-8.85 2.02-13.07-2.27-4.23-4.28-5.24-10.2-2.24-13.23 2.99-3.03 8.85-2.01 13.07 2.27Zm43.41 77.24c2.6 0 4.71 2.14 4.71 4.77s-2.11 4.77-4.71 4.77h-8.41v8.52c0 2.63-2.11 4.77-4.71 4.77s-4.71-2.14-4.71-4.77v-8.52h-8.41c-2.6 0-4.71-2.14-4.71-4.77s2.11-4.77 4.71-4.77h26.25Zm-44.4-243.31-.32.33a4.55 4.55 0 0 1-3.29 1.44c-2.48 0-4.52-2.06-4.52-4.57 0-1.25.51-2.45 1.41-3.32l.33-.34 6.59-6.67h.01c.05-.07.11-.12.16-.17l.63-.64a4.5 4.5 0 0 1 6.36-.02l.02.02c1.75 1.77 1.75 4.69 0 6.47l-.63.64c-.05.06-.11.11-.16.16l-6.6 6.68Zm35.84-78.09v1.11c0 2.51-2.04 4.57-4.52 4.57s-4.52-2.06-4.52-4.57V70.09a4.6 4.6 0 0 1 1.32-3.07c1.75-1.76 4.6-1.78 6.36-.03l.03.03c.83.84 1.3 1.96 1.32 3.14v9.98Zm26.56 14.93-.77.78a4.5 4.5 0 0 1-6.36.02l-.02-.02c-1.75-1.77-1.75-4.69 0-6.47l.77-.78 6.62-6.7.35-.35.05-.05c.83-.79 1.93-1.23 3.08-1.23 2.48 0 4.52 2.06 4.52 4.57 0 1.18-.45 2.31-1.26 3.17l-.35.36-6.62 6.7Zm-6.39 56.46-.77-.78c-1.75-1.77-1.75-4.69 0-6.47a4.5 4.5 0 0 1 6.36-.02l.02.02.77.78 6.62 6.7.35.36c.81.86 1.26 1.99 1.26 3.17 0 2.51-2.04 4.57-4.52 4.57-1.17 0-2.29-.46-3.13-1.27l-.35-.35-6.62-6.7Zm-29.21 18.41v-11.06c0-2.51 2.04-4.57 4.52-4.57s4.52 2.06 4.52 4.57V169.92c.04 1.26-.44 2.47-1.32 3.37-1.75 1.76-4.6 1.78-6.36.03l-.03-.03a4.6 4.6 0 0 1-1.32-3.35Zm43.96-45.3h-1.09c-2.48 0-4.52-2.06-4.52-4.57s2.04-4.57 4.52-4.57h11.02c1.15.04 2.23.52 3.04 1.34 1.75 1.77 1.75 4.69 0 6.47-.82.83-1.93 1.31-3.1 1.34h-9.86Zm-66.13 6.64a29.306 29.306 0 0 1 0-22.43 28.74 28.74 0 0 1 14.69-15.38c3.76-1.76 7.85-2.67 12-2.67 3.91 0 7.64.81 11.05 2.26 3.52 1.46 6.72 3.6 9.39 6.31 2.94 2.97 5.2 6.55 6.62 10.48a29.21 29.21 0 0 1-.36 21.39c-1.43 3.56-3.56 6.8-6.26 9.53a28.492 28.492 0 0 1-9.41 6.33 28.294 28.294 0 0 1-11.04 2.24c-3.91 0-7.64-.8-11.06-2.25a28.782 28.782 0 0 1-15.63-15.81Zm8.33-18.91a20.583 20.583 0 0 0 0 15.39c2.03 4.89 5.92 8.83 10.75 10.88a19.88 19.88 0 0 0 14.4.31c5.2-1.95 9.41-6.04 11.55-11.2a20.645 20.645 0 0 0-.35-16.19c-2.11-4.52-5.83-8.15-10.4-10.08a19.937 19.937 0 0 0-15.21 0c-4.83 2.05-8.73 5.99-10.75 10.88Zm-15.47 7.7c0 2.51-2.04 4.57-4.52 4.57h-10.46c-2.48 0-4.52-2.06-4.52-4.57s2.04-4.57 4.52-4.57h10.46c2.48 0 4.52 2.06 4.52 4.57Zm3.52-24.22-7.39-7.48c-1.75-1.77-1.75-4.69 0-6.47a4.5 4.5 0 0 1 6.36-.02l.02.02 7.4 7.49c1.75 1.77 1.75 4.69 0 6.47a4.5 4.5 0 0 1-6.36.02l-.02-.02Z"/>
-                        </svg>
-                        <span>{{ $settings?->site_name ?? 'Männerkreis' }}</span>
-                    </a>
-                    <p class="footer__text">
-                        {{ $settings?->site_description ?: 'Ein Raum für echte Begegnung unter Männern. Authentischer Austausch, Gemeinschaft und persönliches Wachstum in Niederbayern.' }}
-                    </p>
-                    @if(!empty($socialLinks))
-                        <ul class="footer__social-links">
-                            @foreach($socialLinks as $link)
-                                <li>
-                                    <x-social-icon
-                                        variant="link"
-                                        :type="$link['type'] ?? null"
-                                        :url="$link['value']"
-                                        :label="$link['label'] ?? ''"
-                                    />
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-
-                <div class="footer__nav">
-                    <h3 class="footer__heading">Navigation</h3>
-                    <ul class="footer__links">
-                        <li><a href="{{ route('home') }}#ueber" data-umami-event="footer-link" data-umami-event-target="ueber">Über uns</a></li>
-                        <li><a href="{{ route('home') }}#reise" data-umami-event="footer-link" data-umami-event-target="reise">Die Reise</a></li>
-                        <li><a href="{{ route('home') }}#faq" data-umami-event="footer-link" data-umami-event-target="faq">FAQ</a></li>
-                        @if($hasNextEvent)
-                            <li><a href="{{ $nextEventUrl }}" data-umami-event="footer-link" data-umami-event-target="event">Nächster Termin</a></li>
-                        @endif
-                    </ul>
-                </div>
-
-                <div class="footer__contact">
-                    <h3 class="footer__heading">Kontakt</h3>
-                    <ul class="footer__links">
-                        @if($settings?->contact_email)
-                            <li><a href="mailto:{{ $settings->contact_email }}" data-umami-event="contact-click" data-umami-event-type="email">E-Mail schreiben</a></li>
-                        @endif
-                        @if($settings?->contact_phone)
-                            <li><a href="tel:{{ str_replace([' ', '-', '(', ')'], '', $settings->contact_phone) }}" data-umami-event="contact-click" data-umami-event-type="phone">{{ $settings->contact_phone }}</a></li>
-                        @endif
-                        <li><a href="{{ route('home') }}#newsletter" data-umami-event="footer-link" data-umami-event-target="newsletter">Newsletter</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer__bottom fade-in">
-                <p class="footer__copyright">
-                    {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
+                <p class="footer__text">
+                    {{ $settings?->site_description ?: 'Ein Raum für echte Begegnung unter Männern. Authentischer Austausch, Gemeinschaft und persönliches Wachstum in Niederbayern.' }}
                 </p>
-                <div class="footer__legal">
-                    <a href="{{ route('page.show', 'impressum') }}" data-umami-event="footer-link" data-umami-event-target="impressum">Impressum</a>
-                    <a href="{{ route('page.show', 'datenschutz') }}" data-umami-event="footer-link" data-umami-event-target="datenschutz">Datenschutz</a>
-                </div>
+                @if(!empty($socialLinks))
+                    <ul class="footer__social-links">
+                        @foreach($socialLinks as $link)
+                            <li>
+                                <x-social-icon
+                                    variant="link"
+                                    :type="$link['type'] ?? null"
+                                    :url="$link['value']"
+                                    :label="$link['label'] ?? ''"
+                                />
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+
+            <div class="footer__nav">
+                <h3 class="footer__heading">Navigation</h3>
+                <ul class="footer__links">
+                    <li><a
+                            href="{{ route('home') }}#ueber"
+                            data-umami-event="footer-link"
+                            data-umami-event-target="ueber"
+                        >Über uns</a></li>
+                    <li><a
+                            href="{{ route('home') }}#reise"
+                            data-umami-event="footer-link"
+                            data-umami-event-target="reise"
+                        >Die Reise</a></li>
+                    <li><a href="{{ route('home') }}#faq" data-umami-event="footer-link" data-umami-event-target="faq">FAQ</a>
+                    </li>
+                    @if($hasNextEvent)
+                        <li><a
+                                href="{{ $nextEventUrl }}"
+                                data-umami-event="footer-link"
+                                data-umami-event-target="event"
+                            >Nächster Termin</a></li>
+                    @endif
+                </ul>
+            </div>
+
+            <div class="footer__contact">
+                <h3 class="footer__heading">Kontakt</h3>
+                <ul class="footer__links">
+                    @if($settings?->contact_email)
+                        <li><a
+                                href="mailto:{{ $settings->contact_email }}"
+                                data-umami-event="contact-click"
+                                data-umami-event-type="email"
+                            >E-Mail schreiben</a></li>
+                    @endif
+                    @if($settings?->contact_phone)
+                        <li><a
+                                href="tel:{{ str_replace([' ', '-', '(', ')'], '', $settings->contact_phone) }}"
+                                data-umami-event="contact-click"
+                                data-umami-event-type="phone"
+                            >{{ $settings->contact_phone }}</a></li>
+                    @endif
+                    <li><a
+                            href="{{ route('home') }}#newsletter"
+                            data-umami-event="footer-link"
+                            data-umami-event-target="newsletter"
+                        >Newsletter</a></li>
+                </ul>
             </div>
         </div>
-    </footer>
 
-    <!-- Scroll to Top Button -->
-    <button class="scroll-to-top" id="scrollToTop" aria-label="Nach oben scrollen" title="Nach oben">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-    </button>
-
-    <!-- Calendar Modal -->
-    <div class="calendar-modal" id="calendarModal">
-        <div class="calendar-modal__content">
-            <h3>In Kalender speichern</h3>
-            <p>Wähle deinen Kalender:</p>
-            <div class="calendar-modal__buttons">
-                <a href="#" id="calendarGoogle" class="btn btn--secondary" target="_blank" rel="noopener">
-                    Google Calendar
-                </a>
-                <a href="#" id="calendarICS" class="btn btn--secondary" download="maennerkreis-straubing.ics">
-                    Apple/Outlook (.ics)
-                </a>
+        <div class="footer__bottom fade-in">
+            <p class="footer__copyright">
+                {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
+            </p>
+            <div class="footer__legal">
+                <a
+                    href="{{ route('page.show', 'impressum') }}"
+                    data-umami-event="footer-link"
+                    data-umami-event-target="impressum"
+                >Impressum</a>
+                <a
+                    href="{{ route('page.show', 'datenschutz') }}"
+                    data-umami-event="footer-link"
+                    data-umami-event-target="datenschutz"
+                >Datenschutz</a>
             </div>
         </div>
     </div>
+</footer>
 
-    <!-- JavaScript -->
-    <script>
-        window.routes = {
-            newsletter: '{{ route('newsletter.subscribe') }}',
-            eventRegister: '{{ route('event.register') }}',
-            csrfToken: '{{ csrf_token() }}'
-        };
-    </script>
+<!-- Scroll to Top Button -->
+<button class="scroll-to-top" id="scrollToTop" aria-label="Nach oben scrollen" title="Nach oben">
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+</button>
 
-    @vite(['resources/js/app.ts'])
-    @stack('scripts')
+<!-- Calendar Modal -->
+<div class="calendar-modal" id="calendarModal">
+    <div class="calendar-modal__content">
+        <h3>In Kalender speichern</h3>
+        <p>Wähle deinen Kalender:</p>
+        <div class="calendar-modal__buttons">
+            <a href="#" id="calendarGoogle" class="btn btn--secondary" target="_blank" rel="noopener">
+                Google Calendar
+            </a>
+            <a href="#" id="calendarICS" class="btn btn--secondary" download="maennerkreis-straubing.ics">
+                Apple/Outlook (.ics)
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    window.routes = {
+        newsletter: '{{ route('newsletter.subscribe') }}',
+        eventRegister: '{{ route('event.register') }}',
+        csrfToken: '{{ csrf_token() }}',
+    };
+</script>
+
+@vite(['resources/js/app.ts'])
+@stack('scripts')
 </body>
 </html>
