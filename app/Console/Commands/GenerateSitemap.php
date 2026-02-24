@@ -43,6 +43,7 @@ class GenerateSitemap extends Command
 
         Page::published()
             ->select('slug', 'updated_at')
+            ->where('slug', '!=', 'home')
             ->latest('published_at')
             ->get()
             ->each(function (Page $page) use ($sitemap): void {

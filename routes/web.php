@@ -16,6 +16,8 @@ Route::controller(PageController::class)->group(function (): void {
     Route::get('/', 'home')->name('home');
 });
 
+Route::redirect('/home', '/', 301);
+
 Route::controller(EventController::class)->group(function (): void {
     Route::get('/event', 'showNext')->name('event.show');
     Route::get('/event/{slug}', 'show')->name('event.show.slug');

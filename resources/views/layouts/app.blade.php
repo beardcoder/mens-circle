@@ -29,7 +29,7 @@
                     <a href="{{ route('home') }}#faq" class="nav__link" data-umami-event="nav-click" data-umami-event-target="faq">Fragen</a>
                     @if($hasNextEvent)
                         <a
-                            href="{{ route('event.show') }}"
+                            href="{{ $nextEventUrl }}"
                             class="btn btn--primary btn--large nav__cta"
                             data-umami-event="cta-click"
                             data-umami-event-location="header"
@@ -91,7 +91,7 @@
                         <li><a href="{{ route('home') }}#reise" data-umami-event="footer-link" data-umami-event-target="reise">Die Reise</a></li>
                         <li><a href="{{ route('home') }}#faq" data-umami-event="footer-link" data-umami-event-target="faq">FAQ</a></li>
                         @if($hasNextEvent)
-                            <li><a href="{{ route('event.show') }}" data-umami-event="footer-link" data-umami-event-target="event">Nächster Termin</a></li>
+                            <li><a href="{{ $nextEventUrl }}" data-umami-event="footer-link" data-umami-event-target="event">Nächster Termin</a></li>
                         @endif
                     </ul>
                 </div>

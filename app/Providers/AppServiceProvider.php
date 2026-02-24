@@ -57,13 +57,23 @@ class AppServiceProvider extends ServiceProvider
             'components.blocks.hero',
         ], function (ViewContract $view): void {
             try {
+                $nextEvent = cache()->remember(
+                    'next_event_data',
+                    300,
+                    fn () => Event::published()
+                        ->upcoming()
+                        ->orderBy('event_date')
+                        ->first(['slug']),
+                );
+
                 $view->with([
-                    'hasNextEvent' => cache()
-                        ->remember('has_next_event', 300, fn () => Event::published()->upcoming()->exists(), ),
+                    'hasNextEvent' => $nextEvent !== null,
+                    'nextEventUrl' => $nextEvent ? route('event.show.slug', $nextEvent->slug) : route('event.show'),
                 ]);
             } catch (Throwable) {
                 $view->with([
                     'hasNextEvent' => false,
+                    'nextEventUrl' => route('event.show'),
                 ]);
             }
         });

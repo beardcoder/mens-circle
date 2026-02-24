@@ -1,0 +1,113 @@
+/**
+ * Archetypes Section
+ * Dedicated layout for archetype overview cards
+ */
+
+.archetypes-section {
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.archetypes__header {
+  max-inline-size: 780px;
+  margin-inline: auto;
+  margin-block-end: var(--space-lg);
+  text-align: center;
+}
+
+.archetypes__title {
+  margin-block-end: var(--space-sm);
+}
+
+.archetypes__intro {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.archetypes__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+
+@media (width <= 900px) {
+  .archetypes__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.archetype-card {
+  position: relative;
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    145deg,
+    color-mix(in oklch, var(--bg-primary) 88%, var(--accent-primary) 12%) 0%,
+    var(--bg-primary) 100%
+  );
+}
+
+.archetype-card::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  content: '';
+  background: radial-gradient(
+    circle at 100% 0%,
+    color-mix(in oklch, var(--accent-primary) 12%, transparent) 0%,
+    transparent 60%
+  );
+}
+
+.archetype-card__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  margin-block-end: var(--space-2xs);
+  border: 1px solid color-mix(in oklch, var(--accent-primary) 35%, transparent);
+  border-radius: var(--radius-full);
+  color: color-mix(in oklch, var(--accent-primary) 88%, var(--text-primary) 12%);
+  background: color-mix(in oklch, var(--accent-primary) 10%, transparent);
+}
+
+.archetype-card__icon svg {
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  stroke: currentcolor;
+  stroke-width: 1.7;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.archetype-card__number {
+  display: inline-block;
+  margin-block-end: var(--space-xs);
+  font-family: var(--font-display);
+  font-size: clamp(1.625rem, 2.8vw, 2.25rem);
+  line-height: 1;
+  color: var(--accent-primary);
+}
+
+.archetype-card__title {
+  margin-block-end: var(--space-xs);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2vw, 1.85rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.archetype-card__description {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}

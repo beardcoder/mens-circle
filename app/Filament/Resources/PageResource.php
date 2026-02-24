@@ -197,6 +197,7 @@ class PageResource extends Resource
                 self::introBlock(),
                 self::textSectionBlock(),
                 self::valueItemsBlock(),
+                self::archetypesBlock(),
                 self::moderatorBlock(),
                 self::journeyStepsBlock(),
                 self::testimonialsBlock(),
@@ -311,6 +312,40 @@ class PageResource extends Resource
                             ->label('Beschreibung')
                             ->rows(2),
                     ])
+                    ->collapsible()
+                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+            ]);
+    }
+
+    private static function archetypesBlock(): Block
+    {
+        return Block::make('archetypes')
+            ->label('Archetypen Kompass')
+            ->icon(Heroicon::OutlinedRectangleStack)
+            ->schema([
+                self::blockIdField(),
+                TextInput::make('eyebrow')
+                    ->label('Überschrift (klein)'),
+                TextInput::make('title')
+                    ->label('Titel')
+                    ->required(),
+                Textarea::make('intro')
+                    ->label('Intro Text')
+                    ->rows(2),
+                Repeater::make('items')
+                    ->label('Archetypen')
+                    ->schema([
+                        TextInput::make('number')
+                            ->label('Nummer')
+                            ->numeric(),
+                        TextInput::make('title')
+                            ->label('Titel')
+                            ->required(),
+                        Textarea::make('description')
+                            ->label('Beschreibung')
+                            ->rows(2),
+                    ])
+                    ->defaultItems(5)
                     ->collapsible()
                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
             ]);

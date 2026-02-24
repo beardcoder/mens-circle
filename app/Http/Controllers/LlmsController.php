@@ -556,6 +556,7 @@ class LlmsController
                 break;
 
             case 'value_items':
+            case 'archetypes':
             case 'journey_steps':
                 if (!empty($data['eyebrow']) && \is_string($data['eyebrow'])) {
                     $lines[] = "*{$data['eyebrow']}*";
@@ -569,6 +570,11 @@ class LlmsController
 
                 if (!empty($data['subtitle']) && \is_string($data['subtitle'])) {
                     $lines[] = $data['subtitle'];
+                    $lines[] = '';
+                }
+
+                if (!empty($data['intro']) && \is_string($data['intro'])) {
+                    $lines[] = $data['intro'];
                     $lines[] = '';
                 }
 

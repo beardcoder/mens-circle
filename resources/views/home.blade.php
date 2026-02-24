@@ -80,6 +80,8 @@
                 <x-blocks.text-section :block="$block" />
             @elseif($block->type === 'value_items')
                 <x-blocks.value-items :block="$block" />
+            @elseif($block->type === 'archetypes')
+                <x-blocks.archetypes :block="$block" />
             @elseif($block->type === 'moderator')
                 <x-blocks.moderator :block="$block" :page="$page" />
             @elseif($block->type === 'journey_steps')
