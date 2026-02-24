@@ -10,3 +10,7 @@ echo "Response cache cleared successfully"
 echo "Generating sitemap..."
 php artisan sitemap:generate || true
 echo "Sitemap generated successfully"
+
+echo "Generating favicon package..."
+php artisan favicon:generate || true
+echo "Favicon package generated successfully"
