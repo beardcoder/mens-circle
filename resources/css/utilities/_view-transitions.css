@@ -2,11 +2,88 @@
    VIEW TRANSITIONS API
    ============================================
 
-   Bare minimum View Transition API for smooth page navigation.
-   Uses browser's default automatic transitions.
-   Falls back gracefully for browsers that don't support it.
+   Enhanced cross-document transitions:
+   - smooth content fade/lift between pages
+   - stable fixed header during navigation
+   - reduced-motion friendly fallback
    ============================================ */
 
 @view-transition {
   navigation: auto;
+}
+
+/* Keep fixed UI elements visually stable during transitions. */
+.header {
+  view-transition-name: site-header;
+}
+
+.scroll-progress,
+.scroll-to-top,
+.skip-link {
+  view-transition-name: none;
+}
+
+::view-transition-group(root) {
+  animation-duration: 0.55s;
+  animation-timing-function: var(--ease-in-out);
+}
+
+::view-transition-old(root) {
+  animation: page-exit 320ms var(--ease-out) both;
+}
+
+::view-transition-new(root) {
+  animation: page-enter 520ms var(--ease-out) both;
+}
+
+::view-transition-group(site-header),
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation-duration: 0.24s;
+  animation-timing-function: linear;
+}
+
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  mix-blend-mode: normal;
+}
+
+@keyframes page-exit {
+  from {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    filter: blur(2px);
+    transform: translateY(10px) scale(0.995);
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(18px) scale(1.004);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-group(site-header),
+  ::view-transition-old(site-header),
+  ::view-transition-new(site-header) {
+    animation: none !important;
+    animation-duration: 0.01ms !important;
+  }
 }
