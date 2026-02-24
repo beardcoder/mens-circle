@@ -37,8 +37,8 @@
         <div class="archetypes__grid stagger-children">
             @foreach($items as $item)
                 @php $icon = $detectIcon($item); @endphp
-                <article class="archetype-card">
-                    <div class="archetype-card__icon" aria-hidden="true">
+                <article class="archetype-card archetype-card--{{ $icon }}">
+                    <div class="archetype-card__background-icon" aria-hidden="true">
                         @if($icon === 'warrior')
                             <svg viewBox="0 0 24 24" role="presentation">
                                 <path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z" />
@@ -74,17 +74,19 @@
                         @endif
                     </div>
 
-                    <span class="archetype-card__number">
-                        {{ $item['number'] ?? $loop->iteration }}
-                    </span>
+                    <div class="archetype-card__content">
+                        <span class="archetype-card__number">
+                            {{ $item['number'] ?? $loop->iteration }}
+                        </span>
 
-                    @if(!empty($item['title']))
-                        <h3 class="archetype-card__title">{{ $item['title'] }}</h3>
-                    @endif
+                        @if(!empty($item['title']))
+                            <h3 class="archetype-card__title">{{ $item['title'] }}</h3>
+                        @endif
 
-                    @if(!empty($item['description']))
-                        <p class="archetype-card__description">{{ $item['description'] }}</p>
-                    @endif
+                        @if(!empty($item['description']))
+                            <p class="archetype-card__description">{{ $item['description'] }}</p>
+                        @endif
+                    </div>
                 </article>
             @endforeach
         </div>

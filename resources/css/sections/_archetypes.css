@@ -40,8 +40,8 @@
 
 .archetype-card {
   position: relative;
-  display: grid;
-  gap: var(--space-xs);
+  overflow: hidden;
+  display: block;
   padding: var(--space-md);
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-lg);
@@ -57,6 +57,7 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
+  z-index: 0;
   content: '';
   background: radial-gradient(
     circle at 100% 0%,
@@ -65,23 +66,29 @@
   );
 }
 
-.archetype-card__icon {
+.archetype-card__content {
+  position: relative;
+  z-index: 2;
   display: grid;
-  place-items: center;
-  inline-size: 2.75rem;
-  block-size: 2.75rem;
-  margin-block-end: var(--space-2xs);
-  border: 1px solid color-mix(in oklch, var(--accent-primary) 35%, transparent);
-  border-radius: var(--radius-full);
-  color: color-mix(in oklch, var(--accent-primary) 88%, var(--text-primary) 12%);
-  background: color-mix(in oklch, var(--accent-primary) 10%, transparent);
+  gap: var(--space-xs);
 }
 
-.archetype-card__icon svg {
-  inline-size: 1.2rem;
-  block-size: 1.2rem;
+.archetype-card__background-icon {
+  position: absolute;
+  inset-inline-end: clamp(-1.5rem, -2vw, -0.4rem);
+  inset-block-end: clamp(-2rem, -3vw, -0.6rem);
+  z-index: 1;
+  opacity: 0.14;
+  color: color-mix(in oklch, var(--accent-primary) 84%, var(--text-primary) 16%);
+  pointer-events: none;
+}
+
+.archetype-card__background-icon svg {
+  inline-size: clamp(9.5rem, 19vw, 14rem);
+  block-size: clamp(9.5rem, 19vw, 14rem);
+  transform: rotate(-8deg);
   stroke: currentcolor;
-  stroke-width: 1.7;
+  stroke-width: 1.45;
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -91,7 +98,7 @@
   display: inline-block;
   margin-block-end: var(--space-xs);
   font-family: var(--font-display);
-  font-size: clamp(1.625rem, 2.8vw, 2.25rem);
+  font-size: clamp(1.85rem, 3.2vw, 2.55rem);
   line-height: 1;
   color: var(--accent-primary);
 }
@@ -110,4 +117,41 @@
   font-size: 1rem;
   line-height: 1.7;
   color: var(--text-secondary);
+  max-inline-size: 36ch;
+}
+
+.archetype-card--warrior .archetype-card__background-icon {
+  opacity: 0.16;
+}
+
+.archetype-card--lover .archetype-card__background-icon {
+  opacity: 0.2;
+}
+
+.archetype-card--magician .archetype-card__background-icon {
+  opacity: 0.18;
+}
+
+.archetype-card--king .archetype-card__background-icon {
+  opacity: 0.17;
+}
+
+.archetype-card--father .archetype-card__background-icon {
+  opacity: 0.16;
+}
+
+@media (width <= 640px) {
+  .archetype-card {
+    padding: var(--space-sm);
+  }
+
+  .archetype-card__background-icon {
+    inset-inline-end: -2.1rem;
+    inset-block-end: -2.2rem;
+  }
+
+  .archetype-card__background-icon svg {
+    inline-size: 11rem;
+    block-size: 11rem;
+  }
 }
