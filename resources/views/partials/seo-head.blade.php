@@ -46,12 +46,15 @@
 <meta name="googlebot" content="@yield('robots', 'index, follow')">
 
 <!-- Favicon -->
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="shortcut icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+@php
+    $faviconVersion = substr(md5_file(public_path('favicon.svg')), 0, 8);
+@endphp
+<link rel="icon" type="image/png" href="{{ asset('favicon-96x96.png') }}?v={{ $faviconVersion }}" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v={{ $faviconVersion }}" />
+<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v={{ $faviconVersion }}" />
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}?v={{ $faviconVersion }}" />
 <meta name="apple-mobile-web-app-title" content="Männerkreis" />
-<link rel="manifest" href="/site.webmanifest" />
+<link rel="manifest" href="{{ asset('site.webmanifest') }}?v={{ $faviconVersion }}" />
 
 <!-- Styles -->
 @vite(['resources/css/app.css'])

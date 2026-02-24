@@ -8,7 +8,7 @@ ARG PHP_IMAGE=serversideup/php:8.5-frankenphp
 FROM oven/bun:1-slim AS assets
 WORKDIR /app
 
-COPY package.json bun.lockb* ./
+COPY package.json bun.lock* ./
 RUN --mount=type=cache,target=/root/.bun/install/cache \
     bun install --frozen-lockfile
 
