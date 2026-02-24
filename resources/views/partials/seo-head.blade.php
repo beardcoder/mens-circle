@@ -14,9 +14,7 @@
 <link rel="alternate" hreflang="x-default" href="@yield('canonical', url()->current())">
 
 <!-- Theme Color -->
-<meta name="theme-color" content="#3d2817">
 <meta name="color-scheme" content="light">
-<meta name="msapplication-TileColor" content="#3d2817">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="@yield('og_type', 'website')">
@@ -46,15 +44,8 @@
 <meta name="googlebot" content="@yield('robots', 'index, follow')">
 
 <!-- Favicon -->
-@php
-    $faviconVersion = substr(md5_file(public_path('favicon.svg')), 0, 8);
-@endphp
-<link rel="icon" type="image/png" href="{{ asset('favicon-96x96.png') }}?v={{ $faviconVersion }}" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v={{ $faviconVersion }}" />
-<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v={{ $faviconVersion }}" />
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}?v={{ $faviconVersion }}" />
-<meta name="apple-mobile-web-app-title" content="Männerkreis" />
-<link rel="manifest" href="{{ asset('site.webmanifest') }}?v={{ $faviconVersion }}" />
+@include('partials.favicon-head')
+<meta name="apple-mobile-web-app-title" content="{{ $settings?->site_name ?? 'Männerkreis' }}" />
 
 <!-- Styles -->
 @vite(['resources/css/app.css'])

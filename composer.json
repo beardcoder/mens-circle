@@ -8,6 +8,7 @@
     "filament/filament": "^5.2.2",
     "filament/spatie-laravel-media-library-plugin": "^5.2.2",
     "filament/spatie-laravel-settings-plugin": "^5.2.2",
+    "genkgo/favicon": "^0.3.7",
     "laravel/framework": "^12.49.0",
     "laravel/socialite": "^5.24.2",
     "laravel/tinker": "^2.11.0",

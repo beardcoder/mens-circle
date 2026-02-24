@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f189aebc73a46e28048fe152727fea41",
+    "content-hash": "b39d28fbe28677600bd0efd0c34d5a67",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -1900,6 +1900,51 @@
                 }
             ],
             "time": "2025-12-03T09:33:47+00:00"
+        },
+        {
+            "name": "genkgo/favicon",
+            "version": "0.3.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/genkgo/favicon.git",
+                "reference": "7f5275c4961443c4ed1742b55f08dac77950a2c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/genkgo/favicon/zipball/7f5275c4961443c4ed1742b55f08dac77950a2c6",
+                "reference": "7f5275c4961443c4ed1742b55f08dac77950a2c6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-imagick": "*",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpstan/phpstan": "^2.0"
+            },
+            "bin": [
+                "bin/favicon-generator"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Genkgo\\Favicon\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Generate browser favicons",
+            "support": {
+                "issues": "https://github.com/genkgo/favicon/issues",
+                "source": "https://github.com/genkgo/favicon/tree/0.3.7"
+            },
+            "time": "2025-05-13T15:17:33+00:00"
         },
         {
             "name": "graham-campbell/result-type",
