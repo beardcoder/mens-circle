@@ -46,9 +46,12 @@
 <meta name="googlebot" content="@yield('robots', 'index, follow')">
 
 <!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.ico') }}">
-<link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Männerkreis" />
+<link rel="manifest" href="/site.webmanifest" />
 
 <!-- Styles -->
 @vite(['resources/css/app.css'])
