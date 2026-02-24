@@ -43,7 +43,11 @@ export function useNavigation(): void {
     updateAriaAttributes(true);
   };
 
-  const close = (): void => {
+  const close = (options: { restoreScroll?: boolean } = {}): void => {
+    if (!state.isOpen) {
+      return;
+    }
+
     state.isOpen = false;
 
     nav.classList.remove('open');
@@ -51,11 +55,13 @@ export function useNavigation(): void {
     document.body.classList.remove('nav-open');
     document.body.style.top = '';
 
-    window.scrollTo({
-      top: state.scrollPosition,
-      left: 0,
-      behavior: 'instant',
-    });
+    if (options.restoreScroll ?? true) {
+      window.scrollTo({
+        top: state.scrollPosition,
+        left: 0,
+        behavior: 'instant',
+      });
+    }
 
     updateAriaAttributes(false);
   };
@@ -76,7 +82,13 @@ export function useNavigation(): void {
   );
 
   navLinks.forEach((link) => {
-    link.addEventListener('click', () => close());
+    link.addEventListener('click', () => {
+      if (!state.isOpen) {
+        return;
+      }
+
+      close({ restoreScroll: false });
+    });
   });
 
   document.addEventListener('click', (e) => {
