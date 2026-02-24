@@ -12,6 +12,10 @@
   navigation: auto;
 }
 
+::view-transition {
+  background: var(--bg-dark);
+}
+
 /* Keep fixed UI elements visually stable during transitions. */
 .header {
   view-transition-name: site-header;
@@ -24,16 +28,22 @@
 }
 
 ::view-transition-group(root) {
-  animation-duration: 0.55s;
+  animation-duration: 0.46s;
   animation-timing-function: var(--ease-in-out);
 }
 
 ::view-transition-old(root) {
-  animation: page-exit 320ms var(--ease-out) both;
+  animation: page-exit 300ms var(--ease-out) both;
 }
 
 ::view-transition-new(root) {
-  animation: page-enter 520ms var(--ease-out) both;
+  animation: page-enter 420ms var(--ease-out) both;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  backface-visibility: hidden;
 }
 
 ::view-transition-group(site-header),
@@ -51,27 +61,27 @@
 @keyframes page-exit {
   from {
     opacity: 1;
-    filter: blur(0);
+    filter: brightness(1);
     transform: translateY(0) scale(1);
   }
 
   to {
-    opacity: 0;
-    filter: blur(2px);
-    transform: translateY(10px) scale(0.995);
+    opacity: 1;
+    filter: brightness(0.96);
+    transform: translateY(0) scale(1.005);
   }
 }
 
 @keyframes page-enter {
   from {
-    opacity: 0;
-    filter: blur(8px);
-    transform: translateY(18px) scale(1.004);
+    opacity: 1;
+    filter: brightness(0.98);
+    transform: translateY(10px) scale(1.01);
   }
 
   to {
     opacity: 1;
-    filter: blur(0);
+    filter: brightness(1);
     transform: translateY(0) scale(1);
   }
 }
