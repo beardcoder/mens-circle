@@ -1,99 +1,29 @@
 /* ============================================
-   VIEW TRANSITIONS API
+   PAGE TRANSITIONS
    ============================================
 
-   Enhanced cross-document transitions:
-   - smooth content fade/lift between pages
-   - stable fixed header during navigation
+   Simple CSS-only page transitions:
+   - fade-in on page load for smooth navigation feel
+   - no View Transition API (causes blink on iOS)
    - reduced-motion friendly fallback
    ============================================ */
 
-@view-transition {
-  navigation: auto;
-}
-
-::view-transition {
-  background: var(--bg-dark);
-}
-
-/* Keep fixed UI elements visually stable during transitions. */
-.header {
-  view-transition-name: site-header;
-}
-
-.scroll-progress,
-.scroll-to-top,
-.skip-link {
-  view-transition-name: none;
-}
-
-::view-transition-group(root) {
-  animation-duration: 0.46s;
-  animation-timing-function: var(--ease-in-out);
-}
-
-::view-transition-old(root) {
-  animation: page-exit 300ms var(--ease-out) both;
-}
-
-::view-transition-new(root) {
-  animation: page-enter 420ms var(--ease-out) both;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  mix-blend-mode: normal;
-  backface-visibility: hidden;
-}
-
-::view-transition-group(site-header),
-::view-transition-old(site-header),
-::view-transition-new(site-header) {
-  animation-duration: 0.24s;
-  animation-timing-function: linear;
-}
-
-::view-transition-old(site-header),
-::view-transition-new(site-header) {
-  mix-blend-mode: normal;
-}
-
-@keyframes page-exit {
-  from {
-    opacity: 1;
-    filter: brightness(1);
-    transform: translateY(0) scale(1);
-  }
-
-  to {
-    opacity: 1;
-    filter: brightness(0.96);
-    transform: translateY(0) scale(1.005);
-  }
+#main {
+  animation: page-enter 300ms var(--ease-out) both;
 }
 
 @keyframes page-enter {
   from {
-    opacity: 1;
-    filter: brightness(0.98);
-    transform: translateY(10px) scale(1.01);
+    opacity: 0;
   }
 
   to {
     opacity: 1;
-    filter: brightness(1);
-    transform: translateY(0) scale(1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(root),
-  ::view-transition-old(root),
-  ::view-transition-new(root),
-  ::view-transition-group(site-header),
-  ::view-transition-old(site-header),
-  ::view-transition-new(site-header) {
-    animation: none !important;
-    animation-duration: 0.01ms !important;
+  #main {
+    animation: none;
   }
 }
