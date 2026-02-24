@@ -30,3 +30,4 @@ public/sitemap.xml
 .phpstorm.meta.php
 _ide_helper.php
 .php-cs-fixer.cache
+package-lock.json
