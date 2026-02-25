@@ -7,6 +7,7 @@ Framework-specific improvements for TYPO3 projects. Apply these when `typo3/cms-
 ### Pattern: Constructor Injection over Inject Annotations
 
 **Before:**
+
 ```php
 class UserController extends ActionController
 {
@@ -14,7 +15,7 @@ class UserController extends ActionController
      * @var UserRepository
      */
     protected $userRepository;
-    
+
     /**
      * @param UserRepository $userRepository
      */
@@ -26,6 +27,7 @@ class UserController extends ActionController
 ```
 
 **After:**
+
 ```php
 class UserController extends ActionController
 {
@@ -38,6 +40,7 @@ class UserController extends ActionController
 ### Pattern: Typed Repository Methods
 
 **Before:**
+
 ```php
 class UserRepository extends Repository
 {
@@ -55,6 +58,7 @@ class UserRepository extends Repository
 ```
 
 **After:**
+
 ```php
 class UserRepository extends Repository
 {
@@ -73,6 +77,7 @@ class UserRepository extends Repository
 ### Pattern: Modern Query Building
 
 **Before:**
+
 ```php
 $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
     ->getQueryBuilderForTable('tx_myext_domain_model_user');
@@ -89,6 +94,7 @@ $result = $queryBuilder
 ```
 
 **After:**
+
 ```php
 $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
     ->getQueryBuilderForTable('tx_myext_domain_model_user');
@@ -107,6 +113,7 @@ $result = $queryBuilder
 ### Pattern: Query Restrictions
 
 **Before:**
+
 ```php
 $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
     ->getQueryBuilderForTable('pages');
@@ -115,6 +122,7 @@ $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestri
 ```
 
 **After:**
+
 ```php
 $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
     ->getQueryBuilderForTable('pages');
@@ -128,6 +136,7 @@ $queryBuilder->getRestrictions()
 ### Pattern: Modern FlexForm Access
 
 **Before:**
+
 ```php
 $flexFormService = GeneralUtility::makeInstance(FlexFormService::class);
 $flexFormData = $flexFormService->convertFlexFormContentToArray($row['pi_flexform']);
@@ -135,6 +144,7 @@ $setting = $flexFormData['settings']['mySetting'] ?? '';
 ```
 
 **After:**
+
 ```php
 $flexFormService = GeneralUtility::makeInstance(FlexFormService::class);
 $flexFormData = $flexFormService->convertFlexFormContentToArray($row['pi_flexform']);
@@ -149,6 +159,7 @@ $setting = $row['pi_flexform']['data']['sDEF']['lDEF']['settings.mySetting']['vD
 Replace Signal/Slot with modern Event Dispatcher.
 
 **Before:**
+
 ```php
 // Registration
 $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
@@ -164,6 +175,7 @@ $this->objectManager->get(Dispatcher::class)->dispatch(__CLASS__, 'mySignal', [$
 ```
 
 **After:**
+
 ```php
 // Event class
 final class MyEvent
@@ -171,7 +183,7 @@ final class MyEvent
     public function __construct(
         private array $data
     ) {}
-    
+
     public function getData(): array
     {
         return $this->data;
@@ -196,12 +208,14 @@ $this->eventDispatcher->dispatch($event);
 ### Pattern: Modern Site Handling
 
 **Before:**
+
 ```php
 $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId);
 $baseUrl = $site->getBase()->getHost();
 ```
 
 **After:**
+
 ```php
 $site = $request->getAttribute('site');
 $baseUrl = (string)$site->getBase();
@@ -212,12 +226,14 @@ $baseUrl = (string)$site->getBase();
 Replace hooks with PSR-15 middleware.
 
 **Before:**
+
 ```php
 // ext_localconf.php
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['checkAlternativeIdMethods-PostProc'][] = MyClass::class . '->processRequest';
 ```
 
 **After:**
+
 ```php
 // Configuration/RequestMiddlewares.php
 return [
@@ -252,12 +268,14 @@ class MyMiddleware implements MiddlewareInterface
 ### Pattern: Modern Context Access
 
 **Before:**
+
 ```php
 $frontendUser = $GLOBALS['TSFE']->fe_user;
 $isLoggedIn = $frontendUser->user['uid'] > 0;
 ```
 
 **After:**
+
 ```php
 $context = GeneralUtility::makeInstance(Context::class);
 $isLoggedIn = $context->getPropertyFromAspect('frontend.user', 'isLoggedIn');
@@ -268,12 +286,14 @@ $isLoggedIn = $context->getPropertyFromAspect('frontend.user', 'isLoggedIn');
 ### Pattern: Modern Icon Rendering
 
 **Before:**
+
 ```php
 $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 $icon = $iconFactory->getIcon('actions-document-new', Icon::SIZE_SMALL)->render();
 ```
 
 **After:**
+
 ```php
 $icon = GeneralUtility::makeInstance(IconFactory::class)
     ->getIcon('actions-document-new', Icon::SIZE_SMALL)
@@ -288,6 +308,7 @@ $icon = GeneralUtility::makeInstance(IconFactory::class)
 ### Pattern: Modern TCA Configuration
 
 **Before:**
+
 ```php
 return [
     'ctrl' => [
@@ -319,6 +340,7 @@ return [
 ```
 
 **After:**
+
 ```php
 return [
     'ctrl' => [
@@ -356,6 +378,7 @@ return [
 ### Pattern: Modern ViewHelper
 
 **Before:**
+
 ```php
 class MyViewHelper extends AbstractViewHelper
 {
@@ -367,7 +390,7 @@ class MyViewHelper extends AbstractViewHelper
         parent::initializeArguments();
         $this->registerArgument('value', 'string', 'The value', true);
     }
-    
+
     /**
      * @return string
      */
@@ -379,6 +402,7 @@ class MyViewHelper extends AbstractViewHelper
 ```
 
 **After:**
+
 ```php
 class MyViewHelper extends AbstractViewHelper
 {
@@ -386,7 +410,7 @@ class MyViewHelper extends AbstractViewHelper
     {
         $this->registerArgument('value', 'string', 'The value', true);
     }
-    
+
     public function render(): string
     {
         return strtoupper($this->arguments['value']);
@@ -399,6 +423,7 @@ class MyViewHelper extends AbstractViewHelper
 ### Pattern: Services.yaml Configuration
 
 **Before:**
+
 ```php
 // ext_localconf.php
 GeneralUtility::makeInstance(ObjectManager::class)
@@ -406,24 +431,26 @@ GeneralUtility::makeInstance(ObjectManager::class)
 ```
 
 **After:**
+
 ```yaml
 # Configuration/Services.yaml
 services:
-  _defaults:
-    autowire: true
-    autoconfigure: true
-    public: false
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
 
-  MyVendor\MyExt\:
-    resource: '../Classes/*'
-    
-  MyVendor\MyExt\Service\SomeService:
-    public: true
+    MyVendor\MyExt\:
+        resource: "../Classes/*"
+
+    MyVendor\MyExt\Service\SomeService:
+        public: true
 ```
 
 ## When to Apply
 
 Apply TYPO3-specific patterns when:
+
 - Any `typo3/cms-*` package is present in composer.json
 - Old Signal/Slot patterns are used
 - Hooks can be replaced with middleware
@@ -432,6 +459,7 @@ Apply TYPO3-specific patterns when:
 - Constructor injection would reduce boilerplate
 
 Do not apply when:
+
 - TYPO3 version < 11 (many features require v11+)
 - Extensions need to support older TYPO3 versions
 - Breaking changes would affect production stability

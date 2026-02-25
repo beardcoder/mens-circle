@@ -35,8 +35,8 @@
 }
 
 .testimonials__title {
-  margin-inline: auto;
   margin-block-end: var(--space-md);
+  margin-inline: auto;
   color: var(--text-primary);
 }
 
@@ -92,8 +92,8 @@
 .testimonial-item__quote {
   position: relative;
   flex-grow: 1;
-  margin: 0;
   padding-inline-start: 1.8rem;
+  margin: 0;
   margin-block-end: var(--space-lg);
   font-style: italic;
   line-height: 1.7;
@@ -102,13 +102,13 @@
 
 .testimonial-item__quote::before {
   position: absolute;
-  inset-inline-start: 0;
   inset-block-start: -0.2rem;
-  content: '„';
+  inset-inline-start: 0;
   font-family: var(--font-display);
   font-size: clamp(2.1rem, 3vw, 2.9rem);
   line-height: 1;
   color: color-mix(in oklch, var(--accent-primary) 70%, transparent);
+  content: '„';
 }
 
 .testimonial-item__author {
@@ -138,8 +138,8 @@
 
   .testimonial-item {
     min-block-size: auto;
-    border-inline-start: none;
     border-block-start: 1px solid var(--border-light);
+    border-inline-start: none;
   }
 
   .testimonial-item:first-child {

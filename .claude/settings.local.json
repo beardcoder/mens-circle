@@ -1,18 +1,13 @@
 {
-  "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "laravel-boost"
-  ],
-  "mcpServers": {
-    "laravel-boost": {
-      "command": "ddev",
-      "args": [
-        "artisan",
-        "boost:mcp"
-      ]
+    "enableAllProjectMcpServers": true,
+    "enabledMcpjsonServers": ["laravel-boost"],
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "ddev",
+            "args": ["artisan", "boost:mcp"]
+        }
+    },
+    "enabledPlugins": {
+        "fullstack-dev-skills@fullstack-dev-skills": true
     }
-  },
-  "enabledPlugins": {
-    "fullstack-dev-skills@fullstack-dev-skills": true
-  }
 }

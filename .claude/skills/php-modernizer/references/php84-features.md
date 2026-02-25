@@ -9,6 +9,7 @@ Replace complex if-else chains and switch statements with concise match expressi
 ### Pattern: Simple Conditionals
 
 **Before:**
+
 ```php
 if (!$event->is_published) {
     return ['error' => 'Not available', 'code' => 404];
@@ -22,6 +23,7 @@ if (!$event->is_published) {
 ```
 
 **After:**
+
 ```php
 return match (true) {
     !$event->is_published => ['error' => 'Not available', 'code' => 404],
@@ -34,6 +36,7 @@ return match (true) {
 ### Pattern: Status Mapping
 
 **Before:**
+
 ```php
 switch ($status) {
     case 'pending':
@@ -48,6 +51,7 @@ switch ($status) {
 ```
 
 **After:**
+
 ```php
 return match ($status) {
     'pending'  => 'warning',
@@ -62,13 +66,14 @@ return match ($status) {
 Eliminate boilerplate constructor code by promoting parameters directly to properties.
 
 **Before:**
+
 ```php
 class UserService
 {
     private UserRepository $repository;
     private Validator $validator;
     private EventDispatcher $dispatcher;
-    
+
     public function __construct(
         UserRepository $repository,
         Validator $validator,
@@ -82,6 +87,7 @@ class UserService
 ```
 
 **After:**
+
 ```php
 class UserService
 {
@@ -98,12 +104,13 @@ class UserService
 Add immutability guarantees to properties that shouldn't change after initialization.
 
 **Before:**
+
 ```php
 class Event
 {
     private string $id;
     private DateTimeImmutable $createdAt;
-    
+
     public function __construct(string $id)
     {
         $this->id = $id;
@@ -113,6 +120,7 @@ class Event
 ```
 
 **After:**
+
 ```php
 class Event
 {
@@ -128,6 +136,7 @@ class Event
 Replace string/int constants with type-safe enums.
 
 **Before:**
+
 ```php
 class Order
 {
@@ -135,9 +144,9 @@ class Order
     public const STATUS_PROCESSING = 'processing';
     public const STATUS_SHIPPED = 'shipped';
     public const STATUS_DELIVERED = 'delivered';
-    
+
     private string $status;
-    
+
     public function setStatus(string $status): void
     {
         if (!in_array($status, [
@@ -154,6 +163,7 @@ class Order
 ```
 
 **After:**
+
 ```php
 enum OrderStatus: string
 {
@@ -166,7 +176,7 @@ enum OrderStatus: string
 class Order
 {
     private OrderStatus $status;
-    
+
     public function setStatus(OrderStatus $status): void
     {
         $this->status = $status;
@@ -183,7 +193,7 @@ enum OrderStatus: string
     case Processing = 'processing';
     case Shipped = 'shipped';
     case Delivered = 'delivered';
-    
+
     public function canBeCancelled(): bool
     {
         return match ($this) {
@@ -191,7 +201,7 @@ enum OrderStatus: string
             self::Shipped, self::Delivered => false,
         };
     }
-    
+
     public function label(): string
     {
         return match ($this) {
@@ -209,6 +219,7 @@ enum OrderStatus: string
 Simplify null checks with the nullsafe operator `?->`.
 
 **Before:**
+
 ```php
 $country = null;
 if ($user !== null) {
@@ -220,18 +231,21 @@ if ($user !== null) {
 ```
 
 **After:**
+
 ```php
 $country = $user?->getAddress()?->getCountry();
 ```
 
 **Before:**
+
 ```php
-$length = $data !== null && $data->getName() !== null 
-    ? strlen($data->getName()) 
+$length = $data !== null && $data->getName() !== null
+    ? strlen($data->getName())
     : 0;
 ```
 
 **After:**
+
 ```php
 $length = strlen($data?->getName() ?? '') ?: 0;
 ```
@@ -241,6 +255,7 @@ $length = strlen($data?->getName() ?? '') ?: 0;
 Improve readability for functions with many parameters or optional parameters.
 
 **Before:**
+
 ```php
 // What do these booleans mean?
 $user = createUser('john@example.com', 'password123', true, false, true);
@@ -250,6 +265,7 @@ $user = createUser('john@example.com', 'password123', null, null, true);
 ```
 
 **After:**
+
 ```php
 $user = createUser(
     email: 'john@example.com',
@@ -264,6 +280,7 @@ $user = createUser(
 Modern array manipulation with spread operator.
 
 **Before:**
+
 ```php
 $defaults = ['color' => 'blue', 'size' => 'medium'];
 $overrides = ['size' => 'large'];
@@ -271,17 +288,20 @@ $config = array_merge($defaults, $overrides);
 ```
 
 **After:**
+
 ```php
 $config = [...$defaults, ...$overrides];
 ```
 
 **Before:**
+
 ```php
 $filtered = array_filter($items, fn($item) => $item > 10);
 $mapped = array_map(fn($item) => $item * 2, $filtered);
 ```
 
 **After:**
+
 ```php
 $result = [...array_map(
     fn($item) => $item * 2,
@@ -294,6 +314,7 @@ $result = [...array_map(
 Replace sprintf with modern string interpolation for better readability.
 
 **Before:**
+
 ```php
 $message = sprintf(
     'Welcome, %s! You have %d new messages.',
@@ -303,16 +324,19 @@ $message = sprintf(
 ```
 
 **After:**
+
 ```php
 $message = "Welcome, {$user->getName()}! You have {$messageCount} new messages.";
 ```
 
 **Before:**
+
 ```php
 $url = sprintf('https://api.example.com/%s/%s', $version, $endpoint);
 ```
 
 **After:**
+
 ```php
 $url = "https://api.example.com/{$version}/{$endpoint}";
 ```
@@ -322,12 +346,14 @@ $url = "https://api.example.com/{$version}/{$endpoint}";
 Use concise syntax for passing methods as callbacks.
 
 **Before:**
+
 ```php
 $names = array_map(fn($user) => $user->getName(), $users);
 $sorted = array_filter($items, fn($item) => $this->isValid($item));
 ```
 
 **After:**
+
 ```php
 $names = array_map($user->getName(...), $users);
 $sorted = array_filter($items, $this->isValid(...));
@@ -338,6 +364,7 @@ $sorted = array_filter($items, $this->isValid(...));
 Modern array handling with destructuring.
 
 **Before:**
+
 ```php
 $parts = explode(':', $connection);
 $host = $parts[0];
@@ -345,11 +372,13 @@ $port = isset($parts[1]) ? $parts[1] : 3306;
 ```
 
 **After:**
+
 ```php
 [$host, $port] = explode(':', $connection) + [1 => 3306];
 ```
 
 **Before:**
+
 ```php
 $config = $this->loadConfig();
 $database = $config['database'];
@@ -357,6 +386,7 @@ $cache = $config['cache'];
 ```
 
 **After:**
+
 ```php
 ['database' => $database, 'cache' => $cache] = $this->loadConfig();
 ```
@@ -366,6 +396,7 @@ $cache = $config['cache'];
 Add type declarations to all properties for better type safety.
 
 **Before:**
+
 ```php
 class User
 {
@@ -377,6 +408,7 @@ class User
 ```
 
 **After:**
+
 ```php
 class User
 {
@@ -392,6 +424,7 @@ class User
 Express multiple possible types without docblocks.
 
 **Before:**
+
 ```php
 /**
  * @param int|string $id
@@ -404,6 +437,7 @@ public function findUser($id)
 ```
 
 **After:**
+
 ```php
 public function findUser(int|string $id): ?User
 {
@@ -416,12 +450,14 @@ public function findUser(int|string $id): ?User
 Use throw as an expression in various contexts.
 
 **Before:**
+
 ```php
 $value = isset($data['key']) ? $data['key'] : throw new Exception('Missing key');
 // Syntax error in PHP < 8.0
 ```
 
 **After:**
+
 ```php
 $value = $data['key'] ?? throw new Exception('Missing key');
 ```
@@ -431,13 +467,14 @@ $value = $data['key'] ?? throw new Exception('Missing key');
 ### Pattern: Modern DTO
 
 **Before:**
+
 ```php
 class UserDTO
 {
     public $id;
     public $email;
     public $status;
-    
+
     public function __construct($id, $email, $status)
     {
         $this->id = $id;
@@ -448,6 +485,7 @@ class UserDTO
 ```
 
 **After:**
+
 ```php
 enum UserStatus: string
 {
@@ -469,20 +507,21 @@ readonly class UserDTO
 ### Pattern: Modern Service Class
 
 **Before:**
+
 ```php
 class NotificationService
 {
     private $mailer;
     private $smsProvider;
     private $logger;
-    
+
     public function __construct($mailer, $smsProvider, $logger)
     {
         $this->mailer = $mailer;
         $this->smsProvider = $smsProvider;
         $this->logger = $logger;
     }
-    
+
     public function send($user, $message, $channel)
     {
         if ($channel === 'email') {
@@ -499,6 +538,7 @@ class NotificationService
 ```
 
 **After:**
+
 ```php
 enum NotificationChannel
 {
@@ -513,7 +553,7 @@ class NotificationService
         private readonly SmsProviderInterface $smsProvider,
         private readonly LoggerInterface $logger,
     ) {}
-    
+
     public function send(User $user, string $message, NotificationChannel $channel): void
     {
         match ($channel) {
@@ -521,13 +561,13 @@ class NotificationService
             NotificationChannel::Sms => $this->sendSms($user, $message),
         };
     }
-    
+
     private function sendEmail(User $user, string $message): void
     {
         $this->mailer->send(to: $user->email, body: $message);
         $this->logger->info('Email sent', ['user' => $user->id]);
     }
-    
+
     private function sendSms(User $user, string $message): void
     {
         $this->smsProvider->send(to: $user->phone, body: $message);
@@ -539,6 +579,7 @@ class NotificationService
 ## When to Apply
 
 Apply these patterns when:
+
 - The old syntax obscures intent
 - Type safety would prevent bugs
 - Readability improves significantly
@@ -546,6 +587,7 @@ Apply these patterns when:
 - Modern features better express the domain
 
 Do not apply when:
+
 - The change would reduce clarity
 - Team hasn't adopted PHP 8.0+ conventions
 - Breaking changes would impact too many dependents

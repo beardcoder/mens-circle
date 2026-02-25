@@ -4,16 +4,16 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 
 ## Tech Stack
 
-| Category | Technology |
-|----------|-----------|
-| Framework | Laravel 12, PHP 8.5 |
-| Admin Panel | Filament v5 (Livewire 4, Alpine.js) |
-| Frontend | Blade templates, vanilla TypeScript, Vite 8 |
-| Styling | Custom CSS (OKLCH color system) + Tailwind CSS v4 |
-| Database | SQLite (local/production), migrations via Eloquent |
-| Testing | Pest v4, PHPStan level 9, Rector (PHP 8.5 target) |
-| Auth | Laravel Socialite (GitHub OAuth for admin) |
-| Deployment | Docker with PHP-FPM + Nginx, `serversideup/php:8.5-fpm-nginx` |
+| Category    | Technology                                                    |
+| ----------- | ------------------------------------------------------------- |
+| Framework   | Laravel 12, PHP 8.5                                           |
+| Admin Panel | Filament v5 (Livewire 4, Alpine.js)                           |
+| Frontend    | Blade templates, vanilla TypeScript, Vite 8                   |
+| Styling     | Custom CSS (OKLCH color system) + Tailwind CSS v4             |
+| Database    | SQLite (local/production), migrations via Eloquent            |
+| Testing     | Pest v4, PHPStan level 9, Rector (PHP 8.5 target)             |
+| Auth        | Laravel Socialite (GitHub OAuth for admin)                    |
+| Deployment  | Docker with PHP-FPM + Nginx, `serversideup/php:8.5-fpm-nginx` |
 
 ## Project Structure
 
@@ -75,22 +75,23 @@ Testimonial (standalone, moderated)
 
 All routes are in `routes/web.php`. No API-specific route file.
 
-| Route | Controller | Purpose |
-|-------|-----------|---------|
-| `GET /` | PageController::home | Homepage with dynamic content blocks |
-| `GET /event` | EventController::showNext | Redirect to next upcoming event |
-| `GET /event/{slug}` | EventController::show | Event detail page |
-| `POST /event/register` | EventController::register | JSON registration endpoint |
-| `GET /teile-deine-erfahrung` | TestimonialSubmissionController::show | Testimonial form |
-| `POST /testimonial/submit` | TestimonialSubmissionController::submit | Submit testimonial |
-| `POST /newsletter/subscribe` | NewsletterController::subscribe | JSON subscription endpoint |
-| `GET /newsletter/unsubscribe/{token}` | NewsletterController::unsubscribe | Token-based unsubscribe |
-| `GET /auth/{provider}/redirect` | SocialiteController::redirect | GitHub OAuth (admin) |
-| `GET /auth/{provider}/callback` | SocialiteController::callback | OAuth callback |
-| `GET /llms.txt` | LlmsController::show | LLM-friendly site description |
-| `GET /{slug}` | PageController::show | Dynamic CMS pages (catch-all, last) |
+| Route                                 | Controller                              | Purpose                              |
+| ------------------------------------- | --------------------------------------- | ------------------------------------ |
+| `GET /`                               | PageController::home                    | Homepage with dynamic content blocks |
+| `GET /event`                          | EventController::showNext               | Redirect to next upcoming event      |
+| `GET /event/{slug}`                   | EventController::show                   | Event detail page                    |
+| `POST /event/register`                | EventController::register               | JSON registration endpoint           |
+| `GET /teile-deine-erfahrung`          | TestimonialSubmissionController::show   | Testimonial form                     |
+| `POST /testimonial/submit`            | TestimonialSubmissionController::submit | Submit testimonial                   |
+| `POST /newsletter/subscribe`          | NewsletterController::subscribe         | JSON subscription endpoint           |
+| `GET /newsletter/unsubscribe/{token}` | NewsletterController::unsubscribe       | Token-based unsubscribe              |
+| `GET /auth/{provider}/redirect`       | SocialiteController::redirect           | GitHub OAuth (admin)                 |
+| `GET /auth/{provider}/callback`       | SocialiteController::callback           | OAuth callback                       |
+| `GET /llms.txt`                       | LlmsController::show                    | LLM-friendly site description        |
+| `GET /{slug}`                         | PageController::show                    | Dynamic CMS pages (catch-all, last)  |
 
 Scheduled commands in `routes/console.php`:
+
 - `events:send-reminders` — daily at 10:00
 - `sitemap:generate` — daily at 02:00
 - Health checks — every minute
@@ -134,16 +135,16 @@ tests/
 
 ### Factory States
 
-| Factory | Key States |
-|---------|-----------|
-| Event | `published()`, `unpublished()`, `tomorrow()`, `past()`, `onDate()` |
-| Registration | `registered()`, `waitlist()`, `cancelled()`, `attended()`, `forEvent()`, `forParticipant()` |
-| Participant | `withPhone()` |
-| Page | `published()`, `unpublished()` |
-| ContentBlock | `hero()`, `text()`, `forPage()` |
-| Newsletter | `draft()`, `sending()`, `sent()` |
-| NewsletterSubscription | `active()`, `unconfirmed()`, `unsubscribed()`, `forParticipant()` |
-| Testimonial | `unpublished()`, `anonymous()` |
+| Factory                | Key States                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------- |
+| Event                  | `published()`, `unpublished()`, `tomorrow()`, `past()`, `onDate()`                          |
+| Registration           | `registered()`, `waitlist()`, `cancelled()`, `attended()`, `forEvent()`, `forParticipant()` |
+| Participant            | `withPhone()`                                                                               |
+| Page                   | `published()`, `unpublished()`                                                              |
+| ContentBlock           | `hero()`, `text()`, `forPage()`                                                             |
+| Newsletter             | `draft()`, `sending()`, `sent()`                                                            |
+| NewsletterSubscription | `active()`, `unconfirmed()`, `unsubscribed()`, `forParticipant()`                           |
+| Testimonial            | `unpublished()`, `anonymous()`                                                              |
 
 ## Code Quality Commands
 
@@ -170,6 +171,7 @@ The frontend is **server-rendered Blade** with progressive enhancement via vanil
 ### CSS
 
 Custom component-based CSS in `resources/css/` with OKLCH color palette. Files organized as:
+
 - `base/` — variables (OKLCH colors, spacing, typography), reset, typography
 - `components/` — buttons, header, footer, cards, accordion, forms, modal, toast
 - `sections/` — hero, intro, moderator, journey, testimonials, faq, newsletter, cta, event
@@ -180,6 +182,7 @@ Tailwind CSS v4 is also available via the Vite plugin for utility classes.
 ### TypeScript
 
 Entry point: `resources/js/app.ts`. Uses composable pattern:
+
 - `composables/` — `useIntersectionObserver()`, `useParallax()`, `useForm()`, `showToast()`
 - `components/` — navigation, forms (newsletter/registration/testimonial), accordion, calendar, faq, animations
 - `utils/` — helpers, Umami analytics tracking
@@ -202,13 +205,13 @@ Each block has a corresponding Blade component in `resources/views/components/bl
 
 ### Key Custom Config Files
 
-| File | Purpose |
-|------|---------|
-| `config/sevenio.php` | Seven.io SMS API settings |
-| `config/analytics.php` | Umami analytics (disabled by default) |
-| `config/health.php` | Spatie Health email notifications |
-| `config/responsecache.php` | Response cache (7-day TTL) |
-| `config/octane.php` | FrankenPHP worker configuration |
+| File                       | Purpose                               |
+| -------------------------- | ------------------------------------- |
+| `config/sevenio.php`       | Seven.io SMS API settings             |
+| `config/analytics.php`     | Umami analytics (disabled by default) |
+| `config/health.php`        | Spatie Health email notifications     |
+| `config/responsecache.php` | Response cache (7-day TTL)            |
+| `config/octane.php`        | FrankenPHP worker configuration       |
 
 ### Environment
 
@@ -223,22 +226,23 @@ Each block has a corresponding Blade component in `resources/views/components/bl
 ## Middleware Stack
 
 Configured in `bootstrap/app.php`:
+
 - `CompressHtml` — HTML minification via voku/HtmlMin
 - `CacheResponse` — Spatie Response Cache (auto-cleared by `ClearsResponseCache` trait on model changes)
 
 ## Key Third-Party Packages
 
-| Package | Purpose |
-|---------|---------|
-| `spatie/laravel-responsecache` | Full HTTP response caching |
-| `spatie/laravel-medialibrary` | Event images, content block media |
-| `spatie/laravel-settings` | Persistent `GeneralSettings` (site name, contact, socials) |
-| `spatie/laravel-sluggable` | Auto-slug for Events and Pages |
-| `spatie/laravel-health` | Health checks (mail, queue, SMS, disk, DB) |
-| `spatie/laravel-sitemap` | Sitemap generation |
-| `seven.io/api` | SMS notifications for event reminders |
-| `sentry/sentry-laravel` | Error tracking |
-| `voku/html-min` | HTML response compression |
+| Package                        | Purpose                                                    |
+| ------------------------------ | ---------------------------------------------------------- |
+| `spatie/laravel-responsecache` | Full HTTP response caching                                 |
+| `spatie/laravel-medialibrary`  | Event images, content block media                          |
+| `spatie/laravel-settings`      | Persistent `GeneralSettings` (site name, contact, socials) |
+| `spatie/laravel-sluggable`     | Auto-slug for Events and Pages                             |
+| `spatie/laravel-health`        | Health checks (mail, queue, SMS, disk, DB)                 |
+| `spatie/laravel-sitemap`       | Sitemap generation                                         |
+| `seven.io/api`                 | SMS notifications for event reminders                      |
+| `sentry/sentry-laravel`        | Error tracking                                             |
+| `voku/html-min`                | HTML response compression                                  |
 
 ## Conventions
 
@@ -375,6 +379,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 - Use appropriate PHP type hints for method parameters.
 
 <!-- Explicit Return Types and Method Params -->
+
 ```php
 protected function isAccessible(User $user, ?string $path = null): bool
 {
@@ -524,13 +529,13 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 
 Select::make('type')
-    ->options(CompanyType::class)
-    ->required()
-    ->live(),
+->options(CompanyType::class)
+->required()
+->live(),
 
 TextInput::make('company_name')
-    ->required()
-    ->visible(fn (Get $get): bool => $get('type') === 'business'),
+->required()
+->visible(fn (Get $get): bool => $get('type') === 'business'),
 
 </code-snippet>
 
@@ -540,7 +545,7 @@ Use `state()` with a `Closure` to compute derived column values:
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('full_name')
-    ->state(fn (User $record): string => "{$record->first_name} {$record->last_name}"),
+->state(fn (User $record): string => "{$record->first_name} {$record->last_name}"),
 
 </code-snippet>
 
@@ -551,10 +556,10 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
 
 Action::make('updateEmail')
-    ->form([
-        TextInput::make('email')->email()->required(),
-    ])
-    ->action(fn (array $data, User $record): void => $record->update($data)),
+->form([
+TextInput::make('email')->email()->required(),
+])
+->action(fn (array $data, User $record): void => $record->update($data)),
 
 </code-snippet>
 
@@ -623,6 +628,7 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 ### Common Mistakes
 
 **Commonly Incorrect Namespaces:**
+
 - Form fields (TextInput, Select, etc.): `Filament\Forms\Components\`
 - Infolist entries (for read-only views) (TextEntry, IconEntry, etc.): `Filament\Infolists\Components\`
 - Layout components (Grid, Section, Fieldset, Tabs, Wizard, etc.): `Filament\Schemas\Components\`
@@ -631,6 +637,7 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 - Icons: `Filament\Support\Icons\Heroicon` enum (e.g., `Heroicon::PencilSquare`)
 
 **Recent breaking changes to Filament:**
+
 - File visibility is `private` by default. Use `->visibility('public')` for public access.
 - `Grid`, `Section`, and `Fieldset` no longer span all columns by default.
 

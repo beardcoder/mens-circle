@@ -222,23 +222,28 @@ public function registerMediaConversions(?Media $media = null): void
 ### Image Manipulation Methods (via spatie/image)
 
 Resizing and fitting:
+
 - `width(int)`, `height(int)` — constrain dimensions
 - `fit(Fit, int, int)` — fit within bounds using `Fit::Contain`, `Fit::Max`, `Fit::Fill`, `Fit::Stretch`, `Fit::Crop`
 - `crop(int, int)` — crop to exact dimensions
 
 Effects:
+
 - `sharpen(int)`, `blur(int)`, `pixelate(int)`
 - `greyscale()`, `sepia()`
 - `brightness(int)`, `contrast(int)`, `colorize(int, int, int)`
 
 Orientation:
+
 - `orientation(int)`, `flip(string)`, `rotate(int)`
 
 Format:
+
 - `format(string)` — `'jpg'`, `'png'`, `'webp'`, `'avif'`
 - `quality(int)` — 1-100
 
 Other:
+
 - `border(int, string, string)`, `watermark(string)`
 - `optimize()`, `nonOptimized()`
 
@@ -436,6 +441,7 @@ use Spatie\MediaLibrary\MediaCollections\Events\CollectionHasBeenClearedEvent;
 ```
 
 Listen to these events to hook into the media lifecycle:
+
 ```php
 Event::listen(MediaHasBeenAddedEvent::class, function ($event) {
     $event->media; // the added Media model

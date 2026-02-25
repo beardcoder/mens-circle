@@ -5,6 +5,7 @@ A modern web application for managing and organizing men's circle events in Lowe
 ## Features
 
 ### Event Management
+
 - Create, manage, and publish events with rich content
 - Support for images and detailed descriptions
 - Event capacity management with automatic status updates
@@ -12,6 +13,7 @@ A modern web application for managing and organizing men's circle events in Lowe
 - Automatic redirection to upcoming events
 
 ### Participant Registration
+
 - Online registration form for events
 - Support for single or multiple participants
 - Phone number validation with German format
@@ -19,6 +21,7 @@ A modern web application for managing and organizing men's circle events in Lowe
 - Admin panel for managing registrations
 
 ### Newsletter System
+
 - Email subscription management
 - Double opt-in workflow
 - Unsubscribe functionality with secure tokens
@@ -26,18 +29,21 @@ A modern web application for managing and organizing men's circle events in Lowe
 - Newsletter campaigns with HTML templates
 
 ### Testimonials
+
 - Public form for sharing experiences
 - Optional participant approval before publication
 - Rich text support for testimonials
 - Display on website with author attribution
 
 ### Content Management
+
 - Dynamic page creation and management
 - Support for multiple content block types
 - SEO-friendly slugs for all pages
 - Dedicated pages for Impressum and Datenschutz (legal requirements)
 
 ### Admin Panel
+
 - Powered by Filament 5 for modern admin experience
 - Dashboard with statistics and overview widgets
 - Health monitoring for system components
@@ -49,11 +55,11 @@ A modern web application for managing and organizing men's circle events in Lowe
 
 - **Backend**: Laravel 12 (PHP 8.3-8.5)
 - **Admin Panel**: Filament 5
-- **Frontend**: 
-  - Vanilla TypeScript with modern composables pattern
-  - Modern CSS (native nesting, custom properties, OKLCH colors, container queries, logical properties)
-  - Motion library for animations
-  - Blade templates for server-side rendering
+- **Frontend**:
+    - Vanilla TypeScript with modern composables pattern
+    - Modern CSS (native nesting, custom properties, OKLCH colors, container queries, logical properties)
+    - Motion library for animations
+    - Blade templates for server-side rendering
 - **Build Tools**: Vite, Bun
 - **Database**: SQLite (default) / MySQL
 - **Server**: Laravel Octane with FrankenPHP
@@ -108,6 +114,7 @@ bun run build
 ### Configuration
 
 Edit `.env` file and configure:
+
 - `APP_NAME` - Your application name
 - `APP_URL` - Your application URL
 - Database settings (SQLite by default)
@@ -125,6 +132,7 @@ composer run dev
 ```
 
 This command starts:
+
 - PHP development server (port 8000)
 - Queue worker for background jobs
 - Laravel Pail for real-time logs

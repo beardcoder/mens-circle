@@ -7,6 +7,7 @@ General code quality improvements independent of PHP version or framework. These
 ### Pattern: Flatten Nested Conditionals
 
 **Before:**
+
 ```php
 public function processOrder(Order $order): bool
 {
@@ -32,27 +33,28 @@ public function processOrder(Order $order): bool
 ```
 
 **After:**
+
 ```php
 public function processOrder(Order $order): bool
 {
     if (!$order->isValid()) {
         throw new ValidationException('Invalid order');
     }
-    
+
     if (!$order->hasStock()) {
         throw new ValidationException('Out of stock');
     }
-    
+
     if (!$order->user->hasPaymentMethod()) {
         throw new ValidationException('No payment method');
     }
-    
+
     if (!$this->paymentGateway->charge($order)) {
         throw new PaymentException('Payment failed');
     }
-    
+
     $this->fulfillment->process($order);
-    
+
     return true;
 }
 ```
@@ -60,21 +62,23 @@ public function processOrder(Order $order): bool
 ### Pattern: Extract Complex Boolean Logic
 
 **Before:**
+
 ```php
-if (($user->age >= 18 && $user->hasLicense && !$user->isBanned) || 
+if (($user->age >= 18 && $user->hasLicense && !$user->isBanned) ||
     ($user->age >= 16 && $user->hasParentalConsent && $user->hasLicense)) {
     $this->allowAccess($user);
 }
 ```
 
 **After:**
+
 ```php
-$canAccessAsAdult = $user->age >= 18 
-    && $user->hasLicense 
+$canAccessAsAdult = $user->age >= 18
+    && $user->hasLicense
     && !$user->isBanned;
-    
-$canAccessAsMinor = $user->age >= 16 
-    && $user->hasParentalConsent 
+
+$canAccessAsMinor = $user->age >= 16
+    && $user->hasParentalConsent
     && $user->hasLicense;
 
 if ($canAccessAsAdult || $canAccessAsMinor) {
@@ -85,15 +89,17 @@ if ($canAccessAsAdult || $canAccessAsMinor) {
 ### Pattern: Replace Complex Ternary
 
 **Before:**
+
 ```php
-$discount = $user->isPremium() 
-    ? ($order->total > 100 
-        ? ($order->hasPromoCode ? 0.30 : 0.20) 
+$discount = $user->isPremium()
+    ? ($order->total > 100
+        ? ($order->hasPromoCode ? 0.30 : 0.20)
         : 0.10)
     : 0;
 ```
 
 **After:**
+
 ```php
 $discount = match (true) {
     !$user->isPremium() => 0,
@@ -108,6 +114,7 @@ $discount = match (true) {
 ### Pattern: Over-Abstracted Interfaces
 
 **Before:**
+
 ```php
 interface UserRepositoryInterface
 {
@@ -132,13 +139,13 @@ class UserService implements UserServiceInterface
     public function __construct(
         private UserRepositoryInterface $repository
     ) {}
-    
+
     public function getUser(int $id): User
     {
-        return $this->repository->find($id) 
+        return $this->repository->find($id)
             ?? throw new NotFoundException();
     }
-    
+
     public function updateUser(User $user): void
     {
         $this->repository->save($user);
@@ -147,6 +154,7 @@ class UserService implements UserServiceInterface
 ```
 
 **After:**
+
 ```php
 // If there's only one implementation, remove the interface
 class UserRepository
@@ -162,23 +170,24 @@ class UserRepository
 ### Pattern: Unnecessary Wrapper Methods
 
 **Before:**
+
 ```php
 class OrderService
 {
     public function __construct(
         private OrderRepository $repository
     ) {}
-    
+
     public function findOrder(int $id): ?Order
     {
         return $this->repository->find($id);
     }
-    
+
     public function saveOrder(Order $order): void
     {
         $this->repository->save($order);
     }
-    
+
     public function deleteOrder(Order $order): void
     {
         $this->repository->delete($order);
@@ -187,6 +196,7 @@ class OrderService
 ```
 
 **After:**
+
 ```php
 // Remove service, use repository directly
 // Add methods only when they add actual business logic
@@ -196,7 +206,7 @@ class OrderService
         private OrderRepository $repository,
         private EventDispatcher $dispatcher
     ) {}
-    
+
     public function placeOrder(Order $order): void
     {
         // Actual business logic
@@ -212,6 +222,7 @@ class OrderService
 ### Pattern: Remove Obvious Comments
 
 **Before:**
+
 ```php
 // Get the user from database
 $user = $this->repository->find($id);
@@ -230,8 +241,9 @@ $this->repository->save($user);
 ```
 
 **After:**
+
 ```php
-$user = $this->repository->find($id) 
+$user = $this->repository->find($id)
     ?? throw new NotFoundException('User not found');
 
 $user->setEmail($email);
@@ -241,6 +253,7 @@ $this->repository->save($user);
 ### Pattern: Consolidate Duplicate Logic
 
 **Before:**
+
 ```php
 public function sendWelcomeEmail(User $user): void
 {
@@ -248,7 +261,7 @@ public function sendWelcomeEmail(User $user): void
         ->to($user->email)
         ->subject('Welcome!')
         ->html($this->renderTemplate('emails/welcome.html.twig', ['user' => $user]));
-    
+
     $this->mailer->send($email);
 }
 
@@ -261,12 +274,13 @@ public function sendResetPasswordEmail(User $user, string $token): void
             'user' => $user,
             'token' => $token
         ]));
-    
+
     $this->mailer->send($email);
 }
 ```
 
 **After:**
+
 ```php
 private function sendEmail(User $user, string $template, array $data = []): void
 {
@@ -274,7 +288,7 @@ private function sendEmail(User $user, string $template, array $data = []): void
         ->to($user->email)
         ->subject($data['subject'] ?? 'Notification')
         ->html($this->renderTemplate($template, ['user' => $user, ...$data]));
-    
+
     $this->mailer->send($email);
 }
 
@@ -299,6 +313,7 @@ public function sendResetPasswordEmail(User $user, string $token): void
 ### Pattern: Break Down Large Methods
 
 **Before:**
+
 ```php
 public function processCheckout(array $data): Order
 {
@@ -307,25 +322,26 @@ public function processCheckout(array $data): Order
         throw new ValidationException('Invalid email');
     }
     // ... more validation
-    
+
     // Create order (30 lines)
     $order = new Order();
     $order->setUser($user);
     // ... more setup
-    
+
     // Process payment (25 lines)
     $paymentResult = $this->paymentGateway->charge(...);
     // ... handle payment
-    
+
     // Send emails (15 lines)
     $this->mailer->send(...);
     // ... more emails
-    
+
     return $order;
 }
 ```
 
 **After:**
+
 ```php
 public function processCheckout(array $data): Order
 {
@@ -333,7 +349,7 @@ public function processCheckout(array $data): Order
     $order = $this->createOrder($validatedData);
     $this->processPayment($order);
     $this->sendOrderConfirmation($order);
-    
+
     return $order;
 }
 
@@ -363,6 +379,7 @@ private function sendOrderConfirmation(Order $order): void
 ### Pattern: Replace Magic Numbers
 
 **Before:**
+
 ```php
 if ($order->status === 3) {
     // Process shipped orders
@@ -374,6 +391,7 @@ if ($user->level >= 5) {
 ```
 
 **After:**
+
 ```php
 enum OrderStatus: int
 {
@@ -396,6 +414,7 @@ if ($user->level >= self::PREMIUM_LEVEL) {
 ### Pattern: Improve Variable Names
 
 **Before:**
+
 ```php
 $d = new DateTime();
 $u = $this->repo->find($id);
@@ -404,6 +423,7 @@ $cnt = count($temp);
 ```
 
 **After:**
+
 ```php
 $currentDate = new DateTime();
 $user = $this->repository->find($id);
@@ -416,6 +436,7 @@ $orderCount = count($orders);
 ### Pattern: Query in Loops (N+1 Problem)
 
 **Before:**
+
 ```php
 $users = $this->userRepository->findAll();
 foreach ($users as $user) {
@@ -425,6 +446,7 @@ foreach ($users as $user) {
 ```
 
 **After:**
+
 ```php
 // Eager load relationships
 $users = $this->userRepository->findAllWithOrders();
@@ -440,6 +462,7 @@ $usersWithCounts = $this->userRepository->findAllWithOrderCounts();
 ### Pattern: Unnecessary Loops
 
 **Before:**
+
 ```php
 $sum = 0;
 foreach ($orders as $order) {
@@ -453,6 +476,7 @@ foreach ($users as $user) {
 ```
 
 **After:**
+
 ```php
 $sum = array_sum(array_column($orders, 'total'));
 // Or with collections: $orders->sum('total')
@@ -466,6 +490,7 @@ $emails = array_column($users, 'email');
 ### Pattern: Specific Exceptions
 
 **Before:**
+
 ```php
 public function charge(Order $order): void
 {
@@ -478,6 +503,7 @@ public function charge(Order $order): void
 ```
 
 **After:**
+
 ```php
 public function charge(Order $order): void
 {
@@ -502,18 +528,19 @@ public function charge(Order $order): void
 ### Pattern: Add Missing Type Hints
 
 **Before:**
+
 ```php
 class UserService
 {
     private $repository;
     private $validator;
-    
+
     public function __construct($repository, $validator)
     {
         $this->repository = $repository;
         $this->validator = $validator;
     }
-    
+
     public function createUser($data)
     {
         if ($this->validator->validate($data)) {
@@ -525,6 +552,7 @@ class UserService
 ```
 
 **After:**
+
 ```php
 class UserService
 {
@@ -532,13 +560,13 @@ class UserService
         private UserRepository $repository,
         private ValidatorInterface $validator,
     ) {}
-    
+
     public function createUser(array $data): User
     {
         if (!$this->validator->validate($data)) {
             throw new ValidationException('Invalid user data');
         }
-        
+
         return $this->repository->save($data);
     }
 }
@@ -549,6 +577,7 @@ class UserService
 ### Pattern: Positive Logic
 
 **Before:**
+
 ```php
 if (!$user->isNotActive()) {
     // Do something
@@ -560,6 +589,7 @@ if (!empty($errors)) {
 ```
 
 **After:**
+
 ```php
 if ($user->isActive()) {
     // Do something
@@ -573,6 +603,7 @@ if ($errors) {
 ### Pattern: Remove Double Negatives
 
 **Before:**
+
 ```php
 if (!$user->isNotVerified()) {
     $this->grantAccess();
@@ -580,6 +611,7 @@ if (!$user->isNotVerified()) {
 ```
 
 **After:**
+
 ```php
 if ($user->isVerified()) {
     $this->grantAccess();
@@ -591,18 +623,19 @@ if ($user->isVerified()) {
 ### Pattern: Use Readonly and Final
 
 **Before:**
+
 ```php
 class Configuration
 {
     private string $apiKey;
     private string $apiSecret;
-    
+
     public function __construct(string $apiKey, string $apiSecret)
     {
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
     }
-    
+
     public function setApiKey(string $apiKey): void
     {
         $this->apiKey = $apiKey; // Dangerous mutation
@@ -611,6 +644,7 @@ class Configuration
 ```
 
 **After:**
+
 ```php
 final readonly class Configuration
 {
@@ -618,7 +652,7 @@ final readonly class Configuration
         public string $apiKey,
         public string $apiSecret,
     ) {}
-    
+
     // No setters - object is immutable
 }
 ```
@@ -626,6 +660,7 @@ final readonly class Configuration
 ## When to Apply
 
 Apply these simplifications when:
+
 - Code is harder to understand than necessary
 - Abstractions add no value
 - Logic can be flattened without losing clarity
@@ -634,6 +669,7 @@ Apply these simplifications when:
 - Performance could be improved without complexity
 
 Do not apply when:
+
 - Current code is already clear and maintainable
 - Abstraction is necessary for testing or flexibility
 - Changes would break existing patterns team relies on

@@ -1,10 +1,10 @@
 ---
 name: tailwindcss-development
 description: >-
-  Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components,
-  working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors,
-  typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle,
-  hero section, cards, buttons, or any visual/UI changes.
+    Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components,
+    working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors,
+    typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle,
+    hero section, cards, buttons, or any visual/UI changes.
 ---
 
 # Tailwind CSS Development
@@ -59,19 +59,19 @@ In Tailwind v4, import Tailwind with a regular CSS `@import` statement instead o
 
 Tailwind v4 removed deprecated utilities. Use the replacements shown below. Opacity values remain numeric.
 
-| Deprecated | Replacement |
-|------------|-------------|
-| bg-opacity-* | bg-black/* |
-| text-opacity-* | text-black/* |
-| border-opacity-* | border-black/* |
-| divide-opacity-* | divide-black/* |
-| ring-opacity-* | ring-black/* |
-| placeholder-opacity-* | placeholder-black/* |
-| flex-shrink-* | shrink-* |
-| flex-grow-* | grow-* |
-| overflow-ellipsis | text-ellipsis |
-| decoration-slice | box-decoration-slice |
-| decoration-clone | box-decoration-clone |
+| Deprecated             | Replacement          |
+| ---------------------- | -------------------- |
+| bg-opacity-\*          | bg-black/\*          |
+| text-opacity-\*        | text-black/\*        |
+| border-opacity-\*      | border-black/\*      |
+| divide-opacity-\*      | divide-black/\*      |
+| ring-opacity-\*        | ring-black/\*        |
+| placeholder-opacity-\* | placeholder-black/\* |
+| flex-shrink-\*         | shrink-\*            |
+| flex-grow-\*           | grow-\*              |
+| overflow-ellipsis      | text-ellipsis        |
+| decoration-slice       | box-decoration-slice |
+| decoration-clone       | box-decoration-clone |
 
 ## Spacing
 
@@ -117,7 +117,7 @@ If existing pages and components support dark mode, new pages and components mus
 
 ## Common Pitfalls
 
-- Using deprecated v3 utilities (bg-opacity-*, flex-shrink-*, etc.)
+- Using deprecated v3 utilities (bg-opacity-_, flex-shrink-_, etc.)
 - Using `@tailwind` directives instead of `@import "tailwindcss"`
 - Trying to use `tailwind.config.js` instead of CSS `@theme` directive
 - Using margins for spacing between siblings instead of gap utilities

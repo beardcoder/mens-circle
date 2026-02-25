@@ -9,6 +9,7 @@ Replace array manipulation chains with Laravel Collections for better readabilit
 ### Pattern: Filter and Map
 
 **Before:**
+
 ```php
 $activeUserEmails = array_map(
     fn($user) => $user->email,
@@ -17,6 +18,7 @@ $activeUserEmails = array_map(
 ```
 
 **After:**
+
 ```php
 $activeUserEmails = collect($users)
     ->filter(fn($user) => $user->is_active)
@@ -27,6 +29,7 @@ $activeUserEmails = collect($users)
 ### Pattern: Group By
 
 **Before:**
+
 ```php
 $grouped = [];
 foreach ($orders as $order) {
@@ -39,6 +42,7 @@ foreach ($orders as $order) {
 ```
 
 **After:**
+
 ```php
 $grouped = collect($orders)->groupBy('status');
 ```
@@ -46,6 +50,7 @@ $grouped = collect($orders)->groupBy('status');
 ### Pattern: Sum and Reduce
 
 **Before:**
+
 ```php
 $total = array_reduce(
     $orders,
@@ -55,6 +60,7 @@ $total = array_reduce(
 ```
 
 **After:**
+
 ```php
 $total = collect($orders)->sum('total');
 ```
@@ -62,6 +68,7 @@ $total = collect($orders)->sum('total');
 ### Pattern: Unique Values
 
 **Before:**
+
 ```php
 $uniqueEmails = array_unique(
     array_map(fn($user) => $user->email, $users)
@@ -69,6 +76,7 @@ $uniqueEmails = array_unique(
 ```
 
 **After:**
+
 ```php
 $uniqueEmails = collect($users)->pluck('email')->unique();
 ```
@@ -80,6 +88,7 @@ Replace manual SQL, joins, and suboptimal queries with Eloquent features.
 ### Pattern: Relationship Queries
 
 **Before:**
+
 ```php
 $users = DB::table('users')
     ->join('posts', 'users.id', '=', 'posts.user_id')
@@ -90,6 +99,7 @@ $users = DB::table('users')
 ```
 
 **After:**
+
 ```php
 $users = User::whereHas('posts', function ($query) {
     $query->where('published', true);
@@ -99,6 +109,7 @@ $users = User::whereHas('posts', function ($query) {
 ### Pattern: Eager Loading
 
 **Before:**
+
 ```php
 $users = User::all();
 foreach ($users as $user) {
@@ -108,6 +119,7 @@ foreach ($users as $user) {
 ```
 
 **After:**
+
 ```php
 $users = User::with('profile')->get();
 foreach ($users as $user) {
@@ -118,12 +130,14 @@ foreach ($users as $user) {
 ### Pattern: Count Queries
 
 **Before:**
+
 ```php
 $users = User::where('active', true)->get();
 $count = count($users);
 ```
 
 **After:**
+
 ```php
 $count = User::where('active', true)->count();
 ```
@@ -131,11 +145,13 @@ $count = User::where('active', true)->count();
 ### Pattern: Existence Checks
 
 **Before:**
+
 ```php
 $hasActiveUsers = count(User::where('active', true)->get()) > 0;
 ```
 
 **After:**
+
 ```php
 $hasActiveUsers = User::where('active', true)->exists();
 ```
@@ -147,6 +163,7 @@ Replace manual model lookups with route model binding.
 ### Pattern: Basic Binding
 
 **Before:**
+
 ```php
 Route::get('/users/{id}', function ($id) {
     $user = User::findOrFail($id);
@@ -155,6 +172,7 @@ Route::get('/users/{id}', function ($id) {
 ```
 
 **After:**
+
 ```php
 Route::get('/users/{user}', function (User $user) {
     return view('user.show', compact('user'));
@@ -164,6 +182,7 @@ Route::get('/users/{user}', function (User $user) {
 ### Pattern: Custom Key Binding
 
 **Before:**
+
 ```php
 Route::get('/users/{slug}', function ($slug) {
     $user = User::where('slug', $slug)->firstOrFail();
@@ -172,6 +191,7 @@ Route::get('/users/{slug}', function ($slug) {
 ```
 
 **After:**
+
 ```php
 // In User model
 public function getRouteKeyName()
@@ -190,6 +210,7 @@ Route::get('/users/{user:slug}', function (User $user) {
 Use Form Request classes instead of inline validation.
 
 **Before:**
+
 ```php
 public function store(Request $request)
 {
@@ -198,14 +219,15 @@ public function store(Request $request)
         'body' => 'required',
         'status' => 'required|in:draft,published',
     ]);
-    
+
     Post::create($validated);
-    
+
     return redirect()->route('posts.index');
 }
 ```
 
 **After:**
+
 ```php
 // app/Http/Requests/StorePostRequest.php
 class StorePostRequest extends FormRequest
@@ -224,7 +246,7 @@ class StorePostRequest extends FormRequest
 public function store(StorePostRequest $request)
 {
     Post::create($request->validated());
-    
+
     return redirect()->route('posts.index');
 }
 ```
@@ -234,6 +256,7 @@ public function store(StorePostRequest $request)
 Use Laravel's response helpers instead of manual JSON responses.
 
 **Before:**
+
 ```php
 return response()->json([
     'success' => true,
@@ -243,6 +266,7 @@ return response()->json([
 ```
 
 **After:**
+
 ```php
 return response()->json([
     'data' => $user,
@@ -256,6 +280,7 @@ return new UserResource($user);
 ### Pattern: Error Responses
 
 **Before:**
+
 ```php
 return response()->json([
     'success' => false,
@@ -265,6 +290,7 @@ return response()->json([
 ```
 
 **After:**
+
 ```php
 return response()->json([
     'message' => 'Validation failed',
@@ -280,6 +306,7 @@ throw ValidationException::withMessages($errors);
 Use Eloquent's conditional query methods.
 
 **Before:**
+
 ```php
 $query = User::query();
 
@@ -295,6 +322,7 @@ $users = $query->get();
 ```
 
 **After:**
+
 ```php
 $users = User::query()
     ->when($request->has('active'), fn($q) => $q->where('active', $request->active))
@@ -307,6 +335,7 @@ $users = User::query()
 Use collection higher order messages for cleaner iteration.
 
 **Before:**
+
 ```php
 $users->each(function ($user) {
     $user->notify(new WelcomeNotification);
@@ -314,11 +343,13 @@ $users->each(function ($user) {
 ```
 
 **After:**
+
 ```php
 $users->each->notify(new WelcomeNotification);
 ```
 
 **Before:**
+
 ```php
 $activeUsers = $users->filter(function ($user) {
     return $user->isActive();
@@ -326,6 +357,7 @@ $activeUsers = $users->filter(function ($user) {
 ```
 
 **After:**
+
 ```php
 $activeUsers = $users->filter->isActive();
 ```
@@ -335,6 +367,7 @@ $activeUsers = $users->filter->isActive();
 Use modern attribute casting in models.
 
 **Before:**
+
 ```php
 class Post extends Model
 {
@@ -343,12 +376,12 @@ class Post extends Model
         'metadata' => 'array',
         'is_featured' => 'boolean',
     ];
-    
+
     public function getTagsAttribute($value)
     {
         return json_decode($value, true);
     }
-    
+
     public function setTagsAttribute($value)
     {
         $this->attributes['tags'] = json_encode($value);
@@ -357,6 +390,7 @@ class Post extends Model
 ```
 
 **After:**
+
 ```php
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 
@@ -376,13 +410,14 @@ class Post extends Model
 Replace string status fields with Enums.
 
 **Before:**
+
 ```php
 class Order extends Model
 {
     const STATUS_PENDING = 'pending';
     const STATUS_PROCESSING = 'processing';
     const STATUS_COMPLETED = 'completed';
-    
+
     public function isPending(): bool
     {
         return $this->status === self::STATUS_PENDING;
@@ -391,13 +426,14 @@ class Order extends Model
 ```
 
 **After:**
+
 ```php
 enum OrderStatus: string
 {
     case Pending = 'pending';
     case Processing = 'processing';
     case Completed = 'completed';
-    
+
     public function color(): string
     {
         return match($this) {
@@ -421,6 +457,7 @@ class Order extends Model
 Replace nested service calls with Laravel's Pipeline.
 
 **Before:**
+
 ```php
 $data = $this->validateInput($request->all());
 $data = $this->sanitizeData($data);
@@ -430,6 +467,7 @@ return $this->process($data);
 ```
 
 **After:**
+
 ```php
 return Pipeline::send($request->all())
     ->through([
@@ -446,6 +484,7 @@ return Pipeline::send($request->all())
 Use Laravel's built-in directives instead of PHP conditionals in Blade.
 
 **Before:**
+
 ```blade
 <?php if (auth()->check()): ?>
     <p>Welcome, <?= auth()->user()->name ?></p>
@@ -453,6 +492,7 @@ Use Laravel's built-in directives instead of PHP conditionals in Blade.
 ```
 
 **After:**
+
 ```blade
 @auth
     <p>Welcome, {{ auth()->user()->name }}</p>
@@ -464,6 +504,7 @@ Use Laravel's built-in directives instead of PHP conditionals in Blade.
 Use the new Attribute-based accessors instead of get/set methods.
 
 **Before:**
+
 ```php
 public function getFullNameAttribute()
 {
@@ -477,6 +518,7 @@ public function setPasswordAttribute($value)
 ```
 
 **After:**
+
 ```php
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
@@ -498,12 +540,14 @@ protected function password(): Attribute
 ## When to Apply
 
 Apply Laravel-specific patterns when:
+
 - `laravel/framework` is present in composer.json
 - Code uses array functions where Collections would be clearer
 - Manual queries can be replaced with Eloquent features
 - Framework features would reduce boilerplate significantly
 
 Do not apply when:
+
 - Performance is critical and raw queries are necessary
 - The application is in maintenance mode with no Laravel updates planned
 - Team prefers vanilla PHP patterns

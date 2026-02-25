@@ -121,6 +121,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 - Use appropriate PHP type hints for method parameters.
 
 <!-- Explicit Return Types and Method Params -->
+
 ```php
 protected function isAccessible(User $user, ?string $path = null): bool
 {
@@ -270,13 +271,13 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 
 Select::make('type')
-    ->options(CompanyType::class)
-    ->required()
-    ->live(),
+->options(CompanyType::class)
+->required()
+->live(),
 
 TextInput::make('company_name')
-    ->required()
-    ->visible(fn (Get $get): bool => $get('type') === 'business'),
+->required()
+->visible(fn (Get $get): bool => $get('type') === 'business'),
 
 </code-snippet>
 
@@ -286,7 +287,7 @@ Use `state()` with a `Closure` to compute derived column values:
 use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('full_name')
-    ->state(fn (User $record): string => "{$record->first_name} {$record->last_name}"),
+->state(fn (User $record): string => "{$record->first_name} {$record->last_name}"),
 
 </code-snippet>
 
@@ -297,10 +298,10 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
 
 Action::make('updateEmail')
-    ->form([
-        TextInput::make('email')->email()->required(),
-    ])
-    ->action(fn (array $data, User $record): void => $record->update($data)),
+->form([
+TextInput::make('email')->email()->required(),
+])
+->action(fn (array $data, User $record): void => $record->update($data)),
 
 </code-snippet>
 
@@ -369,6 +370,7 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 ### Common Mistakes
 
 **Commonly Incorrect Namespaces:**
+
 - Form fields (TextInput, Select, etc.): `Filament\Forms\Components\`
 - Infolist entries (for read-only views) (TextEntry, IconEntry, etc.): `Filament\Infolists\Components\`
 - Layout components (Grid, Section, Fieldset, Tabs, Wizard, etc.): `Filament\Schemas\Components\`
@@ -377,6 +379,7 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 - Icons: `Filament\Support\Icons\Heroicon` enum (e.g., `Heroicon::PencilSquare`)
 
 **Recent breaking changes to Filament:**
+
 - File visibility is `private` by default. Use `->visibility('public')` for public access.
 - `Grid`, `Section`, and `Fieldset` no longer span all columns by default.
 

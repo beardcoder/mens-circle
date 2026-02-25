@@ -1,10 +1,10 @@
 ---
 name: pest-testing
 description: >-
-  Tests applications using the Pest 4 PHP framework. Activates when writing tests, creating unit or feature
-  tests, adding assertions, testing Livewire components, browser testing, debugging test failures,
-  working with datasets or mocking; or when the user mentions test, spec, TDD, expects, assertion,
-  coverage, or needs to verify functionality works.
+    Tests applications using the Pest 4 PHP framework. Activates when writing tests, creating unit or feature
+    tests, adding assertions, testing Livewire components, browser testing, debugging test failures,
+    working with datasets or mocking; or when the user mentions test, spec, TDD, expects, assertion,
+    coverage, or needs to verify functionality works.
 ---
 
 # Pest Testing 4
@@ -40,7 +40,7 @@ All tests must be written using Pest. Use `php artisan make:test --pest {name}`.
 <code-snippet name="Basic Pest Test Example" lang="php">
 
 it('is true', function () {
-    expect(true)->toBeTrue();
+expect(true)->toBeTrue();
 });
 
 </code-snippet>
@@ -58,16 +58,16 @@ Use specific assertions (`assertSuccessful()`, `assertNotFound()`) instead of `a
 <code-snippet name="Pest Response Assertion" lang="php">
 
 it('returns all', function () {
-    $this->postJson('/api/docs', [])->assertSuccessful();
+$this->postJson('/api/docs', [])->assertSuccessful();
 });
 
 </code-snippet>
 
-| Use | Instead of |
-|-----|------------|
+| Use                  | Instead of          |
+| -------------------- | ------------------- |
 | `assertSuccessful()` | `assertStatus(200)` |
-| `assertNotFound()` | `assertStatus(404)` |
-| `assertForbidden()` | `assertStatus(403)` |
+| `assertNotFound()`   | `assertStatus(404)` |
+| `assertForbidden()`  | `assertStatus(403)` |
 
 ## Mocking
 
@@ -82,21 +82,21 @@ Use datasets for repetitive tests (validation rules, etc.):
 it('has emails', function (string $email) {
     expect($email)->not->toBeEmpty();
 })->with([
-    'james' => 'james@laravel.com',
-    'taylor' => 'taylor@laravel.com',
+'james' => 'james@laravel.com',
+'taylor' => 'taylor@laravel.com',
 ]);
 
 </code-snippet>
 
 ## Pest 4 Features
 
-| Feature | Purpose |
-|---------|---------|
-| Browser Testing | Full integration tests in real browsers |
-| Smoke Testing | Validate multiple pages quickly |
-| Visual Regression | Compare screenshots for visual changes |
-| Test Sharding | Parallel CI runs |
-| Architecture Testing | Enforce code conventions |
+| Feature              | Purpose                                 |
+| -------------------- | --------------------------------------- |
+| Browser Testing      | Full integration tests in real browsers |
+| Smoke Testing        | Validate multiple pages quickly         |
+| Visual Regression    | Compare screenshots for visual changes  |
+| Test Sharding        | Parallel CI runs                        |
+| Architecture Testing | Enforce code conventions                |
 
 ### Browser Test Example
 
@@ -114,7 +114,7 @@ Browser tests run in real browsers for full integration testing:
 <code-snippet name="Pest Browser Test Example" lang="php">
 
 it('may reset the password', function () {
-    Notification::fake();
+Notification::fake();
 
     $this->actingAs(User::factory()->create());
 
@@ -128,6 +128,7 @@ it('may reset the password', function () {
         ->assertSee('We have emailed your password reset link!');
 
     Notification::assertSent(ResetPassword::class);
+
 });
 
 </code-snippet>
@@ -159,9 +160,9 @@ Pest 4 includes architecture testing (from Pest 3):
 <code-snippet name="Architecture Test Example" lang="php">
 
 arch('controllers')
-    ->expect('App\Http\Controllers')
-    ->toExtendNothing()
-    ->toHaveSuffix('Controller');
+->expect('App\Http\Controllers')
+->toExtendNothing()
+->toHaveSuffix('Controller');
 
 </code-snippet>
 

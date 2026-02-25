@@ -7,17 +7,19 @@ Framework-specific improvements for Symfony projects. Apply these when `symfony/
 ### Pattern: Modern Service Configuration
 
 **Before:**
+
 ```yaml
 # services.yaml
 services:
     App\Service\UserService:
         arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@security.password_encoder'
-            - '@event_dispatcher'
+            - "@doctrine.orm.entity_manager"
+            - "@security.password_encoder"
+            - "@event_dispatcher"
 ```
 
 **After:**
+
 ```yaml
 # services.yaml
 services:
@@ -26,14 +28,15 @@ services:
         autoconfigure: true
 
     App\:
-        resource: '../src/'
+        resource: "../src/"
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+            - "../src/DependencyInjection/"
+            - "../src/Entity/"
+            - "../src/Kernel.php"
 ```
 
 **PHP Class:**
+
 ```php
 class UserService
 {
@@ -50,6 +53,7 @@ class UserService
 ### Pattern: AbstractController Features
 
 **Before:**
+
 ```php
 class UserController extends Controller
 {
@@ -58,11 +62,11 @@ class UserController extends Controller
         $user = $this->getDoctrine()
             ->getRepository(User::class)
             ->find($id);
-            
+
         if (!$user) {
             throw $this->createNotFoundException('User not found');
         }
-        
+
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
@@ -71,6 +75,7 @@ class UserController extends Controller
 ```
 
 **After:**
+
 ```php
 class UserController extends AbstractController
 {
@@ -87,6 +92,7 @@ class UserController extends AbstractController
 ### Pattern: Attributes over Annotations
 
 **Before:**
+
 ```php
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -102,7 +108,7 @@ class UserApiController extends AbstractController
     {
         // ...
     }
-    
+
     /**
      * @Route("/{id}", name="show", methods={"GET"})
      */
@@ -114,6 +120,7 @@ class UserApiController extends AbstractController
 ```
 
 **After:**
+
 ```php
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -126,7 +133,7 @@ class UserApiController extends AbstractController
     {
         // ...
     }
-    
+
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(User $user): JsonResponse
     {
@@ -140,27 +147,28 @@ class UserApiController extends AbstractController
 ### Pattern: Modern Form Building
 
 **Before:**
+
 ```php
 public function new(Request $request): Response
 {
     $user = new User();
-    
+
     $form = $this->createFormBuilder($user)
         ->add('email', EmailType::class)
         ->add('password', PasswordType::class)
         ->add('save', SubmitType::class)
         ->getForm();
-        
+
     $form->handleRequest($request);
-    
+
     if ($form->isSubmitted() && $form->isValid()) {
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
-        
+
         return $this->redirectToRoute('user_list');
     }
-    
+
     return $this->render('user/new.html.twig', [
         'form' => $form->createView(),
     ]);
@@ -168,6 +176,7 @@ public function new(Request $request): Response
 ```
 
 **After:**
+
 ```php
 #[Route('/user/new', name: 'user_new')]
 public function new(
@@ -177,14 +186,14 @@ public function new(
     $user = new User();
     $form = $this->createForm(UserType::class, $user);
     $form->handleRequest($request);
-    
+
     if ($form->isSubmitted() && $form->isValid()) {
         $entityManager->persist($user);
         $entityManager->flush();
-        
+
         return $this->redirectToRoute('user_list');
     }
-    
+
     return $this->render('user/new.html.twig', [
         'form' => $form,
     ]);
@@ -196,6 +205,7 @@ public function new(
 ### Pattern: Query Builder vs DQL
 
 **Before:**
+
 ```php
 $query = $this->entityManager->createQuery(
     'SELECT u FROM App\Entity\User u
@@ -209,6 +219,7 @@ $users = $query->getResult();
 ```
 
 **After:**
+
 ```php
 $users = $this->entityManager->getRepository(User::class)
     ->createQueryBuilder('u')
@@ -224,6 +235,7 @@ $users = $this->entityManager->getRepository(User::class)
 ### Pattern: Custom Repository Methods
 
 **Before:**
+
 ```php
 class UserController extends AbstractController
 {
@@ -236,13 +248,14 @@ class UserController extends AbstractController
             ->orderBy('u.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
-            
+
         return $this->render('user/list.html.twig', ['users' => $users]);
     }
 }
 ```
 
 **After:**
+
 ```php
 // Repository
 class UserRepository extends ServiceEntityRepository
@@ -276,6 +289,7 @@ class UserController extends AbstractController
 ### Pattern: Event Subscribers
 
 **Before:**
+
 ```php
 // Services.yaml
 services:
@@ -285,6 +299,7 @@ services:
 ```
 
 **After:**
+
 ```php
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -297,12 +312,12 @@ class UserSubscriber implements EventSubscriberInterface
             UserUpdatedEvent::class => 'onUserUpdated',
         ];
     }
-    
+
     public function onUserCreated(UserCreatedEvent $event): void
     {
         // Handle event
     }
-    
+
     public function onUserUpdated(UserUpdatedEvent $event): void
     {
         // Handle event
@@ -315,6 +330,7 @@ class UserSubscriber implements EventSubscriberInterface
 ### Pattern: Validation Attributes
 
 **Before:**
+
 ```php
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -325,7 +341,7 @@ class User
      * @Assert\Email
      */
     private $email;
-    
+
     /**
      * @Assert\NotBlank
      * @Assert\Length(min=8)
@@ -335,6 +351,7 @@ class User
 ```
 
 **After:**
+
 ```php
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -343,7 +360,7 @@ class User
     #[Assert\NotBlank]
     #[Assert\Email]
     private string $email;
-    
+
     #[Assert\NotBlank]
     #[Assert\Length(min: 8)]
     private string $password;
@@ -355,25 +372,26 @@ class User
 ### Pattern: Modern Security Voters
 
 **Before:**
+
 ```php
 class PostVoter extends Voter
 {
     const VIEW = 'view';
     const EDIT = 'edit';
-    
+
     protected function supports($attribute, $subject): bool
     {
         if (!in_array($attribute, [self::VIEW, self::EDIT])) {
             return false;
         }
-        
+
         if (!$subject instanceof Post) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         // ...
@@ -382,6 +400,7 @@ class PostVoter extends Voter
 ```
 
 **After:**
+
 ```php
 enum PostPermission: string
 {
@@ -393,17 +412,17 @@ class PostVoter extends Voter
 {
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return $subject instanceof Post 
+        return $subject instanceof Post
             && PostPermission::tryFrom($attribute) !== null;
     }
-    
+
     protected function voteOnAttribute(
         string $attribute,
         mixed $subject,
         TokenInterface $token
     ): bool {
         $permission = PostPermission::from($attribute);
-        
+
         return match ($permission) {
             PostPermission::View => $this->canView($subject, $token),
             PostPermission::Edit => $this->canEdit($subject, $token),
@@ -417,6 +436,7 @@ class PostVoter extends Voter
 ### Pattern: Serialization Groups with Attributes
 
 **Before:**
+
 ```php
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -426,7 +446,7 @@ class User
      * @Groups({"user:read", "user:write"})
      */
     private $email;
-    
+
     /**
      * @Groups({"user:read"})
      */
@@ -435,6 +455,7 @@ class User
 ```
 
 **After:**
+
 ```php
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -442,7 +463,7 @@ class User
 {
     #[Groups(['user:read', 'user:write'])]
     private string $email;
-    
+
     #[Groups(['user:read'])]
     private \DateTimeInterface $createdAt;
 }
@@ -453,6 +474,7 @@ class User
 ### Pattern: Modern HTTP Client Usage
 
 **Before:**
+
 ```php
 $client = HttpClient::create();
 $response = $client->request('GET', 'https://api.example.com/users');
@@ -462,6 +484,7 @@ $data = json_decode($content, true);
 ```
 
 **After:**
+
 ```php
 $response = $this->httpClient->request('GET', 'https://api.example.com/users');
 $data = $response->toArray(); // Automatically decodes JSON
@@ -472,11 +495,12 @@ $data = $response->toArray(); // Automatically decodes JSON
 ### Pattern: Modern Command Definition
 
 **Before:**
+
 ```php
 class UserCreateCommand extends Command
 {
     protected static $defaultName = 'app:user:create';
-    
+
     protected function configure(): void
     {
         $this
@@ -484,20 +508,21 @@ class UserCreateCommand extends Command
             ->addArgument('email', InputArgument::REQUIRED, 'User email')
             ->addOption('admin', null, InputOption::VALUE_NONE, 'Make user admin');
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $email = $input->getArgument('email');
         $isAdmin = $input->getOption('admin');
-        
+
         // ...
-        
+
         return Command::SUCCESS;
     }
 }
 ```
 
 **After:**
+
 ```php
 #[AsCommand(
     name: 'app:user:create',
@@ -511,25 +536,25 @@ class UserCreateCommand extends Command
     ) {
         parent::__construct();
     }
-    
+
     protected function configure(): void
     {
         $this
             ->addArgument('email', InputArgument::REQUIRED, 'User email')
             ->addOption('admin', null, InputOption::VALUE_NONE, 'Make user admin');
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        
+
         $email = $input->getArgument('email');
         $isAdmin = $input->getOption('admin');
-        
+
         // ...
-        
+
         $io->success('User created successfully!');
-        
+
         return Command::SUCCESS;
     }
 }
@@ -540,6 +565,7 @@ class UserCreateCommand extends Command
 ### Pattern: Entity Lifecycle Callbacks
 
 **Before:**
+
 ```php
 /**
  * @ORM\HasLifecycleCallbacks
@@ -553,7 +579,7 @@ class User
     {
         $this->createdAt = new \DateTime();
     }
-    
+
     /**
      * @ORM\PreUpdate
      */
@@ -565,6 +591,7 @@ class User
 ```
 
 **After:**
+
 ```php
 use Doctrine\ORM\Mapping as ORM;
 
@@ -577,7 +604,7 @@ class User
     {
         $this->createdAt = new \DateTimeImmutable();
     }
-    
+
     #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
@@ -591,6 +618,7 @@ class User
 ### Pattern: Asynchronous Message Handling
 
 **Before:**
+
 ```php
 public function sendEmail(UserRepository $users, MailerInterface $mailer): void
 {
@@ -606,6 +634,7 @@ public function sendEmail(UserRepository $users, MailerInterface $mailer): void
 ```
 
 **After:**
+
 ```php
 // Message
 readonly class SendNewsletterMessage
@@ -623,16 +652,16 @@ class SendNewsletterHandler
         private UserRepository $users,
         private MailerInterface $mailer,
     ) {}
-    
+
     public function __invoke(SendNewsletterMessage $message): void
     {
         $user = $this->users->find($message->userId);
-        
+
         $email = (new Email())
             ->to($user->getEmail())
             ->subject('Newsletter')
             ->html('...');
-            
+
         $this->mailer->send($email);
     }
 }
@@ -645,7 +674,7 @@ public function sendNewsletter(
     foreach ($users->findAll() as $user) {
         $bus->dispatch(new SendNewsletterMessage($user->getId()));
     }
-    
+
     return $this->redirectToRoute('admin_dashboard');
 }
 ```
@@ -653,6 +682,7 @@ public function sendNewsletter(
 ## When to Apply
 
 Apply Symfony-specific patterns when:
+
 - `symfony/*` packages are present in composer.json
 - Using annotations that can be replaced with attributes (PHP 8.0+)
 - Autowiring can simplify service configuration
@@ -661,6 +691,7 @@ Apply Symfony-specific patterns when:
 - Event subscribers are more appropriate than listeners
 
 Do not apply when:
+
 - Symfony version < 5.4 (many features require 5.4+)
 - PHP version < 8.0 (attributes require PHP 8.0+)
 - Breaking changes would affect production stability

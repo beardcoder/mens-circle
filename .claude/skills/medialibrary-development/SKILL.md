@@ -3,7 +3,7 @@ name: medialibrary-development
 description: Build and work with spatie/laravel-medialibrary features including associating files with Eloquent models, defining media collections and conversions, generating responsive images, and retrieving media URLs and paths.
 license: MIT
 metadata:
-  author: Spatie
+    author: Spatie
 ---
 
 # Media Library Development
@@ -88,6 +88,7 @@ $allMedia = $model->getMedia('images');
 ## Do and Don't
 
 Do:
+
 - Always implement the `HasMedia` interface alongside the `InteractsWithMedia` trait.
 - Use `?Media $media = null` as the parameter for `registerMediaConversions()`.
 - Call `->toMediaCollection()` to finalize adding media.
@@ -96,6 +97,7 @@ Do:
 - Use `Spatie\Image\Enums\Fit` enum values for fit methods.
 
 Don't:
+
 - Don't forget to run `php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"` before migrating.
 - Don't use `env()` for disk configuration; use `config()` or set it in `config/media-library.php`.
 - Don't call `addMedia()` without calling `toMediaCollection()` — the media won't be saved.
