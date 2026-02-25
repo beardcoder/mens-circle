@@ -47,6 +47,19 @@ readonly class CompressHtml
 
         $contentType = $response->headers->get('Content-Type') ?? '';
 
-        return str_contains($contentType, 'text/html');
+        if (!str_contains($contentType, 'text/html')) {
+            return false;
+        }
+
+        $content = $response->getContent();
+
+        // Skip compression for pages containing Livewire components — HtmlMin
+        // can corrupt wire:snapshot JSON (e.g. stripping empty "children": {}),
+        // causing Livewire hydration to fail with "Undefined array key children".
+        if ($content !== false && str_contains($content, 'wire:snapshot')) {
+            return false;
+        }
+
+        return true;
     }
 }
