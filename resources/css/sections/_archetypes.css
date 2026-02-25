@@ -64,26 +64,18 @@
 .archetype-card__background-icon {
   position: absolute;
   inset-block-start: 50%;
-  inset-inline-end: clamp(-1rem, -1.6vw, -0.4rem);
+  inset-inline-end: clamp(-5.5rem, -4.2vw, -2.6rem);
   z-index: 1;
-  color: color-mix(
-    in oklch,
-    var(--accent-primary) 72%,
-    var(--text-primary) 28%
-  );
   pointer-events: none;
-  opacity: 0.07;
+  opacity: 0.16;
 }
 
-.archetype-card__background-icon svg {
-  inline-size: clamp(12rem, 25vw, 17rem);
-  block-size: clamp(12rem, 25vw, 17rem);
-  fill: none;
-  stroke: currentcolor;
-  stroke-width: 0.68;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transform: translateY(-50%) rotate(-10deg);
+.archetype-card__background-icon img {
+  inline-size: clamp(16rem, 32vw, 22rem);
+  block-size: clamp(16rem, 32vw, 22rem);
+  object-fit: contain;
+  transform: translateY(-50%) rotate(-8deg);
+  filter: saturate(0.86) brightness(0.95);
 }
 
 .archetype-card__title {
@@ -103,23 +95,23 @@
   color: var(--text-secondary);
 }
 
-.archetype-card--warrior .archetype-card__background-icon svg {
+.archetype-card--warrior .archetype-card__background-icon img {
   transform: translateY(-50%) rotate(-14deg);
 }
 
-.archetype-card--lover .archetype-card__background-icon svg {
+.archetype-card--lover .archetype-card__background-icon img {
   transform: translateY(-50%) rotate(-6deg);
 }
 
-.archetype-card--magician .archetype-card__background-icon svg {
-  transform: translateY(-50%) rotate(-2deg);
+.archetype-card--magician .archetype-card__background-icon img {
+  transform: translateY(-50%) rotate(-3deg);
 }
 
-.archetype-card--king .archetype-card__background-icon svg {
+.archetype-card--king .archetype-card__background-icon img {
   transform: translateY(-50%) rotate(-12deg);
 }
 
-.archetype-card--father .archetype-card__background-icon svg {
+.archetype-card--father .archetype-card__background-icon img {
   transform: translateY(-50%) rotate(-4deg);
 }
 
@@ -153,11 +145,12 @@
   }
 
   .archetype-card__background-icon {
-    inset-inline-end: -2.1rem;
+    inset-inline-end: -3.4rem;
+    opacity: 0.14;
   }
 
-  .archetype-card__background-icon svg {
-    inline-size: 10.5rem;
-    block-size: 10.5rem;
+  .archetype-card__background-icon img {
+    inline-size: 12.5rem;
+    block-size: 12.5rem;
   }
 }
