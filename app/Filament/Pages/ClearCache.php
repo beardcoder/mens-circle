@@ -52,7 +52,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht den Response-Cache (gecachte HTTP-Antworten). Die Seiten werden beim nächsten Aufruf neu generiert.',
                 successTitle: 'Response-Cache gelöscht',
                 successBody: 'Der Response-Cache wurde erfolgreich gelöscht.',
-                action: ResponseCache::clear(...),
+                action: static fn() => ResponseCache::clear(),
             ),
 
             $this->makeCacheAction(

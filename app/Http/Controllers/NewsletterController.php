@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use SensitiveParameter;
 use App\Http\Requests\NewsletterSubscriptionRequest;
 use App\Mail\NewsletterWelcome;
 use App\Models\NewsletterSubscription;
@@ -15,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use RuntimeException;
+use SensitiveParameter;
 
 final class NewsletterController
 {

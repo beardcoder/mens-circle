@@ -313,12 +313,15 @@ final class LlmsController
             if (!isset($faq['items'])) {
                 continue;
             }
+
             if (!\is_array($faq['items'])) {
                 continue;
             }
+
             if ($faq['items'] === []) {
                 continue;
             }
+
             if (isset($faq['title']) && \is_string($faq['title']) && $faq['title'] !== '') {
                 $lines[] = '### ' . $this->convertHtmlToMarkdown($faq['title']);
                 $lines[] = '';
@@ -333,21 +336,27 @@ final class LlmsController
                 if (!\is_array($item)) {
                     continue;
                 }
+
                 if (!isset($item['question'])) {
                     continue;
                 }
+
                 if ($item['question'] === '') {
                     continue;
                 }
+
                 if (!\is_string($item['question'])) {
                     continue;
                 }
+
                 if (!isset($item['answer'])) {
                     continue;
                 }
+
                 if ($item['answer'] === '') {
                     continue;
                 }
+
                 if (!\is_string($item['answer'])) {
                     continue;
                 }
@@ -530,12 +539,15 @@ final class LlmsController
                         if (!\is_array($value)) {
                             continue;
                         }
+
                         if (!isset($value['title'])) {
                             continue;
                         }
+
                         if ($value['title'] === '') {
                             continue;
                         }
+
                         if (!\is_string($value['title'])) {
                             continue;
                         }
@@ -581,12 +593,15 @@ final class LlmsController
                         if (!\is_array($item)) {
                             continue;
                         }
+
                         if (!isset($item['title'])) {
                             continue;
                         }
+
                         if ($item['title'] === '') {
                             continue;
                         }
+
                         if (!\is_string($item['title'])) {
                             continue;
                         }
@@ -716,12 +731,15 @@ final class LlmsController
                 if ($block->type !== 'faq') {
                     continue;
                 }
+
                 if (!isset($block->data['items'])) {
                     continue;
                 }
+
                 if ($block->data['items'] === []) {
                     continue;
                 }
+
                 $faqBlocks[] = $block->data;
             }
         }

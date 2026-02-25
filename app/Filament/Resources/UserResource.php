@@ -60,7 +60,7 @@ class UserResource extends Resource
                         ->label('Passwort')
                         ->password()
                         ->revealable()
-                        ->dehydrateStateUsing(Hash::make(...))
+                        ->dehydrateStateUsing(static fn(string $state): string => Hash::make($state))
                         ->dehydrated(static fn(?string $state): bool => filled($state))
                         ->required(static fn(string $operation): bool => $operation === 'create')
                         ->rule(Password::default()),
