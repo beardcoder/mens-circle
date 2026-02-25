@@ -487,8 +487,6 @@ final class LlmsController
                 $hasButtonLink = isset($data['button_link']) && \is_string($data['button_link']) && $data['button_link'] !== '';
 
                 if ($hasButtonText && $hasButtonLink) {
-                    \assert(\is_string($data['button_text']));
-                    \assert(\is_string($data['button_link']));
                     $lines[] = \sprintf('**Call-to-Action:** [%s](%s)', $data['button_text'], $data['button_link']);
                     $lines[] = '';
                 }
@@ -662,8 +660,6 @@ final class LlmsController
                 $hasButtonLink = isset($data['button_link']) && \is_string($data['button_link']) && $data['button_link'] !== '';
 
                 if ($hasButtonText && $hasButtonLink) {
-                    \assert(\is_string($data['button_text']));
-                    \assert(\is_string($data['button_link']));
                     $lines[] = \sprintf('**Aktion:** [%s](%s)', $data['button_text'], $data['button_link']);
                     $lines[] = '';
                 }
