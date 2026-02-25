@@ -29,12 +29,12 @@ class NewsletterSubscription extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['participant_id', 'token', 'subscribed_at', 'confirmed_at', 'unsubscribed_at', ];
+    protected $fillable = ['participant_id', 'token', 'subscribed_at', 'confirmed_at', 'unsubscribed_at'];
 
     #[Override]
     protected static function booted(): void
     {
-        static::creating(function (self $subscription): void {
+        static::creating(static function (self $subscription): void {
             $subscription->token ??= Str::random(64);
             $subscription->subscribed_at ??= now();
         });

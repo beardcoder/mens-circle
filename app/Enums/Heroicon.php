@@ -103,35 +103,29 @@ enum Heroicon: string
             self::Phone => 'Telefon',
             self::ChatBubbleLeftRight => 'Chat',
             self::AtSymbol => '@-Symbol',
-
             // Social Media & Web
             self::GlobeAlt => 'Weltkugel',
             self::Link => 'Link',
             self::Share => 'Teilen',
-
             // Location & Navigation
             self::MapPin => 'Standort-Pin',
             self::Map => 'Karte',
             self::Home => 'Haus',
             self::BuildingOffice => 'Gebäude',
-
             // Users & People
             self::User => 'Benutzer',
             self::UserGroup => 'Benutzergruppe',
             self::Users => 'Benutzer (Mehrere)',
             self::Heart => 'Herz',
-
             // Calendar & Time
             self::Calendar => 'Kalender',
             self::CalendarDays => 'Kalender (Tage)',
             self::Clock => 'Uhr',
-
             // Information & Support
             self::InformationCircle => 'Information',
             self::QuestionMarkCircle => 'Frage',
             self::ExclamationCircle => 'Warnung',
             self::LightBulb => 'Glühbirne',
-
             // Actions
             self::ArrowRight => 'Pfeil Rechts',
             self::ArrowLeft => 'Pfeil Links',
@@ -146,7 +140,6 @@ enum Heroicon: string
             self::XMark => 'X',
             self::Check => 'Häkchen',
             self::CheckCircle => 'Häkchen (Kreis)',
-
             // Media & Content
             self::Photo => 'Foto',
             self::Camera => 'Kamera',
@@ -154,25 +147,21 @@ enum Heroicon: string
             self::Document => 'Dokument',
             self::Newspaper => 'Zeitung',
             self::BookOpen => 'Buch (Offen)',
-
             // Commerce & Business
             self::ShoppingBag => 'Einkaufstasche',
             self::ShoppingCart => 'Einkaufswagen',
             self::CreditCard => 'Kreditkarte',
             self::CurrencyEuro => 'Euro',
             self::Banknotes => 'Geldscheine',
-
             // Settings & Tools
             self::Cog6Tooth => 'Zahnrad',
             self::Wrench => 'Schraubenschlüssel',
             self::AdjustmentsHorizontal => 'Einstellungen',
-
             // Security
             self::LockClosed => 'Schloss (Geschlossen)',
             self::LockOpen => 'Schloss (Offen)',
             self::ShieldCheck => 'Schild (Häkchen)',
             self::Key => 'Schlüssel',
-
             // Other
             self::Star => 'Stern',
             self::Sparkles => 'Funken',

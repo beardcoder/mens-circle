@@ -10,7 +10,7 @@ use Laravel\Socialite\Socialite;
 use Laravel\Socialite\Two\GithubProvider;
 use Throwable;
 
-class SocialiteController
+final class SocialiteController
 {
     /**
      * @var array<int, string>
@@ -24,9 +24,7 @@ class SocialiteController
         /** @var GithubProvider $driver */
         $driver = Socialite::driver($provider);
 
-        return $driver
-            ->scopes(['user:email'])
-            ->redirect();
+        return $driver->scopes(['user:email'])->redirect();
     }
 
     public function callback(string $provider): RedirectResponse
@@ -36,7 +34,8 @@ class SocialiteController
         try {
             $response = Socialite::driver($provider)->user();
         } catch (Throwable) {
-            return redirect()->route('filament.admin.auth.login')
+            return redirect()
+                ->route('filament.admin.auth.login')
                 ->withErrors([
                     'email' => 'Authentifizierung fehlgeschlagen. Bitte versuche es erneut.',
                 ]);
@@ -45,7 +44,8 @@ class SocialiteController
         $user = User::firstWhere('email', $response->getEmail());
 
         if (!$user) {
-            return redirect()->route('filament.admin.auth.login')
+            return redirect()
+                ->route('filament.admin.auth.login')
                 ->withErrors([
                     'email' => 'Kein Benutzer mit dieser E-Mail-Adresse gefunden.',
                 ]);
@@ -55,8 +55,7 @@ class SocialiteController
             'github_id' => $response->getId(),
         ]);
 
-        auth()
-            ->login($user);
+        auth()->login($user);
 
         return redirect()->intended(route('filament.admin.pages.dashboard'));
     }

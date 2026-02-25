@@ -13,16 +13,9 @@ trait HasEnumOptions
      */
     public static function options(): array
     {
-        return array_column(
-            array_map(
-                static fn (self $case): array => [
-                    'value' => $case->value,
-                    'label' => $case->getLabel(),
-                ],
-                self::cases(),
-            ),
-            'label',
-            'value',
-        );
+        return array_column(array_map(static fn(self $case): array => [
+            'value' => $case->value,
+            'label' => $case->getLabel(),
+        ], self::cases()), 'label', 'value');
     }
 }

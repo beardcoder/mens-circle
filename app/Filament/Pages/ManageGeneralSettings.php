@@ -31,111 +31,108 @@ class ManageGeneralSettings extends SettingsPage
     #[Override]
     public function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Section::make('Website-Informationen')
-                    ->description('Grundlegende Informationen über die Website')
-                    ->schema([
-                        TextInput::make('site_name')
-                            ->label('Seitenname')
-                            ->required()
-                            ->maxLength(255)
-                            ->helperText('Der Name der Website (z.B. "Männerkreis Niederbayern")'),
+        return $schema->components([
+            Section::make('Website-Informationen')
+                ->description('Grundlegende Informationen über die Website')
+                ->schema([
+                    TextInput::make('site_name')
+                        ->label('Seitenname')
+                        ->required()
+                        ->maxLength(255)
+                        ->helperText('Der Name der Website (z.B. "Männerkreis Niederbayern")'),
 
-                        TextInput::make('site_tagline')
-                            ->label('Tagline')
-                            ->maxLength(255)
-                            ->helperText('Kurze Beschreibung der Website'),
+                    TextInput::make('site_tagline')
+                        ->label('Tagline')
+                        ->maxLength(255)
+                        ->helperText('Kurze Beschreibung der Website'),
 
-                        Textarea::make('site_description')
-                            ->label('Seitenbeschreibung')
-                            ->rows(3)
-                            ->maxLength(500)
-                            ->helperText('Wird für SEO Meta Tags verwendet'),
-                    ])
-                    ->columns(1),
+                    Textarea::make('site_description')
+                        ->label('Seitenbeschreibung')
+                        ->rows(3)
+                        ->maxLength(500)
+                        ->helperText('Wird für SEO Meta Tags verwendet'),
+                ])
+                ->columns(1),
 
-                Section::make('Kontaktinformationen')
-                    ->description('Kontaktdaten für Besucher')
-                    ->schema([
-                        TextInput::make('contact_email')
-                            ->label('Kontakt E-Mail')
-                            ->email()
-                            ->required()
-                            ->helperText('Hauptkontakt-E-Mail-Adresse'),
+            Section::make('Kontaktinformationen')
+                ->description('Kontaktdaten für Besucher')
+                ->schema([
+                    TextInput::make('contact_email')
+                        ->label('Kontakt E-Mail')
+                        ->email()
+                        ->required()
+                        ->helperText('Hauptkontakt-E-Mail-Adresse'),
 
-                        TextInput::make('contact_phone')
-                            ->label('Telefonnummer')
-                            ->tel()
-                            ->helperText('Optional: Telefonnummer für Kontakt'),
+                    TextInput::make('contact_phone')
+                        ->label('Telefonnummer')
+                        ->tel()
+                        ->helperText('Optional: Telefonnummer für Kontakt'),
 
-                        TextInput::make('location')
-                            ->label('Standort')
-                            ->maxLength(255)
-                            ->helperText('Hauptstandort (z.B. "Niederbayern", "Straubing")'),
-                    ])
-                    ->columns(1),
+                    TextInput::make('location')
+                        ->label('Standort')
+                        ->maxLength(255)
+                        ->helperText('Hauptstandort (z.B. "Niederbayern", "Straubing")'),
+                ])
+                ->columns(1),
 
-                Section::make('Community & Social Media')
-                    ->description('WhatsApp und Social Media Links')
-                    ->schema([
-                        TextInput::make('whatsapp_community_link')
-                            ->label('WhatsApp Community Link')
-                            ->url()
-                            ->maxLength(500)
-                            ->placeholder('https://chat.whatsapp.com/...')
-                            ->helperText(
-                                'Einladungslink zur WhatsApp Community. Leer lassen um die Sektion auszublenden.',
-                            ),
+            Section::make('Community & Social Media')
+                ->description('WhatsApp und Social Media Links')
+                ->schema([
+                    TextInput::make('whatsapp_community_link')
+                        ->label('WhatsApp Community Link')
+                        ->url()
+                        ->maxLength(500)
+                        ->placeholder('https://chat.whatsapp.com/...')
+                        ->helperText('Einladungslink zur WhatsApp Community. Leer lassen um die Sektion auszublenden.'),
 
-                        Repeater::make('social_links')
-                            ->label('Social & Kontakt Links')
-                            ->schema([
-                                Select::make('type')
-                                    ->label('Typ')
-                                    ->options(SocialLinkType::options())
-                                    ->required()
-                                    ->searchable()
-                                    ->helperText('Wähle den Typ des Links.'),
+                    Repeater::make('social_links')
+                        ->label('Social & Kontakt Links')
+                        ->schema([
+                            Select::make('type')
+                                ->label('Typ')
+                                ->options(SocialLinkType::options())
+                                ->required()
+                                ->searchable()
+                                ->helperText('Wähle den Typ des Links.'),
 
-                                TextInput::make('label')
-                                    ->label('Beschriftung')
-                                    ->maxLength(255)
-                                    ->helperText('Wird als Tooltip/Alt-Text angezeigt'),
+                            TextInput::make('label')
+                                ->label('Beschriftung')
+                                ->maxLength(255)
+                                ->helperText('Wird als Tooltip/Alt-Text angezeigt'),
 
-                                TextInput::make('value')
-                                    ->label('Wert (URL/E-Mail/Telefon)')
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->helperText('Komplette URL oder E-Mail/Tel-Nummer'),
-                            ])
-                            ->collapsible()
-                            ->collapsed()
-                            ->itemLabel(fn (array $state): string => $this->getSocialLinkLabel($state))
-                            ->addActionLabel('Link hinzufügen')
-                            ->reorderable()
-                            ->columnSpanFull(),
-                    ])
-                    ->columns(1),
+                            TextInput::make('value')
+                                ->label('Wert (URL/E-Mail/Telefon)')
+                                ->required()
+                                ->maxLength(255)
+                                ->helperText('Komplette URL oder E-Mail/Tel-Nummer'),
+                        ])
+                        ->collapsible()
+                        ->collapsed()
+                        ->itemLabel($this->getSocialLinkLabel(...))
+                        ->addActionLabel('Link hinzufügen')
+                        ->reorderable()
+                        ->columnSpanFull(),
+                ])
+                ->columns(1),
 
-                Section::make('Footer & Events')
-                    ->description('Footer-Text und Event-Einstellungen')
-                    ->schema([
-                        Textarea::make('footer_text')
-                            ->label('Footer Text')
-                            ->rows(2)
-                            ->helperText('Copyright-Text im Footer'),
+            Section::make('Footer & Events')
+                ->description('Footer-Text und Event-Einstellungen')
+                ->schema([
+                    Textarea::make('footer_text')
+                        ->label('Footer Text')
+                        ->rows(2)
+                        ->helperText('Copyright-Text im Footer'),
 
-                        TextInput::make('event_default_max_participants')
-                            ->label('Standard Teilnehmerzahl bei Events')
-                            ->numeric()
-                            ->default(8)
-                            ->minValue(1)
-                            ->maxValue(100)
-                            ->helperText('Standard-Maximalzahl für neue Events'),
-                    ])
-                    ->columns(1),
-            ]);
+                    TextInput::make('event_default_max_participants')
+                        ->label('Standard Teilnehmerzahl bei Events')
+                        ->numeric()
+                        ->default(8)
+                        ->minValue(1)
+                        ->maxValue(100)
+                        ->helperText('Standard-Maximalzahl für neue Events'),
+                ])
+                ->columns(1),
+        ]);
     }
 
     /**
@@ -158,7 +155,7 @@ class ManageGeneralSettings extends SettingsPage
      */
     private function getIconLabel(array $state): ?string
     {
-        if (!empty($state['type']) && \is_string($state['type'])) {
+        if (isset($state['type']) && \is_string($state['type']) && $state['type'] !== '') {
             return SocialLinkType::tryFrom($state['type'])?->getLabel();
         }
 

@@ -52,167 +52,162 @@ class EventResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Section::make('Grundinformationen')
-                    ->description('Titel, Beschreibung und Bild für das Event')
-                    ->schema([
-                        TextInput::make('title')
-                            ->label('Titel')
-                            ->required()
-                            ->maxLength(255)
-                            ->placeholder('z.B. Männerabend im Januar')
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', null)),
-                        TextInput::make('slug')
-                            ->label('URL-Slug')
-                            ->maxLength(255)
-                            ->unique(ignoreRecord: true)
-                            ->helperText('Wird automatisch aus dem Titel generiert'),
-                        Textarea::make('description')
-                            ->label('Beschreibung')
-                            ->rows(4)
-                            ->placeholder('Beschreibe das Event...')
-                            ->helperText('Kurze Beschreibung für die Event-Übersicht'),
-                        SpatieMediaLibraryFileUpload::make('image')
-                            ->label('Event-Bild')
-                            ->image()
-                            ->collection('event_image')
-                            ->disk('public')
-                            ->responsiveImages()
-                            ->imageEditor()
-                            ->helperText('Empfohlen: 16:9 Format, mindestens 1200x675px'),
-                    ]),
+        return $schema->components([
+            Section::make('Grundinformationen')
+                ->description('Titel, Beschreibung und Bild für das Event')
+                ->schema([
+                    TextInput::make('title')
+                        ->label('Titel')
+                        ->required()
+                        ->maxLength(255)
+                        ->placeholder('z.B. Männerabend im Januar')
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(static fn($state, callable $set) => $set('slug', null)),
+                    TextInput::make('slug')
+                        ->label('URL-Slug')
+                        ->maxLength(255)
+                        ->unique(ignoreRecord: true)
+                        ->helperText('Wird automatisch aus dem Titel generiert'),
+                    Textarea::make('description')
+                        ->label('Beschreibung')
+                        ->rows(4)
+                        ->placeholder('Beschreibe das Event...')
+                        ->helperText('Kurze Beschreibung für die Event-Übersicht'),
+                    SpatieMediaLibraryFileUpload::make('image')
+                        ->label('Event-Bild')
+                        ->image()
+                        ->collection('event_image')
+                        ->disk('public')
+                        ->responsiveImages()
+                        ->imageEditor()
+                        ->helperText('Empfohlen: 16:9 Format, mindestens 1200x675px'),
+                ]),
 
-                Section::make('Datum & Zeit')
-                    ->description('Wann findet das Event statt?')
-                    ->columns(3)
-                    ->schema([
-                        DateTimePicker::make('event_date')
-                            ->label('Veranstaltungsdatum')
-                            ->required()
-                            ->native(false)
-                            ->displayFormat('d.m.Y')
-                            ->minDate(now()),
-                        TimePicker::make('start_time')
-                            ->label('Startzeit')
-                            ->required()
-                            ->seconds(false)
-                            ->displayFormat('H:i'),
-                        TimePicker::make('end_time')
-                            ->label('Endzeit')
-                            ->required()
-                            ->seconds(false)
-                            ->displayFormat('H:i'),
-                    ]),
+            Section::make('Datum & Zeit')
+                ->description('Wann findet das Event statt?')
+                ->columns(3)
+                ->schema([
+                    DateTimePicker::make('event_date')
+                        ->label('Veranstaltungsdatum')
+                        ->required()
+                        ->native(false)
+                        ->displayFormat('d.m.Y')
+                        ->minDate(now()),
+                    TimePicker::make('start_time')
+                        ->label('Startzeit')
+                        ->required()
+                        ->seconds(false)
+                        ->displayFormat('H:i'),
+                    TimePicker::make('end_time')
+                        ->label('Endzeit')
+                        ->required()
+                        ->seconds(false)
+                        ->displayFormat('H:i'),
+                ]),
 
-                Section::make('Ort')
-                    ->description('Wo findet das Event statt?')
-                    ->columns(3)
-                    ->schema([
-                        TextInput::make('location')
-                            ->label('Ort/Veranstaltungsort')
-                            ->required()
-                            ->default('Straubing')
-                            ->maxLength(255)
-                            ->placeholder('z.B. Gemeindehaus St. Jakob')
-                            ->columnSpanFull(),
-                        TextInput::make('street')
-                            ->label('Straße & Hausnummer')
-                            ->maxLength(255)
-                            ->placeholder('z.B. Hauptstraße 1')
-                            ->columnSpan(2),
-                        TextInput::make('postal_code')
-                            ->label('PLZ')
-                            ->maxLength(10)
-                            ->placeholder('z.B. 94315')
-                            ->columnSpan(1),
-                        TextInput::make('city')
-                            ->label('Stadt')
-                            ->maxLength(255)
-                            ->placeholder('z.B. Straubing')
-                            ->default('Straubing')
-                            ->columnSpanFull(),
-                        Textarea::make('location_details')
-                            ->label('Ortsdetails für Teilnehmer')
-                            ->rows(3)
-                            ->columnSpanFull()
-                            ->placeholder('Zusätzliche Informationen wie Parkplatz, Eingang, etc.')
-                            ->helperText('Wird nur angemeldeten Teilnehmern angezeigt'),
-                    ]),
+            Section::make('Ort')
+                ->description('Wo findet das Event statt?')
+                ->columns(3)
+                ->schema([
+                    TextInput::make('location')
+                        ->label('Ort/Veranstaltungsort')
+                        ->required()
+                        ->default('Straubing')
+                        ->maxLength(255)
+                        ->placeholder('z.B. Gemeindehaus St. Jakob')
+                        ->columnSpanFull(),
+                    TextInput::make('street')
+                        ->label('Straße & Hausnummer')
+                        ->maxLength(255)
+                        ->placeholder('z.B. Hauptstraße 1')
+                        ->columnSpan(2),
+                    TextInput::make('postal_code')
+                        ->label('PLZ')
+                        ->maxLength(10)
+                        ->placeholder('z.B. 94315')
+                        ->columnSpan(1),
+                    TextInput::make('city')
+                        ->label('Stadt')
+                        ->maxLength(255)
+                        ->placeholder('z.B. Straubing')
+                        ->default('Straubing')
+                        ->columnSpanFull(),
+                    Textarea::make('location_details')
+                        ->label('Ortsdetails für Teilnehmer')
+                        ->rows(3)
+                        ->columnSpanFull()
+                        ->placeholder('Zusätzliche Informationen wie Parkplatz, Eingang, etc.')
+                        ->helperText('Wird nur angemeldeten Teilnehmern angezeigt'),
+                ]),
 
-                Section::make('Teilnehmer & Kosten')
-                    ->description('Teilnehmerbegrenzung und Kostenbasis')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('max_participants')
-                            ->label('Maximale Teilnehmer')
-                            ->required()
-                            ->numeric()
-                            ->default(8)
-                            ->minValue(1)
-                            ->maxValue(100)
-                            ->helperText('Anzahl der verfügbaren Plätze'),
-                        TextInput::make('cost_basis')
-                            ->label('Kostenbasis')
-                            ->required()
-                            ->default('Auf Spendenbasis')
-                            ->maxLength(255)
-                            ->placeholder('z.B. Kostenlos, 10€, Auf Spendenbasis'),
-                    ]),
+            Section::make('Teilnehmer & Kosten')
+                ->description('Teilnehmerbegrenzung und Kostenbasis')
+                ->columns(2)
+                ->schema([
+                    TextInput::make('max_participants')
+                        ->label('Maximale Teilnehmer')
+                        ->required()
+                        ->numeric()
+                        ->default(8)
+                        ->minValue(1)
+                        ->maxValue(100)
+                        ->helperText('Anzahl der verfügbaren Plätze'),
+                    TextInput::make('cost_basis')
+                        ->label('Kostenbasis')
+                        ->required()
+                        ->default('Auf Spendenbasis')
+                        ->maxLength(255)
+                        ->placeholder('z.B. Kostenlos, 10€, Auf Spendenbasis'),
+                ]),
 
-                Section::make('Veröffentlichung')
-                    ->description('Sichtbarkeit auf der Website')
-                    ->schema([
-                        Toggle::make('is_published')
-                            ->label('Event veröffentlichen')
-                            ->default(false)
-                            ->helperText('Aktivieren, um das Event auf der Website anzuzeigen')
-                            ->inline(false),
-                    ]),
-            ]);
+            Section::make('Veröffentlichung')
+                ->description('Sichtbarkeit auf der Website')
+                ->schema([
+                    Toggle::make('is_published')
+                        ->label('Event veröffentlichen')
+                        ->default(false)
+                        ->helperText('Aktivieren, um das Event auf der Website anzuzeigen')
+                        ->inline(false),
+                ]),
+        ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->withCount('activeRegistrations'))
+            ->modifyQueryUsing(static fn(Builder $query) => $query->withCount('activeRegistrations'))
             ->columns([
                 TextColumn::make('title')
                     ->label('Titel')
                     ->searchable()
                     ->sortable()
-                    ->description(
-                        fn ($record): ?string => $record->description ? str($record->description)
-                            ->limit(50, )
-                            ->toString() : null,
-                    )
+                    ->description(static fn($record): ?string => $record->description
+                        ? str($record->description)->limit(50)->toString()
+                        : null)
                     ->wrap(),
                 TextColumn::make('event_date')
                     ->label('Datum')
                     ->dateTime('d.m.Y')
                     ->sortable()
                     ->description(
-                        fn ($record): string => $record->start_time->format('H:i') . ' - ' . $record->end_time->format(
-                            'H:i',
-                        ),
+                        static fn($record): string => $record->start_time->format('H:i') . ' - ' . $record->end_time->format('H:i'),
                     )
-                    ->color(
-                        fn ($record): string => $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary'),
-                    ),
+                    ->color(static fn($record): string => (
+                        $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary')
+                    )),
                 TextColumn::make('location')
                     ->label('Ort')
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('active_registrations_count')
                     ->label('Anmeldungen')
-                    ->formatStateUsing(
-                        fn ($record): string => "{$record->active_registrations_count} / {$record->max_participants}",
-                    )
+                    ->formatStateUsing(static fn($record): string => "{$record->active_registrations_count} / {$record->max_participants}")
                     ->badge()
-                    ->color(
-                        fn ($record): string => $record->isFull ? 'danger' : ($record->active_registrations_count > ($record->max_participants * 0.8) ? 'warning' : 'success'),
-                    )
+                    ->color(static fn($record): string => (
+                        $record->isFull
+                            ? 'danger'
+                            : ($record->active_registrations_count > ($record->max_participants * 0.8) ? 'warning' : 'success')
+                    ))
                     ->sortable(),
                 IconColumn::make('is_published')
                     ->label('Veröffentlicht')
@@ -239,29 +234,26 @@ class EventResource extends Resource
                     ]),
                 Filter::make('upcoming')
                     ->label('Kommende Events')
-                    ->query(fn (Builder $query): Builder => $query->where('event_date', '>=', now()))
+                    ->query(static fn(Builder $query): Builder => $query->where('event_date', '>=', now()))
                     ->toggle()
                     ->default(),
                 Filter::make('past')
                     ->label('Vergangene Events')
-                    ->query(fn (Builder $query): Builder => $query->where('event_date', '<', now()))
+                    ->query(static fn(Builder $query): Builder => $query->where('event_date', '<', now()))
                     ->toggle(),
                 Filter::make('full')
                     ->label('Ausgebuchte Events')
-                    ->query(
-                        fn (Builder $query): Builder => $query->whereRaw(
-                            'max_participants <= (
+                    ->query(static fn(Builder $query): Builder => $query->whereRaw('max_participants <= (
                                 SELECT COUNT(*)
                                 FROM registrations
                                 WHERE registrations.event_id = events.id
                                 AND registrations.status IN (?, ?)
-                            )',
-                            [RegistrationStatus::Registered->value, RegistrationStatus::Attended->value],
-                        ),
-                    )
+                            )', [
+                        RegistrationStatus::Registered->value,
+                        RegistrationStatus::Attended->value,
+                    ]))
                     ->toggle(),
-                TrashedFilter::make()
-                    ->label('Gelöschte Events'),
+                TrashedFilter::make()->label('Gelöschte Events'),
             ])
             ->deferFilters(false)
             ->recordActions([ViewAction::make(), EditAction::make()])
@@ -296,7 +288,6 @@ class EventResource extends Resource
      */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
-        return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([SoftDeletingScope::class]);
+        return parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
     }
 }

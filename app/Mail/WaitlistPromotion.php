@@ -28,10 +28,10 @@ class WaitlistPromotion extends Mailable
     {
         $participant = $this->registration->participant;
 
-        return new Envelope(
-            to: [new Address($participant->email, $participant->fullName)],
-            subject: 'Ein Platz ist frei – ' . $this->event->title,
-        );
+        return new Envelope(to: [new Address(
+            $participant->email,
+            $participant->fullName,
+        )], subject: 'Ein Platz ist frei – ' . $this->event->title);
     }
 
     public function content(): Content
@@ -48,8 +48,7 @@ class WaitlistPromotion extends Mailable
         $filename = "event-{$this->event->slug}.ics";
 
         return [
-            Attachment::fromData(fn (): string => $icalContent, $filename)
-                ->withMime('text/calendar'),
+            Attachment::fromData(static fn(): string => $icalContent, $filename)->withMime('text/calendar'),
         ];
     }
 }

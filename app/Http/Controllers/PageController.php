@@ -9,7 +9,7 @@ use App\Models\Testimonial;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
 
-class PageController
+final class PageController
 {
     public function home(): View
     {
@@ -25,9 +25,7 @@ class PageController
             ->firstOrFail();
 
         // Load testimonials if needed for this page
-        $testimonials = $page->contentBlocks->contains('type', 'testimonials')
-            ? Testimonial::published()->get()
-            : collect();
+        $testimonials = $page->contentBlocks->contains('type', 'testimonials') ? Testimonial::published()->get() : collect();
 
         // Use specific view if it exists, otherwise fall back to generic 'page' view
         /** @var view-string $viewName */

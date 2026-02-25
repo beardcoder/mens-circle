@@ -38,69 +38,66 @@ class UserResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Section::make('Benutzerdaten')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('name')
-                            ->label('Name')
-                            ->required()
-                            ->maxLength(255),
-                        TextInput::make('email')
-                            ->label('E-Mail-Adresse')
-                            ->email()
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255),
-                    ]),
-                Section::make('Passwort')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('password')
-                            ->label('Passwort')
-                            ->password()
-                            ->revealable()
-                            ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
-                            ->dehydrated(fn (?string $state): bool => filled($state))
-                            ->required(fn (string $operation): bool => $operation === 'create')
-                            ->rule(Password::default()),
-                        TextInput::make('password_confirmation')
-                            ->label('Passwort bestätigen')
-                            ->password()
-                            ->revealable()
-                            ->same('password')
-                            ->requiredWith('password')
-                            ->dehydrated(false),
-                    ]),
-            ]);
+        return $schema->components([
+            Section::make('Benutzerdaten')
+                ->columns(2)
+                ->schema([
+                    TextInput::make('name')
+                        ->label('Name')
+                        ->required()
+                        ->maxLength(255),
+                    TextInput::make('email')
+                        ->label('E-Mail-Adresse')
+                        ->email()
+                        ->required()
+                        ->unique(ignoreRecord: true)
+                        ->maxLength(255),
+                ]),
+            Section::make('Passwort')
+                ->columns(2)
+                ->schema([
+                    TextInput::make('password')
+                        ->label('Passwort')
+                        ->password()
+                        ->revealable()
+                        ->dehydrateStateUsing(Hash::make(...))
+                        ->dehydrated(static fn(?string $state): bool => filled($state))
+                        ->required(static fn(string $operation): bool => $operation === 'create')
+                        ->rule(Password::default()),
+                    TextInput::make('password_confirmation')
+                        ->label('Passwort bestätigen')
+                        ->password()
+                        ->revealable()
+                        ->same('password')
+                        ->requiredWith('password')
+                        ->dehydrated(false),
+                ]),
+        ]);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('name')
-                    ->label('Name')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('email')
-                    ->label('E-Mail')
-                    ->searchable()
-                    ->sortable()
-                    ->copyable(),
-                TextColumn::make('email_verified_at')
-                    ->label('E-Mail verifiziert')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable()
-                    ->placeholder('Nicht verifiziert'),
-                TextColumn::make('created_at')
-                    ->label('Erstellt')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->defaultSort('created_at', 'desc');
+        return $table->columns([
+            TextColumn::make('name')
+                ->label('Name')
+                ->searchable()
+                ->sortable(),
+            TextColumn::make('email')
+                ->label('E-Mail')
+                ->searchable()
+                ->sortable()
+                ->copyable(),
+            TextColumn::make('email_verified_at')
+                ->label('E-Mail verifiziert')
+                ->dateTime('d.m.Y H:i')
+                ->sortable()
+                ->placeholder('Nicht verifiziert'),
+            TextColumn::make('created_at')
+                ->label('Erstellt')
+                ->dateTime('d.m.Y H:i')
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

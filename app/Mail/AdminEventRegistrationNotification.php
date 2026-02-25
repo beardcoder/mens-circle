@@ -30,20 +30,13 @@ class AdminEventRegistrationNotification extends Mailable
         /** @var string $adminName */
         $adminName = config('mail.admin.name', 'Männerkreis Admin');
 
-        return new Envelope(
-            to: [new Address($adminEmail, $adminName)],
-            subject: 'Neue Anmeldung: ' . $this->event->title,
-        );
+        return new Envelope(to: [new Address($adminEmail, $adminName)], subject: 'Neue Anmeldung: ' . $this->event->title);
     }
 
     public function content(): Content
     {
-        return new Content(
-            markdown: 'emails.admin-event-registration',
-            with: [
-                'registrationCount' => $this->event->activeRegistrations()
-                    ->count(),
-            ],
-        );
+        return new Content(markdown: 'emails.admin-event-registration', with: [
+            'registrationCount' => $this->event->activeRegistrations()->count(),
+        ]);
     }
 }

@@ -43,8 +43,6 @@ class StatsOverview extends StatsOverviewWidget
 
     private function getNextEventDescription(?Event $event): string
     {
-        return $event instanceof Event
-            ? 'Nächstes Event: ' . $event->event_date->format('d.m.Y')
-            : 'Kein Event geplant';
+        return $event instanceof Event ? 'Nächstes Event: ' . $event->event_date->format('d.m.Y') : 'Kein Event geplant';
     }
 }

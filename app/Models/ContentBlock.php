@@ -29,7 +29,7 @@ class ContentBlock extends Model implements HasMedia
     use InteractsWithMedia;
     use ClearsResponseCache;
 
-    protected $fillable = ['page_id', 'type', 'data', 'block_id', 'order', ];
+    protected $fillable = ['page_id', 'type', 'data', 'block_id', 'order'];
 
     /**
      * Relationship to Page
@@ -50,19 +50,18 @@ class ContentBlock extends Model implements HasMedia
         /** @var Page $page */
         $page = $this->page;
 
-        return $page->getMedia('page_blocks')
-            ->first(
-                fn (Media $media): bool
-                => $media->getCustomProperty('block_id') === $this->block_id
-                && $media->getCustomProperty('field') === $field,
-            );
+        return $page->getMedia('page_blocks')->first(
+            fn(Media $media): bool => (
+                $media->getCustomProperty('block_id') === $this->block_id
+                && $media->getCustomProperty('field') === $field
+            ),
+        );
     }
 
     #[Override]
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('page_blocks')
-            ->useDisk('public');
+        $this->addMediaCollection('page_blocks')->useDisk('public');
     }
 
     #[Override]

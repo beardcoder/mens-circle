@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->configureHealth();
 
-        View::composer('*', function (ViewContract $view): void {
+        View::composer('*', static function (ViewContract $view): void {
             try {
                 $settings = app(GeneralSettings::class);
 
@@ -55,16 +55,12 @@ class AppServiceProvider extends ServiceProvider
             'layouts.app',
             'components.blocks.cta',
             'components.blocks.hero',
-        ], function (ViewContract $view): void {
+        ], static function (ViewContract $view): void {
             try {
-                $nextEvent = cache()->remember(
-                    'next_event_data',
-                    300,
-                    fn () => Event::published()
-                        ->upcoming()
-                        ->orderBy('event_date')
-                        ->first(['slug']),
-                );
+                $nextEvent = cache()->remember('next_event_data', 300, static fn() => Event::published()
+                    ->upcoming()
+                    ->orderBy('event_date')
+                    ->first(['slug']));
 
                 $view->with([
                     'hasNextEvent' => $nextEvent !== null,
@@ -83,22 +79,18 @@ class AppServiceProvider extends ServiceProvider
     {
         Health::checks([
             // Infrastructure Checks
-            UsedDiskSpaceCheck::new()
-                ->warnWhenUsedSpaceIsAbovePercentage(70)
-                ->failWhenUsedSpaceIsAbovePercentage(90),
+            UsedDiskSpaceCheck::new()->warnWhenUsedSpaceIsAbovePercentage(70)->failWhenUsedSpaceIsAbovePercentage(90),
             DatabaseCheck::new(),
             CacheCheck::new(),
 
             // Schedule Check - wichtig für Event-Reminders und Sitemap
-            ScheduleCheck::new()
-                ->useCacheStore(Config::string('health.schedule.cache_store', 'health'))
-                ->heartbeatMaxAgeInMinutes(
-                    Config::integer('health.schedule.heartbeat_max_age_in_minutes', 10),
-                ),
+            ScheduleCheck::new()->useCacheStore(Config::string(
+                'health.schedule.cache_store',
+                'health',
+            ))->heartbeatMaxAgeInMinutes(Config::integer('health.schedule.heartbeat_max_age_in_minutes', 10)),
 
             // Queue Check - wichtig für asynchrone Jobs
-            QueueHealthCheck::new()
-                ->name('Queue System'),
+            QueueHealthCheck::new()->name('Queue System'),
 
             // Application Checks
             OptimizedAppCheck::new(),
@@ -107,18 +99,16 @@ class AppServiceProvider extends ServiceProvider
 
             // Website Availability Check
             PingCheck::new()
-                ->url(config('app.url') ?: 'http://localhost') // @phpstan-ignore argument.type
+                ->url(config('app.url') ?? 'http://localhost') // @phpstan-ignore argument.type
                 ->name('Website')
                 ->timeout(5)
                 ->retryTimes(2),
 
             // Mail System Check
-            MailHealthCheck::new()
-                ->name('SMTP Mail'),
+            MailHealthCheck::new()->name('SMTP Mail'),
 
             // SMS Service Check (Seven.io)
-            SevenIoHealthCheck::new()
-                ->name('Seven.io SMS'),
+            SevenIoHealthCheck::new()->name('Seven.io SMS'),
         ]);
     }
 }

@@ -18,16 +18,12 @@ class SevenIoHealthCheck extends Check
         $result = Result::make();
         $apiKey = config('sevenio.api_key', '');
 
-        if (empty($apiKey)) {
-            return $result
-                ->warning('Seven.io API-Key nicht konfiguriert')
-                ->shortSummary('Nicht konfiguriert');
+        if ($apiKey === '') {
+            return $result->warning('Seven.io API-Key nicht konfiguriert')->shortSummary('Nicht konfiguriert');
         }
 
         try {
-            $response = Http::timeout(10)
-                ->withHeader('X-Api-Key', $apiKey)
-                ->get('https://gateway.seven.io/api/balance');
+            $response = Http::timeout(10)->withHeader('X-Api-Key', $apiKey)->get('https://gateway.seven.io/api/balance');
 
             if ($response->successful()) {
                 $balance = (float) $response->body();
@@ -51,13 +47,9 @@ class SevenIoHealthCheck extends Check
 
             $statusCode = $response->status();
 
-            return $result
-                ->failed("Seven.io API nicht erreichbar (HTTP {$statusCode})")
-                ->shortSummary('API-Fehler');
+            return $result->failed("Seven.io API nicht erreichbar (HTTP {$statusCode})")->shortSummary('API-Fehler');
         } catch (Throwable $throwable) {
-            return $result
-                ->failed('Seven.io Verbindungsfehler: ' . $throwable->getMessage())
-                ->shortSummary('Verbindungsfehler');
+            return $result->failed('Seven.io Verbindungsfehler: ' . $throwable->getMessage())->shortSummary('Verbindungsfehler');
         }
     }
 }

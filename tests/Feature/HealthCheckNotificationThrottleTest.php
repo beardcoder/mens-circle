@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Notifications\HealthCheckFailedNotification;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Notification;
 use Spatie\Health\Checks\Result;
 use Spatie\Health\Notifications\Notifiable;
 
@@ -16,9 +15,7 @@ test('notification is sent when no previous notification exists', function (): v
     Cache::flush();
 
     $results = [
-        Result::make()
-            ->failed()
-            ->notificationMessage('Test check failed'),
+        Result::make()->failed()->notificationMessage('Test check failed'),
     ];
 
     $notification = new HealthCheckFailedNotification($results);
@@ -34,9 +31,7 @@ test('notification is throttled within throttle window', function (): void {
     Cache::flush();
 
     $results = [
-        Result::make()
-            ->failed()
-            ->notificationMessage('Test check failed'),
+        Result::make()->failed()->notificationMessage('Test check failed'),
     ];
 
     $notification = new HealthCheckFailedNotification($results);
@@ -57,9 +52,7 @@ test('notification is sent after throttle window expires', function (): void {
     Cache::flush();
 
     $results = [
-        Result::make()
-            ->failed()
-            ->notificationMessage('Test check failed'),
+        Result::make()->failed()->notificationMessage('Test check failed'),
     ];
 
     $notification = new HealthCheckFailedNotification($results);
@@ -82,9 +75,7 @@ test('notification is not sent when notifications are disabled', function (): vo
     Cache::flush();
 
     $results = [
-        Result::make()
-            ->failed()
-            ->notificationMessage('Test check failed'),
+        Result::make()->failed()->notificationMessage('Test check failed'),
     ];
 
     $notification = new HealthCheckFailedNotification($results);
@@ -100,9 +91,7 @@ test('notification is always sent when throttle is set to zero', function (): vo
     Cache::flush();
 
     $results = [
-        Result::make()
-            ->failed()
-            ->notificationMessage('Test check failed'),
+        Result::make()->failed()->notificationMessage('Test check failed'),
     ];
 
     $notification = new HealthCheckFailedNotification($results);
@@ -123,9 +112,7 @@ test('throttling is independent per channel', function (): void {
     Cache::flush();
 
     $results = [
-        Result::make()
-            ->failed()
-            ->notificationMessage('Test check failed'),
+        Result::make()->failed()->notificationMessage('Test check failed'),
     ];
 
     $notification = new HealthCheckFailedNotification($results);
@@ -151,9 +138,7 @@ test('only one notification is sent when shouldSend is called multiple times rap
     Cache::flush();
 
     $results = [
-        Result::make()
-            ->failed()
-            ->notificationMessage('Test check failed'),
+        Result::make()->failed()->notificationMessage('Test check failed'),
     ];
 
     $notifiable = new Notifiable();
@@ -170,6 +155,6 @@ test('only one notification is sent when shouldSend is called multiple times rap
     $result3 = $notification3->shouldSend($notifiable, 'mail');
 
     // Only one should return true due to Cache::add() atomic operation
-    $sentCount = collect([$result1, $result2, $result3])->filter(fn ($result) => $result === true)->count();
+    $sentCount = collect([$result1, $result2, $result3])->filter(fn($result) => $result === true)->count();
     expect($sentCount)->toBe(1);
 });

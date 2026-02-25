@@ -177,12 +177,14 @@ class DatabaseSeeder extends Seeder
         // Create ContentBlocks for homepage
         foreach ($contentBlocks as $index => $block) {
             $blockData = $block['data'];
-            $homepage->contentBlocks()->create([
-                'type' => $block['type'],
-                'data' => $blockData,
-                'block_id' => Str::uuid(),
-                'order' => $index,
-            ]);
+            $homepage
+                ->contentBlocks()
+                ->create([
+                    'type' => $block['type'],
+                    'data' => $blockData,
+                    'block_id' => Str::uuid(),
+                    'order' => $index,
+                ]);
         }
 
         // Create legal pages

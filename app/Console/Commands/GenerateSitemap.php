@@ -22,17 +22,13 @@ class GenerateSitemap extends Command
 
         $sitemap = Sitemap::create();
 
-        $sitemap->add(
-            Url::create(route('home'))
-                ->setPriority(1.0)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY),
-        );
+        $sitemap->add(Url::create(route('home'))->setPriority(1.0)->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
 
         Event::published()
             ->select('slug', 'updated_at')
             ->latest('event_date')
             ->get()
-            ->each(function (Event $event) use ($sitemap): void {
+            ->each(static function (Event $event) use ($sitemap): void {
                 $sitemap->add(
                     Url::create(route('event.show.slug', $event->slug))
                         ->setLastModificationDate($event->updated_at ?? now())
@@ -46,7 +42,7 @@ class GenerateSitemap extends Command
             ->where('slug', '!=', 'home')
             ->latest('published_at')
             ->get()
-            ->each(function (Page $page) use ($sitemap): void {
+            ->each(static function (Page $page) use ($sitemap): void {
                 $sitemap->add(
                     Url::create(route('page.show', $page->slug))
                         ->setLastModificationDate($page->updated_at ?? now())

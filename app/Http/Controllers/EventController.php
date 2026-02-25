@@ -23,7 +23,7 @@ use Seven\Api\Client;
 use Seven\Api\Resource\Sms\SmsParams;
 use Seven\Api\Resource\Sms\SmsResource;
 
-class EventController
+final class EventController
 {
     public function showNext(): View|RedirectResponse
     {
@@ -76,14 +76,11 @@ class EventController
         $isWaitlist = $event->isFull;
 
         try {
-            $participant = Participant::updateOrCreate(
-                ['email' => $validated['email']],
-                [
-                    'first_name' => $validated['first_name'],
-                    'last_name' => $validated['last_name'],
-                    'phone' => $validated['phone_number'] ?? null,
-                ],
-            );
+            $participant = Participant::updateOrCreate(['email' => $validated['email']], [
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'phone' => $validated['phone_number'] ?? null,
+            ]);
 
             $existingRegistration = Registration::withTrashed()
                 ->where('event_id', $event->id)

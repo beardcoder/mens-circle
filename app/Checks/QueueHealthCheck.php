@@ -25,16 +25,12 @@ class QueueHealthCheck extends Check
 
         // Sync queue is only for local development
         if ($connection === 'sync') {
-            return $result
-                ->warning("Queue-Treiber ist 'sync' (nicht für Produktion)")
-                ->shortSummary($connection);
+            return $result->warning("Queue-Treiber ist 'sync' (nicht für Produktion)")->shortSummary($connection);
         }
 
         // Null queue means no jobs are processed
         if ($connection === 'null') {
-            return $result
-                ->warning("Queue-Treiber ist 'null' (Jobs werden nicht verarbeitet)")
-                ->shortSummary($connection);
+            return $result->warning("Queue-Treiber ist 'null' (Jobs werden nicht verarbeitet)")->shortSummary($connection);
         }
 
         try {
@@ -89,8 +85,7 @@ class QueueHealthCheck extends Check
         /** @var string $redisConnection */
         $redisConnection = Config::get('queue.connections.redis.connection', 'default');
         // Try to ping redis
-        $redis = app('redis')
-            ->connection($redisConnection);
+        $redis = app('redis')->connection($redisConnection);
         $redis->ping();
     }
 }

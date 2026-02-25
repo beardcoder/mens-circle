@@ -8,8 +8,7 @@ use Spatie\Health\Commands\ScheduleCheckHeartbeatCommand;
 use Spatie\Health\Facades\Health;
 
 test('schedule check uses configured cache store', function (): void {
-    $scheduleCheck = Health::registeredChecks()
-        ->first(fn (Check $check): bool => $check instanceof ScheduleCheck);
+    $scheduleCheck = Health::registeredChecks()->first(fn(Check $check): bool => $check instanceof ScheduleCheck);
 
     expect($scheduleCheck)
         ->toBeInstanceOf(ScheduleCheck::class)
@@ -18,8 +17,7 @@ test('schedule check uses configured cache store', function (): void {
 });
 
 test('schedule heartbeat survives default cache clear', function (): void {
-    $scheduleCheck = Health::registeredChecks()
-        ->first(fn (Check $check): bool => $check instanceof ScheduleCheck);
+    $scheduleCheck = Health::registeredChecks()->first(fn(Check $check): bool => $check instanceof ScheduleCheck);
 
     expect($scheduleCheck)->toBeInstanceOf(ScheduleCheck::class);
 
@@ -36,8 +34,7 @@ test('schedule heartbeat survives default cache clear', function (): void {
 
     $this->artisan('cache:clear')->assertExitCode(0);
 
-    expect(cache()->store($cacheStoreName)->get($cacheKey))
-        ->toBe($heartbeatBeforeClear);
+    expect(cache()->store($cacheStoreName)->get($cacheKey))->toBe($heartbeatBeforeClear);
 
     $result = $scheduleCheck->run();
 

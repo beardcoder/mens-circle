@@ -17,9 +17,7 @@ test('event can be created with required fields', function (): void {
         'is_published' => true,
     ]);
 
-    expect($event->title)->toBe('Test Event')
-        ->and($event->max_participants)->toBe(20)
-        ->and($event->is_published)->toBeTrue();
+    expect($event->title)->toBe('Test Event')->and($event->max_participants)->toBe(20)->and($event->is_published)->toBeTrue();
 });
 
 test('event slug is generated automatically', function (): void {
@@ -38,11 +36,13 @@ test('event calculates available spots correctly', function (): void {
 
     $participant = Participant::factory()->create();
 
-    Registration::factory()->count(3)->create([
-        'event_id' => $event->id,
-        'participant_id' => Participant::factory(),
-        'status' => RegistrationStatus::Registered,
-    ]);
+    Registration::factory()
+        ->count(3)
+        ->create([
+            'event_id' => $event->id,
+            'participant_id' => Participant::factory(),
+            'status' => RegistrationStatus::Registered,
+        ]);
 
     $event->refresh();
 
@@ -54,11 +54,13 @@ test('event knows when it is full', function (): void {
         'max_participants' => 2,
     ]);
 
-    Registration::factory()->count(2)->create([
-        'event_id' => $event->id,
-        'participant_id' => Participant::factory(),
-        'status' => RegistrationStatus::Registered,
-    ]);
+    Registration::factory()
+        ->count(2)
+        ->create([
+            'event_id' => $event->id,
+            'participant_id' => Participant::factory(),
+            'status' => RegistrationStatus::Registered,
+        ]);
 
     $event->refresh();
 
@@ -70,11 +72,13 @@ test('event knows when it is not full', function (): void {
         'max_participants' => 10,
     ]);
 
-    Registration::factory()->count(5)->create([
-        'event_id' => $event->id,
-        'participant_id' => Participant::factory(),
-        'status' => RegistrationStatus::Registered,
-    ]);
+    Registration::factory()
+        ->count(5)
+        ->create([
+            'event_id' => $event->id,
+            'participant_id' => Participant::factory(),
+            'status' => RegistrationStatus::Registered,
+        ]);
 
     $event->refresh();
 
@@ -122,8 +126,7 @@ test('published scope filters published events', function (): void {
 
     $publishedEvents = Event::published()->get();
 
-    expect($publishedEvents)->toHaveCount(1)
-        ->and($publishedEvents->first()->is_published)->toBeTrue();
+    expect($publishedEvents)->toHaveCount(1)->and($publishedEvents->first()->is_published)->toBeTrue();
 });
 
 test('upcoming scope filters future events', function (): void {
@@ -136,7 +139,7 @@ test('upcoming scope filters future events', function (): void {
 });
 
 test('nextEvent returns next published upcoming event', function (): void {
-    Event::factory()->create([
+    $soonestEvent = Event::factory()->create([
         'event_date' => now()->addDays(1),
         'is_published' => true,
     ]);
@@ -153,9 +156,7 @@ test('nextEvent returns next published upcoming event', function (): void {
 
     $nextEvent = Event::nextEvent();
 
-    expect($nextEvent)->not->toBeNull()
-        ->and($nextEvent->event_date->isToday())->toBeFalse()
-        ->and($nextEvent->event_date->isFuture())->toBeTrue();
+    expect($nextEvent)->toBeInstanceOf(Event::class)->and($nextEvent->id)->toBe($soonestEvent->id);
 });
 
 test('event generates valid ical content', function (): void {
@@ -186,20 +187,23 @@ test('cancelled registrations do not count as active', function (): void {
         'max_participants' => 10,
     ]);
 
-    Registration::factory()->count(3)->create([
-        'event_id' => $event->id,
-        'participant_id' => Participant::factory(),
-        'status' => RegistrationStatus::Registered,
-    ]);
+    Registration::factory()
+        ->count(3)
+        ->create([
+            'event_id' => $event->id,
+            'participant_id' => Participant::factory(),
+            'status' => RegistrationStatus::Registered,
+        ]);
 
-    Registration::factory()->count(2)->create([
-        'event_id' => $event->id,
-        'participant_id' => Participant::factory(),
-        'status' => RegistrationStatus::Cancelled,
-    ]);
+    Registration::factory()
+        ->count(2)
+        ->create([
+            'event_id' => $event->id,
+            'participant_id' => Participant::factory(),
+            'status' => RegistrationStatus::Cancelled,
+        ]);
 
     $event->refresh();
 
-    expect($event->activeRegistrationsCount)->toBe(3)
-        ->and($event->availableSpots)->toBe(7);
+    expect($event->activeRegistrationsCount)->toBe(3)->and($event->availableSpots)->toBe(7);
 });

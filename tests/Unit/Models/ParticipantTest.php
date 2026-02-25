@@ -14,10 +14,14 @@ test('participant can be created', function (): void {
         'phone' => '+49123456789',
     ]);
 
-    expect($participant->first_name)->toBe('Max')
-        ->and($participant->last_name)->toBe('Mustermann')
-        ->and($participant->email)->toBe('max@example.com')
-        ->and($participant->phone)->toBe('+49123456789');
+    expect($participant->first_name)
+        ->toBe('Max')
+        ->and($participant->last_name)
+        ->toBe('Mustermann')
+        ->and($participant->email)
+        ->toBe('max@example.com')
+        ->and($participant->phone)
+        ->toBe('+49123456789');
 });
 
 test('participant can have nullable names', function (): void {
@@ -27,8 +31,7 @@ test('participant can have nullable names', function (): void {
         'email' => 'test@example.com',
     ]);
 
-    expect($participant->first_name)->toBe('')
-        ->and($participant->last_name)->toBe('');
+    expect($participant->first_name)->toBeEmpty()->and($participant->last_name)->toBeEmpty();
 });
 
 test('participant full name is computed correctly', function (): void {
@@ -52,9 +55,11 @@ test('participant full name trims whitespace', function (): void {
 test('participant can have multiple registrations', function (): void {
     $participant = Participant::factory()->create();
 
-    Registration::factory()->count(3)->create([
-        'participant_id' => $participant->id,
-    ]);
+    Registration::factory()
+        ->count(3)
+        ->create([
+            'participant_id' => $participant->id,
+        ]);
 
     expect($participant->registrations)->toHaveCount(3);
 });
@@ -103,9 +108,12 @@ test('findOrCreateByEmail creates new participant', function (): void {
         'last_name' => 'User',
     ]);
 
-    expect($participant->email)->toBe('new@example.com')
-        ->and($participant->first_name)->toBe('New')
-        ->and($participant->last_name)->toBe('User');
+    expect($participant->email)
+        ->toBe('new@example.com')
+        ->and($participant->first_name)
+        ->toBe('New')
+        ->and($participant->last_name)
+        ->toBe('User');
 });
 
 test('findOrCreateByEmail finds existing participant', function (): void {
@@ -118,6 +126,5 @@ test('findOrCreateByEmail finds existing participant', function (): void {
         'first_name' => 'Different',
     ]);
 
-    expect($found->id)->toBe($existing->id)
-        ->and($found->first_name)->toBe('Existing');
+    expect($found->id)->toBe($existing->id)->and($found->first_name)->toBe('Existing');
 });

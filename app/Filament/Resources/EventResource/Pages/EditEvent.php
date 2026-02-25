@@ -56,10 +56,9 @@ class EditEvent extends EditRecord
                             ->label('E-Mail-Vorlage')
                             ->options(
                                 collect(EmailTemplate::participantTemplates())
-                                    ->mapWithKeys(fn (EmailTemplate $template): array => [
+                                    ->mapWithKeys(static fn(EmailTemplate $template): array => [
                                         $template->value => $template->getLabel(),
-                                    ])
-                                    ->all(),
+                                    ])->all(),
                             )
                             ->placeholder('Vorlage auswählen (optional)')
                             ->native(false)
@@ -111,7 +110,8 @@ class EditEvent extends EditRecord
             ->modalDescription(function (): string {
                 /** @var Event $event */
                 $event = $this->record;
-                $count = $event->registrations()
+                $count = $event
+                    ->registrations()
                     ->whereIn('status', [RegistrationStatus::Registered, RegistrationStatus::Attended])
                     ->count();
 
@@ -122,7 +122,8 @@ class EditEvent extends EditRecord
                 /** @var Event $event */
                 $event = $this->record;
 
-                $registrations = $event->registrations()
+                $registrations = $event
+                    ->registrations()
                     ->whereIn('status', [RegistrationStatus::Registered, RegistrationStatus::Attended])
                     ->with('participant')
                     ->get();
@@ -132,13 +133,12 @@ class EditEvent extends EditRecord
 
                 foreach ($registrations as $registration) {
                     try {
-                        Mail::to($registration->participant->email)
-                            ->send(new EventParticipantMessage(
-                                mailSubject: $data['subject'],
-                                mailContent: $data['content'],
-                                event: $event,
-                                participantName: $registration->participant->first_name,
-                            ));
+                        Mail::to($registration->participant->email)->send(new EventParticipantMessage(
+                            mailSubject: $data['subject'],
+                            mailContent: $data['content'],
+                            event: $event,
+                            participantName: $registration->participant->first_name,
+                        ));
                         $sentCount++;
                     } catch (Exception $exception) {
                         Log::error('Failed to send participant message', [

@@ -24,15 +24,11 @@ class MailHealthCheck extends Check
         $mailer = Config::get('mail.default', 'smtp');
 
         if ($mailer === 'log' || $mailer === 'array') {
-            return $result
-                ->warning("Mail-Treiber ist '{$mailer}' (nicht für Produktion)")
-                ->shortSummary($mailer);
+            return $result->warning("Mail-Treiber ist '{$mailer}' (nicht für Produktion)")->shortSummary($mailer);
         }
 
         if ($mailer !== 'smtp') {
-            return $result
-                ->ok()
-                ->shortSummary($mailer);
+            return $result->ok()->shortSummary($mailer);
         }
 
         try {
@@ -48,10 +44,8 @@ class MailHealthCheck extends Check
             /** @var string|null $password */
             $password = Config::get('mail.mailers.smtp.password');
 
-            if (empty($host)) {
-                return $result
-                    ->failed('SMTP-Host nicht konfiguriert')
-                    ->shortSummary('Nicht konfiguriert');
+            if ($host === null || $host === '') {
+                return $result->failed('SMTP-Host nicht konfiguriert')->shortSummary('Nicht konfiguriert');
             }
 
             $scheme = match ($encryption) {
@@ -60,7 +54,7 @@ class MailHealthCheck extends Check
                 default => 'smtp',
             };
 
-            $dsn = new Dsn($scheme, $host, $username, $password, $port, );
+            $dsn = new Dsn($scheme, $host, $username, $password, $port);
 
             $factory = new EsmtpTransportFactory();
             $transport = $factory->create($dsn);

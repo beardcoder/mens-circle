@@ -42,55 +42,49 @@ class ParticipantResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Section::make('Persönliche Daten')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('first_name')
-                            ->label('Vorname')
-                            ->maxLength(255),
-                        TextInput::make('last_name')
-                            ->label('Nachname')
-                            ->maxLength(255),
-                        TextInput::make('email')
-                            ->label('E-Mail-Adresse')
-                            ->email()
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255)
-                            ->columnSpanFull(),
-                        TextInput::make('phone')
-                            ->label('Telefonnummer')
-                            ->tel()
-                            ->maxLength(30)
-                            ->columnSpanFull(),
-                    ]),
-                Section::make('Newsletter')
-                    ->schema([
-                        Toggle::make('is_subscribed_to_newsletter')
-                            ->label('Newsletter-Abonnement')
-                            ->helperText('Aktivieren, um den Teilnehmer für den Newsletter anzumelden')
-                            ->formatStateUsing(fn ($record) => $record?->isSubscribedToNewsletter() ?? false)
-                            ->live()
-                            ->afterStateUpdated(function ($state, $record): void {
-                                if (!$record) {
-                                    return;
-                                }
+        return $schema->components([
+            Section::make('Persönliche Daten')
+                ->columns(2)
+                ->schema([
+                    TextInput::make('first_name')->label('Vorname')->maxLength(255),
+                    TextInput::make('last_name')->label('Nachname')->maxLength(255),
+                    TextInput::make('email')
+                        ->label('E-Mail-Adresse')
+                        ->email()
+                        ->required()
+                        ->unique(ignoreRecord: true)
+                        ->maxLength(255)
+                        ->columnSpanFull(),
+                    TextInput::make('phone')
+                        ->label('Telefonnummer')
+                        ->tel()
+                        ->maxLength(30)
+                        ->columnSpanFull(),
+                ]),
+            Section::make('Newsletter')->schema([
+                Toggle::make('is_subscribed_to_newsletter')
+                    ->label('Newsletter-Abonnement')
+                    ->helperText('Aktivieren, um den Teilnehmer für den Newsletter anzumelden')
+                    ->formatStateUsing(static fn($record) => $record?->isSubscribedToNewsletter() ?? false)
+                    ->live()
+                    ->afterStateUpdated(static function ($state, $record): void {
+                        if (!$record) {
+                            return;
+                        }
 
-                                $subscription = $record->newsletterSubscription;
+                        $subscription = $record->newsletterSubscription;
 
-                                if ($state) {
-                                    self::handleNewsletterSubscribe($record, $subscription);
+                        if ($state) {
+                            self::handleNewsletterSubscribe($record, $subscription);
 
-                                    return;
-                                }
+                            return;
+                        }
 
-                                self::handleNewsletterUnsubscribe($subscription);
-                            })
-                            ->dehydrated(false),
-                    ]),
-            ]);
+                        self::handleNewsletterUnsubscribe($subscription);
+                    })
+                    ->dehydrated(false),
+            ]),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -121,7 +115,7 @@ class ParticipantResource extends Resource
                 IconColumn::make('newsletter_subscription')
                     ->label('Newsletter')
                     ->boolean()
-                    ->state(fn ($record): bool => $record->isSubscribedToNewsletter()),
+                    ->state(static fn($record): bool => $record->isSubscribedToNewsletter()),
                 TextColumn::make('created_at')
                     ->label('Erstellt')
                     ->dateTime('d.m.Y H:i')
@@ -131,18 +125,15 @@ class ParticipantResource extends Resource
             ->filters([
                 Filter::make('has_registrations')
                     ->label('Hat Anmeldungen')
-                    ->query(fn (Builder $query): Builder => $query->has('registrations')),
+                    ->query(static fn(Builder $query): Builder => $query->has('registrations')),
                 Filter::make('newsletter_subscriber')
                     ->label('Newsletter-Abonnent')
-                    ->query(
-                        fn (Builder $query): Builder => $query->whereHas(
-                            'newsletterSubscription',
-                            fn (Builder $q) => $q->whereNull('unsubscribed_at', ),
-                        ),
-                    ),
+                    ->query(static fn(Builder $query): Builder => $query->whereHas('newsletterSubscription', static fn(Builder $q) => $q->whereNull(
+                        'unsubscribed_at',
+                    ))),
             ])
-            ->recordActions([EditAction::make(), DeleteAction::make(), ])
-            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make(), ]), ])
+            ->recordActions([EditAction::make(), DeleteAction::make()])
+            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])])
             ->defaultSort('created_at', 'desc');
     }
 
@@ -169,8 +160,7 @@ class ParticipantResource extends Resource
         }
 
         if (!$subscription instanceof NewsletterSubscription) {
-            $record->newsletterSubscription()
-                ->create([]);
+            $record->newsletterSubscription()->create([]);
         }
     }
 

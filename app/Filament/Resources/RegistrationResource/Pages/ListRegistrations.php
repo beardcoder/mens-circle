@@ -16,6 +16,6 @@ class ListRegistrations extends ListRecords
     #[Override]
     protected function getHeaderActions(): array
     {
-        return [CreateAction::make(), ];
+        return [CreateAction::make()];
     }
 }

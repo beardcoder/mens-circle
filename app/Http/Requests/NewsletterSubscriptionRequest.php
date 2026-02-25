@@ -48,8 +48,7 @@ class NewsletterSubscriptionRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success' => false,
-            'message' => $validator->errors()
-                ->first(),
+            'message' => $validator->errors()->first(),
         ], 422));
     }
 }

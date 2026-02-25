@@ -15,9 +15,7 @@ final class CodeQualityTest
      */
     public function testSettingsAreFinal(): Rule
     {
-        return PHPat::rule()
-            ->classes(Selector::inNamespace('App\Settings'))
-            ->shouldBeFinal();
+        return PHPat::rule()->classes(Selector::inNamespace('App\Settings'))->shouldBeFinal();
     }
 
     /**

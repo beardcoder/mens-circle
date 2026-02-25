@@ -58,75 +58,74 @@ class SendNewsletter extends Page implements HasActions, HasForms
     {
         $nextEvent = Event::nextEvent();
 
-        return $schema
-            ->components([
-                Section::make('Vorlage')
-                    ->description('Wähle eine Vorlage, um Betreff und Inhalt automatisch auszufüllen')
-                    ->schema([
-                        Select::make('template')
-                            ->label('E-Mail-Vorlage')
-                            ->options(
-                                collect(EmailTemplate::newsletterTemplates())
-                                    ->mapWithKeys(fn (EmailTemplate $template): array => [
-                                        $template->value => $template->getLabel(),
-                                    ])
-                                    ->all(),
-                            )
-                            ->placeholder('Vorlage auswählen (optional)')
-                            ->native(false)
-                            ->live()
-                            ->afterStateUpdated(function (?string $state, callable $set): void {
-                                if (!$state) {
-                                    return;
-                                }
+        return $schema->components([
+            Section::make('Vorlage')
+                ->description('Wähle eine Vorlage, um Betreff und Inhalt automatisch auszufüllen')
+                ->schema([
+                    Select::make('template')
+                        ->label('E-Mail-Vorlage')
+                        ->options(
+                            collect(EmailTemplate::newsletterTemplates())
+                                ->mapWithKeys(static fn(EmailTemplate $template): array => [
+                                    $template->value => $template->getLabel(),
+                                ])->all(),
+                        )
+                        ->placeholder('Vorlage auswählen (optional)')
+                        ->native(false)
+                        ->live()
+                        ->afterStateUpdated(static function (?string $state, callable $set): void {
+                            if (!$state) {
+                                return;
+                            }
 
-                                $template = EmailTemplate::from($state);
-                                $service = new EmailTemplateService();
-                                $resolved = $service->resolve($template);
+                            $template = EmailTemplate::from($state);
+                            $service = new EmailTemplateService();
+                            $resolved = $service->resolve($template);
 
-                                $set('subject', $resolved['subject']);
-                                $set('content', $resolved['content']);
-                            })
-                            ->helperText($nextEvent instanceof Event
+                            $set('subject', $resolved['subject']);
+                            $set('content', $resolved['content']);
+                        })
+                        ->helperText(
+                            $nextEvent instanceof Event
                                 ? "Platzhalter werden mit Daten vom nächsten Event gefüllt: {$nextEvent->title} ({$nextEvent->event_date->translatedFormat(
                                     'd. F Y',
                                 )})"
-                                : 'Kein kommendes Event vorhanden – Platzhalter werden mit „—" gefüllt'),
+                                : 'Kein kommendes Event vorhanden – Platzhalter werden mit „—" gefüllt',
+                        ),
 
-                        TextEntry::make('placeholders_info')
-                            ->label('Verfügbare Platzhalter')
-                            ->state(implode(', ', EmailTemplate::placeholders()))
-                            ->helperText(
-                                'Diese Platzhalter können im Betreff und Inhalt verwendet werden und werden beim Auswählen einer Vorlage automatisch ersetzt',
-                            ),
-                    ])
-                    ->collapsible(),
+                    TextEntry::make('placeholders_info')
+                        ->label('Verfügbare Platzhalter')
+                        ->state(implode(', ', EmailTemplate::placeholders()))
+                        ->helperText(
+                            'Diese Platzhalter können im Betreff und Inhalt verwendet werden und werden beim Auswählen einer Vorlage automatisch ersetzt',
+                        ),
+                ])
+                ->collapsible(),
 
-                TextInput::make('subject')
-                    ->label('Betreff')
-                    ->required()
-                    ->maxLength(255)
-                    ->placeholder('z.B. Nächstes Treffen am 24. Januar')
-                    ->helperText('Der Betreff erscheint in der E-Mail-Vorschau'),
+            TextInput::make('subject')
+                ->label('Betreff')
+                ->required()
+                ->maxLength(255)
+                ->placeholder('z.B. Nächstes Treffen am 24. Januar')
+                ->helperText('Der Betreff erscheint in der E-Mail-Vorschau'),
 
-                RichEditor::make('content')
-                    ->label('Newsletter-Inhalt')
-                    ->required()
-                    ->toolbarButtons([
-                        'bold',
-                        'italic',
-                        'link',
-                        'h2',
-                        'h3',
-                        'bulletList',
-                        'orderedList',
-                        'undo',
-                        'redo',
-                    ])
-                    ->placeholder('Schreibe deine Newsletter-Nachricht hier...')
-                    ->helperText('Formatiere deinen Text mit den Werkzeugen oben'),
-            ])
-            ->statePath('data');
+            RichEditor::make('content')
+                ->label('Newsletter-Inhalt')
+                ->required()
+                ->toolbarButtons([
+                    'bold',
+                    'italic',
+                    'link',
+                    'h2',
+                    'h3',
+                    'bulletList',
+                    'orderedList',
+                    'undo',
+                    'redo',
+                ])
+                ->placeholder('Schreibe deine Newsletter-Nachricht hier...')
+                ->helperText('Formatiere deinen Text mit den Werkzeugen oben'),
+        ])->statePath('data');
     }
 
     #[Override]
@@ -139,13 +138,13 @@ class SendNewsletter extends Page implements HasActions, HasForms
                 ->color('primary')
                 ->requiresConfirmation()
                 ->modalHeading('Newsletter versenden?')
-                ->modalDescription(function (): string {
+                ->modalDescription(static function (): string {
                     $count = NewsletterSubscription::whereNull('unsubscribed_at')->count();
 
                     return "Der Newsletter wird an {$count} aktive Abonnenten versendet. Dies kann nicht rückgängig gemacht werden.";
                 })
                 ->modalSubmitActionLabel('Jetzt versenden')
-                ->action(fn () => $this->sendNewsletterAction()),
+                ->action($this->sendNewsletterAction(...)),
         ];
     }
 

@@ -18,8 +18,7 @@ test('can view next event page', function (): void {
 
     $response = $this->get(route('event.show'));
 
-    expect($response->status())->toBe(302)
-        ->and($response->headers->get('Location'))->toContain($event->slug);
+    expect($response->status())->toBe(302)->and($response->headers->get('Location'))->toContain($event->slug);
 });
 
 test('shows no event page when no upcoming events', function (): void {
@@ -122,7 +121,11 @@ test('registers on waitlist when event is full', function (): void {
         'max_participants' => 2,
     ]);
 
-    Registration::factory()->count(2)->forEvent($event)->registered()->create();
+    Registration::factory()
+        ->count(2)
+        ->forEvent($event)
+        ->registered()
+        ->create();
 
     $response = $this->postJson(route('event.register'), [
         'event_id' => $event->id,
@@ -156,7 +159,10 @@ test('sends waitlist confirmation email when event is full', function (): void {
         'max_participants' => 1,
     ]);
 
-    Registration::factory()->forEvent($event)->registered()->create();
+    Registration::factory()
+        ->forEvent($event)
+        ->registered()
+        ->create();
 
     $this->postJson(route('event.register'), [
         'event_id' => $event->id,
@@ -178,8 +184,15 @@ test('already on waitlist returns error', function (): void {
 
     $participant = Participant::factory()->create(['email' => 'max@example.com']);
 
-    Registration::factory()->forEvent($event)->registered()->create();
-    Registration::factory()->forEvent($event)->forParticipant($participant)->waitlist()->create();
+    Registration::factory()
+        ->forEvent($event)
+        ->registered()
+        ->create();
+    Registration::factory()
+        ->forEvent($event)
+        ->forParticipant($participant)
+        ->waitlist()
+        ->create();
 
     $response = $this->postJson(route('event.register'), [
         'event_id' => $event->id,
@@ -288,8 +301,14 @@ test('promotes from waitlist when registration is cancelled', function (): void 
         'max_participants' => 1,
     ]);
 
-    $registered = Registration::factory()->forEvent($event)->registered()->create();
-    $waitlisted = Registration::factory()->forEvent($event)->waitlist()->create();
+    $registered = Registration::factory()
+        ->forEvent($event)
+        ->registered()
+        ->create();
+    $waitlisted = Registration::factory()
+        ->forEvent($event)
+        ->waitlist()
+        ->create();
 
     $registered->cancel();
 
@@ -305,8 +324,14 @@ test('sends waitlist promotion email when registration is cancelled', function (
         'max_participants' => 1,
     ]);
 
-    $registered = Registration::factory()->forEvent($event)->registered()->create();
-    Registration::factory()->forEvent($event)->waitlist()->create();
+    $registered = Registration::factory()
+        ->forEvent($event)
+        ->registered()
+        ->create();
+    Registration::factory()
+        ->forEvent($event)
+        ->waitlist()
+        ->create();
 
     $registered->cancel();
 
@@ -320,7 +345,10 @@ test('does not promote when no one is on waitlist', function (): void {
         'max_participants' => 1,
     ]);
 
-    $registered = Registration::factory()->forEvent($event)->registered()->create();
+    $registered = Registration::factory()
+        ->forEvent($event)
+        ->registered()
+        ->create();
 
     $registered->cancel();
 

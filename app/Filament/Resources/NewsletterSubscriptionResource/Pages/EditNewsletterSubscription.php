@@ -16,6 +16,6 @@ class EditNewsletterSubscription extends EditRecord
     #[Override]
     protected function getHeaderActions(): array
     {
-        return [DeleteAction::make(), ];
+        return [DeleteAction::make()];
     }
 }

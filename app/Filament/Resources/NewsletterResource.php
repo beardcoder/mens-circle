@@ -41,37 +41,36 @@ class NewsletterResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                TextInput::make('subject')
-                    ->label('Betreff')
-                    ->disabled()
-                    ->dehydrated(false),
-                RichEditor::make('content')
-                    ->label('Inhalt')
-                    ->disabled()
-                    ->dehydrated(false)
-                    ->toolbarButtons([]),
-                TextInput::make('status')
-                    ->label('Status')
-                    ->disabled()
-                    ->dehydrated(false),
-                TextInput::make('recipient_count')
-                    ->label('Anzahl Empfänger')
-                    ->disabled()
-                    ->dehydrated(false)
-                    ->numeric(),
-                DateTimePicker::make('sent_at')
-                    ->label('Versendet am')
-                    ->disabled()
-                    ->dehydrated(false)
-                    ->displayFormat('d.m.Y H:i'),
-                DateTimePicker::make('created_at')
-                    ->label('Erstellt am')
-                    ->disabled()
-                    ->dehydrated(false)
-                    ->displayFormat('d.m.Y H:i'),
-            ]);
+        return $schema->components([
+            TextInput::make('subject')
+                ->label('Betreff')
+                ->disabled()
+                ->dehydrated(false),
+            RichEditor::make('content')
+                ->label('Inhalt')
+                ->disabled()
+                ->dehydrated(false)
+                ->toolbarButtons([]),
+            TextInput::make('status')
+                ->label('Status')
+                ->disabled()
+                ->dehydrated(false),
+            TextInput::make('recipient_count')
+                ->label('Anzahl Empfänger')
+                ->disabled()
+                ->dehydrated(false)
+                ->numeric(),
+            DateTimePicker::make('sent_at')
+                ->label('Versendet am')
+                ->disabled()
+                ->dehydrated(false)
+                ->displayFormat('d.m.Y H:i'),
+            DateTimePicker::make('created_at')
+                ->label('Erstellt am')
+                ->disabled()
+                ->dehydrated(false)
+                ->displayFormat('d.m.Y H:i'),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -86,8 +85,8 @@ class NewsletterResource extends Resource
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (NewsletterStatus $state): string => $state->getColor())
-                    ->formatStateUsing(fn (NewsletterStatus $state): string => $state->getLabel())
+                    ->color(static fn(NewsletterStatus $state): string => $state->getColor())
+                    ->formatStateUsing(static fn(NewsletterStatus $state): string => $state->getLabel())
                     ->sortable(),
                 TextColumn::make('recipient_count')
                     ->label('Empfänger')
@@ -103,10 +102,10 @@ class NewsletterResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([SelectFilter::make('status') ->label('Status') ->options(NewsletterStatus::options()), ])
+            ->filters([SelectFilter::make('status')->label('Status')->options(NewsletterStatus::options())])
             ->defaultSort('created_at', 'desc')
-            ->recordActions([ViewAction::make(), ])
-            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make(), ]), ]);
+            ->recordActions([ViewAction::make()])
+            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 
     public static function getRelations(): array

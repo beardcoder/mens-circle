@@ -40,7 +40,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht den Anwendungs-Cache.',
                 successTitle: 'Anwendungs-Cache gelöscht',
                 successBody: 'Der Anwendungs-Cache wurde erfolgreich gelöscht.',
-                action: fn () => Artisan::call('cache:clear'),
+                action: static fn() => Artisan::call('cache:clear'),
             ),
 
             $this->makeCacheAction(
@@ -52,7 +52,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht den Response-Cache (gecachte HTTP-Antworten). Die Seiten werden beim nächsten Aufruf neu generiert.',
                 successTitle: 'Response-Cache gelöscht',
                 successBody: 'Der Response-Cache wurde erfolgreich gelöscht.',
-                action: fn () => ResponseCache::clear(),
+                action: ResponseCache::clear(...),
             ),
 
             $this->makeCacheAction(
@@ -64,7 +64,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht den Konfigurations-Cache.',
                 successTitle: 'Konfigurations-Cache gelöscht',
                 successBody: 'Der Konfigurations-Cache wurde erfolgreich gelöscht.',
-                action: fn () => Artisan::call('config:clear'),
+                action: static fn() => Artisan::call('config:clear'),
             ),
 
             $this->makeCacheAction(
@@ -76,7 +76,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht den Routen-Cache.',
                 successTitle: 'Routen-Cache neu aufgebaut',
                 successBody: 'Der Routen-Cache wurde gelöscht und neu aufgebaut.',
-                action: function (): void {
+                action: static function (): void {
                     Artisan::call('route:clear');
                     Artisan::call('route:cache');
                 },
@@ -91,7 +91,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht den View-Cache.',
                 successTitle: 'View-Cache neu aufgebaut',
                 successBody: 'Der View-Cache wurde gelöscht und neu aufgebaut.',
-                action: function (): void {
+                action: static function (): void {
                     Artisan::call('view:clear');
                     Artisan::call('view:cache');
                 },
@@ -106,7 +106,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht alle Caches (Anwendung, Response, Konfiguration, Routen, Views). Diese Aktion kann nicht rückgängig gemacht werden.',
                 successTitle: 'Alle Caches gelöscht',
                 successBody: 'Alle Caches wurden gelöscht. Routen- und View-Cache wurden neu aufgebaut.',
-                action: function (): void {
+                action: static function (): void {
                     Artisan::call('cache:clear');
                     ResponseCache::clear();
                     Artisan::call('config:clear');
@@ -127,7 +127,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies führt den Laravel Optimize-Befehl aus und cached Konfiguration, Routen, Views und Events für maximale Performance.',
                 successTitle: 'Laravel optimiert',
                 successBody: 'Die Anwendung wurde erfolgreich optimiert. Konfiguration, Routen, Views und Events wurden gecached.',
-                action: fn () => Artisan::call('optimize'),
+                action: static fn() => Artisan::call('optimize'),
                 submitLabel: 'Jetzt optimieren',
             ),
 
@@ -140,7 +140,7 @@ class ClearCache extends Page
                 modalDescription: 'Dies löscht alle durch Laravel Optimize erstellten Caches. Nützlich während der Entwicklung.',
                 successTitle: 'Optimierung zurückgesetzt',
                 successBody: 'Alle Optimierungs-Caches wurden gelöscht.',
-                action: fn () => Artisan::call('optimize:clear'),
+                action: static fn() => Artisan::call('optimize:clear'),
                 submitLabel: 'Zurücksetzen',
             ),
         ];
@@ -166,7 +166,7 @@ class ClearCache extends Page
             ->modalHeading($modalHeading)
             ->modalDescription($modalDescription)
             ->modalSubmitActionLabel($submitLabel)
-            ->action(function () use ($action, $successTitle, $successBody): void {
+            ->action(static function () use ($action, $successTitle, $successBody): void {
                 try {
                     $action();
 

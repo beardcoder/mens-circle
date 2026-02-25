@@ -69,17 +69,13 @@ class Event extends Model implements HasMedia
     #[Override]
     public function getSlugOptions(): SlugOptions
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom(fn ($model) => $model->event_date->format('Y-m-d'))
-            ->saveSlugsTo('slug');
+        return SlugOptions::create()->generateSlugsFrom(static fn($model) => $model->event_date->format('Y-m-d'))->saveSlugsTo('slug');
     }
 
     #[Override]
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('event_image')
-            ->singleFile()
-            ->useDisk('public');
+        $this->addMediaCollection('event_image')->singleFile()->useDisk('public');
     }
 
     /**
@@ -95,8 +91,7 @@ class Event extends Model implements HasMedia
      */
     public function activeRegistrations(): HasMany
     {
-        return $this->registrations()
-            ->active();
+        return $this->registrations()->active();
     }
 
     /**
@@ -104,9 +99,7 @@ class Event extends Model implements HasMedia
      */
     public function waitlistRegistrations(): HasMany
     {
-        return $this->hasMany(Registration::class)
-            ->where('status', RegistrationStatus::Waitlist)
-            ->orderBy('registered_at');
+        return $this->hasMany(Registration::class)->where('status', RegistrationStatus::Waitlist)->orderBy('registered_at');
     }
 
     /**
@@ -114,9 +107,7 @@ class Event extends Model implements HasMedia
      */
     protected function activeRegistrationsCount(): Attribute
     {
-        return Attribute::make(
-            get: fn (): int => (int) ($this->active_registrations_count ?? $this->activeRegistrations()->count()),
-        );
+        return Attribute::make(get: fn(): int => (int) ($this->active_registrations_count ?? $this->activeRegistrations()->count()));
     }
 
     /**
@@ -124,9 +115,7 @@ class Event extends Model implements HasMedia
      */
     protected function availableSpots(): Attribute
     {
-        return Attribute::make(
-            get: fn (): int => max(0, $this->max_participants - $this->activeRegistrationsCount),
-        );
+        return Attribute::make(get: fn(): int => max(0, $this->max_participants - $this->activeRegistrationsCount));
     }
 
     /**
@@ -134,7 +123,7 @@ class Event extends Model implements HasMedia
      */
     protected function isFull(): Attribute
     {
-        return Attribute::make(get: fn (): bool => $this->availableSpots <= 0);
+        return Attribute::make(get: fn(): bool => $this->availableSpots <= 0);
     }
 
     /**
@@ -142,7 +131,7 @@ class Event extends Model implements HasMedia
      */
     protected function isPast(): Attribute
     {
-        return Attribute::make(get: fn (): bool => $this->event_date->endOfDay()->isPast());
+        return Attribute::make(get: fn(): bool => $this->event_date->endOfDay()->isPast());
     }
 
     /**
@@ -150,31 +139,30 @@ class Event extends Model implements HasMedia
      */
     protected function fullAddress(): Attribute
     {
-        return Attribute::make(
-            get: function (): ?string {
-                if (!$this->street || !$this->city) {
-                    return null;
-                }
+        return Attribute::make(get: function (): ?string {
+            if (!$this->street || !$this->city) {
+                return null;
+            }
 
-                $parts = [$this->street, $this->postal_code ? "{$this->postal_code} {$this->city}" : $this->city, ];
+            $parts = [$this->street, $this->postal_code ? "{$this->postal_code} {$this->city}" : $this->city];
 
-                return implode(', ', $parts);
-            },
-        );
+            return implode(', ', $parts);
+        });
     }
 
     public function generateICalContent(): string
     {
-        $startDateTime = $this->event_date->copy()
+        $startDateTime = $this->event_date
+            ->copy()
             ->setTimeFrom($this->start_time)
             ->format('Ymd\THis');
 
-        $endDateTime = $this->event_date->copy()
+        $endDateTime = $this->event_date
+            ->copy()
             ->setTimeFrom($this->end_time)
             ->format('Ymd\THis');
 
-        $now = now()->utc()
-            ->format('Ymd\THis\Z');
+        $now = now()->utc()->format('Ymd\THis\Z');
         $location = $this->fullAddress ?? $this->location;
         $description = str_replace(["\r\n", "\n", "\r"], '\n', strip_tags($this->description ?? ''));
 
@@ -211,7 +199,10 @@ class Event extends Model implements HasMedia
 
     public static function upcomingCount(): int
     {
-        return static::query()->published()->upcoming()->count();
+        return static::query()
+            ->published()
+            ->upcoming()
+            ->count();
     }
 
     public static function nextEvent(): ?self

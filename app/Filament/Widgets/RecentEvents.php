@@ -18,7 +18,12 @@ class RecentEvents extends TableWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(Event::query() ->where('event_date', '>=', now()) ->oldest('event_date') ->limit(5))
+            ->query(
+                Event::query()
+                    ->where('event_date', '>=', now())
+                    ->oldest('event_date')
+                    ->limit(5),
+            )
             ->columns([
                 TextColumn::make('title')
                     ->label('Event')
@@ -38,9 +43,9 @@ class RecentEvents extends TableWidget
 
                 TextColumn::make('available_spots')
                     ->label('Freie Plätze')
-                    ->getStateUsing(fn (Event $record): int => $record->availableSpots)
+                    ->getStateUsing(static fn(Event $record): int => $record->availableSpots)
                     ->badge()
-                    ->color(fn (int $state): string => match (true) {
+                    ->color(static fn(int $state): string => match (true) {
                         $state === 0 => 'danger',
                         $state <= 3 => 'warning',
                         default => 'success',
@@ -49,8 +54,8 @@ class RecentEvents extends TableWidget
                 TextColumn::make('is_published')
                     ->label('Status')
                     ->badge()
-                    ->formatStateUsing(fn (bool $state): string => $state ? 'Veröffentlicht' : 'Entwurf')
-                    ->color(fn (bool $state): string => $state ? 'success' : 'gray'),
+                    ->formatStateUsing(static fn(bool $state): string => $state ? 'Veröffentlicht' : 'Entwurf')
+                    ->color(static fn(bool $state): string => $state ? 'success' : 'gray'),
             ])
             ->heading('Kommende Events')
             ->defaultSort('event_date', 'asc');

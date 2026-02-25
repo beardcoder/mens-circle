@@ -38,7 +38,8 @@ test('llms output includes archetypes block content', function (): void {
 
     $response = $this->get(route('llms.txt'));
 
-    $response->assertSuccessful()
+    $response
+        ->assertSuccessful()
         ->assertSeeText('Die fuenf Kraefte')
         ->assertSeeText('Ein Kompass fuer maennliche Entwicklung.')
         ->assertSeeText('Der Krieger')

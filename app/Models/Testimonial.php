@@ -30,7 +30,7 @@ class Testimonial extends Model
     use ClearsResponseCache;
     use SoftDeletes;
 
-    protected $fillable = ['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order', ];
+    protected $fillable = ['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order'];
 
     #[Override]
     protected function casts(): array
@@ -55,9 +55,8 @@ class Testimonial extends Model
     #[Override]
     protected static function booted(): void
     {
-        static::addGlobalScope('order', function (Builder $builder): void {
-            $builder->orderBy('sort_order', 'asc')
-                ->orderBy('created_at', 'desc');
+        static::addGlobalScope('order', static function (Builder $builder): void {
+            $builder->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
         });
     }
 }

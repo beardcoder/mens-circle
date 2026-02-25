@@ -36,7 +36,7 @@ test('sitemap excludes duplicate home page slug and includes canonical urls', fu
 
     $sitemap = file_get_contents(public_path('sitemap.xml'));
 
-    expect($sitemap)->not->toBeFalse();
+    expect($sitemap)->toBeString()->not->toBeEmpty();
     expect($sitemap)
         ->toContain('<loc>' . route('home') . '</loc>')
         ->toContain('<loc>' . route('event.show.slug', $event->slug) . '</loc>')

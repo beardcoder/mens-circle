@@ -73,8 +73,8 @@ enum EmailTemplate: string
     public static function newsletterTemplates(): array
     {
         return array_filter(
-            array_combine(array_map(fn (self $case): string => $case->value, self::cases()), self::cases(), ),
-            fn (self $case): bool => $case->getCategory() === 'newsletter',
+            array_combine(array_map(static fn(self $case): string => $case->value, self::cases()), self::cases()),
+            static fn(self $case): bool => $case->getCategory() === 'newsletter',
         );
     }
 
@@ -84,93 +84,93 @@ enum EmailTemplate: string
     public static function participantTemplates(): array
     {
         return array_filter(
-            array_combine(array_map(fn (self $case): string => $case->value, self::cases()), self::cases(), ),
-            fn (self $case): bool => $case->getCategory() === 'participant',
+            array_combine(array_map(static fn(self $case): string => $case->value, self::cases()), self::cases()),
+            static fn(self $case): bool => $case->getCategory() === 'participant',
         );
     }
 
     private function newsletterNewEventContent(): string
     {
         return <<<'HTML'
-        <h2>Ein neues Treffen steht an!</h2>
+            <h2>Ein neues Treffen steht an!</h2>
 
-        <p>Wir laden dich herzlich zu unserem nächsten Männerkreis ein.</p>
+            <p>Wir laden dich herzlich zu unserem nächsten Männerkreis ein.</p>
 
-        <p><strong>{event_title}</strong><br>
-        📅 {event_date} um {event_time} Uhr<br>
-        📍 {event_location}</p>
+            <p><strong>{event_title}</strong><br>
+            📅 {event_date} um {event_time} Uhr<br>
+            📍 {event_location}</p>
 
-        <p>Der Männerkreis ist ein geschützter Raum, in dem wir als Männer zusammenkommen – offen, ehrlich und ohne Masken. Egal ob du zum ersten Mal dabei bist oder schon länger Teil unserer Gemeinschaft: Du bist willkommen.</p>
+            <p>Der Männerkreis ist ein geschützter Raum, in dem wir als Männer zusammenkommen – offen, ehrlich und ohne Masken. Egal ob du zum ersten Mal dabei bist oder schon länger Teil unserer Gemeinschaft: Du bist willkommen.</p>
 
-        <p><strong>Teilnahme:</strong> {cost_basis}</p>
+            <p><strong>Teilnahme:</strong> {cost_basis}</p>
 
-        <p>Es sind noch <strong>{available_spots} Plätze</strong> frei. Sichere dir jetzt deinen Platz:</p>
+            <p>Es sind noch <strong>{available_spots} Plätze</strong> frei. Sichere dir jetzt deinen Platz:</p>
 
-        <p>👉 <a href="{event_url}">Jetzt anmelden</a></p>
+            <p>👉 <a href="{event_url}">Jetzt anmelden</a></p>
 
-        <p>Wir freuen uns auf dich!</p>
-        HTML;
+            <p>Wir freuen uns auf dich!</p>
+            HTML;
     }
 
     private function newsletterEventReminderContent(): string
     {
         return <<<'HTML'
-        <h2>Unser Treffen rückt näher!</h2>
+            <h2>Unser Treffen rückt näher!</h2>
 
-        <p>Nur noch wenige Tage bis zu unserem nächsten Männerkreis – und es gibt noch freie Plätze.</p>
+            <p>Nur noch wenige Tage bis zu unserem nächsten Männerkreis – und es gibt noch freie Plätze.</p>
 
-        <p><strong>{event_title}</strong><br>
-        📅 {event_date} um {event_time} Uhr<br>
-        📍 {event_location}</p>
+            <p><strong>{event_title}</strong><br>
+            📅 {event_date} um {event_time} Uhr<br>
+            📍 {event_location}</p>
 
-        <p>Noch <strong>{available_spots} Plätze</strong> verfügbar.</p>
+            <p>Noch <strong>{available_spots} Plätze</strong> verfügbar.</p>
 
-        <p>Vielleicht hast du schon länger überlegt, mal vorbeizukommen? Jetzt ist ein guter Zeitpunkt. Der Männerkreis lebt von den Männern, die sich trauen, aufzutauchen – so wie sie sind.</p>
+            <p>Vielleicht hast du schon länger überlegt, mal vorbeizukommen? Jetzt ist ein guter Zeitpunkt. Der Männerkreis lebt von den Männern, die sich trauen, aufzutauchen – so wie sie sind.</p>
 
-        <p><strong>Teilnahme:</strong> {cost_basis}</p>
+            <p><strong>Teilnahme:</strong> {cost_basis}</p>
 
-        <p>👉 <a href="{event_url}">Jetzt Platz sichern</a></p>
+            <p>👉 <a href="{event_url}">Jetzt Platz sichern</a></p>
 
-        <p>Wir freuen uns, wenn du dabei bist.</p>
-        HTML;
+            <p>Wir freuen uns, wenn du dabei bist.</p>
+            HTML;
     }
 
     private function participantPreEventContent(): string
     {
         return <<<'HTML'
-        <h2>Es ist bald soweit!</h2>
+            <h2>Es ist bald soweit!</h2>
 
-        <p>In wenigen Tagen treffen wir uns wieder zum Männerkreis – und du bist dabei. Das freut uns sehr.</p>
+            <p>In wenigen Tagen treffen wir uns wieder zum Männerkreis – und du bist dabei. Das freut uns sehr.</p>
 
-        <p><strong>{event_title}</strong><br>
-        📅 {event_date} um {event_time} Uhr<br>
-        📍 {event_location}</p>
+            <p><strong>{event_title}</strong><br>
+            📅 {event_date} um {event_time} Uhr<br>
+            📍 {event_location}</p>
 
-        <h3>Nimm dir einen Moment</h3>
+            <h3>Nimm dir einen Moment</h3>
 
-        <p>Bevor wir uns treffen, möchten wir dich einladen, kurz innezuhalten:</p>
+            <p>Bevor wir uns treffen, möchten wir dich einladen, kurz innezuhalten:</p>
 
-        <ul>
-        <li>Wie geht es dir gerade – wirklich?</li>
-        <li>Was beschäftigt dich in diesen Tagen?</li>
-        <li>Was möchtest du loslassen, was möchtest du mitnehmen in den Kreis?</li>
-        </ul>
+            <ul>
+            <li>Wie geht es dir gerade – wirklich?</li>
+            <li>Was beschäftigt dich in diesen Tagen?</li>
+            <li>Was möchtest du loslassen, was möchtest du mitnehmen in den Kreis?</li>
+            </ul>
 
-        <p>Du musst nichts vorbereiten. Komm einfach so, wie du bist. Der Kreis hält dich.</p>
+            <p>Du musst nichts vorbereiten. Komm einfach so, wie du bist. Der Kreis hält dich.</p>
 
-        <h3>Zur Erinnerung</h3>
+            <h3>Zur Erinnerung</h3>
 
-        <ul>
-        <li>Komm pünktlich – wir starten gemeinsam</li>
-        <li>Bring eine offene Haltung mit</li>
-        <li>Falls du doch nicht kannst, gib uns bitte kurz Bescheid</li>
-        </ul>
+            <ul>
+            <li>Komm pünktlich – wir starten gemeinsam</li>
+            <li>Bring eine offene Haltung mit</li>
+            <li>Falls du doch nicht kannst, gib uns bitte kurz Bescheid</li>
+            </ul>
 
-        <p><strong>Teilnahme:</strong> {cost_basis}</p>
+            <p><strong>Teilnahme:</strong> {cost_basis}</p>
 
-        <p>👉 <a href="{event_url}">Alle Details zum Treffen</a></p>
+            <p>👉 <a href="{event_url}">Alle Details zum Treffen</a></p>
 
-        <p>Bis bald – wir freuen uns auf dich.</p>
-        HTML;
+            <p>Bis bald – wir freuen uns auf dich.</p>
+            HTML;
     }
 }

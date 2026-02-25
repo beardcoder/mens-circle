@@ -57,28 +57,20 @@ class PageResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('slug')
-                    ->maxLength(255)
-                    ->unique(ignoreRecord: true),
-                Toggle::make('is_published')
-                    ->label('Veröffentlicht')
-                    ->default(false),
-                DateTimePicker::make('published_at')
-                    ->label('Veröffentlichungsdatum'),
+        return $schema->components([
+            TextInput::make('title')->required()->maxLength(255),
+            TextInput::make('slug')->maxLength(255)->unique(ignoreRecord: true),
+            Toggle::make('is_published')->label('Veröffentlicht')->default(false),
+            DateTimePicker::make('published_at')->label('Veröffentlichungsdatum'),
 
-                self::contentBlocksBuilder(),
+            self::contentBlocksBuilder(),
 
-                KeyValue::make('meta')
-                    ->label('SEO Meta Tags')
-                    ->keyLabel('Schlüssel')
-                    ->valueLabel('Wert')
-                    ->columnSpanFull(),
-            ]);
+            KeyValue::make('meta')
+                ->label('SEO Meta Tags')
+                ->keyLabel('Schlüssel')
+                ->valueLabel('Wert')
+                ->columnSpanFull(),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -89,9 +81,7 @@ class PageResource extends Resource
                     ->label('Titel')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('slug')
-                    ->label('Slug')
-                    ->searchable(),
+                TextColumn::make('slug')->label('Slug')->searchable(),
                 IconColumn::make('is_published')
                     ->label('Veröffentlicht')
                     ->boolean()
@@ -141,8 +131,7 @@ class PageResource extends Resource
      */
     public static function getRecordRouteBindingEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([SoftDeletingScope::class]);
+        return parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
     }
 
     private static function contentBlocksBuilder(): Builder
@@ -151,7 +140,7 @@ class PageResource extends Resource
             ->label('Inhaltsblöcke')
             ->collapsible()
             ->collapsed()
-            ->afterStateUpdated(function (Builder $component): void {
+            ->afterStateUpdated(static function (Builder $component): void {
                 $state = $component->getState();
 
                 if (!\is_array($state)) {
@@ -217,19 +206,14 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedSparkles)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('label')
-                    ->label('Label (klein)'),
+                TextInput::make('label')->label('Label (klein)'),
                 Textarea::make('title')
                     ->label('Titel (HTML erlaubt)')
                     ->required()
                     ->rows(2),
-                Textarea::make('description')
-                    ->label('Beschreibung')
-                    ->rows(3),
-                TextInput::make('button_text')
-                    ->label('Button Text'),
-                TextInput::make('button_link')
-                    ->label('Button Link'),
+                Textarea::make('description')->label('Beschreibung')->rows(3),
+                TextInput::make('button_text')->label('Button Text'),
+                TextInput::make('button_link')->label('Button Link'),
                 self::blockImageUpload('background_image', 'Hintergrundbild'),
             ]);
     }
@@ -241,32 +225,22 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedInformationCircle)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')
-                    ->label('Überschrift (klein)'),
+                TextInput::make('eyebrow')->label('Überschrift (klein)'),
                 Textarea::make('title')
                     ->label('Titel (HTML erlaubt)')
                     ->required()
                     ->rows(2),
-                Textarea::make('text')
-                    ->label('Text')
-                    ->rows(3),
-                Textarea::make('quote')
-                    ->label('Zitat (HTML erlaubt)')
-                    ->rows(2),
+                Textarea::make('text')->label('Text')->rows(3),
+                Textarea::make('quote')->label('Zitat (HTML erlaubt)')->rows(2),
                 Repeater::make('values')
                     ->label('Werte')
                     ->schema([
-                        TextInput::make('number')
-                            ->label('Nummer'),
-                        TextInput::make('title')
-                            ->label('Titel')
-                            ->required(),
-                        Textarea::make('description')
-                            ->label('Beschreibung')
-                            ->rows(2),
+                        TextInput::make('number')->label('Nummer'),
+                        TextInput::make('title')->label('Titel')->required(),
+                        Textarea::make('description')->label('Beschreibung')->rows(2),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(static fn(array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -277,14 +251,9 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedDocumentText)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')
-                    ->label('Überschrift (klein)'),
-                TextInput::make('title')
-                    ->label('Titel')
-                    ->required(),
-                RichEditor::make('content')
-                    ->label('Inhalt')
-                    ->required(),
+                TextInput::make('eyebrow')->label('Überschrift (klein)'),
+                TextInput::make('title')->label('Titel')->required(),
+                RichEditor::make('content')->label('Inhalt')->required(),
             ]);
     }
 
@@ -295,25 +264,17 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedRectangleStack)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')
-                    ->label('Überschrift (klein)'),
-                TextInput::make('title')
-                    ->label('Titel'),
+                TextInput::make('eyebrow')->label('Überschrift (klein)'),
+                TextInput::make('title')->label('Titel'),
                 Repeater::make('items')
                     ->label('Werte')
                     ->schema([
-                        TextInput::make('number')
-                            ->label('Nummer')
-                            ->numeric(),
-                        TextInput::make('title')
-                            ->label('Titel')
-                            ->required(),
-                        Textarea::make('description')
-                            ->label('Beschreibung')
-                            ->rows(2),
+                        TextInput::make('number')->label('Nummer')->numeric(),
+                        TextInput::make('title')->label('Titel')->required(),
+                        Textarea::make('description')->label('Beschreibung')->rows(2),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(static fn(array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -324,30 +285,19 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedRectangleStack)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')
-                    ->label('Überschrift (klein)'),
-                TextInput::make('title')
-                    ->label('Titel')
-                    ->required(),
-                Textarea::make('intro')
-                    ->label('Intro Text')
-                    ->rows(2),
+                TextInput::make('eyebrow')->label('Überschrift (klein)'),
+                TextInput::make('title')->label('Titel')->required(),
+                Textarea::make('intro')->label('Intro Text')->rows(2),
                 Repeater::make('items')
                     ->label('Archetypen')
                     ->schema([
-                        TextInput::make('number')
-                            ->label('Nummer')
-                            ->numeric(),
-                        TextInput::make('title')
-                            ->label('Titel')
-                            ->required(),
-                        Textarea::make('description')
-                            ->label('Beschreibung')
-                            ->rows(2),
+                        TextInput::make('number')->label('Nummer')->numeric(),
+                        TextInput::make('title')->label('Titel')->required(),
+                        Textarea::make('description')->label('Beschreibung')->rows(2),
                     ])
                     ->defaultItems(5)
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(static fn(array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -358,18 +308,13 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedUserCircle)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')
-                    ->label('Überschrift (klein)'),
+                TextInput::make('eyebrow')->label('Überschrift (klein)'),
                 Textarea::make('name')
                     ->label('Name (HTML erlaubt für <span class="light">)')
                     ->required()
                     ->rows(2),
-                RichEditor::make('bio')
-                    ->label('Biografie')
-                    ->required(),
-                Textarea::make('quote')
-                    ->label('Zitat')
-                    ->rows(3),
+                RichEditor::make('bio')->label('Biografie')->required(),
+                Textarea::make('quote')->label('Zitat')->rows(3),
                 self::blockImageUpload('photo', 'Foto'),
             ]);
     }
@@ -381,29 +326,18 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedMap)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')
-                    ->label('Überschrift (klein)'),
-                Textarea::make('title')
-                    ->label('Titel (HTML erlaubt)')
-                    ->rows(2),
-                Textarea::make('subtitle')
-                    ->label('Untertitel')
-                    ->rows(2),
+                TextInput::make('eyebrow')->label('Überschrift (klein)'),
+                Textarea::make('title')->label('Titel (HTML erlaubt)')->rows(2),
+                Textarea::make('subtitle')->label('Untertitel')->rows(2),
                 Repeater::make('steps')
                     ->label('Schritte')
                     ->schema([
-                        TextInput::make('number')
-                            ->label('Nummer')
-                            ->numeric(),
-                        TextInput::make('title')
-                            ->label('Titel')
-                            ->required(),
-                        Textarea::make('description')
-                            ->label('Beschreibung')
-                            ->rows(2),
+                        TextInput::make('number')->label('Nummer')->numeric(),
+                        TextInput::make('title')->label('Titel')->required(),
+                        Textarea::make('description')->label('Beschreibung')->rows(2),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+                    ->itemLabel(static fn(array $state): ?string => $state['title'] ?? null),
             ]);
     }
 
@@ -429,27 +363,20 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedQuestionMarkCircle)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')
-                    ->label('Überschrift (klein)'),
-                Textarea::make('title')
-                    ->label('Titel (HTML erlaubt)')
-                    ->rows(2),
-                Textarea::make('intro')
-                    ->label('Intro Text')
-                    ->rows(2),
+                TextInput::make('eyebrow')->label('Überschrift (klein)'),
+                Textarea::make('title')->label('Titel (HTML erlaubt)')->rows(2),
+                Textarea::make('intro')->label('Intro Text')->rows(2),
                 Repeater::make('items')
                     ->label('Fragen & Antworten')
                     ->schema([
-                        TextInput::make('question')
-                            ->label('Frage')
-                            ->required(),
+                        TextInput::make('question')->label('Frage')->required(),
                         Textarea::make('answer')
                             ->label('Antwort')
                             ->required()
                             ->rows(3),
                     ])
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['question'] ?? null),
+                    ->itemLabel(static fn(array $state): ?string => $state['question'] ?? null),
             ]);
     }
 
@@ -460,15 +387,12 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedEnvelope)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')
-                    ->label('Überschrift (klein)'),
+                TextInput::make('eyebrow')->label('Überschrift (klein)'),
                 Textarea::make('title')
                     ->label('Titel (HTML erlaubt)')
                     ->required()
                     ->rows(2),
-                Textarea::make('text')
-                    ->label('Text')
-                    ->rows(2),
+                Textarea::make('text')->label('Text')->rows(2),
             ]);
     }
 
@@ -479,19 +403,14 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedCursorArrowRipple)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')
-                    ->label('Überschrift (klein)'),
+                TextInput::make('eyebrow')->label('Überschrift (klein)'),
                 Textarea::make('title')
                     ->label('Titel (HTML erlaubt)')
                     ->required()
                     ->rows(2),
-                Textarea::make('text')
-                    ->label('Text')
-                    ->rows(2),
-                TextInput::make('button_text')
-                    ->label('Button Text'),
-                TextInput::make('button_link')
-                    ->label('Button Link'),
+                Textarea::make('text')->label('Text')->rows(2),
+                TextInput::make('button_text')->label('Button Text'),
+                TextInput::make('button_link')->label('Button Link'),
             ]);
     }
 
@@ -512,8 +431,7 @@ class PageResource extends Resource
 
     private static function blockIdField(): Hidden
     {
-        return Hidden::make('block_id')
-            ->default(fn (): string => (string) Str::uuid());
+        return Hidden::make('block_id')->default(static fn(): string => (string) Str::uuid());
     }
 
     private static function blockImageUpload(string $name, string $label): SpatieMediaLibraryFileUpload
@@ -525,20 +443,18 @@ class PageResource extends Resource
             ->image()
             ->imageEditor()
             ->responsiveImages()
-            ->customProperties(fn (Get $get): array => [
+            ->customProperties(static fn(Get $get): array => [
                 'block_id' => $get('block_id'),
                 'field' => $name,
             ])
-            ->filterMediaUsing(function (Collection $media, Get $get) use ($name): Collection {
+            ->filterMediaUsing(static function (Collection $media, Get $get) use ($name): Collection {
                 $blockId = $get('block_id');
 
                 if (!$blockId) {
                     return $media->take(0);
                 }
 
-                return $media
-                    ->where('custom_properties.block_id', $blockId)
-                    ->where('custom_properties.field', $name);
+                return $media->where('custom_properties.block_id', $blockId)->where('custom_properties.field', $name);
             });
     }
 }

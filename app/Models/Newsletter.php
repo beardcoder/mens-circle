@@ -23,7 +23,7 @@ class Newsletter extends Model
     /** @use HasFactory<NewsletterFactory> */
     use HasFactory;
 
-    protected $fillable = ['subject', 'content', 'sent_at', 'recipient_count', 'status', ];
+    protected $fillable = ['subject', 'content', 'sent_at', 'recipient_count', 'status'];
 
     #[Override]
     protected function casts(): array

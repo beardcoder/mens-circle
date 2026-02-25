@@ -51,7 +51,7 @@ class EmailTemplateService
         if (!$event instanceof Event) {
             $eventPlaceholders = array_values(array_filter(
                 EmailTemplate::placeholders(),
-                fn (string $p): bool => $p !== '{first_name}',
+                static fn(string $p): bool => $p !== '{first_name}',
             ));
 
             return array_fill_keys($eventPlaceholders, '—');

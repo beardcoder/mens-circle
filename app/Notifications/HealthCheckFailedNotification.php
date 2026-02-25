@@ -36,7 +36,7 @@ class HealthCheckFailedNotification extends Notification
         }
 
         $throttleMinutes = config('health.notifications.throttle_notifications_for_minutes', 60);
-        \assert(\is_int($throttleMinutes));
+        \assert(\is_int($throttleMinutes), 'health.notifications.throttle_notifications_for_minutes must be an integer');
 
         if ($throttleMinutes <= 0) {
             return true;
@@ -55,9 +55,7 @@ class HealthCheckFailedNotification extends Notification
                 /** @var Carbon|null $lastNotificationSentAt */
                 $lastNotificationSentAt = Cache::get($cacheKey);
 
-                if ($lastNotificationSentAt === null || $lastNotificationSentAt->diffInMinutes(
-                    now(),
-                ) >= $throttleMinutes) {
+                if ($lastNotificationSentAt === null || $lastNotificationSentAt->diffInMinutes(now()) >= $throttleMinutes) {
                     Cache::put($cacheKey, now(), $throttleMinutes * 60);
 
                     return true;
@@ -83,16 +81,14 @@ class HealthCheckFailedNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        $failedChecks = collect($this->results)
-            ->filter(fn (Result $result): bool => $result->status->value === 'failed');
+        $failedChecks = collect($this->results)->filter(static fn(Result $result): bool => $result->status->value === 'failed');
 
-        $warningChecks = collect($this->results)
-            ->filter(fn (Result $result): bool => $result->status->value === 'warning');
+        $warningChecks = collect($this->results)->filter(static fn(Result $result): bool => $result->status->value === 'warning');
 
         /** @var string $appName */
         $appName = config('app.name', 'Application');
 
-        $message = (new MailMessage())
+        $message = new MailMessage()
             ->subject('Health Check Warnung - ' . $appName)
             ->greeting('Health Check Benachrichtigung')
             ->line('Es wurden Probleme bei den automatischen Health Checks festgestellt:');

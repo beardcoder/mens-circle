@@ -27,10 +27,7 @@ class WaitlistConfirmation extends Mailable
     {
         $participant = $this->registration->participant;
 
-        return new Envelope(
-            to: [new Address($participant->email, $participant->fullName)],
-            subject: 'Warteliste: ' . $this->event->title,
-        );
+        return new Envelope(to: [new Address($participant->email, $participant->fullName)], subject: 'Warteliste: ' . $this->event->title);
     }
 
     public function content(): Content

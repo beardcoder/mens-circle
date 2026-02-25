@@ -37,70 +37,67 @@ class RegistrationsRelationManager extends RelationManager
 
     public function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Section::make('Teilnehmer')
-                    ->description('Wähle einen bestehenden Teilnehmer oder erstelle einen neuen')
-                    ->schema([
-                        Select::make('participant_id')
-                            ->label('Teilnehmer')
-                            ->relationship('participant', 'email')
-                            ->getOptionLabelFromRecordUsing(
-                                fn (Participant $record): string => "{$record->fullName} ({$record->email})",
-                            )
-                            ->required()
-                            ->searchable(['first_name', 'last_name', 'email'])
-                            ->preload()
-                            ->createOptionForm([
-                                TextInput::make('first_name')
-                                    ->label('Vorname')
-                                    ->required()
-                                    ->maxLength(255),
-                                TextInput::make('last_name')
-                                    ->label('Nachname')
-                                    ->required()
-                                    ->maxLength(255),
-                                TextInput::make('email')
-                                    ->label('E-Mail-Adresse')
-                                    ->email()
-                                    ->required()
-                                    ->unique()
-                                    ->maxLength(255),
-                                TextInput::make('phone')
-                                    ->label('Telefonnummer')
-                                    ->tel()
-                                    ->maxLength(30),
-                            ])
-                            ->native(false),
-                    ]),
+        return $schema->components([
+            Section::make('Teilnehmer')
+                ->description('Wähle einen bestehenden Teilnehmer oder erstelle einen neuen')
+                ->schema([
+                    Select::make('participant_id')
+                        ->label('Teilnehmer')
+                        ->relationship('participant', 'email')
+                        ->getOptionLabelFromRecordUsing(static fn(Participant $record): string => "{$record->fullName} ({$record->email})")
+                        ->required()
+                        ->searchable(['first_name', 'last_name', 'email'])
+                        ->preload()
+                        ->createOptionForm([
+                            TextInput::make('first_name')
+                                ->label('Vorname')
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('last_name')
+                                ->label('Nachname')
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('email')
+                                ->label('E-Mail-Adresse')
+                                ->email()
+                                ->required()
+                                ->unique()
+                                ->maxLength(255),
+                            TextInput::make('phone')
+                                ->label('Telefonnummer')
+                                ->tel()
+                                ->maxLength(30),
+                        ])
+                        ->native(false),
+                ]),
 
-                Section::make('Anmeldestatus')
-                    ->description('Status und Zeitpunkte der Anmeldung')
-                    ->columns(2)
-                    ->schema([
-                        Select::make('status')
-                            ->label('Status')
-                            ->options(RegistrationStatus::options())
-                            ->default(RegistrationStatus::Registered->value)
-                            ->required()
-                            ->native(false),
-                        DateTimePicker::make('registered_at')
-                            ->label('Angemeldet am')
-                            ->native(false)
-                            ->default(now())
-                            ->displayFormat('d.m.Y H:i'),
-                        DateTimePicker::make('cancelled_at')
-                            ->label('Abgesagt am')
-                            ->native(false)
-                            ->displayFormat('d.m.Y H:i'),
-                    ]),
-            ]);
+            Section::make('Anmeldestatus')
+                ->description('Status und Zeitpunkte der Anmeldung')
+                ->columns(2)
+                ->schema([
+                    Select::make('status')
+                        ->label('Status')
+                        ->options(RegistrationStatus::options())
+                        ->default(RegistrationStatus::Registered->value)
+                        ->required()
+                        ->native(false),
+                    DateTimePicker::make('registered_at')
+                        ->label('Angemeldet am')
+                        ->native(false)
+                        ->default(now())
+                        ->displayFormat('d.m.Y H:i'),
+                    DateTimePicker::make('cancelled_at')
+                        ->label('Abgesagt am')
+                        ->native(false)
+                        ->displayFormat('d.m.Y H:i'),
+                ]),
+        ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->with('participant'))
+            ->modifyQueryUsing(static fn($query) => $query->with('participant'))
             ->columns([
                 TextColumn::make('participant.first_name')
                     ->label('Vorname')
@@ -124,8 +121,8 @@ class RegistrationsRelationManager extends RelationManager
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (RegistrationStatus $state): string => $state->getColor())
-                    ->formatStateUsing(fn (RegistrationStatus $state): string => $state->getLabel())
+                    ->color(static fn(RegistrationStatus $state): string => $state->getColor())
+                    ->formatStateUsing(static fn(RegistrationStatus $state): string => $state->getLabel())
                     ->sortable(),
                 TextColumn::make('registered_at')
                     ->label('Angemeldet am')
@@ -133,22 +130,20 @@ class RegistrationsRelationManager extends RelationManager
                     ->sortable(),
             ])
             ->filters([
-                SelectFilter::make('status')
-                    ->label('Anmeldestatus')
-                    ->options(RegistrationStatus::options()),
+                SelectFilter::make('status')->label('Anmeldestatus')->options(RegistrationStatus::options()),
             ])
-            ->headerActions([CreateAction::make(), ])
+            ->headerActions([CreateAction::make()])
             ->recordActions([
                 EditAction::make(),
                 Action::make('promote')
                     ->label('Befördern')
                     ->icon('heroicon-o-arrow-up-circle')
                     ->color('success')
-                    ->visible(fn (Registration $record): bool => $record->status === RegistrationStatus::Waitlist)
+                    ->visible(static fn(Registration $record): bool => $record->status === RegistrationStatus::Waitlist)
                     ->requiresConfirmation()
                     ->modalHeading('Von Warteliste befördern')
                     ->modalDescription('Dieser Teilnehmer wird sofort als angemeldet markiert und erhält eine Bestätigungs-E-Mail.')
-                    ->action(function (Registration $record): void {
+                    ->action(static function (Registration $record): void {
                         $record->promote();
                         $record->load(['participant', 'event']);
 
@@ -168,7 +163,7 @@ class RegistrationsRelationManager extends RelationManager
                             ->send();
                     }),
             ])
-            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make(), ]), ])
+            ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])])
             ->defaultSort('registered_at', 'desc');
     }
 }

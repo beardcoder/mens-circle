@@ -17,9 +17,12 @@ test('registration can be created', function (): void {
         'status' => RegistrationStatus::Registered,
     ]);
 
-    expect($registration->event_id)->toBe($event->id)
-        ->and($registration->participant_id)->toBe($participant->id)
-        ->and($registration->status)->toBe(RegistrationStatus::Registered);
+    expect($registration->event_id)
+        ->toBe($event->id)
+        ->and($registration->participant_id)
+        ->toBe($participant->id)
+        ->and($registration->status)
+        ->toBe(RegistrationStatus::Registered);
 });
 
 test('registration can be cancelled', function (): void {
@@ -29,8 +32,7 @@ test('registration can be cancelled', function (): void {
 
     $registration->cancel();
 
-    expect($registration->status)->toBe(RegistrationStatus::Cancelled)
-        ->and($registration->cancelled_at)->not->toBeNull();
+    expect($registration->status)->toBe(RegistrationStatus::Cancelled)->and($registration->cancelled_at)->not->toBeNull();
 });
 
 test('registration can be marked as attended', function (): void {
@@ -60,8 +62,7 @@ test('registered scope only includes registered status', function (): void {
 
     $registeredOnly = Registration::registered()->get();
 
-    expect($registeredOnly)->toHaveCount(1)
-        ->and($registeredOnly->first()->status)->toBe(RegistrationStatus::Registered);
+    expect($registeredOnly)->toHaveCount(1)->and($registeredOnly->first()->status)->toBe(RegistrationStatus::Registered);
 });
 
 test('cancelled scope only includes cancelled status', function (): void {
@@ -70,24 +71,21 @@ test('cancelled scope only includes cancelled status', function (): void {
 
     $cancelledOnly = Registration::cancelled()->get();
 
-    expect($cancelledOnly)->toHaveCount(1)
-        ->and($cancelledOnly->first()->status)->toBe(RegistrationStatus::Cancelled);
+    expect($cancelledOnly)->toHaveCount(1)->and($cancelledOnly->first()->status)->toBe(RegistrationStatus::Cancelled);
 });
 
 test('registration belongs to event', function (): void {
     $event = Event::factory()->create();
     $registration = Registration::factory()->create(['event_id' => $event->id]);
 
-    expect($registration->event)->toBeInstanceOf(Event::class)
-        ->and($registration->event->id)->toBe($event->id);
+    expect($registration->event)->toBeInstanceOf(Event::class)->and($registration->event->id)->toBe($event->id);
 });
 
 test('registration belongs to participant', function (): void {
     $participant = Participant::factory()->create();
     $registration = Registration::factory()->create(['participant_id' => $participant->id]);
 
-    expect($registration->participant)->toBeInstanceOf(Participant::class)
-        ->and($registration->participant->id)->toBe($participant->id);
+    expect($registration->participant)->toBeInstanceOf(Participant::class)->and($registration->participant->id)->toBe($participant->id);
 });
 
 test('registration has registered_at timestamp', function (): void {

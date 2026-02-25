@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use SensitiveParameter;
 use App\Http\Requests\NewsletterSubscriptionRequest;
 use App\Mail\NewsletterWelcome;
 use App\Models\NewsletterSubscription;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use RuntimeException;
 
-class NewsletterController
+final class NewsletterController
 {
     public function subscribe(NewsletterSubscriptionRequest $request): JsonResponse
     {
@@ -25,9 +26,7 @@ class NewsletterController
         try {
             $participant = Participant::findOrCreateByEmail($email);
 
-            $subscription = NewsletterSubscription::withTrashed()
-                ->where('participant_id', $participant->id)
-                ->first();
+            $subscription = NewsletterSubscription::withTrashed()->where('participant_id', $participant->id)->first();
 
             if ($subscription?->isActive()) {
                 throw new RuntimeException('Diese E-Mail-Adresse ist bereits für den Newsletter angemeldet.');
@@ -63,7 +62,7 @@ class NewsletterController
         }
     }
 
-    public function unsubscribe(string $token): View
+    public function unsubscribe(#[SensitiveParameter] string $token): View
     {
         $subscription = NewsletterSubscription::where('token', $token)->firstOrFail();
 

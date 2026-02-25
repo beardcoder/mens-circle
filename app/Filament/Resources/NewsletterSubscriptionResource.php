@@ -45,65 +45,60 @@ class NewsletterSubscriptionResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Section::make('Teilnehmer')
-                    ->description('Wähle einen bestehenden Teilnehmer oder erstelle einen neuen')
-                    ->schema([
-                        Select::make('participant_id')
-                            ->label('Teilnehmer')
-                            ->relationship('participant', 'email')
-                            ->getOptionLabelFromRecordUsing(fn (Participant $record): string => $record->fullName
-                                ? "{$record->fullName} ({$record->email})"
-                                : $record->email)
-                            ->required()
-                            ->searchable(['first_name', 'last_name', 'email'])
-                            ->preload()
-                            ->createOptionForm([
-                                TextInput::make('first_name')
-                                    ->label('Vorname')
-                                    ->maxLength(255),
-                                TextInput::make('last_name')
-                                    ->label('Nachname')
-                                    ->maxLength(255),
-                                TextInput::make('email')
-                                    ->label('E-Mail-Adresse')
-                                    ->email()
-                                    ->required()
-                                    ->unique()
-                                    ->maxLength(255),
-                                TextInput::make('phone')
-                                    ->label('Telefonnummer')
-                                    ->tel()
-                                    ->maxLength(30),
-                            ])
-                            ->native(false),
-                    ]),
+        return $schema->components([
+            Section::make('Teilnehmer')
+                ->description('Wähle einen bestehenden Teilnehmer oder erstelle einen neuen')
+                ->schema([
+                    Select::make('participant_id')
+                        ->label('Teilnehmer')
+                        ->relationship('participant', 'email')
+                        ->getOptionLabelFromRecordUsing(static fn(Participant $record): string => $record->fullName
+                            ? "{$record->fullName} ({$record->email})"
+                            : $record->email)
+                        ->required()
+                        ->searchable(['first_name', 'last_name', 'email'])
+                        ->preload()
+                        ->createOptionForm([
+                            TextInput::make('first_name')->label('Vorname')->maxLength(255),
+                            TextInput::make('last_name')->label('Nachname')->maxLength(255),
+                            TextInput::make('email')
+                                ->label('E-Mail-Adresse')
+                                ->email()
+                                ->required()
+                                ->unique()
+                                ->maxLength(255),
+                            TextInput::make('phone')
+                                ->label('Telefonnummer')
+                                ->tel()
+                                ->maxLength(30),
+                        ])
+                        ->native(false),
+                ]),
 
-                Section::make('Abonnement-Status')
-                    ->description('Zeitstempel des Abonnements')
-                    ->columns(2)
-                    ->schema([
-                        DateTimePicker::make('subscribed_at')
-                            ->label('Angemeldet am')
-                            ->disabled()
-                            ->dehydrated()
-                            ->displayFormat('d.m.Y H:i')
-                            ->native(false),
-                        DateTimePicker::make('confirmed_at')
-                            ->label('Bestätigt am')
-                            ->disabled()
-                            ->dehydrated()
-                            ->displayFormat('d.m.Y H:i')
-                            ->native(false),
-                        DateTimePicker::make('unsubscribed_at')
-                            ->label('Abgemeldet am')
-                            ->disabled()
-                            ->dehydrated()
-                            ->displayFormat('d.m.Y H:i')
-                            ->native(false),
-                    ]),
-            ]);
+            Section::make('Abonnement-Status')
+                ->description('Zeitstempel des Abonnements')
+                ->columns(2)
+                ->schema([
+                    DateTimePicker::make('subscribed_at')
+                        ->label('Angemeldet am')
+                        ->disabled()
+                        ->dehydrated()
+                        ->displayFormat('d.m.Y H:i')
+                        ->native(false),
+                    DateTimePicker::make('confirmed_at')
+                        ->label('Bestätigt am')
+                        ->disabled()
+                        ->dehydrated()
+                        ->displayFormat('d.m.Y H:i')
+                        ->native(false),
+                    DateTimePicker::make('unsubscribed_at')
+                        ->label('Abgemeldet am')
+                        ->disabled()
+                        ->dehydrated()
+                        ->displayFormat('d.m.Y H:i')
+                        ->native(false),
+                ]),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -128,7 +123,7 @@ class NewsletterSubscriptionResource extends Resource
                 IconColumn::make('is_active')
                     ->label('Aktiv')
                     ->boolean()
-                    ->state(fn ($record): bool => $record->isActive()),
+                    ->state(static fn($record): bool => $record->isActive()),
                 TextColumn::make('subscribed_at')
                     ->label('Angemeldet am')
                     ->dateTime('d.m.Y H:i')
@@ -143,11 +138,11 @@ class NewsletterSubscriptionResource extends Resource
             ->filters([
                 Filter::make('active')
                     ->label('Aktive Abonnenten')
-                    ->query(fn (Builder $query): Builder => $query->whereNull('unsubscribed_at'))
+                    ->query(static fn(Builder $query): Builder => $query->whereNull('unsubscribed_at'))
                     ->default(),
                 Filter::make('unsubscribed')
                     ->label('Abgemeldete')
-                    ->query(fn (Builder $query): Builder => $query->whereNotNull('unsubscribed_at')),
+                    ->query(static fn(Builder $query): Builder => $query->whereNotNull('unsubscribed_at')),
             ])
             ->defaultSort('subscribed_at', 'desc')
             ->recordActions([EditAction::make()])

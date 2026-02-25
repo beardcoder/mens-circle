@@ -18,6 +18,6 @@ class EditTestimonial extends EditRecord
     #[Override]
     protected function getHeaderActions(): array
     {
-        return [DeleteAction::make(), ForceDeleteAction::make(), RestoreAction::make(), ];
+        return [DeleteAction::make(), ForceDeleteAction::make(), RestoreAction::make()];
     }
 }

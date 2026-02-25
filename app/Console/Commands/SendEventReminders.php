@@ -58,11 +58,7 @@ class SendEventReminders extends Command
             $eventDate = $event->event_date->format('d.m.Y H:i');
             $this->info("Processing event: {$event->title} ({$eventDate})");
 
-            $registrations->each(function (Registration $registration) use (
-                $event,
-                &$totalEmailsSent,
-                &$totalSmsSent
-            ): void {
+            $registrations->each(function (Registration $registration) use ($event, &$totalEmailsSent, &$totalSmsSent): void {
                 $participant = $registration->participant;
 
                 Mail::queue(new EventReminder($registration, $event));
@@ -85,9 +81,7 @@ class SendEventReminders extends Command
 
         $this->newLine();
         $eventCount = $upcomingEvents->count();
-        $this->info(
-            "Successfully sent {$totalEmailsSent} email(s) and {$totalSmsSent} SMS for {$eventCount} event(s).",
-        );
+        $this->info("Successfully sent {$totalEmailsSent} email(s) and {$totalSmsSent} SMS for {$eventCount} event(s).");
 
         return self::SUCCESS;
     }

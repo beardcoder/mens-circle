@@ -6,10 +6,12 @@ use App\Mail\EventParticipantMessage;
 use App\Models\Event;
 
 test('participant message has correct subject', function (): void {
-    $event = Event::factory()->published()->create([
-        'title' => 'Männerkreis Test',
-        'event_date' => now()->addDays(7),
-    ]);
+    $event = Event::factory()
+        ->published()
+        ->create([
+            'title' => 'Männerkreis Test',
+            'event_date' => now()->addDays(7),
+        ]);
 
     $mailable = new EventParticipantMessage(
         mailSubject: 'Einstimmung: Männerkreis Test',
@@ -22,10 +24,12 @@ test('participant message has correct subject', function (): void {
 });
 
 test('participant message renders content', function (): void {
-    $event = Event::factory()->published()->create([
-        'title' => 'Männerkreis Test',
-        'event_date' => now()->addDays(7),
-    ]);
+    $event = Event::factory()
+        ->published()
+        ->create([
+            'title' => 'Männerkreis Test',
+            'event_date' => now()->addDays(7),
+        ]);
 
     $mailable = new EventParticipantMessage(
         mailSubject: 'Test Betreff',
@@ -39,16 +43,14 @@ test('participant message renders content', function (): void {
 });
 
 test('participant message includes event title in footer', function (): void {
-    $event = Event::factory()->published()->create([
-        'title' => 'Besonderes Treffen',
-        'event_date' => now()->addDays(7),
-    ]);
+    $event = Event::factory()
+        ->published()
+        ->create([
+            'title' => 'Besonderes Treffen',
+            'event_date' => now()->addDays(7),
+        ]);
 
-    $mailable = new EventParticipantMessage(
-        mailSubject: 'Test',
-        mailContent: '<p>Inhalt</p>',
-        event: $event,
-    );
+    $mailable = new EventParticipantMessage(mailSubject: 'Test', mailContent: '<p>Inhalt</p>', event: $event);
 
     $mailable->assertSeeInHtml('Besonderes Treffen');
 });

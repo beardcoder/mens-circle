@@ -25,7 +25,7 @@ class EditPage extends EditRecord
     #[Override]
     protected function getHeaderActions(): array
     {
-        return [DeleteAction::make(), ForceDeleteAction::make(), RestoreAction::make(), ];
+        return [DeleteAction::make(), ForceDeleteAction::make(), RestoreAction::make()];
     }
 
     /**
@@ -35,7 +35,8 @@ class EditPage extends EditRecord
     {
         $this->record->contentBlocks->each(function ($blockItem): void {
             /** @var ContentBlock $blockItem */
-            $blockItem->getMedia('page_blocks')
+            $blockItem
+                ->getMedia('page_blocks')
                 ->each(function ($mediaItem): void {
                     /** @var Media $mediaItem */
                     $mediaItem->update([
@@ -45,10 +46,11 @@ class EditPage extends EditRecord
                 });
         });
 
-        $contentBlocks = $this->record->contentBlocks()
+        $contentBlocks = $this->record
+            ->contentBlocks()
             ->orderBy('order')
             ->get()
-            ->map(function ($blockItem): array {
+            ->map(static function ($blockItem): array {
                 /** @var ContentBlock $blockItem */
                 /** @var array<string, mixed> $blockData */
                 $blockData = $blockItem->data;

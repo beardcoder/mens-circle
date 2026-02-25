@@ -30,15 +30,8 @@ class NewsletterMail extends Mailable implements ShouldQueue
 
     public function content(): Content
     {
-        return new Content(
-            markdown: 'emails.newsletter',
-            with: [
-                'processedContent' => str_replace(
-                    '{first_name}',
-                    e($this->subscription->participant->first_name),
-                    $this->newsletter->content,
-                ),
-            ],
-        );
+        return new Content(markdown: 'emails.newsletter', with: [
+            'processedContent' => str_replace('{first_name}', e($this->subscription->participant->first_name), $this->newsletter->content),
+        ]);
     }
 }

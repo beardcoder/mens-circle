@@ -44,8 +44,7 @@ class SendNewsletterJob implements ShouldQueue
                 /** @var NewsletterSubscription $subscription */
                 foreach ($subscriptions as $subscription) {
                     try {
-                        Mail::to($subscription->participant->email)
-                            ->send(new NewsletterMail($this->newsletter, $subscription));
+                        Mail::to($subscription->participant->email)->send(new NewsletterMail($this->newsletter, $subscription));
 
                         $recipientCount++;
                     } catch (Exception $e) {

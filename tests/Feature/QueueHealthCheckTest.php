@@ -9,7 +9,7 @@ use Spatie\Health\Enums\Status;
 
 test('database queue check passes when tables exist', function (): void {
     // Ensure jobs and failed_jobs tables exist in test database
-    if (! Schema::hasTable('jobs')) {
+    if (!Schema::hasTable('jobs')) {
         $this->artisan('queue:table');
         $this->artisan('queue:failed-table');
         $this->artisan('migrate', ['--force' => true]);
@@ -20,8 +20,7 @@ test('database queue check passes when tables exist', function (): void {
     $check = new QueueHealthCheck();
     $result = $check->run();
 
-    expect($result->status)->toEqual(Status::ok())
-        ->and($result->getShortSummary())->toContain('database');
+    expect($result->status)->toEqual(Status::ok())->and($result->getShortSummary())->toContain('database');
 });
 
 test('sync queue shows warning', function (): void {
@@ -30,8 +29,7 @@ test('sync queue shows warning', function (): void {
     $check = new QueueHealthCheck();
     $result = $check->run();
 
-    expect($result->status)->toEqual(Status::warning())
-        ->and($result->getShortSummary())->toBe('sync');
+    expect($result->status)->toEqual(Status::warning())->and($result->getShortSummary())->toBe('sync');
 });
 
 test('null queue shows warning', function (): void {
@@ -40,8 +38,7 @@ test('null queue shows warning', function (): void {
     $check = new QueueHealthCheck();
     $result = $check->run();
 
-    expect($result->status)->toEqual(Status::warning())
-        ->and($result->getShortSummary())->toBe('null');
+    expect($result->status)->toEqual(Status::warning())->and($result->getShortSummary())->toBe('null');
 });
 
 test('sync queue check includes metadata for connection', function (): void {

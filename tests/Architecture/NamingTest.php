@@ -18,10 +18,7 @@ final class NamingTest
         return PHPat::rule()
             ->classes(Selector::inNamespace('App\Services'))
             ->shouldNotDependOn()
-            ->classes(
-                Selector::inNamespace('App\Http\Controllers'),
-                Selector::inNamespace('App\Filament'),
-            )
+            ->classes(Selector::inNamespace('App\Http\Controllers'), Selector::inNamespace('App\Filament'))
             ->because('Services should be framework-agnostic');
     }
 }

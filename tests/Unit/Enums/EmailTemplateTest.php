@@ -51,7 +51,8 @@ test('participant templates returns only participant category', function (): voi
 test('placeholders returns expected placeholder keys', function (): void {
     $placeholders = EmailTemplate::placeholders();
 
-    expect($placeholders)->toContain('{event_title}')
+    expect($placeholders)
+        ->toContain('{event_title}')
         ->toContain('{event_date}')
         ->toContain('{event_time}')
         ->toContain('{event_location}')

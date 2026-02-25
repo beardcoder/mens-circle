@@ -12,8 +12,7 @@ trait ClearsResponseCache
     {
         $clearCache = static function (): void {
             ResponseCache::clear();
-            cache()
-                ->forget('has_next_event');
+            cache()->forget('has_next_event');
         };
 
         static::created($clearCache);

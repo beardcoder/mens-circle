@@ -24,8 +24,7 @@ test('can subscribe to newsletter', function (): void {
 });
 
 test('newsletter subscription requires email', function (): void {
-    $response = $this->postJson(route('newsletter.subscribe'), [
-    ]);
+    $response = $this->postJson(route('newsletter.subscribe'), []);
 
     $response->assertStatus(422);
     $response->assertJson([
