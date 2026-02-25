@@ -68,7 +68,7 @@ test('preserves wire:snapshot children key when skipping compression', function 
     $content = $response->getContent();
     $decodedSnapshot = json_decode(
         mb_substr((string) $content, mb_strpos((string) $content, "wire:snapshot='") + 15, mb_strpos((string) $content, "'></div>") - mb_strpos((string) $content, "wire:snapshot='") - 15),
-        true
+        true,
     );
 
     expect($decodedSnapshot)->toHaveKey('memo')
