@@ -19,7 +19,7 @@ import {
   useScrollAnimations,
   useActiveSection,
   useJourneyProgress,
-} from '@/components/scrollama';
+} from '@/components/scroll-animations';
 import { initUmamiKit } from '@/utils/umami-kit';
 
 /**
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   useScrollHeader();
   useScrollToTop();
 
-  // Scroll-driven animations and section tracking (Scrollama)
+  // Scroll-driven animations and section tracking
   useScrollAnimations();
   useActiveSection();
   useJourneyProgress();

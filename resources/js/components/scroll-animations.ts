@@ -1,17 +1,15 @@
 /**
- * Scrollama Composables
- * Scroll-driven animations and section tracking powered by Scrollama
+ * Scroll Animations
+ * Lightweight scroll-driven animations using native IntersectionObserver + Web Animations API
  */
-
-import scrollama from 'scrollama';
 
 /* ============================================
    Animation Configuration
    ============================================ */
 
-const ANIMATION_DURATION = 800;
-const ANIMATION_STAGGER_DELAY = 150;
-const ANIMATION_EASING = 'cubic-bezier(0.16, 0.6, 0.4, 1)';
+const ANIMATION_DURATION = 600;
+const ANIMATION_STAGGER_DELAY = 100;
+const ANIMATION_EASING = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
 
 type Direction = 'up' | 'down' | 'left' | 'right' | 'scale' | 'default';
 
@@ -22,11 +20,11 @@ interface AnimationTransform {
 
 function getTransformForDirection(direction: Direction): AnimationTransform {
   const transforms: Record<Direction, string> = {
-    default: 'translateY(20px)',
-    up: 'translateY(20px)',
-    down: 'translateY(-20px)',
-    left: 'translateX(-20px)',
-    right: 'translateX(20px)',
+    default: 'translateY(16px)',
+    up: 'translateY(16px)',
+    down: 'translateY(-16px)',
+    left: 'translateX(-16px)',
+    right: 'translateX(16px)',
     scale: 'scale(0.97)',
   };
 
@@ -93,7 +91,7 @@ function setInitialState(element: HTMLElement): void {
 
 /* ============================================
    useScrollAnimations
-   Triggers fade-in animations on scroll using Scrollama
+   Triggers fade-in animations on scroll using IntersectionObserver
    ============================================ */
 
 export function useScrollAnimations(): void {
@@ -114,7 +112,6 @@ export function useScrollAnimations(): void {
 
   // Set initial hidden state for individual fade elements
   fadeElements.forEach((el) => {
-    // Skip elements inside stagger containers (they're handled separately)
     if (el.closest('.stagger-children')) return;
     setInitialState(el);
   });
@@ -131,61 +128,69 @@ export function useScrollAnimations(): void {
     }
   });
 
-  // Scrollama for individual fade-in elements
-  if (fadeElements.length > 0) {
-    const filteredElements = Array.from(fadeElements).filter(
-      (el) => !el.closest('.stagger-children')
-    );
+  // IntersectionObserver for individual fade-in elements
+  const filteredElements = Array.from(fadeElements).filter(
+    (el) => !el.closest('.stagger-children')
+  );
 
-    if (filteredElements.length > 0) {
-      scrollama()
-        .setup({
-          step: filteredElements,
-          offset: 0.8,
-          once: true,
-        })
-        .onStepEnter(({ element }) => {
+  if (filteredElements.length > 0) {
+    const fadeObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const element = entry.target as HTMLElement;
           const delay = getDelay(element);
 
           animateElement(element, delay);
+          fadeObserver.unobserve(element);
         });
-    }
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    filteredElements.forEach((el) => fadeObserver.observe(el));
   }
 
-  // Scrollama for stagger containers
+  // IntersectionObserver for stagger containers
   if (staggerContainers.length > 0) {
-    scrollama()
-      .setup({
-        step: Array.from(staggerContainers),
-        offset: 0.8,
-        once: true,
-      })
-      .onStepEnter(({ element }) => {
-        const children = element.children;
+    const staggerObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
 
-        for (let i = 0; i < children.length; i++) {
-          const child = children[i] as HTMLElement;
+          const children = entry.target.children;
 
-          child.style.willChange = 'opacity, transform';
+          for (let i = 0; i < children.length; i++) {
+            const child = children[i] as HTMLElement;
 
-          const animation = child.animate(
-            [
-              { opacity: 0, transform: 'translateY(12px)' },
-              { opacity: 1, transform: 'translateY(0)' },
-            ],
-            {
-              duration: ANIMATION_DURATION,
-              delay: i * ANIMATION_STAGGER_DELAY,
-              easing: ANIMATION_EASING,
-              fill: 'forwards',
-            }
-          );
+            child.style.willChange = 'opacity, transform';
 
-          animation.onfinish = () => {
-            child.style.willChange = 'auto';
-          };
-        }
-      });
+            const animation = child.animate(
+              [
+                { opacity: 0, transform: 'translateY(12px)' },
+                { opacity: 1, transform: 'translateY(0)' },
+              ],
+              {
+                duration: ANIMATION_DURATION,
+                delay: i * ANIMATION_STAGGER_DELAY,
+                easing: ANIMATION_EASING,
+                fill: 'forwards',
+              }
+            );
+
+            animation.onfinish = () => {
+              child.style.willChange = 'auto';
+            };
+          }
+
+          staggerObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    staggerContainers.forEach((el) => staggerObserver.observe(el));
   }
 }
 
@@ -218,25 +223,23 @@ export function useActiveSection(): void {
     });
   };
 
-  scrollama()
-    .setup({
-      step: sections,
-      offset: 0.4,
-    })
-    .onStepEnter(({ element }) => {
-      setActive(element.id);
-    })
-    .onStepExit(({ element, direction }) => {
-      // When scrolling back up past the first section, remove all active states
-      if (direction === 'up' && element.id === sections[0]?.id) {
-        setActive(null);
-      }
-    });
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActive(entry.target.id);
+        }
+      });
+    },
+    { threshold: 0.3, rootMargin: '-20% 0px -40% 0px' }
+  );
+
+  sections.forEach((section) => sectionObserver.observe(section));
 }
 
 /* ============================================
    useJourneyProgress
-   Animates journey step numbers and a progress line as user scrolls
+   Animates journey step numbers as user scrolls
    ============================================ */
 
 export function useJourneyProgress(): void {
@@ -256,28 +259,32 @@ export function useJourneyProgress(): void {
 
     if (number) {
       number.style.transition =
-        'opacity 0.6s cubic-bezier(0.16, 0.6, 0.4, 1), transform 0.6s cubic-bezier(0.16, 0.6, 0.4, 1)';
+        'opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1)';
       number.style.opacity = '0.08';
       number.style.transform = 'scale(0.95)';
     }
   });
 
-  scrollama()
-    .setup({
-      step: Array.from(steps),
-      offset: 0.6,
-      once: true,
-    })
-    .onStepEnter(({ element }) => {
-      const number = element.querySelector<HTMLElement>(
-        '.journey__step-number'
-      );
+  const journeyObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
 
-      if (number) {
-        number.style.opacity = '0.25';
-        number.style.transform = 'scale(1)';
-      }
+        const number = entry.target.querySelector<HTMLElement>(
+          '.journey__step-number'
+        );
 
-      element.classList.add('journey__step--active');
-    });
+        if (number) {
+          number.style.opacity = '0.25';
+          number.style.transform = 'scale(1)';
+        }
+
+        entry.target.classList.add('journey__step--active');
+        journeyObserver.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.3, rootMargin: '0px 0px -20% 0px' }
+  );
+
+  steps.forEach((step) => journeyObserver.observe(step));
 }
