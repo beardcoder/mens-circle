@@ -1,12 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" fill="none">
-  <g stroke="#c87444" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M600 146 820 236v242c0 196-99 351-220 438-121-87-220-242-220-438V236L600 146Z"/>
-    <path d="M600 276v476"/>
-    <path d="M514 354h172"/>
-    <path d="M396 838c69-30 136-46 204-46s135 16 204 46"/>
-    <path d="M474 918c42-14 84-22 126-22s84 8 126 22"/>
-    <path d="M332 1016c174-86 362-86 536 0"/>
-    <circle cx="600" cy="600" r="492"/>
-    <path d="M226 302c86-94 190-151 304-174"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="100" cy="100" r="94"/>
+  <circle cx="100" cy="88" r="48"/>
+  <path d="M96 22 L100 10 L104 22"/>
+  <line x1="100" y1="22" x2="100" y2="178"/>
+  <line x1="64" y1="84" x2="136" y2="84"/>
+  <line x1="64" y1="80" x2="64" y2="88"/>
+  <line x1="136" y1="80" x2="136" y2="88"/>
+  <line x1="94" y1="108" x2="106" y2="108"/>
+  <line x1="94" y1="120" x2="106" y2="120"/>
+  <line x1="94" y1="132" x2="106" y2="132"/>
+  <circle cx="100" cy="180" r="6"/>
 </svg>

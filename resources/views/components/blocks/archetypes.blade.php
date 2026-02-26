@@ -39,12 +39,7 @@
                 @php $icon = $detectIcon($item); @endphp
                 <article class="archetype-card archetype-card--{{ $icon }}">
                     <div class="archetype-card__background-icon" aria-hidden="true">
-                        <img
-                            src="{{ asset('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg') }}"
-                            alt=""
-                            loading="lazy"
-                            decoding="async"
-                        >
+                        {!! file_get_contents(public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg')) !!}
                     </div>
 
                     <div class="archetype-card__content">

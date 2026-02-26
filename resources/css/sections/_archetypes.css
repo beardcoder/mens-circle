@@ -70,12 +70,10 @@
   opacity: 0.16;
 }
 
-.archetype-card__background-icon img {
+.archetype-card__background-icon svg {
   inline-size: clamp(16rem, 32vw, 22rem);
   block-size: clamp(16rem, 32vw, 22rem);
-  object-fit: contain;
   transform: translateY(-50%) rotate(-8deg);
-  filter: saturate(0.86) brightness(0.95);
 }
 
 .archetype-card__title {
@@ -95,23 +93,23 @@
   color: var(--text-secondary);
 }
 
-.archetype-card--warrior .archetype-card__background-icon img {
+.archetype-card--warrior .archetype-card__background-icon svg {
   transform: translateY(-50%) rotate(-14deg);
 }
 
-.archetype-card--lover .archetype-card__background-icon img {
+.archetype-card--lover .archetype-card__background-icon svg {
   transform: translateY(-50%) rotate(-6deg);
 }
 
-.archetype-card--magician .archetype-card__background-icon img {
+.archetype-card--magician .archetype-card__background-icon svg {
   transform: translateY(-50%) rotate(-3deg);
 }
 
-.archetype-card--king .archetype-card__background-icon img {
+.archetype-card--king .archetype-card__background-icon svg {
   transform: translateY(-50%) rotate(-12deg);
 }
 
-.archetype-card--father .archetype-card__background-icon img {
+.archetype-card--father .archetype-card__background-icon svg {
   transform: translateY(-50%) rotate(-4deg);
 }
 
@@ -149,7 +147,7 @@
     opacity: 0.14;
   }
 
-  .archetype-card__background-icon img {
+  .archetype-card__background-icon svg {
     inline-size: 12.5rem;
     block-size: 12.5rem;
   }
