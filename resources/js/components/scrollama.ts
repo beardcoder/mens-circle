@@ -9,9 +9,9 @@ import scrollama from 'scrollama';
    Animation Configuration
    ============================================ */
 
-const ANIMATION_DURATION = 600;
-const ANIMATION_STAGGER_DELAY = 100;
-const ANIMATION_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const ANIMATION_DURATION = 800;
+const ANIMATION_STAGGER_DELAY = 150;
+const ANIMATION_EASING = 'cubic-bezier(0.16, 0.6, 0.4, 1)';
 
 type Direction = 'up' | 'down' | 'left' | 'right' | 'scale' | 'default';
 
@@ -22,12 +22,12 @@ interface AnimationTransform {
 
 function getTransformForDirection(direction: Direction): AnimationTransform {
   const transforms: Record<Direction, string> = {
-    default: 'translateY(30px)',
-    up: 'translateY(30px)',
-    down: 'translateY(-30px)',
-    left: 'translateX(-30px)',
-    right: 'translateX(30px)',
-    scale: 'scale(0.95)',
+    default: 'translateY(20px)',
+    up: 'translateY(20px)',
+    down: 'translateY(-20px)',
+    left: 'translateX(-20px)',
+    right: 'translateX(20px)',
+    scale: 'scale(0.97)',
   };
 
   return {
@@ -61,11 +61,13 @@ function getDelay(element: HTMLElement): number {
 
 function animateElement(element: HTMLElement, delay: number): void {
   const direction = getDirection(element);
-  const { to } = getTransformForDirection(direction);
+  const { from, to } = getTransformForDirection(direction);
 
-  element.animate(
+  element.style.willChange = 'opacity, transform';
+
+  const animation = element.animate(
     [
-      {}, // from current state (set in setInitialState)
+      { opacity: from.opacity, transform: from.transform },
       { opacity: to.opacity, transform: to.transform },
     ],
     {
@@ -75,6 +77,10 @@ function animateElement(element: HTMLElement, delay: number): void {
       fill: 'forwards',
     }
   );
+
+  animation.onfinish = () => {
+    element.style.willChange = 'auto';
+  };
 }
 
 function setInitialState(element: HTMLElement): void {
@@ -121,7 +127,7 @@ export function useScrollAnimations(): void {
       const child = children[i] as HTMLElement;
 
       child.style.opacity = '0';
-      child.style.transform = 'translateY(20px)';
+      child.style.transform = 'translateY(12px)';
     }
   });
 
@@ -160,9 +166,11 @@ export function useScrollAnimations(): void {
         for (let i = 0; i < children.length; i++) {
           const child = children[i] as HTMLElement;
 
-          child.animate(
+          child.style.willChange = 'opacity, transform';
+
+          const animation = child.animate(
             [
-              {}, // from current state
+              { opacity: 0, transform: 'translateY(12px)' },
               { opacity: 1, transform: 'translateY(0)' },
             ],
             {
@@ -172,6 +180,10 @@ export function useScrollAnimations(): void {
               fill: 'forwards',
             }
           );
+
+          animation.onfinish = () => {
+            child.style.willChange = 'auto';
+          };
         }
       });
   }
@@ -244,9 +256,9 @@ export function useJourneyProgress(): void {
 
     if (number) {
       number.style.transition =
-        'opacity 0.4s ease-out, transform 0.4s ease-out';
+        'opacity 0.6s cubic-bezier(0.16, 0.6, 0.4, 1), transform 0.6s cubic-bezier(0.16, 0.6, 0.4, 1)';
       number.style.opacity = '0.08';
-      number.style.transform = 'scale(0.9)';
+      number.style.transform = 'scale(0.95)';
     }
   });
 

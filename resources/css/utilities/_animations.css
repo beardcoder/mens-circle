@@ -1,14 +1,15 @@
 /**
  * Animation Utilities (2025)
- * Using Motion.dev for scroll-triggered animations
+ * Using Scrollama + Web Animations API for scroll-triggered animations
  *
  * This file provides:
  * - Transition utilities for hover/focus states
  * - Continuous/looping keyframe animations
  * - Reduced motion support
  *
- * Scroll-triggered animations are handled by Motion.dev's inView function
- * @see https://motion.dev/docs/inview
+ * Scroll-triggered animations are handled by Scrollama's IntersectionObserver
+ * with the Web Animations API for smooth, GPU-accelerated playback
+ * @see resources/js/components/scrollama.ts
  */
 
 /* ============================================
@@ -61,13 +62,13 @@
 
 /* ============================================
    Scroll-Triggered Animation Classes
-   Initial states - Motion.dev handles the animation
+   Initial states - Scrollama + Web Animations API handles the animation
    ============================================ */
 
 /**
  * These classes mark elements for scroll-triggered animations.
- * Motion.dev's inView function detects these classes and applies
- * the appropriate animation when elements enter the viewport.
+ * Scrollama detects viewport entry and triggers the Web Animations API
+ * for smooth, GPU-accelerated playback with natural easing.
  *
  * Usage:
  *   <div class="fade-in">Fades in from bottom</div>
@@ -78,18 +79,17 @@
  *   </div>
  */
 
-/* Marker classes for Motion.dev - no CSS animation needed */
+/* Marker classes for scroll animations - no CSS animation needed */
 .fade-in,
 .fade-in-up,
 .fade-in-down,
 .fade-in-left,
 .fade-in-right,
 .fade-in-scale {
-  /* Initial state set by JavaScript for smooth loading */
-  will-change: opacity, transform;
+  /* Initial state and will-change set dynamically by JavaScript */
 }
 
-/* Delay classes - handled by Motion.dev */
+/* Delay classes - handled by JavaScript */
 .delay-1,
 .delay-2,
 .delay-3,
@@ -100,16 +100,16 @@
 .fade-in-delay-3,
 .fade-in-delay-4,
 .fade-in-delay-5 {
-  /* Delays are applied programmatically by Motion.dev */
+  /* Delays are applied programmatically by JavaScript */
 }
 
 /* Stagger container - children animate with staggered timing */
 .stagger-children {
-  /* Container marker for Motion.dev stagger effect */
+  /* Container marker for scroll animation stagger effect */
 }
 
 .stagger-children > * {
-  will-change: opacity, transform;
+  /* will-change set dynamically by JavaScript */
 }
 
 /* ============================================
@@ -117,9 +117,8 @@
    ============================================ */
 
 /* Breathing / Pulsing animation
- * NOTE: Decorative circle breathing animations are now handled by Motion.dev
- * for smoother, more natural motion. See breathing-animation.ts
- * This CSS animation is kept as a fallback for no-JS environments.
+ * Used for decorative elements like hero circles.
+ * CSS animation kept as fallback for no-JS environments.
  */
 @keyframes breathe {
   0%,
@@ -221,7 +220,7 @@
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
 
   to {
@@ -233,7 +232,7 @@
 @keyframes fade-in-down {
   from {
     opacity: 0;
-    transform: translateY(-30px);
+    transform: translateY(-20px);
   }
 
   to {
@@ -245,7 +244,7 @@
 @keyframes fade-in-left {
   from {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-20px);
   }
 
   to {
@@ -257,7 +256,7 @@
 @keyframes fade-in-right {
   from {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(20px);
   }
 
   to {
@@ -269,7 +268,7 @@
 @keyframes fade-in-scale {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.97);
   }
 
   to {
@@ -425,7 +424,7 @@
   .fade-in-delay-3,
   .fade-in-delay-4,
   .fade-in-delay-5 {
-    /* Motion.dev handles reduced motion, but ensure visibility */
+    /* Ensure visibility when reduced motion is preferred */
     opacity: 1 !important;
     transform: none !important;
   }
