@@ -15,6 +15,11 @@ import {
   useTestimonialForm,
 } from '@/components/forms';
 import { useCalendarIntegration } from '@/components/calendar';
+import {
+  useScrollAnimations,
+  useActiveSection,
+  useJourneyProgress,
+} from '@/components/scrollama';
 import { initUmamiKit } from '@/utils/umami-kit';
 
 /**
@@ -25,6 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
   useNavigation();
   useScrollHeader();
   useScrollToTop();
+
+  // Scroll-driven animations and section tracking (Scrollama)
+  useScrollAnimations();
+  useActiveSection();
+  useJourneyProgress();
 
   // Interactive components
   useNewsletterForm();

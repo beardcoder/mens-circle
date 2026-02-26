@@ -90,8 +90,13 @@
   transition: inline-size var(--transition-medium) var(--ease-spring);
 }
 
-.nav__link:hover::after {
+.nav__link:hover::after,
+.nav__link--active::after {
   inline-size: 100%;
+}
+
+.nav__link--active {
+  opacity: 1;
 }
 
 /* ============================================
