@@ -148,7 +148,7 @@
 }
 
 /* ============================================
-   Journey Step Active State (Scrollama)
+   Journey Step Active State
    ============================================ */
 .journey__step--active .journey__step-title {
   color: var(--color-parchment);

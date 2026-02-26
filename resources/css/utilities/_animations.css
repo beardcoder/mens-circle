@@ -1,15 +1,15 @@
 /**
- * Animation Utilities (2025)
- * Using Scrollama + Web Animations API for scroll-triggered animations
+ * Animation Utilities
+ * Using IntersectionObserver + Web Animations API for scroll-triggered animations
  *
  * This file provides:
  * - Transition utilities for hover/focus states
  * - Continuous/looping keyframe animations
  * - Reduced motion support
  *
- * Scroll-triggered animations are handled by Scrollama's IntersectionObserver
+ * Scroll-triggered animations are handled by IntersectionObserver
  * with the Web Animations API for smooth, GPU-accelerated playback
- * @see resources/js/components/scrollama.ts
+ * @see resources/js/components/scroll-animations.ts
  */
 
 /* ============================================
@@ -62,12 +62,12 @@
 
 /* ============================================
    Scroll-Triggered Animation Classes
-   Initial states - Scrollama + Web Animations API handles the animation
+   Initial states - IntersectionObserver + Web Animations API handles the animation
    ============================================ */
 
 /**
  * These classes mark elements for scroll-triggered animations.
- * Scrollama detects viewport entry and triggers the Web Animations API
+ * IntersectionObserver detects viewport entry and triggers the Web Animations API
  * for smooth, GPU-accelerated playback with natural easing.
  *
  * Usage:
