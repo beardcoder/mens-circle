@@ -1,9 +1,9 @@
 <x-mail::message>
 <p style="text-align: center; margin: 0 0 6px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #b86f52; text-transform: uppercase; letter-spacing: 0.2em;">Erinnerung</p>
 
-# Morgen ist es soweit!
+# {{ $isToday ? 'Heute' : 'Morgen' }} ist es soweit!
 
-<p style="text-align: center; color: #5c4a3a; font-size: 15px; margin-bottom: 32px;">Hallo {{ $registration->participant->first_name }}, dein Termin<br><strong>{{ $event->title }}</strong> findet morgen statt.</p>
+<p style="text-align: center; color: #5c4a3a; font-size: 15px; margin-bottom: 32px;">Hallo {{ $registration->participant->first_name }}, dein Termin<br><strong>{{ $event->title }}</strong> findet {{ $isToday ? 'heute' : 'morgen' }} statt.</p>
 
 <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 0 36px;">
 <tr>
@@ -50,7 +50,7 @@
 
 ---
 
-Bis morgen!
+Bis {{ $isToday ? 'gleich' : 'morgen' }}!
 
 Herzliche Grüße,<br>
 **{{ config('app.name') }}**
