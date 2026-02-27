@@ -10,7 +10,7 @@ use Spatie\Health\Commands\RunHealthChecksCommand;
 use Spatie\Health\Commands\ScheduleCheckHeartbeatCommand;
 
 // Event Management
-Schedule::command(SendEventReminders::class)->daily()->at('10:00');
+Schedule::command(SendEventReminders::class)->everyFifteenMinutes();
 
 // SEO
 Schedule::command(GenerateSitemap::class)->daily()->at('02:00');

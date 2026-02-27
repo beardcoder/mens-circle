@@ -22,6 +22,8 @@ use Override;
  * @property RegistrationStatus $status
  * @property Carbon $registered_at
  * @property ?Carbon $cancelled_at
+ * @property ?Carbon $reminder_sent_at
+ * @property ?Carbon $sms_reminder_sent_at
  * @property Participant $participant
  * @property Event $event
  */
@@ -33,7 +35,7 @@ class Registration extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['participant_id', 'event_id', 'status', 'registered_at', 'cancelled_at'];
+    protected $fillable = ['participant_id', 'event_id', 'status', 'registered_at', 'cancelled_at', 'reminder_sent_at', 'sms_reminder_sent_at'];
 
     /**
      * @return BelongsTo<Participant, $this>
@@ -129,6 +131,8 @@ class Registration extends Model
             'status' => RegistrationStatus::class,
             'registered_at' => 'datetime',
             'cancelled_at' => 'datetime',
+            'reminder_sent_at' => 'datetime',
+            'sms_reminder_sent_at' => 'datetime',
         ];
     }
 }

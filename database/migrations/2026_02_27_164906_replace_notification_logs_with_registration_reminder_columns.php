@@ -9,6 +9,20 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
+        Schema::dropIfExists('event_notification_logs');
+
+        Schema::table('registrations', function (Blueprint $table): void {
+            $table->timestamp('reminder_sent_at')->nullable()->after('cancelled_at');
+            $table->timestamp('sms_reminder_sent_at')->nullable()->after('reminder_sent_at');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('registrations', function (Blueprint $table): void {
+            $table->dropColumn(['reminder_sent_at', 'sms_reminder_sent_at']);
+        });
+
         Schema::create('event_notification_logs', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('registration_id')->constrained()->cascadeOnDelete();
@@ -19,10 +33,5 @@ return new class extends Migration {
 
             $table->unique(['registration_id', 'event_id', 'channel']);
         });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('event_notification_logs');
     }
 };
