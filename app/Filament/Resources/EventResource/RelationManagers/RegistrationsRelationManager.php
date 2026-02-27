@@ -128,6 +128,11 @@ class RegistrationsRelationManager extends RelationManager
                     ->label('Angemeldet am')
                     ->dateTime('d.m.Y H:i')
                     ->sortable(),
+                TextColumn::make('reminder_sent_at')
+                    ->label('Erinnerung')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->placeholder('Ausstehend'),
             ])
             ->filters([
                 SelectFilter::make('status')->label('Anmeldestatus')->options(RegistrationStatus::options()),

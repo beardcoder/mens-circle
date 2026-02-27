@@ -163,6 +163,17 @@ class RegistrationResource extends Resource
                     ->dateTime('d.m.Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('reminder_sent_at')
+                    ->label('Erinnerung')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->placeholder('Ausstehend'),
+                TextColumn::make('sms_reminder_sent_at')
+                    ->label('SMS')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->placeholder('Ausstehend')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('deleted_at')
                     ->label('Gelöscht am')
                     ->dateTime('d.m.Y H:i')
