@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Mail\EventReminder;
 use App\Models\Event;
+use App\Models\EventNotificationLog;
 use App\Models\Registration;
 use Exception;
 use Illuminate\Console\Command;
@@ -19,28 +20,29 @@ class SendEventReminders extends Command
 {
     protected $signature = 'events:send-reminders';
 
-    protected $description = 'Send reminder emails and SMS to participants for events happening tomorrow';
+    protected $description = 'Send reminder emails and SMS to participants for events happening today or tomorrow';
 
     public function handle(): int
     {
-        $this->info('Searching for events happening tomorrow...');
+        $this->info('Searching for events happening today or tomorrow...');
 
-        $tomorrowStart = now()->addDay()->startOfDay();
+        $todayStart = now()->startOfDay();
         $tomorrowEnd = now()->addDay()->endOfDay();
 
         $upcomingEvents = Event::published()
-            ->whereBetween('event_date', [$tomorrowStart, $tomorrowEnd])
+            ->whereBetween('event_date', [$todayStart, $tomorrowEnd])
             ->with(['activeRegistrations.participant'])
             ->get();
 
         if ($upcomingEvents->isEmpty()) {
-            $this->info('No events found in the 24-hour window.');
+            $this->info('No upcoming events found for today or tomorrow.');
 
             return self::SUCCESS;
         }
 
         $totalEmailsSent = 0;
         $totalSmsSent = 0;
+        $totalSkipped = 0;
 
         foreach ($upcomingEvents as $event) {
             $registrations = $event->activeRegistrations;
@@ -51,33 +53,71 @@ class SendEventReminders extends Command
                 continue;
             }
 
-            $eventDate = $event->event_date->format('d.m.Y H:i');
+            $eventDate = $event->event_date->format('d.m.Y');
             $this->info("Processing event: {$event->title} ({$eventDate})");
 
-            $registrations->each(function (Registration $registration) use ($event, &$totalEmailsSent, &$totalSmsSent): void {
+            $isToday = $event->event_date->isToday();
+            $timeWord = $isToday ? 'heute' : 'morgen';
+
+            $registrations->each(function (Registration $registration) use ($event, $timeWord, &$totalEmailsSent, &$totalSmsSent, &$totalSkipped): void {
                 $participant = $registration->participant;
 
-                Mail::queue(new EventReminder($registration, $event));
-                $totalEmailsSent++;
-                $this->line("  -> Email reminder sent to: {$participant->email}");
+                $alreadySentEmail = EventNotificationLog::query()
+                    ->where('registration_id', $registration->id)
+                    ->where('event_id', $event->id)
+                    ->where('channel', 'email')
+                    ->exists();
 
-                if ($participant->phone) {
-                    $eventTime = $event->start_time->format('H:i');
-                    $smsMessage = "Hallo {$participant->first_name}, morgen ist Maennerkreis! {$event->title} um {$eventTime} Uhr in {$event->location}. Bis bald!";
-                    $this->sendSms($participant->phone, $smsMessage, [
+                if ($alreadySentEmail) {
+                    $totalSkipped++;
+                    $this->line("  -> Already notified: {$participant->email} (skipped)");
+                } else {
+                    Mail::queue(new EventReminder($registration, $event));
+
+                    EventNotificationLog::create([
                         'registration_id' => $registration->id,
                         'event_id' => $event->id,
-                        'type' => 'event_reminder',
+                        'channel' => 'email',
+                        'notified_at' => now(),
                     ]);
-                    $totalSmsSent++;
-                    $this->line("  -> SMS reminder sent to: {$participant->phone}");
+
+                    $totalEmailsSent++;
+                    $this->line("  -> Email reminder sent to: {$participant->email}");
+                }
+
+                if ($participant->phone) {
+                    $alreadySentSms = EventNotificationLog::query()
+                        ->where('registration_id', $registration->id)
+                        ->where('event_id', $event->id)
+                        ->where('channel', 'sms')
+                        ->exists();
+
+                    if (!$alreadySentSms) {
+                        $eventTime = $event->start_time->format('H:i');
+                        $smsMessage = "Hallo {$participant->first_name}, {$timeWord} ist Maennerkreis! {$event->title} um {$eventTime} Uhr in {$event->location}. Bis bald!";
+                        $this->sendSms($participant->phone, $smsMessage, [
+                            'registration_id' => $registration->id,
+                            'event_id' => $event->id,
+                            'type' => 'event_reminder',
+                        ]);
+
+                        EventNotificationLog::create([
+                            'registration_id' => $registration->id,
+                            'event_id' => $event->id,
+                            'channel' => 'sms',
+                            'notified_at' => now(),
+                        ]);
+
+                        $totalSmsSent++;
+                        $this->line("  -> SMS reminder sent to: {$participant->phone}");
+                    }
                 }
             });
         }
 
         $this->newLine();
         $eventCount = $upcomingEvents->count();
-        $this->info("Successfully sent {$totalEmailsSent} email(s) and {$totalSmsSent} SMS for {$eventCount} event(s).");
+        $this->info("Sent {$totalEmailsSent} email(s) and {$totalSmsSent} SMS for {$eventCount} event(s). Skipped {$totalSkipped} already notified.");
 
         return self::SUCCESS;
     }
