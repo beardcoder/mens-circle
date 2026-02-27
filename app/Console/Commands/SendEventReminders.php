@@ -17,23 +17,19 @@ use Seven\Api\Resource\Sms\SmsResource;
 
 class SendEventReminders extends Command
 {
-    private const REMINDER_WINDOW_START_HOURS = 23;
-
-    private const REMINDER_WINDOW_END_HOURS = 25;
-
     protected $signature = 'events:send-reminders';
 
-    protected $description = 'Send reminder emails and SMS to participants for events happening in 24 hours';
+    protected $description = 'Send reminder emails and SMS to participants for events happening tomorrow';
 
     public function handle(): int
     {
-        $this->info('Searching for events happening in 24 hours...');
+        $this->info('Searching for events happening tomorrow...');
 
-        $startWindow = now()->addHours(self::REMINDER_WINDOW_START_HOURS);
-        $endWindow = now()->addHours(self::REMINDER_WINDOW_END_HOURS);
+        $tomorrowStart = now()->addDay()->startOfDay();
+        $tomorrowEnd = now()->addDay()->endOfDay();
 
         $upcomingEvents = Event::published()
-            ->whereBetween('event_date', [$startWindow, $endWindow])
+            ->whereBetween('event_date', [$tomorrowStart, $tomorrowEnd])
             ->with(['activeRegistrations.participant'])
             ->get();
 
