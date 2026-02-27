@@ -10,6 +10,7 @@ use App\Models\EventNotificationLog;
 use App\Models\Registration;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Seven\Api\Client;
@@ -59,20 +60,21 @@ class SendEventReminders extends Command
             $isToday = $event->event_date->isToday();
             $timeWord = $isToday ? 'heute' : 'morgen';
 
-            $registrations->each(function (Registration $registration) use ($event, $timeWord, &$totalEmailsSent, &$totalSmsSent, &$totalSkipped): void {
+            $existingLogs = EventNotificationLog::query()
+                ->where('event_id', $event->id)
+                ->whereIn('registration_id', $registrations->pluck('id'))
+                ->get()
+                ->groupBy('registration_id');
+
+            $registrations->each(function (Registration $registration) use ($event, $isToday, $timeWord, $existingLogs, &$totalEmailsSent, &$totalSmsSent, &$totalSkipped): void {
                 $participant = $registration->participant;
+                $logs = $existingLogs->get($registration->id, new Collection());
 
-                $alreadySentEmail = EventNotificationLog::query()
-                    ->where('registration_id', $registration->id)
-                    ->where('event_id', $event->id)
-                    ->where('channel', 'email')
-                    ->exists();
-
-                if ($alreadySentEmail) {
+                if ($logs->contains('channel', 'email')) {
                     $totalSkipped++;
                     $this->line("  -> Already notified: {$participant->email} (skipped)");
                 } else {
-                    Mail::queue(new EventReminder($registration, $event));
+                    Mail::queue(new EventReminder($registration, $event, $isToday));
 
                     EventNotificationLog::create([
                         'registration_id' => $registration->id,
@@ -85,22 +87,15 @@ class SendEventReminders extends Command
                     $this->line("  -> Email reminder sent to: {$participant->email}");
                 }
 
-                if ($participant->phone) {
-                    $alreadySentSms = EventNotificationLog::query()
-                        ->where('registration_id', $registration->id)
-                        ->where('event_id', $event->id)
-                        ->where('channel', 'sms')
-                        ->exists();
+                if ($participant->phone && !$logs->contains('channel', 'sms')) {
+                    $eventTime = $event->start_time->format('H:i');
+                    $smsMessage = "Hallo {$participant->first_name}, {$timeWord} ist Maennerkreis! {$event->title} um {$eventTime} Uhr in {$event->location}. Bis bald!";
 
-                    if (!$alreadySentSms) {
-                        $eventTime = $event->start_time->format('H:i');
-                        $smsMessage = "Hallo {$participant->first_name}, {$timeWord} ist Maennerkreis! {$event->title} um {$eventTime} Uhr in {$event->location}. Bis bald!";
-                        $this->sendSms($participant->phone, $smsMessage, [
-                            'registration_id' => $registration->id,
-                            'event_id' => $event->id,
-                            'type' => 'event_reminder',
-                        ]);
-
+                    if ($this->sendSms($participant->phone, $smsMessage, [
+                        'registration_id' => $registration->id,
+                        'event_id' => $event->id,
+                        'type' => 'event_reminder',
+                    ])) {
                         EventNotificationLog::create([
                             'registration_id' => $registration->id,
                             'event_id' => $event->id,
@@ -125,7 +120,7 @@ class SendEventReminders extends Command
     /**
      * @param array<string, mixed> $context
      */
-    private function sendSms(string $phoneNumber, string $message, array $context = []): void
+    private function sendSms(string $phoneNumber, string $message, array $context = []): bool
     {
         /** @var string|null $apiKey */
         $apiKey = config('sevenio.api_key');
@@ -133,7 +128,7 @@ class SendEventReminders extends Command
         if (!$apiKey) {
             Log::warning('Cannot send SMS - Seven.io API key not configured', $context);
 
-            return;
+            return false;
         }
 
         try {
@@ -143,12 +138,16 @@ class SendEventReminders extends Command
             $from = config('sevenio.from');
             $params = new SmsParams(text: $message, to: $phoneNumber, from: $from ?? '');
             $smsResource->dispatch($params);
+
+            return true;
         } catch (Exception $exception) {
             Log::error('Failed to send SMS', [
                 ...$context,
                 'phone_number' => $phoneNumber,
                 'error' => $exception->getMessage(),
             ]);
+
+            return false;
         }
     }
 }

@@ -185,7 +185,7 @@ test('sends reminder to new registration even when others already notified', fun
     expect(EventNotificationLog::query()->count())->toBe(2);
 });
 
-test('sends sms to participants with phone numbers and logs it', function (): void {
+test('does not log sms when api key is not configured', function (): void {
     $tomorrow = now()->addDay()->startOfDay();
 
     $event = Event::factory()->published()->create([
@@ -198,11 +198,10 @@ test('sends sms to participants with phone numbers and logs it', function (): vo
     Registration::factory()->registered()->forEvent($event)->forParticipant($participant)->create();
 
     $this->artisan('events:send-reminders')
-        ->expectsOutputToContain('SMS reminder sent to:')
         ->assertSuccessful();
 
     expect(EventNotificationLog::query()->where('channel', 'email')->count())->toBe(1)
-        ->and(EventNotificationLog::query()->where('channel', 'sms')->count())->toBe(1);
+        ->and(EventNotificationLog::query()->where('channel', 'sms')->count())->toBe(0);
 });
 
 test('does not resend sms to already notified participant', function (): void {
