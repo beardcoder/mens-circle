@@ -22,7 +22,7 @@
         "@fontsource-variable/dm-sans": "^5.2.8",
         "@fontsource-variable/playfair-display": "^5.2.8",
         "@stylistic/eslint-plugin": "^5.9.0",
-        "@types/node": "^25.3.0",
+        "@types/node": "^25.3.3",
         "concurrently": "^9.2.1",
         "eslint": "^10.0.2",
         "eslint-config-prettier": "^10.1.8",
