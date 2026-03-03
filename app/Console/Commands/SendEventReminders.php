@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Mail\EventReminder;
-use App\Models\Event;
 use App\Models\Registration;
 use Exception;
 use Illuminate\Console\Command;
