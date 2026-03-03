@@ -16,8 +16,8 @@
         "baseUrl": ".",
         "paths": {
             "@/*": ["resources/js/*"],
-            "@stitch": ["resources/js/lib/stitch/index.ts"],
-            "@stitch/*": ["resources/js/lib/stitch/*"]
+            "@stitch": ["node_modules/@beardcoder/stitch-js/dist/index.d.ts"],
+            "@stitch/*": ["node_modules/@beardcoder/stitch-js/dist/*"]
         }
     },
     "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts"],
