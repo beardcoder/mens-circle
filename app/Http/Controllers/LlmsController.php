@@ -310,15 +310,7 @@ final class LlmsController
         $lines[] = '';
 
         foreach ($faqBlocks as $faq) {
-            if (!isset($faq['items'])) {
-                continue;
-            }
-
-            if (!\is_array($faq['items'])) {
-                continue;
-            }
-
-            if ($faq['items'] === []) {
+            if (!isset($faq['items']) || !\is_array($faq['items']) || $faq['items'] === []) {
                 continue;
             }
 
@@ -333,31 +325,10 @@ final class LlmsController
             }
 
             foreach ($faq['items'] as $item) {
-                if (!\is_array($item)) {
-                    continue;
-                }
-
-                if (!isset($item['question'])) {
-                    continue;
-                }
-
-                if ($item['question'] === '') {
-                    continue;
-                }
-
-                if (!\is_string($item['question'])) {
-                    continue;
-                }
-
-                if (!isset($item['answer'])) {
-                    continue;
-                }
-
-                if ($item['answer'] === '') {
-                    continue;
-                }
-
-                if (!\is_string($item['answer'])) {
+                if (!\is_array($item)
+                    || !isset($item['question'], $item['answer'])
+                    || !\is_string($item['question']) || $item['question'] === ''
+                    || !\is_string($item['answer']) || $item['answer'] === '') {
                     continue;
                 }
 
@@ -534,19 +505,7 @@ final class LlmsController
 
                 if (isset($data['values']) && \is_array($data['values']) && $data['values'] !== []) {
                     foreach ($data['values'] as $value) {
-                        if (!\is_array($value)) {
-                            continue;
-                        }
-
-                        if (!isset($value['title'])) {
-                            continue;
-                        }
-
-                        if ($value['title'] === '') {
-                            continue;
-                        }
-
-                        if (!\is_string($value['title'])) {
+                        if (!\is_array($value) || !isset($value['title']) || !\is_string($value['title']) || $value['title'] === '') {
                             continue;
                         }
 
@@ -588,19 +547,7 @@ final class LlmsController
                 $items = $data['items'] ?? $data['steps'] ?? [];
                 if (\is_array($items) && $items !== []) {
                     foreach ($items as $item) {
-                        if (!\is_array($item)) {
-                            continue;
-                        }
-
-                        if (!isset($item['title'])) {
-                            continue;
-                        }
-
-                        if ($item['title'] === '') {
-                            continue;
-                        }
-
-                        if (!\is_string($item['title'])) {
+                        if (!\is_array($item) || !isset($item['title']) || !\is_string($item['title']) || $item['title'] === '') {
                             continue;
                         }
 

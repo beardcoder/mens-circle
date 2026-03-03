@@ -14,7 +14,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class WaitlistPromotion extends Mailable
+final class WaitlistPromotion extends Mailable
 {
     use Queueable;
     use SerializesModels;

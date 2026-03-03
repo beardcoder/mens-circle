@@ -10,7 +10,7 @@ use Spatie\Health\Checks\Check;
 use Spatie\Health\Checks\Result;
 use Throwable;
 
-class SevenIoHealthCheck extends Check
+final class SevenIoHealthCheck extends Check
 {
     #[Override]
     public function run(): Result

@@ -13,7 +13,7 @@ use Spatie\Health\Checks\Check;
 use Spatie\Health\Checks\Result;
 use Throwable;
 
-class QueueHealthCheck extends Check
+final class QueueHealthCheck extends Check
 {
     #[Override]
     public function run(): Result

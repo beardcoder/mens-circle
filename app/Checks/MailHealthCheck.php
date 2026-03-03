@@ -13,7 +13,7 @@ use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
 use Throwable;
 
-class MailHealthCheck extends Check
+final class MailHealthCheck extends Check
 {
     #[Override]
     public function run(): Result

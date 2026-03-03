@@ -14,7 +14,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class EventRegistrationConfirmation extends Mailable
+final class EventRegistrationConfirmation extends Mailable
 {
     use Queueable;
     use SerializesModels;

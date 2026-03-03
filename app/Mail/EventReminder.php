@@ -13,7 +13,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class EventReminder extends Mailable
+final class EventReminder extends Mailable
 {
     use Queueable;
     use SerializesModels;

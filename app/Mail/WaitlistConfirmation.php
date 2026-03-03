@@ -13,7 +13,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class WaitlistConfirmation extends Mailable
+final class WaitlistConfirmation extends Mailable
 {
     use Queueable;
     use SerializesModels;

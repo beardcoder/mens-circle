@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Health\Checks\Result;
 
-class HealthCheckFailedNotification extends Notification
+final class HealthCheckFailedNotification extends Notification
 {
     use Queueable;
 
@@ -35,8 +35,8 @@ class HealthCheckFailedNotification extends Notification
             return false;
         }
 
+        /** @var int $throttleMinutes */
         $throttleMinutes = config('health.notifications.throttle_notifications_for_minutes', 60);
-        \assert(\is_int($throttleMinutes), 'health.notifications.throttle_notifications_for_minutes must be an integer');
 
         if ($throttleMinutes <= 0) {
             return true;
@@ -96,14 +96,14 @@ class HealthCheckFailedNotification extends Notification
         if ($failedChecks->isNotEmpty()) {
             $message->line('**Fehlgeschlagene Checks:**');
             foreach ($failedChecks as $result) {
-                $message->line(\sprintf('- %s: %s', $result->check->getName(), $result->notificationMessage));
+                $message->line("- {$result->check->getName()}: {$result->notificationMessage}");
             }
         }
 
         if ($warningChecks->isNotEmpty()) {
             $message->line('**Warnungen:**');
             foreach ($warningChecks as $result) {
-                $message->line(\sprintf('- %s: %s', $result->check->getName(), $result->notificationMessage));
+                $message->line("- {$result->check->getName()}: {$result->notificationMessage}");
             }
         }
 
