@@ -249,7 +249,6 @@
     window.routes = {
         newsletter: '{{ route('newsletter.subscribe') }}',
         eventRegister: '{{ route('event.register') }}',
-        csrfToken: '{{ csrf_token() }}',
     };
 </script>
 

@@ -1,5 +1,9 @@
 {
-    "agents": ["claude_code", "codex", "copilot"],
+    "agents": [
+        "claude_code",
+        "codex",
+        "copilot"
+    ],
     "guidelines": true,
     "herd_mcp": false,
     "mcp": true,
@@ -12,8 +16,9 @@
     "sail": false,
     "skills": [
         "pest-testing",
-        "tailwindcss-development",
         "medialibrary-development",
-        "responsecache-development"
+        "responsecache-development",
+        "laravel-specialist",
+        "php-best-practices"
     ]
 }

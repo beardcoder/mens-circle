@@ -21,21 +21,14 @@ Route::redirect('/home', '/', 301);
 Route::controller(EventController::class)->group(function (): void {
     Route::get('/event', 'showNext')->name('event.show');
     Route::get('/event/{slug}', 'show')->name('event.show.slug');
-    Route::post('/event/register', 'register')->name('event.register');
 });
 
 Route::redirect('/events', '/event', 301);
 Route::redirect('/events/{slug}', '/event/{slug}', 301);
 
-Route::controller(TestimonialSubmissionController::class)->group(function (): void {
-    Route::get('/teile-deine-erfahrung', 'show')->name('testimonial.form');
-    Route::post('/testimonial/submit', 'submit')->name('testimonial.submit');
-});
+Route::get('/teile-deine-erfahrung', [TestimonialSubmissionController::class, 'show'])->name('testimonial.form');
 
-Route::controller(NewsletterController::class)->group(function (): void {
-    Route::post('/newsletter/subscribe', 'subscribe')->name('newsletter.subscribe');
-    Route::get('/newsletter/unsubscribe/{token}', 'unsubscribe')->name('newsletter.unsubscribe');
-});
+Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
 Route::get('/auth/{provider}/redirect', [SocialiteController::class, 'redirect'])
     ->name('socialite.redirect');

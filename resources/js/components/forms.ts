@@ -178,7 +178,6 @@ async function submitFormRequest(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': window.routes.csrfToken,
         Accept: 'application/json',
       },
       body: JSON.stringify(body),

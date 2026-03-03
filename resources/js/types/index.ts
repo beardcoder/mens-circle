@@ -15,7 +15,6 @@ export interface EventData {
 export interface Routes {
   newsletter: string;
   eventRegister: string;
-  csrfToken: string;
 }
 
 export interface ApiResponse {
