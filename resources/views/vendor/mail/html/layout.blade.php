@@ -8,10 +8,11 @@
 <meta name="supported-color-schemes" content="light">
 <!--[if mso]>
 <style type="text/css">
-body, table, td { font-family: Georgia, 'Times New Roman', serif !important; }
+body, table, td { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important; }
+h1, h2, h3 { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important; }
 </style>
 <![endif]-->
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 @media only screen and (max-width: 600px) {
 .inner-body {
