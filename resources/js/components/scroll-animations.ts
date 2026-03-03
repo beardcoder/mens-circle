@@ -1,11 +1,9 @@
 /**
- * Scroll Animations
- * Lightweight scroll-driven animations using native IntersectionObserver + Web Animations API
+ * Scroll Animation Components
+ * Lightweight scroll-driven animations using stitch-js + IntersectionObserver + Web Animations API
  */
 
-/* ============================================
-   Animation Configuration
-   ============================================ */
+import { defineComponent } from '@stitch';
 
 const ANIMATION_DURATION = 600;
 const ANIMATION_STAGGER_DELAY = 100;
@@ -57,68 +55,107 @@ function getDelay(element: HTMLElement): number {
   return 0;
 }
 
-function animateElement(element: HTMLElement, delay: number): void {
-  const direction = getDirection(element);
-  const { from, to } = getTransformForDirection(direction);
-
-  element.style.willChange = 'opacity, transform';
-
-  const animation = element.animate(
-    [
-      { opacity: from.opacity, transform: from.transform },
-      { opacity: to.opacity, transform: to.transform },
-    ],
-    {
-      duration: ANIMATION_DURATION,
-      delay,
-      easing: ANIMATION_EASING,
-      fill: 'forwards',
-    }
-  );
-
-  animation.onfinish = () => {
-    element.style.willChange = 'auto';
-  };
+interface ScrollAnimateOptions {
+  threshold: number;
+  rootMargin: string;
 }
 
-function setInitialState(element: HTMLElement): void {
-  const direction = getDirection(element);
-  const { from } = getTransformForDirection(direction);
+/**
+ * Scroll fade-in animation component
+ * Attach to .fade-in, .fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right, .fade-in-scale
+ * Triggers Web Animations API fade-in on scroll intersection
+ */
+export const scrollAnimate = defineComponent<ScrollAnimateOptions>(
+  {
+    threshold: 0.1,
+    rootMargin: '0px 0px -10% 0px',
+  },
+  (ctx) => {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
 
-  element.style.opacity = String(from.opacity);
-  element.style.transform = from.transform;
+    if (prefersReducedMotion) return;
+
+    // Skip if inside a stagger container (handled by staggerAnimate)
+    if (ctx.el.closest('.stagger-children')) return;
+
+    const direction = getDirection(ctx.el);
+    const { from } = getTransformForDirection(direction);
+
+    ctx.el.style.opacity = String(from.opacity);
+    ctx.el.style.transform = from.transform;
+
+    const { options: o } = ctx;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const element = entry.target as HTMLElement;
+          const delay = getDelay(element);
+          const dir = getDirection(element);
+          const transforms = getTransformForDirection(dir);
+
+          element.style.willChange = 'opacity, transform';
+
+          const animation = element.animate(
+            [
+              {
+                opacity: transforms.from.opacity,
+                transform: transforms.from.transform,
+              },
+              {
+                opacity: transforms.to.opacity,
+                transform: transforms.to.transform,
+              },
+            ],
+            {
+              duration: ANIMATION_DURATION,
+              delay,
+              easing: ANIMATION_EASING,
+              fill: 'forwards',
+            }
+          );
+
+          animation.onfinish = () => {
+            element.style.willChange = 'auto';
+          };
+
+          observer.unobserve(element);
+        });
+      },
+      { threshold: o.threshold, rootMargin: o.rootMargin }
+    );
+
+    observer.observe(ctx.el);
+    ctx.onDestroy(() => observer.disconnect());
+  }
+);
+
+interface StaggerAnimateOptions {
+  threshold: number;
+  rootMargin: string;
 }
 
-/* ============================================
-   useScrollAnimations
-   Triggers fade-in animations on scroll using IntersectionObserver
-   ============================================ */
+/**
+ * Stagger animation component
+ * Attach to .stagger-children — animates child elements with staggered delay
+ */
+export const staggerAnimate = defineComponent<StaggerAnimateOptions>(
+  {
+    threshold: 0.1,
+    rootMargin: '0px 0px -10% 0px',
+  },
+  (ctx) => {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
 
-export function useScrollAnimations(): void {
-  const prefersReducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)'
-  ).matches;
+    if (prefersReducedMotion) return;
 
-  if (prefersReducedMotion) return;
-
-  const fadeElements = document.querySelectorAll<HTMLElement>(
-    '.fade-in, .fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right, .fade-in-scale'
-  );
-
-  const staggerContainers =
-    document.querySelectorAll<HTMLElement>('.stagger-children');
-
-  if (fadeElements.length === 0 && staggerContainers.length === 0) return;
-
-  // Set initial hidden state for individual fade elements
-  fadeElements.forEach((el) => {
-    if (el.closest('.stagger-children')) return;
-    setInitialState(el);
-  });
-
-  // Set initial hidden state for stagger children
-  staggerContainers.forEach((container) => {
-    const children = container.children;
+    const children = ctx.el.children;
 
     for (let i = 0; i < children.length; i++) {
       const child = children[i] as HTMLElement;
@@ -126,43 +163,18 @@ export function useScrollAnimations(): void {
       child.style.opacity = '0';
       child.style.transform = 'translateY(12px)';
     }
-  });
 
-  // IntersectionObserver for individual fade-in elements
-  const filteredElements = Array.from(fadeElements).filter(
-    (el) => !el.closest('.stagger-children')
-  );
+    const { options: o } = ctx;
 
-  if (filteredElements.length > 0) {
-    const fadeObserver = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
 
-          const element = entry.target as HTMLElement;
-          const delay = getDelay(element);
+          const containerChildren = entry.target.children;
 
-          animateElement(element, delay);
-          fadeObserver.unobserve(element);
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
-    );
-
-    filteredElements.forEach((el) => fadeObserver.observe(el));
-  }
-
-  // IntersectionObserver for stagger containers
-  if (staggerContainers.length > 0) {
-    const staggerObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-
-          const children = entry.target.children;
-
-          for (let i = 0; i < children.length; i++) {
-            const child = children[i] as HTMLElement;
+          for (let i = 0; i < containerChildren.length; i++) {
+            const child = containerChildren[i] as HTMLElement;
 
             child.style.willChange = 'opacity, transform';
 
@@ -184,107 +196,138 @@ export function useScrollAnimations(): void {
             };
           }
 
-          staggerObserver.unobserve(entry.target);
+          observer.unobserve(entry.target);
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
+      { threshold: o.threshold, rootMargin: o.rootMargin }
     );
 
-    staggerContainers.forEach((el) => staggerObserver.observe(el));
+    observer.observe(ctx.el);
+    ctx.onDestroy(() => observer.disconnect());
   }
+);
+
+interface ActiveSectionOptions {
+  sectionIds: string[];
+  linkSelector: string;
+  activeClass: string;
+  threshold: number;
+  rootMargin: string;
 }
 
-/* ============================================
-   useActiveSection
-   Tracks which section is in view and highlights the nav link
-   ============================================ */
+/**
+ * Active section tracking component
+ * Attach to nav element — highlights nav links based on visible section
+ */
+export const activeSection = defineComponent<ActiveSectionOptions>(
+  {
+    sectionIds: ['ueber', 'reise', 'faq', 'newsletter'],
+    linkSelector: '.nav__link[href*="#"]',
+    activeClass: 'nav__link--active',
+    threshold: 0.3,
+    rootMargin: '-20% 0px -40% 0px',
+  },
+  (ctx) => {
+    const { options: o } = ctx;
+    const sections = o.sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
 
-const SECTION_IDS = ['ueber', 'reise', 'faq', 'newsletter'];
+    if (sections.length === 0) return;
 
-export function useActiveSection(): void {
-  const sections = SECTION_IDS.map((id) => document.getElementById(id)).filter(
-    Boolean
-  ) as HTMLElement[];
+    const navLinks = ctx.el.querySelectorAll<HTMLAnchorElement>(o.linkSelector);
 
-  if (sections.length === 0) return;
+    if (navLinks.length === 0) return;
 
-  const navLinks = document.querySelectorAll<HTMLAnchorElement>(
-    '.nav__link[href*="#"]'
-  );
+    const setActive = (sectionId: string | null): void => {
+      navLinks.forEach((link) => {
+        const href = link.getAttribute('href') ?? '';
+        const isActive = sectionId !== null && href.endsWith(`#${sectionId}`);
 
-  if (navLinks.length === 0) return;
+        link.classList.toggle(o.activeClass, isActive);
+      });
+    };
 
-  const setActive = (sectionId: string | null): void => {
-    navLinks.forEach((link) => {
-      const href = link.getAttribute('href') ?? '';
-      const isActive = sectionId !== null && href.endsWith(`#${sectionId}`);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        });
+      },
+      { threshold: o.threshold, rootMargin: o.rootMargin }
+    );
 
-      link.classList.toggle('nav__link--active', isActive);
+    sections.forEach((section) => observer.observe(section));
+    ctx.onDestroy(() => observer.disconnect());
+  }
+);
+
+interface JourneyProgressOptions {
+  stepSelector: string;
+  numberSelector: string;
+  activeClass: string;
+  threshold: number;
+  rootMargin: string;
+}
+
+/**
+ * Journey progress component
+ * Attach to .journey or parent container — animates step numbers on scroll
+ */
+export const journeyProgress = defineComponent<JourneyProgressOptions>(
+  {
+    stepSelector: '.journey__step',
+    numberSelector: '.journey__step-number',
+    activeClass: 'journey__step--active',
+    threshold: 0.3,
+    rootMargin: '0px 0px -20% 0px',
+  },
+  (ctx) => {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (prefersReducedMotion) return;
+
+    const { options: o } = ctx;
+    const steps = ctx.el.querySelectorAll<HTMLElement>(o.stepSelector);
+
+    if (steps.length === 0) return;
+
+    steps.forEach((step) => {
+      const number = step.querySelector<HTMLElement>(o.numberSelector);
+
+      if (number) {
+        number.style.transition = `opacity 0.6s ${ANIMATION_EASING}, transform 0.6s ${ANIMATION_EASING}`;
+        number.style.opacity = '0.08';
+        number.style.transform = 'scale(0.95)';
+      }
     });
-  };
 
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActive(entry.target.id);
-        }
-      });
-    },
-    { threshold: 0.3, rootMargin: '-20% 0px -40% 0px' }
-  );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
 
-  sections.forEach((section) => sectionObserver.observe(section));
-}
+          const number = entry.target.querySelector<HTMLElement>(
+            o.numberSelector
+          );
 
-/* ============================================
-   useJourneyProgress
-   Animates journey step numbers as user scrolls
-   ============================================ */
+          if (number) {
+            number.style.opacity = '0.25';
+            number.style.transform = 'scale(1)';
+          }
 
-export function useJourneyProgress(): void {
-  const prefersReducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)'
-  ).matches;
+          entry.target.classList.add(o.activeClass);
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: o.threshold, rootMargin: o.rootMargin }
+    );
 
-  if (prefersReducedMotion) return;
-
-  const steps = document.querySelectorAll<HTMLElement>('.journey__step');
-
-  if (steps.length === 0) return;
-
-  // Set initial state - step numbers start dimmed
-  steps.forEach((step) => {
-    const number = step.querySelector<HTMLElement>('.journey__step-number');
-
-    if (number) {
-      number.style.transition =
-        'opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1)';
-      number.style.opacity = '0.08';
-      number.style.transform = 'scale(0.95)';
-    }
-  });
-
-  const journeyObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-
-        const number = entry.target.querySelector<HTMLElement>(
-          '.journey__step-number'
-        );
-
-        if (number) {
-          number.style.opacity = '0.25';
-          number.style.transform = 'scale(1)';
-        }
-
-        entry.target.classList.add('journey__step--active');
-        journeyObserver.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.3, rootMargin: '0px 0px -20% 0px' }
-  );
-
-  steps.forEach((step) => journeyObserver.observe(step));
-}
+    steps.forEach((step) => observer.observe(step));
+    ctx.onDestroy(() => observer.disconnect());
+  }
+);

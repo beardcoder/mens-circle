@@ -1,11 +1,13 @@
 /**
- * Form Composables - Modern Functional Pattern
- * Handles all form interactions with validation and submission
+ * Form Components
+ * Newsletter, registration, and testimonial forms using stitch-js
  */
 
+import { defineComponent } from '@stitch';
 import { validateEmail } from '@/utils/helpers';
-import { useForm } from '@/composables';
+import { showToast } from '@/utils/toast';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
+import type { ApiResponse } from '@/types';
 
 type FormFieldElement =
   | HTMLInputElement
@@ -23,9 +25,7 @@ function getTrackableFields(form: HTMLFormElement): FormFieldElement[] {
   return Array.from(
     form.querySelectorAll<FormFieldElement>('input, textarea, select')
   ).filter((field) => {
-    if (!field.name || field.disabled) {
-      return false;
-    }
+    if (!field.name || field.disabled) return false;
 
     if (field instanceof HTMLInputElement && field.type === 'hidden') {
       return false;
@@ -52,9 +52,7 @@ function isFieldFilled(field: FormFieldElement): boolean {
 }
 
 function isRequiredFieldComplete(field: FormFieldElement): boolean {
-  if (!field.required) {
-    return true;
-  }
+  if (!field.required) return true;
 
   if (field instanceof HTMLInputElement) {
     if (field.type === 'checkbox' || field.type === 'radio') {
@@ -88,11 +86,12 @@ function getFormCompletionState(form: HTMLFormElement): FormCompletionState {
   };
 }
 
-function useFilledFormAbandonTracking(
+function setupAbandonTracking(
   form: HTMLFormElement,
   eventName: string,
-  formType: string
-): void {
+  formType: string,
+  onDestroy: (fn: () => void) => void
+): { markSubmitted: () => void } {
   let hasSubmitted = false;
   let hasTracked = false;
   let firstInteractionAt: number | null = null;
@@ -108,9 +107,7 @@ function useFilledFormAbandonTracking(
   };
 
   const trackAbandonIfFilled = (): void => {
-    if (hasTracked || hasSubmitted || firstInteractionAt === null) {
-      return;
-    }
+    if (hasTracked || hasSubmitted || firstInteractionAt === null) return;
 
     const completion = getFormCompletionState(form);
 
@@ -145,79 +142,143 @@ function useFilledFormAbandonTracking(
   form.addEventListener('input', markInteraction);
   form.addEventListener('change', markInteraction);
   form.addEventListener('submit', markSubmitted, { capture: true });
-
   window.addEventListener('pagehide', trackAbandonIfFilled, { capture: true });
   window.addEventListener('beforeunload', trackAbandonIfFilled, {
     capture: true,
   });
+
+  onDestroy(() => {
+    form.removeEventListener('input', markInteraction);
+    form.removeEventListener('change', markInteraction);
+    form.removeEventListener('submit', markSubmitted);
+    window.removeEventListener('pagehide', trackAbandonIfFilled);
+    window.removeEventListener('beforeunload', trackAbandonIfFilled);
+  });
+
+  return { markSubmitted };
 }
 
+async function submitFormRequest(
+  form: HTMLFormElement,
+  url: string,
+  body: Record<string, unknown>,
+  onSuccess?: () => void,
+  onError?: (error: Error) => void
+): Promise<void> {
+  const submitButton = form.querySelector<HTMLButtonElement>('[type="submit"]');
+  const originalButtonText = submitButton?.textContent ?? '';
+
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.textContent = 'Wird gesendet...';
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': window.routes.csrfToken,
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data: ApiResponse = await response.json();
+
+    if (data.success) {
+      form.reset();
+      showToast('success', data.message);
+      onSuccess?.();
+    } else {
+      showToast('error', data.message);
+      onError?.(new Error(data.message));
+    }
+  } catch {
+    showToast('error', 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.');
+    onError?.(new Error('Network error'));
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = originalButtonText;
+    }
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface NewsletterFormOptions {}
+
 /**
- * Newsletter form composable
- * Handles newsletter subscription with validation
+ * Newsletter form component
+ * Attach to #newsletterForm
  */
-export function useNewsletterForm(): void {
-  const form = document.getElementById('newsletterForm') as HTMLFormElement;
+export const newsletterForm = defineComponent<NewsletterFormOptions>(
+  {},
+  (ctx) => {
+    const form = ctx.el as HTMLFormElement;
 
-  if (!form) return;
+    if (form.tagName !== 'FORM') return;
 
-  useFilledFormAbandonTracking(
-    form,
-    TRACKING_EVENTS.NEWSLETTER_ABANDON_FILLED,
-    'newsletter'
-  );
+    setupAbandonTracking(
+      form,
+      TRACKING_EVENTS.NEWSLETTER_ABANDON_FILLED,
+      'newsletter',
+      (fn) => ctx.onDestroy(fn)
+    );
 
-  useForm(form, {
-    onSubmit: async (formData) => {
+    ctx.on('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
       const email = formData.get('email') as string;
 
       if (!validateEmail(email)) {
-        throw new Error('Bitte gib eine gültige E-Mail-Adresse ein.');
+        showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
+
+        return;
       }
 
-      // Track newsletter submission
       trackEvent(TRACKING_EVENTS.NEWSLETTER_SUBMIT);
 
-      return fetch(window.routes.newsletter, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': window.routes.csrfToken,
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-    },
-    onSuccess: () => {
-      // Track successful newsletter subscription
-      trackEvent(TRACKING_EVENTS.NEWSLETTER_SUCCESS);
-    },
-    onError: (error) => {
-      // Track newsletter subscription error
-      trackEvent(TRACKING_EVENTS.NEWSLETTER_ERROR, {
-        error: error.message,
-      });
-    },
-  });
-}
+      submitFormRequest(
+        form,
+        window.routes.newsletter,
+        { email },
+        () => trackEvent(TRACKING_EVENTS.NEWSLETTER_SUCCESS),
+        (error) =>
+          trackEvent(TRACKING_EVENTS.NEWSLETTER_ERROR, {
+            error: error.message,
+          })
+      );
+    });
+  }
+);
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface RegistrationFormOptions {}
 
 /**
- * Event registration form composable
- * Handles event registration with validation
+ * Event registration form component
+ * Attach to #registrationForm
  */
-export function useRegistrationForm(): void {
-  const form = document.getElementById('registrationForm') as HTMLFormElement;
+export const registrationForm = defineComponent<RegistrationFormOptions>(
+  {},
+  (ctx) => {
+    const form = ctx.el as HTMLFormElement;
 
-  if (!form) return;
+    if (form.tagName !== 'FORM') return;
 
-  useFilledFormAbandonTracking(
-    form,
-    TRACKING_EVENTS.EVENT_REGISTRATION_ABANDON_FILLED,
-    'event-registration'
-  );
+    setupAbandonTracking(
+      form,
+      TRACKING_EVENTS.EVENT_REGISTRATION_ABANDON_FILLED,
+      'event-registration',
+      (fn) => ctx.onDestroy(fn)
+    );
 
-  useForm(form, {
-    onSubmit: async (formData) => {
+    ctx.on('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
       const firstName = (formData.get('first_name') as string)?.trim();
       const lastName = (formData.get('last_name') as string)?.trim();
       const email = (formData.get('email') as string)?.trim();
@@ -229,81 +290,90 @@ export function useRegistrationForm(): void {
       const eventId = formData.get('event_id') as string;
 
       if (!firstName || !lastName) {
-        throw new Error('Bitte fülle alle Pflichtfelder aus.');
+        showToast('error', 'Bitte fülle alle Pflichtfelder aus.');
+
+        return;
       }
 
       if (!validateEmail(email)) {
-        throw new Error('Bitte gib eine gültige E-Mail-Adresse ein.');
+        showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
+
+        return;
       }
 
       if (!privacy) {
-        throw new Error('Bitte bestätige die Datenschutzerklärung.');
+        showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
+
+        return;
       }
 
-      // Track event registration submission
       trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUBMIT, {
         event_id: eventId,
         has_phone: phoneNumber ? 'yes' : 'no',
       });
 
-      return fetch(window.routes.eventRegister, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': window.routes.csrfToken,
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
+      submitFormRequest(
+        form,
+        window.routes.eventRegister,
+        {
           event_id: eventId,
           first_name: firstName,
           last_name: lastName,
           email,
           phone_number: phoneNumber,
           privacy: privacy ? 1 : 0,
-        }),
-      });
-    },
-    onSuccess: () => {
-      // Track successful event registration
-      trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUCCESS);
-    },
-    onError: (error) => {
-      // Track event registration error
-      trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_ERROR, {
-        error: error.message,
-      });
-    },
-  });
-}
-
-/**
- * Testimonial form composable
- * Handles testimonial submission with character counter
- */
-export function useTestimonialForm(): void {
-  const form = document.getElementById('testimonialForm') as HTMLFormElement;
-
-  if (!form) return;
-
-  useFilledFormAbandonTracking(
-    form,
-    TRACKING_EVENTS.TESTIMONIAL_ABANDON_FILLED,
-    'testimonial'
-  );
-
-  const quoteTextarea = form.querySelector<HTMLTextAreaElement>('#quote');
-  const charCount = document.getElementById('charCount');
-
-  if (quoteTextarea && charCount) {
-    quoteTextarea.addEventListener('input', () => {
-      charCount.textContent = String(quoteTextarea.value.length);
+        },
+        () => trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUCCESS),
+        (error) =>
+          trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_ERROR, {
+            error: error.message,
+          })
+      );
     });
   }
+);
 
-  const submitUrl = form.dataset.submitUrl ?? '';
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface TestimonialFormOptions {}
 
-  useForm(form, {
-    onSubmit: async (formData) => {
+/**
+ * Testimonial form component
+ * Attach to #testimonialForm
+ */
+export const testimonialForm = defineComponent<TestimonialFormOptions>(
+  {},
+  (ctx) => {
+    const form = ctx.el as HTMLFormElement;
+
+    if (form.tagName !== 'FORM') return;
+
+    setupAbandonTracking(
+      form,
+      TRACKING_EVENTS.TESTIMONIAL_ABANDON_FILLED,
+      'testimonial',
+      (fn) => ctx.onDestroy(fn)
+    );
+
+    const quoteTextarea = ctx.query<HTMLTextAreaElement>('#quote');
+    const charCount = document.getElementById('charCount');
+
+    if (quoteTextarea && charCount) {
+      const handleInput = (): void => {
+        charCount.textContent = String(quoteTextarea.value.length);
+      };
+
+      quoteTextarea.addEventListener('input', handleInput);
+      ctx.onDestroy(() =>
+        quoteTextarea.removeEventListener('input', handleInput)
+      );
+    }
+
+    const submitUrl = ctx.el.dataset.submitUrl ?? '';
+
+    ctx.on('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
       const quote = (formData.get('quote') as string)?.trim();
       const authorName =
         (formData.get('author_name') as string)?.trim() || null;
@@ -314,55 +384,54 @@ export function useTestimonialForm(): void {
       )?.checked;
 
       if (!quote || quote.length < 10) {
-        throw new Error(
+        showToast(
+          'error',
           'Bitte teile deine Erfahrung mit uns (mindestens 10 Zeichen).'
         );
+
+        return;
       }
 
       if (!validateEmail(email)) {
-        throw new Error('Bitte gib eine gültige E-Mail-Adresse ein.');
+        showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
+
+        return;
       }
 
       if (!privacy) {
-        throw new Error('Bitte bestätige die Datenschutzerklärung.');
+        showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
+
+        return;
       }
 
-      // Track testimonial submission
       trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUBMIT, {
         has_name: authorName ? 'yes' : 'no',
         has_role: role ? 'yes' : 'no',
         char_count: quote.length,
       });
 
-      return fetch(submitUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': window.routes.csrfToken,
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
+      submitFormRequest(
+        form,
+        submitUrl,
+        {
           quote,
           author_name: authorName,
           role,
           email,
           privacy: privacy ? 1 : 0,
-        }),
-      });
-    },
-    onSuccess: () => {
-      if (charCount) {
-        charCount.textContent = '0';
-      }
+        },
+        () => {
+          if (charCount) {
+            charCount.textContent = '0';
+          }
 
-      // Track successful testimonial submission
-      trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUCCESS);
-    },
-    onError: (error) => {
-      // Track testimonial submission error
-      trackEvent(TRACKING_EVENTS.TESTIMONIAL_ERROR, {
-        error: error.message,
-      });
-    },
-  });
-}
+          trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUCCESS);
+        },
+        (error) =>
+          trackEvent(TRACKING_EVENTS.TESTIMONIAL_ERROR, {
+            error: error.message,
+          })
+      );
+    });
+  }
+);

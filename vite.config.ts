@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
+import path from 'node:path';
 
 export default defineConfig({
   plugins: [
@@ -8,6 +9,11 @@ export default defineConfig({
       refresh: true,
     }),
   ],
+  resolve: {
+    alias: {
+      '@stitch': path.resolve(__dirname, 'resources/js/lib/stitch/index.ts'),
+    },
+  },
   server: {
     watch: {
       ignored: ['**/storage/framework/views/**'],
