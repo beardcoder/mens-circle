@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Contracts\DefinesCacheUrls;
 use App\Enums\RegistrationStatus;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\EventFactory;
@@ -38,7 +39,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property bool $isPast
  * @property ?string $fullAddress
  */
-class Event extends Model implements HasMedia
+class Event extends Model implements DefinesCacheUrls, HasMedia
 {
     use ClearsResponseCache;
 
@@ -148,6 +149,14 @@ class Event extends Model implements HasMedia
 
             return implode(', ', $parts);
         });
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getCacheUrls(): array
+    {
+        return [url('/'), url('/event'), route('event.show.slug', $this->slug)];
     }
 
     public function generateICalContent(): string

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Contracts\DefinesCacheUrls;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\PageFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -29,7 +30,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property bool $is_published
  * @property ?Carbon $published_at
  */
-class Page extends Model implements HasMedia
+class Page extends Model implements DefinesCacheUrls, HasMedia
 {
     use ClearsResponseCache;
 
@@ -40,6 +41,14 @@ class Page extends Model implements HasMedia
     use SoftDeletes;
 
     protected $fillable = ['title', 'slug', 'meta', 'is_published', 'published_at'];
+
+    /**
+     * @return array<string>
+     */
+    public function getCacheUrls(): array
+    {
+        return [$this->slug === 'home' ? url('/') : route('page.show', $this->slug)];
+    }
 
     #[Override]
     public function getSlugOptions(): SlugOptions

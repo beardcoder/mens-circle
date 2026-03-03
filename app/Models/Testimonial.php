@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Contracts\DefinesCacheUrls;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\TestimonialFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -23,7 +24,7 @@ use Override;
  * @property ?Carbon $published_at
  * @property int $sort_order
  */
-class Testimonial extends Model
+class Testimonial extends Model implements DefinesCacheUrls
 {
     /** @use HasFactory<TestimonialFactory> */
     use HasFactory;
@@ -31,6 +32,14 @@ class Testimonial extends Model
     use SoftDeletes;
 
     protected $fillable = ['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order'];
+
+    /**
+     * @return array<string>
+     */
+    public function getCacheUrls(): array
+    {
+        return [url('/')];
+    }
 
     #[Override]
     protected function casts(): array
