@@ -1,40 +1,20 @@
 name: Ward Security Scan
-
 on: [push, pull_request]
 
 jobs:
   security-scan:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '1.24'
+
       - name: Install Ward
         run: go install github.com/eljakani/ward@latest
+
       - name: Run Ward
-        run: ward init && ward scan . --output json,sarif
-      - name: Fix SARIF severity values
-        run: |
-          python3 -c "
-          import json
-          severity_map = {'critical': '9.0', 'high': '7.5', 'medium': '5.5', 'low': '2.5'}
-          with open('ward-report.sarif') as f:
-              sarif = json.load(f)
-          for run in sarif.get('runs', []):
-              for rule in run.get('tool', {}).get('driver', {}).get('rules', []):
-                  props = rule.get('properties', {})
-                  sec_sev = props.get('security-severity', '')
-                  if isinstance(sec_sev, str) and sec_sev.lower() in severity_map:
-                      props['security-severity'] = severity_map[sec_sev.lower()]
-          with open('ward-report.sarif', 'w') as f:
-              json.dump(sarif, f)
-          "
+        run: ward init && ward scan . --output json
+
       - name: Upload SARIF
         if: always()
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ward-report.sarif
