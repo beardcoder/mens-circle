@@ -1,50 +1,66 @@
 /**
  * Männerkreis Niederbayern / Straubing - Application Entry Point
- * Modern, performant, and accessible web application
+ * Built with @beardcoder/stitch-js progressive enhancement framework
  */
 
 import './types';
+import { register, autoInit } from '@stitch';
+import { navigation, scrollHeader, scrollToTop } from '@/components/navigation';
 import {
-  useNavigation,
-  useScrollHeader,
-  useScrollToTop,
-} from '@/components/navigation';
-import {
-  useNewsletterForm,
-  useRegistrationForm,
-  useTestimonialForm,
+  newsletterForm,
+  registrationForm,
+  testimonialForm,
 } from '@/components/forms';
-import { useCalendarIntegration } from '@/components/calendar';
+import { calendarIntegration } from '@/components/calendar';
 import {
-  useScrollAnimations,
-  useActiveSection,
-  useJourneyProgress,
+  scrollAnimate,
+  staggerAnimate,
+  activeSection,
+  journeyProgress,
 } from '@/components/scroll-animations';
+import { nativeAccordion } from '@/components/accordion';
 import { initUmamiKit } from '@/utils/umami-kit';
 
-/**
- * Initialize all application features when DOM is ready
- */
-document.addEventListener('DOMContentLoaded', () => {
-  // Navigation and header
-  useNavigation();
-  useScrollHeader();
-  useScrollToTop();
+// Navigation and header
+register('#nav', navigation());
+register('#header', scrollHeader());
+register('#scrollToTop', scrollToTop());
 
-  // Scroll-driven animations and section tracking
-  useScrollAnimations();
-  useActiveSection();
-  useJourneyProgress();
+// Scroll-driven animations (per-element)
+const fadeSelector =
+  '.fade-in, .fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right, .fade-in-scale';
 
-  // Interactive components
-  useNewsletterForm();
-  useRegistrationForm();
-  useTestimonialForm();
-  useCalendarIntegration();
+register(fadeSelector, scrollAnimate());
+register('.stagger-children', staggerAnimate());
 
-  // Analytics tracking
+// Section tracking (on nav element)
+register('#nav', activeSection());
+
+// Journey progress (on section container)
+register('.journey-section', journeyProgress());
+
+// Interactive forms
+register('#newsletterForm', newsletterForm());
+register('#registrationForm', registrationForm());
+register('#testimonialForm', testimonialForm());
+
+// Calendar integration
+register('#addToCalendar', calendarIntegration());
+
+// Accordion (FAQ sections)
+register('.faq-section', nativeAccordion());
+
+// Initialize all registered components
+autoInit();
+
+// Analytics tracking (standalone, not a stitch component)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => initUmamiKit(), {
+    once: true,
+  });
+} else {
   initUmamiKit();
-});
+}
 
 // Performance monitoring (only in development)
 if (import.meta.env.DEV && 'PerformanceObserver' in globalThis) {

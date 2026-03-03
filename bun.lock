@@ -3,6 +3,9 @@
   "configVersion": 1,
   "workspaces": {
     "": {
+      "dependencies": {
+        "@beardcoder/stitch-js": "^1.0.1",
+      },
       "devDependencies": {
         "@eslint/compat": "^2.0.2",
         "@eslint/css": "^0.14.1",
@@ -34,6 +37,8 @@
     "@babel/code-frame": ["@babel/code-frame@7.27.1", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.27.1", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg=="],
 
     "@babel/helper-validator-identifier": ["@babel/helper-validator-identifier@7.28.5", "", {}, "sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q=="],
+
+    "@beardcoder/stitch-js": ["@beardcoder/stitch-js@1.0.1", "", {}, "sha512-VOMjphf5110FQs/eBo931r8nXsFwE1DdqqE5oF3TF9un2VfU3Pts63iguSrypyeBiOhyP38bhCkHQk5VwAb1iA=="],
 
     "@cacheable/memory": ["@cacheable/memory@2.0.7", "", { "dependencies": { "@cacheable/utils": "^2.3.3", "@keyv/bigmap": "^1.3.0", "hookified": "^1.14.0", "keyv": "^5.5.5" } }, "sha512-RbxnxAMf89Tp1dLhXMS7ceft/PGsDl1Ip7T20z5nZ+pwIAsQ1p2izPjVG69oCLv/jfQ7HDPHTWK0c9rcAWXN3A=="],
 

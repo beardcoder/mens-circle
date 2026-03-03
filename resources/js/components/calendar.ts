@@ -1,76 +1,16 @@
 /**
- * Calendar Composables
- * Handles calendar integration for ICS and Google Calendar export
+ * Calendar Integration Component
+ * Handles ICS and Google Calendar export using stitch-js
  */
 
+import { defineComponent } from '@stitch';
 import type { EventData } from '@/types';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 
-export function useCalendarIntegration(): void {
-  const addToCalendarBtn = document.getElementById('addToCalendar');
-  const calendarModal = document.getElementById('calendarModal');
-  const calendarICS = document.getElementById(
-    'calendarICS'
-  ) as HTMLAnchorElement | null;
-  const calendarGoogle = document.getElementById(
-    'calendarGoogle'
-  ) as HTMLAnchorElement | null;
-
-  if (!addToCalendarBtn) return;
-
-  const eventData: EventData = window.eventData ?? {
-    title: 'Männerkreis Niederbayern/ Straubing',
-    description:
-      'Treffen des Männerkreis Niederbayern/ Straubing. Ein Raum für echte Begegnung unter Männern.',
-    location: 'Straubing (genaue Adresse nach Anmeldung)',
-    startDate: '2025-01-24',
-    startTime: '19:00',
-    endDate: '2025-01-24',
-    endTime: '21:30',
-  };
-
-  if (calendarICS) {
-    const icsContent = generateICS(eventData);
-    const blob = new Blob([icsContent], {
-      type: 'text/calendar;charset=utf-8',
-    });
-
-    const icsBlobUrl = URL.createObjectURL(blob);
-
-    calendarICS.href = icsBlobUrl;
-  }
-
-  if (calendarGoogle) {
-    calendarGoogle.href = generateGoogleCalendarUrl(eventData);
-  }
-
-  addToCalendarBtn.addEventListener('click', () => {
-    if (!calendarModal) return;
-
-    trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, {
-      event: eventData.title,
-    });
-
-    calendarModal.classList.add('open');
-  });
-
-  calendarICS?.addEventListener('click', () => {
-    trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
-      event: eventData.title,
-    });
-  });
-
-  calendarGoogle?.addEventListener('click', () => {
-    trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
-      event: eventData.title,
-    });
-  });
-
-  calendarModal?.addEventListener('click', (e) => {
-    if (e.target === calendarModal) {
-      calendarModal.classList.remove('open');
-    }
-  });
+interface CalendarOptions {
+  modalSelector: string;
+  icsSelector: string;
+  googleSelector: string;
 }
 
 function formatICSDate(date: string, time: string): string {
@@ -123,3 +63,100 @@ function generateGoogleCalendarUrl(event: EventData): string {
 
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
+
+/**
+ * Calendar integration component
+ * Attach to #addToCalendar — manages calendar export modal and download links
+ */
+export const calendarIntegration = defineComponent<CalendarOptions>(
+  {
+    modalSelector: '#calendarModal',
+    icsSelector: '#calendarICS',
+    googleSelector: '#calendarGoogle',
+  },
+  (ctx) => {
+    const { options: o } = ctx;
+    const calendarModal = document.querySelector<HTMLElement>(o.modalSelector);
+    const calendarICS = document.querySelector<HTMLAnchorElement>(
+      o.icsSelector
+    );
+    const calendarGoogle = document.querySelector<HTMLAnchorElement>(
+      o.googleSelector
+    );
+
+    const eventData: EventData = window.eventData ?? {
+      title: 'Männerkreis Niederbayern/ Straubing',
+      description:
+        'Treffen des Männerkreis Niederbayern/ Straubing. Ein Raum für echte Begegnung unter Männern.',
+      location: 'Straubing (genaue Adresse nach Anmeldung)',
+      startDate: '2025-01-24',
+      startTime: '19:00',
+      endDate: '2025-01-24',
+      endTime: '21:30',
+    };
+
+    if (calendarICS) {
+      const icsContent = generateICS(eventData);
+      const blob = new Blob([icsContent], {
+        type: 'text/calendar;charset=utf-8',
+      });
+      const icsBlobUrl = URL.createObjectURL(blob);
+
+      calendarICS.href = icsBlobUrl;
+      ctx.onDestroy(() => URL.revokeObjectURL(icsBlobUrl));
+    }
+
+    if (calendarGoogle) {
+      calendarGoogle.href = generateGoogleCalendarUrl(eventData);
+    }
+
+    ctx.on('click', () => {
+      if (!calendarModal) return;
+
+      trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, {
+        event: eventData.title,
+      });
+
+      calendarModal.classList.add('open');
+    });
+
+    if (calendarICS) {
+      const handleICSClick = (): void => {
+        trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
+          event: eventData.title,
+        });
+      };
+
+      calendarICS.addEventListener('click', handleICSClick);
+      ctx.onDestroy(() =>
+        calendarICS.removeEventListener('click', handleICSClick)
+      );
+    }
+
+    if (calendarGoogle) {
+      const handleGoogleClick = (): void => {
+        trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
+          event: eventData.title,
+        });
+      };
+
+      calendarGoogle.addEventListener('click', handleGoogleClick);
+      ctx.onDestroy(() =>
+        calendarGoogle.removeEventListener('click', handleGoogleClick)
+      );
+    }
+
+    if (calendarModal) {
+      const handleModalClick = (e: MouseEvent): void => {
+        if (e.target === calendarModal) {
+          calendarModal.classList.remove('open');
+        }
+      };
+
+      calendarModal.addEventListener('click', handleModalClick);
+      ctx.onDestroy(() =>
+        calendarModal.removeEventListener('click', handleModalClick)
+      );
+    }
+  }
+);
