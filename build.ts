@@ -20,6 +20,18 @@ const fontSources = [
   'node_modules/@fontsource-variable/playfair-display/files/*-wght-normal.woff2',
 ];
 
+async function copyFontsCss(): Promise<void> {
+  const src = resolve(projectRoot, 'resources/css/base/_fonts.css');
+  const dest = resolve(outdir, 'fonts.css');
+
+  const file = Bun.file(src);
+  if (!(await file.exists())) {
+    throw new Error(`Font CSS source not found: ${src}`);
+  }
+
+  await Bun.write(dest, file);
+}
+
 async function copyFonts(): Promise<void> {
   mkdirSync(fontsDir, { recursive: true });
 
@@ -74,6 +86,7 @@ async function build(): Promise<void> {
       }
     }),
     copyFonts(),
+    copyFontsCss(),
   ]);
 
   const duration = (performance.now() - startTime).toFixed(0);
