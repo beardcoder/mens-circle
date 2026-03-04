@@ -79,6 +79,7 @@
 <link rel="modulepreload" href="/build/app.js?v={{ $assetVersion }}">
 
 <!-- Styles -->
+<link rel="stylesheet" href="/build/fonts.css?v={{ $assetVersion }}">
 <link rel="stylesheet" href="/build/app.css?v={{ $assetVersion }}">
 
 <!-- Analytics -->
