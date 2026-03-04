@@ -2,6 +2,10 @@
     $faviconVersion = substr(md5_file(public_path('favicon.svg')), 0, 8);
 @endphp
 
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MK Admin">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicon-57x57.png') }}?v={{ $faviconVersion }}">
 <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('favicon-60x60.png') }}?v={{ $faviconVersion }}">
 <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('favicon-72x72.png') }}?v={{ $faviconVersion }}">
@@ -19,8 +23,8 @@
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v={{ $faviconVersion }}">
 <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v={{ $faviconVersion }}">
 <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v={{ $faviconVersion }}" />
-<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileColor" content="#f97316">
 <meta name="msapplication-TileImage" content="{{ asset('favicon-144x144.png')  }}">
 <meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}?v={{ $faviconVersion }}">
 <link rel="manifest" href="{{ asset('admin-manifest.json') }}?v={{ $faviconVersion }}">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#f97316">
