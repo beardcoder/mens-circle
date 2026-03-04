@@ -22,5 +22,5 @@
 <meta name="msapplication-TileColor" content="#000000">
 <meta name="msapplication-TileImage" content="{{ asset('favicon-144x144.png')  }}">
 <meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}?v={{ $faviconVersion }}">
-<link rel="manifest" href="{{ asset('manifest.json') }}?v={{ $faviconVersion }}">
+<link rel="manifest" href="{{ asset('admin-manifest.json') }}?v={{ $faviconVersion }}">
 <meta name="theme-color" content="#000000">
