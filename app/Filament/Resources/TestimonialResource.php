@@ -182,6 +182,9 @@ class TestimonialResource extends Resource
      */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
-        return parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
+        /** @var Builder<Testimonial> $query */
+        $query = parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
+
+        return $query;
     }
 }

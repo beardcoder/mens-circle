@@ -1,3 +1,4 @@
+@php $assetVersion = file_exists(public_path('build/app.css')) ? filemtime(public_path('build/app.css')) : 0; @endphp
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
 <head>
