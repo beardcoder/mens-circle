@@ -25,9 +25,14 @@ async function copyFonts(): Promise<void> {
 
   for (const pattern of fontSources) {
     const glob = new Glob(pattern);
+
     for await (const path of glob.scan({ cwd: projectRoot })) {
       const filename = path.split('/').pop()!;
-      await Bun.write(resolve(fontsDir, filename), Bun.file(resolve(projectRoot, path)));
+
+      await Bun.write(
+        resolve(fontsDir, filename),
+        Bun.file(resolve(projectRoot, path))
+      );
     }
   }
 }
@@ -72,6 +77,7 @@ async function build(): Promise<void> {
   ]);
 
   const duration = (performance.now() - startTime).toFixed(0);
+
   console.log(`Build completed in ${duration}ms`);
 }
 
@@ -84,14 +90,18 @@ if (isWatch) {
   console.log('Watching for changes...');
 
   for (const dir of dirs) {
-    watch(resolve(projectRoot, dir), { recursive: true }, async (_event, filename) => {
-      if (!filename) return;
-      console.log(`Changed: ${dir}/${filename}`);
-      try {
-        await build();
-      } catch (error) {
-        console.error('Build error:', error);
+    watch(
+      resolve(projectRoot, dir),
+      { recursive: true },
+      async (_event, filename) => {
+        if (!filename) return;
+        console.log(`Changed: ${dir}/${filename}`);
+        try {
+          await build();
+        } catch (error) {
+          console.error('Build error:', error);
+        }
       }
-    });
+    );
   }
 }
