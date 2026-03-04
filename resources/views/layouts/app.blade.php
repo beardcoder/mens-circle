@@ -252,7 +252,7 @@
     };
 </script>
 
-@vite(['resources/js/app.ts'])
+<script type="module" src="/build/app.js?v={{ $assetVersion }}"></script>
 @stack('scripts')
 </body>
 </html>

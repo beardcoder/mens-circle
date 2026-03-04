@@ -73,7 +73,10 @@
 <meta name="theme-color" content="#000000">
 
 <!-- Styles -->
-@vite(['resources/css/app.css'])
+@php $assetVersion = filemtime(public_path('build/app.css')); @endphp
+<link rel="preload" href="/build/app.css?v={{ $assetVersion }}" as="style">
+<link rel="modulepreload" href="/build/app.js?v={{ $assetVersion }}">
+<link rel="stylesheet" href="/build/app.css?v={{ $assetVersion }}">
 
 <!-- Analytics -->
 @include('components.analytics.umami')
