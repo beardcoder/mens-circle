@@ -72,10 +72,14 @@
 <link rel="manifest" href="{{ asset('manifest.json') }}?v={{ $faviconVersion }}">
 <meta name="theme-color" content="#000000">
 
-<!-- Styles -->
+<!-- Preload critical assets -->
 @php $assetVersion = filemtime(public_path('build/app.css')); @endphp
+<link rel="preload" href="/build/fonts/dm-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/build/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/build/app.css?v={{ $assetVersion }}" as="style">
 <link rel="modulepreload" href="/build/app.js?v={{ $assetVersion }}">
+
+<!-- Styles -->
 <link rel="stylesheet" href="/build/app.css?v={{ $assetVersion }}">
 
 <!-- Analytics -->

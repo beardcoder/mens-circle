@@ -3,21 +3,41 @@
  *
  * Bundles JS and CSS with plain filenames. Cache busting is handled
  * via ?v= query parameters in Blade templates using filemtime().
+ * Font files are copied separately for proper preloading.
  */
-import { rmSync } from 'node:fs';
+import { mkdirSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { Glob } from 'bun';
 
 const projectRoot = import.meta.dir;
 const outdir = resolve(projectRoot, 'public/build');
+const fontsDir = resolve(outdir, 'fonts');
 const isWatch = process.argv.includes('--watch');
 const isDev = process.argv.includes('--dev');
+
+const fontSources = [
+  'node_modules/@fontsource-variable/dm-sans/files/*-wght-normal.woff2',
+  'node_modules/@fontsource-variable/playfair-display/files/*-wght-normal.woff2',
+];
+
+async function copyFonts(): Promise<void> {
+  mkdirSync(fontsDir, { recursive: true });
+
+  for (const pattern of fontSources) {
+    const glob = new Glob(pattern);
+    for await (const path of glob.scan({ cwd: projectRoot })) {
+      const filename = path.split('/').pop()!;
+      await Bun.write(resolve(fontsDir, filename), Bun.file(resolve(projectRoot, path)));
+    }
+  }
+}
 
 async function build(): Promise<void> {
   const startTime = performance.now();
 
   rmSync(outdir, { recursive: true, force: true });
 
-  const [jsResult, cssResult] = await Promise.all([
+  await Promise.all([
     Bun.build({
       entrypoints: [resolve(projectRoot, 'resources/js/app.ts')],
       outdir,
@@ -29,6 +49,11 @@ async function build(): Promise<void> {
         'import.meta.env.DEV': isDev ? 'true' : 'false',
         'import.meta.env.PROD': isDev ? 'false' : 'true',
       },
+    }).then((result) => {
+      if (!result.success) {
+        for (const log of result.logs) console.error(log);
+        process.exit(1);
+      }
     }),
     Bun.build({
       entrypoints: [resolve(projectRoot, 'resources/css/app.css')],
@@ -36,17 +61,15 @@ async function build(): Promise<void> {
       naming: '[name].[ext]',
       minify: !isDev,
       target: 'browser',
-    }),
-  ]);
-
-  for (const result of [jsResult, cssResult]) {
-    if (!result.success) {
-      for (const log of result.logs) {
-        console.error(log);
+      external: ['/build/fonts/*'],
+    }).then((result) => {
+      if (!result.success) {
+        for (const log of result.logs) console.error(log);
+        process.exit(1);
       }
-      process.exit(1);
-    }
-  }
+    }),
+    copyFonts(),
+  ]);
 
   const duration = (performance.now() - startTime).toFixed(0);
   console.log(`Build completed in ${duration}ms`);
