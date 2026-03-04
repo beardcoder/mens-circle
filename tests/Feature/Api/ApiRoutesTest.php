@@ -33,4 +33,3 @@ test('api newsletter subscribe route has api prefix', function (): void {
 test('api testimonial submit route has api prefix', function (): void {
     expect(route('testimonial.submit'))->toContain('/api/');
 });
-
