@@ -8,7 +8,7 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 | ----------- | ------------------------------------------------------------- |
 | Framework   | Laravel 12, PHP 8.5                                           |
 | Admin Panel | Filament v5 (Livewire 4, Alpine.js)                           |
-| Frontend    | Blade templates, vanilla TypeScript, Vite 8                   |
+| Frontend    | Blade templates, vanilla TypeScript, Bun bundler              |
 | Styling     | Custom CSS (OKLCH color system) + Tailwind CSS v4             |
 | Database    | SQLite (local/production), migrations via Eloquent            |
 | Testing     | Pest v4, PHPStan level 9, Rector (PHP 8.5 target)             |
@@ -177,7 +177,7 @@ Custom component-based CSS in `resources/css/` with OKLCH color palette. Files o
 - `sections/` — hero, intro, moderator, journey, testimonials, faq, newsletter, cta, event
 - `utilities/` — layout, animations, visual, view-transitions, print
 
-Tailwind CSS v4 is also available via the Vite plugin for utility classes.
+Tailwind CSS v4 is also available for utility classes.
 
 ### TypeScript
 
@@ -190,7 +190,7 @@ Entry point: `resources/js/app.ts`. Uses composable pattern:
 ### Build
 
 ```bash
-bun run dev    # Development server (HMR on port 5173)
+bun run dev    # Watch mode with rebuilds on changes
 bun run build  # Production build to public/build/
 ```
 
@@ -457,9 +457,9 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
 - When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
 
-## Vite Error
+## Build Error
 
-- If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `bun run build` or ask the user to run `bun run dev` or `composer run dev`.
+- If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, the assets need to be rebuilt. Run `bun run build` or ask the user to run `bun run dev` or `composer run dev`.
 
 === laravel/v12 rules ===
 
