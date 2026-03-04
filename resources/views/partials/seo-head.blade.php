@@ -73,7 +73,6 @@
 <meta name="theme-color" content="#000000">
 
 <!-- Preload critical assets -->
-@php $assetVersion = filemtime(public_path('build/app.css')); @endphp
 <link rel="preload" href="/build/fonts/dm-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/build/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/build/app.css?v={{ $assetVersion }}" as="style">
