@@ -36,6 +36,7 @@ class TestimonialFactory extends Factory
         return [
             'quote' => $faker->randomElement($quotes),
             'author_name' => $faker->boolean(60) ? $faker->firstName() : null,
+            'email' => $faker->safeEmail(),
             'role' => $faker->boolean(70) ? 'Teilnehmer seit ' . $faker->year() : null,
             'is_published' => true,
             'published_at' => now(),
