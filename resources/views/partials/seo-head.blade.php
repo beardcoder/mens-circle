@@ -73,14 +73,16 @@
 <meta name="theme-color" content="#000000">
 
 <!-- Preload critical assets -->
+@stack('preloads')
 <link rel="preload" href="/build/fonts/dm-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/build/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/build/app.css?v={{ $assetVersion }}" as="style">
 <link rel="modulepreload" href="/build/app.js?v={{ $assetVersion }}">
 
 <!-- Styles -->
-<link rel="stylesheet" href="/build/fonts.css?v={{ $assetVersion }}">
 <link rel="stylesheet" href="/build/app.css?v={{ $assetVersion }}">
+<link rel="preload" href="/build/fonts.css?v={{ $assetVersion }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/build/fonts.css?v={{ $assetVersion }}"></noscript>
 
 <!-- Analytics -->
 @include('components.analytics.umami')

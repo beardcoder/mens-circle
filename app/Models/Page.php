@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 use Override;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -68,6 +69,15 @@ class Page extends Model implements DefinesCacheUrls, HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('page_blocks')->useDisk('public');
+    }
+
+    #[Override]
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('webp')
+            ->toWebp()
+            ->quality(85)
+            ->performOnCollections('page_blocks');
     }
 
     #[Override]
