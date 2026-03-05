@@ -12,15 +12,27 @@
     }
 @endphp
 
+@if($media)
+    @php
+        $preloadUrl = $media->hasGeneratedConversion('webp') ? $media->getUrl('webp') : $media->getUrl();
+        $preloadType = $media->hasGeneratedConversion('webp') ? 'image/webp' : $media->mime_type;
+    @endphp
+    @push('preloads')
+        <link rel="preload" as="image" href="{{ $preloadUrl }}" type="{{ $preloadType }}" fetchpriority="high">
+    @endpush
+@endif
+
 <section class="hero" role="banner">
     <div class="hero__bg">
         @if($media)
-            {{ $media->img()->attributes([
-                'class' => 'hero__bg-image',
-                'loading' => 'eager',
-                'fetchpriority' => 'high',
-                'aria-hidden' => 'true',
-            ]) }}
+            <x-picture
+                :media="$media"
+                class="hero__bg-image"
+                loading="eager"
+                fetchpriority="high"
+                aria-hidden="true"
+                decoding="sync"
+            />
         @endif
     </div>
 

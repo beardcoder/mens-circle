@@ -19,6 +19,7 @@ use Illuminate\Support\Carbon;
 use Override;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -77,6 +78,15 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('event_image')->singleFile()->useDisk('public');
+    }
+
+    #[Override]
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('webp')
+            ->toWebp()
+            ->quality(85)
+            ->performOnCollections('event_image');
     }
 
     /**

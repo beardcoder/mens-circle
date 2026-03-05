@@ -69,16 +69,27 @@
 
 @section('content')
     <!-- Event Hero -->
+    @if($eventImage)
+        @php
+            $preloadUrl = $eventImage->hasGeneratedConversion('webp') ? $eventImage->getUrl('webp') : $eventImage->getUrl();
+            $preloadType = $eventImage->hasGeneratedConversion('webp') ? 'image/webp' : $eventImage->mime_type;
+        @endphp
+        @push('preloads')
+            <link rel="preload" as="image" href="{{ $preloadUrl }}" type="{{ $preloadType }}" fetchpriority="high">
+        @endpush
+    @endif
     <section class="hero event-hero">
         <div class="hero__bg">
             @if($eventImage)
-                {{ $eventImage->img()->attributes([
-                    'class' => 'hero__bg-image',
-                    'loading' => 'eager',
-                    'fetchpriority' => 'high',
-                    'aria-hidden' => 'true',
-                    'alt' => $event->title,
-                ]) }}
+                <x-picture
+                    :media="$eventImage"
+                    :alt="$event->title"
+                    class="hero__bg-image"
+                    loading="eager"
+                    fetchpriority="high"
+                    aria-hidden="true"
+                    decoding="sync"
+                />
             @endif
         </div>
         <div class="hero__circles" aria-hidden="true">
