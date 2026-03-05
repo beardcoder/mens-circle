@@ -17,8 +17,8 @@ use Override;
 
 /**
  * @property string $quote
- * @property string $author_name
- * @property string $email
+ * @property ?string $author_name
+ * @property ?string $email
  * @property ?string $role
  * @property bool $is_published
  * @property ?Carbon $published_at
