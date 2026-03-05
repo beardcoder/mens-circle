@@ -344,8 +344,13 @@
     var(--color-terracotta-light)
   );
   transform-origin: left;
-  animation: scroll-progress-fill auto linear;
-  animation-timeline: scroll(root);
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: scroll-progress-fill auto linear;
+    animation-timeline: scroll(root);
+  }
 }
 
 @keyframes scroll-progress-fill {
