@@ -301,7 +301,7 @@
     };
   </script>
 
-  <script src="{{ asset('build/app.js') }}?v={{ filemtime(public_path('build/app.js')) }}" defer></script>
+  @vite(['resources/js/app.ts'])
   @stack ('scripts')
 </body>
 </html>

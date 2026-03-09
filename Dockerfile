@@ -3,17 +3,17 @@
 ARG PHP_IMAGE=serversideup/php:8.5-frankenphp
 
 # ----------------------------
-# 1) Frontend build with Bun
+# 1) Frontend build (Vite) with Bun
 # ----------------------------
 FROM oven/bun:1-slim AS assets
 WORKDIR /app
 
-COPY package.json bun.lock* tsconfig.json ./
+COPY package.json bun.lock* ./
 RUN --mount=type=cache,target=/root/.bun/install/cache \
     bun install --frozen-lockfile
 
 COPY resources/ resources/
-COPY build.ts ./
+COPY vite.config.ts ./
 COPY public/ public/
 RUN bun run build
 

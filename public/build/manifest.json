@@ -1,0 +1,41 @@
+{
+  "node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-ext-wght-normal.woff2": {
+    "file": "assets/dm-sans-latin-ext-wght-normal-BOFOeGcA.woff2",
+    "src": "node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2": {
+    "file": "assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2",
+    "src": "node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/playfair-display/files/playfair-display-cyrillic-wght-normal.woff2": {
+    "file": "assets/playfair-display-cyrillic-wght-normal-5WvUvBgz.woff2",
+    "src": "node_modules/@fontsource-variable/playfair-display/files/playfair-display-cyrillic-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-ext-wght-normal.woff2": {
+    "file": "assets/playfair-display-latin-ext-wght-normal-CT1r92Rl.woff2",
+    "src": "node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2": {
+    "file": "assets/playfair-display-latin-wght-normal-BOwq7MWX.woff2",
+    "src": "node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/playfair-display/files/playfair-display-vietnamese-wght-normal.woff2": {
+    "file": "assets/playfair-display-vietnamese-wght-normal-Cabi7G8-.woff2",
+    "src": "node_modules/@fontsource-variable/playfair-display/files/playfair-display-vietnamese-wght-normal.woff2"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-Zzi1LUAM.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.ts": {
+    "file": "assets/app-Ca54n4tt.js",
+    "name": "app",
+    "src": "resources/js/app.ts",
+    "isEntry": true
+  }
+}

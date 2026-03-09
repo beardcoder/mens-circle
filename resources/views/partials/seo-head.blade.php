@@ -194,8 +194,7 @@
 <meta name="theme-color" content="#000000" />
 
 <!-- Styles -->
-<link rel="stylesheet" href="{{ asset('build/fonts.css') }}?v={{ filemtime(public_path('build/fonts.css')) }}" />
-<link rel="stylesheet" href="{{ asset('build/app.css') }}?v={{ filemtime(public_path('build/app.css')) }}" />
+@vite(['resources/css/app.css'])
 
 <!-- Analytics -->
 @include ('components.analytics.umami')
