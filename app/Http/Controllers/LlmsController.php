@@ -310,10 +310,15 @@ final class LlmsController
         $lines[] = '';
 
         foreach ($faqBlocks as $faq) {
-            if (!isset($faq['items']) || !\is_array($faq['items']) || $faq['items'] === []) {
+            if (!isset($faq['items'])) {
                 continue;
             }
-
+            if (!\is_array($faq['items'])) {
+                continue;
+            }
+            if ($faq['items'] === []) {
+                continue;
+            }
             if (isset($faq['title']) && \is_string($faq['title']) && $faq['title'] !== '') {
                 $lines[] = '### ' . $this->convertHtmlToMarkdown($faq['title']);
                 $lines[] = '';
@@ -325,13 +330,24 @@ final class LlmsController
             }
 
             foreach ($faq['items'] as $item) {
-                if (!\is_array($item)
-                    || !isset($item['question'], $item['answer'])
-                    || !\is_string($item['question']) || $item['question'] === ''
-                    || !\is_string($item['answer']) || $item['answer'] === '') {
+                if (!\is_array($item)) {
                     continue;
                 }
-
+                if (!isset($item['question'], $item['answer'])) {
+                    continue;
+                }
+                if (!\is_string($item['question'])) {
+                    continue;
+                }
+                if ($item['question'] === '') {
+                    continue;
+                }
+                if (!\is_string($item['answer'])) {
+                    continue;
+                }
+                if ($item['answer'] === '') {
+                    continue;
+                }
                 $lines[] = "**Q: {$item['question']}**";
                 $lines[] = '';
                 $lines[] = '**A:** ' . $this->convertHtmlToMarkdown($item['answer']);
@@ -505,10 +521,18 @@ final class LlmsController
 
                 if (isset($data['values']) && \is_array($data['values']) && $data['values'] !== []) {
                     foreach ($data['values'] as $value) {
-                        if (!\is_array($value) || !isset($value['title']) || !\is_string($value['title']) || $value['title'] === '') {
+                        if (!\is_array($value)) {
                             continue;
                         }
-
+                        if (!isset($value['title'])) {
+                            continue;
+                        }
+                        if (!\is_string($value['title'])) {
+                            continue;
+                        }
+                        if ($value['title'] === '') {
+                            continue;
+                        }
                         $prefix = $this->getListPrefix($value['number'] ?? null);
                         $lines[] = "{$prefix}**{$value['title']}**";
                         if (isset($value['description']) && \is_string($value['description']) && $value['description'] !== '') {
@@ -547,10 +571,18 @@ final class LlmsController
                 $items = $data['items'] ?? $data['steps'] ?? [];
                 if (\is_array($items) && $items !== []) {
                     foreach ($items as $item) {
-                        if (!\is_array($item) || !isset($item['title']) || !\is_string($item['title']) || $item['title'] === '') {
+                        if (!\is_array($item)) {
                             continue;
                         }
-
+                        if (!isset($item['title'])) {
+                            continue;
+                        }
+                        if (!\is_string($item['title'])) {
+                            continue;
+                        }
+                        if ($item['title'] === '') {
+                            continue;
+                        }
                         $prefix = $this->getListPrefix($item['number'] ?? null);
                         $lines[] = "{$prefix}**{$item['title']}**";
 

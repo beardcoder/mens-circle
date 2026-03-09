@@ -12,6 +12,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        if (Schema::hasColumn('testimonials', 'email')) {
+            return;
+        }
+
         Schema::table('testimonials', function (Blueprint $table): void {
             $table->string('email')->nullable()->after('author_name');
         });

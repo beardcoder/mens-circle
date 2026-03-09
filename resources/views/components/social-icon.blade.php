@@ -1,4 +1,4 @@
-@props(['type' => null, 'url' => '#', 'label' => '', 'variant' => 'icon'])
+@props (['type' => null, 'url' => '#', 'label' => '', 'variant' => 'icon'])
 
 @php
 use App\Enums\SocialLinkType;
@@ -29,18 +29,18 @@ $iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
 @endphp
 
 <a
-    href="{{ $href }}"
-    title="{{ $title }}"
-    target="{{ $isInternal ? '_self' : '_blank' }}"
-    rel="{{ $isInternal ? '' : 'noopener noreferrer' }}"
-    data-umami-event="social-click"
-    data-umami-event-platform="{{ $socialType->value }}"
-    {{ $attributes->merge(['class' => $linkClass]) }}
+  href="{{ $href }}"
+  title="{{ $title }}"
+  target="{{ $isInternal ? '_self' : '_blank' }}"
+  rel="{{ $isInternal ? '' : 'noopener noreferrer' }}"
+  data-umami-event="social-click"
+  data-umami-event-platform="{{ $socialType->value }}"
+  {{ $attributes->merge(['class' => $linkClass]) }}
 >
-    <span class="{{ $iconClass }}">{!! $iconSvg !!}</span>
-    @if($isTextVariant)
-        <span class="social-link__label">{{ $title }}</span>
-    @else
-        <span class="sr-only">{{ $title }}</span>
-    @endif
+  <span class="{{ $iconClass }}">{!! $iconSvg !!}</span>
+  @if ($isTextVariant)
+    <span class="social-link__label">{{ $title }}</span>
+  @else
+    <span class="sr-only">{{ $title }}</span>
+  @endif
 </a>

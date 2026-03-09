@@ -283,14 +283,8 @@ class EventResource extends Resource
         ];
     }
 
-    /**
-     * @return Builder<Event>
-     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
-        /** @var Builder<Event> $query */
-        $query = parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
-
-        return $query;
+        return parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
     }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Bun Build Script
  *
@@ -25,6 +26,7 @@ async function copyFontsCss(): Promise<void> {
   const dest = resolve(outdir, 'fonts.css');
 
   const file = Bun.file(src);
+
   if (!(await file.exists())) {
     throw new Error(`Font CSS source not found: ${src}`);
   }

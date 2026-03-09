@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Override;
@@ -18,7 +19,7 @@ use Override;
 /**
  * @property int $participant_id
  * @property string $token
- * @property Carbon $subscribed_at
+ * @property Carbon|CarbonImmutable $subscribed_at
  * @property ?Carbon $confirmed_at
  * @property ?Carbon $unsubscribed_at
  * @property Participant $participant

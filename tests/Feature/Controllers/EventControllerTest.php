@@ -10,6 +10,8 @@ use App\Models\Participant;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Mail;
 
+use function Pest\Laravel\assertDatabaseHas;
+
 test('can view next event page', function (): void {
     $event = Event::factory()->create([
         'event_date' => now()->addDays(7),
@@ -79,7 +81,7 @@ test('can register for event', function (): void {
         'success' => true,
     ]);
 
-    $this->assertDatabaseHas('participants', [
+    assertDatabaseHas('participants', [
         'email' => 'max@example.com',
         'first_name' => 'Max',
         'last_name' => 'Mustermann',
@@ -87,7 +89,7 @@ test('can register for event', function (): void {
 
     $participant = Participant::where('email', 'max@example.com')->first();
 
-    $this->assertDatabaseHas('registrations', [
+    assertDatabaseHas('registrations', [
         'event_id' => $event->id,
         'participant_id' => $participant->id,
         'status' => RegistrationStatus::Registered->value,
@@ -143,7 +145,7 @@ test('registers on waitlist when event is full', function (): void {
 
     $participant = Participant::where('email', 'max@example.com')->first();
 
-    $this->assertDatabaseHas('registrations', [
+    assertDatabaseHas('registrations', [
         'event_id' => $event->id,
         'participant_id' => $participant->id,
         'status' => RegistrationStatus::Waitlist->value,

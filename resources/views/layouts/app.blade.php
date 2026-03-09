@@ -1,259 +1,307 @@
-@php $assetVersion = file_exists(public_path('build/app.css')) ? filemtime(public_path('build/app.css')) : 0; @endphp
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
 <head>
-    @include('partials.seo-head')
+  @include ('partials.seo-head')
 </head>
 <body>
-<!-- Scroll Progress Indicator -->
-<div class="scroll-progress" aria-hidden="true"></div>
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress" aria-hidden="true"></div>
 
-<!-- Skip Link -->
-<a href="#main" class="skip-link">Zum Inhalt springen</a>
+  <!-- Skip Link -->
+  <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
-<!-- Header -->
-<header class="header" id="header">
+  <!-- Header -->
+  <header class="header" id="header">
     <div class="container">
-        <div class="header__inner">
+      <div class="header__inner">
+        <a
+          href="{{ route('home') }}"
+          class="logo"
+          aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite"
+        >
+          <svg
+            class="logo__icon"
+            fill-rule="evenodd"
+            stroke-linejoin="round"
+            stroke-miterlimit="2"
+            clip-rule="evenodd"
+            viewBox="0 0 396 397"
+          >
+            <path
+              fill="currentColor"
+              d="M19.664 171.425s.655-3.856 6.266-3.446c4.634.339 4.265 5.2 4.265 5.2 2.633 39.979 21.063 70.21 21.063 70.21s-36.274-19.308-31.594-71.964M68.22 80.74s-3.914 6.2 2.715 10.79c7.799 5.401 12.497-.26 12.497-.26s22.94-39.58 78.984-54.41c62.286-16.482 128.715 5.265 128.715 5.265S258.531.245 175.288 9.946C102.037 18.483 68.22 80.74 68.22 80.74"
+            />
+            <path
+              fill="currentColor"
+              d="M38.474 97.38q1.968-.257 4.01-.258c17.114 0 31.008 13.895 31.008 31.009s-13.894 31.008-31.008 31.008c-26.309 0-54.461-31.126-18.138-87.76 11.882-18.52 33.8-38.704 52.655-49.5C111.64 2.049 144.285 0 144.285 0S72.508 23.758 38.475 97.379M251.649 350.072s-3.667 1.36-6.117-3.703c-2.023-4.183 2.371-6.294 2.371-6.294 33.306-22.27 50.271-53.345 50.271-53.345s1.417 41.068-46.525 63.342M148.832 353.369s7.327.29 7.988-7.747c.778-9.454-6.474-10.693-6.474-10.693s-45.748-.076-86.614-41.197C18.316 248.032 3.935 179.63 3.935 179.63s-19.97 49.173 30.054 116.413c44.02 59.168 114.843 57.327 114.843 57.327"
+            />
+            <path
+              fill="currentColor"
+              d="M178.118 370.81a31 31 0 0 1-2.227-3.343c-8.558-14.822-3.471-33.802 11.35-42.359s33.801-3.471 42.358 11.35c13.155 22.784.275 62.728-66.934 59.588-21.979-1.03-50.418-9.92-69.196-20.85-34.491-20.082-52.588-47.33-52.588-47.33s56.463 50.281 137.237 42.945M294.606 59.948s3.011 2.495-.149 7.15c-2.61 3.843-6.637 1.092-6.637 1.092-35.938-17.708-71.333-16.863-71.333-16.863s34.858-21.76 78.119 8.62M348.86 147.345s-3.414-6.49-10.704-3.044c-8.576 4.053-6.023 10.952-6.023 10.952s22.808 39.658 7.63 95.608c-16.87 62.183-68.919 108.838-68.919 108.838s52.57-7.292 85.79-84.234c29.232-67.706-7.775-128.12-7.775-128.12"
+            />
+            <path
+              fill="currentColor"
+              d="M349.324 113.259a31 31 0 0 1-1.782 3.6c-8.557 14.823-27.537 19.908-42.358 11.35-14.822-8.556-19.907-27.536-11.35-42.358 13.154-22.784 54.186-31.601 85.071 28.173 10.098 19.55 16.62 48.623 16.541 70.35-.145 39.912-14.694 69.209-14.694 69.209s15.313-74.04-31.428-140.324"
+            />
+          </svg>
+
+          <span class="logo__text">Männerkreis</span>
+        </a>
+
+        <nav class="nav" id="nav">
+          <a
+            href="{{ route('home') }}#ueber"
+            class="nav__link"
+            data-umami-event="nav-click"
+            data-umami-event-target="ueber"
+            >Über</a
+          >
+          <a
+            href="{{ route('home') }}#reise"
+            class="nav__link"
+            data-umami-event="nav-click"
+            data-umami-event-target="reise"
+            >Die Reise</a
+          >
+          <a
+            href="{{ route('home') }}#faq"
+            class="nav__link"
+            data-umami-event="nav-click"
+            data-umami-event-target="faq"
+            >Fragen</a
+          >
+          @if ($hasNextEvent)
             <a
-                href="{{ route('home') }}"
-                class="logo"
-                aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite"
+              href="{{ $nextEventUrl }}"
+              class="btn btn--primary btn--large nav__cta"
+              data-umami-event="cta-click"
+              data-umami-event-location="header"
+              data-umami-event-action="go-to-event"
+              >Nächster Termin</a
             >
-                <svg
-                    class="logo__icon"
-                    fill-rule="evenodd"
-                    stroke-linejoin="round"
-                    stroke-miterlimit="2"
-                    clip-rule="evenodd"
-                    viewBox="0 0 396 397"
-                >
-                    <path
-                        fill="currentColor"
-                        d="M19.664 171.425s.655-3.856 6.266-3.446c4.634.339 4.265 5.2 4.265 5.2 2.633 39.979 21.063 70.21 21.063 70.21s-36.274-19.308-31.594-71.964M68.22 80.74s-3.914 6.2 2.715 10.79c7.799 5.401 12.497-.26 12.497-.26s22.94-39.58 78.984-54.41c62.286-16.482 128.715 5.265 128.715 5.265S258.531.245 175.288 9.946C102.037 18.483 68.22 80.74 68.22 80.74"
-                    />
-                    <path
-                        fill="currentColor"
-                        d="M38.474 97.38q1.968-.257 4.01-.258c17.114 0 31.008 13.895 31.008 31.009s-13.894 31.008-31.008 31.008c-26.309 0-54.461-31.126-18.138-87.76 11.882-18.52 33.8-38.704 52.655-49.5C111.64 2.049 144.285 0 144.285 0S72.508 23.758 38.475 97.379M251.649 350.072s-3.667 1.36-6.117-3.703c-2.023-4.183 2.371-6.294 2.371-6.294 33.306-22.27 50.271-53.345 50.271-53.345s1.417 41.068-46.525 63.342M148.832 353.369s7.327.29 7.988-7.747c.778-9.454-6.474-10.693-6.474-10.693s-45.748-.076-86.614-41.197C18.316 248.032 3.935 179.63 3.935 179.63s-19.97 49.173 30.054 116.413c44.02 59.168 114.843 57.327 114.843 57.327"
-                    />
-                    <path
-                        fill="currentColor"
-                        d="M178.118 370.81a31 31 0 0 1-2.227-3.343c-8.558-14.822-3.471-33.802 11.35-42.359s33.801-3.471 42.358 11.35c13.155 22.784.275 62.728-66.934 59.588-21.979-1.03-50.418-9.92-69.196-20.85-34.491-20.082-52.588-47.33-52.588-47.33s56.463 50.281 137.237 42.945M294.606 59.948s3.011 2.495-.149 7.15c-2.61 3.843-6.637 1.092-6.637 1.092-35.938-17.708-71.333-16.863-71.333-16.863s34.858-21.76 78.119 8.62M348.86 147.345s-3.414-6.49-10.704-3.044c-8.576 4.053-6.023 10.952-6.023 10.952s22.808 39.658 7.63 95.608c-16.87 62.183-68.919 108.838-68.919 108.838s52.57-7.292 85.79-84.234c29.232-67.706-7.775-128.12-7.775-128.12"
-                    />
-                    <path
-                        fill="currentColor"
-                        d="M349.324 113.259a31 31 0 0 1-1.782 3.6c-8.557 14.823-27.537 19.908-42.358 11.35-14.822-8.556-19.907-27.536-11.35-42.358 13.154-22.784 54.186-31.601 85.071 28.173 10.098 19.55 16.62 48.623 16.541 70.35-.145 39.912-14.694 69.209-14.694 69.209s15.313-74.04-31.428-140.324"
-                    />
-                </svg>
+          @endif
+        </nav>
 
-                <span class="logo__text">Männerkreis</span>
-            </a>
-
-            <nav class="nav" id="nav">
-                <a
-                    href="{{ route('home') }}#ueber"
-                    class="nav__link"
-                    data-umami-event="nav-click"
-                    data-umami-event-target="ueber"
-                >Über</a>
-                <a
-                    href="{{ route('home') }}#reise"
-                    class="nav__link"
-                    data-umami-event="nav-click"
-                    data-umami-event-target="reise"
-                >Die Reise</a>
-                <a
-                    href="{{ route('home') }}#faq"
-                    class="nav__link"
-                    data-umami-event="nav-click"
-                    data-umami-event-target="faq"
-                >Fragen</a>
-                @if($hasNextEvent)
-                    <a
-                        href="{{ $nextEventUrl }}"
-                        class="btn btn--primary btn--large nav__cta"
-                        data-umami-event="cta-click"
-                        data-umami-event-location="header"
-                        data-umami-event-action="go-to-event"
-                    >Nächster Termin</a>
-                @endif
-            </nav>
-
-            <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
-</header>
+  </header>
 
-<!-- Main Content -->
-<main id="main">
-    @yield('content')
-</main>
+  <!-- Main Content -->
+  <main id="main">
+    @yield ('content')
+  </main>
 
-<!-- Footer -->
-<footer class="footer">
+  <!-- Footer -->
+  <footer class="footer">
     <div class="container">
-        <div class="footer__top stagger-children">
-            <div class="footer__brand">
-                <a href="{{ route('home') }}" class="footer__logo">
+      <div class="footer__top stagger-children">
+        <div class="footer__brand">
+          <a href="{{ route('home') }}" class="footer__logo">
+            <svg
+              class="footer__logo-icon"
+              fill-rule="evenodd"
+              stroke-linejoin="round"
+              stroke-miterlimit="2"
+              clip-rule="evenodd"
+              viewBox="0 0 396 397"
+            >
+              <path
+                fill="currentColor"
+                d="M19.664 171.425s.655-3.856 6.266-3.446c4.634.339 4.265 5.2 4.265 5.2 2.633 39.979 21.063 70.21 21.063 70.21s-36.274-19.308-31.594-71.964M68.22 80.74s-3.914 6.2 2.715 10.79c7.799 5.401 12.497-.26 12.497-.26s22.94-39.58 78.984-54.41c62.286-16.482 128.715 5.265 128.715 5.265S258.531.245 175.288 9.946C102.037 18.483 68.22 80.74 68.22 80.74"
+              />
+              <path
+                fill="currentColor"
+                d="M38.474 97.38q1.968-.257 4.01-.258c17.114 0 31.008 13.895 31.008 31.009s-13.894 31.008-31.008 31.008c-26.309 0-54.461-31.126-18.138-87.76 11.882-18.52 33.8-38.704 52.655-49.5C111.64 2.049 144.285 0 144.285 0S72.508 23.758 38.475 97.379M251.649 350.072s-3.667 1.36-6.117-3.703c-2.023-4.183 2.371-6.294 2.371-6.294 33.306-22.27 50.271-53.345 50.271-53.345s1.417 41.068-46.525 63.342M148.832 353.369s7.327.29 7.988-7.747c.778-9.454-6.474-10.693-6.474-10.693s-45.748-.076-86.614-41.197C18.316 248.032 3.935 179.63 3.935 179.63s-19.97 49.173 30.054 116.413c44.02 59.168 114.843 57.327 114.843 57.327"
+              />
+              <path
+                fill="currentColor"
+                d="M178.118 370.81a31 31 0 0 1-2.227-3.343c-8.558-14.822-3.471-33.802 11.35-42.359s33.801-3.471 42.358 11.35c13.155 22.784.275 62.728-66.934 59.588-21.979-1.03-50.418-9.92-69.196-20.85-34.491-20.082-52.588-47.33-52.588-47.33s56.463 50.281 137.237 42.945M294.606 59.948s3.011 2.495-.149 7.15c-2.61 3.843-6.637 1.092-6.637 1.092-35.938-17.708-71.333-16.863-71.333-16.863s34.858-21.76 78.119 8.62M348.86 147.345s-3.414-6.49-10.704-3.044c-8.576 4.053-6.023 10.952-6.023 10.952s22.808 39.658 7.63 95.608c-16.87 62.183-68.919 108.838-68.919 108.838s52.57-7.292 85.79-84.234c29.232-67.706-7.775-128.12-7.775-128.12"
+              />
+              <path
+                fill="currentColor"
+                d="M349.324 113.259a31 31 0 0 1-1.782 3.6c-8.557 14.823-27.537 19.908-42.358 11.35-14.822-8.556-19.907-27.536-11.35-42.358 13.154-22.784 54.186-31.601 85.071 28.173 10.098 19.55 16.62 48.623 16.541 70.35-.145 39.912-14.694 69.209-14.694 69.209s15.313-74.04-31.428-140.324"
+              />
+            </svg>
 
-                    <svg
-                        class="footer__logo-icon" fill-rule="evenodd" stroke-linejoin="round"
-                        stroke-miterlimit="2" clip-rule="evenodd" viewBox="0 0 396 397"
-                    >
-                        <path
-                            fill="currentColor"
-                            d="M19.664 171.425s.655-3.856 6.266-3.446c4.634.339 4.265 5.2 4.265 5.2 2.633 39.979 21.063 70.21 21.063 70.21s-36.274-19.308-31.594-71.964M68.22 80.74s-3.914 6.2 2.715 10.79c7.799 5.401 12.497-.26 12.497-.26s22.94-39.58 78.984-54.41c62.286-16.482 128.715 5.265 128.715 5.265S258.531.245 175.288 9.946C102.037 18.483 68.22 80.74 68.22 80.74"
-                        />
-                        <path
-                            fill="currentColor"
-                            d="M38.474 97.38q1.968-.257 4.01-.258c17.114 0 31.008 13.895 31.008 31.009s-13.894 31.008-31.008 31.008c-26.309 0-54.461-31.126-18.138-87.76 11.882-18.52 33.8-38.704 52.655-49.5C111.64 2.049 144.285 0 144.285 0S72.508 23.758 38.475 97.379M251.649 350.072s-3.667 1.36-6.117-3.703c-2.023-4.183 2.371-6.294 2.371-6.294 33.306-22.27 50.271-53.345 50.271-53.345s1.417 41.068-46.525 63.342M148.832 353.369s7.327.29 7.988-7.747c.778-9.454-6.474-10.693-6.474-10.693s-45.748-.076-86.614-41.197C18.316 248.032 3.935 179.63 3.935 179.63s-19.97 49.173 30.054 116.413c44.02 59.168 114.843 57.327 114.843 57.327"
-                        />
-                        <path
-                            fill="currentColor"
-                            d="M178.118 370.81a31 31 0 0 1-2.227-3.343c-8.558-14.822-3.471-33.802 11.35-42.359s33.801-3.471 42.358 11.35c13.155 22.784.275 62.728-66.934 59.588-21.979-1.03-50.418-9.92-69.196-20.85-34.491-20.082-52.588-47.33-52.588-47.33s56.463 50.281 137.237 42.945M294.606 59.948s3.011 2.495-.149 7.15c-2.61 3.843-6.637 1.092-6.637 1.092-35.938-17.708-71.333-16.863-71.333-16.863s34.858-21.76 78.119 8.62M348.86 147.345s-3.414-6.49-10.704-3.044c-8.576 4.053-6.023 10.952-6.023 10.952s22.808 39.658 7.63 95.608c-16.87 62.183-68.919 108.838-68.919 108.838s52.57-7.292 85.79-84.234c29.232-67.706-7.775-128.12-7.775-128.12"
-                        />
-                        <path
-                            fill="currentColor"
-                            d="M349.324 113.259a31 31 0 0 1-1.782 3.6c-8.557 14.823-27.537 19.908-42.358 11.35-14.822-8.556-19.907-27.536-11.35-42.358 13.154-22.784 54.186-31.601 85.071 28.173 10.098 19.55 16.62 48.623 16.541 70.35-.145 39.912-14.694 69.209-14.694 69.209s15.313-74.04-31.428-140.324"
-                        />
-                    </svg>
-
-                    <span>{{ $settings?->site_name ?? 'Männerkreis' }}</span>
-                </a>
-                <p class="footer__text">
-                    {{ $settings?->site_description ?: 'Ein Raum für echte Begegnung unter Männern. Authentischer Austausch, Gemeinschaft und persönliches Wachstum in Niederbayern.' }}
-                </p>
-                @if(!empty($socialLinks))
-                    <ul class="footer__social-links">
-                        @foreach($socialLinks as $link)
-                            <li>
-                                <x-social-icon
-                                    variant="link"
-                                    :type="$link['type'] ?? null"
-                                    :url="$link['value']"
-                                    :label="$link['label'] ?? ''"
-                                />
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
-
-            <div class="footer__nav">
-                <h3 class="footer__heading">Navigation</h3>
-                <ul class="footer__links">
-                    <li><a
-                            href="{{ route('home') }}#ueber"
-                            data-umami-event="footer-link"
-                            data-umami-event-target="ueber"
-                        >Über uns</a></li>
-                    <li><a
-                            href="{{ route('home') }}#reise"
-                            data-umami-event="footer-link"
-                            data-umami-event-target="reise"
-                        >Die Reise</a></li>
-                    <li><a href="{{ route('home') }}#faq" data-umami-event="footer-link" data-umami-event-target="faq">FAQ</a>
-                    </li>
-                    @if($hasNextEvent)
-                        <li><a
-                                href="{{ $nextEventUrl }}"
-                                data-umami-event="footer-link"
-                                data-umami-event-target="event"
-                            >Nächster Termin</a></li>
-                    @endif
-                </ul>
-            </div>
-
-            <div class="footer__contact">
-                <h3 class="footer__heading">Kontakt</h3>
-                <ul class="footer__links">
-                    @if($settings?->contact_email)
-                        <li><a
-                                href="mailto:{{ $settings->contact_email }}"
-                                data-umami-event="contact-click"
-                                data-umami-event-type="email"
-                            >E-Mail schreiben</a></li>
-                    @endif
-                    @if($settings?->contact_phone)
-                        <li><a
-                                href="tel:{{ str_replace([' ', '-', '(', ')'], '', $settings->contact_phone) }}"
-                                data-umami-event="contact-click"
-                                data-umami-event-type="phone"
-                            >{{ $settings->contact_phone }}</a></li>
-                    @endif
-                    <li><a
-                            href="{{ route('home') }}#newsletter"
-                            data-umami-event="footer-link"
-                            data-umami-event-target="newsletter"
-                        >Newsletter</a></li>
-                </ul>
-            </div>
+            <span>{{ $settings?->site_name ?? 'Männerkreis' }}</span>
+          </a>
+          <p class="footer__text">
+            {{ $settings?->site_description ?: 'Ein Raum für echte Begegnung unter Männern. Authentischer Austausch, Gemeinschaft und persönliches Wachstum in Niederbayern.' }}
+          </p>
+          @if (!empty($socialLinks))
+            <ul class="footer__social-links">
+              @foreach ($socialLinks as $link)
+                <li>
+                  <x-social-icon
+                    variant="link"
+                    :type="$link['type'] ?? null"
+                    :url="$link['value']"
+                    :label="$link['label'] ?? ''"
+                  />
+                </li>
+              @endforeach
+            </ul>
+          @endif
         </div>
 
-        <div class="footer__bottom fade-in">
-            <p class="footer__copyright">
-                {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
-            </p>
-            <div class="footer__legal">
+        <div class="footer__nav">
+          <h3 class="footer__heading">Navigation</h3>
+          <ul class="footer__links">
+            <li>
+              <a
+                href="{{ route('home') }}#ueber"
+                data-umami-event="footer-link"
+                data-umami-event-target="ueber"
+                >Über uns</a
+              >
+            </li>
+            <li>
+              <a
+                href="{{ route('home') }}#reise"
+                data-umami-event="footer-link"
+                data-umami-event-target="reise"
+                >Die Reise</a
+              >
+            </li>
+            <li>
+              <a
+                href="{{ route('home') }}#faq"
+                data-umami-event="footer-link"
+                data-umami-event-target="faq"
+                >FAQ</a
+              >
+            </li>
+            @if ($hasNextEvent)
+              <li>
                 <a
-                    href="{{ route('page.show', 'impressum') }}"
-                    data-umami-event="footer-link"
-                    data-umami-event-target="impressum"
-                >Impressum</a>
-                <a
-                    href="{{ route('page.show', 'datenschutz') }}"
-                    data-umami-event="footer-link"
-                    data-umami-event-target="datenschutz"
-                >Datenschutz</a>
-            </div>
+                  href="{{ $nextEventUrl }}"
+                  data-umami-event="footer-link"
+                  data-umami-event-target="event"
+                  >Nächster Termin</a
+                >
+              </li>
+            @endif
+          </ul>
         </div>
+
+        <div class="footer__contact">
+          <h3 class="footer__heading">Kontakt</h3>
+          <ul class="footer__links">
+            @if ($settings?->contact_email)
+              <li>
+                <a
+                  href="mailto:{{ $settings->contact_email }}"
+                  data-umami-event="contact-click"
+                  data-umami-event-type="email"
+                  >E-Mail schreiben</a
+                >
+              </li>
+            @endif
+            @if ($settings?->contact_phone)
+              <li>
+                <a
+                  href="tel:{{ str_replace([' ', '-', '(', ')'], '', $settings->contact_phone) }}"
+                  data-umami-event="contact-click"
+                  data-umami-event-type="phone"
+                  >{{ $settings->contact_phone }}</a
+                >
+              </li>
+            @endif
+            <li>
+              <a
+                href="{{ route('home') }}#newsletter"
+                data-umami-event="footer-link"
+                data-umami-event-target="newsletter"
+                >Newsletter</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom fade-in">
+        <p class="footer__copyright">
+          {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
+        </p>
+        <div class="footer__legal">
+          <a
+            href="{{ route('page.show', 'impressum') }}"
+            data-umami-event="footer-link"
+            data-umami-event-target="impressum"
+            >Impressum</a
+          >
+          <a
+            href="{{ route('page.show', 'datenschutz') }}"
+            data-umami-event="footer-link"
+            data-umami-event-target="datenschutz"
+            >Datenschutz</a
+          >
+        </div>
+      </div>
     </div>
-</footer>
+  </footer>
 
-<!-- Scroll to Top Button -->
-<button class="scroll-to-top" id="scrollToTop" aria-label="Nach oben scrollen" title="Nach oben">
+  <!-- Scroll to Top Button -->
+  <button
+    class="scroll-to-top"
+    id="scrollToTop"
+    aria-label="Nach oben scrollen"
+    title="Nach oben"
+  >
     <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
     >
-        <polyline points="18 15 12 9 6 15"></polyline>
+      <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
-</button>
+  </button>
 
-<!-- Calendar Modal -->
-<div class="calendar-modal" id="calendarModal">
+  <!-- Calendar Modal -->
+  <div class="calendar-modal" id="calendarModal">
     <div class="calendar-modal__content">
-        <h3>In Kalender speichern</h3>
-        <p>Wähle deinen Kalender:</p>
-        <div class="calendar-modal__buttons">
-            <a href="#" id="calendarGoogle" class="btn btn--secondary" target="_blank" rel="noopener">
-                Google Calendar
-            </a>
-            <a href="#" id="calendarICS" class="btn btn--secondary" download="maennerkreis-straubing.ics">
-                Apple/Outlook (.ics)
-            </a>
-        </div>
+      <h3>In Kalender speichern</h3>
+      <p>Wähle deinen Kalender:</p>
+      <div class="calendar-modal__buttons">
+        <a
+          href="#"
+          id="calendarGoogle"
+          class="btn btn--secondary"
+          target="_blank"
+          rel="noopener"
+        >
+          Google Calendar
+        </a>
+        <a
+          href="#"
+          id="calendarICS"
+          class="btn btn--secondary"
+          download="maennerkreis-straubing.ics"
+        >
+          Apple/Outlook (.ics)
+        </a>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- JavaScript -->
-<script>
+  <!-- JavaScript -->
+  <script>
     window.routes = {
-        newsletter: '{{ route('newsletter.subscribe') }}',
-        eventRegister: '{{ route('event.register') }}',
+      newsletter: '{{ route('newsletter.subscribe') }}',
+      eventRegister: '{{ route('event.register') }}',
     };
-</script>
+  </script>
 
-<script type="module" src="/build/app.js?v={{ $assetVersion }}"></script>
-@stack('scripts')
+  <script src="{{ asset('build/app.js') }}?v={{ filemtime(public_path('build/app.js')) }}" defer></script>
+  @stack ('scripts')
 </body>
 </html>

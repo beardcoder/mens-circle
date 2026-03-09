@@ -84,9 +84,9 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('webp')
-            ->toWebp()
-            ->quality(85)
-            ->performOnCollections('event_image');
+            ->performOnCollections('event_image')
+            ->format('webp')
+            ->quality(85);
     }
 
     /**

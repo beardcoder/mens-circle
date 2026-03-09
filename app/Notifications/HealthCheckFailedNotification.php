@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
-use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -52,7 +52,7 @@ final class HealthCheckFailedNotification extends Notification
 
         try {
             if ($lock->get()) {
-                /** @var Carbon|null $lastNotificationSentAt */
+                /** @var CarbonInterface|null $lastNotificationSentAt */
                 $lastNotificationSentAt = Cache::get($cacheKey);
 
                 if ($lastNotificationSentAt === null || $lastNotificationSentAt->diffInMinutes(now()) >= $throttleMinutes) {

@@ -1,4 +1,4 @@
-@props([
+@props ([
     'block',
     'page' => null,
 ])
@@ -12,77 +12,63 @@
     }
 @endphp
 
-@if($media)
-    @php
-        $preloadUrl = $media->hasGeneratedConversion('webp') ? $media->getUrl('webp') : $media->getUrl();
-        $preloadType = $media->hasGeneratedConversion('webp') ? 'image/webp' : $media->mime_type;
-    @endphp
-    @push('preloads')
-        <link rel="preload" as="image" href="{{ $preloadUrl }}" type="{{ $preloadType }}" fetchpriority="high">
-    @endpush
-@endif
-
 <section class="hero" role="banner">
-    <div class="hero__bg">
-        @if($media)
-            <x-picture
-                :media="$media"
-                class="hero__bg-image"
-                loading="eager"
-                fetchpriority="high"
-                aria-hidden="true"
-                decoding="sync"
-            />
+  <div class="hero__bg">
+    @if ($media)
+      {{ $media->img()->attributes([
+                'class' => 'hero__bg-image',
+                'loading' => 'eager',
+                'fetchpriority' => 'high',
+                'aria-hidden' => 'true',
+            ]) }}
+    @endif
+  </div>
+
+  <div class="hero__circles" aria-hidden="true">
+    <div class="hero__circle hero__circle--1"></div>
+    <div class="hero__circle hero__circle--2"></div>
+    <div class="hero__circle hero__circle--3"></div>
+    <div class="hero__circle hero__circle--4"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero__content">
+      @if (!empty($data['label']))
+        <p class="hero__label">{{ $data['label'] }}</p>
+      @endif
+
+      @if (!empty($data['title']))
+        <h1 class="hero__title">{!! $data['title'] !!}</h1>
+      @endif
+
+      <div class="hero__bottom">
+        @if (!empty($data['description']))
+          <p class="hero__description">{{ $data['description'] }}</p>
         @endif
-    </div>
 
-    <div class="hero__circles" aria-hidden="true">
-        <div class="hero__circle hero__circle--1"></div>
-        <div class="hero__circle hero__circle--2"></div>
-        <div class="hero__circle hero__circle--3"></div>
-        <div class="hero__circle hero__circle--4"></div>
-    </div>
-
-    <div class="container">
-        <div class="hero__content">
-            @if(!empty($data['label']))
-                <p class="hero__label">{{ $data['label'] }}</p>
-            @endif
-
-            @if(!empty($data['title']))
-                <h1 class="hero__title">
-                    {!! $data['title'] !!}
-                </h1>
-            @endif
-
-            <div class="hero__bottom">
-                @if(!empty($data['description']))
-                    <p class="hero__description">
-                        {{ $data['description'] }}
-                    </p>
-                @endif
-
-                @if(!empty($data['button_text']) && !empty($data['button_link']))
-                    @php
+        @if (!empty($data['button_text']) && !empty($data['button_link']))
+          @php
                         $isEventLink = str_contains($data['button_link'], route('event.show')) ||
                                        str_contains($data['button_link'], '/event');
                         $shouldShowButton = !$isEventLink || $hasNextEvent;
                         $resolvedButtonLink = $isEventLink ? $nextEventUrl : $data['button_link'];
                     @endphp
-
-                    @if($shouldShowButton)
-                        <div class="hero__cta fade-in-delay-3">
-                            <a href="{{ $resolvedButtonLink }}" class="btn btn--primary btn--large">
-                                {{ $data['button_text'] }}
-                            </a>
-                            <div class="hero__scroll fade-in-delay-4">
-                                <span>Entdecken</span>
-                                <div class="hero__scroll-line" aria-hidden="true"></div>
-                            </div>
-                        </div>
-                    @endif
-                @endif
+          @if ($shouldShowButton)
+            <div class="hero__cta fade-in-delay-3">
+              <a
+                href="{{ $resolvedButtonLink }}"
+                class="btn btn--primary btn--large"
+              >
+                {{ $data['button_text'] }}
+              </a>
+              <div class="hero__scroll fade-in-delay-4">
+                <span>Entdecken</span>
+                <div class="hero__scroll-line" aria-hidden="true"></div>
+              </div>
             </div>
-        </div>
+          @endif
+        @endif
+      </div>
     </div>
+  </div>
 </section>

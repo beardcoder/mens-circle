@@ -13,6 +13,7 @@ use Filament\Pages\Dashboard;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Enums\Platform;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -35,7 +36,13 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->spa()
+            ->databaseTransactions()
+            ->sidebarCollapsibleOnDesktop()
             ->unsavedChangesAlerts()
+            ->globalSearchFieldSuffix(fn(): string => match (Platform::detect()) {
+                Platform::Mac => '⌘K',
+                default => 'Ctrl+K',
+            })
             ->profile(isSimple: false)
             ->favicon(asset('favicon.svg'))
             ->brandName('Männerkreis Niederbayern')

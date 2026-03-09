@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Models\NewsletterSubscription;
 use App\Models\Participant;
 
+use function Pest\Laravel\assertDatabaseHas;
+
 test('can subscribe to newsletter', function (): void {
     $response = $this->postJson(route('newsletter.subscribe'), [
         'email' => 'newsletter@example.com',
@@ -18,7 +20,7 @@ test('can subscribe to newsletter', function (): void {
     $participant = Participant::where('email', 'newsletter@example.com')->first();
     expect($participant)->not->toBeNull();
 
-    $this->assertDatabaseHas('newsletter_subscriptions', [
+    assertDatabaseHas('newsletter_subscriptions', [
         'participant_id' => $participant->id,
     ]);
 });

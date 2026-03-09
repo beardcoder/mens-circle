@@ -126,15 +126,9 @@ class PageResource extends Resource
         ];
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Builder<Page>
-     */
     public static function getRecordRouteBindingEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        /** @var \Illuminate\Database\Eloquent\Builder<Page> $query */
-        $query = parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
-
-        return $query;
+        return parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
     }
 
     private static function contentBlocksBuilder(): Builder

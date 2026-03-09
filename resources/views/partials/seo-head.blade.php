@@ -1,91 +1,204 @@
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <!-- Primary Meta Tags -->
-<title>@yield('title', $settings?->site_name . ($settings?->site_tagline ? ' – ' . $settings?->site_tagline : ''))</title>
-<meta name="title" content="@yield('meta_title', $settings?->site_name . ($settings?->site_tagline ? ' – ' . $settings?->site_tagline : ''))">
-<meta name="description" content="@yield('meta_description', $settings?->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
-<meta name="keywords" content="@yield('meta_keywords', 'Männerkreis, Niederbayern, Männergruppe, persönliches Wachstum, Gemeinschaft, Männer')">
-<meta name="author" content="Markus Sommer">
-<link rel="canonical" href="@yield('canonical', url()->current())">
+<title>
+  @yield ('title', $settings?->site_name . ($settings?->site_tagline ? ' – ' . $settings?->site_tagline : ''))
+</title>
+<meta
+  name="title"
+  content="@yield('meta_title', $settings?->site_name . ($settings?->site_tagline ? ' – ' . $settings?->site_tagline : ''))"
+/>
+<meta
+  name="description"
+  content="@yield('meta_description', $settings?->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')"
+/>
+<meta
+  name="keywords"
+  content="@yield('meta_keywords', 'Männerkreis, Niederbayern, Männergruppe, persönliches Wachstum, Gemeinschaft, Männer')"
+/>
+<meta name="author" content="Markus Sommer" />
+<link rel="canonical" href="@yield('canonical', url()->current())" />
 
 <!-- Language & Locale -->
-<link rel="alternate" hreflang="de" href="@yield('canonical', url()->current())">
-<link rel="alternate" hreflang="x-default" href="@yield('canonical', url()->current())">
+<link
+  rel="alternate"
+  hreflang="de"
+  href="@yield('canonical', url()->current())"
+/>
+<link
+  rel="alternate"
+  hreflang="x-default"
+  href="@yield('canonical', url()->current())"
+/>
 
 <!-- Theme Color -->
-<meta name="theme-color" content="#3d2817">
-<meta name="color-scheme" content="light">
-<meta name="msapplication-TileColor" content="#3d2817">
+<meta name="theme-color" content="#3d2817" />
+<meta name="color-scheme" content="light" />
+<meta name="msapplication-TileColor" content="#3d2817" />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="@yield('og_type', 'website')">
-<meta property="og:url" content="{{ url()->current() }}">
-<meta property="og:title" content="@yield('og_title', $settings?->site_name)">
-<meta property="og:description" content="@yield('og_description', $settings?->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
-<meta property="og:image" content="@yield('og_image', asset('images/logo-color.png'))">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="@yield('og_image_alt', 'Männerkreis Niederbayern/ Straubing - Gemeinschaft für Männer')">
-<meta property="og:locale" content="de_DE">
-<meta property="og:site_name" content="{{ $settings?->site_name }}">
+<meta property="og:type" content="@yield('og_type', 'website')" />
+<meta property="og:url" content="{{ url()->current() }}" />
+<meta property="og:title" content="@yield('og_title', $settings?->site_name)" />
+<meta
+  property="og:description"
+  content="@yield('og_description', $settings?->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')"
+/>
+<meta
+  property="og:image"
+  content="@yield('og_image', asset('images/logo-color.png'))"
+/>
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta
+  property="og:image:alt"
+  content="@yield('og_image_alt', 'Männerkreis Niederbayern/ Straubing - Gemeinschaft für Männer')"
+/>
+<meta property="og:locale" content="de_DE" />
+<meta property="og:site_name" content="{{ $settings?->site_name }}" />
 
 <!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="{{ url()->current() }}">
-<meta name="twitter:title" content="@yield('twitter_title', $settings?->site_name)">
-<meta name="twitter:description" content="@yield('twitter_description', $settings?->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')">
-<meta name="twitter:image" content="@yield('twitter_image', asset('images/logo-color.png'))">
-<meta name="twitter:image:alt" content="@yield('twitter_image_alt', 'Männerkreis Niederbayern/ Straubing')">
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="{{ url()->current() }}" />
+<meta
+  name="twitter:title"
+  content="@yield('twitter_title', $settings?->site_name)"
+/>
+<meta
+  name="twitter:description"
+  content="@yield('twitter_description', $settings?->site_description ?: 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.')"
+/>
+<meta
+  name="twitter:image"
+  content="@yield('twitter_image', asset('images/logo-color.png'))"
+/>
+<meta
+  name="twitter:image:alt"
+  content="@yield('twitter_image_alt', 'Männerkreis Niederbayern/ Straubing')"
+/>
 
 <!-- Security -->
-<meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 
 <!-- Robots -->
-<meta name="robots" content="@yield('robots', 'index, follow')">
-<meta name="googlebot" content="@yield('robots', 'index, follow')">
+<meta name="robots" content="@yield('robots', 'index, follow')" />
+<meta name="googlebot" content="@yield('robots', 'index, follow')" />
 
 <!-- Favicon -->
 @php
     $faviconVersion = substr(md5_file(public_path('favicon.svg')), 0, 8);
 @endphp
-<link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicon-57x57.png') }}?v={{ $faviconVersion }}">
-<link rel="apple-touch-icon" sizes="60x60" href="{{ asset('favicon-60x60.png') }}?v={{ $faviconVersion }}">
-<link rel="apple-touch-icon" sizes="72x72" href="{{ asset('favicon-72x72.png') }}?v={{ $faviconVersion }}">
-<link rel="apple-touch-icon" sizes="76x76" href="{{ asset('favicon-76x76.png') }}?v={{ $faviconVersion }}">
-<link rel="apple-touch-icon" sizes="114x114" href="{{ asset('favicon-114x114.png') }}?v={{ $faviconVersion }}">
-<link rel="apple-touch-icon" sizes="120x120" href="{{ asset('favicon-120x120.png') }}?v={{ $faviconVersion }}">
-<link rel="apple-touch-icon" sizes="144x144" href="{{ asset('favicon-144x144.png') }}?v={{ $faviconVersion }}">
-<link rel="apple-touch-icon" sizes="152x152" href="{{ asset('favicon-152x152.png') }}?v={{ $faviconVersion }}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon-180x180.png') }}?v={{ $faviconVersion }}">
-<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v={{ $faviconVersion }}">
-<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}?v={{ $faviconVersion }}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v={{ $faviconVersion }}">
-<link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}?v={{ $faviconVersion }}">
-<link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon-192x192.png') }}?v={{ $faviconVersion }}">
-<link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v={{ $faviconVersion }}">
-<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v={{ $faviconVersion }}">
-<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v={{ $faviconVersion }}" />
-<meta name="msapplication-TileColor" content="#000000">
-<meta name="msapplication-TileImage" content="{{ asset('favicon-144x144.png')  }}">
-<meta name="msapplication-config" content="{{ asset('browserconfig.xml') }}?v={{ $faviconVersion }}">
-<link rel="manifest" href="{{ asset('manifest.json') }}?v={{ $faviconVersion }}">
-<meta name="theme-color" content="#000000">
-
-<!-- Preload critical assets -->
-@stack('preloads')
-<link rel="preload" href="/build/fonts/dm-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/build/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/build/app.css?v={{ $assetVersion }}" as="style">
-<link rel="modulepreload" href="/build/app.js?v={{ $assetVersion }}">
+<link
+  rel="apple-touch-icon"
+  sizes="57x57"
+  href="{{ asset('favicon-57x57.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="60x60"
+  href="{{ asset('favicon-60x60.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="72x72"
+  href="{{ asset('favicon-72x72.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="76x76"
+  href="{{ asset('favicon-76x76.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="114x114"
+  href="{{ asset('favicon-114x114.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="120x120"
+  href="{{ asset('favicon-120x120.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="144x144"
+  href="{{ asset('favicon-144x144.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="152x152"
+  href="{{ asset('favicon-152x152.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="{{ asset('favicon-180x180.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="icon"
+  type="image/svg+xml"
+  href="{{ asset('favicon.svg') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="{{ asset('favicon-16x16.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="{{ asset('favicon-32x32.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="96x96"
+  href="{{ asset('favicon-96x96.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="192x192"
+  href="{{ asset('favicon-192x192.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="shortcut icon"
+  type="image/x-icon"
+  href="{{ asset('favicon.ico') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="icon"
+  type="image/x-icon"
+  href="{{ asset('favicon.ico') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="icon"
+  type="image/svg+xml"
+  href="{{ asset('favicon.svg') }}?v={{ $faviconVersion }}"
+/>
+<meta name="msapplication-TileColor" content="#000000" />
+<meta
+  name="msapplication-TileImage"
+  content="{{ asset('favicon-144x144.png')  }}"
+/>
+<meta
+  name="msapplication-config"
+  content="{{ asset('browserconfig.xml') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="manifest"
+  href="{{ asset('manifest.json') }}?v={{ $faviconVersion }}"
+/>
+<meta name="theme-color" content="#000000" />
 
 <!-- Styles -->
-<link rel="stylesheet" href="/build/app.css?v={{ $assetVersion }}">
-<link rel="preload" href="/build/fonts.css?v={{ $assetVersion }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/build/fonts.css?v={{ $assetVersion }}"></noscript>
+<link rel="stylesheet" href="{{ asset('build/fonts.css') }}?v={{ filemtime(public_path('build/fonts.css')) }}" />
+<link rel="stylesheet" href="{{ asset('build/app.css') }}?v={{ filemtime(public_path('build/app.css')) }}" />
 
 <!-- Analytics -->
-@include('components.analytics.umami')
+@include ('components.analytics.umami')
 
 <!-- Structured Data -->
-@stack('structured_data')
+@stack ('structured_data')

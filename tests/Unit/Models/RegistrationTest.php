@@ -93,5 +93,5 @@ test('registration has registered_at timestamp', function (): void {
         'registered_at' => now()->subHours(2),
     ]);
 
-    expect($registration->registered_at)->toBeInstanceOf(\Illuminate\Support\Carbon::class);
+    expect($registration->registered_at)->toBeInstanceOf(\DateTimeInterface::class);
 });
