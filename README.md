@@ -16,9 +16,8 @@ A community platform for organizing men's circle events in Lower Bavaria/Straubi
 | Category    | Technology                                               |
 | ----------- | -------------------------------------------------------- |
 | Framework   | Laravel 12, PHP 8.5                                      |
-| Routing     | Laravel Folio (file-based pages) + traditional controllers |
 | Admin       | Filament v5 (Livewire 4, Alpine.js)                     |
-| Frontend    | Blade, vanilla TypeScript, Vite 7                        |
+| Frontend    | Blade, vanilla TypeScript, Vite 8                        |
 | Styling     | Custom CSS (OKLCH colors, native nesting) + Tailwind v4  |
 | Database    | SQLite                                                   |
 | Deployment  | Docker with FrankenPHP (`serversideup/php:8.5-frankenphp`) |
@@ -105,25 +104,17 @@ app/
 ├── Enums/               # RegistrationStatus, NewsletterStatus, SocialLinkType
 ├── Filament/            # Admin panel (Resources, Pages, Widgets)
 ├── Http/
-│   ├── Controllers/     # API-only controllers (register, subscribe, submit)
+│   ├── Controllers/     # Event, Page, Newsletter, Testimonial, Socialite, Llms
 │   ├── Middleware/       # CompressHtml
 │   └── Requests/        # Form validation with German error messages
 ├── Jobs/                # SendNewsletterJob
 ├── Mail/                # Email templates
 ├── Models/              # Eloquent models with ClearsResponseCache
 ├── Observers/           # RegistrationObserver
-├── Providers/           # App, Folio, AdminPanel
+├── Providers/           # App, AdminPanel
 ├── Services/            # EventNotificationService
 ├── Settings/            # GeneralSettings (Spatie)
 └── Traits/              # HasEnumOptions, ClearsResponseCache
-
-resources/views/pages/   # Folio file-based pages
-├── event/
-│   ├── index.blade.php          # → /event (redirect or no-event)
-│   └── [slug].blade.php         # → /event/{slug}
-├── newsletter/unsubscribe/
-│   └── [token].blade.php        # → /newsletter/unsubscribe/{token}
-└── teile-deine-erfahrung.blade.php  # → /teile-deine-erfahrung
 
 resources/css/           # Component-based CSS (OKLCH palette)
 ├── base/                # Variables, fonts, reset, typography

@@ -1,26 +1,3 @@
-<?php
-
-use App\Models\Event;
-use Illuminate\View\View;
-use function Laravel\Folio\{name, render};
-
-name('event.show.slug');
-
-render(function (View $view, string $slug) {
-    $event = Event::published()
-        ->where('slug', $slug)
-        ->with(['media'])
-        ->withCount('activeRegistrations')
-        ->firstOrFail();
-
-    return $view->with([
-        'event' => $event,
-        'eventImage' => $event->getFirstMedia('event_image'),
-    ]);
-});
-
-?>
-
 @extends ('layouts.app')
 
 @section ('title', $event->title . ' am ' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
@@ -30,13 +7,13 @@ render(function (View $view, string $slug) {
 @section ('og_type', 'event')
 @section ('og_title', $event->title . ' am ' . $event->event_date->format('d.m.Y') . ' – Männerkreis Niederbayern/ Straubing')
 @section ('og_description', 'Treffen des Männerkreis Niederbayern/ Straubing am ' . $event->event_date->format('d.m.Y') . ' in ' . $event->location)
-@section ('canonical', route('event.show.slug', ['slug' => $event->slug]))
+@section ('canonical', route('event.show.slug', $event->slug))
 
 <x-seo.breadcrumb-schema
   :items="[
     ['name' => 'Startseite', 'url' => route('home')],
     ['name' => 'Veranstaltungen', 'url' => route('event.show')],
-    ['name' => $event->title, 'url' => route('event.show.slug', ['slug' => $event->slug])],
+    ['name' => $event->title, 'url' => route('event.show.slug', $event->slug)],
 ]"
 />
 
@@ -79,7 +56,7 @@ render(function (View $view, string $slug) {
         },
         "offers": {
             "@@type": "Offer",
-            "url": "{{ route('event.show.slug', ['slug' => $event->slug]) }}",
+            "url": "{{ route('event.show.slug', $event->slug) }}",
             "price": "0",
             "priceCurrency": "EUR",
             "availability": "{{ $event->isPast ? 'https://schema.org/SoldOut' : ($event->isFull ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock') }}",

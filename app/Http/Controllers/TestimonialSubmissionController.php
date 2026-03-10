@@ -7,9 +7,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TestimonialSubmissionRequest;
 use App\Models\Testimonial;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 final class TestimonialSubmissionController
 {
+    public function show(): View
+    {
+        return view('testimonial-form');
+    }
+
     public function submit(TestimonialSubmissionRequest $request): JsonResponse
     {
         $validated = $request->validated();

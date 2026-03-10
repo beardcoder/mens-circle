@@ -12,7 +12,9 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
 use RuntimeException;
+use SensitiveParameter;
 
 final class NewsletterController
 {
@@ -58,5 +60,22 @@ final class NewsletterController
                 'message' => $runtimeException->getMessage(),
             ], 409);
         }
+    }
+
+    public function unsubscribe(#[SensitiveParameter] string $token): View
+    {
+        $subscription = NewsletterSubscription::where('token', $token)->firstOrFail();
+
+        if (!$subscription->isActive()) {
+            return view('newsletter.unsubscribed', [
+                'message' => 'Diese E-Mail-Adresse wurde bereits vom Newsletter abgemeldet.',
+            ]);
+        }
+
+        $subscription->unsubscribe();
+
+        return view('newsletter.unsubscribed', [
+            'message' => 'Du wurdest erfolgreich vom Newsletter abgemeldet.',
+        ]);
     }
 }

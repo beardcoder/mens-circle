@@ -1,25 +1,3 @@
-<?php
-
-use App\Models\Event;
-use Illuminate\View\View;
-use function Laravel\Folio\{name, render};
-
-name('event.show');
-
-render(function (View $view) {
-    $event = Event::published()
-        ->upcoming()
-        ->select('id', 'slug', 'event_date')
-        ->orderBy('event_date')
-        ->first();
-
-    return $event
-        ? redirect()->route('event.show.slug', ['slug' => $event->slug])
-        : $view;
-});
-
-?>
-
 @extends ('layouts.app')
 
 @section ('title', 'Aktuell kein Termin – Männerkreis Niederbayern/ Straubing')

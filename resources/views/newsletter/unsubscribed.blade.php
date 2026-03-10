@@ -1,27 +1,3 @@
-<?php
-
-use App\Models\NewsletterSubscription;
-use Illuminate\View\View;
-use Spatie\ResponseCache\Middlewares\DoNotCacheResponse;
-use function Laravel\Folio\{middleware, name, render};
-
-name('newsletter.unsubscribe');
-middleware([DoNotCacheResponse::class]);
-
-render(function (View $view, string $token) {
-    $subscription = NewsletterSubscription::where('token', $token)->firstOrFail();
-
-    if (!$subscription->isActive()) {
-        return $view->with('message', 'Diese E-Mail-Adresse wurde bereits vom Newsletter abgemeldet.');
-    }
-
-    $subscription->unsubscribe();
-
-    return $view->with('message', 'Du wurdest erfolgreich vom Newsletter abgemeldet.');
-});
-
-?>
-
 @extends ('layouts.app')
 
 @section ('title', 'Newsletter abgemeldet – Männerkreis Niederbayern/ Straubing')

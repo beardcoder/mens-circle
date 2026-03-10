@@ -7,7 +7,6 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 | Category    | Technology                                               |
 | ----------- | -------------------------------------------------------- |
 | Framework   | Laravel 12, PHP 8.5                                      |
-| Routing     | Laravel Folio (file-based pages) + traditional controllers |
 | Admin Panel | Filament v5 (Livewire 4, Alpine.js)                     |
 | Frontend    | Blade templates, vanilla TypeScript, Vite 7              |
 | Styling     | Custom CSS (OKLCH color system) + Tailwind CSS v4        |
@@ -32,8 +31,7 @@ app/
 │   │                        #   NewsletterSubscription, Testimonial, Page
 │   └── Widgets/             # StatsOverview, RecentEvents, UpcomingEventRegistrations
 ├── Http/
-│   ├── Controllers/         # Event (register), Page, Newsletter (subscribe),
-│   │                        #   TestimonialSubmission (submit), Socialite, Llms
+│   ├── Controllers/         # Event, Page, Newsletter, TestimonialSubmission, Socialite, Llms
 │   ├── Middleware/           # CompressHtml (voku/HtmlMin)
 │   ├── Requests/            # EventRegistration, NewsletterSubscription, TestimonialSubmission
 │   └── Resources/           # EventResource (API)
@@ -44,19 +42,10 @@ app/
 │                            #   NewsletterSubscription, Testimonial, Page, ContentBlock
 ├── Notifications/           # HealthCheckFailedNotification (throttled)
 ├── Observers/               # RegistrationObserver
-├── Providers/               # AppServiceProvider, FolioServiceProvider, AdminPanelProvider
+├── Providers/               # AppServiceProvider, AdminPanelProvider
 ├── Services/                # EventNotificationService (email + SMS via Seven.io)
 ├── Settings/                # GeneralSettings (Spatie Settings)
 └── Traits/                  # HasEnumOptions, ClearsResponseCache
-
-resources/views/pages/       # Folio file-based pages
-├── event/
-│   ├── index.blade.php      # Redirect to next event or show no-event page
-│   └── [slug].blade.php     # Event detail page
-├── newsletter/
-│   └── unsubscribe/
-│       └── [token].blade.php # Newsletter unsubscribe
-└── teile-deine-erfahrung.blade.php  # Testimonial form
 ```
 
 ## Domain Models & Relationships
@@ -86,31 +75,22 @@ Testimonial (standalone, moderated)
 
 ## Routes
 
-Hybrid routing: Laravel Folio for GET pages, traditional controllers for API endpoints and complex routes.
+All routes defined in `routes/web.php` and `routes/api.php`.
 
-### Folio Pages (`resources/views/pages/`)
-
-| File                                       | Route Name               | Purpose                         |
-| ------------------------------------------ | ------------------------ | ------------------------------- |
-| `event/index.blade.php`                    | `event.show`             | Redirect to next upcoming event |
-| `event/[slug].blade.php`                   | `event.show.slug`        | Event detail page               |
-| `teile-deine-erfahrung.blade.php`          | `testimonial.form`       | Testimonial submission form     |
-| `newsletter/unsubscribe/[token].blade.php` | `newsletter.unsubscribe` | Token-based unsubscribe         |
-
-### Traditional Routes (`routes/web.php` + `routes/api.php`)
-
-| Route                            | Controller                             | Purpose                              |
-| -------------------------------- | -------------------------------------- | ------------------------------------ |
-| `GET /`                          | PageController::home                   | Homepage with dynamic content blocks |
-| `POST /api/event/register`       | EventController::register              | JSON registration endpoint           |
-| `POST /api/testimonial/submit`   | TestimonialSubmissionController::submit | Submit testimonial                   |
-| `POST /api/newsletter/subscribe` | NewsletterController::subscribe        | JSON subscription endpoint           |
-| `GET /auth/{provider}/redirect`  | SocialiteController::redirect          | GitHub OAuth (admin)                 |
-| `GET /auth/{provider}/callback`  | SocialiteController::callback          | OAuth callback                       |
-| `GET /llms.txt`                  | LlmsController::show                   | LLM-friendly site description        |
-| `GET /{slug}`                    | PageController::show                   | Dynamic CMS pages (catch-all, last)  |
-
-**Important:** The `/{slug}` catch-all excludes Folio paths via regex. Folio named routes require array arguments: `route('event.show.slug', ['slug' => $slug])`.
+| Route                                 | Controller                              | Purpose                              |
+| ------------------------------------- | --------------------------------------- | ------------------------------------ |
+| `GET /`                               | PageController::home                    | Homepage with dynamic content blocks |
+| `GET /event`                          | EventController::showNext               | Redirect to next upcoming event      |
+| `GET /event/{slug}`                   | EventController::show                   | Event detail page                    |
+| `POST /api/event/register`            | EventController::register               | JSON registration endpoint           |
+| `GET /teile-deine-erfahrung`          | TestimonialSubmissionController::show   | Testimonial form                     |
+| `POST /api/testimonial/submit`        | TestimonialSubmissionController::submit | Submit testimonial                   |
+| `POST /api/newsletter/subscribe`      | NewsletterController::subscribe         | JSON subscription endpoint           |
+| `GET /newsletter/unsubscribe/{token}` | NewsletterController::unsubscribe       | Token-based unsubscribe              |
+| `GET /auth/{provider}/redirect`       | SocialiteController::redirect           | GitHub OAuth (admin)                 |
+| `GET /auth/{provider}/callback`       | SocialiteController::callback           | OAuth callback                       |
+| `GET /llms.txt`                       | LlmsController::show                    | LLM-friendly site description        |
+| `GET /{slug}`                         | PageController::show                    | Dynamic CMS pages (catch-all, last)  |
 
 Scheduled commands in `routes/console.php`:
 
@@ -271,7 +251,6 @@ Configured in `bootstrap/app.php`:
 
 | Package                        | Purpose                                                    |
 | ------------------------------ | ---------------------------------------------------------- |
-| `laravel/folio`                | File-based page routing                                    |
 | `nunomaduro/essentials`        | Strict models, CarbonImmutable, HTTPS, safe console        |
 | `spatie/laravel-responsecache` | Full HTTP response caching                                 |
 | `spatie/laravel-medialibrary`  | Event images, content block media                          |
@@ -288,7 +267,6 @@ Configured in `bootstrap/app.php`:
 - All user-facing text is in German (labels, validation messages, emails, enums)
 - Enum keys are TitleCase; enum labels return German translations via `getLabel()`
 - Business logic belongs in `Actions/` classes, not controllers
-- Controllers only handle POST/API endpoints; GET pages use Folio file-based routing
 - Models use the `ClearsResponseCache` trait to auto-invalidate cache
 - Form validation uses dedicated `FormRequest` classes with German error messages
 - Soft deletes on: Event, Registration, NewsletterSubscription, Testimonial, Page, ContentBlock
