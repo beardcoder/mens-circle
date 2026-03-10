@@ -23,7 +23,6 @@
 /* ============================================
    Text Inputs
    ============================================ */
-.form-input,
 .form-group input[type='text'],
 .form-group input[type='email'],
 .form-group input[type='tel'],
@@ -48,15 +47,13 @@
   will-change: transform, box-shadow;
 }
 
-.form-input::placeholder,
 .form-group input::placeholder {
   color: var(--color-sand);
   opacity: 0.5;
 }
 
-/* Checkbox & Radio inputs */
-.form-checkbox input,
-.form-radio input {
+/* Checkbox inputs */
+.form-checkbox input {
   flex-shrink: 0;
   inline-size: 18px;
   block-size: 18px;
@@ -65,15 +62,6 @@
   cursor: pointer;
 }
 
-/* Light theme inputs */
-.form-input--light,
-.form-group--light input {
-  color: var(--text-primary);
-  background: var(--bg-secondary);
-  border-color: var(--border-light);
-}
-
-.form-input:focus,
 .form-group input:focus {
   outline: none;
   background: var(--bg-input-focus);
@@ -84,61 +72,15 @@
   transform: translateY(-1px);
 }
 
-.form-input--light:focus,
-.form-group--light input:focus {
-  background: var(--bg-primary);
-}
-
-.form-input:disabled,
 .form-group input:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
 
-/* Error state */
-.form-input.error,
-.form-input[aria-invalid='true'] {
-  border-color: var(--accent-primary);
-}
-
-.form-input.error:focus,
-.form-input[aria-invalid='true']:focus {
-  box-shadow: 0 0 0 3px
-    color-mix(in oklch, var(--accent-primary) 20%, transparent);
-}
-
 /* ============================================
-   Select
+   Checkbox
    ============================================ */
-.form-select {
-  inline-size: 100%;
-  padding: 1rem 3rem 1rem 1.125rem;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  color: var(--text-on-dark);
-  appearance: none;
-  cursor: pointer;
-  background: var(--bg-input)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c4b49a' d='M6 8L1 3h10z'/%3E%3C/svg%3E")
-    no-repeat right 1rem center;
-  border: 1px solid var(--border-medium);
-  border-radius: var(--radius-md);
-  transition:
-    border-color var(--transition-fast),
-    background-color var(--transition-fast);
-}
-
-.form-select:focus {
-  outline: none;
-  background-color: var(--bg-input-focus);
-  border-color: var(--accent-primary);
-}
-
-/* ============================================
-   Checkbox & Radio
-   ============================================ */
-.form-checkbox,
-.form-radio {
+.form-checkbox {
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
@@ -146,22 +88,19 @@
   cursor: pointer;
 }
 
-.form-checkbox span,
-.form-radio span {
+.form-checkbox span {
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--color-sand);
 }
 
-.form-checkbox a,
-.form-radio a {
+.form-checkbox a {
   color: var(--accent-secondary);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.form-checkbox a:hover,
-.form-radio a:hover {
+.form-checkbox a:hover {
   color: var(--accent-primary);
 }
 
@@ -181,77 +120,12 @@
 }
 
 /* ============================================
-   Form Actions
-   ============================================ */
-.form-actions {
-  display: flex;
-  gap: var(--space-sm);
-  margin-block-start: var(--space-md);
-}
-
-@media (width <= 480px) {
-  .form-actions {
-    flex-direction: column;
-  }
-}
-
-/* ============================================
-   Form Messages
-   ============================================ */
-.form-message {
-  padding: var(--space-md);
-  margin-block-start: var(--space-md);
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.5;
-  border-radius: var(--radius-md);
-  animation: slide-in-down 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes slide-in-down {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.form-message--success {
-  color: var(--color-bone);
-  background: var(--color-earth-warm);
-  border: 1px solid var(--color-earth-mid);
-}
-
-.form-message--error {
-  color: var(--color-bone);
-  background: var(--accent-primary);
-  border: 1px solid
-    color-mix(in oklch, var(--accent-primary) 80%, var(--color-earth-deep));
-}
-
-.form-message--info {
-  color: var(--text-on-dark);
-  background: color-mix(in oklch, var(--color-sand) 40%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 60%, transparent);
-}
-
-/* ============================================
    Helper Text
    ============================================ */
 .form-helper {
   margin-block-start: 0.5rem;
   font-size: 0.8rem;
   color: var(--text-secondary);
-}
-
-.form-error-text {
-  margin-block-start: 0.5rem;
-  font-size: 0.8rem;
-  color: var(--accent-primary);
 }
 
 /* ============================================
@@ -291,24 +165,4 @@
 .newsletter__input::placeholder {
   color: var(--color-sand);
   opacity: 0.6;
-}
-
-/* ============================================
-   Event Registration Form
-   ============================================ */
-.event-registration-form .form-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-sm);
-}
-
-@media (width <= 600px) {
-  .event-registration-form .form-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-.event-registration-form .event__submit-btn {
-  inline-size: 100%;
-  margin-block-start: var(--space-md);
 }
