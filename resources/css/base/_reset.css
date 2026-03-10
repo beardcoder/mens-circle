@@ -18,10 +18,7 @@ html {
 
   /* Base font size for rem calculations */
   font-size: 16px;
-  text-rendering: optimizelegibility;
   text-size-adjust: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 @media (width >= 1600px) {
@@ -170,17 +167,5 @@ table {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-  }
-}
-
-/* Print styles */
-@media print {
-  *,
-  *::before,
-  *::after {
-    color: #000 !important;
-    text-shadow: none !important;
-    background: transparent !important;
-    box-shadow: none !important;
   }
 }

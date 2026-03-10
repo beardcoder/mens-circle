@@ -3,62 +3,15 @@
  * Using IntersectionObserver + Web Animations API for scroll-triggered animations
  *
  * This file provides:
- * - Transition utilities for hover/focus states
- * - Continuous/looping keyframe animations
+ * - Continuous/looping keyframe animations (used by other CSS files)
+ * - Scroll progress indicator
+ * - Scroll-to-top button
  * - Reduced motion support
  *
  * Scroll-triggered animations are handled by IntersectionObserver
  * with the Web Animations API for smooth, GPU-accelerated playback
  * @see resources/js/components/scroll-animations.ts
  */
-
-/* ============================================
-   Transition Utilities
-   ============================================ */
-.transition {
-  transition-timing-function: var(--ease-out);
-  transition-duration: var(--duration-normal);
-  transition-property:
-    color, background-color, border-color, text-decoration-color, fill, stroke,
-    opacity, box-shadow, transform, filter, backdrop-filter;
-}
-
-.transition-fast {
-  transition-duration: var(--duration-fast);
-}
-
-.transition-slow {
-  transition-duration: var(--duration-slow);
-}
-
-.transition-none {
-  transition: none;
-}
-
-.transition-colors {
-  transition-timing-function: var(--ease-out);
-  transition-duration: var(--duration-normal);
-  transition-property:
-    color, background-color, border-color, text-decoration-color, fill, stroke;
-}
-
-.transition-transform {
-  transition-timing-function: var(--ease-out);
-  transition-duration: var(--duration-normal);
-  transition-property: transform;
-}
-
-.transition-opacity {
-  transition-timing-function: var(--ease-out);
-  transition-duration: var(--duration-normal);
-  transition-property: opacity;
-}
-
-.transition-shadow {
-  transition-timing-function: var(--ease-out);
-  transition-duration: var(--duration-normal);
-  transition-property: box-shadow;
-}
 
 /* ============================================
    Scroll-Triggered Animation Classes
@@ -94,12 +47,10 @@
 .delay-2,
 .delay-3,
 .delay-4,
-.delay-5,
 .fade-in-delay-1,
 .fade-in-delay-2,
 .fade-in-delay-3,
-.fade-in-delay-4,
-.fade-in-delay-5 {
+.fade-in-delay-4 {
   /* Delays are applied programmatically by JavaScript */
 }
 
@@ -114,12 +65,10 @@
 
 /* ============================================
    Continuous/Looping Keyframe Animations
+   Referenced by hero, event, and button CSS
    ============================================ */
 
-/* Breathing / Pulsing animation
- * Used for decorative elements like hero circles.
- * CSS animation kept as fallback for no-JS environments.
- */
+/* Breathing / Pulsing animation for decorative elements */
 @keyframes breathe {
   0%,
   100% {
@@ -133,27 +82,7 @@
   }
 }
 
-.animate-breathe {
-  animation: breathe 15s ease-in-out infinite;
-}
-
-/* Subtle pulse */
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.animate-pulse {
-  animation: pulse 2s ease-in-out infinite;
-}
-
-/* Scroll indicator pulse */
+/* Scroll indicator pulse (used by hero scroll line) */
 @keyframes scroll-pulse {
   0%,
   100% {
@@ -167,162 +96,11 @@
   }
 }
 
-.animate-scroll-pulse {
-  animation: scroll-pulse 2.5s ease-in-out infinite;
-}
-
-/* Spin */
+/* Spin (used by button loading state) */
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-/* Bounce */
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(-25%);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-  }
-
-  50% {
-    transform: translateY(0);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  }
-}
-
-.animate-bounce {
-  animation: bounce 1s infinite;
-}
-
-/* Float */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-/* Fade in animation for programmatic use */
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-down {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fade-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fade-in-scale {
-  from {
-    opacity: 0;
-    transform: scale(0.97);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* ============================================
-   Hover Animations
-   ============================================ */
-.hover-lift {
-  transition: transform var(--transition-fast);
-}
-
-.hover-lift:hover {
-  transform: translateY(-4px);
-}
-
-.hover-scale {
-  transition: transform var(--transition-fast);
-}
-
-.hover-scale:hover {
-  transform: scale(1.05);
-}
-
-.hover-glow {
-  transition: box-shadow var(--transition-medium);
-}
-
-.hover-glow:hover {
-  box-shadow: 0 0 30px
-    color-mix(in oklch, var(--accent-primary) 30%, transparent);
-}
-
-/* ============================================
-   Interactive States
-   ============================================ */
-.active-scale {
-  transition: transform var(--transition-fast);
-}
-
-.active-scale:active {
-  transform: scale(0.98);
-}
-
-/* ============================================
-   Performance Optimization
-   Use content-visibility for off-screen content
-   ============================================ */
-.content-auto {
-  contain-intrinsic-size: auto 500px;
-  content-visibility: auto;
 }
 
 /* ============================================
@@ -427,8 +205,7 @@
   .fade-in-delay-1,
   .fade-in-delay-2,
   .fade-in-delay-3,
-  .fade-in-delay-4,
-  .fade-in-delay-5 {
+  .fade-in-delay-4 {
     /* Ensure visibility when reduced motion is preferred */
     opacity: 1 !important;
     transform: none !important;
@@ -437,20 +214,6 @@
   .stagger-children > * {
     opacity: 1 !important;
     transform: none !important;
-  }
-
-  .animate-breathe,
-  .animate-pulse,
-  .animate-scroll-pulse,
-  .animate-spin,
-  .animate-bounce,
-  .animate-float {
-    animation: none;
-  }
-
-  .hover-lift:hover,
-  .hover-scale:hover {
-    transform: none;
   }
 }
 
