@@ -1,3 +1,11 @@
+<?php
+
+use function Laravel\Folio\name;
+
+name('testimonial.form');
+
+?>
+
 @extends ('layouts.app')
 
 @section ('title', 'Teile deine Erfahrung – Männerkreis Niederbayern/ Straubing')

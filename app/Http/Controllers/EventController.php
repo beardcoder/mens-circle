@@ -14,10 +14,8 @@ use App\Models\Participant;
 use App\Models\Registration;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\View\View;
 use RuntimeException;
 use Seven\Api\Client;
 use Seven\Api\Resource\Sms\SmsParams;
@@ -25,33 +23,6 @@ use Seven\Api\Resource\Sms\SmsResource;
 
 final class EventController
 {
-    public function showNext(): View|RedirectResponse
-    {
-        $event = Event::published()
-            ->upcoming()
-            ->select('id', 'slug', 'event_date')
-            ->orderBy('event_date')
-            ->first();
-
-        return $event ? redirect()->route('event.show.slug', ['slug' => $event->slug]) : view('no-event');
-    }
-
-    public function show(string $slug): View
-    {
-        $event = Event::published()
-            ->where('slug', $slug)
-            ->with(['media'])
-            ->withCount('activeRegistrations')
-            ->firstOrFail();
-
-        $eventImage = $event->getFirstMedia('event_image');
-
-        return view('event', [
-            'event' => $event,
-            'eventImage' => $eventImage,
-        ]);
-    }
-
     public function register(EventRegistrationRequest $request): JsonResponse
     {
         $validated = $request->validated();

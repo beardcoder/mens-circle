@@ -166,7 +166,7 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
      */
     public function getCacheUrls(): array
     {
-        return [url('/'), url('/event'), route('event.show.slug', $this->slug)];
+        return [url('/'), url('/event'), route('event.show.slug', ['slug' => $this->slug])];
     }
 
     public function generateICalContent(): string

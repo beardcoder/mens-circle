@@ -24,7 +24,7 @@ describe('Event cache invalidation', function (): void {
             ->once()
             ->withArgs(fn(array $urls): bool => in_array(url('/'), $urls, true)
                 && in_array(url('/event'), $urls, true)
-                && in_array(route('event.show.slug', $event->slug), $urls, true));
+                && in_array(route('event.show.slug', ['slug' => $event->slug]), $urls, true));
     });
 
     it('does not clear the entire cache on event update', function (): void {
@@ -43,7 +43,7 @@ describe('Registration cache invalidation', function (): void {
 
         ResponseCache::shouldHaveReceived('forget')
             ->withArgs(fn(array $urls): bool => in_array(url('/event'), $urls, true)
-                && in_array(route('event.show.slug', $event->slug), $urls, true));
+                && in_array(route('event.show.slug', ['slug' => $event->slug]), $urls, true));
     });
 
     it('does not clear the entire cache on registration update', function (): void {

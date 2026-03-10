@@ -30,7 +30,7 @@ class GenerateSitemap extends Command
             ->get()
             ->each(static function (Event $event) use ($sitemap): void {
                 $sitemap->add(
-                    Url::create(route('event.show.slug', $event->slug))
+                    Url::create(route('event.show.slug', ['slug' => $event->slug]))
                         ->setLastModificationDate($event->updated_at ?? now())
                         ->setPriority(0.8)
                         ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY),

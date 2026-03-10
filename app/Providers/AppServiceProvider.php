@@ -64,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
 
                 $view->with([
                     'hasNextEvent' => $nextEvent !== null,
-                    'nextEventUrl' => $nextEvent ? route('event.show.slug', $nextEvent->slug) : route('event.show'),
+                    'nextEventUrl' => $nextEvent ? route('event.show.slug', ['slug' => $nextEvent->slug]) : route('event.show'),
                 ]);
             } catch (Throwable) {
                 $view->with([

@@ -49,7 +49,7 @@ class Registration extends Model implements DefinesCacheUrls
 
         return array_values(array_filter([
             url('/event'),
-            $eventSlug ? route('event.show.slug', $eventSlug) : null,
+            $eventSlug ? route('event.show.slug', ['slug' => $eventSlug]) : null,
         ]));
     }
 

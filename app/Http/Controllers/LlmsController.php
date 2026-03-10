@@ -212,7 +212,7 @@ final class LlmsController
                 $lines[] = $this->convertHtmlToMarkdown($event->description);
             }
 
-            $url = url()->route('event.show.slug', $event->slug);
+            $url = url()->route('event.show.slug', ['slug' => $event->slug]);
             $lines[] = '';
             $lines[] = '**Mehr Informationen und Anmeldung:** ' . $url;
             $lines[] = '';
@@ -244,7 +244,7 @@ final class LlmsController
 
         foreach ($pastEvents as $event) {
             $date = $event->event_date->format('d.m.Y');
-            $url = url()->route('event.show.slug', $event->slug);
+            $url = url()->route('event.show.slug', ['slug' => $event->slug]);
             $lines[] = "- **[{$event->title}]({$url})** - {$date}";
         }
 

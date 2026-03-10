@@ -8,7 +8,7 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 | ----------- | ------------------------------------------------------------- |
 | Framework   | Laravel 12, PHP 8.5                                           |
 | Admin Panel | Filament v5 (Livewire 4, Alpine.js)                           |
-| Frontend    | Blade templates, vanilla TypeScript, Bun bundler              |
+| Frontend    | Blade templates, vanilla TypeScript, Vite 8                   |
 | Styling     | Custom CSS (OKLCH color system) + Tailwind CSS v4             |
 | Database    | SQLite (local/production), migrations via Eloquent            |
 | Testing     | Pest v4, PHPStan level 9, Rector (PHP 8.5 target)             |
@@ -73,22 +73,31 @@ Testimonial (standalone, moderated)
 
 ## Routes
 
-All routes are in `routes/web.php`. No API-specific route file.
+Routes use a hybrid approach: Laravel Folio (file-based routing) for GET pages, traditional controllers for API endpoints and complex routes.
 
-| Route                                 | Controller                              | Purpose                              |
-| ------------------------------------- | --------------------------------------- | ------------------------------------ |
-| `GET /`                               | PageController::home                    | Homepage with dynamic content blocks |
-| `GET /event`                          | EventController::showNext               | Redirect to next upcoming event      |
-| `GET /event/{slug}`                   | EventController::show                   | Event detail page                    |
-| `POST /event/register`                | EventController::register               | JSON registration endpoint           |
-| `GET /teile-deine-erfahrung`          | TestimonialSubmissionController::show   | Testimonial form                     |
-| `POST /testimonial/submit`            | TestimonialSubmissionController::submit | Submit testimonial                   |
-| `POST /newsletter/subscribe`          | NewsletterController::subscribe         | JSON subscription endpoint           |
-| `GET /newsletter/unsubscribe/{token}` | NewsletterController::unsubscribe       | Token-based unsubscribe              |
-| `GET /auth/{provider}/redirect`       | SocialiteController::redirect           | GitHub OAuth (admin)                 |
-| `GET /auth/{provider}/callback`       | SocialiteController::callback           | OAuth callback                       |
-| `GET /llms.txt`                       | LlmsController::show                    | LLM-friendly site description        |
-| `GET /{slug}`                         | PageController::show                    | Dynamic CMS pages (catch-all, last)  |
+### Folio Pages (`resources/views/pages/`)
+
+| File                                       | Route Name              | Purpose                         |
+| ------------------------------------------ | ----------------------- | ------------------------------- |
+| `event/index.blade.php`                    | `event.show`            | Redirect to next upcoming event |
+| `event/[slug].blade.php`                   | `event.show.slug`       | Event detail page               |
+| `teile-deine-erfahrung.blade.php`          | `testimonial.form`      | Testimonial submission form     |
+| `newsletter/unsubscribe/[token].blade.php` | `newsletter.unsubscribe`| Token-based unsubscribe         |
+
+### Traditional Routes (`routes/web.php` + `routes/api.php`)
+
+| Route                            | Controller                              | Purpose                              |
+| -------------------------------- | --------------------------------------- | ------------------------------------ |
+| `GET /`                          | PageController::home                    | Homepage with dynamic content blocks |
+| `POST /api/event/register`       | EventController::register               | JSON registration endpoint           |
+| `POST /api/testimonial/submit`   | TestimonialSubmissionController::submit  | Submit testimonial                   |
+| `POST /api/newsletter/subscribe` | NewsletterController::subscribe          | JSON subscription endpoint           |
+| `GET /auth/{provider}/redirect`  | SocialiteController::redirect           | GitHub OAuth (admin)                 |
+| `GET /auth/{provider}/callback`  | SocialiteController::callback           | OAuth callback                       |
+| `GET /llms.txt`                  | LlmsController::show                    | LLM-friendly site description        |
+| `GET /{slug}`                    | PageController::show                    | Dynamic CMS pages (catch-all, last)  |
+
+**Note:** The `/{slug}` catch-all route excludes Folio-handled paths (`event`, `teile-deine-erfahrung`, `newsletter/`) via regex constraint. Folio named routes require array arguments: `route('event.show.slug', ['slug' => $slug])`.
 
 Scheduled commands in `routes/console.php`:
 
