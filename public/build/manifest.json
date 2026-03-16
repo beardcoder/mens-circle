@@ -24,16 +24,24 @@
     "src": "node_modules/@fontsource-variable/playfair-display/files/playfair-display-vietnamese-wght-normal.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-C-xjWiM0.css",
-    "src": "resources/css/app.css",
-    "isEntry": true,
+    "file": "assets/app-sQAPziPd.css",
     "name": "app",
     "names": [
       "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "assets": [
+      "assets/playfair-display-cyrillic-wght-normal-5WvUvBgz.woff2",
+      "assets/playfair-display-vietnamese-wght-normal-Cabi7G8-.woff2",
+      "assets/playfair-display-latin-ext-wght-normal-CT1r92Rl.woff2",
+      "assets/playfair-display-latin-wght-normal-BOwq7MWX.woff2",
+      "assets/dm-sans-latin-ext-wght-normal-BOFOeGcA.woff2",
+      "assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2"
     ]
   },
   "resources/js/app.ts": {
-    "file": "assets/app-Ca54n4tt.js",
+    "file": "assets/app-DiLttPds.js",
     "name": "app",
     "src": "resources/js/app.ts",
     "isEntry": true
