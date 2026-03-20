@@ -57,7 +57,9 @@
 .btn:hover {
   color: var(--btn-hover-color);
   background: var(--btn-hover-bg);
-  box-shadow: var(--shadow-lg);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 24px color-mix(in oklch, var(--accent-primary) 15%, transparent);
   transform: translateY(-2px) scale(1.02);
 }
 

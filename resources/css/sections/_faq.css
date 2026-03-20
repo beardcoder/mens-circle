@@ -49,8 +49,8 @@
 /* Uses .section-title .text-italic from typography.css */
 
 .faq__intro {
-  font-size: 1.0625rem;
-  line-height: 1.7;
+  font-size: var(--text-section-body);
+  line-height: var(--leading-relaxed);
   color: var(--text-secondary);
 }
 

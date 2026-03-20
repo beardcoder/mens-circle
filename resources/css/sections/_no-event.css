@@ -64,9 +64,9 @@
 /* Uses .section-title .text-italic from typography.css */
 
 .no-event-info__text {
-  max-inline-size: 540px;
-  font-size: 1.0625rem;
-  line-height: 1.9;
+  max-inline-size: var(--content-max-text);
+  font-size: var(--text-section-body);
+  line-height: var(--leading-relaxed);
   color: var(--text-secondary);
 }
 
@@ -133,7 +133,7 @@
 
 .no-event-cta__text {
   margin-block-end: var(--space-lg);
-  font-size: 1.0625rem;
-  line-height: 1.8;
+  font-size: var(--text-section-body);
+  line-height: var(--leading-relaxed);
   color: var(--text-secondary);
 }

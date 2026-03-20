@@ -155,15 +155,15 @@
 }
 
 .moderator__bio {
-  max-inline-size: 520px;
+  max-inline-size: var(--content-max-text);
   margin-block-end: var(--space-md);
-  font-size: 1.0625rem;
-  line-height: 1.9;
+  font-size: var(--text-section-body);
+  line-height: var(--leading-relaxed);
   color: var(--text-secondary);
 }
 
 .moderator__quote {
-  max-inline-size: 500px;
+  max-inline-size: var(--content-max-text);
   padding-inline-start: var(--space-md);
   margin-block-start: var(--space-lg);
   border-inline-start: 2px solid var(--accent-primary);

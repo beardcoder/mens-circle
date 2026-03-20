@@ -41,6 +41,7 @@
     oklch(50% 0.15 145deg / 20%) 0%,
     transparent 50%
   );
+  animation: breathe-slow 22s ease-in-out infinite -4s;
 }
 
 /* ============================================
@@ -84,9 +85,9 @@
 }
 
 .whatsapp__text {
-  max-inline-size: 500px;
-  font-size: 1.0625rem;
-  line-height: 1.8;
+  max-inline-size: var(--content-max-text);
+  font-size: var(--text-section-body);
+  line-height: var(--leading-relaxed);
   color: oklch(85% 0.03 145deg);
 }
 

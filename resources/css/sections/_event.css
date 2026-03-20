@@ -64,7 +64,6 @@
   position: absolute;
   border: 1px solid var(--color-sand);
   border-radius: 50%;
-  animation: breathe 15s ease-in-out infinite;
 }
 
 .event-register__circle--1 {
@@ -72,6 +71,7 @@
   inset-inline-start: -30%;
   inline-size: 120%;
   block-size: 120%;
+  animation: breathe 20s ease-in-out infinite;
 }
 
 .event-register__circle--2 {
@@ -79,7 +79,7 @@
   inset-inline-end: -20%;
   inline-size: 80%;
   block-size: 80%;
-  animation-delay: -7s;
+  animation: breathe-slow 26s ease-in-out infinite -7s;
 }
 
 /* Extends .eyebrow.eyebrow--secondary with positioning */
@@ -190,7 +190,7 @@
   margin-block-end: var(--space-lg);
 }
 
-@media (width <= 768px) {
+@media (width <= 800px) {
   .event-register__past-info {
     text-align: start;
   }
@@ -223,7 +223,7 @@
   transform: translateY(-50%);
 }
 
-@media (width <= 768px) {
+@media (width <= 800px) {
   .event-info__bg-text {
     display: none;
   }
@@ -384,9 +384,9 @@
 /* Uses .section-title--lg and .section-title .text-italic */
 
 .event-about__text {
-  max-inline-size: 540px;
-  font-size: 1.125rem;
-  line-height: 1.9;
+  max-inline-size: var(--content-max-text);
+  font-size: var(--text-section-body-lg);
+  line-height: var(--leading-relaxed);
   color: var(--text-secondary);
 }
 
@@ -441,7 +441,6 @@
   position: absolute;
   border: 1px solid var(--color-sand);
   border-radius: 50%;
-  animation: breathe 15s ease-in-out infinite;
 }
 
 .event-about__circle--1 {
@@ -449,6 +448,7 @@
   inset-inline-start: -20%;
   inline-size: 140%;
   block-size: 140%;
+  animation: breathe 20s ease-in-out infinite;
 }
 
 .event-about__circle--2 {
@@ -457,7 +457,7 @@
   inline-size: 80%;
   aspect-ratio: 1 / 1;
   transform: translate(-50%, -50%);
-  animation-delay: -5s;
+  animation: breathe-slow 28s ease-in-out infinite -5s;
 }
 
 .event-about__circle--3 {
@@ -465,7 +465,7 @@
   inset-inline-end: -10%;
   inline-size: 50%;
   aspect-ratio: 1 / 1;
-  animation-delay: -10s;
+  animation: breathe 24s ease-in-out infinite -10s;
 }
 
 .event-about__quote {
@@ -519,7 +519,6 @@
   position: absolute;
   border: 1px solid var(--color-sand);
   border-radius: 50%;
-  animation: breathe 15s ease-in-out infinite;
 }
 
 .event-cta__circle--1 {
@@ -528,6 +527,7 @@
   inline-size: 70vw;
   block-size: 70vw;
   transform: translate(-50%, -50%);
+  animation: breathe 22s ease-in-out infinite;
 }
 
 .event-cta__circle--2 {
@@ -536,7 +536,7 @@
   inline-size: 50vw;
   block-size: 50vw;
   transform: translate(-50%, -50%);
-  animation-delay: -5s;
+  animation: breathe-slow 30s ease-in-out infinite -5s;
 }
 
 .event-cta__content {

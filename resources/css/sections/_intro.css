@@ -52,10 +52,10 @@
 /* Uses .section-title .text-italic from typography.css */
 
 .intro__text {
-  max-inline-size: 540px;
+  max-inline-size: var(--content-max-text);
   margin-block-end: var(--space-lg);
-  font-size: 1.1875rem;
-  line-height: 1.9;
+  font-size: var(--text-section-body-lg);
+  line-height: var(--leading-relaxed);
   color: var(--text-secondary);
 }
 
@@ -129,6 +129,7 @@
   inset-inline-start: -20%;
   inline-size: 140%;
   block-size: 140%;
+  animation: breathe-slow 26s ease-in-out infinite;
 }
 
 .intro__image-circles::after {
@@ -137,6 +138,7 @@
   inline-size: 80%;
   aspect-ratio: 1 / 1;
   transform: translate(-50%, -50%);
+  animation: breathe 22s ease-in-out infinite -6s;
 }
 
 /* ============================================

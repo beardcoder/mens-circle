@@ -30,12 +30,14 @@
   inline-size: 50vw;
   block-size: 50vw;
   opacity: 0.3;
+  animation: breathe-slow 24s ease-in-out infinite;
 }
 
 .cta-section::after {
   inline-size: 35vw;
   block-size: 35vw;
   opacity: 0.2;
+  animation: breathe 20s ease-in-out infinite -8s;
 }
 
 /* ============================================
@@ -58,7 +60,7 @@
 
 .cta__text {
   margin-block-end: var(--space-lg);
-  font-size: 1.125rem;
-  line-height: 1.8;
+  font-size: var(--text-section-body-lg);
+  line-height: var(--leading-relaxed);
   color: var(--text-secondary);
 }

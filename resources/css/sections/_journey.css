@@ -94,6 +94,11 @@
   position: relative;
   padding: var(--space-lg) var(--space-md);
   border-inline-start: 1px solid var(--border-on-dark);
+  transition: background-color var(--transition-medium);
+}
+
+.journey__step:hover {
+  background: color-mix(in oklch, var(--color-earth-mid) 30%, transparent);
 }
 
 .journey__step:first-child {
@@ -142,7 +147,7 @@
 .journey__step-text {
   margin: 0;
   font-size: 0.9375rem;
-  line-height: 1.7;
+  line-height: var(--leading-normal);
   color: var(--color-sand);
   opacity: 0.9;
 }

@@ -5,9 +5,9 @@
 
 import { defineComponent } from '@stitch';
 
-const ANIMATION_DURATION = 600;
-const ANIMATION_STAGGER_DELAY = 100;
-const ANIMATION_EASING = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
+const ANIMATION_DURATION = 700;
+const ANIMATION_STAGGER_DELAY = 80;
+const ANIMATION_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
 type Direction = 'up' | 'down' | 'left' | 'right' | 'scale' | 'default';
 
@@ -18,12 +18,12 @@ interface AnimationTransform {
 
 function getTransformForDirection(direction: Direction): AnimationTransform {
   const transforms: Record<Direction, string> = {
-    default: 'translateY(16px)',
-    up: 'translateY(16px)',
-    down: 'translateY(-16px)',
-    left: 'translateX(-16px)',
-    right: 'translateX(16px)',
-    scale: 'scale(0.97)',
+    default: 'translateY(24px)',
+    up: 'translateY(24px)',
+    down: 'translateY(-24px)',
+    left: 'translateX(-24px)',
+    right: 'translateX(24px)',
+    scale: 'scale(0.95)',
   };
 
   return {
@@ -161,7 +161,7 @@ export const staggerAnimate = defineComponent<StaggerAnimateOptions>(
       const child = children[i] as HTMLElement;
 
       child.style.opacity = '0';
-      child.style.transform = 'translateY(12px)';
+      child.style.transform = 'translateY(20px)';
     }
 
     const { options: o } = ctx;
@@ -180,7 +180,7 @@ export const staggerAnimate = defineComponent<StaggerAnimateOptions>(
 
             const animation = child.animate(
               [
-                { opacity: 0, transform: 'translateY(12px)' },
+                { opacity: 0, transform: 'translateY(20px)' },
                 { opacity: 1, transform: 'translateY(0)' },
               ],
               {

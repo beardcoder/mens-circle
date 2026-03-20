@@ -154,9 +154,9 @@
 }
 
 .footer__links a:hover {
-  color: var(--text-on-dark);
+  color: var(--accent-secondary);
   opacity: 1;
-  transform: translateX(2px);
+  transform: translateX(4px);
 }
 
 .footer__legal a:hover {

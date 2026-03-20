@@ -54,8 +54,8 @@
 
 .testimonial-form__intro p {
   margin-block-end: var(--space-md);
-  font-size: 1.0625rem;
-  line-height: 1.7;
+  font-size: var(--text-section-body);
+  line-height: var(--leading-relaxed);
   color: var(--text-muted);
 }
 

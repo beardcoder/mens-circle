@@ -75,6 +75,11 @@
   min-block-size: 16rem;
   padding: var(--space-lg) var(--space-md);
   border-inline-start: 1px solid var(--border-light);
+  transition: background-color var(--transition-medium);
+}
+
+.testimonial-item:hover {
+  background: color-mix(in oklch, var(--color-sand-light) 30%, transparent);
 }
 
 .testimonial-item:nth-child(odd) {
@@ -96,7 +101,7 @@
   margin: 0;
   margin-block-end: var(--space-lg);
   font-style: italic;
-  line-height: 1.7;
+  line-height: var(--leading-relaxed);
   color: var(--text-primary);
 }
 

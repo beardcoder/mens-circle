@@ -37,6 +37,7 @@
     color-mix(in oklch, var(--accent-primary) 15%, transparent) 0%,
     transparent 50%
   );
+  animation: breathe-slow 20s ease-in-out infinite;
 }
 
 /* ============================================
@@ -70,8 +71,8 @@
 }
 
 .newsletter__text {
-  font-size: 1.0625rem;
-  line-height: 1.8;
+  font-size: var(--text-section-body);
+  line-height: var(--leading-relaxed);
   color: var(--color-sand);
 }
 
