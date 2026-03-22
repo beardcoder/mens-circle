@@ -66,9 +66,9 @@
 
 /* ============================================
    Breathing Orb — Headspace/WHM-inspired
-   Concentric rings centered bottom-right that
-   breathe together as one unified organism.
-   Smooth, fluid, meditative.
+   Massive concentric rings, cropped by viewport,
+   like watching a body breathe from close up.
+   Only arcs visible — intimate, organic, alive.
    ============================================ */
 .hero__circles {
   position: absolute;
@@ -83,87 +83,87 @@
   --breathe-easing: cubic-bezier(0.37, 0, 0.63, 1);
 
   position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 65%;
+  inset-block-end: -60%;
+  inset-inline-end: -40%;
   border-radius: 50%;
   transform-origin: center;
-  translate: -50% -50%;
   will-change: transform, opacity;
 }
 
-/* Layer 1 — Outermost halo: very large, faint atmospheric glow */
+/* Layer 1 — Outermost: massive, mostly off-screen, faint arc */
 .hero__circle--1 {
-  --breathe-min-opacity: 0.08;
-  --breathe-max-opacity: 0.2;
-  --breathe-min-scale: 0.96;
-  --breathe-max-scale: 1.04;
+  --breathe-min-opacity: 0.06;
+  --breathe-max-opacity: 0.18;
+  --breathe-min-scale: 0.97;
+  --breathe-max-scale: 1.03;
 
-  inline-size: 75vw;
-  block-size: 75vw;
+  inline-size: 160vw;
+  block-size: 160vw;
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--color-earth-warm) 10%, transparent) 0%,
-    color-mix(in oklch, var(--color-earth-warm) 4%, transparent) 50%,
+    color-mix(in oklch, var(--color-earth-warm) 8%, transparent) 0%,
+    color-mix(in oklch, var(--color-earth-warm) 3%, transparent) 50%,
     transparent 70%
   );
+  border: 1px solid color-mix(in oklch, var(--color-sand) 6%, transparent);
   animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
-/* Layer 2 — Warm atmosphere */
+/* Layer 2 — Large warm arc */
 .hero__circle--2 {
-  --breathe-min-opacity: 0.12;
-  --breathe-max-opacity: 0.35;
-  --breathe-min-scale: 0.94;
-  --breathe-max-scale: 1.06;
+  --breathe-min-opacity: 0.1;
+  --breathe-max-opacity: 0.3;
+  --breathe-min-scale: 0.96;
+  --breathe-max-scale: 1.04;
 
-  inline-size: 50vw;
-  block-size: 50vw;
+  inline-size: 120vw;
+  block-size: 120vw;
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--accent-primary) 14%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 6%, transparent) 50%,
+    color-mix(in oklch, var(--accent-primary) 12%, transparent) 0%,
+    color-mix(in oklch, var(--accent-primary) 5%, transparent) 50%,
     transparent 72%
   );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 8%, transparent);
-  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -0.4s;
+  border: 1px solid color-mix(in oklch, var(--color-sand) 10%, transparent);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -0.5s;
 }
 
-/* Layer 3 — Core glow ring */
+/* Layer 3 — Core glow, cropped to a visible crescent */
 .hero__circle--3 {
-  --breathe-min-opacity: 0.18;
-  --breathe-max-opacity: 0.5;
-  --breathe-min-scale: 0.93;
-  --breathe-max-scale: 1.07;
+  --breathe-min-opacity: 0.15;
+  --breathe-max-opacity: 0.45;
+  --breathe-min-scale: 0.95;
+  --breathe-max-scale: 1.05;
 
-  inline-size: 32vw;
-  block-size: 32vw;
+  inline-size: 85vw;
+  block-size: 85vw;
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--accent-primary) 22%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 10%, transparent) 45%,
+    color-mix(in oklch, var(--accent-primary) 18%, transparent) 0%,
+    color-mix(in oklch, var(--accent-primary) 8%, transparent) 45%,
     transparent 70%
   );
   border: 1px solid color-mix(in oklch, var(--color-sand) 15%, transparent);
-  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -0.8s;
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -1s;
 }
 
-/* Layer 4 — Inner warm orb */
+/* Layer 4 — Inner warm orb, the "belly" center */
 .hero__circle--4 {
-  --breathe-min-opacity: 0.25;
-  --breathe-max-opacity: 0.7;
-  --breathe-min-scale: 0.9;
-  --breathe-max-scale: 1.1;
+  --breathe-min-opacity: 0.2;
+  --breathe-max-opacity: 0.6;
+  --breathe-min-scale: 0.93;
+  --breathe-max-scale: 1.07;
 
-  inline-size: 18vw;
-  block-size: 18vw;
+  inline-size: 55vw;
+  block-size: 55vw;
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--accent-secondary) 30%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 15%, transparent) 50%,
+    color-mix(in oklch, var(--accent-secondary) 25%, transparent) 0%,
+    color-mix(in oklch, var(--accent-primary) 12%, transparent) 50%,
     transparent 75%
   );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 22%, transparent);
-  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -1.2s;
+  border: 1px solid color-mix(in oklch, var(--color-sand) 20%, transparent);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -1.5s;
 }
 
 /* ============================================
@@ -270,27 +270,28 @@
   }
 
   .hero__circle {
-    inset-inline-start: 55%;
+    inset-block-end: -70%;
+    inset-inline-end: -50%;
   }
 
   .hero__circle--1 {
-    inline-size: 95vw;
-    block-size: 95vw;
+    inline-size: 200vw;
+    block-size: 200vw;
   }
 
   .hero__circle--2 {
-    inline-size: 65vw;
-    block-size: 65vw;
+    inline-size: 160vw;
+    block-size: 160vw;
   }
 
   .hero__circle--3 {
-    inline-size: 42vw;
-    block-size: 42vw;
+    inline-size: 120vw;
+    block-size: 120vw;
   }
 
   .hero__circle--4 {
-    inline-size: 25vw;
-    block-size: 25vw;
+    inline-size: 80vw;
+    block-size: 80vw;
   }
 
   .hero__title {
