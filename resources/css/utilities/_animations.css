@@ -264,14 +264,7 @@
   }
 
   /* Freeze breathing animations at their resting state */
-  .hero__circle,
-  .event-register__circle,
-  .event-about__circle,
-  .event-cta__circle,
-  .intro__image-circles::before,
-  .intro__image-circles::after,
-  .cta-section::before,
-  .cta-section::after,
+  .breathing-circle,
   .newsletter-section::after,
   .whatsapp-section::after {
     animation: none !important;

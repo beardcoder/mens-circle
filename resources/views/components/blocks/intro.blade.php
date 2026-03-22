@@ -47,7 +47,7 @@
 
     <div class="intro__right">
       <div class="intro__image-area">
-        <div class="intro__image-circles"></div>
+        <x-breathing-circles :layers="3" />
         @if (!empty($data['quote']))
           <p class="intro__image-text">{!! $data['quote'] !!}</p>
         @endif

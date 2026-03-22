@@ -5,6 +5,7 @@
 @endphp
 
 <section class="section section--large cta-section">
+  <x-breathing-circles :layers="3" />
   <div class="container">
     <div class="cta__content fade-in">
       @if (!empty($data['eyebrow']))
