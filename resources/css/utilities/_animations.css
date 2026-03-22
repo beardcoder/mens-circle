@@ -74,35 +74,30 @@
 @keyframes breathe {
   0% {
     opacity: 0.12;
-    filter: blur(0);
     transform: scale(0.88);
   }
 
   /* Inhale — slow expansion */
   30% {
     opacity: 0.38;
-    filter: blur(0.5px);
     transform: scale(1.12);
   }
 
   /* Brief hold at peak */
   40% {
     opacity: 0.35;
-    filter: blur(0.3px);
     transform: scale(1.1);
   }
 
   /* Exhale — gentle contraction */
   70% {
     opacity: 0.15;
-    filter: blur(0);
     transform: scale(0.92);
   }
 
   /* Rest before next breath */
   100% {
     opacity: 0.12;
-    filter: blur(0);
     transform: scale(0.88);
   }
 }
