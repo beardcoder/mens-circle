@@ -27,8 +27,12 @@
   opacity: 0.03;
 }
 
-/* Gradient glow */
+/* Gradient glow — breathing in sync with site-wide system */
 .whatsapp-section::after {
+  --breathe-scale: 1.12;
+  --breathe-opacity-min: 0.15;
+  --breathe-opacity-max: 0.35;
+
   position: absolute;
   inset-block-start: -30%;
   inset-inline-start: -20%;
@@ -41,7 +45,9 @@
     oklch(50% 0.15 145deg / 20%) 0%,
     transparent 50%
   );
-  animation: breathe-ambient 14s cubic-bezier(0.37, 0, 0.63, 1) infinite -4s;
+  border-radius: 50%;
+  animation: breathe 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform, opacity;
 }
 
 /* ============================================

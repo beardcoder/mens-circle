@@ -13,7 +13,7 @@
   background: var(--bg-tertiary);
 }
 
-/* Decorative breathing petals — collapsed to pseudo-element approach */
+/* Decorative breathing circles — accordion concentric waves */
 .cta-section::before,
 .cta-section::after {
   position: absolute;
@@ -21,30 +21,33 @@
   inset-inline-start: 50%;
   pointer-events: none;
   content: '';
+  background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
   border-radius: 50%;
-  mix-blend-mode: screen;
-  opacity: 0.2;
+  animation: breathe 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform, opacity;
 }
 
 .cta-section::before {
+  --breathe-scale: 1.18;
+  --breathe-opacity-min: 0.25;
+  --breathe-opacity-max: 0.5;
+
   inline-size: min(40vw, 400px);
   block-size: min(40vw, 400px);
   margin-block-start: calc(min(40vw, 400px) * -0.5);
   margin-inline-start: calc(min(40vw, 400px) * -0.5);
-  background: color-mix(in oklch, var(--accent-primary) 45%, var(--color-earth-deep));
-  animation: breathe 10s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
 .cta-section::after {
-  --breathe-min-scale: 0.85;
-  --breathe-max-scale: 1.15;
+  --breathe-scale: 1.06;
+  --breathe-opacity-min: 0.3;
+  --breathe-opacity-max: 0.55;
 
   inline-size: min(30vw, 300px);
   block-size: min(30vw, 300px);
   margin-block-start: calc(min(30vw, 300px) * -0.5);
   margin-inline-start: calc(min(30vw, 300px) * -0.5);
-  background: color-mix(in oklch, var(--color-earth-warm) 55%, var(--color-earth-deep));
-  animation: breathe 10s cubic-bezier(0.5, 0, 0.5, 1) infinite -3s;
 }
 
 /* ============================================

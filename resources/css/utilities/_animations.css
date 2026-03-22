@@ -68,53 +68,42 @@
    Referenced by hero, event, and button CSS
    ============================================ */
 
-/* Breathing animation — smooth orb pulse
-   Smooth sinusoidal expansion and contraction like a living orb.
-   4-phase breath: inhale (expand) → hold → exhale (contract) → rest */
+/* ── Unified Breathing Animation System ──────────────────────────
+   Accordion-style concentric wave expansion.
+   All layers share ONE animation; per-layer --breathe-scale
+   controls expansion intensity (inner = subtle, outer = strong).
+
+   Rhythm: inhale 4s → hold 1s → exhale 4s → rest 1s = 10s
+   Easing: cubic-bezier(0.4, 0, 0.2, 1) — organic, grounded
+
+   Custom properties per layer:
+     --breathe-scale       : peak scale  (default 1.08)
+     --breathe-opacity-min : exhaled opacity (default 0.4)
+     --breathe-opacity-max : inhaled opacity (default 0.8)
+   ─────────────────────────────────────────────────────────────── */
 @keyframes breathe {
   0%,
   100% {
-    opacity: var(--breathe-min-opacity, 0.4);
-    transform: scale(var(--breathe-min-scale, 0.92));
+    opacity: var(--breathe-opacity-min, 0.4);
+    transform: scale(1);
   }
 
-  35% {
-    opacity: var(--breathe-max-opacity, 0.9);
-    transform: scale(var(--breathe-max-scale, 1.08));
+  /* Inhale peak */
+  40% {
+    opacity: var(--breathe-opacity-max, 0.8);
+    transform: scale(var(--breathe-scale, 1.08));
   }
 
+  /* Hold */
   50% {
-    opacity: calc(var(--breathe-max-opacity, 0.9) - 0.05);
-    transform: scale(calc(var(--breathe-max-scale, 1.08) - 0.02));
+    opacity: var(--breathe-opacity-max, 0.8);
+    transform: scale(var(--breathe-scale, 1.08));
   }
 
-  75% {
-    opacity: calc(var(--breathe-min-opacity, 0.4) + 0.05);
-    transform: scale(calc(var(--breathe-min-scale, 0.92) + 0.02));
-  }
-}
-
-/* Ambient breathing for background elements */
-@keyframes breathe-ambient {
-  0%,
-  100% {
-    opacity: var(--breathe-min-opacity, 0.15);
-    transform: scale(0.95) translate(0, 0);
-  }
-
-  30% {
-    opacity: var(--breathe-max-opacity, 0.35);
-    transform: scale(1.05) translate(2px, -3px);
-  }
-
-  50% {
-    opacity: calc(var(--breathe-max-opacity, 0.35) - 0.05);
-    transform: scale(1.03) translate(3px, -1px);
-  }
-
-  70% {
-    opacity: calc(var(--breathe-min-opacity, 0.15) + 0.05);
-    transform: scale(0.97) translate(-1px, 2px);
+  /* Exhale complete */
+  90% {
+    opacity: var(--breathe-opacity-min, 0.4);
+    transform: scale(1);
   }
 }
 
@@ -272,6 +261,20 @@
   .stagger-children > * {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  /* Freeze breathing animations at their resting state */
+  .hero__circle,
+  .event-register__circle,
+  .event-about__circle,
+  .event-cta__circle,
+  .intro__image-circles::before,
+  .intro__image-circles::after,
+  .cta-section::before,
+  .cta-section::after,
+  .newsletter-section::after,
+  .whatsapp-section::after {
+    animation: none !important;
   }
 }
 

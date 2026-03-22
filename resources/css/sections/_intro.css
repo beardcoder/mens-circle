@@ -109,7 +109,11 @@
   text-align: center;
 }
 
+/* Decorative breathing circles — accordion concentric waves */
 .intro__image-circles {
+  --breathe-duration: 10s;
+  --breathe-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -122,22 +126,25 @@
   background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
   border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
   border-radius: 50%;
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
+  will-change: transform, opacity;
 }
 
 .intro__image-circles::before {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.7;
+  --breathe-scale: 1.18;
+  --breathe-opacity-min: 0.3;
+  --breathe-opacity-max: 0.6;
 
   inset-block-start: -20%;
   inset-inline-start: -20%;
   inline-size: 140%;
   block-size: 140%;
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
 
 .intro__image-circles::after {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.75;
+  --breathe-scale: 1.06;
+  --breathe-opacity-min: 0.35;
+  --breathe-opacity-max: 0.65;
 
   inset-block-start: 50%;
   inset-inline-start: 50%;
@@ -145,7 +152,6 @@
   aspect-ratio: 1 / 1;
   background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
   transform: translate(-50%, -50%);
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite -3s;
 }
 
 /* ============================================
