@@ -68,138 +68,54 @@
    Referenced by hero, event, and button CSS
    ============================================ */
 
-/* Breathing animation — Headspace-inspired organic rhythm
-   Follows natural breathing pattern: slow inhale → hold → slow exhale → hold
-   Asymmetric timing creates a more natural, calming feel */
+/* Breathing animation — Headspace/WHM-inspired smooth orb pulse
+   Smooth sinusoidal expansion and contraction like a living orb.
+   4-phase breath: inhale (expand) → hold → exhale (contract) → rest */
 @keyframes breathe {
-  0% {
-    opacity: 0.12;
-    transform: scale(0.88);
-  }
-
-  /* Inhale — slow expansion */
-  30% {
-    opacity: 0.38;
-    transform: scale(1.12);
-  }
-
-  /* Brief hold at peak */
-  40% {
-    opacity: 0.35;
-    transform: scale(1.1);
-  }
-
-  /* Exhale — gentle contraction */
-  70% {
-    opacity: 0.15;
-    transform: scale(0.92);
-  }
-
-  /* Rest before next breath */
+  0%,
   100% {
-    opacity: 0.12;
-    transform: scale(0.88);
+    opacity: var(--breathe-min-opacity, 0.4);
+    transform: scale(var(--breathe-min-scale, 0.92));
+  }
+
+  35% {
+    opacity: var(--breathe-max-opacity, 0.9);
+    transform: scale(var(--breathe-max-scale, 1.08));
+  }
+
+  50% {
+    opacity: calc(var(--breathe-max-opacity, 0.9) - 0.05);
+    transform: scale(calc(var(--breathe-max-scale, 1.08) - 0.02));
+  }
+
+  75% {
+    opacity: calc(var(--breathe-min-opacity, 0.4) + 0.05);
+    transform: scale(calc(var(--breathe-min-scale, 0.92) + 0.02));
   }
 }
 
-/* Slow breathing variant — deeper, more meditative rhythm
-   Adds subtle rotation for organic, drifting movement */
-@keyframes breathe-slow {
-  0% {
-    opacity: 0.08;
-    transform: scale(0.9) rotate(0deg) translate(0, 0);
-  }
-
-  /* Slow inhale with gentle drift */
-  25% {
-    opacity: 0.28;
-    transform: scale(1.06) rotate(0.8deg) translate(2px, -3px);
-  }
-
-  /* Hold — slight continued expansion */
-  38% {
-    opacity: 0.3;
-    transform: scale(1.08) rotate(1deg) translate(3px, -4px);
-  }
-
-  /* Exhale — settles back */
-  65% {
-    opacity: 0.12;
-    transform: scale(0.94) rotate(-0.3deg) translate(-1px, 2px);
-  }
-
-  /* Rest at base */
+/* Ambient breathing — slower, subtler for background decorative elements.
+   Adds gentle organic drift for a living, floating feel */
+@keyframes breathe-ambient {
+  0%,
   100% {
-    opacity: 0.08;
-    transform: scale(0.9) rotate(0deg) translate(0, 0);
-  }
-}
-
-/* Soft glow pulse — for filled/gradient circles
-   Creates a Headspace-like radiating warmth effect */
-@keyframes breathe-glow {
-  0% {
-    box-shadow: 0 0 0 0 transparent;
-    opacity: 0.06;
-    transform: scale(0.85);
+    opacity: var(--breathe-min-opacity, 0.15);
+    transform: scale(0.95) translate(0, 0);
   }
 
   30% {
-    box-shadow: 0 0 60px 20px color-mix(in oklch, var(--accent-primary) 12%, transparent);
-    opacity: 0.2;
-    transform: scale(1.15);
+    opacity: var(--breathe-max-opacity, 0.35);
+    transform: scale(1.05) translate(2px, -3px);
   }
 
-  40% {
-    box-shadow: 0 0 40px 15px color-mix(in oklch, var(--accent-primary) 8%, transparent);
-    opacity: 0.18;
-    transform: scale(1.12);
+  50% {
+    opacity: calc(var(--breathe-max-opacity, 0.35) - 0.05);
+    transform: scale(1.03) translate(3px, -1px);
   }
 
   70% {
-    box-shadow: 0 0 0 0 transparent;
-    opacity: 0.08;
-    transform: scale(0.9);
-  }
-
-  100% {
-    box-shadow: 0 0 0 0 transparent;
-    opacity: 0.06;
-    transform: scale(0.85);
-  }
-}
-
-/* Rising breath — Headspace-inspired vertical breathing
-   Elements rise upward during inhale and settle during exhale.
-   Inner circles start first, outer follow via staggered delays */
-@keyframes breathe-rise {
-  0% {
-    opacity: 0.25;
-    transform: translateY(5%) scale(0.94);
-  }
-
-  /* Inhale — rise and expand */
-  30% {
-    opacity: 0.85;
-    transform: translateY(-4%) scale(1.06);
-  }
-
-  /* Hold at peak */
-  40% {
-    opacity: 0.75;
-    transform: translateY(-3%) scale(1.04);
-  }
-
-  /* Exhale — settle back down */
-  70% {
-    opacity: 0.3;
-    transform: translateY(3%) scale(0.97);
-  }
-
-  /* Rest before next breath */
-  100% {
-    opacity: 0.25;
-    transform: translateY(5%) scale(0.94);
+    opacity: calc(var(--breathe-min-opacity, 0.15) + 0.05);
+    transform: scale(0.97) translate(-1px, 2px);
   }
 }
 
