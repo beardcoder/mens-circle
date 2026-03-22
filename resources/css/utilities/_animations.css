@@ -68,40 +68,9 @@
    Referenced by hero, event, and button CSS
    ============================================ */
 
-/* Apple Watch Breathe — petal container pulse
-   Container scales down + rotates on exhale,
-   scales up on inhale. Petals translate outward simultaneously. */
-@keyframes breathe-pulse {
-  0% {
-    transform: scale(0.2) rotate(135deg);
-  }
-
-  50% {
-    transform: scale(1) rotate(0deg);
-  }
-
-  100% {
-    transform: scale(0.2) rotate(135deg);
-  }
-}
-
-/* Individual petal spread — each circle moves from center to its offset.
-   Per-petal --tx / --ty custom properties set the direction. */
-@keyframes breathe-petal {
-  0% {
-    transform: translate(0, 0);
-  }
-
-  50% {
-    transform: translate(var(--tx), var(--ty));
-  }
-
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
-/* Simple breathing for section decorative circles */
+/* Breathing animation — smooth orb pulse
+   Smooth sinusoidal expansion and contraction like a living orb.
+   4-phase breath: inhale (expand) → hold → exhale (contract) → rest */
 @keyframes breathe {
   0%,
   100% {

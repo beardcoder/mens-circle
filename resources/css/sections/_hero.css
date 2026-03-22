@@ -65,86 +65,84 @@
 }
 
 /* ============================================
-   Breathing Orb — Apple Watch Breathe style
-   Petal circles stacked at center, spread outward
-   on inhale with mix-blend-mode for warm overlaps.
-   Positioned bottom-right, cropped by viewport.
+   Breathing Orb — Concentric circles
+   Stacked from bottom-right, breathing with
+   scale and opacity like a living organism.
    ============================================ */
 .hero__circles {
-  --breathe-duration: 8s;
-  --breathe-easing: cubic-bezier(0.5, 0, 0.5, 1);
-  --petal-size: min(50vw, 50vh);
-
   position: absolute;
-  inset-block-end: calc(var(--petal-size) * -0.3);
-  inset-inline-end: calc(var(--petal-size) * -0.15);
-  inline-size: calc(var(--petal-size) * 2);
-  block-size: calc(var(--petal-size) * 2);
+  inset: 0;
+  overflow: hidden;
   pointer-events: none;
-  animation: breathe-pulse var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
-/* Shared petal — all circles same size, stacked at center */
+/* Shared circle — all layers breathe with the same rhythm */
 .hero__circle {
+  --breathe-duration: 8s;
+  --breathe-easing: cubic-bezier(0.37, 0, 0.63, 1);
+
   position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: var(--petal-size);
-  block-size: var(--petal-size);
-  margin-block-start: calc(var(--petal-size) * -0.5);
-  margin-inline-start: calc(var(--petal-size) * -0.5);
+  inset-block-end: -60%;
+  inset-inline-end: -40%;
   border-radius: 50%;
-  mix-blend-mode: screen;
-  animation: breathe-petal var(--breathe-duration) var(--breathe-easing) infinite;
-  will-change: transform;
+  transform-origin: center;
+  will-change: transform, opacity;
 }
 
-/* Petal 1 — up */
+/* Layer 1 — Outermost: massive arc, soft earth tone */
 .hero__circle--1 {
-  --tx: 0px;
-  --ty: calc(var(--petal-size) * -0.35);
+  --breathe-min-opacity: 0.5;
+  --breathe-max-opacity: 0.8;
+  --breathe-min-scale: 0.97;
+  --breathe-max-scale: 1.03;
 
-  background: color-mix(in oklch, var(--accent-primary) 45%, var(--color-earth-deep));
+  inline-size: 160vw;
+  block-size: 160vw;
+  background: color-mix(in oklch, var(--color-earth-warm) 6%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 10%, transparent);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
-/* Petal 2 — up-right */
+/* Layer 2 — Large warm arc, terracotta tint */
 .hero__circle--2 {
-  --tx: calc(var(--petal-size) * 0.3);
-  --ty: calc(var(--petal-size) * -0.18);
+  --breathe-min-opacity: 0.5;
+  --breathe-max-opacity: 0.85;
+  --breathe-min-scale: 0.96;
+  --breathe-max-scale: 1.04;
 
-  background: color-mix(in oklch, var(--color-terracotta-light) 50%, var(--color-earth-dark));
+  inline-size: 120vw;
+  block-size: 120vw;
+  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 14%, transparent);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -0.5s;
 }
 
-/* Petal 3 — down-right */
+/* Layer 3 — Core glow crescent */
 .hero__circle--3 {
-  --tx: calc(var(--petal-size) * 0.3);
-  --ty: calc(var(--petal-size) * 0.18);
+  --breathe-min-opacity: 0.5;
+  --breathe-max-opacity: 0.9;
+  --breathe-min-scale: 0.95;
+  --breathe-max-scale: 1.05;
 
-  background: color-mix(in oklch, var(--accent-primary) 40%, var(--color-earth-mid));
+  inline-size: 85vw;
+  block-size: 85vw;
+  background: color-mix(in oklch, var(--accent-primary) 10%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 18%, transparent);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -1s;
 }
 
-/* Petal 4 — down */
+/* Layer 4 — Inner warm orb */
 .hero__circle--4 {
-  --tx: 0px;
-  --ty: calc(var(--petal-size) * 0.35);
+  --breathe-min-opacity: 0.5;
+  --breathe-max-opacity: 1;
+  --breathe-min-scale: 0.93;
+  --breathe-max-scale: 1.07;
 
-  background: color-mix(in oklch, var(--color-earth-warm) 55%, var(--color-earth-deep));
-}
-
-/* Petal 5 — down-left */
-.hero__circle--5 {
-  --tx: calc(var(--petal-size) * -0.3);
-  --ty: calc(var(--petal-size) * 0.18);
-
-  background: color-mix(in oklch, var(--color-terracotta-light) 35%, var(--color-earth-dark));
-}
-
-/* Petal 6 — up-left */
-.hero__circle--6 {
-  --tx: calc(var(--petal-size) * -0.3);
-  --ty: calc(var(--petal-size) * -0.18);
-
-  background: color-mix(in oklch, var(--accent-primary) 50%, var(--color-earth-mid));
+  inline-size: 55vw;
+  block-size: 55vw;
+  background: color-mix(in oklch, var(--accent-secondary) 12%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 22%, transparent);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -1.5s;
 }
 
 /* ============================================
@@ -250,11 +248,29 @@
     padding-block-start: var(--space-3xl);
   }
 
-  .hero__circles {
-    --petal-size: min(70vw, 45vh);
+  .hero__circle {
+    inset-block-end: -70%;
+    inset-inline-end: -50%;
+  }
 
-    inset-block-end: calc(var(--petal-size) * -0.5);
-    inset-inline-end: calc(var(--petal-size) * -0.3);
+  .hero__circle--1 {
+    inline-size: 200vw;
+    block-size: 200vw;
+  }
+
+  .hero__circle--2 {
+    inline-size: 160vw;
+    block-size: 160vw;
+  }
+
+  .hero__circle--3 {
+    inline-size: 120vw;
+    block-size: 120vw;
+  }
+
+  .hero__circle--4 {
+    inline-size: 80vw;
+    block-size: 80vw;
   }
 
   .hero__title {
