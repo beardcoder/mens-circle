@@ -52,8 +52,11 @@
   }
 }
 
-/* Decorative circles */
+/* Decorative breathing circles — accordion concentric waves */
 .event-register__circles {
+  --breathe-duration: 10s;
+  --breathe-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -64,29 +67,31 @@
   background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
   border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
   border-radius: 50%;
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
+  will-change: transform, opacity;
 }
 
 .event-register__circle--1 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.7;
+  --breathe-scale: 1.18;
+  --breathe-opacity-min: 0.3;
+  --breathe-opacity-max: 0.6;
 
   inset-block-start: -60%;
   inset-inline-start: -30%;
   inline-size: 120%;
   block-size: 120%;
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
 
 .event-register__circle--2 {
-  --breathe-min-opacity: 0.35;
-  --breathe-max-opacity: 0.65;
+  --breathe-scale: 1.06;
+  --breathe-opacity-min: 0.35;
+  --breathe-opacity-max: 0.65;
 
   inset-block-end: -40%;
   inset-inline-end: -20%;
   inline-size: 80%;
   block-size: 80%;
   background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
-  animation: breathe-ambient 14s cubic-bezier(0.37, 0, 0.63, 1) infinite -4s;
 }
 
 /* Extends .eyebrow.eyebrow--secondary with positioning */
@@ -436,8 +441,11 @@
   opacity: 0.05;
 }
 
-/* Decorative circles */
+/* Decorative breathing circles — accordion concentric waves */
 .event-about__circles {
+  --breathe-duration: 10s;
+  --breathe-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -448,22 +456,25 @@
   background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
   border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
   border-radius: 50%;
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
+  will-change: transform, opacity;
 }
 
 .event-about__circle--1 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.7;
+  --breathe-scale: 1.20;
+  --breathe-opacity-min: 0.3;
+  --breathe-opacity-max: 0.6;
 
   inset-block-start: -20%;
   inset-inline-start: -20%;
   inline-size: 140%;
   block-size: 140%;
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
 
 .event-about__circle--2 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.75;
+  --breathe-scale: 1.10;
+  --breathe-opacity-min: 0.35;
+  --breathe-opacity-max: 0.65;
 
   inset-block-start: 50%;
   inset-inline-start: 50%;
@@ -471,19 +482,18 @@
   aspect-ratio: 1 / 1;
   background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
   transform: translate(-50%, -50%);
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite -3s;
 }
 
 .event-about__circle--3 {
-  --breathe-min-opacity: 0.35;
-  --breathe-max-opacity: 0.65;
+  --breathe-scale: 1.04;
+  --breathe-opacity-min: 0.4;
+  --breathe-opacity-max: 0.7;
 
   inset-block-end: -10%;
   inset-inline-end: -10%;
   inline-size: 50%;
   aspect-ratio: 1 / 1;
   background: color-mix(in oklch, var(--accent-primary) 10%, transparent);
-  animation: breathe-ambient 14s cubic-bezier(0.37, 0, 0.63, 1) infinite -6s;
 }
 
 .event-about__quote {
@@ -525,8 +535,11 @@
   opacity: 0.03;
 }
 
-/* Decorative circles */
+/* Decorative breathing circles — accordion concentric waves */
 .event-cta__circles {
+  --breathe-duration: 10s;
+  --breathe-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -534,34 +547,33 @@
 
 .event-cta__circle {
   position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
   background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
   border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
   border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
+  will-change: transform, opacity;
 }
 
 .event-cta__circle--1 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.7;
+  --breathe-scale: 1.18;
+  --breathe-opacity-min: 0.3;
+  --breathe-opacity-max: 0.6;
 
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
   inline-size: 70vw;
   block-size: 70vw;
-  transform: translate(-50%, -50%);
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
 
 .event-cta__circle--2 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.75;
+  --breathe-scale: 1.06;
+  --breathe-opacity-min: 0.35;
+  --breathe-opacity-max: 0.65;
 
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
   inline-size: 50vw;
   block-size: 50vw;
   background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
-  transform: translate(-50%, -50%);
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite -3s;
 }
 
 .event-cta__content {

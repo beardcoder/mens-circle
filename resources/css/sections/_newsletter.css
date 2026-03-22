@@ -23,8 +23,12 @@
   opacity: 0.04;
 }
 
-/* Gradient glow */
+/* Gradient glow — breathing in sync with site-wide system */
 .newsletter-section::after {
+  --breathe-scale: 1.12;
+  --breathe-opacity-min: 0.15;
+  --breathe-opacity-max: 0.35;
+
   position: absolute;
   inset-block-start: -30%;
   inset-inline-end: -20%;
@@ -37,7 +41,9 @@
     color-mix(in oklch, var(--accent-primary) 15%, transparent) 0%,
     transparent 50%
   );
-  animation: breathe-ambient 14s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  border-radius: 50%;
+  animation: breathe 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform, opacity;
 }
 
 /* ============================================
