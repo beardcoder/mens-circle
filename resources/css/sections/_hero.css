@@ -65,7 +65,9 @@
 }
 
 /* ============================================
-   Decorative Circles
+   Breathing Orbs — Headspace-inspired
+   Concentric layers rising from bottom,
+   building upward with staggered timing
    ============================================ */
 .hero__circles {
   position: absolute;
@@ -76,52 +78,104 @@
 
 .hero__circle {
   position: absolute;
-  background: radial-gradient(
-    circle at center,
-    color-mix(in oklch, var(--accent-primary) 4%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 2%, transparent) 40%,
-    transparent 70%
-  );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 60%, transparent);
   border-radius: 50%;
+  will-change: transform, opacity;
 }
 
+/* Layer 1 — Outermost ambient glow */
 .hero__circle--1 {
-  inset-block-start: -15vw;
-  inset-inline-end: -25vw;
-  inline-size: 70vw;
-  block-size: 70vw;
-  animation: breathe-glow 18s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-}
-
-.hero__circle--2 {
-  inset-block-start: -5vw;
+  inset-block-end: -35vw;
   inset-inline-end: -15vw;
-  inline-size: 50vw;
-  block-size: 50vw;
-  animation: breathe-slow 22s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite -5s;
-}
-
-.hero__circle--3 {
-  inset-block-start: 2vw;
-  inset-inline-end: -8vw;
-  inline-size: 35vw;
-  block-size: 35vw;
+  inline-size: 85vw;
+  block-size: 85vw;
   background: radial-gradient(
-    circle at center,
-    color-mix(in oklch, var(--accent-secondary) 5%, transparent) 0%,
-    color-mix(in oklch, var(--accent-secondary) 2%, transparent) 40%,
+    circle at 50% 40%,
+    color-mix(in oklch, var(--color-earth-warm) 12%, transparent) 0%,
+    color-mix(in oklch, var(--color-earth-warm) 5%, transparent) 45%,
     transparent 70%
   );
-  animation: breathe 25s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite -10s;
+  border: 1px solid color-mix(in oklch, var(--color-sand) 10%, transparent);
+  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 1s;
 }
 
+/* Layer 2 — Earth warmth */
+.hero__circle--2 {
+  inset-block-end: -25vw;
+  inset-inline-end: -5vw;
+  inline-size: 65vw;
+  block-size: 65vw;
+  background: radial-gradient(
+    circle at 50% 40%,
+    color-mix(in oklch, var(--accent-primary) 14%, transparent) 0%,
+    color-mix(in oklch, var(--accent-primary) 6%, transparent) 45%,
+    transparent 70%
+  );
+  border: 1px solid color-mix(in oklch, var(--color-sand) 18%, transparent);
+  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.7s;
+}
+
+/* Layer 3 — Middle terracotta */
+.hero__circle--3 {
+  inset-block-end: -16vw;
+  inset-inline-end: 3vw;
+  inline-size: 48vw;
+  block-size: 48vw;
+  background: radial-gradient(
+    circle at 50% 45%,
+    color-mix(in oklch, var(--accent-primary) 18%, transparent) 0%,
+    color-mix(in oklch, var(--accent-primary) 8%, transparent) 40%,
+    transparent 70%
+  );
+  border: 1px solid color-mix(in oklch, var(--color-sand) 28%, transparent);
+  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.5s;
+}
+
+/* Layer 4 — Inner warmth */
 .hero__circle--4 {
-  inset-block-end: -45vw;
-  inset-inline-start: -45vw;
-  inline-size: 90vw;
-  block-size: 90vw;
-  animation: breathe-slow 30s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite -3s;
+  inset-block-end: -8vw;
+  inset-inline-end: 10vw;
+  inline-size: 34vw;
+  block-size: 34vw;
+  background: radial-gradient(
+    circle at 50% 45%,
+    color-mix(in oklch, var(--accent-secondary) 20%, transparent) 0%,
+    color-mix(in oklch, var(--accent-primary) 10%, transparent) 40%,
+    transparent 70%
+  );
+  border: 1px solid color-mix(in oklch, var(--color-sand) 35%, transparent);
+  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.3s;
+}
+
+/* Layer 5 — Inner bright glow */
+.hero__circle--5 {
+  inset-block-end: -2vw;
+  inset-inline-end: 16vw;
+  inline-size: 22vw;
+  block-size: 22vw;
+  background: radial-gradient(
+    circle at 50% 45%,
+    color-mix(in oklch, var(--accent-secondary) 25%, transparent) 0%,
+    color-mix(in oklch, var(--accent-secondary) 12%, transparent) 40%,
+    transparent 70%
+  );
+  border: 1px solid color-mix(in oklch, var(--color-sand) 42%, transparent);
+  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.1s;
+}
+
+/* Layer 6 — Innermost warm core */
+.hero__circle--6 {
+  inset-block-end: 2vw;
+  inset-inline-end: 20vw;
+  inline-size: 14vw;
+  block-size: 14vw;
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--accent-secondary) 30%, transparent) 0%,
+    color-mix(in oklch, var(--accent-secondary) 15%, transparent) 35%,
+    transparent 65%
+  );
+  border: 1px solid color-mix(in oklch, var(--color-sand) 45%, transparent);
+  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 /* ============================================
@@ -225,6 +279,48 @@
   .hero {
     align-items: center;
     padding-block-start: var(--space-3xl);
+  }
+
+  .hero__circle--1 {
+    inset-block-end: -40vw;
+    inset-inline-end: -30vw;
+    inline-size: 100vw;
+    block-size: 100vw;
+  }
+
+  .hero__circle--2 {
+    inset-block-end: -30vw;
+    inset-inline-end: -15vw;
+    inline-size: 80vw;
+    block-size: 80vw;
+  }
+
+  .hero__circle--3 {
+    inset-block-end: -20vw;
+    inset-inline-end: -5vw;
+    inline-size: 60vw;
+    block-size: 60vw;
+  }
+
+  .hero__circle--4 {
+    inset-block-end: -12vw;
+    inset-inline-end: 5vw;
+    inline-size: 45vw;
+    block-size: 45vw;
+  }
+
+  .hero__circle--5 {
+    inset-block-end: -5vw;
+    inset-inline-end: 12vw;
+    inline-size: 32vw;
+    block-size: 32vw;
+  }
+
+  .hero__circle--6 {
+    inset-block-end: 0;
+    inset-inline-end: 18vw;
+    inline-size: 22vw;
+    block-size: 22vw;
   }
 
   .hero__title {

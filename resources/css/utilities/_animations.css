@@ -169,6 +169,40 @@
   }
 }
 
+/* Rising breath — Headspace-inspired vertical breathing
+   Elements rise upward during inhale and settle during exhale.
+   Inner circles start first, outer follow via staggered delays */
+@keyframes breathe-rise {
+  0% {
+    opacity: 0.25;
+    transform: translateY(5%) scale(0.94);
+  }
+
+  /* Inhale — rise and expand */
+  30% {
+    opacity: 0.85;
+    transform: translateY(-4%) scale(1.06);
+  }
+
+  /* Hold at peak */
+  40% {
+    opacity: 0.75;
+    transform: translateY(-3%) scale(1.04);
+  }
+
+  /* Exhale — settle back down */
+  70% {
+    opacity: 0.3;
+    transform: translateY(3%) scale(0.97);
+  }
+
+  /* Rest before next breath */
+  100% {
+    opacity: 0.25;
+    transform: translateY(5%) scale(0.94);
+  }
+}
+
 /* Gentle drift for decorative elements */
 @keyframes drift {
   0%,
