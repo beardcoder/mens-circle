@@ -76,7 +76,13 @@
 
 .hero__circle {
   position: absolute;
-  border: 1px solid var(--color-sand);
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--accent-primary) 4%, transparent) 0%,
+    color-mix(in oklch, var(--accent-primary) 2%, transparent) 40%,
+    transparent 70%
+  );
+  border: 1px solid color-mix(in oklch, var(--color-sand) 60%, transparent);
   border-radius: 50%;
 }
 
@@ -85,7 +91,7 @@
   inset-inline-end: -25vw;
   inline-size: 70vw;
   block-size: 70vw;
-  animation: breathe 18s ease-in-out infinite;
+  animation: breathe-glow 18s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 .hero__circle--2 {
@@ -93,7 +99,7 @@
   inset-inline-end: -15vw;
   inline-size: 50vw;
   block-size: 50vw;
-  animation: breathe-slow 22s ease-in-out infinite -5s;
+  animation: breathe-slow 22s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite -5s;
 }
 
 .hero__circle--3 {
@@ -101,7 +107,13 @@
   inset-inline-end: -8vw;
   inline-size: 35vw;
   block-size: 35vw;
-  animation: breathe 25s ease-in-out infinite -10s;
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--accent-secondary) 5%, transparent) 0%,
+    color-mix(in oklch, var(--accent-secondary) 2%, transparent) 40%,
+    transparent 70%
+  );
+  animation: breathe 25s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite -10s;
 }
 
 .hero__circle--4 {
@@ -109,7 +121,7 @@
   inset-inline-start: -45vw;
   inline-size: 90vw;
   block-size: 90vw;
-  animation: breathe-slow 30s ease-in-out infinite -3s;
+  animation: breathe-slow 30s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite -3s;
 }
 
 /* ============================================
