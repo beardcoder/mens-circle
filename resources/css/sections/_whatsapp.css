@@ -41,7 +41,7 @@
     oklch(50% 0.15 145deg / 20%) 0%,
     transparent 50%
   );
-  animation: breathe-slow 22s ease-in-out infinite -4s;
+  animation: breathe-slow 22s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite -4s;
 }
 
 /* ============================================
