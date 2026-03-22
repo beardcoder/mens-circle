@@ -134,16 +134,19 @@
   inset-inline-start: -20%;
   inline-size: 140%;
   block-size: 140%;
-  animation: breathe-slow 26s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
 
 .intro__image-circles::after {
+  --breathe-min-opacity: 0.15;
+  --breathe-max-opacity: 0.4;
+
   inset-block-start: 50%;
   inset-inline-start: 50%;
   inline-size: 80%;
   aspect-ratio: 1 / 1;
   transform: translate(-50%, -50%);
-  animation: breathe-glow 22s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite -6s;
+  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite -3s;
 }
 
 /* ============================================

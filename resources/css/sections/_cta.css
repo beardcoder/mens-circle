@@ -35,14 +35,14 @@
   inline-size: 50vw;
   block-size: 50vw;
   opacity: 0.3;
-  animation: breathe-slow 24s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
 
 .cta-section::after {
   inline-size: 35vw;
   block-size: 35vw;
   opacity: 0.2;
-  animation: breathe-glow 20s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite -8s;
+  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite -3s;
 }
 
 /* ============================================

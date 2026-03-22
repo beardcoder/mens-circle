@@ -65,9 +65,10 @@
 }
 
 /* ============================================
-   Breathing Orbs — Headspace-inspired
-   Concentric layers rising from bottom,
-   building upward with staggered timing
+   Breathing Orb — Headspace/WHM-inspired
+   Concentric rings centered bottom-right that
+   breathe together as one unified organism.
+   Smooth, fluid, meditative.
    ============================================ */
 .hero__circles {
   position: absolute;
@@ -76,106 +77,93 @@
   pointer-events: none;
 }
 
+/* Shared orb properties — all layers breathe with the same rhythm */
 .hero__circle {
+  --breathe-duration: 8s;
+  --breathe-easing: cubic-bezier(0.37, 0, 0.63, 1);
+
   position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 65%;
   border-radius: 50%;
+  transform-origin: center;
+  translate: -50% -50%;
   will-change: transform, opacity;
 }
 
-/* Layer 1 — Outermost ambient glow */
+/* Layer 1 — Outermost halo: very large, faint atmospheric glow */
 .hero__circle--1 {
-  inset-block-end: -35vw;
-  inset-inline-end: -15vw;
-  inline-size: 85vw;
-  block-size: 85vw;
+  --breathe-min-opacity: 0.08;
+  --breathe-max-opacity: 0.2;
+  --breathe-min-scale: 0.96;
+  --breathe-max-scale: 1.04;
+
+  inline-size: 75vw;
+  block-size: 75vw;
   background: radial-gradient(
-    circle at 50% 40%,
-    color-mix(in oklch, var(--color-earth-warm) 12%, transparent) 0%,
-    color-mix(in oklch, var(--color-earth-warm) 5%, transparent) 45%,
+    circle at center,
+    color-mix(in oklch, var(--color-earth-warm) 10%, transparent) 0%,
+    color-mix(in oklch, var(--color-earth-warm) 4%, transparent) 50%,
     transparent 70%
   );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 10%, transparent);
-  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 1s;
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
-/* Layer 2 — Earth warmth */
+/* Layer 2 — Warm atmosphere */
 .hero__circle--2 {
-  inset-block-end: -25vw;
-  inset-inline-end: -5vw;
-  inline-size: 65vw;
-  block-size: 65vw;
+  --breathe-min-opacity: 0.12;
+  --breathe-max-opacity: 0.35;
+  --breathe-min-scale: 0.94;
+  --breathe-max-scale: 1.06;
+
+  inline-size: 50vw;
+  block-size: 50vw;
   background: radial-gradient(
-    circle at 50% 40%,
+    circle at center,
     color-mix(in oklch, var(--accent-primary) 14%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 6%, transparent) 45%,
-    transparent 70%
+    color-mix(in oklch, var(--accent-primary) 6%, transparent) 50%,
+    transparent 72%
   );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 18%, transparent);
-  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.7s;
+  border: 1px solid color-mix(in oklch, var(--color-sand) 8%, transparent);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -0.4s;
 }
 
-/* Layer 3 — Middle terracotta */
+/* Layer 3 — Core glow ring */
 .hero__circle--3 {
-  inset-block-end: -16vw;
-  inset-inline-end: 3vw;
-  inline-size: 48vw;
-  block-size: 48vw;
+  --breathe-min-opacity: 0.18;
+  --breathe-max-opacity: 0.5;
+  --breathe-min-scale: 0.93;
+  --breathe-max-scale: 1.07;
+
+  inline-size: 32vw;
+  block-size: 32vw;
   background: radial-gradient(
-    circle at 50% 45%,
-    color-mix(in oklch, var(--accent-primary) 18%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 8%, transparent) 40%,
+    circle at center,
+    color-mix(in oklch, var(--accent-primary) 22%, transparent) 0%,
+    color-mix(in oklch, var(--accent-primary) 10%, transparent) 45%,
     transparent 70%
   );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 28%, transparent);
-  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.5s;
+  border: 1px solid color-mix(in oklch, var(--color-sand) 15%, transparent);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -0.8s;
 }
 
-/* Layer 4 — Inner warmth */
+/* Layer 4 — Inner warm orb */
 .hero__circle--4 {
-  inset-block-end: -8vw;
-  inset-inline-end: 10vw;
-  inline-size: 34vw;
-  block-size: 34vw;
-  background: radial-gradient(
-    circle at 50% 45%,
-    color-mix(in oklch, var(--accent-secondary) 20%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 10%, transparent) 40%,
-    transparent 70%
-  );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 35%, transparent);
-  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.3s;
-}
+  --breathe-min-opacity: 0.25;
+  --breathe-max-opacity: 0.7;
+  --breathe-min-scale: 0.9;
+  --breathe-max-scale: 1.1;
 
-/* Layer 5 — Inner bright glow */
-.hero__circle--5 {
-  inset-block-end: -2vw;
-  inset-inline-end: 16vw;
-  inline-size: 22vw;
-  block-size: 22vw;
-  background: radial-gradient(
-    circle at 50% 45%,
-    color-mix(in oklch, var(--accent-secondary) 25%, transparent) 0%,
-    color-mix(in oklch, var(--accent-secondary) 12%, transparent) 40%,
-    transparent 70%
-  );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 42%, transparent);
-  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.1s;
-}
-
-/* Layer 6 — Innermost warm core */
-.hero__circle--6 {
-  inset-block-end: 2vw;
-  inset-inline-end: 20vw;
-  inline-size: 14vw;
-  block-size: 14vw;
+  inline-size: 18vw;
+  block-size: 18vw;
   background: radial-gradient(
     circle at center,
     color-mix(in oklch, var(--accent-secondary) 30%, transparent) 0%,
-    color-mix(in oklch, var(--accent-secondary) 15%, transparent) 35%,
-    transparent 65%
+    color-mix(in oklch, var(--accent-primary) 15%, transparent) 50%,
+    transparent 75%
   );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 45%, transparent);
-  animation: breathe-rise 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  border: 1px solid color-mix(in oklch, var(--color-sand) 22%, transparent);
+  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -1.2s;
 }
 
 /* ============================================
@@ -281,46 +269,28 @@
     padding-block-start: var(--space-3xl);
   }
 
+  .hero__circle {
+    inset-inline-start: 55%;
+  }
+
   .hero__circle--1 {
-    inset-block-end: -40vw;
-    inset-inline-end: -30vw;
-    inline-size: 100vw;
-    block-size: 100vw;
+    inline-size: 95vw;
+    block-size: 95vw;
   }
 
   .hero__circle--2 {
-    inset-block-end: -30vw;
-    inset-inline-end: -15vw;
-    inline-size: 80vw;
-    block-size: 80vw;
+    inline-size: 65vw;
+    block-size: 65vw;
   }
 
   .hero__circle--3 {
-    inset-block-end: -20vw;
-    inset-inline-end: -5vw;
-    inline-size: 60vw;
-    block-size: 60vw;
+    inline-size: 42vw;
+    block-size: 42vw;
   }
 
   .hero__circle--4 {
-    inset-block-end: -12vw;
-    inset-inline-end: 5vw;
-    inline-size: 45vw;
-    block-size: 45vw;
-  }
-
-  .hero__circle--5 {
-    inset-block-end: -5vw;
-    inset-inline-end: 12vw;
-    inline-size: 32vw;
-    block-size: 32vw;
-  }
-
-  .hero__circle--6 {
-    inset-block-end: 0;
-    inset-inline-end: 18vw;
-    inline-size: 22vw;
-    block-size: 22vw;
+    inline-size: 25vw;
+    block-size: 25vw;
   }
 
   .hero__title {
