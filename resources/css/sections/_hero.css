@@ -90,79 +90,59 @@
   will-change: transform, opacity;
 }
 
-/* Layer 1 — Outermost: massive, mostly off-screen, faint arc */
+/* Layer 1 — Outermost: massive arc, soft earth tone fill */
 .hero__circle--1 {
-  --breathe-min-opacity: 0.06;
-  --breathe-max-opacity: 0.18;
+  --breathe-min-opacity: 0.5;
+  --breathe-max-opacity: 0.8;
   --breathe-min-scale: 0.97;
   --breathe-max-scale: 1.03;
 
   inline-size: 160vw;
   block-size: 160vw;
-  background: radial-gradient(
-    circle at center,
-    color-mix(in oklch, var(--color-earth-warm) 8%, transparent) 0%,
-    color-mix(in oklch, var(--color-earth-warm) 3%, transparent) 50%,
-    transparent 70%
-  );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 6%, transparent);
+  background: color-mix(in oklch, var(--color-earth-warm) 6%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 10%, transparent);
   animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
-/* Layer 2 — Large warm arc */
+/* Layer 2 — Large warm arc, terracotta tint */
 .hero__circle--2 {
-  --breathe-min-opacity: 0.1;
-  --breathe-max-opacity: 0.3;
+  --breathe-min-opacity: 0.5;
+  --breathe-max-opacity: 0.85;
   --breathe-min-scale: 0.96;
   --breathe-max-scale: 1.04;
 
   inline-size: 120vw;
   block-size: 120vw;
-  background: radial-gradient(
-    circle at center,
-    color-mix(in oklch, var(--accent-primary) 12%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 5%, transparent) 50%,
-    transparent 72%
-  );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 10%, transparent);
+  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 14%, transparent);
   animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -0.5s;
 }
 
-/* Layer 3 — Core glow, cropped to a visible crescent */
+/* Layer 3 — Core glow crescent */
 .hero__circle--3 {
-  --breathe-min-opacity: 0.15;
-  --breathe-max-opacity: 0.45;
+  --breathe-min-opacity: 0.5;
+  --breathe-max-opacity: 0.9;
   --breathe-min-scale: 0.95;
   --breathe-max-scale: 1.05;
 
   inline-size: 85vw;
   block-size: 85vw;
-  background: radial-gradient(
-    circle at center,
-    color-mix(in oklch, var(--accent-primary) 18%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 8%, transparent) 45%,
-    transparent 70%
-  );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 15%, transparent);
+  background: color-mix(in oklch, var(--accent-primary) 10%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 18%, transparent);
   animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -1s;
 }
 
 /* Layer 4 — Inner warm orb, the "belly" center */
 .hero__circle--4 {
-  --breathe-min-opacity: 0.2;
-  --breathe-max-opacity: 0.6;
+  --breathe-min-opacity: 0.5;
+  --breathe-max-opacity: 1;
   --breathe-min-scale: 0.93;
   --breathe-max-scale: 1.07;
 
   inline-size: 55vw;
   block-size: 55vw;
-  background: radial-gradient(
-    circle at center,
-    color-mix(in oklch, var(--accent-secondary) 25%, transparent) 0%,
-    color-mix(in oklch, var(--accent-primary) 12%, transparent) 50%,
-    transparent 75%
-  );
-  border: 1px solid color-mix(in oklch, var(--color-sand) 20%, transparent);
+  background: color-mix(in oklch, var(--accent-secondary) 12%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 22%, transparent);
   animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -1.5s;
 }
 
