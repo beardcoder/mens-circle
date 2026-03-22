@@ -88,8 +88,6 @@
       <div class="hero__circle hero__circle--2"></div>
       <div class="hero__circle hero__circle--3"></div>
       <div class="hero__circle hero__circle--4"></div>
-      <div class="hero__circle hero__circle--5"></div>
-      <div class="hero__circle hero__circle--6"></div>
     </div>
 
     <div class="container">
