@@ -68,41 +68,38 @@
    Referenced by hero, event, and button CSS
    ============================================ */
 
-/* ── Unified Breathing Animation System ──────────────────────────
-   Accordion-style concentric wave expansion.
-   All layers share ONE animation; per-layer --breathe-scale
-   controls expansion intensity (inner = subtle, outer = strong).
+/* ── Breathing Animation ────────────────────────────────────────
+   One rhythm. One easing. Amplitude varies per layer via CSS vars.
 
-   Rhythm: inhale 4s → hold 1s → exhale 4s → rest 1s = 10s
+   Cycle: inhale 4s → hold 1s → exhale 4s → rest 1s = 10s
    Easing: cubic-bezier(0.4, 0, 0.2, 1) — organic, grounded
 
-   Custom properties per layer:
-     --breathe-scale       : peak scale  (default 1.08)
-     --breathe-opacity-min : exhaled opacity (default 0.4)
-     --breathe-opacity-max : inhaled opacity (default 0.8)
+   Resolved per element:
+     --breathe-scale       peak scale       (default: 1.10)
+     --breathe-opacity-min resting opacity  (default: 0.35)
+     --breathe-opacity-max peak opacity     (default: 0.75)
+     --breathe-duration    full cycle       (default: 10s)
+     --breathe-easing      timing function  (default: cubic-bezier(0.4, 0, 0.2, 1))
    ─────────────────────────────────────────────────────────────── */
 @keyframes breathe {
   0%,
   100% {
-    opacity: var(--breathe-opacity-min, 0.4);
+    opacity: var(--breathe-opacity-min, 0.35);
     transform: scale(1);
   }
 
-  /* Inhale peak */
   40% {
-    opacity: var(--breathe-opacity-max, 0.8);
-    transform: scale(var(--breathe-scale, 1.08));
+    opacity: var(--breathe-opacity-max, 0.75);
+    transform: scale(var(--breathe-scale, 1.10));
   }
 
-  /* Hold */
   50% {
-    opacity: var(--breathe-opacity-max, 0.8);
-    transform: scale(var(--breathe-scale, 1.08));
+    opacity: var(--breathe-opacity-max, 0.75);
+    transform: scale(var(--breathe-scale, 1.10));
   }
 
-  /* Exhale complete */
   90% {
-    opacity: var(--breathe-opacity-min, 0.4);
+    opacity: var(--breathe-opacity-min, 0.35);
     transform: scale(1);
   }
 }

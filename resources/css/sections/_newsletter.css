@@ -23,23 +23,24 @@
   opacity: 0.04;
 }
 
-/* Gradient glow — breathing in sync with site-wide system */
+/* Breathing orb — part of the unified site-wide system */
 .newsletter-section::after {
   --breathe-scale: 1.12;
-  --breathe-opacity-min: 0.15;
-  --breathe-opacity-max: 0.35;
+  --breathe-opacity-min: 0.18;
+  --breathe-opacity-max: 0.42;
 
   position: absolute;
-  inset-block-start: -30%;
-  inset-inline-end: -20%;
-  inline-size: 70%;
-  block-size: 160%;
+  inset-block-start: -40%;
+  inset-inline-end: -25%;
+  inline-size: 80%;
+  block-size: 180%;
   pointer-events: none;
   content: '';
   background: radial-gradient(
-    ellipse at center,
-    color-mix(in oklch, var(--accent-primary) 15%, transparent) 0%,
-    transparent 50%
+    circle at center,
+    color-mix(in oklch, var(--accent-primary) 28%, transparent) 0%,
+    color-mix(in oklch, var(--color-earth-warm) 12%, transparent) 40%,
+    transparent 70%
   );
   border-radius: 50%;
   animation: breathe 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;

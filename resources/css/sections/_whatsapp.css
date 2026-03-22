@@ -27,23 +27,24 @@
   opacity: 0.03;
 }
 
-/* Gradient glow — breathing in sync with site-wide system */
+/* Breathing orb — part of the unified site-wide system */
 .whatsapp-section::after {
   --breathe-scale: 1.12;
-  --breathe-opacity-min: 0.15;
-  --breathe-opacity-max: 0.35;
+  --breathe-opacity-min: 0.18;
+  --breathe-opacity-max: 0.42;
 
   position: absolute;
-  inset-block-start: -30%;
-  inset-inline-start: -20%;
-  inline-size: 70%;
-  block-size: 160%;
+  inset-block-start: -40%;
+  inset-inline-start: -25%;
+  inline-size: 80%;
+  block-size: 180%;
   pointer-events: none;
   content: '';
   background: radial-gradient(
-    ellipse at center,
-    oklch(50% 0.15 145deg / 20%) 0%,
-    transparent 50%
+    circle at center,
+    oklch(55% 0.15 145deg / 30%) 0%,
+    oklch(45% 0.10 145deg / 12%) 40%,
+    transparent 70%
   );
   border-radius: 50%;
   animation: breathe 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
