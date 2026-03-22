@@ -1,25 +1,26 @@
 /**
- * Breathing Circles Component
- * Reusable accordion-style concentric wave animation.
+ * Breathing Orb System
+ *
+ * One motion language. One timing model. One visual system.
+ *
+ * Each layer is a soft radial gradient orb — no hard edges, no borders.
+ * Layers stack to build warm atmospheric depth from diffuse halo to
+ * concentrated terracotta core.
+ *
+ * Accordion mechanic (non-negotiable):
+ *   Layer 1 (outermost): scale 1.22 — widest expansion
+ *   Layer 5 (innermost): scale 1.03 — minimal movement
+ *   All layers in perfect sync — same duration, different amplitude.
  *
  * Usage (Blade):
  *   <x-breathing-circles :layers="5" />
- *   <x-breathing-circles :layers="3" class="my-section__circles" />
+ *   <x-breathing-circles :layers="3" />
  *
- * Each numbered layer scales with different intensity:
- *   Layer 1 (outermost) → strongest expansion
- *   Layer 5 (innermost) → subtlest expansion
- *
- * All layers animate in perfect sync via the shared `breathe` keyframe
- * from _animations.css, creating an accordion-like breathing effect.
- *
- * Section-specific sizing & positioning should be set via
- * descendant selectors (e.g. `.hero .breathing-circle--1 { ... }`).
+ * Section-specific sizing & positioning via descendant selectors.
+ * @see utilities/_animations.css for @keyframes breathe
  */
 
-/* ============================================
-   Container
-   ============================================ */
+/* ── Container ─────────────────────────────────────────────────── */
 .breathing-circles {
   position: absolute;
   inset: 0;
@@ -27,9 +28,7 @@
   pointer-events: none;
 }
 
-/* ============================================
-   Circle Base — shared animation & appearance
-   ============================================ */
+/* ── Base orb ──────────────────────────────────────────────────── */
 .breathing-circle {
   position: absolute;
   border-radius: 50%;
@@ -42,59 +41,74 @@
   will-change: transform, opacity;
 }
 
-/* ============================================
-   Layer Variants — outermost (1) to innermost (5)
-   Scale intensity decreases toward center;
-   opacity range increases toward center.
-   Colors shift from warm earth (outer) to accent (inner).
-   ============================================ */
+/* ── Accordion layers ───────────────────────────────────────────
+   Each layer: soft radial gradient from warm center to transparent.
+   No borders, no flat fills — pure atmospheric glow.
+   Layers accumulate: outer = diffuse halo, inner = dense warm core.
+   ─────────────────────────────────────────────────────────────── */
 
-/* Layer 1: Outermost — strongest expansion */
+/* Layer 1: outermost halo — widest sweep, earth-warm diffuse glow */
 .breathing-circle--1 {
   --breathe-scale: 1.22;
-  --breathe-opacity-min: 0.3;
-  --breathe-opacity-max: 0.6;
+  --breathe-opacity-min: 0.20;
+  --breathe-opacity-max: 0.52;
 
-  background: color-mix(in oklch, var(--color-earth-warm) 6%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 10%, transparent);
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--color-earth-warm) 22%, transparent) 0%,
+    transparent 68%
+  );
 }
 
-/* Layer 2: Strong-moderate expansion */
+/* Layer 2: strong outer ring — warm amber, broader spread */
 .breathing-circle--2 {
-  --breathe-scale: 1.14;
-  --breathe-opacity-min: 0.35;
-  --breathe-opacity-max: 0.65;
+  --breathe-scale: 1.15;
+  --breathe-opacity-min: 0.26;
+  --breathe-opacity-max: 0.58;
 
-  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 14%, transparent);
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--color-terracotta) 20%, transparent) 0%,
+    transparent 64%
+  );
 }
 
-/* Layer 3: Moderate expansion */
+/* Layer 3: mid ring — terracotta, transitional presence */
 .breathing-circle--3 {
-  --breathe-scale: 1.08;
-  --breathe-opacity-min: 0.4;
-  --breathe-opacity-max: 0.7;
+  --breathe-scale: 1.09;
+  --breathe-opacity-min: 0.32;
+  --breathe-opacity-max: 0.66;
 
-  background: color-mix(in oklch, var(--accent-primary) 10%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 18%, transparent);
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--color-terracotta) 28%, transparent) 0%,
+    transparent 60%
+  );
 }
 
-/* Layer 4: Subtle expansion */
+/* Layer 4: inner ring — richer terracotta, focused warmth */
 .breathing-circle--4 {
-  --breathe-scale: 1.04;
-  --breathe-opacity-min: 0.45;
-  --breathe-opacity-max: 0.8;
+  --breathe-scale: 1.05;
+  --breathe-opacity-min: 0.42;
+  --breathe-opacity-max: 0.74;
 
-  background: color-mix(in oklch, var(--accent-secondary) 12%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 22%, transparent);
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--color-terracotta) 36%, transparent) 0%,
+    transparent 55%
+  );
 }
 
-/* Layer 5: Innermost — subtlest expansion */
+/* Layer 5: innermost core — densest, least movement */
 .breathing-circle--5 {
-  --breathe-scale: 1.02;
-  --breathe-opacity-min: 0.5;
-  --breathe-opacity-max: 0.9;
+  --breathe-scale: 1.03;
+  --breathe-opacity-min: 0.52;
+  --breathe-opacity-max: 0.84;
 
-  background: color-mix(in oklch, var(--accent-secondary) 14%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 26%, transparent);
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--color-terracotta) 42%, transparent) 0%,
+    color-mix(in oklch, var(--color-earth-warm) 20%, transparent) 40%,
+    transparent 68%
+  );
 }
