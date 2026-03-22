@@ -52,41 +52,49 @@
   }
 }
 
-/* Decorative circles */
+/* Decorative breathing petals — Apple Watch Breathe style */
 .event-register__circles {
+  --breathe-duration: 10s;
+  --breathe-easing: cubic-bezier(0.5, 0, 0.5, 1);
+  --petal-size: min(30vw, 300px);
+
   position: absolute;
-  inset: 0;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: calc(var(--petal-size) * 2);
+  block-size: calc(var(--petal-size) * 2);
+  margin-block-start: calc(var(--petal-size) * -1);
+  margin-inline-start: calc(var(--petal-size) * -1);
   pointer-events: none;
+  opacity: 0.25;
+  animation: breathe-pulse var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
 .event-register__circle {
   position: absolute;
-  background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: var(--petal-size);
+  block-size: var(--petal-size);
+  margin-block-start: calc(var(--petal-size) * -0.5);
+  margin-inline-start: calc(var(--petal-size) * -0.5);
   border-radius: 50%;
+  mix-blend-mode: screen;
+  animation: breathe-petal var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
 .event-register__circle--1 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.7;
+  --tx: 0px;
+  --ty: calc(var(--petal-size) * -0.3);
 
-  inset-block-start: -60%;
-  inset-inline-start: -30%;
-  inline-size: 120%;
-  block-size: 120%;
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  background: color-mix(in oklch, var(--accent-primary) 45%, var(--color-earth-deep));
 }
 
 .event-register__circle--2 {
-  --breathe-min-opacity: 0.35;
-  --breathe-max-opacity: 0.65;
+  --tx: 0px;
+  --ty: calc(var(--petal-size) * 0.3);
 
-  inset-block-end: -40%;
-  inset-inline-end: -20%;
-  inline-size: 80%;
-  block-size: 80%;
-  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
-  animation: breathe-ambient 14s cubic-bezier(0.37, 0, 0.63, 1) infinite -4s;
+  background: color-mix(in oklch, var(--color-earth-warm) 55%, var(--color-earth-deep));
 }
 
 /* Extends .eyebrow.eyebrow--secondary with positioning */
@@ -436,54 +444,56 @@
   opacity: 0.05;
 }
 
-/* Decorative circles */
+/* Decorative breathing petals — Apple Watch Breathe style */
 .event-about__circles {
+  --breathe-duration: 10s;
+  --breathe-easing: cubic-bezier(0.5, 0, 0.5, 1);
+  --petal-size: min(35vw, 350px);
+
   position: absolute;
-  inset: 0;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: calc(var(--petal-size) * 2);
+  block-size: calc(var(--petal-size) * 2);
+  margin-block-start: calc(var(--petal-size) * -1);
+  margin-inline-start: calc(var(--petal-size) * -1);
   pointer-events: none;
+  opacity: 0.3;
+  animation: breathe-pulse var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
 .event-about__circle {
   position: absolute;
-  background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: var(--petal-size);
+  block-size: var(--petal-size);
+  margin-block-start: calc(var(--petal-size) * -0.5);
+  margin-inline-start: calc(var(--petal-size) * -0.5);
   border-radius: 50%;
+  mix-blend-mode: screen;
+  animation: breathe-petal var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
 .event-about__circle--1 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.7;
+  --tx: 0px;
+  --ty: calc(var(--petal-size) * -0.3);
 
-  inset-block-start: -20%;
-  inset-inline-start: -20%;
-  inline-size: 140%;
-  block-size: 140%;
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  background: color-mix(in oklch, var(--accent-primary) 45%, var(--color-earth-deep));
 }
 
 .event-about__circle--2 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.75;
+  --tx: calc(var(--petal-size) * 0.26);
+  --ty: calc(var(--petal-size) * 0.15);
 
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: 80%;
-  aspect-ratio: 1 / 1;
-  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
-  transform: translate(-50%, -50%);
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite -3s;
+  background: color-mix(in oklch, var(--color-terracotta-light) 50%, var(--color-earth-dark));
 }
 
 .event-about__circle--3 {
-  --breathe-min-opacity: 0.35;
-  --breathe-max-opacity: 0.65;
+  --tx: calc(var(--petal-size) * -0.26);
+  --ty: calc(var(--petal-size) * 0.15);
 
-  inset-block-end: -10%;
-  inset-inline-end: -10%;
-  inline-size: 50%;
-  aspect-ratio: 1 / 1;
-  background: color-mix(in oklch, var(--accent-primary) 10%, transparent);
-  animation: breathe-ambient 14s cubic-bezier(0.37, 0, 0.63, 1) infinite -6s;
+  background: color-mix(in oklch, var(--color-earth-warm) 55%, var(--color-earth-deep));
 }
 
 .event-about__quote {
@@ -525,43 +535,49 @@
   opacity: 0.03;
 }
 
-/* Decorative circles */
+/* Decorative breathing petals — Apple Watch Breathe style */
 .event-cta__circles {
+  --breathe-duration: 10s;
+  --breathe-easing: cubic-bezier(0.5, 0, 0.5, 1);
+  --petal-size: min(30vw, 300px);
+
   position: absolute;
-  inset: 0;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: calc(var(--petal-size) * 2);
+  block-size: calc(var(--petal-size) * 2);
+  margin-block-start: calc(var(--petal-size) * -1);
+  margin-inline-start: calc(var(--petal-size) * -1);
   pointer-events: none;
+  opacity: 0.2;
+  animation: breathe-pulse var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
 .event-cta__circle {
   position: absolute;
-  background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: var(--petal-size);
+  block-size: var(--petal-size);
+  margin-block-start: calc(var(--petal-size) * -0.5);
+  margin-inline-start: calc(var(--petal-size) * -0.5);
   border-radius: 50%;
+  mix-blend-mode: screen;
+  animation: breathe-petal var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
 .event-cta__circle--1 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.7;
+  --tx: 0px;
+  --ty: calc(var(--petal-size) * -0.3);
 
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: 70vw;
-  block-size: 70vw;
-  transform: translate(-50%, -50%);
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  background: color-mix(in oklch, var(--accent-primary) 45%, var(--color-earth-deep));
 }
 
 .event-cta__circle--2 {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.75;
+  --tx: 0px;
+  --ty: calc(var(--petal-size) * 0.3);
 
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: 50vw;
-  block-size: 50vw;
-  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
-  transform: translate(-50%, -50%);
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite -3s;
+  background: color-mix(in oklch, var(--color-earth-warm) 55%, var(--color-earth-deep));
 }
 
 .event-cta__content {
