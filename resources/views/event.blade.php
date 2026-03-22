@@ -83,12 +83,7 @@
                 ]) }}
       @endif
     </div>
-    <div class="hero__circles" aria-hidden="true">
-      <div class="hero__circle hero__circle--1"></div>
-      <div class="hero__circle hero__circle--2"></div>
-      <div class="hero__circle hero__circle--3"></div>
-      <div class="hero__circle hero__circle--4"></div>
-    </div>
+    <x-breathing-circles :layers="5" />
 
     <div class="container">
       <div class="hero__content">
@@ -122,10 +117,7 @@
     <section class="event-register-section" id="anmeldung">
       <div class="event-register__layout">
         <div class="event-register__content fade-in">
-          <div class="event-register__circles" aria-hidden="true">
-            <div class="event-register__circle event-register__circle--1"></div>
-            <div class="event-register__circle event-register__circle--2"></div>
-          </div>
+          <x-breathing-circles :layers="3" />
           <p class="eyebrow eyebrow--secondary">Rückblick</p>
           <h2
             class="section-title section-title--lg section-title--light event-register__title"
@@ -160,10 +152,7 @@
     <section class="event-register-section" id="anmeldung">
       <div class="event-register__layout">
         <div class="event-register__content fade-in">
-          <div class="event-register__circles" aria-hidden="true">
-            <div class="event-register__circle event-register__circle--1"></div>
-            <div class="event-register__circle event-register__circle--2"></div>
-          </div>
+          <x-breathing-circles :layers="3" />
           @if ($event->isFull)
             <p class="eyebrow eyebrow--secondary">Warteliste</p>
             <h2
@@ -356,11 +345,7 @@
       </div>
       <div class="event-about__visual fade-in fade-in-delay-1">
         <div class="event-about__quote-area">
-          <div class="event-about__circles" aria-hidden="true">
-            <div class="event-about__circle event-about__circle--1"></div>
-            <div class="event-about__circle event-about__circle--2"></div>
-            <div class="event-about__circle event-about__circle--3"></div>
-          </div>
+          <x-breathing-circles :layers="3" />
           <p class="event-about__quote">»Gemeinsam<br />
           <span class="text-italic">wachsen</span>,<br />
           einander<br />
@@ -371,10 +356,7 @@
   </section>
   <!-- Final CTA Section -->
   <section class="event-cta-section">
-    <div class="event-cta__circles" aria-hidden="true">
-      <div class="event-cta__circle event-cta__circle--1"></div>
-      <div class="event-cta__circle event-cta__circle--2"></div>
-    </div>
+    <x-breathing-circles :layers="3" />
     <div class="container">
       <div class="event-cta__content fade-in">
         @if ($event->isPast)

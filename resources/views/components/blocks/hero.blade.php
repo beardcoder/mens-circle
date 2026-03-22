@@ -24,12 +24,7 @@
     @endif
   </div>
 
-  <div class="hero__circles" aria-hidden="true">
-    <div class="hero__circle hero__circle--1"></div>
-    <div class="hero__circle hero__circle--2"></div>
-    <div class="hero__circle hero__circle--3"></div>
-    <div class="hero__circle hero__circle--4"></div>
-  </div>
+  <x-breathing-circles :layers="5" />
 
   <div class="container">
     <div class="hero__content">

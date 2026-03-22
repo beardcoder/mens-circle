@@ -52,46 +52,27 @@
   }
 }
 
-/* Decorative breathing circles — accordion concentric waves */
-.event-register__circles {
-  --breathe-duration: 10s;
-  --breathe-easing: cubic-bezier(0.4, 0, 0.2, 1);
-
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.event-register__circle {
-  position: absolute;
-  background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
-  border-radius: 50%;
-  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
-  will-change: transform, opacity;
-}
-
-.event-register__circle--1 {
-  --breathe-scale: 1.18;
-  --breathe-opacity-min: 0.3;
-  --breathe-opacity-max: 0.6;
-
+/* Breathing circles — section-specific positioning */
+.event-register-section .breathing-circle--1 {
   inset-block-start: -60%;
   inset-inline-start: -30%;
   inline-size: 120%;
   block-size: 120%;
 }
 
-.event-register__circle--2 {
-  --breathe-scale: 1.06;
-  --breathe-opacity-min: 0.35;
-  --breathe-opacity-max: 0.65;
-
+.event-register-section .breathing-circle--2 {
   inset-block-end: -40%;
   inset-inline-end: -20%;
   inline-size: 80%;
   block-size: 80%;
-  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
+}
+
+.event-register-section .breathing-circle--3 {
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: 50%;
+  aspect-ratio: 1 / 1;
+  translate: -50% -50%;
 }
 
 /* Extends .eyebrow.eyebrow--secondary with positioning */
@@ -441,59 +422,27 @@
   opacity: 0.05;
 }
 
-/* Decorative breathing circles — accordion concentric waves */
-.event-about__circles {
-  --breathe-duration: 10s;
-  --breathe-easing: cubic-bezier(0.4, 0, 0.2, 1);
-
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.event-about__circle {
-  position: absolute;
-  background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
-  border-radius: 50%;
-  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
-  will-change: transform, opacity;
-}
-
-.event-about__circle--1 {
-  --breathe-scale: 1.20;
-  --breathe-opacity-min: 0.3;
-  --breathe-opacity-max: 0.6;
-
+/* Breathing circles — section-specific positioning */
+.event-about-section .breathing-circle--1 {
   inset-block-start: -20%;
   inset-inline-start: -20%;
   inline-size: 140%;
   block-size: 140%;
 }
 
-.event-about__circle--2 {
-  --breathe-scale: 1.10;
-  --breathe-opacity-min: 0.35;
-  --breathe-opacity-max: 0.65;
-
+.event-about-section .breathing-circle--2 {
   inset-block-start: 50%;
   inset-inline-start: 50%;
   inline-size: 80%;
   aspect-ratio: 1 / 1;
-  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
-  transform: translate(-50%, -50%);
+  translate: -50% -50%;
 }
 
-.event-about__circle--3 {
-  --breathe-scale: 1.04;
-  --breathe-opacity-min: 0.4;
-  --breathe-opacity-max: 0.7;
-
+.event-about-section .breathing-circle--3 {
   inset-block-end: -10%;
   inset-inline-end: -10%;
   inline-size: 50%;
   aspect-ratio: 1 / 1;
-  background: color-mix(in oklch, var(--accent-primary) 10%, transparent);
 }
 
 .event-about__quote {
@@ -535,45 +484,26 @@
   opacity: 0.03;
 }
 
-/* Decorative breathing circles — accordion concentric waves */
-.event-cta__circles {
-  --breathe-duration: 10s;
-  --breathe-easing: cubic-bezier(0.4, 0, 0.2, 1);
-
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.event-cta__circle {
-  position: absolute;
+/* Breathing circles — section-specific positioning */
+.event-cta-section .breathing-circle {
   inset-block-start: 50%;
   inset-inline-start: 50%;
-  background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
-  will-change: transform, opacity;
+  translate: -50% -50%;
 }
 
-.event-cta__circle--1 {
-  --breathe-scale: 1.18;
-  --breathe-opacity-min: 0.3;
-  --breathe-opacity-max: 0.6;
-
+.event-cta-section .breathing-circle--1 {
   inline-size: 70vw;
   block-size: 70vw;
 }
 
-.event-cta__circle--2 {
-  --breathe-scale: 1.06;
-  --breathe-opacity-min: 0.35;
-  --breathe-opacity-max: 0.65;
-
+.event-cta-section .breathing-circle--2 {
   inline-size: 50vw;
   block-size: 50vw;
-  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
+}
+
+.event-cta-section .breathing-circle--3 {
+  inline-size: 35vw;
+  block-size: 35vw;
 }
 
 .event-cta__content {

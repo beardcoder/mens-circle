@@ -20,14 +20,7 @@
 @section ('content')
   <!-- Hero Section -->
   <section class="hero no-event-hero">
-    <div class="hero__circles" aria-hidden="true">
-      <div class="hero__circle hero__circle--1"></div>
-      <div class="hero__circle hero__circle--2"></div>
-      <div class="hero__circle hero__circle--3"></div>
-      <div class="hero__circle hero__circle--4"></div>
-      <div class="hero__circle hero__circle--5"></div>
-      <div class="hero__circle hero__circle--6"></div>
-    </div>
+    <x-breathing-circles :layers="5" />
 
     <div class="container">
       <div class="hero__content">
@@ -66,11 +59,7 @@
         </div>
         <div class="no-event-info__visual fade-in fade-in-delay-1">
           <div class="no-event-info__quote-area">
-            <div class="event-about__circles" aria-hidden="true">
-              <div class="event-about__circle event-about__circle--1"></div>
-              <div class="event-about__circle event-about__circle--2"></div>
-              <div class="event-about__circle event-about__circle--3"></div>
-            </div>
+            <x-breathing-circles :layers="3" />
             <p class="event-about__quote">»Bleib<br />
             <span class="text-italic">verbunden</span>«</p>
           </div>

@@ -112,6 +112,29 @@
   opacity: 0.05;
 }
 
+/* Breathing circles — section-specific positioning */
+.no-event-info-section .breathing-circle--1 {
+  inset-block-start: -20%;
+  inset-inline-start: -20%;
+  inline-size: 140%;
+  block-size: 140%;
+}
+
+.no-event-info-section .breathing-circle--2 {
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: 80%;
+  aspect-ratio: 1 / 1;
+  translate: -50% -50%;
+}
+
+.no-event-info-section .breathing-circle--3 {
+  inset-block-end: -10%;
+  inset-inline-end: -10%;
+  inline-size: 50%;
+  aspect-ratio: 1 / 1;
+}
+
 /* ============================================
    No Event CTA Section
    ============================================ */
