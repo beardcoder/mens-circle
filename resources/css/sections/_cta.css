@@ -13,7 +13,7 @@
   background: var(--bg-tertiary);
 }
 
-/* Decorative circles */
+/* Decorative breathing petals — collapsed to pseudo-element approach */
 .cta-section::before,
 .cta-section::after {
   position: absolute;
@@ -21,29 +21,30 @@
   inset-inline-start: 50%;
   pointer-events: none;
   content: '';
-  background: color-mix(in oklch, var(--accent-primary) 6%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  opacity: 0.2;
 }
 
 .cta-section::before {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.7;
-
-  inline-size: 50vw;
-  block-size: 50vw;
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  inline-size: min(40vw, 400px);
+  block-size: min(40vw, 400px);
+  margin-block-start: calc(min(40vw, 400px) * -0.5);
+  margin-inline-start: calc(min(40vw, 400px) * -0.5);
+  background: color-mix(in oklch, var(--accent-primary) 45%, var(--color-earth-deep));
+  animation: breathe 10s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
 .cta-section::after {
-  --breathe-min-opacity: 0.4;
-  --breathe-max-opacity: 0.75;
+  --breathe-min-scale: 0.85;
+  --breathe-max-scale: 1.15;
 
-  inline-size: 35vw;
-  block-size: 35vw;
-  background: color-mix(in oklch, var(--accent-primary) 8%, transparent);
-  animation: breathe 10s cubic-bezier(0.37, 0, 0.63, 1) infinite -3s;
+  inline-size: min(30vw, 300px);
+  block-size: min(30vw, 300px);
+  margin-block-start: calc(min(30vw, 300px) * -0.5);
+  margin-inline-start: calc(min(30vw, 300px) * -0.5);
+  background: color-mix(in oklch, var(--color-earth-warm) 55%, var(--color-earth-deep));
+  animation: breathe 10s cubic-bezier(0.5, 0, 0.5, 1) infinite -3s;
 }
 
 /* ============================================
