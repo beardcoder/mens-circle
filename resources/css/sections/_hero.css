@@ -90,12 +90,12 @@
   will-change: transform, opacity;
 }
 
-/* Layer 1 — Outermost: massive arc, soft earth tone fill */
+/* Layer 1 — Outermost: massive arc, barely moves (anchor layer) */
 .hero__circle--1 {
   --breathe-min-opacity: 0.5;
   --breathe-max-opacity: 0.8;
-  --breathe-min-scale: 0.97;
-  --breathe-max-scale: 1.03;
+  --breathe-min-scale: 0.96;
+  --breathe-max-scale: 1.02;
 
   inline-size: 160vw;
   block-size: 160vw;
@@ -104,12 +104,12 @@
   animation: breathe var(--breathe-duration) var(--breathe-easing) infinite;
 }
 
-/* Layer 2 — Large warm arc, terracotta tint */
+/* Layer 2 — Moderate breathing */
 .hero__circle--2 {
   --breathe-min-opacity: 0.5;
   --breathe-max-opacity: 0.85;
-  --breathe-min-scale: 0.96;
-  --breathe-max-scale: 1.04;
+  --breathe-min-scale: 0.9;
+  --breathe-max-scale: 1.06;
 
   inline-size: 120vw;
   block-size: 120vw;
@@ -118,12 +118,12 @@
   animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -0.5s;
 }
 
-/* Layer 3 — Core glow crescent */
+/* Layer 3 — Strong breathing, visible crescent movement */
 .hero__circle--3 {
   --breathe-min-opacity: 0.5;
   --breathe-max-opacity: 0.9;
-  --breathe-min-scale: 0.95;
-  --breathe-max-scale: 1.05;
+  --breathe-min-scale: 0.84;
+  --breathe-max-scale: 1.1;
 
   inline-size: 85vw;
   block-size: 85vw;
@@ -132,12 +132,12 @@
   animation: breathe var(--breathe-duration) var(--breathe-easing) infinite -1s;
 }
 
-/* Layer 4 — Inner warm orb, the "belly" center */
+/* Layer 4 — Inner orb, strongest breathing — pulls close then pushes out */
 .hero__circle--4 {
   --breathe-min-opacity: 0.5;
   --breathe-max-opacity: 1;
-  --breathe-min-scale: 0.93;
-  --breathe-max-scale: 1.07;
+  --breathe-min-scale: 0.78;
+  --breathe-max-scale: 1.14;
 
   inline-size: 55vw;
   block-size: 55vw;
