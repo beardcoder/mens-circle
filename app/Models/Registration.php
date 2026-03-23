@@ -6,9 +6,13 @@ namespace App\Models;
 
 use App\Contracts\DefinesCacheUrls;
 use App\Enums\RegistrationStatus;
+use App\Observers\RegistrationObserver;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\RegistrationFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +32,9 @@ use Override;
  * @property Participant $participant
  * @property Event $event
  */
+#[Fillable(['participant_id', 'event_id', 'status', 'registered_at', 'cancelled_at', 'reminder_sent_at', 'sms_reminder_sent_at'])]
+#[ObservedBy(RegistrationObserver::class)]
+#[UseFactory(RegistrationFactory::class)]
 class Registration extends Model implements DefinesCacheUrls
 {
     use ClearsResponseCache;
@@ -35,8 +42,6 @@ class Registration extends Model implements DefinesCacheUrls
     /** @use HasFactory<RegistrationFactory> */
     use HasFactory;
     use SoftDeletes;
-
-    protected $fillable = ['participant_id', 'event_id', 'status', 'registered_at', 'cancelled_at', 'reminder_sent_at', 'sms_reminder_sent_at'];
 
     /**
      * @return array<string>

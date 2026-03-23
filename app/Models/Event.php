@@ -8,7 +8,9 @@ use App\Contracts\DefinesCacheUrls;
 use App\Enums\RegistrationStatus;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\EventFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,6 +42,24 @@ use Spatie\Sluggable\SlugOptions;
  * @property bool $isPast
  * @property ?string $fullAddress
  */
+#[Fillable([
+    'title',
+    'slug',
+    'description',
+    'image',
+    'event_date',
+    'start_time',
+    'end_time',
+    'location',
+    'street',
+    'postal_code',
+    'city',
+    'location_details',
+    'max_participants',
+    'cost_basis',
+    'is_published',
+])]
+#[UseFactory(EventFactory::class)]
 class Event extends Model implements DefinesCacheUrls, HasMedia
 {
     use ClearsResponseCache;
@@ -49,24 +69,6 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
     use HasSlug;
     use InteractsWithMedia;
     use SoftDeletes;
-
-    protected $fillable = [
-        'title',
-        'slug',
-        'description',
-        'image',
-        'event_date',
-        'start_time',
-        'end_time',
-        'location',
-        'street',
-        'postal_code',
-        'city',
-        'location_details',
-        'max_participants',
-        'cost_basis',
-        'is_published',
-    ];
 
     #[Override]
     public function getSlugOptions(): SlugOptions

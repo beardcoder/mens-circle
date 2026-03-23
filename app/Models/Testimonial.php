@@ -7,7 +7,9 @@ namespace App\Models;
 use App\Contracts\DefinesCacheUrls;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\TestimonialFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,14 +26,14 @@ use Override;
  * @property ?Carbon $published_at
  * @property int $sort_order
  */
+#[Fillable(['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order'])]
+#[UseFactory(TestimonialFactory::class)]
 class Testimonial extends Model implements DefinesCacheUrls
 {
     /** @use HasFactory<TestimonialFactory> */
     use HasFactory;
     use ClearsResponseCache;
     use SoftDeletes;
-
-    protected $fillable = ['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order'];
 
     /**
      * @return array<string>

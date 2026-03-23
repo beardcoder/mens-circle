@@ -6,12 +6,14 @@ namespace Database\Factories;
 
 use App\Models\NewsletterSubscription;
 use App\Models\Participant;
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
  * @extends Factory<NewsletterSubscription>
  */
+#[UseModel(NewsletterSubscription::class)]
 class NewsletterSubscriptionFactory extends Factory
 {
     /**

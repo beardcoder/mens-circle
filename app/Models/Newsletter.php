@@ -6,6 +6,8 @@ namespace App\Models;
 
 use App\Enums\NewsletterStatus;
 use Database\Factories\NewsletterFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -18,12 +20,12 @@ use Override;
  * @property ?int $recipient_count
  * @property NewsletterStatus $status
  */
+#[Fillable(['subject', 'content', 'sent_at', 'recipient_count', 'status'])]
+#[UseFactory(NewsletterFactory::class)]
 class Newsletter extends Model
 {
     /** @use HasFactory<NewsletterFactory> */
     use HasFactory;
-
-    protected $fillable = ['subject', 'content', 'sent_at', 'recipient_count', 'status'];
 
     #[Override]
     protected function casts(): array

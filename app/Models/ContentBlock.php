@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Contracts\DefinesCacheUrls;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\ContentBlockFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,14 +25,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $order
  * @property Page $page
  */
+#[Fillable(['page_id', 'type', 'data', 'block_id', 'order'])]
+#[UseFactory(ContentBlockFactory::class)]
 class ContentBlock extends Model implements DefinesCacheUrls, HasMedia
 {
     /** @use HasFactory<ContentBlockFactory> */
     use HasFactory;
     use InteractsWithMedia;
     use ClearsResponseCache;
-
-    protected $fillable = ['page_id', 'type', 'data', 'block_id', 'order'];
 
     /**
      * @return array<string>

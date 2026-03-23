@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\NewsletterSubscriptionFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\CarbonImmutable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Override;
@@ -24,13 +26,13 @@ use Override;
  * @property ?Carbon $unsubscribed_at
  * @property Participant $participant
  */
+#[Fillable(['participant_id', 'token', 'subscribed_at', 'confirmed_at', 'unsubscribed_at'])]
+#[UseFactory(NewsletterSubscriptionFactory::class)]
 class NewsletterSubscription extends Model
 {
     /** @use HasFactory<NewsletterSubscriptionFactory> */
     use HasFactory;
     use SoftDeletes;
-
-    protected $fillable = ['participant_id', 'token', 'subscribed_at', 'confirmed_at', 'unsubscribed_at'];
 
     #[Override]
     protected static function booted(): void

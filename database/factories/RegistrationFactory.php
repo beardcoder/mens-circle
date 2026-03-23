@@ -8,11 +8,13 @@ use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Registration>
  */
+#[UseModel(Registration::class)]
 class RegistrationFactory extends Factory
 {
     /**

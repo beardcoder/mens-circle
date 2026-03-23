@@ -7,7 +7,9 @@ namespace App\Models;
 use App\Contracts\DefinesCacheUrls;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\PageFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +33,8 @@ use Spatie\Sluggable\SlugOptions;
  * @property bool $is_published
  * @property ?Carbon $published_at
  */
+#[Fillable(['title', 'slug', 'meta', 'is_published', 'published_at'])]
+#[UseFactory(PageFactory::class)]
 class Page extends Model implements DefinesCacheUrls, HasMedia
 {
     use ClearsResponseCache;
@@ -40,8 +44,6 @@ class Page extends Model implements DefinesCacheUrls, HasMedia
     use HasSlug;
     use InteractsWithMedia;
     use SoftDeletes;
-
-    protected $fillable = ['title', 'slug', 'meta', 'is_published', 'published_at'];
 
     /**
      * @return array<string>

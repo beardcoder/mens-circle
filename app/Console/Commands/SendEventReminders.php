@@ -7,6 +7,8 @@ namespace App\Console\Commands;
 use App\Mail\EventReminder;
 use App\Models\Registration;
 use Exception;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -14,12 +16,10 @@ use Seven\Api\Client;
 use Seven\Api\Resource\Sms\SmsParams;
 use Seven\Api\Resource\Sms\SmsResource;
 
+#[Signature('events:send-reminders')]
+#[Description('Send reminder emails and SMS to participants for events happening today or tomorrow')]
 class SendEventReminders extends Command
 {
-    protected $signature = 'events:send-reminders';
-
-    protected $description = 'Send reminder emails and SMS to participants for events happening today or tomorrow';
-
     public function handle(): int
     {
         $this->info('Searching for events happening today or tomorrow...');

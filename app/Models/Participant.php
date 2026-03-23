@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Database\Factories\ParticipantFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,12 +20,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property ?string $phone
  * @property string $fullName
  */
+#[Fillable(['first_name', 'last_name', 'email', 'phone'])]
+#[UseFactory(ParticipantFactory::class)]
 class Participant extends Model
 {
     /** @use HasFactory<ParticipantFactory> */
     use HasFactory;
-
-    protected $fillable = ['first_name', 'last_name', 'email', 'phone'];
 
     /**
      * @return HasMany<Registration, $this>

@@ -8,8 +8,6 @@ use App\Checks\MailHealthCheck;
 use App\Checks\QueueHealthCheck;
 use App\Checks\SevenIoHealthCheck;
 use App\Models\Event;
-use App\Models\Registration;
-use App\Observers\RegistrationObserver;
 use App\Settings\GeneralSettings;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\Config;
@@ -30,8 +28,6 @@ class AppServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        Registration::observe(RegistrationObserver::class);
-
         $this->configureHealth();
 
         View::composer('*', static function (ViewContract $view): void {

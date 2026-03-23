@@ -7,12 +7,14 @@ namespace Database\Factories;
 use App\Models\ContentBlock;
 use App\Models\Page;
 use Faker\Factory as FakerFactory;
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
  * @extends Factory<ContentBlock>
  */
+#[UseModel(ContentBlock::class)]
 class ContentBlockFactory extends Factory
 {
     /**

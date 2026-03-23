@@ -6,11 +6,13 @@ namespace Database\Factories;
 
 use App\Models\Page;
 use Faker\Factory as FakerFactory;
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Page>
  */
+#[UseModel(Page::class)]
 class PageFactory extends Factory
 {
     /**

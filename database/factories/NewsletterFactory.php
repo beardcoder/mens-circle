@@ -7,11 +7,13 @@ namespace Database\Factories;
 use App\Enums\NewsletterStatus;
 use App\Models\Newsletter;
 use Faker\Factory as FakerFactory;
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Newsletter>
  */
+#[UseModel(Newsletter::class)]
 class NewsletterFactory extends Factory
 {
     /**

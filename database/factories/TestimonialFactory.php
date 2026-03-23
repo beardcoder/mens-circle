@@ -6,11 +6,13 @@ namespace Database\Factories;
 
 use App\Models\Testimonial;
 use Faker\Factory as FakerFactory;
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Testimonial>
  */
+#[UseModel(Testimonial::class)]
 class TestimonialFactory extends Factory
 {
     /**

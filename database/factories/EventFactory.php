@@ -8,11 +8,13 @@ use App\Models\Event;
 use DateTime;
 use DateTimeInterface;
 use Faker\Factory as FakerFactory;
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Event>
  */
+#[UseModel(Event::class)]
 class EventFactory extends Factory
 {
     /**

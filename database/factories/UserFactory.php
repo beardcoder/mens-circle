@@ -6,6 +6,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Faker\Factory as FakerFactory;
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -13,6 +14,7 @@ use Illuminate\Support\Str;
 /**
  * @extends Factory<User>
  */
+#[UseModel(User::class)]
 class UserFactory extends Factory
 {
     /**
