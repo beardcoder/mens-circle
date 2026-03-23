@@ -18,7 +18,7 @@
               "@@type": "Answer",
               "text": "{{ e(strip_tags($item['answer'])) }}"
             }
-          } @if (!$loop->last) @endif
+          }@if (!$loop->last),@endif
           @endif
           @endforeach
         ]

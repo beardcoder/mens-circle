@@ -49,7 +49,7 @@
       "sameAs": [
         @if (!empty($socialLinks))
         @foreach ($socialLinks as $link)
-        "{{ $link['value'] }}" @if (!$loop->last) @endif
+        "{{ $link['value'] }}"@if (!$loop->last),@endif
         @endforeach
         @endif
       ]
