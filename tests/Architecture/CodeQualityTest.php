@@ -15,7 +15,7 @@ final class CodeQualityTest
      */
     public function testSettingsAreFinal(): Rule
     {
-        return PHPat::rule()->classes(Selector::inNamespace('App\Settings'))->shouldBeFinal();
+        return PHPat::rule()->classes(Selector::inNamespace('App\Settings'))->should()->beFinal();
     }
 
     /**
@@ -25,7 +25,7 @@ final class CodeQualityTest
     {
         return PHPat::rule()
             ->classes(Selector::inNamespace('App\Models'))
-            ->shouldNotDependOn()
+            ->shouldNot()->dependOn()
             ->classes(Selector::inNamespace('App\Filament'))
             ->because('Models should be independent of UI layer');
     }

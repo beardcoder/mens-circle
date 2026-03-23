@@ -17,7 +17,7 @@ final class LayerTest
     {
         return PHPat::rule()
             ->classes(Selector::inNamespace('App\Models'))
-            ->shouldNotDependOn()
+            ->shouldNot()->dependOn()
             ->classes(Selector::inNamespace('App\Filament'), Selector::inNamespace('App\Http'), Selector::inNamespace('Filament'))
             ->because('Models should be independent of presentation layer');
     }
@@ -29,7 +29,7 @@ final class LayerTest
     {
         return PHPat::rule()
             ->classes(Selector::inNamespace('App\Services'))
-            ->shouldNotDependOn()
+            ->shouldNot()->dependOn()
             ->classes(
                 Selector::inNamespace('App\Filament'),
                 Selector::inNamespace('App\Http\Controllers'),
@@ -45,7 +45,7 @@ final class LayerTest
     {
         return PHPat::rule()
             ->classes(Selector::inNamespace('App\Enums'))
-            ->canOnlyDependOn()
+            ->canOnly()->dependOn()
             ->classes(Selector::inNamespace('App\Traits'))
             ->because('Enums should be simple value objects');
     }
@@ -57,7 +57,7 @@ final class LayerTest
     {
         return PHPat::rule()
             ->classes(Selector::inNamespace('App\Actions'))
-            ->shouldNotDependOn()
+            ->shouldNot()->dependOn()
             ->classes(Selector::inNamespace('App\Filament'), Selector::inNamespace('App\Http\Controllers'))
             ->because('Actions should be reusable and not tied to presentation');
     }
@@ -69,7 +69,7 @@ final class LayerTest
     {
         return PHPat::rule()
             ->classes(Selector::inNamespace('App\Mail'))
-            ->canOnlyDependOn()
+            ->canOnly()->dependOn()
             ->classes(
                 Selector::inNamespace('App\Models'),
                 Selector::inNamespace('App\Services'),
