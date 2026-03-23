@@ -8,6 +8,12 @@ parameters:
     # Level 10 is the highest level (experimental checks)
     level: 9
 
+    # Spatie Laravel Settings uses PHPDoc annotations that may not perfectly
+    # reflect the runtime structure (e.g. social_links is actually a list of
+    # arrays but must be annotated as array<string, string> for compatibility
+    # with the settings package's docblock parser).
+    treatPhpDocTypesAsCertain: false
+
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'
 #

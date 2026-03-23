@@ -13,7 +13,12 @@ final readonly class LocalBusinessSchema
 
     public function toScript(): string
     {
-        $sameAs = array_column($this->settings->social_links ?? [], 'value');
+        $sameAs = [];
+        foreach ($this->settings->social_links ?? [] as $link) {
+            if (is_array($link) && isset($link['value']) && is_string($link['value'])) {
+                $sameAs[] = $link['value'];
+            }
+        }
 
         $schema = Schema::localBusiness()
             ->setProperty('@id', url('/') . '#organization')
@@ -61,7 +66,7 @@ final readonly class LocalBusinessSchema
             $schema->telephone($this->settings->contact_phone);
         }
 
-        if ($sameAs !== []) {
+        if (count($sameAs) > 0) {
             $schema->sameAs($sameAs);
         }
 
