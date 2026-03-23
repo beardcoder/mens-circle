@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Attributes\Backoff;
 use Illuminate\Queue\Attributes\Tries;
+use Illuminate\Queue\Attributes\WithoutRelations;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -25,6 +26,7 @@ class SendNewsletterJob implements ShouldQueue
     use Queueable;
 
     public function __construct(
+        #[WithoutRelations]
         public readonly Newsletter $newsletter,
     ) {}
 
