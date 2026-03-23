@@ -29,10 +29,6 @@
 
 /* Breathing orb — atmospheric warmth, part of unified system */
 .whatsapp-section::after {
-  --breathe-scale: 1.06;
-  --breathe-opacity-min: 0.08;
-  --breathe-opacity-max: 0.22;
-
   position: absolute;
   inset-block-start: -40%;
   inset-inline-start: -25%;
@@ -40,15 +36,10 @@
   block-size: 180%;
   pointer-events: none;
   content: '';
-  background: radial-gradient(
-    circle at center,
-    oklch(55% 0.15 145deg / 18%) 0%,
-    oklch(45% 0.10 145deg / 8%) 35%,
-    transparent 70%
-  );
+  background: oklch(45% 0.12 145deg / 30%);
   border-radius: 50%;
-  animation: breathe-wander 18s ease-in-out infinite -5s;
-  will-change: transform, opacity;
+  animation: breathe 10s ease-in-out infinite -3s;
+  will-change: transform;
 }
 
 /* ============================================

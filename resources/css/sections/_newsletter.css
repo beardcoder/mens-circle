@@ -25,10 +25,6 @@
 
 /* Breathing orb — atmospheric warmth, part of unified system */
 .newsletter-section::after {
-  --breathe-scale: 1.06;
-  --breathe-opacity-min: 0.08;
-  --breathe-opacity-max: 0.22;
-
   position: absolute;
   inset-block-start: -40%;
   inset-inline-end: -25%;
@@ -36,15 +32,10 @@
   block-size: 180%;
   pointer-events: none;
   content: '';
-  background: radial-gradient(
-    circle at center,
-    color-mix(in oklch, var(--accent-primary) 16%, transparent) 0%,
-    color-mix(in oklch, var(--color-earth-warm) 8%, transparent) 35%,
-    transparent 70%
-  );
+  background: oklch(45% 0.10 44deg / 30%);
   border-radius: 50%;
-  animation: breathe-wander 18s ease-in-out infinite;
-  will-change: transform, opacity;
+  animation: breathe 10s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* ============================================

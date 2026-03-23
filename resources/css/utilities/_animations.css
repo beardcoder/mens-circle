@@ -68,62 +68,53 @@
    Referenced by hero, event, and button CSS
    ============================================ */
 
-/* ── Breathing Animation ────────────────────────────────────────
-   Organic, non-mechanical breathing for decorative orbs.
-   Inspired by firelight / embers — slow, warm, almost imperceptible.
-
-   Design principles:
-   - Longer exhale than inhale (natural breathing rhythm)
-   - No hold phases — continuous, flowing movement
-   - Each layer uses different duration + delay to avoid sync
-
-   Resolved per element:
-     --breathe-scale       peak scale       (default: 1.05)
-     --breathe-opacity-min resting opacity  (default: 0.10)
-     --breathe-opacity-max peak opacity     (default: 0.25)
-     --breathe-duration    full cycle       (default: 14s)
-     --breathe-delay       stagger offset   (default: 0s)
+/* ── Breathing Wave ───────────────────────────────────────────
+   Continuous, fluid ripple from center outward. Never stops.
+   Gentle inhale (0→35%), long exhale (35→100%).
+   Phase-shifted delays create a smooth flowing wave per layer.
+   Outer layers move more, inner layers subtly.
    ─────────────────────────────────────────────────────────────── */
-@keyframes breathe {
-  0% {
-    opacity: var(--breathe-opacity-min, 0.10);
-    transform: scale(1);
-  }
 
-  /* Quick inhale (35% of cycle) */
-  35% {
-    opacity: var(--breathe-opacity-max, 0.25);
-    transform: scale(var(--breathe-scale, 1.05));
-  }
-
-  /* Long, slow exhale (65% of cycle) — this is where the calm lives */
-  100% {
-    opacity: var(--breathe-opacity-min, 0.10);
-    transform: scale(1);
-  }
+/* Layer 1 — Outermost: moves the most */
+@keyframes breathe-1 {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.18); }
+  100% { transform: scale(1); }
 }
 
-/* Secondary rhythm — ultra-slow wandering for layered depth */
-@keyframes breathe-wander {
-  0% {
-    opacity: var(--breathe-opacity-min, 0.10);
-    transform: scale(1) translate(0, 0);
-  }
+/* Layer 2 */
+@keyframes breathe-2 {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.13); }
+  100% { transform: scale(1); }
+}
 
-  30% {
-    opacity: var(--breathe-opacity-max, 0.25);
-    transform: scale(var(--breathe-scale, 1.05)) translate(1%, -0.5%);
-  }
+/* Layer 3 — Mid */
+@keyframes breathe-3 {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.09); }
+  100% { transform: scale(1); }
+}
 
-  60% {
-    opacity: calc((var(--breathe-opacity-min, 0.10) + var(--breathe-opacity-max, 0.25)) / 2);
-    transform: scale(1.01) translate(-0.5%, 0.8%);
-  }
+/* Layer 4 */
+@keyframes breathe-4 {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
 
-  100% {
-    opacity: var(--breathe-opacity-min, 0.10);
-    transform: scale(1) translate(0, 0);
-  }
+/* Layer 5 — Core: subtlest movement */
+@keyframes breathe-5 {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+/* Simple breathe for standalone orbs (newsletter, whatsapp sections) */
+@keyframes breathe {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
 /* Scroll indicator pulse (used by hero scroll line) */

@@ -66,37 +66,36 @@
 
 /* ============================================
    Breathing Orb — Hero-specific positioning
-   Layered circles from bottom-right, creating warm depth.
-   Sizes are deliberately large but opacity is very low.
+   All circles concentric from the same center point.
    ============================================ */
 .hero .breathing-circle {
-  inset-block-end: -50%;
-  inset-inline-end: -35%;
+  inset-block-end: -25%;
+  inset-inline-end: -10%;
 }
 
 .hero .breathing-circle--1 {
-  inline-size: 120vw;
-  block-size: 120vw;
+  inline-size: 70vw;
+  block-size: 70vw;
 }
 
 .hero .breathing-circle--2 {
-  inline-size: 90vw;
-  block-size: 90vw;
+  inline-size: 55vw;
+  block-size: 55vw;
 }
 
 .hero .breathing-circle--3 {
-  inline-size: 65vw;
-  block-size: 65vw;
+  inline-size: 42vw;
+  block-size: 42vw;
 }
 
 .hero .breathing-circle--4 {
-  inline-size: 45vw;
-  block-size: 45vw;
+  inline-size: 30vw;
+  block-size: 30vw;
 }
 
 .hero .breathing-circle--5 {
-  inline-size: 30vw;
-  block-size: 30vw;
+  inline-size: 20vw;
+  block-size: 20vw;
 }
 
 /* ============================================
@@ -203,8 +202,8 @@
   }
 
   .hero .breathing-circle {
-    inset-block-end: -60%;
-    inset-inline-end: -45%;
+    inset-block-end: -40%;
+    inset-inline-end: -25%;
   }
 
   .hero__title {
