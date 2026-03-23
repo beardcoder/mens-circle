@@ -200,4 +200,13 @@
 @include ('components.analytics.umami')
 
 <!-- Structured Data -->
+@if ($localBusinessSchema ?? null)
+    {!! $localBusinessSchema->toScript() !!}
+@endif
+@if ($organizationSchema ?? null)
+    {!! $organizationSchema->toScript() !!}
+@endif
+@if ($websiteSchema ?? null)
+    {!! $websiteSchema->toScript() !!}
+@endif
 @stack ('structured_data')

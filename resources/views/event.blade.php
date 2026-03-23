@@ -9,64 +9,9 @@
 @section ('og_description', 'Treffen des Männerkreis Niederbayern/ Straubing am ' . $event->event_date->format('d.m.Y') . ' in ' . $event->location)
 @section ('canonical', route('event.show.slug', $event->slug))
 
-<x-seo.breadcrumb-schema
-  :items="[
-    ['name' => 'Startseite', 'url' => route('home')],
-    ['name' => 'Veranstaltungen', 'url' => route('event.show')],
-    ['name' => $event->title, 'url' => route('event.show.slug', $event->slug)],
-]"
-/>
-
 @push ('structured_data')
-  <script type="application/ld+json">
-    {
-        "@@context": "https://schema.org",
-        "@@type": "Event",
-        "name": "{{ $event->title }}",
-        "description": "{{ e(strip_tags($event->description)) }}",
-        "image": {
-            "@@type": "ImageObject",
-            "url": "{{ asset('images/logo-color.png') }}",
-            "width": 512,
-            "height": 512
-        },
-        "startDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->start_time->format('H:i') }}:00{{ $event->event_date->format('P') }}",
-        "endDate": "{{ $event->event_date->format('Y-m-d') }}T{{ $event->end_time->format('H:i') }}:00{{ $event->event_date->format('P') }}",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-        "location": {
-            "@@type": "Place",
-            "name": "{{ $event->location }}",
-            "address": {
-                "@@type": "PostalAddress",
-                "addressLocality": "{{ $event->city ?? 'Straubing' }}",
-                "addressRegion": "Bayern",
-                "addressCountry": "DE"
-            }
-        },
-        "organizer": {
-            "@@type": "Organization",
-            "@@id": "{{ url('/') }}#organization",
-            "name": "Männerkreis Niederbayern/ Straubing",
-            "url": "{{ url('/') }}"
-        },
-        "performer": {
-            "@@type": "Organization",
-            "@@id": "{{ url('/') }}#organization"
-        },
-        "offers": {
-            "@@type": "Offer",
-            "url": "{{ route('event.show.slug', $event->slug) }}",
-            "price": "0",
-            "priceCurrency": "EUR",
-            "availability": "{{ $event->isPast ? 'https://schema.org/SoldOut' : ($event->isFull ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock') }}",
-            "validFrom": "{{ now()->format('Y-m-d') }}"
-        },
-        "maximumAttendeeCapacity": {{ $event->max_participants }},
-        "remainingAttendeeCapacity": {{ max(0, $event->availableSpots) }},
-        "inLanguage": "de"
-    }
-  </script>
+    {!! $eventSchema->toScript() !!}
+    {!! $breadcrumbSchema->toScript() !!}
 @endpush
 
 @section ('content')

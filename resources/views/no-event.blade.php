@@ -5,17 +5,22 @@
 @section ('og_title', 'Aktuell kein Termin – Männerkreis Niederbayern/ Straubing')
 @section ('og_description', 'Derzeit ist kein Männerkreis-Treffen geplant. Melde dich für unseren Newsletter an!')
 
-<x-seo.breadcrumb-schema
-  :items="[
-    ['name' => 'Startseite', 'url' => route('home')],
-    ['name' => 'Veranstaltungen', 'url' => route('event.show')],
-]"
-/>
+@php
+    use App\Seo\Data\BreadcrumbItem;
+    use App\Seo\Schemas\BreadcrumbSchema;
+    use App\Seo\Schemas\WebPageSchema;
+@endphp
 
-<x-seo.webpage-schema
-  title="Aktuell kein Termin"
-  description="Derzeit ist kein Männerkreis-Treffen geplant. Melde dich für unseren Newsletter an, um über kommende Termine informiert zu werden."
-/>
+@push ('structured_data')
+    {!! (new BreadcrumbSchema([
+        new BreadcrumbItem('Startseite', route('home')),
+        new BreadcrumbItem('Veranstaltungen', route('event.show')),
+    ]))->toScript() !!}
+    {!! (new WebPageSchema(
+        title: 'Aktuell kein Termin',
+        description: 'Derzeit ist kein Männerkreis-Treffen geplant. Melde dich für unseren Newsletter an, um über kommende Termine informiert zu werden.',
+    ))->toScript() !!}
+@endpush
 
 @section ('content')
   <!-- Hero Section -->

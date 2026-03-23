@@ -11,64 +11,6 @@
   @section ('og_image', asset('storage/' . $page->meta['og_image']))
 @endif
 
-<x-seo.local-business-schema />
-
-@push ('structured_data')
-  <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "Organization",
-      "@@id": "{{ url('/') }}#organization",
-      "name": "Männerkreis Niederbayern/ Straubing",
-      "url": "{{ url('/') }}",
-      "logo": {
-        "@@type": "ImageObject",
-        "url": "{{ asset('images/logo-color.png') }}",
-        "width": 512,
-        "height": 512
-      },
-      "description": "Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.",
-      "address": {
-        "@@type": "PostalAddress",
-        "addressLocality": "Straubing",
-        "addressRegion": "Bayern",
-        "addressCountry": "DE"
-      },
-      "email": "hallo@@mens-circle.de",
-      "areaServed": {
-        "@@type": "Place",
-        "name": "Niederbayern"
-      },
-      "sameAs": [
-        @if (!empty($socialLinks))
-        @foreach ($socialLinks as $link)
-        "{{ $link['value'] }}" @if (!$loop->last) @endif
-        @endforeach
-        @endif
-      ]
-    }
-  </script>
-  <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "WebSite",
-      "@@id": "{{ url('/') }}#website",
-      "name": "Männerkreis Niederbayern/ Straubing",
-      "url": "{{ url('/') }}",
-      "description": "Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.",
-      "inLanguage": "de-DE",
-      "publisher": {
-        "@@id": "{{ url('/') }}#organization"
-      },
-      "potentialAction": {
-        "@@type": "SearchAction",
-        "target": "{{ url('/') }}?s={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-  </script>
-@endpush
-
 @section ('content')
   @if ($page->contentBlocks->isNotEmpty())
     @foreach ($page->contentBlocks as $block)

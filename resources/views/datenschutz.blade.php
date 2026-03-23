@@ -4,17 +4,22 @@
 @section ('meta_description', 'Datenschutzerklärung des Männerkreis Niederbayern/ Straubing. Informationen zur Verarbeitung Ihrer personenbezogenen Daten.')
 @section ('robots', 'index, follow')
 
-<x-seo.breadcrumb-schema
-  :items="[
-    ['name' => 'Startseite', 'url' => route('home')],
-    ['name' => 'Datenschutz', 'url' => route('page.show', 'datenschutz')],
-]"
-/>
+@php
+    use App\Seo\Data\BreadcrumbItem;
+    use App\Seo\Schemas\BreadcrumbSchema;
+    use App\Seo\Schemas\WebPageSchema;
+@endphp
 
-<x-seo.webpage-schema
-  title="Datenschutzerklärung"
-  description="Datenschutzerklärung des Männerkreis Niederbayern/ Straubing. Informationen zur Verarbeitung Ihrer personenbezogenen Daten."
-/>
+@push ('structured_data')
+    {!! (new BreadcrumbSchema([
+        new BreadcrumbItem('Startseite', route('home')),
+        new BreadcrumbItem('Datenschutz', route('page.show', 'datenschutz')),
+    ]))->toScript() !!}
+    {!! (new WebPageSchema(
+        title: 'Datenschutzerklärung',
+        description: 'Datenschutzerklärung des Männerkreis Niederbayern/ Straubing. Informationen zur Verarbeitung Ihrer personenbezogenen Daten.',
+    ))->toScript() !!}
+@endpush
 
 @section ('content')
   <section class="section">

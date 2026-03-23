@@ -8,6 +8,9 @@ use App\Checks\MailHealthCheck;
 use App\Checks\QueueHealthCheck;
 use App\Checks\SevenIoHealthCheck;
 use App\Models\Event;
+use App\Seo\Schemas\LocalBusinessSchema;
+use App\Seo\Schemas\OrganizationSchema;
+use App\Seo\Schemas\WebSiteSchema;
 use App\Settings\GeneralSettings;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\Config;
@@ -37,11 +40,17 @@ class AppServiceProvider extends ServiceProvider
                 $view->with([
                     'settings' => $settings,
                     'socialLinks' => $settings->social_links ?? [],
+                    'localBusinessSchema' => new LocalBusinessSchema($settings),
+                    'organizationSchema' => new OrganizationSchema($settings),
+                    'websiteSchema' => new WebSiteSchema($settings),
                 ]);
             } catch (Throwable) {
                 $view->with([
                     'settings' => null,
                     'socialLinks' => [],
+                    'localBusinessSchema' => null,
+                    'organizationSchema' => null,
+                    'websiteSchema' => null,
                 ]);
             }
         });

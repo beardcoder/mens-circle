@@ -12,6 +12,10 @@ use App\Mail\WaitlistConfirmation;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
+use App\Seo\Data\BreadcrumbItem;
+use App\Seo\Schemas\BreadcrumbSchema;
+use App\Seo\Schemas\EventSchema;
+use App\Settings\GeneralSettings;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -25,6 +29,8 @@ use Seven\Api\Resource\Sms\SmsResource;
 
 final class EventController
 {
+    public function __construct(private readonly GeneralSettings $settings) {}
+
     public function showNext(): View|RedirectResponse
     {
         $event = Event::published()
@@ -49,6 +55,12 @@ final class EventController
         return view('event', [
             'event' => $event,
             'eventImage' => $eventImage,
+            'eventSchema' => new EventSchema($event, $this->settings),
+            'breadcrumbSchema' => new BreadcrumbSchema([
+                new BreadcrumbItem('Startseite', route('home')),
+                new BreadcrumbItem('Veranstaltungen', route('event.show')),
+                new BreadcrumbItem($event->title, route('event.show.slug', $event->slug)),
+            ]),
         ]);
     }
 

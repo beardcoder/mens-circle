@@ -4,17 +4,22 @@
 @section ('meta_description', 'Impressum und rechtliche Angaben des Männerkreis Niederbayern/ Straubing gemäß § 5 TMG.')
 @section ('robots', 'index, follow')
 
-<x-seo.breadcrumb-schema
-  :items="[
-    ['name' => 'Startseite', 'url' => route('home')],
-    ['name' => 'Impressum', 'url' => route('page.show', 'impressum')],
-]"
-/>
+@php
+    use App\Seo\Data\BreadcrumbItem;
+    use App\Seo\Schemas\BreadcrumbSchema;
+    use App\Seo\Schemas\WebPageSchema;
+@endphp
 
-<x-seo.webpage-schema
-  title="Impressum"
-  description="Impressum und rechtliche Angaben des Männerkreis Niederbayern/ Straubing gemäß § 5 TMG."
-/>
+@push ('structured_data')
+    {!! (new BreadcrumbSchema([
+        new BreadcrumbItem('Startseite', route('home')),
+        new BreadcrumbItem('Impressum', route('page.show', 'impressum')),
+    ]))->toScript() !!}
+    {!! (new WebPageSchema(
+        title: 'Impressum',
+        description: 'Impressum und rechtliche Angaben des Männerkreis Niederbayern/ Straubing gemäß § 5 TMG.',
+    ))->toScript() !!}
+@endpush
 
 @section ('content')
   <section class="section">

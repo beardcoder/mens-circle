@@ -5,8 +5,21 @@
     $faqItems = $data['items'] ?? [];
 @endphp
 
-@if (!empty($faqItems) && is_array($faqItems))
-  <x-seo.faq-schema :items="$faqItems" />
+@php
+    use App\Seo\Data\FaqItem;
+    use App\Seo\Schemas\FaqPageSchema;
+
+    $schemaItems = collect($faqItems)
+        ->filter(static fn($item): bool => !empty($item['question']) && !empty($item['answer']))
+        ->map(static fn($item): FaqItem => new FaqItem($item['question'], $item['answer']))
+        ->values()
+        ->all();
+@endphp
+
+@if (count($schemaItems) > 0)
+    @push ('structured_data')
+        {!! (new FaqPageSchema($schemaItems))->toScript() !!}
+    @endpush
 @endif
 
 <section class="section section--large faq-section" id="faq">
