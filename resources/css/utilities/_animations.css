@@ -69,58 +69,60 @@
    ============================================ */
 
 /* ── Breathing Animation ────────────────────────────────────────
-   One rhythm. One easing. Amplitude varies per layer via CSS vars.
+   Organic, non-mechanical breathing for decorative orbs.
+   Inspired by firelight / embers — slow, warm, almost imperceptible.
 
-   Cycle: inhale 4s → hold 1s → exhale 4s → rest 1s = 10s
-   Easing: cubic-bezier(0.4, 0, 0.2, 1) — organic, grounded
+   Design principles:
+   - Longer exhale than inhale (natural breathing rhythm)
+   - No hold phases — continuous, flowing movement
+   - Each layer uses different duration + delay to avoid sync
 
    Resolved per element:
-     --breathe-scale       peak scale       (default: 1.10)
-     --breathe-opacity-min resting opacity  (default: 0.35)
-     --breathe-opacity-max peak opacity     (default: 0.75)
-     --breathe-duration    full cycle       (default: 10s)
-     --breathe-easing      timing function  (default: cubic-bezier(0.4, 0, 0.2, 1))
+     --breathe-scale       peak scale       (default: 1.05)
+     --breathe-opacity-min resting opacity  (default: 0.10)
+     --breathe-opacity-max peak opacity     (default: 0.25)
+     --breathe-duration    full cycle       (default: 14s)
+     --breathe-delay       stagger offset   (default: 0s)
    ─────────────────────────────────────────────────────────────── */
 @keyframes breathe {
-  0%,
-  100% {
-    opacity: var(--breathe-opacity-min, 0.35);
+  0% {
+    opacity: var(--breathe-opacity-min, 0.10);
     transform: scale(1);
   }
 
-  40% {
-    opacity: var(--breathe-opacity-max, 0.75);
-    transform: scale(var(--breathe-scale, 1.10));
+  /* Quick inhale (35% of cycle) */
+  35% {
+    opacity: var(--breathe-opacity-max, 0.25);
+    transform: scale(var(--breathe-scale, 1.05));
   }
 
-  50% {
-    opacity: var(--breathe-opacity-max, 0.75);
-    transform: scale(var(--breathe-scale, 1.10));
-  }
-
-  90% {
-    opacity: var(--breathe-opacity-min, 0.35);
+  /* Long, slow exhale (65% of cycle) — this is where the calm lives */
+  100% {
+    opacity: var(--breathe-opacity-min, 0.10);
     transform: scale(1);
   }
 }
 
-/* Gentle drift for decorative elements */
-@keyframes drift {
-  0%,
+/* Secondary rhythm — ultra-slow wandering for layered depth */
+@keyframes breathe-wander {
+  0% {
+    opacity: var(--breathe-opacity-min, 0.10);
+    transform: scale(1) translate(0, 0);
+  }
+
+  30% {
+    opacity: var(--breathe-opacity-max, 0.25);
+    transform: scale(var(--breathe-scale, 1.05)) translate(1%, -0.5%);
+  }
+
+  60% {
+    opacity: calc((var(--breathe-opacity-min, 0.10) + var(--breathe-opacity-max, 0.25)) / 2);
+    transform: scale(1.01) translate(-0.5%, 0.8%);
+  }
+
   100% {
-    transform: translate(0, 0);
-  }
-
-  25% {
-    transform: translate(6px, -10px);
-  }
-
-  50% {
-    transform: translate(-3px, -6px);
-  }
-
-  75% {
-    transform: translate(5px, 3px);
+    opacity: var(--breathe-opacity-min, 0.10);
+    transform: scale(1) translate(0, 0);
   }
 }
 

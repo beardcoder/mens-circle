@@ -1,23 +1,22 @@
 /**
  * Breathing Orb System
  *
- * One motion language. One timing model. One visual system.
+ * Atmospheric warmth through layered, desynchronized radial gradients.
+ * Think glowing embers in a fire circle — not a pulsing UI element.
  *
- * Each layer is a soft radial gradient orb — no hard edges, no borders.
- * Layers stack to build warm atmospheric depth from diffuse halo to
- * concentrated terracotta core.
- *
- * Accordion mechanic (non-negotiable):
- *   Layer 1 (outermost): scale 1.22 — widest expansion
- *   Layer 5 (innermost): scale 1.03 — minimal movement
- *   All layers in perfect sync — same duration, different amplitude.
+ * Design principles:
+ *   - Subtlety over drama: opacity peaks at 0.30, not 0.80
+ *   - Desynchronized layers: each has unique duration + delay
+ *   - Outer = slowest + most diffuse, inner = slightly faster + focused
+ *   - Wide, soft gradient stops (70–85% transparent edge)
+ *   - No hard borders, no strokes — only gradient orbs
  *
  * Usage (Blade):
  *   <x-breathing-circles :layers="5" />
  *   <x-breathing-circles :layers="3" />
  *
  * Section-specific sizing & positioning via descendant selectors.
- * @see utilities/_animations.css for @keyframes breathe
+ * @see utilities/_animations.css for @keyframes breathe, breathe-wander
  */
 
 /* ── Container ─────────────────────────────────────────────────── */
@@ -33,82 +32,92 @@
   position: absolute;
   border-radius: 50%;
   transform-origin: center;
-  animation:
-    breathe
-    var(--breathe-duration, 10s)
-    var(--breathe-easing, cubic-bezier(0.4, 0, 0.2, 1))
-    infinite;
   will-change: transform, opacity;
 }
 
-/* ── Accordion layers ───────────────────────────────────────────
-   Each layer: soft radial gradient from warm center to transparent.
-   No borders, no flat fills — pure atmospheric glow.
-   Layers accumulate: outer = diffuse halo, inner = dense warm core.
+/* ── Layer 1: Outermost halo ──────────────────────────────────
+   Widest, most diffuse. Barely visible. Sets the atmospheric base.
+   Slowest rhythm — meditative, grounding.
    ─────────────────────────────────────────────────────────────── */
-
-/* Layer 1: outermost halo — widest sweep, earth-warm diffuse glow */
 .breathing-circle--1 {
-  --breathe-scale: 1.22;
-  --breathe-opacity-min: 0.20;
-  --breathe-opacity-max: 0.52;
+  --breathe-scale: 1.06;
+  --breathe-opacity-min: 0.06;
+  --breathe-opacity-max: 0.18;
 
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--color-earth-warm) 22%, transparent) 0%,
-    transparent 68%
+    color-mix(in oklch, var(--color-earth-warm) 14%, transparent) 0%,
+    color-mix(in oklch, var(--color-earth-warm) 6%, transparent) 40%,
+    transparent 75%
   );
+  animation: breathe-wander 20s ease-in-out infinite;
 }
 
-/* Layer 2: strong outer ring — warm amber, broader spread */
+/* ── Layer 2: Outer warmth ────────────────────────────────────
+   Slightly warmer, more present. Bridges halo and core.
+   ─────────────────────────────────────────────────────────────── */
 .breathing-circle--2 {
-  --breathe-scale: 1.15;
-  --breathe-opacity-min: 0.26;
-  --breathe-opacity-max: 0.58;
+  --breathe-scale: 1.05;
+  --breathe-opacity-min: 0.08;
+  --breathe-opacity-max: 0.22;
 
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--color-terracotta) 20%, transparent) 0%,
-    transparent 64%
+    color-mix(in oklch, var(--color-terracotta) 12%, transparent) 0%,
+    color-mix(in oklch, var(--color-earth-warm) 6%, transparent) 35%,
+    transparent 70%
   );
+  animation: breathe 16s ease-in-out infinite -6s;
 }
 
-/* Layer 3: mid ring — terracotta, transitional presence */
+/* ── Layer 3: Mid ring ────────────────────────────────────────
+   The core warmth people will actually perceive (subtly).
+   ─────────────────────────────────────────────────────────────── */
 .breathing-circle--3 {
-  --breathe-scale: 1.09;
-  --breathe-opacity-min: 0.32;
-  --breathe-opacity-max: 0.66;
+  --breathe-scale: 1.04;
+  --breathe-opacity-min: 0.10;
+  --breathe-opacity-max: 0.28;
 
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--color-terracotta) 28%, transparent) 0%,
+    color-mix(in oklch, var(--color-terracotta) 18%, transparent) 0%,
+    color-mix(in oklch, var(--color-earth-warm) 8%, transparent) 30%,
+    transparent 65%
+  );
+  animation: breathe-wander 13s ease-in-out infinite -3s;
+}
+
+/* ── Layer 4: Inner glow ──────────────────────────────────────
+   Focused warmth. Minimal movement — quiet center.
+   ─────────────────────────────────────────────────────────────── */
+.breathing-circle--4 {
+  --breathe-scale: 1.03;
+  --breathe-opacity-min: 0.12;
+  --breathe-opacity-max: 0.30;
+
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--color-terracotta) 22%, transparent) 0%,
+    color-mix(in oklch, var(--color-terracotta-light) 8%, transparent) 30%,
     transparent 60%
   );
+  animation: breathe 11s ease-in-out infinite -8s;
 }
 
-/* Layer 4: inner ring — richer terracotta, focused warmth */
-.breathing-circle--4 {
-  --breathe-scale: 1.05;
-  --breathe-opacity-min: 0.42;
-  --breathe-opacity-max: 0.74;
-
-  background: radial-gradient(
-    circle at center,
-    color-mix(in oklch, var(--color-terracotta) 36%, transparent) 0%,
-    transparent 55%
-  );
-}
-
-/* Layer 5: innermost core — densest, least movement */
+/* ── Layer 5: Innermost ember ─────────────────────────────────
+   The dense, warm heart. Almost still — just a soft glow shift.
+   ─────────────────────────────────────────────────────────────── */
 .breathing-circle--5 {
-  --breathe-scale: 1.03;
-  --breathe-opacity-min: 0.52;
-  --breathe-opacity-max: 0.84;
+  --breathe-scale: 1.02;
+  --breathe-opacity-min: 0.14;
+  --breathe-opacity-max: 0.32;
 
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--color-terracotta) 42%, transparent) 0%,
-    color-mix(in oklch, var(--color-earth-warm) 20%, transparent) 40%,
-    transparent 68%
+    color-mix(in oklch, var(--color-terracotta) 24%, transparent) 0%,
+    color-mix(in oklch, var(--color-terracotta-light) 10%, transparent) 25%,
+    color-mix(in oklch, var(--color-earth-warm) 5%, transparent) 45%,
+    transparent 70%
   );
+  animation: breathe 9s ease-in-out infinite -2s;
 }

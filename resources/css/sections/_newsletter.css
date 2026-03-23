@@ -23,11 +23,11 @@
   opacity: 0.04;
 }
 
-/* Breathing orb — part of the unified site-wide system */
+/* Breathing orb — atmospheric warmth, part of unified system */
 .newsletter-section::after {
-  --breathe-scale: 1.12;
-  --breathe-opacity-min: 0.18;
-  --breathe-opacity-max: 0.42;
+  --breathe-scale: 1.06;
+  --breathe-opacity-min: 0.08;
+  --breathe-opacity-max: 0.22;
 
   position: absolute;
   inset-block-start: -40%;
@@ -38,12 +38,12 @@
   content: '';
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--accent-primary) 28%, transparent) 0%,
-    color-mix(in oklch, var(--color-earth-warm) 12%, transparent) 40%,
+    color-mix(in oklch, var(--accent-primary) 16%, transparent) 0%,
+    color-mix(in oklch, var(--color-earth-warm) 8%, transparent) 35%,
     transparent 70%
   );
   border-radius: 50%;
-  animation: breathe 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: breathe-wander 18s ease-in-out infinite;
   will-change: transform, opacity;
 }
 
