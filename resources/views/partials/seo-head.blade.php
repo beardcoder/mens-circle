@@ -194,7 +194,7 @@
 <meta name="theme-color" content="#000000" />
 
 <!-- Styles -->
-@vite(['resources/css/app.css'])
+@vite (['resources/css/app.css'])
 
 <!-- Analytics -->
 @include ('components.analytics.umami')

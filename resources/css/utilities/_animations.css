@@ -166,7 +166,8 @@
     var(--color-terracotta-light),
     var(--color-earth-warm)
   );
-  box-shadow: 0 0 8px color-mix(in oklch, var(--accent-primary) 40%, transparent);
+  box-shadow: 0 0 8px
+    color-mix(in oklch, var(--accent-primary) 40%, transparent);
   transform-origin: left;
 }
 
