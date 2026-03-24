@@ -62,7 +62,7 @@ ENV APP_ENV=production \
     PHP_DATE_TIMEZONE=Europe/Berlin \
     PHP_MEMORY_LIMIT=512M \
     # Suppress container-level debug/access logging
-    LOG_OUTPUT_LEVEL=off \
+    LOG_OUTPUT_LEVEL=error \
     PHP_DISPLAY_ERRORS=Off \
     PHP_DISPLAY_STARTUP_ERRORS=Off \
     # OPcache: skip file timestamp checks (immutable container)
