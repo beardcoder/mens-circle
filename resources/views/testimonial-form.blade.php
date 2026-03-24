@@ -4,28 +4,21 @@
 @section ('meta_description', 'Teile deine Erfahrung mit dem Männerkreis Niederbayern/ Straubing. Hilf anderen Männern zu verstehen, was der Kreis bedeuten kann.')
 @section ('og_title', 'Teile deine Erfahrung – Männerkreis Niederbayern/ Straubing')
 
-<x-seo.breadcrumb-schema
-  :items="[
-    ['name' => 'Startseite', 'url' => route('home')],
-    ['name' => 'Teile deine Erfahrung', 'url' => route('testimonial.form')],
-]"
-/>
+@php
+    use App\Seo\Data\BreadcrumbItem;
+    use App\Seo\Schemas\BreadcrumbSchema;
+    use App\Seo\Schemas\WebPageSchema;
+@endphp
 
 @push ('structured_data')
-  <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "WebPage",
-      "name": "Teile deine Erfahrung",
-      "description": "Teile deine Erfahrung mit dem Männerkreis Niederbayern/ Straubing",
-      "url": "{{ route('testimonial.form') }}",
-      "inLanguage": "de-DE",
-      "isPartOf": {
-        "@@type": "WebSite",
-        "@@id": "{{ url('/') }}#website"
-      }
-    }
-  </script>
+    {!! (new BreadcrumbSchema([
+        new BreadcrumbItem('Startseite', route('home')),
+        new BreadcrumbItem('Teile deine Erfahrung', route('testimonial.form')),
+    ]))->toScript() !!}
+    {!! (new WebPageSchema(
+        title: 'Teile deine Erfahrung',
+        description: 'Teile deine Erfahrung mit dem Männerkreis Niederbayern/ Straubing. Hilf anderen Männern zu verstehen, was der Kreis bedeuten kann.',
+    ))->toScript() !!}
 @endpush
 
 @section ('content')
