@@ -57,6 +57,9 @@ storage/framework/sessions/*
 storage/framework/views/*
 !storage/framework/views/.gitkeep
 
+# Bootstrap cache (rebuilt at container startup via php artisan optimize)
+bootstrap/cache/*.php
+
 # Database (for SQLite)
 database/*.sqlite
 
