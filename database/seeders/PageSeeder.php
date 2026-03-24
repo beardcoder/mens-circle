@@ -15,6 +15,19 @@ class PageSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create Home page
+        Page::create([
+            'title' => 'Männerkreis Niederbayern / Straubing',
+            'slug' => 'home',
+            'is_published' => true,
+            'published_at' => now(),
+            'meta' => [
+                'meta_title' => 'Männerkreis Niederbayern/ Straubing',
+                'meta_description' => 'Authentischer Austausch, Gemeinschaft und persönliches Wachstum für Männer in Niederbayern.',
+                'meta_keywords' => 'Männerkreis, Niederbayern, Männergruppe, persönliches Wachstum, Gemeinschaft, Männer',
+            ],
+        ]);
+
         // Create Impressum page
         $impressum = Page::create([
             'title' => 'Impressum',
