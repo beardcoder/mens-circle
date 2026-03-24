@@ -29,13 +29,13 @@ COPY . .
 
 RUN --mount=type=cache,target=/root/.composer/cache \
     composer install \
-      --no-dev \
-      --no-interaction \
-      --no-progress \
-      --no-scripts \
-      --prefer-dist \
-      --ignore-platform-reqs \
-      --optimize-autoloader
+    --no-dev \
+    --no-interaction \
+    --no-progress \
+    --no-scripts \
+    --prefer-dist \
+    --ignore-platform-reqs \
+    --optimize-autoloader
 
 # ----------------------------
 # 3) Production image (FrankenPHP)
@@ -61,9 +61,20 @@ ENV APP_ENV=production \
     LOG_LEVEL=error \
     PHP_DATE_TIMEZONE=Europe/Berlin \
     PHP_MEMORY_LIMIT=512M \
+    # Suppress container-level debug/access logging
+    LOG_OUTPUT_LEVEL=off \
+    PHP_DISPLAY_ERRORS=Off \
+    PHP_DISPLAY_STARTUP_ERRORS=Off \
+    # OPcache: skip file timestamp checks (immutable container)
     PHP_OPCACHE_ENABLE=1 \
-    PHP_OPCACHE_JIT=1 \
+    PHP_OPCACHE_VALIDATE_TIMESTAMPS=0 \
+    PHP_OPCACHE_REVALIDATE_FREQ=0 \
+    PHP_OPCACHE_MEMORY_CONSUMPTION=256 \
+    PHP_OPCACHE_JIT=tracing \
     PHP_OPCACHE_JIT_BUFFER_SIZE=64M \
+    # Session cookie security
+    PHP_SESSION_COOKIE_SECURE=1 \
+    # Runtime
     AUTORUN_ENABLED=true \
     HEALTHCHECK_PATH=/up \
     CADDY_SERVER_ROOT=/app/public \
@@ -81,10 +92,10 @@ COPY --from=assets --chown=www-data:www-data /app/public/build /app/public/build
 
 # Update and Optimize autoloader
 RUN composer dump-autoload \
-      --no-dev \
-      --ignore-platform-reqs \
-      --classmap-authoritative \
-      --no-interaction
+    --no-dev \
+    --ignore-platform-reqs \
+    --classmap-authoritative \
+    --no-interaction
 
 # Copy startup scripts to clear response cache on container start
 USER root
