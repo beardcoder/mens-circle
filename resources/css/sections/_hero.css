@@ -85,7 +85,8 @@
   inset-inline-end: -25vw;
   inline-size: 70vw;
   block-size: 70vw;
-  animation: breathe 18s ease-in-out infinite;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .hero__circle--2 {
@@ -93,7 +94,8 @@
   inset-inline-end: -15vw;
   inline-size: 50vw;
   block-size: 50vw;
-  animation: breathe-slow 22s ease-in-out infinite -5s;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .hero__circle--3 {
@@ -101,7 +103,8 @@
   inset-inline-end: -8vw;
   inline-size: 35vw;
   block-size: 35vw;
-  animation: breathe 25s ease-in-out infinite -10s;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .hero__circle--4 {
@@ -109,7 +112,8 @@
   inset-inline-start: -45vw;
   inline-size: 90vw;
   block-size: 90vw;
-  animation: breathe-slow 30s ease-in-out infinite -3s;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 /* ============================================
@@ -203,7 +207,8 @@
   inline-size: 1px;
   block-size: 80px;
   background: linear-gradient(to bottom, var(--accent-primary), transparent);
-  animation: scroll-pulse 2.5s ease-in-out infinite;
+
+  /* Pulse animation handled by anime.js scrollPulse component */
 }
 
 /* ============================================

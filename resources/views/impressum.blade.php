@@ -11,11 +11,11 @@
 @endphp
 
 @push ('structured_data')
-    {!! (new BreadcrumbSchema([
+  {!! (new BreadcrumbSchema([
         new BreadcrumbItem('Startseite', route('home')),
         new BreadcrumbItem('Impressum', route('page.show', 'impressum')),
     ]))->toScript() !!}
-    {!! (new WebPageSchema(
+  {!! (new WebPageSchema(
         title: 'Impressum',
         description: 'Impressum und rechtliche Angaben des Männerkreis Niederbayern/ Straubing gemäß § 5 TMG.',
     ))->toScript() !!}

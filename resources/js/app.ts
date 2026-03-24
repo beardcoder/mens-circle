@@ -1,6 +1,7 @@
 /**
  * Männerkreis Niederbayern / Straubing - Application Entry Point
  * Built with @beardcoder/stitch-js progressive enhancement framework
+ * Animations powered by anime.js
  */
 
 import './types';
@@ -17,6 +18,10 @@ import {
   staggerAnimate,
   activeSection,
   journeyProgress,
+  heroEntrance,
+  breathingCircles,
+  scrollPulse,
+  animatedGradient,
 } from '@/components/scroll-animations';
 import { nativeAccordion } from '@/components/accordion';
 import { initUmamiKit } from '@/utils/umami-kit';
@@ -25,6 +30,24 @@ import { initUmamiKit } from '@/utils/umami-kit';
 register('#nav', navigation());
 register('#header', scrollHeader());
 register('#scrollToTop', scrollToTop());
+
+// Hero entrance animation (cinematic reveal sequence)
+register('.hero', heroEntrance());
+
+// Decorative breathing circle animations (replaces CSS @keyframes)
+register('.hero__circles', breathingCircles());
+register('.event-register__circles', breathingCircles());
+register('.event-about__circles', breathingCircles());
+register('.event-cta__circles', breathingCircles());
+
+// Scroll pulse for hero scroll indicator line
+register('.hero__scroll-line', scrollPulse());
+
+// Animated gradient glows on dark background sections
+register('.hero__bg', animatedGradient());
+register('.journey-section', animatedGradient());
+register('.event-register-section', animatedGradient());
+register('.event-cta-section', animatedGradient());
 
 // Scroll-driven animations (per-element)
 const fadeSelector =

@@ -10,8 +10,8 @@
 @section ('canonical', route('event.show.slug', $event->slug))
 
 @push ('structured_data')
-    {!! $eventSchema->toScript() !!}
-    {!! $breadcrumbSchema->toScript() !!}
+  {!! $eventSchema->toScript() !!}
+  {!! $breadcrumbSchema->toScript() !!}
 @endpush
 
 @section ('content')
