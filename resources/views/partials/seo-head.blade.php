@@ -201,12 +201,12 @@
 
 <!-- Structured Data -->
 @if ($localBusinessSchema ?? null)
-    {!! $localBusinessSchema->toScript() !!}
+  {!! $localBusinessSchema->toScript() !!}
 @endif
 @if ($organizationSchema ?? null)
-    {!! $organizationSchema->toScript() !!}
+  {!! $organizationSchema->toScript() !!}
 @endif
 @if ($websiteSchema ?? null)
-    {!! $websiteSchema->toScript() !!}
+  {!! $websiteSchema->toScript() !!}
 @endif
 @stack ('structured_data')

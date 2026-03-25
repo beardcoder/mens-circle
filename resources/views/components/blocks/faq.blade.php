@@ -17,9 +17,9 @@
 @endphp
 
 @if (count($schemaItems) > 0)
-    @push ('structured_data')
-        {!! (new FaqPageSchema($schemaItems))->toScript() !!}
-    @endpush
+  @push ('structured_data')
+    {!! (new FaqPageSchema($schemaItems))->toScript() !!}
+  @endpush
 @endif
 
 <section class="section section--large faq-section" id="faq">

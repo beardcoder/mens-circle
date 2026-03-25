@@ -11,11 +11,11 @@
 @endphp
 
 @push ('structured_data')
-    {!! (new BreadcrumbSchema([
+  {!! (new BreadcrumbSchema([
         new BreadcrumbItem('Startseite', route('home')),
         new BreadcrumbItem('Datenschutz', route('page.show', 'datenschutz')),
     ]))->toScript() !!}
-    {!! (new WebPageSchema(
+  {!! (new WebPageSchema(
         title: 'Datenschutzerklärung',
         description: 'Datenschutzerklärung des Männerkreis Niederbayern/ Straubing. Informationen zur Verarbeitung Ihrer personenbezogenen Daten.',
     ))->toScript() !!}

@@ -57,12 +57,13 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.15;
+  opacity: 0.25;
 }
 
 .event-register__circle {
   position: absolute;
-  border: 1px solid var(--color-sand);
+  border: 1px solid
+    color-mix(in oklch, var(--color-terracotta-light) 40%, var(--color-sand));
   border-radius: 50%;
 }
 
@@ -71,7 +72,8 @@
   inset-inline-start: -30%;
   inline-size: 120%;
   block-size: 120%;
-  animation: breathe 20s ease-in-out infinite;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .event-register__circle--2 {
@@ -79,7 +81,8 @@
   inset-inline-end: -20%;
   inline-size: 80%;
   block-size: 80%;
-  animation: breathe-slow 26s ease-in-out infinite -7s;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 /* Extends .eyebrow.eyebrow--secondary with positioning */
@@ -434,12 +437,13 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.2;
+  opacity: 0.3;
 }
 
 .event-about__circle {
   position: absolute;
-  border: 1px solid var(--color-sand);
+  border: 1px solid
+    color-mix(in oklch, var(--color-terracotta-light) 40%, var(--color-sand));
   border-radius: 50%;
 }
 
@@ -448,7 +452,8 @@
   inset-inline-start: -20%;
   inline-size: 140%;
   block-size: 140%;
-  animation: breathe 20s ease-in-out infinite;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .event-about__circle--2 {
@@ -457,7 +462,8 @@
   inline-size: 80%;
   aspect-ratio: 1 / 1;
   transform: translate(-50%, -50%);
-  animation: breathe-slow 28s ease-in-out infinite -5s;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .event-about__circle--3 {
@@ -465,7 +471,8 @@
   inset-inline-end: -10%;
   inline-size: 50%;
   aspect-ratio: 1 / 1;
-  animation: breathe 24s ease-in-out infinite -10s;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .event-about__quote {
@@ -512,12 +519,13 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.15;
+  opacity: 0.25;
 }
 
 .event-cta__circle {
   position: absolute;
-  border: 1px solid var(--color-sand);
+  border: 1px solid
+    color-mix(in oklch, var(--color-terracotta-light) 40%, var(--color-sand));
   border-radius: 50%;
 }
 
@@ -527,7 +535,8 @@
   inline-size: 70vw;
   block-size: 70vw;
   transform: translate(-50%, -50%);
-  animation: breathe 22s ease-in-out infinite;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .event-cta__circle--2 {
@@ -536,7 +545,8 @@
   inline-size: 50vw;
   block-size: 50vw;
   transform: translate(-50%, -50%);
-  animation: breathe-slow 30s ease-in-out infinite -5s;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .event-cta__content {

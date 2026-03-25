@@ -337,33 +337,16 @@ body:not(:has(.hero)) .nav-toggle span {
       transform var(--transition-slow);
   }
 
-  /* Staggered animation for links */
+  /* Link visibility — anime.js handles stagger animation */
   .nav.open .nav__link {
     opacity: 1;
     filter: blur(0);
     transform: translateY(0) scale(1);
   }
 
-  .nav.open .nav__link:nth-child(1) {
-    transition-delay: 80ms;
-  }
-
-  .nav.open .nav__link:nth-child(2) {
-    transition-delay: 160ms;
-  }
-
-  .nav.open .nav__link:nth-child(3) {
-    transition-delay: 240ms;
-  }
-
-  .nav.open .nav__link:nth-child(4) {
-    transition-delay: 320ms;
-  }
-
   .nav.open .nav__cta {
     opacity: 1;
     transform: translateY(0) scale(1);
-    transition-delay: 420ms;
   }
 
   .nav.open .nav__cta:hover {
