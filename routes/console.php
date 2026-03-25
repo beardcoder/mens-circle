@@ -10,12 +10,12 @@ use Spatie\Health\Commands\RunHealthChecksCommand;
 use Spatie\Health\Commands\ScheduleCheckHeartbeatCommand;
 
 // Event Management
-Schedule::command(SendEventReminders::class)->everyFifteenMinutes();
+Schedule::command(SendEventReminders::class)->everyFifteenMinutes()->withoutOverlapping();
 
 // SEO
-Schedule::command(GenerateSitemap::class)->daily()->at('02:00');
+Schedule::command(GenerateSitemap::class)->daily()->at('02:00')->runInBackground();
 
 // Health Checks
-Schedule::command(RunHealthChecksCommand::class)->everyMinute();
-Schedule::command(DispatchQueueCheckJobsCommand::class)->everyMinute();
-Schedule::command(ScheduleCheckHeartbeatCommand::class)->everyMinute();
+Schedule::command(RunHealthChecksCommand::class)->everyMinute()->runInBackground();
+Schedule::command(DispatchQueueCheckJobsCommand::class)->everyMinute()->runInBackground();
+Schedule::command(ScheduleCheckHeartbeatCommand::class)->everyMinute()->runInBackground();

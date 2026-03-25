@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 final class EventRegistrationRequest extends FormRequest
 {
@@ -27,7 +28,7 @@ final class EventRegistrationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'event_id' => ['required', 'exists:events,id'],
+            'event_id' => ['required', Rule::exists('events', 'id')->whereNull('deleted_at')],
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],

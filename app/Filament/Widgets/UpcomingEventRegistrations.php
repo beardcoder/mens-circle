@@ -19,9 +19,7 @@ class UpcomingEventRegistrations extends TableWidget
 
     public static function canView(): bool
     {
-        $nextEvent = Event::nextEvent();
-
-        return $nextEvent instanceof Event && $nextEvent->active_registrations_count > 0;
+        return Event::published()->upcoming()->whereHas('activeRegistrations')->exists();
     }
 
     public function table(Table $table): Table

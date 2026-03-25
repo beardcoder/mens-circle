@@ -9,7 +9,6 @@ use App\Models\Registration;
 use App\Models\Testimonial;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 beforeEach(function (): void {
     ResponseCache::spy();

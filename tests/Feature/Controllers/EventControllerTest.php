@@ -10,13 +10,10 @@ use App\Models\Participant;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Mail;
 
-use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertModelExists;
 
 test('can view next event page', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-    ]);
+    $event = Event::factory()->published()->create();
 
     $response = $this->get(route('event.show'));
 
@@ -35,11 +32,7 @@ test('shows no event page when no upcoming events', function (): void {
 test('can view specific event by slug', function (): void {
     $this->markTestSkipped('View tests require full frontend build');
 
-    $event = Event::factory()->create([
-        'title' => 'Test Event',
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-    ]);
+    $event = Event::factory()->published()->create(['title' => 'Test Event']);
 
     $response = $this->get(route('event.show.slug', ['slug' => $event->slug]));
 
@@ -51,9 +44,7 @@ test('can view specific event by slug', function (): void {
 test('cannot view unpublished event', function (): void {
     $this->markTestSkipped('View tests require full frontend build');
 
-    $event = Event::factory()->create([
-        'is_published' => false,
-    ]);
+    $event = Event::factory()->unpublished()->create();
 
     $response = $this->get(route('event.show.slug', ['slug' => $event->slug]));
 
@@ -61,11 +52,7 @@ test('cannot view unpublished event', function (): void {
 });
 
 test('can register for event', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-        'max_participants' => 10,
-    ]);
+    $event = Event::factory()->published()->create(['max_participants' => 10]);
 
     $response = $this->postJson(route('event.register'), [
         'event_id' => $event->id,
@@ -77,30 +64,19 @@ test('can register for event', function (): void {
     ]);
 
     $response->assertStatus(200);
-    $response->assertJson([
-        'success' => true,
-    ]);
+    $response->assertJson(['success' => true]);
 
-    assertDatabaseHas('participants', [
-        'email' => 'max@example.com',
-        'first_name' => 'Max',
-        'last_name' => 'Mustermann',
-    ]);
+    $participant = Participant::where('email', 'max@example.com')->firstOrFail();
+    assertModelExists($participant);
 
-    $participant = Participant::where('email', 'max@example.com')->first();
-
-    assertDatabaseHas('registrations', [
-        'event_id' => $event->id,
-        'participant_id' => $participant->id,
-        'status' => RegistrationStatus::Registered->value,
-    ]);
+    $registration = Registration::where('event_id', $event->id)
+        ->where('participant_id', $participant->id)
+        ->firstOrFail();
+    expect($registration->status)->toBe(RegistrationStatus::Registered);
 });
 
 test('cannot register for past event', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->subDays(1),
-        'is_published' => true,
-    ]);
+    $event = Event::factory()->published()->past()->create();
 
     $response = $this->postJson(route('event.register'), [
         'event_id' => $event->id,
@@ -111,17 +87,11 @@ test('cannot register for past event', function (): void {
     ]);
 
     $response->assertStatus(410);
-    $response->assertJson([
-        'success' => false,
-    ]);
+    $response->assertJson(['success' => false]);
 });
 
 test('registers on waitlist when event is full', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-        'max_participants' => 2,
-    ]);
+    $event = Event::factory()->published()->create(['max_participants' => 2]);
 
     Registration::factory()
         ->count(2)
@@ -138,28 +108,19 @@ test('registers on waitlist when event is full', function (): void {
     ]);
 
     $response->assertStatus(200);
-    $response->assertJson([
-        'success' => true,
-        'waitlist' => true,
-    ]);
+    $response->assertJson(['success' => true, 'waitlist' => true]);
 
-    $participant = Participant::where('email', 'max@example.com')->first();
-
-    assertDatabaseHas('registrations', [
-        'event_id' => $event->id,
-        'participant_id' => $participant->id,
-        'status' => RegistrationStatus::Waitlist->value,
-    ]);
+    $participant = Participant::where('email', 'max@example.com')->firstOrFail();
+    $registration = Registration::where('event_id', $event->id)
+        ->where('participant_id', $participant->id)
+        ->firstOrFail();
+    expect($registration->status)->toBe(RegistrationStatus::Waitlist);
 });
 
 test('sends waitlist confirmation email when event is full', function (): void {
     Mail::fake();
 
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-        'max_participants' => 1,
-    ]);
+    $event = Event::factory()->published()->create(['max_participants' => 1]);
 
     Registration::factory()
         ->forEvent($event)
@@ -178,23 +139,12 @@ test('sends waitlist confirmation email when event is full', function (): void {
 });
 
 test('already on waitlist returns error', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-        'max_participants' => 1,
-    ]);
+    $event = Event::factory()->published()->create(['max_participants' => 1]);
 
     $participant = Participant::factory()->create(['email' => 'max@example.com']);
 
-    Registration::factory()
-        ->forEvent($event)
-        ->registered()
-        ->create();
-    Registration::factory()
-        ->forEvent($event)
-        ->forParticipant($participant)
-        ->waitlist()
-        ->create();
+    Registration::factory()->forEvent($event)->registered()->create();
+    Registration::factory()->forEvent($event)->forParticipant($participant)->waitlist()->create();
 
     $response = $this->postJson(route('event.register'), [
         'event_id' => $event->id,
@@ -205,16 +155,11 @@ test('already on waitlist returns error', function (): void {
     ]);
 
     $response->assertStatus(409);
-    $response->assertJson([
-        'success' => false,
-    ]);
+    $response->assertJson(['success' => false]);
 });
 
 test('cannot register for unpublished event', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => false,
-    ]);
+    $event = Event::factory()->unpublished()->create();
 
     $response = $this->postJson(route('event.register'), [
         'event_id' => $event->id,
@@ -225,26 +170,15 @@ test('cannot register for unpublished event', function (): void {
     ]);
 
     $response->assertStatus(404);
-    $response->assertJson([
-        'success' => false,
-    ]);
+    $response->assertJson(['success' => false]);
 });
 
 test('cannot register twice for same event', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-    ]);
+    $event = Event::factory()->published()->create();
 
-    $participant = Participant::factory()->create([
-        'email' => 'max@example.com',
-    ]);
+    $participant = Participant::factory()->create(['email' => 'max@example.com']);
 
-    Registration::factory()->create([
-        'event_id' => $event->id,
-        'participant_id' => $participant->id,
-        'status' => RegistrationStatus::Registered,
-    ]);
+    Registration::factory()->forEvent($event)->forParticipant($participant)->registered()->create();
 
     $response = $this->postJson(route('event.register'), [
         'event_id' => $event->id,
@@ -255,32 +189,22 @@ test('cannot register twice for same event', function (): void {
     ]);
 
     $response->assertStatus(409);
-    $response->assertJson([
-        'success' => false,
-    ]);
+    $response->assertJson(['success' => false]);
 });
 
 test('registration requires all required fields', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-    ]);
+    $event = Event::factory()->published()->create();
 
     $response = $this->postJson(route('event.register'), [
         'event_id' => $event->id,
     ]);
 
     $response->assertStatus(422);
-    $response->assertJson([
-        'success' => false,
-    ]);
+    $response->assertJson(['success' => false]);
 });
 
 test('registration validates email format', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-    ]);
+    $event = Event::factory()->published()->create();
 
     $response = $this->postJson(route('event.register'), [
         'event_id' => $event->id,
@@ -291,26 +215,14 @@ test('registration validates email format', function (): void {
     ]);
 
     $response->assertStatus(422);
-    $response->assertJson([
-        'success' => false,
-    ]);
+    $response->assertJson(['success' => false]);
 });
 
 test('promotes from waitlist when registration is cancelled', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-        'max_participants' => 1,
-    ]);
+    $event = Event::factory()->published()->create(['max_participants' => 1]);
 
-    $registered = Registration::factory()
-        ->forEvent($event)
-        ->registered()
-        ->create();
-    $waitlisted = Registration::factory()
-        ->forEvent($event)
-        ->waitlist()
-        ->create();
+    $registered = Registration::factory()->forEvent($event)->registered()->create();
+    $waitlisted = Registration::factory()->forEvent($event)->waitlist()->create();
 
     $registered->cancel();
 
@@ -320,20 +232,10 @@ test('promotes from waitlist when registration is cancelled', function (): void 
 test('sends waitlist promotion email when registration is cancelled', function (): void {
     Mail::fake();
 
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-        'max_participants' => 1,
-    ]);
+    $event = Event::factory()->published()->create(['max_participants' => 1]);
 
-    $registered = Registration::factory()
-        ->forEvent($event)
-        ->registered()
-        ->create();
-    Registration::factory()
-        ->forEvent($event)
-        ->waitlist()
-        ->create();
+    $registered = Registration::factory()->forEvent($event)->registered()->create();
+    Registration::factory()->forEvent($event)->waitlist()->create();
 
     $registered->cancel();
 
@@ -341,16 +243,9 @@ test('sends waitlist promotion email when registration is cancelled', function (
 });
 
 test('does not promote when no one is on waitlist', function (): void {
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-        'max_participants' => 1,
-    ]);
+    $event = Event::factory()->published()->create(['max_participants' => 1]);
 
-    $registered = Registration::factory()
-        ->forEvent($event)
-        ->registered()
-        ->create();
+    $registered = Registration::factory()->forEvent($event)->registered()->create();
 
     $registered->cancel();
 

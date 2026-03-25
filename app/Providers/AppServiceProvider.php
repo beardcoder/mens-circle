@@ -104,7 +104,7 @@ class AppServiceProvider extends ServiceProvider
 
             // Website Availability Check
             PingCheck::new()
-                ->url(config('app.url') ?? 'http://localhost') // @phpstan-ignore argument.type
+                ->url(Config::string('app.url', 'http://localhost'))
                 ->name('Website')
                 ->timeout(5)
                 ->retryTimes(2),

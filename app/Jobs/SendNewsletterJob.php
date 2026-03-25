@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Attributes\Backoff;
+use Illuminate\Queue\Attributes\Timeout;
 use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Queue\Attributes\WithoutRelations;
 use Illuminate\Support\Collection;
@@ -21,6 +22,7 @@ use Throwable;
 
 #[Tries(3)]
 #[Backoff(60)]
+#[Timeout(3600)]
 class SendNewsletterJob implements ShouldQueue
 {
     use Queueable;
@@ -40,7 +42,7 @@ class SendNewsletterJob implements ShouldQueue
         $failedCount = 0;
 
         NewsletterSubscription::query()
-            ->whereNull('unsubscribed_at')
+            ->active()
             ->with('participant')
             ->chunk(100, function (Collection $subscriptions) use (&$recipientCount, &$failedCount): void {
                 /** @var NewsletterSubscription $subscription */

@@ -104,6 +104,7 @@ class NewsletterSubscriptionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(static fn (Builder $query) => $query->with('participant'))
             ->columns([
                 TextColumn::make('participant.first_name')
                     ->label('Vorname')

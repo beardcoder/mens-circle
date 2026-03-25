@@ -15,6 +15,7 @@ use App\Models\Registration;
 use App\Seo\Data\BreadcrumbItem;
 use App\Seo\Schemas\BreadcrumbSchema;
 use App\Seo\Schemas\EventSchema;
+use App\Services\EventNotificationService;
 use App\Settings\GeneralSettings;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -23,13 +24,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use RuntimeException;
-use Seven\Api\Client;
-use Seven\Api\Resource\Sms\SmsParams;
-use Seven\Api\Resource\Sms\SmsResource;
 
 final class EventController
 {
-    public function __construct(private readonly GeneralSettings $settings) {}
+    public function __construct(
+        private readonly GeneralSettings $settings,
+        private readonly EventNotificationService $notificationService,
+    ) {}
 
     public function showNext(): View|RedirectResponse
     {
@@ -68,7 +69,7 @@ final class EventController
     {
         $validated = $request->validated();
         /** @var Event $event */
-        $event = Event::query()->findOrFail($validated['event_id']);
+        $event = Event::query()->withCount('activeRegistrations')->findOrFail($validated['event_id']);
 
         $error = match (true) {
             !$event->is_published => ['Diese Veranstaltung ist nicht verfügbar.', 404],
@@ -171,7 +172,7 @@ final class EventController
                 $eventDate = $event->event_date->format('d.m.Y');
                 $eventTime = $event->start_time->format('H:i');
                 $smsMessage = "Hallo {$participant->first_name}! Deine Anmeldung fuer den Maennerkreis am {$eventDate} um {$eventTime} Uhr ist bestaetigt. Wir freuen uns auf dich!";
-                $this->sendSms($participant->phone, $smsMessage, [
+                $this->notificationService->sendSms($participant->phone, $smsMessage, [
                     'registration_id' => $registration->id,
                     'type' => 'registration_confirmation',
                 ]);
@@ -189,33 +190,4 @@ final class EventController
         }
     }
 
-    /**
-     * @param array<string, mixed> $context
-     */
-    private function sendSms(string $phoneNumber, string $message, array $context = []): void
-    {
-        /** @var string|null $apiKey */
-        $apiKey = config('sevenio.api_key');
-
-        if (!$apiKey) {
-            Log::warning('Cannot send SMS - Seven.io API key not configured', $context);
-
-            return;
-        }
-
-        try {
-            $client = new Client($apiKey);
-            $smsResource = new SmsResource($client);
-            /** @var string|null $from */
-            $from = config('sevenio.from');
-            $params = new SmsParams(text: $message, to: $phoneNumber, from: $from ?? '');
-            $smsResource->dispatch($params);
-        } catch (Exception $exception) {
-            Log::error('Failed to send SMS', [
-                ...$context,
-                'phone_number' => $phoneNumber,
-                'error' => $exception->getMessage(),
-            ]);
-        }
-    }
 }
