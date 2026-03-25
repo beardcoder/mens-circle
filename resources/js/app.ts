@@ -4,7 +4,7 @@
  */
 
 import './types';
-import { register, autoInit } from '@stitch';
+import { register, autoInit } from '@beardcoder/stitch-js';
 import { navigation, scrollHeader, scrollToTop } from '@/components/navigation';
 import {
   newsletterForm,

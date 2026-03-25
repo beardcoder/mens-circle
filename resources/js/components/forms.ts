@@ -3,7 +3,7 @@
  * Newsletter, registration, and testimonial forms using stitch-js
  */
 
-import { defineComponent } from '@stitch';
+import { defineComponent } from '@beardcoder/stitch-js';
 import { validateEmail } from '@/utils/helpers';
 import { showToast } from '@/utils/toast';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';

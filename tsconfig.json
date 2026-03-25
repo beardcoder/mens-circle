@@ -13,13 +13,8 @@
         "isolatedModules": true,
         "verbatimModuleSyntax": true,
         "lib": ["ES2020", "DOM", "DOM.Iterable"],
-        "baseUrl": ".",
         "paths": {
-            "@/*": ["resources/js/*"],
-            "@stitch": ["node_modules/@beardcoder/stitch-js/dist/index.d.ts"],
-            "@stitch/*": ["node_modules/@beardcoder/stitch-js/dist/*"]
+            "@/*": ["./resources/js/*"],
         }
-    },
-    "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts"],
-    "exclude": ["node_modules", "vendor", "public"]
+    }
 }

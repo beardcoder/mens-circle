@@ -3,7 +3,7 @@
  * Mobile navigation, scroll header, and scroll-to-top using stitch-js
  */
 
-import { defineComponent } from '@stitch';
+import { defineComponent } from '@beardcoder/stitch-js';
 
 interface NavigationOptions {
   toggleSelector: string;

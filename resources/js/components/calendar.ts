@@ -3,7 +3,7 @@
  * Handles ICS and Google Calendar export using stitch-js
  */
 
-import { defineComponent } from '@stitch';
+import { defineComponent } from '@beardcoder/stitch-js';
 import type { EventData } from '@/types';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 

@@ -3,7 +3,7 @@
  * Uses native <details> behavior with single-open-per-group via stitch-js
  */
 
-import { defineComponent } from '@stitch';
+import { defineComponent } from '@beardcoder/stitch-js';
 
 interface NativeAccordionOptions {
   itemSelector: string;

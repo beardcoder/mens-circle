@@ -3,7 +3,7 @@
  * Lightweight scroll-driven animations using stitch-js + IntersectionObserver + Web Animations API
  */
 
-import { defineComponent } from '@stitch';
+import { defineComponent } from '@beardcoder/stitch-js';
 
 const ANIMATION_DURATION = 700;
 const ANIMATION_STAGGER_DELAY = 80;
