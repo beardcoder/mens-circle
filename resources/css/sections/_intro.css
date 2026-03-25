@@ -113,14 +113,15 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.2;
+  opacity: 0.3;
 }
 
 .intro__image-circles::before,
 .intro__image-circles::after {
   position: absolute;
   content: '';
-  border: 1px solid var(--color-sand);
+  border: 1px solid
+    color-mix(in oklch, var(--color-terracotta-light) 40%, var(--color-sand));
   border-radius: 50%;
 }
 
@@ -129,7 +130,8 @@
   inset-inline-start: -20%;
   inline-size: 140%;
   block-size: 140%;
-  animation: breathe-slow 26s ease-in-out infinite;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 .intro__image-circles::after {
@@ -138,7 +140,8 @@
   inline-size: 80%;
   aspect-ratio: 1 / 1;
   transform: translate(-50%, -50%);
-  animation: breathe 22s ease-in-out infinite -6s;
+
+  /* Animation handled by anime.js breathingCircles component */
 }
 
 /* ============================================

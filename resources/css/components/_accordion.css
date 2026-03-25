@@ -1,6 +1,6 @@
 /**
  * Accordion Component
- * Modern accordion using <details>/<summary> with Motion.dev animations
+ * Modern accordion using <details>/<summary> with anime.js animations
  *
  * Structure:
  *   <details class="accordion-item">
@@ -10,8 +10,8 @@
  *     </div>
  *   </details>
  *
- * Animations are handled by Motion.dev for smooth, performant transitions
- * @see https://motion.dev/docs/inview
+ * Height animations are handled by anime.js for smooth, cross-browser transitions
+ * @see resources/js/components/accordion.ts
  */
 
 /* ============================================
@@ -82,6 +82,18 @@
     transform var(--transition-fast);
 }
 
+/* Mobile: larger touch targets & comfortable sizing */
+@media (width <= 600px) {
+  .accordion-item__trigger,
+  .faq-item__question {
+    gap: var(--space-sm);
+    padding-block: var(--space-lg);
+    padding-inline: var(--space-xs);
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+}
+
 /* Remove default marker */
 .accordion-item__trigger::marker,
 .accordion-item__trigger::-webkit-details-marker,
@@ -122,6 +134,15 @@
     border-color var(--transition-medium),
     transform var(--transition-medium),
     box-shadow var(--transition-medium);
+}
+
+/* Mobile: slightly larger icon for easier tap */
+@media (width <= 600px) {
+  .accordion-item__icon,
+  .faq-item__icon {
+    inline-size: 32px;
+    block-size: 32px;
+  }
 }
 
 /* Horizontal line (minus) */
@@ -179,29 +200,19 @@
 
 /* ============================================
    Accordion Content (Answer Container)
-   Uses interpolate-size: allow-keywords for smooth
-   height animation from 0 to auto (2025+)
+   anime.js handles the height/opacity animation
    ============================================ */
 .accordion-item__content,
 .faq-item__answer {
   block-size: 0;
   overflow: hidden;
   opacity: 0;
-  transition:
-    block-size var(--duration-slow) var(--ease-out),
-    opacity var(--duration-normal) var(--ease-out);
 }
 
 .accordion-item[open] > .accordion-item__content,
 .faq-item[open] > .faq-item__answer {
   block-size: auto;
   opacity: 1;
-}
-
-/* Initial hidden state - Motion.dev will animate */
-.accordion-item__content[data-accordion-content],
-.faq-item__answer[data-accordion-content] {
-  block-size: 0;
 }
 
 /* ============================================
@@ -214,6 +225,17 @@
   font-size: 1rem;
   line-height: var(--leading-relaxed);
   color: var(--text-secondary);
+}
+
+/* Mobile: more generous padding and slightly smaller text */
+@media (width <= 600px) {
+  .accordion-item__body,
+  .faq-item__answer-inner {
+    padding-block: var(--space-sm) var(--space-md);
+    padding-inline: var(--space-xs);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
 }
 
 .accordion-item__body p:last-child,

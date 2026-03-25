@@ -1,9 +1,10 @@
 /**
  * Navigation Components
- * Mobile navigation, scroll header, and scroll-to-top using stitch-js
+ * Mobile navigation with anime.js stagger, scroll header, and scroll-to-top
  */
 
 import { defineComponent } from '@stitch';
+import { animate, stagger } from 'animejs';
 
 interface NavigationOptions {
   toggleSelector: string;
@@ -15,8 +16,12 @@ interface NavigationState {
   scrollPosition: number;
 }
 
+function prefersReducedMotion(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 /**
- * Mobile navigation component
+ * Mobile navigation component with anime.js stagger animations
  * Attach to #nav — manages mobile menu with accessibility
  */
 export const navigation = defineComponent<NavigationOptions>(
@@ -45,6 +50,58 @@ export const navigation = defineComponent<NavigationOptions>(
       );
     };
 
+    const isMobile = (): boolean =>
+      window.matchMedia('(width <= 900px)').matches;
+
+    const animateLinksIn = (): void => {
+      if (prefersReducedMotion() || !isMobile()) return;
+
+      const links = ctx.el.querySelectorAll<HTMLElement>(o.linkSelector);
+
+      if (links.length === 0) return;
+
+      // Reset initial state for animation
+      links.forEach((link) => {
+        link.style.opacity = '0';
+        link.style.transform = 'translateY(24px) scale(0.98)';
+        link.style.filter = 'blur(4px)';
+      });
+
+      animate(links, {
+        opacity: [0, 1],
+        translateY: ['24px', '0px'],
+        scale: [0.98, 1],
+        filter: ['blur(4px)', 'blur(0px)'],
+        duration: 500,
+        delay: stagger(70, { start: 100 }),
+        ease: 'outQuint',
+        onComplete: () => {
+          links.forEach((link) => {
+            link.style.filter = '';
+            link.style.transform = '';
+            link.style.opacity = '';
+          });
+        },
+      });
+    };
+
+    const animateLinksOut = (): void => {
+      if (prefersReducedMotion() || !isMobile()) return;
+
+      const links = ctx.el.querySelectorAll<HTMLElement>(o.linkSelector);
+
+      if (links.length === 0) return;
+
+      animate(links, {
+        opacity: [1, 0],
+        translateY: ['0px', '-12px'],
+        scale: [1, 0.97],
+        duration: 200,
+        delay: stagger(30),
+        ease: 'inCubic',
+      });
+    };
+
     const open = (): void => {
       state.scrollPosition = window.scrollY;
       state.isOpen = true;
@@ -55,12 +112,14 @@ export const navigation = defineComponent<NavigationOptions>(
       document.body.style.top = `-${state.scrollPosition}px`;
 
       updateAriaAttributes(true);
+      animateLinksIn();
     };
 
     const close = (options: { restoreScroll?: boolean } = {}): void => {
       if (!state.isOpen) return;
 
       state.isOpen = false;
+      animateLinksOut();
 
       ctx.el.classList.remove('open');
       navToggle.classList.remove('active');

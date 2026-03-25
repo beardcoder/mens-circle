@@ -444,9 +444,9 @@ export const breathingCircles = defineComponent({}, (ctx) => {
     const baseDuration = isSlowVariant ? 8000 : 6000;
     const durationOffset = index * 2000;
 
-    // Breathing: opacity + scale pulse
+    // Breathing: opacity + scale pulse — higher opacity range for better contrast
     const breatheAnim = animate(circle, {
-      opacity: isSlowVariant ? [0.1, 0.3, 0.1] : [0.15, 0.35, 0.15],
+      opacity: isSlowVariant ? [0.12, 0.4, 0.12] : [0.18, 0.5, 0.18],
       scale: isSlowVariant ? [0.92, 1.08, 0.92] : [0.9, 1.15, 0.9],
       rotate: isSlowVariant ? ['0deg', '1.5deg', '-0.5deg', '0deg'] : '0deg',
       duration: baseDuration + durationOffset,
@@ -516,8 +516,9 @@ export const animatedGradient = defineComponent({}, (ctx) => {
       opacity: 0;
       background: radial-gradient(
         ellipse 80% 60% at var(--gx, 50%) var(--gy, 30%),
-        color-mix(in oklch, var(--accent-primary) 12%, transparent) 0%,
-        transparent 60%
+        color-mix(in oklch, var(--accent-primary) 20%, transparent) 0%,
+        color-mix(in oklch, var(--color-terracotta-light) 6%, transparent) 40%,
+        transparent 70%
       );
     `;
 
