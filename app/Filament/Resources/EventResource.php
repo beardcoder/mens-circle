@@ -15,6 +15,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\ReplicateAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
@@ -256,7 +257,11 @@ class EventResource extends Resource
                 TrashedFilter::make()->label('Gelöschte Events'),
             ])
             ->deferFilters(false)
-            ->recordActions([ViewAction::make(), EditAction::make()])
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                self::replicateAction(),
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
@@ -267,6 +272,27 @@ class EventResource extends Resource
             ->defaultSort('event_date', 'desc')
             ->persistFiltersInSession()
             ->striped();
+    }
+
+    public static function replicateAction(): ReplicateAction
+    {
+        return ReplicateAction::make()
+            ->label('Duplizieren')
+            ->icon(Heroicon::OutlinedDocumentDuplicate)
+            ->excludeAttributes(['slug', 'active_registrations_count'])
+            ->schema([
+                DateTimePicker::make('event_date')
+                    ->label('Neues Veranstaltungsdatum')
+                    ->required()
+                    ->native(false)
+                    ->displayFormat('d.m.Y')
+                    ->minDate(now()),
+            ])
+            ->beforeReplicaSaved(static function (Event $replica, array $data): void {
+                $replica->event_date = $data['event_date'];
+                $replica->is_published = false;
+            })
+            ->successRedirectUrl(static fn(Event $replica): string => EventResource::getUrl('edit', ['record' => $replica]));
     }
 
     public static function getRelations(): array

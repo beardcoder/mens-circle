@@ -36,6 +36,7 @@ class EditEvent extends EditRecord
     {
         return [
             $this->sendMessageAction(),
+            EventResource::replicateAction(),
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),
