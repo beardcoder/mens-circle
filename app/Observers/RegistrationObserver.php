@@ -7,7 +7,6 @@ namespace App\Observers;
 use App\Enums\RegistrationStatus;
 use App\Mail\WaitlistPromotion;
 use App\Models\Registration;
-use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -43,13 +42,13 @@ final class RegistrationObserver
 
         $nextWaitlisted->promote();
 
-        try {
-            Mail::queue(new WaitlistPromotion($nextWaitlisted, $nextWaitlisted->event));
-        } catch (Exception $exception) {
-            Log::error('Failed to send waitlist promotion email', [
+        rescue(
+            fn() => Mail::queue(new WaitlistPromotion($nextWaitlisted, $nextWaitlisted->event)),
+            fn(\Throwable $e) => Log::error('Failed to send waitlist promotion email', [
                 'registration_id' => $nextWaitlisted->id,
-                'error' => $exception->getMessage(),
-            ]);
-        }
+                'error' => $e->getMessage(),
+            ]),
+            report: false,
+        );
     }
 }

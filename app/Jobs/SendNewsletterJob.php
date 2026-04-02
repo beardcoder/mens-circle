@@ -19,6 +19,7 @@ use Illuminate\Queue\Attributes\WithoutRelations;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Sleep;
 use Throwable;
 
 #[Tries(3)]
@@ -66,6 +67,8 @@ class SendNewsletterJob implements ShouldBeUnique, ShouldQueue
                         $failedCount++;
                     }
                 }
+
+                Sleep::for(100)->milliseconds();
             });
 
         $this->newsletter->update([

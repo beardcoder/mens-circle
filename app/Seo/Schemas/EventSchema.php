@@ -6,6 +6,7 @@ namespace App\Seo\Schemas;
 
 use App\Models\Event;
 use App\Settings\GeneralSettings;
+use Illuminate\Support\Uri;
 use Spatie\SchemaOrg\Schema;
 
 final readonly class EventSchema
@@ -35,7 +36,7 @@ final readonly class EventSchema
             ->addressCountry('DE');
 
         $organizer = Schema::organization()
-            ->setProperty('@id', url('/') . '#organization')
+            ->setProperty('@id', (string) Uri::of(url('/'))->withFragment('organization'))
             ->name($this->settings->site_name)
             ->url(url('/'));
 
@@ -59,7 +60,7 @@ final readonly class EventSchema
             )
             ->organizer($organizer)
             ->performer(
-                Schema::organization()->setProperty('@id', url('/') . '#organization'),
+                Schema::organization()->setProperty('@id', (string) Uri::of(url('/'))->withFragment('organization')),
             )
             ->offers(
                 Schema::offer()

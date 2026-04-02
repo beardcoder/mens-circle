@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TestimonialSubmissionRequest;
 use App\Models\Testimonial;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 final class TestimonialSubmissionController
@@ -49,7 +50,7 @@ final class TestimonialSubmissionController
 
         /** @var string $authorName */
         $authorName = $validated['author_name'];
-        $firstName = explode(' ', $authorName)[0];
+        $firstName = Str::before($authorName, ' ');
 
         return "Vielen Dank, {$firstName}! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.";
     }
