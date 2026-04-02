@@ -11,7 +11,8 @@
     "packages": [
         "filament/filament",
         "spatie/laravel-medialibrary",
-        "spatie/laravel-responsecache"
+        "spatie/laravel-responsecache",
+        "barryvdh/laravel-debugbar"
     ],
     "sail": false,
     "skills": [
@@ -20,6 +21,7 @@
         "pest-testing",
         "medialibrary-development",
         "responsecache-development",
+        "debug-using-debugbar",
         "laravel-specialist",
         "php-best-practices"
     ]
