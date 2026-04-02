@@ -24,15 +24,15 @@ final readonly class WebPageSchema
             ->url($this->url ?? url()->current())
             ->inLanguage('de-DE')
             ->publisher(
-                Schema::organization()->setProperty('@id', url('/') . '#organization')
+                Schema::organization()->setProperty('@id', url('/') . '#organization'),
             );
 
-        if ($this->settings !== null) {
+        if ($this->settings instanceof GeneralSettings) {
             $schema->isPartOf(
                 Schema::webSite()
                     ->setProperty('@id', url('/') . '#website')
                     ->name($this->settings->site_name)
-                    ->url(url('/'))
+                    ->url(url('/')),
             );
         }
 

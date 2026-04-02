@@ -21,7 +21,9 @@ trait ClearsResponseCache
                 ResponseCache::forget($urls);
             }
 
-            cache()->forget('next_event_data');
+            if (\in_array($model->getTable(), ['events', 'registrations'], true)) {
+                cache()->forget('next_event_data');
+            }
         };
 
         static::created($clearCache);

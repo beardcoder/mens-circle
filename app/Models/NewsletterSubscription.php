@@ -14,16 +14,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Override;
 
 /**
  * @property int $participant_id
  * @property string $token
- * @property Carbon|CarbonImmutable $subscribed_at
- * @property ?Carbon $confirmed_at
- * @property ?Carbon $unsubscribed_at
+ * @property CarbonImmutable $subscribed_at
+ * @property ?CarbonImmutable $confirmed_at
+ * @property ?CarbonImmutable $unsubscribed_at
  * @property Participant $participant
  */
 #[Fillable(['participant_id', 'token', 'subscribed_at', 'confirmed_at', 'unsubscribed_at'])]

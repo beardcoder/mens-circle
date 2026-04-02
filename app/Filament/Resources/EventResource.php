@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Components\Utilities\Set;
 use App\Enums\RegistrationStatus;
 use App\Filament\Resources\EventResource\Pages\CreateEvent;
 use App\Filament\Resources\EventResource\Pages\EditEvent;
@@ -63,7 +64,7 @@ class EventResource extends Resource
                         ->maxLength(255)
                         ->placeholder('z.B. Männerabend im Januar')
                         ->live(onBlur: true)
-                        ->afterStateUpdated(static fn($state, callable $set) => $set('slug', null)),
+                        ->afterStateUpdated(static fn($state, Set $set): mixed => $set('slug', null)),
                     TextInput::make('slug')
                         ->label('URL-Slug')
                         ->maxLength(255)

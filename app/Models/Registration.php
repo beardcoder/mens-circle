@@ -18,17 +18,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
+use Carbon\CarbonImmutable;
 use Override;
 
 /**
  * @property int $participant_id
  * @property int $event_id
  * @property RegistrationStatus $status
- * @property Carbon $registered_at
- * @property ?Carbon $cancelled_at
- * @property ?Carbon $reminder_sent_at
- * @property ?Carbon $sms_reminder_sent_at
+ * @property CarbonImmutable $registered_at
+ * @property ?CarbonImmutable $cancelled_at
+ * @property ?CarbonImmutable $reminder_sent_at
+ * @property ?CarbonImmutable $sms_reminder_sent_at
  * @property Participant $participant
  * @property Event $event
  */
@@ -77,7 +77,7 @@ class Registration extends Model implements DefinesCacheUrls
     public function cancel(): void
     {
         $this->update([
-            'status' => RegistrationStatus::Cancelled->value,
+            'status' => RegistrationStatus::Cancelled,
             'cancelled_at' => now(),
         ]);
     }
@@ -85,14 +85,14 @@ class Registration extends Model implements DefinesCacheUrls
     public function promote(): void
     {
         $this->update([
-            'status' => RegistrationStatus::Registered->value,
+            'status' => RegistrationStatus::Registered,
         ]);
     }
 
     public function markAsAttended(): void
     {
         $this->update([
-            'status' => RegistrationStatus::Attended->value,
+            'status' => RegistrationStatus::Attended,
         ]);
     }
 

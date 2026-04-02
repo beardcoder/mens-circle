@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Participant;
-use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,22 +21,18 @@ class ParticipantFactory extends Factory
      */
     public function definition(): array
     {
-        $faker = FakerFactory::create();
-
         return [
-            'first_name' => $faker->firstName(),
-            'last_name' => $faker->lastName(),
-            'email' => $faker->unique()->safeEmail(),
-            'phone' => $faker->optional(0.3)->phoneNumber(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'phone' => $this->faker->optional(0.3)->phoneNumber(),
         ];
     }
 
     public function withPhone(): static
     {
-        $faker = FakerFactory::create();
-
         return $this->state(fn(array $attributes): array => [
-            'phone' => $faker->phoneNumber(),
+            'phone' => $this->faker->phoneNumber(),
         ]);
     }
 }

@@ -22,6 +22,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -64,7 +65,7 @@ class EditEvent extends EditRecord
                             ->placeholder('Vorlage auswählen (optional)')
                             ->native(false)
                             ->live()
-                            ->afterStateUpdated(function (?string $state, callable $set): void {
+                            ->afterStateUpdated(function (?string $state, Set $set): void {
                                 if (!$state) {
                                     return;
                                 }
@@ -72,8 +73,7 @@ class EditEvent extends EditRecord
                                 /** @var Event $event */
                                 $event = $this->record;
                                 $template = EmailTemplate::from($state);
-                                $service = new EmailTemplateService();
-                                $resolved = $service->resolve($template, $event);
+                                $resolved = app(EmailTemplateService::class)->resolve($template, $event);
 
                                 $set('subject', $resolved['subject']);
                                 $set('content', $resolved['content']);
@@ -134,7 +134,7 @@ class EditEvent extends EditRecord
 
                 foreach ($registrations as $registration) {
                     try {
-                        Mail::to($registration->participant->email)->send(new EventParticipantMessage(
+                        Mail::to($registration->participant->email)->queue(new EventParticipantMessage(
                             mailSubject: $data['subject'],
                             mailContent: $data['content'],
                             event: $event,

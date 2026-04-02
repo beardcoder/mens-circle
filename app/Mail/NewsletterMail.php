@@ -7,13 +7,12 @@ namespace App\Mail;
 use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-final class NewsletterMail extends Mailable implements ShouldQueue
+final class NewsletterMail extends Mailable
 {
     use Queueable;
     use SerializesModels;

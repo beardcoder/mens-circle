@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureHealth();
 
-        View::composer('*', static function (ViewContract $view): void {
+        View::composer(['layouts.*', 'emails.*', 'filament.*'], static function (ViewContract $view): void {
             try {
                 $settings = app(GeneralSettings::class);
 

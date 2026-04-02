@@ -9,7 +9,6 @@ use App\Models\Registration;
 use App\Models\Testimonial;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
-
 beforeEach(function (): void {
     ResponseCache::spy();
     cache()->forget('next_event_data');

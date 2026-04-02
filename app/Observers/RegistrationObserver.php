@@ -11,8 +11,10 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class RegistrationObserver
+final class RegistrationObserver
 {
+    public bool $afterCommit = true;
+
     public function updated(Registration $registration): void
     {
         if (!$registration->wasChanged('status')) {

@@ -24,6 +24,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Override;
@@ -73,14 +74,13 @@ class SendNewsletter extends Page implements HasActions, HasForms
                         ->placeholder('Vorlage auswählen (optional)')
                         ->native(false)
                         ->live()
-                        ->afterStateUpdated(static function (?string $state, callable $set): void {
+                        ->afterStateUpdated(static function (?string $state, Set $set): void {
                             if (!$state) {
                                 return;
                             }
 
                             $template = EmailTemplate::from($state);
-                            $service = new EmailTemplateService();
-                            $resolved = $service->resolve($template);
+                            $resolved = app(EmailTemplateService::class)->resolve($template);
 
                             $set('subject', $resolved['subject']);
                             $set('content', $resolved['content']);

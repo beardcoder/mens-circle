@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Components\Utilities\Set;
 use App\Filament\Resources\TestimonialResource\Pages\CreateTestimonial;
 use App\Filament\Resources\TestimonialResource\Pages\EditTestimonial;
 use App\Filament\Resources\TestimonialResource\Pages\ListTestimonials;
@@ -97,7 +98,7 @@ class TestimonialResource extends Resource
                         ->default(false)
                         ->helperText('Testimonial auf der Website anzeigen.')
                         ->live()
-                        ->afterStateUpdated(static function ($state, callable $set): void {
+                        ->afterStateUpdated(static function ($state, Set $set): void {
                             if ($state) {
                                 $set('published_at', now());
                             }

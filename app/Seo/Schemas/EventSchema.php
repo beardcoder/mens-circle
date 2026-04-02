@@ -46,7 +46,7 @@ final readonly class EventSchema
                 Schema::imageObject()
                     ->url(asset('images/logo-color.png'))
                     ->setProperty('width', 512)
-                    ->setProperty('height', 512)
+                    ->setProperty('height', 512),
             )
             ->setProperty('startDate', $startDate)
             ->setProperty('endDate', $endDate)
@@ -55,11 +55,11 @@ final readonly class EventSchema
             ->location(
                 Schema::place()
                     ->name($this->event->location ?? 'Straubing')
-                    ->address($address)
+                    ->address($address),
             )
             ->organizer($organizer)
             ->performer(
-                Schema::organization()->setProperty('@id', url('/') . '#organization')
+                Schema::organization()->setProperty('@id', url('/') . '#organization'),
             )
             ->offers(
                 Schema::offer()
@@ -67,7 +67,7 @@ final readonly class EventSchema
                     ->price('0')
                     ->priceCurrency('EUR')
                     ->setProperty('availability', $availability)
-                    ->setProperty('validFrom', now()->format('Y-m-d'))
+                    ->setProperty('validFrom', now()->format('Y-m-d')),
             )
             ->maximumAttendeeCapacity($this->event->max_participants)
             ->remainingAttendeeCapacity(max(0, $this->event->availableSpots))

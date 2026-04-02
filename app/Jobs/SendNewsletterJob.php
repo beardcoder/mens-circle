@@ -9,6 +9,7 @@ use App\Mail\NewsletterMail;
 use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
 use Exception;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Attributes\Backoff;
@@ -23,7 +24,7 @@ use Throwable;
 #[Tries(3)]
 #[Backoff(60)]
 #[Timeout(3600)]
-class SendNewsletterJob implements ShouldQueue
+class SendNewsletterJob implements ShouldBeUnique, ShouldQueue
 {
     use Queueable;
 
@@ -31,6 +32,11 @@ class SendNewsletterJob implements ShouldQueue
         #[WithoutRelations]
         public readonly Newsletter $newsletter,
     ) {}
+
+    public function uniqueId(): int
+    {
+        return $this->newsletter->id;
+    }
 
     public function handle(): void
     {

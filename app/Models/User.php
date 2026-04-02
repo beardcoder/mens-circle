@@ -14,14 +14,14 @@ use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Carbon;
+use Carbon\CarbonImmutable;
 use Override;
 
 /**
  * @property string $name
  * @property string $email
  * @property string $password
- * @property ?Carbon $email_verified_at
+ * @property ?CarbonImmutable $email_verified_at
  * @property string $remember_token
  */
 #[Fillable(['name', 'email', 'password', 'github_id'])]

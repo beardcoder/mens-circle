@@ -56,6 +56,7 @@ final class SocialiteController
         ]);
 
         auth()->login($user);
+        session()->regenerate();
 
         return redirect()->intended(route('filament.admin.pages.dashboard'));
     }

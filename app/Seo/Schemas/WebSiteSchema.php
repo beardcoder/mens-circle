@@ -20,12 +20,12 @@ final readonly class WebSiteSchema
             ->description($this->settings->site_description)
             ->inLanguage('de-DE')
             ->publisher(
-                Schema::organization()->setProperty('@id', url('/') . '#organization')
+                Schema::organization()->setProperty('@id', url('/') . '#organization'),
             )
             ->potentialAction(
                 Schema::searchAction()
                     ->target(url('/') . '?s={search_term_string}')
-                    ->setProperty('query-input', 'required name=search_term_string')
+                    ->setProperty('query-input', 'required name=search_term_string'),
             )
             ->toScript();
     }

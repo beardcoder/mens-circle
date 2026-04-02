@@ -29,7 +29,7 @@ final readonly class LocalBusinessSchema
                 Schema::imageObject()
                     ->url(asset('images/logo-color.png'))
                     ->setProperty('width', 512)
-                    ->setProperty('height', 512)
+                    ->setProperty('height', 512),
             )
             ->image(asset('images/logo-color.png'))
             ->email($this->settings->contact_email)
@@ -38,35 +38,35 @@ final readonly class LocalBusinessSchema
                     ->addressLocality('Straubing')
                     ->addressRegion('Bayern')
                     ->postalCode('94315')
-                    ->addressCountry('DE')
+                    ->addressCountry('DE'),
             )
             ->geo(
                 Schema::geoCoordinates()
                     ->latitude(48.8777)
-                    ->longitude(12.5731)
+                    ->longitude(12.5731),
             )
             ->areaServed(
                 Schema::geoCircle()
                     ->geoMidpoint(
                         Schema::geoCoordinates()
                             ->latitude(48.8777)
-                            ->longitude(12.5731)
+                            ->longitude(12.5731),
                     )
-                    ->geoRadius('50000')
+                    ->geoRadius('50000'),
             )
             ->priceRange('€')
             ->openingHoursSpecification(
                 Schema::openingHoursSpecification()
                     ->setProperty('dayOfWeek', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])
                     ->setProperty('opens', '09:00')
-                    ->setProperty('closes', '18:00')
+                    ->setProperty('closes', '18:00'),
             );
 
         if ($this->settings->contact_phone) {
             $schema->telephone($this->settings->contact_phone);
         }
 
-        if (count($sameAs) > 0) {
+        if ($sameAs !== []) {
             $schema->sameAs($sameAs);
         }
 

@@ -82,19 +82,19 @@ class NewsletterSubscriptionResource extends Resource
                     DateTimePicker::make('subscribed_at')
                         ->label('Angemeldet am')
                         ->disabled()
-                        ->dehydrated()
+                        ->dehydrated(false)
                         ->displayFormat('d.m.Y H:i')
                         ->native(false),
                     DateTimePicker::make('confirmed_at')
                         ->label('Bestätigt am')
                         ->disabled()
-                        ->dehydrated()
+                        ->dehydrated(false)
                         ->displayFormat('d.m.Y H:i')
                         ->native(false),
                     DateTimePicker::make('unsubscribed_at')
                         ->label('Abgemeldet am')
                         ->disabled()
-                        ->dehydrated()
+                        ->dehydrated(false)
                         ->displayFormat('d.m.Y H:i')
                         ->native(false),
                 ]),
@@ -104,7 +104,7 @@ class NewsletterSubscriptionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(static fn (Builder $query) => $query->with('participant'))
+            ->modifyQueryUsing(static fn(Builder $query) => $query->with('participant'))
             ->columns([
                 TextColumn::make('participant.first_name')
                     ->label('Vorname')

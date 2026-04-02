@@ -28,7 +28,7 @@ final readonly class OrganizationSchema
                 Schema::imageObject()
                     ->url(asset('images/logo-color.png'))
                     ->setProperty('width', 512)
-                    ->setProperty('height', 512)
+                    ->setProperty('height', 512),
             )
             ->description($this->settings->site_description)
             ->email($this->settings->contact_email)
@@ -36,13 +36,13 @@ final readonly class OrganizationSchema
                 Schema::postalAddress()
                     ->addressLocality('Straubing')
                     ->addressRegion('Bayern')
-                    ->addressCountry('DE')
+                    ->addressCountry('DE'),
             )
             ->areaServed(
-                Schema::place()->name('Niederbayern')
+                Schema::place()->name('Niederbayern'),
             );
 
-        if (count($sameAs) > 0) {
+        if ($sameAs !== []) {
             $schema->sameAs($sameAs);
         }
 

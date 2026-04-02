@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
+use Carbon\CarbonImmutable;
 use Override;
 
 /**
@@ -23,7 +23,7 @@ use Override;
  * @property ?string $email
  * @property ?string $role
  * @property bool $is_published
- * @property ?Carbon $published_at
+ * @property ?CarbonImmutable $published_at
  * @property int $sort_order
  */
 #[Fillable(['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order'])]

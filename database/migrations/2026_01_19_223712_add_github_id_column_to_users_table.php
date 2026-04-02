@@ -23,7 +23,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table): void {
-            $table->string('github_id')->nullable();
+            $table->dropColumn('github_id');
         });
     }
 };

@@ -6,7 +6,6 @@ namespace Database\Factories;
 
 use App\Enums\NewsletterStatus;
 use App\Models\Newsletter;
-use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,11 +22,9 @@ class NewsletterFactory extends Factory
      */
     public function definition(): array
     {
-        $faker = FakerFactory::create();
-
         return [
-            'subject' => $faker->sentence(),
-            'content' => $faker->paragraphs(3, true),
+            'subject' => $this->faker->sentence(),
+            'content' => $this->faker->paragraphs(3, true),
             'status' => NewsletterStatus::Draft,
             'sent_at' => null,
             'recipient_count' => null,
@@ -54,12 +51,10 @@ class NewsletterFactory extends Factory
 
     public function sent(): static
     {
-        $faker = FakerFactory::create();
-
         return $this->state(fn(array $attributes): array => [
             'status' => NewsletterStatus::Sent,
             'sent_at' => now(),
-            'recipient_count' => $faker->numberBetween(10, 100),
+            'recipient_count' => $this->faker->numberBetween(10, 100),
         ]);
     }
 }

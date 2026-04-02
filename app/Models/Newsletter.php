@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
+use Carbon\CarbonImmutable;
 use Override;
 
 /**
  * @property string $subject
  * @property string $content
- * @property ?Carbon $sent_at
+ * @property ?CarbonImmutable $sent_at
  * @property ?int $recipient_count
  * @property NewsletterStatus $status
  */

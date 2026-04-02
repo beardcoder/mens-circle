@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Contracts\DefinesCacheUrls;
-use App\Enums\RegistrationStatus;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -17,7 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
+use Carbon\CarbonImmutable;
 use Override;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -28,9 +27,9 @@ use Spatie\Sluggable\SlugOptions;
 /**
  * @use HasFactory<EventFactory>
  *
- * @property Carbon $event_date
- * @property Carbon $start_time
- * @property Carbon $end_time
+ * @property CarbonImmutable $event_date
+ * @property CarbonImmutable $start_time
+ * @property CarbonImmutable $end_time
  * @property int $max_participants
  * @property bool $is_published
  * @property string $title
@@ -112,7 +111,7 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
      */
     public function waitlistRegistrations(): HasMany
     {
-        return $this->hasMany(Registration::class)->where('status', RegistrationStatus::Waitlist)->orderBy('registered_at');
+        return $this->registrations()->waitlisted()->orderBy('registered_at');
     }
 
     /**
@@ -174,12 +173,10 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
     public function generateICalContent(): string
     {
         $startDateTime = $this->event_date
-            ->copy()
             ->setTimeFrom($this->start_time)
             ->format('Ymd\THis');
 
         $endDateTime = $this->event_date
-            ->copy()
             ->setTimeFrom($this->end_time)
             ->format('Ymd\THis');
 
