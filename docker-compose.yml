@@ -7,46 +7,44 @@ services:
     ports:
       - "80:8080"
     environment:
-      # Laravel Environment
-      - APP_NAME=Männerkreis Niederbayern/ Straubing
-      - APP_ENV=production
-      - APP_DEBUG=false
-      - APP_URL=http://localhost
-      - APP_KEY=${APP_KEY}
-      - DB_CONNECTION=sqlite
-      - CACHE_STORE=file
-      - SESSION_DRIVER=file
-      - QUEUE_CONNECTION=database
-      - LOG_CHANNEL=stderr
-      - LOG_LEVEL=error
+      APP_NAME: Männerkreis Niederbayern/ Straubing
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: http://localhost
+      APP_KEY: ${APP_KEY}
+      DB_CONNECTION: sqlite
+      CACHE_STORE: file
+      SESSION_DRIVER: file
+      QUEUE_CONNECTION: database
+      LOG_CHANNEL: stderr
+      LOG_LEVEL: error
 
       # Deployment Options
-      - MIGRATE_ON_START=true
-      - OPTIMIZE_ON_START=true
+      MIGRATE_ON_START: "true"
+      OPTIMIZE_ON_START: "true"
 
       # PHP Configuration
-      - PHP_OPCACHE_ENABLE=1
-      - PHP_MEMORY_LIMIT=256M
+      PHP_OPCACHE_ENABLE: "1"
+      PHP_MEMORY_LIMIT: 256M
 
       # Caddy: enable compression and static asset caching
-      - |
-        CADDY_SERVER_EXTRA_DIRECTIVES=
+      CADDY_SERVER_EXTRA_DIRECTIVES: |
         encode zstd gzip
 
         header /build/* {
-          Cache-Control "public, max-age=31536000, immutable"
+        	Cache-Control "public, max-age=31536000, immutable"
         }
 
         header /favicon* {
-          Cache-Control "public, max-age=604800"
+        	Cache-Control "public, max-age=604800"
         }
 
         header /images/* {
-          Cache-Control "public, max-age=604800"
+        	Cache-Control "public, max-age=604800"
         }
 
         header /manifest.json {
-          Cache-Control "public, max-age=604800"
+        	Cache-Control "public, max-age=604800"
         }
     volumes:
       - app-storage:/app/storage
