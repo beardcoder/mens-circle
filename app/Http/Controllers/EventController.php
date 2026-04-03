@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use App\Enums\RegistrationStatus;
 use App\Http\Requests\EventRegistrationRequest;
 use App\Mail\AdminEventRegistrationNotification;
@@ -138,10 +139,10 @@ final class EventController
                 defer(function () use ($registration, $event): void {
                     try {
                         Mail::queue(new WaitlistConfirmation($registration, $event));
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $throwable) {
                         Log::error('Failed to send waitlist confirmation email', [
                             'registration_id' => $registration->id,
-                            'error' => $e->getMessage(),
+                            'error' => $throwable->getMessage(),
                         ]);
                     }
                 });
@@ -156,10 +157,10 @@ final class EventController
             defer(function () use ($registration, $event): void {
                 try {
                     Mail::queue(new EventRegistrationConfirmation($registration, $event));
-                } catch (\Throwable $e) {
+                } catch (Throwable $throwable) {
                     Log::error('Failed to send event registration confirmation', [
                         'registration_id' => $registration->id,
-                        'error' => $e->getMessage(),
+                        'error' => $throwable->getMessage(),
                     ]);
                 }
             });
@@ -167,10 +168,10 @@ final class EventController
             defer(function () use ($registration, $event): void {
                 try {
                     Mail::queue(new AdminEventRegistrationNotification($registration, $event));
-                } catch (\Throwable $e) {
+                } catch (Throwable $throwable) {
                     Log::error('Failed to send admin notification for new registration', [
                         'registration_id' => $registration->id,
-                        'error' => $e->getMessage(),
+                        'error' => $throwable->getMessage(),
                     ]);
                 }
             });
