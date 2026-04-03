@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use App\Http\Requests\NewsletterSubscriptionRequest;
 use App\Mail\NewsletterWelcome;
 use App\Models\NewsletterSubscription;
@@ -45,10 +46,10 @@ final class NewsletterController
             defer(function () use ($participant, $subscription): void {
                 try {
                     Mail::to($participant->email)->queue(new NewsletterWelcome($subscription));
-                } catch (\Throwable $e) {
+                } catch (Throwable $throwable) {
                     Log::error('Failed to send newsletter welcome email', [
                         'subscription_id' => $subscription->id,
-                        'error' => $e->getMessage(),
+                        'error' => $throwable->getMessage(),
                     ]);
                 }
             });

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
+use Throwable;
 use App\Enums\RegistrationStatus;
 use App\Mail\WaitlistPromotion;
 use App\Models\Registration;
@@ -44,9 +45,9 @@ final class RegistrationObserver
 
         rescue(
             fn() => Mail::queue(new WaitlistPromotion($nextWaitlisted, $nextWaitlisted->event)),
-            fn(\Throwable $e) => Log::error('Failed to send waitlist promotion email', [
+            fn(Throwable $throwable) => Log::error('Failed to send waitlist promotion email', [
                 'registration_id' => $nextWaitlisted->id,
-                'error' => $e->getMessage(),
+                'error' => $throwable->getMessage(),
             ]),
             report: false,
         );

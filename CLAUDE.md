@@ -244,8 +244,8 @@ Each block has a corresponding Blade component in `resources/views/components/bl
 
 Configured in `bootstrap/app.php`:
 
-- `CompressHtml` — HTML minification via voku/HtmlMin
 - `CacheResponse` — Spatie Response Cache (auto-cleared by `ClearsResponseCache` trait on model changes)
+- `CompressHtml` — HTML minification via voku/HtmlMin
 
 ## Key Third-Party Packages
 

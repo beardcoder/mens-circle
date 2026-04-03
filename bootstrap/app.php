@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
         $middleware->preventRequestForgery();
-        $middleware->web(append: [CompressHtml::class, CacheResponse::class, ]);
+        $middleware->web(append: [CacheResponse::class, CompressHtml::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         Integration::handles($exceptions);
