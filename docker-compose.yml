@@ -13,8 +13,8 @@ services:
       APP_URL: http://localhost
       APP_KEY: ${APP_KEY}
       DB_CONNECTION: sqlite
-      CACHE_STORE: redis
-      SESSION_DRIVER: redis
+      CACHE_STORE: database
+      SESSION_DRIVER: database
       QUEUE_CONNECTION: database
       LOG_CHANNEL: stderr
       LOG_LEVEL: error
@@ -26,26 +26,6 @@ services:
       # PHP Configuration
       PHP_OPCACHE_ENABLE: "1"
       PHP_MEMORY_LIMIT: 256M
-
-      # Caddy: enable compression and static asset caching
-      CADDY_SERVER_EXTRA_DIRECTIVES: |
-        encode zstd gzip
-
-        header /build/* {
-        	Cache-Control "public, max-age=31536000, immutable"
-        }
-
-        header /favicon* {
-        	Cache-Control "public, max-age=604800"
-        }
-
-        header /images/* {
-        	Cache-Control "public, max-age=604800"
-        }
-
-        header /manifest.json {
-        	Cache-Control "public, max-age=604800"
-        }
     volumes:
       - app-storage:/app/storage
       - app-database:/app/database
