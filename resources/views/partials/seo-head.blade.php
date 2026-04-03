@@ -87,7 +87,13 @@
 
 <!-- Preload critical fonts (latin subsets only for German site) -->
 @php
-    $manifest = once(static fn (): array => json_decode(file_get_contents(public_path('build/manifest.json')), true) ?: []);
+    $manifest = once(static function (): array {
+        $path = public_path('build/manifest.json');
+        if (!file_exists($path)) {
+            return [];
+        }
+        return json_decode(file_get_contents($path), true) ?: [];
+    });
     $dmSansPath = $manifest['node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2']['file'] ?? null;
     $playfairPath = $manifest['node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2']['file'] ?? null;
 @endphp
