@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Spatie\ResponseCache\CacheProfiles\CacheAllSuccessfulGetRequests;
 use Spatie\ResponseCache\Hasher\DefaultHasher;
-use Spatie\ResponseCache\Replacers\CsrfTokenReplacer;
 use Spatie\ResponseCache\Serializers\JsonSerializer;
 
 return [
@@ -122,6 +121,7 @@ return [
      * must always implement the Replacer interface.
      */
     'replacers' => [
-        CsrfTokenReplacer::class,
+        // CsrfTokenReplacer removed: all form submissions use API routes
+        // (api middleware group) which don't verify CSRF tokens.
     ],
 ];

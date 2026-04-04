@@ -78,9 +78,6 @@
   content="@yield('twitter_image_alt', 'Männerkreis Niederbayern/ Straubing')"
 />
 
-<!-- Security -->
-<meta name="csrf-token" content="{{ csrf_token() }}" />
-
 <!-- Robots -->
 <meta name="robots" content="@yield('robots', 'index, follow')" />
 <meta name="googlebot" content="@yield('robots', 'index, follow')" />
