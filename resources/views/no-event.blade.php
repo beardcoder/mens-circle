@@ -12,11 +12,11 @@
 @endphp
 
 @push ('structured_data')
-    {!! (new BreadcrumbSchema([
+  {!! (new BreadcrumbSchema([
         new BreadcrumbItem('Startseite', route('home')),
         new BreadcrumbItem('Veranstaltungen', route('event.show')),
     ]))->toScript() !!}
-    {!! (new WebPageSchema(
+  {!! (new WebPageSchema(
         title: 'Aktuell kein Termin',
         description: 'Derzeit ist kein Männerkreis-Treffen geplant. Melde dich für unseren Newsletter an, um über kommende Termine informiert zu werden.',
     ))->toScript() !!}

@@ -1,5 +1,5 @@
-@props(['schema'])
+@props (['schema'])
 
-@push('structured_data')
-    {!! $schema->toScript() !!}
+@push ('structured_data')
+  {!! $schema->toScript() !!}
 @endpush
