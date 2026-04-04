@@ -20,6 +20,7 @@
           @if ($media)
             <x-picture
               :media="$media"
+              sizes="(max-width: 900px) min(350px, 100vw), 55vw"
               loading="lazy"
               decoding="async"
             />

@@ -21,6 +21,7 @@
       @if ($eventImage)
         <x-picture
           :media="$eventImage"
+          sizes="100vw"
           class="hero__bg-image"
           loading="eager"
           fetchpriority="high"
