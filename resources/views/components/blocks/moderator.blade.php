@@ -18,10 +18,11 @@
       <div class="moderator__photo-wrapper fade-in">
         <div class="moderator__photo">
           @if ($media)
-            {{ $media->img()->attributes([
-                            'loading' => 'lazy',
-                            'decoding' => 'async',
-                        ]) }}
+            <x-picture
+              :media="$media"
+              loading="lazy"
+              decoding="async"
+            />
           @else
             <div class="moderator__photo-placeholder">
               <svg viewBox="0 0 24 24" aria-hidden="true">

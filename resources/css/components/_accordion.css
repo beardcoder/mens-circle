@@ -179,29 +179,31 @@
 
 /* ============================================
    Accordion Content (Answer Container)
-   Uses interpolate-size: allow-keywords for smooth
-   height animation from 0 to auto (2025+)
+   Uses grid-template-rows: 0fr → 1fr for smooth
+   height animation without forced layout recalculation.
+   Supported in all modern browsers (Chrome 98+, Firefox 95+, Safari 16+).
    ============================================ */
 .accordion-item__content,
 .faq-item__answer {
-  block-size: 0;
+  display: grid;
+  grid-template-rows: 0fr;
   overflow: hidden;
   opacity: 0;
   transition:
-    block-size var(--duration-slow) var(--ease-out),
+    grid-template-rows var(--duration-slow) var(--ease-out),
     opacity var(--duration-normal) var(--ease-out);
+}
+
+.accordion-item__content > *,
+.faq-item__answer > * {
+  overflow: hidden;
+  min-block-size: 0;
 }
 
 .accordion-item[open] > .accordion-item__content,
 .faq-item[open] > .faq-item__answer {
-  block-size: auto;
+  grid-template-rows: 1fr;
   opacity: 1;
-}
-
-/* Initial hidden state - Motion.dev will animate */
-.accordion-item__content[data-accordion-content],
-.faq-item__answer[data-accordion-content] {
-  block-size: 0;
 }
 
 /* ============================================
@@ -256,7 +258,7 @@
   /* Show content immediately without animation */
   .accordion-item[open] > .accordion-item__content,
   .faq-item[open] > .faq-item__answer {
-    block-size: auto;
+    grid-template-rows: 1fr;
     opacity: 1;
   }
 
@@ -271,7 +273,7 @@
    ============================================ */
 .no-js .accordion-item__content,
 .no-js .faq-item__answer {
-  block-size: auto;
+  grid-template-rows: 1fr;
   opacity: 1;
 }
 

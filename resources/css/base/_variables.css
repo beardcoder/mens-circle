@@ -279,11 +279,3 @@
   }
 }
 
-/* ============================================
-   Smooth auto-height transitions (progressive)
-   ============================================ */
-@supports (interpolate-size: allow-keywords) {
-  :root {
-    interpolate-size: allow-keywords;
-  }
-}

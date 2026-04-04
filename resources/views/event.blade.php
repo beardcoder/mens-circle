@@ -19,13 +19,14 @@
   <section class="hero event-hero">
     <div class="hero__bg">
       @if ($eventImage)
-        {{ $eventImage->img()->attributes([
-                    'class' => 'hero__bg-image',
-                    'loading' => 'eager',
-                    'fetchpriority' => 'high',
-                    'aria-hidden' => 'true',
-                    'alt' => $event->title,
-                ]) }}
+        <x-picture
+          :media="$eventImage"
+          class="hero__bg-image"
+          loading="eager"
+          fetchpriority="high"
+          aria-hidden="true"
+          :alt="$event->title"
+        />
       @endif
     </div>
     <div class="hero__circles" aria-hidden="true">

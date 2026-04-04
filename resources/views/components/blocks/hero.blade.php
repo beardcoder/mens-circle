@@ -15,12 +15,13 @@
 <section class="hero" role="banner">
   <div class="hero__bg">
     @if ($media)
-      {{ $media->img()->attributes([
-                'class' => 'hero__bg-image',
-                'loading' => 'eager',
-                'fetchpriority' => 'high',
-                'aria-hidden' => 'true',
-            ]) }}
+      <x-picture
+        :media="$media"
+        class="hero__bg-image"
+        loading="eager"
+        fetchpriority="high"
+        aria-hidden="true"
+      />
     @endif
   </div>
 

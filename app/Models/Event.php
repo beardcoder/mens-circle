@@ -87,7 +87,14 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
         $this->addMediaConversion('webp')
             ->performOnCollections('event_image')
             ->format('webp')
-            ->quality(85);
+            ->quality(82)
+            ->withResponsiveImages();
+
+        $this->addMediaConversion('avif')
+            ->performOnCollections('event_image')
+            ->format('avif')
+            ->quality(72)
+            ->withResponsiveImages();
     }
 
     /**

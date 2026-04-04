@@ -79,7 +79,14 @@ class Page extends Model implements DefinesCacheUrls, HasMedia
         $this->addMediaConversion('webp')
             ->performOnCollections('page_blocks')
             ->format('webp')
-            ->quality(85);
+            ->quality(82)
+            ->withResponsiveImages();
+
+        $this->addMediaConversion('avif')
+            ->performOnCollections('page_blocks')
+            ->format('avif')
+            ->quality(72)
+            ->withResponsiveImages();
     }
 
     #[Override]
