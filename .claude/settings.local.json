@@ -1,13 +1,23 @@
 {
-    "enableAllProjectMcpServers": true,
-    "enabledMcpjsonServers": ["laravel-boost"],
-    "mcpServers": {
-        "laravel-boost": {
-            "command": "ddev",
-            "args": ["artisan", "boost:mcp"]
-        }
-    },
-    "enabledPlugins": {
-        "fullstack-dev-skills@fullstack-dev-skills": true
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "laravel-boost"
+  ],
+  "enabledPlugins": {
+    "fullstack-dev-skills@fullstack-dev-skills": true
+  },
+  "mcpServers": {
+    "laravel-boost": {
+      "command": "ddev",
+      "args": [
+        "artisan",
+        "boost:mcp"
+      ]
     }
+  },
+  "permissions": {
+    "allow": [
+      "mcp__laravel-boost__search-docs"
+    ]
+  }
 }
