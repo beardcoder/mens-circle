@@ -11,11 +11,11 @@
 @endphp
 
 @push ('structured_data')
-    {!! (new BreadcrumbSchema([
+  {!! (new BreadcrumbSchema([
         new BreadcrumbItem('Startseite', route('home')),
         new BreadcrumbItem('Teile deine Erfahrung', route('testimonial.form')),
     ]))->toScript() !!}
-    {!! (new WebPageSchema(
+  {!! (new WebPageSchema(
         title: 'Teile deine Erfahrung',
         description: 'Teile deine Erfahrung mit dem Männerkreis Niederbayern/ Straubing. Hilf anderen Männern zu verstehen, was der Kreis bedeuten kann.',
     ))->toScript() !!}

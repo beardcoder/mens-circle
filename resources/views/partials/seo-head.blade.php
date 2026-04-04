@@ -95,21 +95,54 @@
     $playfairPath = $manifest['node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2']['file'] ?? null;
 @endphp
 @if ($dmSansPath)
-  <link rel="preload" href="{{ asset('build/' . $dmSansPath) }}" as="font" type="font/woff2" crossorigin />
+  <link
+    rel="preload"
+    href="{{ asset('build/' . $dmSansPath) }}"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  />
 @endif
 @if ($playfairPath)
-  <link rel="preload" href="{{ asset('build/' . $playfairPath) }}" as="font" type="font/woff2" crossorigin />
+  <link
+    rel="preload"
+    href="{{ asset('build/' . $playfairPath) }}"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  />
 @endif
 
 <!-- Favicon -->
 @php
     $faviconVersion = once(static fn (): string => substr(md5_file(public_path('favicon.svg')), 0, 8));
 @endphp
-<link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v={{ $faviconVersion }}" />
-<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v={{ $faviconVersion }}" />
-<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}?v={{ $faviconVersion }}" />
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon-180x180.png') }}?v={{ $faviconVersion }}" />
-<link rel="manifest" href="{{ asset('manifest.json') }}?v={{ $faviconVersion }}" />
+<link
+  rel="icon"
+  type="image/svg+xml"
+  href="{{ asset('favicon.svg') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="{{ asset('favicon-32x32.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="{{ asset('favicon-16x16.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="{{ asset('favicon-180x180.png') }}?v={{ $faviconVersion }}"
+/>
+<link
+  rel="manifest"
+  href="{{ asset('manifest.json') }}?v={{ $faviconVersion }}"
+/>
 
 <!-- Styles -->
 @vite (['resources/css/app.css'])
@@ -119,12 +152,12 @@
 
 <!-- Structured Data -->
 @if ($localBusinessSchema ?? null)
-    {!! $localBusinessSchema->toScript() !!}
+  {!! $localBusinessSchema->toScript() !!}
 @endif
 @if ($organizationSchema ?? null)
-    {!! $organizationSchema->toScript() !!}
+  {!! $organizationSchema->toScript() !!}
 @endif
 @if ($websiteSchema ?? null)
-    {!! $websiteSchema->toScript() !!}
+  {!! $websiteSchema->toScript() !!}
 @endif
 @stack ('structured_data')

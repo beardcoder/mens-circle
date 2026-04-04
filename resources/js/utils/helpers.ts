@@ -6,4 +6,3 @@ export function validateEmail(email: string): boolean {
 
   return re.test(email);
 }
-
