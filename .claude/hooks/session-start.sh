@@ -14,6 +14,10 @@ cd "${CLAUDE_PROJECT_DIR}"
 echo "Installing PHP dependencies..."
 composer install --no-interaction --no-progress
 
+# Patch Livewire: hydrate() crashes when old browser snapshots lack 'children' in memo
+sed -i "s/\\\$children = \\\$memo\['children'\];/\$children = \$memo['children'] ?? [];/" \
+    vendor/livewire/livewire/src/Features/SupportNestingComponents/SupportNestingComponents.php
+
 # Set up .env if not present
 if [ ! -f ".env" ]; then
   echo "Creating .env from .env.example..."
