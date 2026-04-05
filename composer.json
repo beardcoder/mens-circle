@@ -79,6 +79,9 @@
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "@php -r \"$f='vendor/livewire/livewire/src/Features/SupportNestingComponents/SupportNestingComponents.php'; if(file_exists($f)){$c=file_get_contents($f);$p=str_replace('$children = $memo[\\'children\\'];','$children = $memo[\\'children\\'] ?? [];',$c);if($c!==$p){file_put_contents($f,$p);echo 'Applied Livewire hydration patch'.PHP_EOL;}}\""
+        ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",

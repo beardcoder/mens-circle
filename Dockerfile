@@ -37,6 +37,10 @@ RUN --mount=type=cache,target=/root/.composer/cache \
     --ignore-platform-reqs \
     --optimize-autoloader
 
+# Patch Livewire: $memo['children'] may be absent in old browser snapshots (hydration fix)
+RUN sed -i "s/\\\$children = \\\$memo\['children'\];/\$children = \$memo['children'] ?? [];/" \
+    vendor/livewire/livewire/src/Features/SupportNestingComponents/SupportNestingComponents.php
+
 # ----------------------------
 # 3) Production image (FrankenPHP)
 # ----------------------------
