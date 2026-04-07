@@ -41,4 +41,9 @@ return [
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
         'redirect' => env('APP_URL') . '/auth/github/callback',
     ],
+
+    'pushover' => [
+        'token' => env('PUSHOVER_TOKEN'),
+        'user_key' => env('PUSHOVER_USER_KEY'),
+    ],
 ];
