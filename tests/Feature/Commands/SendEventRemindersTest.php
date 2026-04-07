@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Mail\EventReminder;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
-use Illuminate\Support\Facades\Mail;
+use App\Notifications\EventReminderNotification;
+use Illuminate\Support\Facades\Notification;
 
 beforeEach(function (): void {
-    Mail::fake();
+    Notification::fake();
 });
 
 test('sends reminders for events happening tomorrow and sets reminder_sent_at', function (): void {
@@ -25,10 +25,10 @@ test('sends reminders for events happening tomorrow and sets reminder_sent_at', 
     $registration = Registration::factory()->registered()->forEvent($event)->forParticipant($participant)->create();
 
     $this->artisan('events:send-reminders')
-        ->expectsOutputToContain('Email reminder sent to:')
+        ->expectsOutputToContain('Reminder sent to:')
         ->assertSuccessful();
 
-    Mail::assertQueued(EventReminder::class);
+    Notification::assertSentTo($participant, EventReminderNotification::class);
     expect($registration->fresh()->reminder_sent_at)->not->toBeNull();
 });
 
@@ -47,7 +47,7 @@ test('sends reminders for events happening today', function (): void {
     $this->artisan('events:send-reminders')
         ->assertSuccessful();
 
-    Mail::assertQueued(EventReminder::class);
+    Notification::assertSentTo($participant, EventReminderNotification::class);
     expect($registration->fresh()->reminder_sent_at)->not->toBeNull();
 });
 
@@ -67,7 +67,7 @@ test('does not send reminders for events in two days', function (): void {
         ->expectsOutputToContain('No pending reminders found')
         ->assertSuccessful();
 
-    Mail::assertNothingQueued();
+    Notification::assertNothingSent();
 });
 
 test('does not send reminders for unpublished events', function (): void {
@@ -86,7 +86,7 @@ test('does not send reminders for unpublished events', function (): void {
         ->expectsOutputToContain('No pending reminders found')
         ->assertSuccessful();
 
-    Mail::assertNothingQueued();
+    Notification::assertNothingSent();
 });
 
 test('does not send reminders for cancelled registrations', function (): void {
@@ -105,7 +105,7 @@ test('does not send reminders for cancelled registrations', function (): void {
         ->expectsOutputToContain('No pending reminders found')
         ->assertSuccessful();
 
-    Mail::assertNothingQueued();
+    Notification::assertNothingSent();
 });
 
 test('skips already notified registrations', function (): void {
@@ -126,7 +126,7 @@ test('skips already notified registrations', function (): void {
         ->expectsOutputToContain('No pending reminders found')
         ->assertSuccessful();
 
-    Mail::assertNothingQueued();
+    Notification::assertNothingSent();
 });
 
 test('sends reminder to new registration even when others already notified', function (): void {
@@ -147,14 +147,15 @@ test('sends reminder to new registration even when others already notified', fun
     $newRegistration = Registration::factory()->registered()->forEvent($event)->forParticipant($newParticipant)->create();
 
     $this->artisan('events:send-reminders')
-        ->expectsOutputToContain("Email reminder sent to: {$newParticipant->email}")
+        ->expectsOutputToContain("Reminder sent to: {$newParticipant->email}")
         ->assertSuccessful();
 
-    Mail::assertQueued(EventReminder::class, 1);
+    Notification::assertSentTo($newParticipant, EventReminderNotification::class);
+    Notification::assertNotSentTo($existingParticipant, EventReminderNotification::class);
     expect($newRegistration->fresh()->reminder_sent_at)->not->toBeNull();
 });
 
-test('does not set sms_reminder_sent_at when api key is not configured', function (): void {
+test('sets sms_reminder_sent_at when participant has phone', function (): void {
     $tomorrow = now()->addDay()->startOfDay();
 
     $event = Event::factory()->published()->create([
@@ -164,6 +165,26 @@ test('does not set sms_reminder_sent_at when api key is not configured', functio
     ]);
 
     $participant = Participant::factory()->withPhone()->create();
+    $registration = Registration::factory()->registered()->forEvent($event)->forParticipant($participant)->create();
+
+    $this->artisan('events:send-reminders')
+        ->assertSuccessful();
+
+    $registration->refresh();
+    expect($registration->reminder_sent_at)->not->toBeNull()
+        ->and($registration->sms_reminder_sent_at)->not->toBeNull();
+});
+
+test('does not set sms_reminder_sent_at when participant has no phone', function (): void {
+    $tomorrow = now()->addDay()->startOfDay();
+
+    $event = Event::factory()->published()->create([
+        'event_date' => $tomorrow,
+        'start_time' => $tomorrow->copy()->setTime(19, 0),
+        'end_time' => $tomorrow->copy()->setTime(21, 0),
+    ]);
+
+    $participant = Participant::factory()->create(['phone' => null]);
     $registration = Registration::factory()->registered()->forEvent($event)->forParticipant($participant)->create();
 
     $this->artisan('events:send-reminders')
@@ -187,11 +208,13 @@ test('running command twice does not send duplicate reminders', function (): voi
     Registration::factory()->registered()->forEvent($event)->forParticipant($participant)->create();
 
     $this->artisan('events:send-reminders')->assertSuccessful();
-    Mail::assertQueued(EventReminder::class, 1);
+    Notification::assertSentTo($participant, EventReminderNotification::class);
+
+    Notification::fake();
 
     $this->artisan('events:send-reminders')
         ->expectsOutputToContain('No pending reminders found')
         ->assertSuccessful();
 
-    Mail::assertQueued(EventReminder::class, 1);
+    Notification::assertNothingSent();
 });

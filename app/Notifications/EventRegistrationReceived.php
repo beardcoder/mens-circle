@@ -4,29 +4,46 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
+use App\Mail\AdminEventRegistrationNotification;
 use App\Models\Event;
 use App\Models\Participant;
+use App\Models\Registration;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Pushover\PushoverChannel;
 use NotificationChannels\Pushover\PushoverMessage;
 
-final class EventRegistrationReceived extends Notification
+final class EventRegistrationReceived extends Notification implements ShouldQueue
 {
     use Queueable;
 
     public function __construct(
+        private readonly Registration $registration,
         private readonly Event $event,
         private readonly Participant $participant,
         private readonly bool $isWaitlist = false,
     ) {}
 
     /**
-     * @return array<int, class-string>
+     * @return array<int, string|class-string>
      */
     public function via(object $notifiable): array
     {
-        return [PushoverChannel::class];
+        $channels = ['mail'];
+
+        if (config('services.pushover.token') && config('services.pushover.user_key')) {
+            $channels[] = PushoverChannel::class;
+        }
+
+        return $channels;
+    }
+
+    public function toMail(object $notifiable): Mailable
+    {
+        return (new AdminEventRegistrationNotification($this->registration, $this->event))
+            ->to($notifiable->routeNotificationFor('mail', $this)); // @phpstan-ignore method.notFound
     }
 
     public function toPushover(object $notifiable): PushoverMessage

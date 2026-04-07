@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 use App\Mail\AdminEventRegistrationNotification;
 use App\Models\Event;
-use Illuminate\Support\Facades\Mail;
+use App\Models\Registration;
+use App\Models\User;
+use App\Notifications\EventRegistrationReceived;
+use Illuminate\Support\Facades\Notification;
 
 test('admin notification is sent when registration is created', function (): void {
-    Mail::fake();
+    Notification::fake();
 
+    $user = User::factory()->create();
     $event = Event::factory()->create([
         'event_date' => now()->addDays(7),
         'is_published' => true,
@@ -23,36 +27,17 @@ test('admin notification is sent when registration is created', function (): voi
         'privacy' => true,
     ]);
 
-    Mail::assertQueued(AdminEventRegistrationNotification::class);
-});
-
-test('admin notification has correct recipient', function (): void {
-    Mail::fake();
-
-    $event = Event::factory()->create([
-        'event_date' => now()->addDays(7),
-        'is_published' => true,
-    ]);
-
-    $registration = \App\Models\Registration::factory()->create([
-        'event_id' => $event->id,
-    ]);
-
-    $mailable = new AdminEventRegistrationNotification($registration, $event);
-
-    $mailable->assertTo(config('mail.admin.address'));
+    Notification::assertSentTo($user, EventRegistrationReceived::class);
 });
 
 test('admin notification has correct subject', function (): void {
-    Mail::fake();
-
     $event = Event::factory()->create([
         'title' => 'Männerkreis Test',
         'event_date' => now()->addDays(7),
         'is_published' => true,
     ]);
 
-    $registration = \App\Models\Registration::factory()->create([
+    $registration = Registration::factory()->create([
         'event_id' => $event->id,
     ]);
 

@@ -4,37 +4,29 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Throwable;
 use App\Enums\RegistrationStatus;
 use App\Http\Requests\EventRegistrationRequest;
-use App\Mail\AdminEventRegistrationNotification;
-use App\Mail\EventRegistrationConfirmation;
-use App\Mail\WaitlistConfirmation;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
 use App\Models\User;
+use App\Notifications\EventRegistrationConfirmed;
 use App\Notifications\EventRegistrationReceived;
+use App\Notifications\WaitlistRegistrationConfirmed;
 use App\Seo\Data\BreadcrumbItem;
 use App\Seo\Schemas\BreadcrumbSchema;
 use App\Seo\Schemas\EventSchema;
-use App\Services\EventNotificationService;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
 use RuntimeException;
-
-use function Illuminate\Support\defer;
 
 final class EventController
 {
     public function __construct(
         private readonly GeneralSettings $settings,
-        private readonly EventNotificationService $notificationService,
     ) {}
 
     public function showNext(): View|RedirectResponse
@@ -139,23 +131,8 @@ final class EventController
             $firstName = $validated['first_name'];
 
             if ($isWaitlist) {
-                defer(function () use ($registration, $event): void {
-                    try {
-                        Mail::queue(new WaitlistConfirmation($registration, $event));
-                    } catch (Throwable $throwable) {
-                        Log::error('Failed to send waitlist confirmation email', [
-                            'registration_id' => $registration->id,
-                            'error' => $throwable->getMessage(),
-                        ]);
-                    }
-                });
-
-                defer(function () use ($participant, $event): void {
-                    Notification::send(
-                        User::all(),
-                        new EventRegistrationReceived($event, $participant, isWaitlist: true),
-                    );
-                });
+                $participant->notify(new WaitlistRegistrationConfirmed($registration, $event));
+                Notification::send(User::all(), new EventRegistrationReceived($registration, $event, $participant, isWaitlist: true));
 
                 return response()->json([
                     'success' => true,
@@ -164,46 +141,8 @@ final class EventController
                 ]);
             }
 
-            defer(function () use ($registration, $event): void {
-                try {
-                    Mail::queue(new EventRegistrationConfirmation($registration, $event));
-                } catch (Throwable $throwable) {
-                    Log::error('Failed to send event registration confirmation', [
-                        'registration_id' => $registration->id,
-                        'error' => $throwable->getMessage(),
-                    ]);
-                }
-            });
-
-            defer(function () use ($registration, $event): void {
-                try {
-                    Mail::queue(new AdminEventRegistrationNotification($registration, $event));
-                } catch (Throwable $throwable) {
-                    Log::error('Failed to send admin notification for new registration', [
-                        'registration_id' => $registration->id,
-                        'error' => $throwable->getMessage(),
-                    ]);
-                }
-            });
-
-            defer(function () use ($participant, $event): void {
-                Notification::send(
-                    User::all(),
-                    new EventRegistrationReceived($event, $participant),
-                );
-            });
-
-            if ($participant->phone) {
-                defer(function () use ($participant, $event, $registration): void {
-                    $eventDate = $event->event_date->format('d.m.Y');
-                    $eventTime = $event->start_time->format('H:i');
-                    $smsMessage = "Hallo {$participant->first_name}! Deine Anmeldung fuer den Maennerkreis am {$eventDate} um {$eventTime} Uhr ist bestaetigt. Wir freuen uns auf dich!";
-                    $this->notificationService->sendSms($participant->phone, $smsMessage, [
-                        'registration_id' => $registration->id,
-                        'type' => 'registration_confirmation',
-                    ]);
-                });
-            }
+            $participant->notify(new EventRegistrationConfirmed($registration, $event));
+            Notification::send(User::all(), new EventRegistrationReceived($registration, $event, $participant));
 
             return response()->json([
                 'success' => true,

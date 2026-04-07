@@ -8,7 +8,6 @@ use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -25,9 +24,7 @@ final class WaitlistConfirmation extends Mailable
 
     public function envelope(): Envelope
     {
-        $participant = $this->registration->participant;
-
-        return new Envelope(to: [new Address($participant->email, $participant->fullName)], subject: 'Warteliste: ' . $this->event->title);
+        return new Envelope(subject: 'Warteliste: ' . $this->event->title);
     }
 
     public function content(): Content
