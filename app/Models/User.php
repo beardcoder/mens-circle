@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use NotificationChannels\Pushover\PushoverReceiver;
 use Carbon\CarbonImmutable;
 use Override;
 
@@ -45,6 +46,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function routeNotificationForPushover(mixed $notification): PushoverReceiver
+    {
+        /** @var string $userKey */
+        $userKey = config('services.pushover.user_key');
+
+        return PushoverReceiver::withUserKey($userKey);
     }
 
     #[Override]

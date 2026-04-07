@@ -13,16 +13,18 @@ use App\Mail\WaitlistConfirmation;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
+use App\Models\User;
+use App\Notifications\EventRegistrationReceived;
 use App\Seo\Data\BreadcrumbItem;
 use App\Seo\Schemas\BreadcrumbSchema;
 use App\Seo\Schemas\EventSchema;
 use App\Services\EventNotificationService;
-use App\Services\PushoverService;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\View\View;
 use RuntimeException;
 
@@ -33,7 +35,6 @@ final class EventController
     public function __construct(
         private readonly GeneralSettings $settings,
         private readonly EventNotificationService $notificationService,
-        private readonly PushoverService $pushoverService,
     ) {}
 
     public function showNext(): View|RedirectResponse
@@ -150,14 +151,9 @@ final class EventController
                 });
 
                 defer(function () use ($participant, $event): void {
-                    $this->pushoverService->send(
-                        "<b>{$participant->first_name} {$participant->last_name}</b> hat sich auf die <b>Warteliste</b> für <b>{$event->title}</b> eingetragen.",
-                        [
-                            'title' => 'Neue Wartelisten-Anmeldung',
-                            'url' => route('event.show.slug', $event->slug),
-                            'url_title' => $event->title,
-                            'html' => 1,
-                        ],
+                    Notification::send(
+                        User::all(),
+                        new EventRegistrationReceived($event, $participant, isWaitlist: true),
                     );
                 });
 
@@ -191,16 +187,9 @@ final class EventController
             });
 
             defer(function () use ($participant, $event): void {
-                $eventDate = $event->event_date->format('d.m.Y');
-                $eventTime = $event->start_time->format('H:i');
-                $this->pushoverService->send(
-                    "<b>{$participant->first_name} {$participant->last_name}</b> hat sich für <b>{$event->title}</b> am {$eventDate} um {$eventTime} Uhr angemeldet.",
-                    [
-                        'title' => 'Neue Event-Anmeldung',
-                        'url' => route('event.show.slug', $event->slug),
-                        'url_title' => $event->title,
-                        'html' => 1,
-                    ],
+                Notification::send(
+                    User::all(),
+                    new EventRegistrationReceived($event, $participant),
                 );
             });
 
@@ -227,5 +216,4 @@ final class EventController
             ], 409);
         }
     }
-
 }
