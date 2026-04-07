@@ -8,7 +8,6 @@ use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -26,12 +25,7 @@ final class WaitlistPromotion extends Mailable
 
     public function envelope(): Envelope
     {
-        $participant = $this->registration->participant;
-
-        return new Envelope(to: [new Address(
-            $participant->email,
-            $participant->fullName,
-        )], subject: 'Ein Platz ist frei – ' . $this->event->title);
+        return new Envelope(subject: 'Ein Platz ist frei – ' . $this->event->title);
     }
 
     public function content(): Content

@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Resources\EventResource\RelationManagers;
 
 use App\Enums\RegistrationStatus;
-use App\Mail\WaitlistPromotion;
 use App\Models\Participant;
 use App\Models\Registration;
-use Exception;
+use App\Notifications\WaitlistParticipantPromoted;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -24,8 +23,6 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class RegistrationsRelationManager extends RelationManager
 {
@@ -152,14 +149,9 @@ class RegistrationsRelationManager extends RelationManager
                         $record->promote();
                         $record->load(['participant', 'event']);
 
-                        try {
-                            Mail::queue(new WaitlistPromotion($record, $record->event));
-                        } catch (Exception $exception) {
-                            Log::error('Failed to send waitlist promotion email from admin', [
-                                'registration_id' => $record->id,
-                                'error' => $exception->getMessage(),
-                            ]);
-                        }
+                        $record->participant->notify(
+                            new WaitlistParticipantPromoted($record, $record->event),
+                        );
 
                         Notification::make()
                             ->title('Teilnehmer befördert')

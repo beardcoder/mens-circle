@@ -3,12 +3,13 @@
 declare(strict_types=1);
 
 use App\Enums\RegistrationStatus;
-use App\Mail\WaitlistConfirmation;
-use App\Mail\WaitlistPromotion;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Registration;
-use Illuminate\Support\Facades\Mail;
+use App\Notifications\EventRegistrationConfirmed;
+use App\Notifications\WaitlistParticipantPromoted;
+use App\Notifications\WaitlistRegistrationConfirmed;
+use Illuminate\Support\Facades\Notification;
 
 use function Pest\Laravel\assertModelExists;
 
@@ -52,6 +53,8 @@ test('cannot view unpublished event', function (): void {
 });
 
 test('can register for event', function (): void {
+    Notification::fake();
+
     $event = Event::factory()->published()->create(['max_participants' => 10]);
 
     $response = $this->postJson(route('event.register'), [
@@ -73,6 +76,8 @@ test('can register for event', function (): void {
         ->where('participant_id', $participant->id)
         ->firstOrFail();
     expect($registration->status)->toBe(RegistrationStatus::Registered);
+
+    Notification::assertSentTo($participant, EventRegistrationConfirmed::class);
 });
 
 test('cannot register for past event', function (): void {
@@ -91,6 +96,8 @@ test('cannot register for past event', function (): void {
 });
 
 test('registers on waitlist when event is full', function (): void {
+    Notification::fake();
+
     $event = Event::factory()->published()->create(['max_participants' => 2]);
 
     Registration::factory()
@@ -115,10 +122,12 @@ test('registers on waitlist when event is full', function (): void {
         ->where('participant_id', $participant->id)
         ->firstOrFail();
     expect($registration->status)->toBe(RegistrationStatus::Waitlist);
+
+    Notification::assertSentTo($participant, WaitlistRegistrationConfirmed::class);
 });
 
-test('sends waitlist confirmation email when event is full', function (): void {
-    Mail::fake();
+test('sends waitlist confirmation when event is full', function (): void {
+    Notification::fake();
 
     $event = Event::factory()->published()->create(['max_participants' => 1]);
 
@@ -135,7 +144,8 @@ test('sends waitlist confirmation email when event is full', function (): void {
         'privacy' => true,
     ]);
 
-    Mail::assertQueued(WaitlistConfirmation::class);
+    $participant = Participant::where('email', 'max@example.com')->firstOrFail();
+    Notification::assertSentTo($participant, WaitlistRegistrationConfirmed::class);
 });
 
 test('already on waitlist returns error', function (): void {
@@ -219,6 +229,8 @@ test('registration validates email format', function (): void {
 });
 
 test('promotes from waitlist when registration is cancelled', function (): void {
+    Notification::fake();
+
     $event = Event::factory()->published()->create(['max_participants' => 1]);
 
     $registered = Registration::factory()->forEvent($event)->registered()->create();
@@ -229,17 +241,17 @@ test('promotes from waitlist when registration is cancelled', function (): void 
     expect($waitlisted->fresh()->status)->toBe(RegistrationStatus::Registered);
 });
 
-test('sends waitlist promotion email when registration is cancelled', function (): void {
-    Mail::fake();
+test('sends waitlist promotion notification when registration is cancelled', function (): void {
+    Notification::fake();
 
     $event = Event::factory()->published()->create(['max_participants' => 1]);
 
     $registered = Registration::factory()->forEvent($event)->registered()->create();
-    Registration::factory()->forEvent($event)->waitlist()->create();
+    $waitlisted = Registration::factory()->forEvent($event)->waitlist()->create();
 
     $registered->cancel();
 
-    Mail::assertQueued(WaitlistPromotion::class);
+    Notification::assertSentTo($waitlisted->participant, WaitlistParticipantPromoted::class);
 });
 
 test('does not promote when no one is on waitlist', function (): void {

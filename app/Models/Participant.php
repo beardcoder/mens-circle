@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 
 /**
  * @property string $first_name
@@ -26,6 +28,7 @@ class Participant extends Model
 {
     /** @use HasFactory<ParticipantFactory> */
     use HasFactory;
+    use Notifiable;
 
     /**
      * @return HasMany<Registration, $this>
@@ -49,6 +52,16 @@ class Participant extends Model
     protected function fullName(): Attribute
     {
         return Attribute::make(get: fn(): string => trim("{$this->first_name} {$this->last_name}"));
+    }
+
+    public function routeNotificationForMail(Notification $notification): string
+    {
+        return $this->email;
+    }
+
+    public function routeNotificationForSevenIo(Notification $notification): ?string
+    {
+        return $this->phone;
     }
 
     public function isSubscribedToNewsletter(): bool

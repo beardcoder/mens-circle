@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Throwable;
 use App\Http\Requests\NewsletterSubscriptionRequest;
-use App\Mail\NewsletterWelcome;
 use App\Models\NewsletterSubscription;
 use App\Models\Participant;
+use App\Notifications\NewsletterSubscribed;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use RuntimeException;
 use SensitiveParameter;
-
-use function Illuminate\Support\defer;
 
 final class NewsletterController
 {
@@ -43,16 +38,7 @@ final class NewsletterController
                 ]);
             }
 
-            defer(function () use ($participant, $subscription): void {
-                try {
-                    Mail::to($participant->email)->queue(new NewsletterWelcome($subscription));
-                } catch (Throwable $throwable) {
-                    Log::error('Failed to send newsletter welcome email', [
-                        'subscription_id' => $subscription->id,
-                        'error' => $throwable->getMessage(),
-                    ]);
-                }
-            });
+            $participant->notify(new NewsletterSubscribed($subscription));
 
             return response()->json([
                 'success' => true,
