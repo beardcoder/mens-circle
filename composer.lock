@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4cea2c89bb0e3a4bb23d361025de16b",
+    "content-hash": "38cde00f2fb466a4e68be69c5b5cd29a",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -7623,6 +7623,77 @@
                 }
             ],
             "time": "2026-03-23T07:42:02+00:00"
+        },
+        {
+            "name": "spatie/laravel-varnish",
+            "version": "2.10.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-varnish.git",
+                "reference": "0ffb0598849bb42f1e116867ff00f2628b309cfb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-varnish/zipball/0ffb0598849bb42f1e116867ff00f2628b309cfb",
+                "reference": "0ffb0598849bb42f1e116867ff00f2628b309cfb",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^8.73|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/http": "^8.73|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "pestphp/pest": "^1.22|^2.34|^3.7|^4.0",
+                "phpunit/phpunit": "^9.5|^10.5|^11.5.3|^12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\Varnish\\VarnishServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Varnish\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Making Varnish and Laravel play nice together",
+            "homepage": "https://github.com/spatie/laravel-varnish",
+            "keywords": [
+                "laravel-varnish",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-varnish/issues",
+                "source": "https://github.com/spatie/laravel-varnish/tree/2.10.3"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-02-21T21:16:45+00:00"
         },
         {
             "name": "spatie/php-attribute-reader",

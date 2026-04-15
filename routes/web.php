@@ -15,6 +15,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Spatie\ResponseCache\Middlewares\DoNotCacheResponse;
+use Spatie\Varnish\Middleware\CacheWithVarnish;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +23,15 @@ use Spatie\ResponseCache\Middlewares\DoNotCacheResponse;
 |--------------------------------------------------------------------------
 |
 | These routes serve public, anonymous content cached by Spatie Response
-| Cache. Stripping session and cookie middleware eliminates ~150ms of
-| unnecessary Redis round-trips on every cache hit. None of these
-| controllers use sessions, flash data, or CSRF tokens.
+| Cache and Varnish. Stripping session and cookie middleware eliminates
+| ~150ms of unnecessary Redis round-trips on every cache hit. None of
+| these controllers use sessions, flash data, or CSRF tokens.
+|
+| CacheWithVarnish adds X-Cacheable and Cache-Control: s-maxage headers
+| so Varnish knows to cache these responses.
 |
 */
-Route::withoutMiddleware([
+Route::middleware(CacheWithVarnish::class)->withoutMiddleware([
     EncryptCookies::class,
     AddQueuedCookiesToResponse::class,
     StartSession::class,
