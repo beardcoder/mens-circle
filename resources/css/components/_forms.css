@@ -40,11 +40,17 @@
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-md);
   transition:
-    border-color var(--transition-fast),
-    background-color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    transform var(--transition-fast);
+    border-color var(--duration-normal) var(--ease-smooth),
+    background-color var(--duration-normal) var(--ease-smooth),
+    box-shadow var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-normal) var(--ease-smooth);
   will-change: transform, box-shadow;
+}
+
+.form-group input:hover:not(:focus, :disabled),
+.form-group textarea:hover:not(:focus, :disabled) {
+  background: var(--bg-input-focus);
+  border-color: color-mix(in oklch, var(--accent-primary) 40%, transparent);
 }
 
 .form-group input::placeholder {
@@ -68,8 +74,9 @@
   background: var(--bg-input-focus);
   border-color: var(--accent-primary);
   box-shadow:
-    0 0 0 3px color-mix(in oklch, var(--accent-primary) 20%, transparent),
-    0 4px 20px color-mix(in oklch, var(--accent-primary) 15%, transparent);
+    0 0 0 3px color-mix(in oklch, var(--accent-primary) 22%, transparent),
+    0 6px 16px -4px color-mix(in oklch, var(--accent-primary) 20%, transparent),
+    0 16px 32px -8px color-mix(in oklch, var(--accent-primary) 12%, transparent);
   transform: translateY(-1px);
 }
 
@@ -153,14 +160,22 @@
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-full);
   transition:
-    border-color var(--transition-fast),
-    background-color var(--transition-fast);
+    border-color var(--duration-normal) var(--ease-smooth),
+    background-color var(--duration-normal) var(--ease-smooth),
+    box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.newsletter__input:hover:not(:focus) {
+  border-color: color-mix(in oklch, var(--accent-primary) 45%, transparent);
 }
 
 .newsletter__input:focus {
   outline: none;
   background: var(--bg-input-focus);
   border-color: var(--accent-primary);
+  box-shadow:
+    0 0 0 3px color-mix(in oklch, var(--accent-primary) 18%, transparent),
+    0 8px 24px -6px color-mix(in oklch, var(--accent-primary) 22%, transparent);
 }
 
 .newsletter__input::placeholder {

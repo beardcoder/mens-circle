@@ -30,14 +30,14 @@
   inline-size: 50vw;
   block-size: 50vw;
   opacity: 0.3;
-  animation: breathe-slow 24s ease-in-out infinite;
+  animation: breathe-slow 24s var(--ease-organic) infinite;
 }
 
 .cta-section::after {
   inline-size: 35vw;
   block-size: 35vw;
   opacity: 0.2;
-  animation: breathe 20s ease-in-out infinite -8s;
+  animation: breathe 20s var(--ease-organic) infinite -8s;
 }
 
 /* ============================================

@@ -93,6 +93,13 @@
 .accordion-item__trigger:hover,
 .faq-item__question:hover {
   color: var(--accent-primary);
+  transform: translateX(4px);
+}
+
+.accordion-item__trigger:hover .accordion-item__icon,
+.faq-item__question:hover .faq-item__icon {
+  background: color-mix(in oklch, var(--accent-primary) 14%, transparent);
+  border-color: var(--accent-primary);
 }
 
 .accordion-item__trigger:focus-visible,
@@ -161,8 +168,10 @@
 .faq-item[open] .faq-item__icon {
   background: var(--accent-primary);
   border-color: var(--accent-primary);
-  box-shadow: 0 8px 24px
-    color-mix(in oklch, var(--accent-primary) 30%, transparent);
+  box-shadow:
+    0 2px 6px color-mix(in oklch, var(--color-ink) 8%, transparent),
+    0 10px 28px color-mix(in oklch, var(--accent-primary) 35%, transparent);
+  transform: scale(1.08);
 }
 
 .accordion-item[open] .accordion-item__icon::before,

@@ -94,11 +94,42 @@
   position: relative;
   padding: var(--space-lg) var(--space-md);
   border-inline-start: 1px solid var(--border-on-dark);
-  transition: background-color var(--transition-medium);
+  transition: background-color var(--duration-slow) var(--ease-smooth);
+}
+
+/* Top accent line that reveals on hover */
+.journey__step::after {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: var(--space-md) var(--space-md);
+  block-size: 2px;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-primary) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: scaleX(0.3);
+  transition:
+    opacity var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-slower) var(--ease-smooth);
 }
 
 .journey__step:hover {
   background: color-mix(in oklch, var(--color-earth-mid) 30%, transparent);
+}
+
+.journey__step:hover::after {
+  opacity: 0.75;
+  transform: scaleX(1);
+}
+
+.journey__step:hover .journey__step-number {
+  opacity: 0.5;
+  transform: translateY(-4px);
 }
 
 .journey__step:first-child {
@@ -134,6 +165,9 @@
   color: var(--accent-primary);
   letter-spacing: -0.04em;
   opacity: 0.25;
+  transition:
+    opacity var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-slow) var(--ease-smooth);
 }
 
 .journey__step-title {

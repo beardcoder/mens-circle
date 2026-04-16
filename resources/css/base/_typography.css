@@ -70,7 +70,10 @@ p:last-child {
    Reusable component for section labels
    ============================================ */
 .eyebrow {
-  display: block;
+  position: relative;
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
   margin-block-end: var(--space-sm);
   font-size: 0.65rem;
   font-weight: 600;
@@ -78,6 +81,14 @@ p:last-child {
   text-align: inherit;
   text-transform: uppercase;
   letter-spacing: 0.3em;
+}
+
+.eyebrow::before {
+  inline-size: 28px;
+  block-size: 1px;
+  content: '';
+  background: currentcolor;
+  opacity: 0.5;
 }
 
 .eyebrow--secondary {

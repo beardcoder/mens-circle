@@ -72,18 +72,13 @@
 @keyframes breathe {
   0%,
   100% {
-    opacity: 0.15;
-    transform: scale(0.9);
+    opacity: 0.16;
+    transform: scale(0.92);
   }
 
-  40% {
-    opacity: 0.35;
-    transform: scale(1.15);
-  }
-
-  70% {
-    opacity: 0.25;
-    transform: scale(1.05);
+  50% {
+    opacity: 0.34;
+    transform: scale(1.12);
   }
 }
 
@@ -92,17 +87,12 @@
   0%,
   100% {
     opacity: 0.1;
-    transform: scale(0.92) rotate(0deg);
+    transform: scale(0.94) rotate(-0.4deg);
   }
 
-  35% {
-    opacity: 0.3;
-    transform: scale(1.08) rotate(1deg);
-  }
-
-  65% {
-    opacity: 0.2;
-    transform: scale(1.02) rotate(-0.5deg);
+  50% {
+    opacity: 0.28;
+    transform: scale(1.06) rotate(0.6deg);
   }
 }
 
@@ -208,13 +198,16 @@
   background: var(--accent-primary);
   border: none;
   border-radius: var(--radius-full);
-  box-shadow: var(--shadow-lg);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 0 1px color-mix(in oklch, var(--color-bone) 10%, transparent) inset;
   opacity: 0;
   transform: translateY(16px) scale(0.9);
   transition:
-    opacity var(--transition-medium),
-    transform var(--transition-medium),
-    background-color var(--transition-fast);
+    opacity var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-normal) var(--ease-smooth),
+    background-color var(--duration-fast) var(--ease-smooth),
+    box-shadow var(--duration-normal) var(--ease-smooth);
 }
 
 .scroll-to-top.visible {
@@ -225,7 +218,10 @@
 
 .scroll-to-top:hover {
   background: var(--bg-dark);
-  box-shadow: var(--shadow-xl);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 0 1px color-mix(in oklch, var(--color-bone) 12%, transparent) inset,
+    0 0 28px color-mix(in oklch, var(--accent-primary) 30%, transparent);
   transform: translateY(-2px) scale(1.05);
 }
 

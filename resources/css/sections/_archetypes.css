@@ -39,16 +39,46 @@
   padding: var(--space-lg) var(--space-md);
   overflow: hidden;
   border-inline-start: 1px solid var(--border-light);
-  transition: background-color var(--transition-medium);
+  transition: background-color var(--duration-slow) var(--ease-smooth);
+}
+
+/* Top accent line that reveals on hover */
+.archetype-card::before {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: var(--space-md) var(--space-md);
+  block-size: 2px;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-primary) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: scaleX(0.3);
+  transition:
+    opacity var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-slower) var(--ease-smooth);
 }
 
 .archetype-card:hover {
   background: color-mix(in oklch, var(--color-sand-light) 40%, transparent);
 }
 
+.archetype-card:hover::before {
+  opacity: 0.7;
+  transform: scaleX(1);
+}
+
+.archetype-card:hover .archetype-card__title {
+  color: var(--accent-primary);
+}
+
 .archetype-card:hover .archetype-card__background-icon {
-  opacity: 0.22;
-  transform: scale(1.05);
+  opacity: 0.24;
+  transform: scale(1.06);
 }
 
 .archetype-card:nth-child(odd) {
@@ -79,8 +109,8 @@
   pointer-events: none;
   opacity: 0.16;
   transition:
-    opacity var(--transition-medium),
-    transform var(--transition-medium);
+    opacity var(--duration-slow) var(--ease-smooth),
+    transform var(--duration-slower) var(--ease-smooth);
 }
 
 .archetype-card__background-icon svg {
@@ -96,6 +126,7 @@
   line-height: 1.15;
   color: var(--text-primary);
   letter-spacing: -0.01em;
+  transition: color var(--duration-normal) var(--ease-smooth);
 }
 
 .archetype-card__description {
