@@ -7,21 +7,56 @@
    Value Item Card
    ============================================ */
 .value-item {
+  position: relative;
   display: grid;
   grid-template-columns: 80px 1fr;
   gap: var(--space-md);
   align-items: start;
   padding-block: var(--space-md);
+  padding-inline: var(--space-sm);
+  margin-inline: calc(var(--space-sm) * -1);
   border-block-start: 1px solid var(--border-light);
-  transition: transform var(--transition-medium);
+  border-radius: var(--radius-md);
+  transition:
+    transform var(--duration-slow) var(--ease-smooth),
+    background-color var(--duration-normal) var(--ease-smooth);
+}
+
+/* Left accent bar, slides in on hover */
+.value-item::before {
+  position: absolute;
+  inset-block: var(--space-md);
+  inset-inline-start: 0;
+  inline-size: 2px;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(
+    180deg,
+    var(--accent-primary),
+    var(--color-earth-warm)
+  );
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transform: scaleY(0.6);
+  transform-origin: center;
+  transition:
+    opacity var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-slow) var(--ease-smooth);
 }
 
 .value-item:hover {
+  background: color-mix(in oklch, var(--color-sand-light) 28%, transparent);
   transform: translateX(4px);
+}
+
+.value-item:hover::before {
+  opacity: 1;
+  transform: scaleY(1);
 }
 
 .value-item:hover .value-item__number {
   color: var(--accent-primary);
+  transform: translateY(-2px);
 }
 
 .value-item:last-child {
@@ -35,7 +70,9 @@
   color: var(--text-accent);
   letter-spacing: -0.04em;
   opacity: 1;
-  transition: color var(--transition-medium);
+  transition:
+    color var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-slow) var(--ease-smooth);
 }
 
 .value-item__content h3 {

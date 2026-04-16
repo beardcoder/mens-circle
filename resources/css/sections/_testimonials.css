@@ -75,11 +75,16 @@
   min-block-size: 16rem;
   padding: var(--space-lg) var(--space-md);
   border-inline-start: 1px solid var(--border-light);
-  transition: background-color var(--transition-medium);
+  transition: background-color var(--duration-slow) var(--ease-smooth);
 }
 
 .testimonial-item:hover {
   background: color-mix(in oklch, var(--color-sand-light) 30%, transparent);
+}
+
+.testimonial-item:hover .testimonial-item__quote::before {
+  color: var(--accent-primary);
+  transform: translateY(-2px) scale(1.08);
 }
 
 .testimonial-item:nth-child(odd) {
@@ -114,6 +119,10 @@
   line-height: 1;
   color: color-mix(in oklch, var(--accent-primary) 70%, transparent);
   content: '„';
+  transform-origin: top left;
+  transition:
+    color var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-slow) var(--ease-spring);
 }
 
 .testimonial-item__author {

@@ -12,6 +12,10 @@
   --btn-border: transparent;
   --btn-hover-bg: var(--bg-dark);
   --btn-hover-color: var(--color-bone);
+  --btn-shadow: var(--shadow-md);
+  --btn-shadow-hover:
+    var(--shadow-xl),
+    0 0 28px color-mix(in oklch, var(--accent-primary) 22%, transparent);
 
   position: relative;
   display: inline-flex;
@@ -33,12 +37,13 @@
   background: var(--btn-bg);
   border: 1.5px solid var(--btn-border);
   border-radius: var(--radius-full);
+  box-shadow: var(--btn-shadow);
   transition:
-    background-color var(--transition-medium),
-    color var(--transition-medium),
-    border-color var(--transition-medium),
-    transform var(--transition-fast),
-    box-shadow var(--transition-medium);
+    background-color var(--duration-normal) var(--ease-smooth),
+    color var(--duration-normal) var(--ease-smooth),
+    border-color var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-fast) var(--ease-smooth),
+    box-shadow var(--duration-normal) var(--ease-smooth);
 }
 
 .btn::before {
@@ -46,20 +51,18 @@
   inset: 0;
   content: '';
   background: radial-gradient(
-    circle at center,
-    color-mix(in oklch, var(--btn-hover-bg) 30%, transparent) 0%,
-    transparent 70%
+    circle at 50% 120%,
+    color-mix(in oklch, var(--color-bone) 22%, transparent) 0%,
+    transparent 60%
   );
   opacity: 0;
-  transition: opacity var(--transition-fast);
+  transition: opacity var(--transition-medium);
 }
 
 .btn:hover {
   color: var(--btn-hover-color);
   background: var(--btn-hover-bg);
-  box-shadow:
-    var(--shadow-lg),
-    0 0 24px color-mix(in oklch, var(--accent-primary) 15%, transparent);
+  box-shadow: var(--btn-shadow-hover);
   transform: translateY(-2px) scale(1.02);
 }
 
@@ -68,13 +71,14 @@
 }
 
 .btn:active {
+  box-shadow: var(--shadow-sm);
   transform: translateY(0) scale(0.97);
   transition-duration: 0.08s;
 }
 
 .btn:focus-visible {
   outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 .btn:disabled,
@@ -96,9 +100,17 @@
 
 /* Primary (default) */
 .btn--primary {
-  --btn-bg: var(--accent-primary);
+  --btn-bg: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--accent-primary) 96%, white) 0%,
+    var(--accent-primary) 100%
+  );
   --btn-color: var(--color-bone);
-  --btn-hover-bg: var(--bg-dark);
+  --btn-hover-bg: linear-gradient(
+    180deg,
+    var(--color-earth-dark) 0%,
+    var(--color-earth-deep) 100%
+  );
   --btn-hover-color: var(--color-bone);
 }
 
@@ -109,6 +121,7 @@
   --btn-border: var(--text-primary);
   --btn-hover-bg: var(--text-primary);
   --btn-hover-color: var(--bg-primary);
+  --btn-shadow: none;
 }
 
 /* ============================================
@@ -157,8 +170,9 @@
 .social-icon:hover {
   color: var(--text-on-dark);
   background: var(--accent-primary);
-  box-shadow: 0 4px 12px
-    color-mix(in oklch, var(--accent-primary) 30%, transparent);
+  box-shadow:
+    0 2px 6px color-mix(in oklch, var(--color-ink) 12%, transparent),
+    0 8px 20px color-mix(in oklch, var(--accent-primary) 38%, transparent);
   transform: translateY(-3px) scale(1.08);
 }
 
