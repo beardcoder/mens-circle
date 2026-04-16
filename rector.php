@@ -37,9 +37,6 @@ return RectorConfig::configure()
     ])
     ->withSetProviders(LaravelSetProvider::class)
     ->withImportNames(removeUnusedImports: true)
-    ->withPHPStanConfigs([
-        __DIR__.'/phpstan.neon',
-    ])
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,

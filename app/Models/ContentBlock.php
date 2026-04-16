@@ -35,7 +35,7 @@ class ContentBlock extends Model implements DefinesCacheUrls, HasMedia
     use ClearsResponseCache;
 
     /**
-     * @return array<string>
+     * @return list<string>
      */
     public function getCacheUrls(): array
     {

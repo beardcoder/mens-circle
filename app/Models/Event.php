@@ -163,7 +163,7 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
     }
 
     /**
-     * @return array<string>
+     * @return list<string>
      */
     public function getCacheUrls(): array
     {
