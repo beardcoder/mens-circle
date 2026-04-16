@@ -8,7 +8,7 @@
       },
       "devDependencies": {
         "@eslint/compat": "^2.0.5",
-        "@eslint/css": "^1.0.0",
+        "@eslint/css": "^1.1.0",
         "@eslint/js": "^10.0.1",
         "@fontsource-variable/dm-sans": "^5.2.8",
         "@fontsource-variable/playfair-display": "^5.2.8",
@@ -77,7 +77,7 @@
 
     "@eslint/core": ["@eslint/core@1.2.1", "", { "dependencies": { "@types/json-schema": "^7.0.15" } }, "sha512-MwcE1P+AZ4C6DWlpin/OmOA54mmIZ/+xZuJiQd4SyB29oAJjN30UW9wkKNptW2ctp4cEsvhlLY/CsQ1uoHDloQ=="],
 
-    "@eslint/css": ["@eslint/css@1.0.0", "", { "dependencies": { "@eslint/core": "^1.1.1", "@eslint/css-tree": "^3.6.9", "@eslint/plugin-kit": "^0.6.1" } }, "sha512-2MjyL517F1wrLrmmfaFntKKiImudiXW6Dd80oE7VRIRu64bT5YieRs+WPgdZy9m8izs/tSUqi3j2mBnjUrqJfA=="],
+    "@eslint/css": ["@eslint/css@1.1.0", "", { "dependencies": { "@eslint/core": "^1.1.1", "@eslint/css-tree": "^3.6.9", "@eslint/plugin-kit": "^0.6.1" } }, "sha512-sNwfLcU3nKXv/v2YglqujwMU4Iv3BDhxldNUd/2FckVab0zdvc9pPlKWxjR6Ap/EU+Y8Pdu853iwvcUpemRhRw=="],
 
     "@eslint/css-tree": ["@eslint/css-tree@3.6.9", "", { "dependencies": { "mdn-data": "2.23.0", "source-map-js": "^1.0.1" } }, "sha512-3D5/OHibNEGk+wKwNwMbz63NMf367EoR4mVNNpxddCHKEb2Nez7z62J2U6YjtErSsZDoY0CsccmoUpdEbkogNA=="],
 
@@ -570,8 +570,6 @@
     "@cacheable/utils/keyv": ["keyv@5.5.5", "", { "dependencies": { "@keyv/serialize": "^1.1.1" } }, "sha512-FA5LmZVF1VziNc0bIdCSA1IoSVnDCqE8HJIZZv2/W8YmoAM50+tnUgJR/gQZwEeIMleuIOnRnHA/UaZRNeV4iQ=="],
 
     "@eslint-community/eslint-utils/eslint-visitor-keys": ["eslint-visitor-keys@3.4.3", "", {}, "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag=="],
-
-    "@eslint/css/@eslint/core": ["@eslint/core@1.1.1", "", { "dependencies": { "@types/json-schema": "^7.0.15" } }, "sha512-QUPblTtE51/7/Zhfv8BDwO0qkkzQL7P/aWWbqcf4xWLEYn1oKjdO0gglQBB4GAsu7u6wjijbCmzsUTy6mnk6oQ=="],
 
     "@eslint/plugin-kit/@eslint/core": ["@eslint/core@1.1.1", "", { "dependencies": { "@types/json-schema": "^7.0.15" } }, "sha512-QUPblTtE51/7/Zhfv8BDwO0qkkzQL7P/aWWbqcf4xWLEYn1oKjdO0gglQBB4GAsu7u6wjijbCmzsUTy6mnk6oQ=="],
 
