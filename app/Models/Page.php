@@ -46,7 +46,7 @@ class Page extends Model implements DefinesCacheUrls, HasMedia
     use SoftDeletes;
 
     /**
-     * @return array<string>
+     * @return list<string>
      */
     public function getCacheUrls(): array
     {

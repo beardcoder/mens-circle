@@ -6,8 +6,6 @@ namespace App\Notifications\Messages;
 
 final class SevenIoMessage
 {
-    public string $content = '';
-
     public ?string $from = null;
 
     public static function create(string $content = ''): self
@@ -15,10 +13,7 @@ final class SevenIoMessage
         return new self($content);
     }
 
-    public function __construct(string $content = '')
-    {
-        $this->content = $content;
-    }
+    public function __construct(public string $content = '') {}
 
     public function content(string $content): self
     {

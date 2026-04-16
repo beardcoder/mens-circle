@@ -44,7 +44,7 @@ class Registration extends Model implements DefinesCacheUrls
     use SoftDeletes;
 
     /**
-     * @return array<string>
+     * @return list<string>
      */
     public function getCacheUrls(): array
     {

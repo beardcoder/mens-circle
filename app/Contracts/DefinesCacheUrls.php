@@ -10,7 +10,7 @@ interface DefinesCacheUrls
      * Return the full URLs whose cached responses should be invalidated
      * when this model is created, updated, or deleted.
      *
-     * @return array<string>
+     * @return list<string>
      */
     public function getCacheUrls(): array;
 }
