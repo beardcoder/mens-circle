@@ -14,7 +14,7 @@
         "typecheck": "tsc --noEmit"
     },
     "devDependencies": {
-        "@eslint/compat": "^2.0.3",
+        "@eslint/compat": "^2.0.5",
         "@eslint/css": "^1.0.0",
         "@eslint/js": "^10.0.1",
         "@fontsource-variable/dm-sans": "^5.2.8",
