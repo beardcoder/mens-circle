@@ -56,13 +56,11 @@ FROM ${FRANKENPHP_IMAGE} AS production
 
 # Install required PHP extensions:
 # - intl:    required by Filament
-# - imagick: ImageMagick for image processing (Spatie Media Library)
-# - gd:      GD library for image manipulation
+# - gd:      image driver for Spatie Media Library (default)
 # - exif:    EXIF data extraction from images
 # - opcache: bytecode cache for production performance
 RUN install-php-extensions \
     intl \
-    imagick \
     gd \
     exif \
     opcache
