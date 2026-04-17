@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7-labs
 
-ARG FRANKENPHP_IMAGE=dunglas/frankenphp:1-php8.5
+ARG FRANKENPHP_IMAGE=dunglas/frankenphp:1-php8.5-alpine
 
 # ----------------------------
 # 1) Frontend build (Vite) with Bun
@@ -24,9 +24,7 @@ RUN bun run build
 FROM ${FRANKENPHP_IMAGE} AS vendor
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends git unzip \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache git unzip
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
