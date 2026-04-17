@@ -21,7 +21,8 @@ set -- \
     --port="${OCTANE_PORT:-80}" \
     --admin-port="${OCTANE_ADMIN_PORT:-2019}" \
     --workers="${OCTANE_WORKERS:-auto}" \
-    --max-requests="${OCTANE_MAX_REQUESTS:-500}"
+    --max-requests="${OCTANE_MAX_REQUESTS:-500}" \
+    --caddyfile="${OCTANE_CADDYFILE:-/app/docker/Caddyfile}"
 
 if [ "${OCTANE_HTTPS:-false}" = "true" ]; then
     set -- "$@" --https
