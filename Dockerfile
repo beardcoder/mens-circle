@@ -70,13 +70,11 @@ ENV APP_ENV=production \
     LOG_CHANNEL=stderr \
     LOG_LEVEL=error \
     OCTANE_SERVER=frankenphp \
-    # Octane / FrankenPHP runtime defaults (override via compose / k8s as needed)
     OCTANE_HOST=0.0.0.0 \
     OCTANE_PORT=80 \
     OCTANE_ADMIN_PORT=2019 \
     OCTANE_WORKERS=auto \
     OCTANE_MAX_REQUESTS=500 \
-    # Set OCTANE_HTTPS=true to enable TLS + HTTP/3 (Caddy autocert for OCTANE_HOST)
     OCTANE_HTTPS=false \
     OCTANE_HTTP_REDIRECT=false \
     APP_BASE_PATH=/app \
