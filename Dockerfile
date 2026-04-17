@@ -57,13 +57,13 @@ FROM ${FRANKENPHP_IMAGE} AS production
 # - gd:        image driver for Spatie Media Library (default)
 # - exif:      EXIF data extraction from images
 # - opcache:   bytecode cache for production performance
-# - pdo_mysql: MySQL/MariaDB driver
+# - pdo_pgsql: PostgreSQL driver
 RUN install-php-extensions \
     intl \
     gd \
     exif \
     opcache \
-    pdo_mysql
+    pdo_pgsql
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
