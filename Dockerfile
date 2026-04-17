@@ -53,15 +53,17 @@ RUN composer dump-autoload \
 FROM ${FRANKENPHP_IMAGE} AS production
 
 # Install required PHP extensions:
-# - intl:    required by Filament
-# - gd:      image driver for Spatie Media Library (default)
-# - exif:    EXIF data extraction from images
-# - opcache: bytecode cache for production performance
+# - intl:      required by Filament
+# - gd:        image driver for Spatie Media Library (default)
+# - exif:      EXIF data extraction from images
+# - opcache:   bytecode cache for production performance
+# - pdo_mysql: MySQL/MariaDB driver
 RUN install-php-extensions \
     intl \
     gd \
     exif \
-    opcache
+    opcache \
+    pdo_mysql
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
