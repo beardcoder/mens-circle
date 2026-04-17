@@ -1,35 +1,56 @@
 /**
  * Scroll Animation Components
- * Lightweight scroll-driven animations using stitch-js + IntersectionObserver + Web Animations API
+ * Smooth, organic scroll-driven animations using stitch-js + IntersectionObserver + Web Animations API
+ *
+ * Design principles:
+ * - Subtle movement distances (12–16px) so elements emerge rather than fly in
+ * - Multi-keyframe sequences where opacity leads transform for a natural reveal
+ * - Generous stagger delays (120ms) for a gentle cascade effect
+ * - Soft deceleration easing that mimics organic motion
  */
 
 import { defineComponent } from '@beardcoder/stitch-js';
 
-const ANIMATION_DURATION = 700;
-const ANIMATION_STAGGER_DELAY = 80;
-const ANIMATION_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+/** Base duration for individual element reveals */
+const ANIMATION_DURATION = 900;
+
+/** Time between staggered children – enough to perceive each one individually */
+const ANIMATION_STAGGER_DELAY = 120;
+
+/** Smooth deceleration curve – fast entry that settles gently */
+const ANIMATION_EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
 type Direction = 'up' | 'down' | 'left' | 'right' | 'scale' | 'default';
 
-interface AnimationTransform {
-  from: { opacity: number; transform: string };
-  to: { opacity: number; transform: string };
-}
-
-function getTransformForDirection(direction: Direction): AnimationTransform {
-  const transforms: Record<Direction, string> = {
-    default: 'translateY(24px)',
-    up: 'translateY(24px)',
-    down: 'translateY(-24px)',
-    left: 'translateX(-24px)',
-    right: 'translateX(24px)',
-    scale: 'scale(0.95)',
+/**
+ * Multi-keyframe animation sequence for a given direction.
+ * The middle keyframe (40%) lets opacity arrive before transform finishes,
+ * creating a soft, layered reveal instead of a mechanical slide.
+ */
+function getKeyframesForDirection(direction: Direction): Keyframe[] {
+  const distances: Record<Direction, string> = {
+    default: 'translateY(14px)',
+    up: 'translateY(14px)',
+    down: 'translateY(-14px)',
+    left: 'translateX(-16px)',
+    right: 'translateX(16px)',
+    scale: 'scale(0.97)',
   };
 
-  return {
-    from: { opacity: 0, transform: transforms[direction] },
-    to: { opacity: 1, transform: 'translateY(0) translateX(0) scale(1)' },
+  const midTransforms: Record<Direction, string> = {
+    default: 'translateY(4px)',
+    up: 'translateY(4px)',
+    down: 'translateY(-4px)',
+    left: 'translateX(-4px)',
+    right: 'translateX(4px)',
+    scale: 'scale(0.995)',
   };
+
+  return [
+    { opacity: 0, transform: distances[direction], offset: 0 },
+    { opacity: 1, transform: midTransforms[direction], offset: 0.45 },
+    { opacity: 1, transform: 'none', offset: 1 },
+  ];
 }
 
 function getDirection(element: HTMLElement): Direction {
@@ -55,6 +76,16 @@ function getDelay(element: HTMLElement): number {
   return 0;
 }
 
+/**
+ * Cleans up after an animation finishes: removes `will-change` hint
+ * and clears inline styles so the element settles into its natural state.
+ */
+function cleanupAfterAnimation(element: HTMLElement): void {
+  element.style.willChange = 'auto';
+  element.style.opacity = '';
+  element.style.transform = '';
+}
+
 interface ScrollAnimateOptions {
   threshold: number;
   rootMargin: string;
@@ -63,12 +94,12 @@ interface ScrollAnimateOptions {
 /**
  * Scroll fade-in animation component
  * Attach to .fade-in, .fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right, .fade-in-scale
- * Triggers Web Animations API fade-in on scroll intersection
+ * Triggers a smooth, multi-keyframe reveal on scroll intersection
  */
 export const scrollAnimate = defineComponent<ScrollAnimateOptions>(
   {
-    threshold: 0.1,
-    rootMargin: '0px 0px -10% 0px',
+    threshold: 0.08,
+    rootMargin: '0px 0px -5% 0px',
   },
   (ctx) => {
     const prefersReducedMotion = window.matchMedia(
@@ -80,11 +111,7 @@ export const scrollAnimate = defineComponent<ScrollAnimateOptions>(
     // Skip if inside a stagger container (handled by staggerAnimate)
     if (ctx.el.closest('.stagger-children')) return;
 
-    const direction = getDirection(ctx.el);
-    const { from } = getTransformForDirection(direction);
-
-    ctx.el.style.opacity = String(from.opacity);
-    ctx.el.style.transform = from.transform;
+    ctx.el.style.opacity = '0';
 
     const { options: o } = ctx;
 
@@ -95,33 +122,18 @@ export const scrollAnimate = defineComponent<ScrollAnimateOptions>(
 
           const element = entry.target as HTMLElement;
           const delay = getDelay(element);
-          const dir = getDirection(element);
-          const transforms = getTransformForDirection(dir);
+          const keyframes = getKeyframesForDirection(getDirection(element));
 
           element.style.willChange = 'opacity, transform';
 
-          const animation = element.animate(
-            [
-              {
-                opacity: transforms.from.opacity,
-                transform: transforms.from.transform,
-              },
-              {
-                opacity: transforms.to.opacity,
-                transform: transforms.to.transform,
-              },
-            ],
-            {
-              duration: ANIMATION_DURATION,
-              delay,
-              easing: ANIMATION_EASING,
-              fill: 'forwards',
-            }
-          );
+          const animation = element.animate(keyframes, {
+            duration: ANIMATION_DURATION,
+            delay,
+            easing: ANIMATION_EASING,
+            fill: 'forwards',
+          });
 
-          animation.onfinish = () => {
-            element.style.willChange = 'auto';
-          };
+          animation.onfinish = () => cleanupAfterAnimation(element);
 
           observer.unobserve(element);
         });
@@ -141,12 +153,13 @@ interface StaggerAnimateOptions {
 
 /**
  * Stagger animation component
- * Attach to .stagger-children — animates child elements with staggered delay
+ * Attach to .stagger-children — animates child elements with a gentle cascade.
+ * Each child uses a multi-keyframe reveal with increasing delay.
  */
 export const staggerAnimate = defineComponent<StaggerAnimateOptions>(
   {
-    threshold: 0.1,
-    rootMargin: '0px 0px -10% 0px',
+    threshold: 0.08,
+    rootMargin: '0px 0px -5% 0px',
   },
   (ctx) => {
     const prefersReducedMotion = window.matchMedia(
@@ -161,7 +174,6 @@ export const staggerAnimate = defineComponent<StaggerAnimateOptions>(
       const child = children[i] as HTMLElement;
 
       child.style.opacity = '0';
-      child.style.transform = 'translateY(20px)';
     }
 
     const { options: o } = ctx;
@@ -180,8 +192,9 @@ export const staggerAnimate = defineComponent<StaggerAnimateOptions>(
 
             const animation = child.animate(
               [
-                { opacity: 0, transform: 'translateY(20px)' },
-                { opacity: 1, transform: 'translateY(0)' },
+                { opacity: 0, transform: 'translateY(12px)', offset: 0 },
+                { opacity: 1, transform: 'translateY(3px)', offset: 0.45 },
+                { opacity: 1, transform: 'none', offset: 1 },
               ],
               {
                 duration: ANIMATION_DURATION,
@@ -191,9 +204,7 @@ export const staggerAnimate = defineComponent<StaggerAnimateOptions>(
               }
             );
 
-            animation.onfinish = () => {
-              child.style.willChange = 'auto';
-            };
+            animation.onfinish = () => cleanupAfterAnimation(child);
           }
 
           observer.unobserve(entry.target);
@@ -300,9 +311,9 @@ export const journeyProgress = defineComponent<JourneyProgressOptions>(
       const number = step.querySelector<HTMLElement>(o.numberSelector);
 
       if (number) {
-        number.style.transition = `opacity 0.6s ${ANIMATION_EASING}, transform 0.6s ${ANIMATION_EASING}`;
+        number.style.transition = `opacity 0.8s ${ANIMATION_EASING}, transform 0.8s ${ANIMATION_EASING}`;
         number.style.opacity = '0.08';
-        number.style.transform = 'scale(0.95)';
+        number.style.transform = 'scale(0.97)';
       }
     });
 
