@@ -14,8 +14,6 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
 use Override;
 use Spatie\ResponseCache\Facades\ResponseCache;
-use Spatie\Varnish\Varnish;
-use Symfony\Component\Process\Process;
 
 class ClearCache extends Page
 {
@@ -55,18 +53,6 @@ class ClearCache extends Page
                 successTitle: 'Response-Cache gelöscht',
                 successBody: 'Der Response-Cache wurde erfolgreich gelöscht.',
                 action: static fn() => ResponseCache::clear(),
-            ),
-
-            $this->makeCacheAction(
-                name: 'flushVarnishCache',
-                label: 'Varnish-Cache löschen',
-                icon: 'heroicon-s-server-stack',
-                color: 'warning',
-                modalHeading: 'Varnish-Cache löschen?',
-                modalDescription: 'Dies löscht den gesamten Varnish-Cache. Alle Seiten werden beim nächsten Aufruf vom Backend neu geladen.',
-                successTitle: 'Varnish-Cache gelöscht',
-                successBody: 'Der Varnish-Cache wurde erfolgreich gelöscht.',
-                action: static fn(): Process => (new Varnish())->flush(),
             ),
 
             $this->makeCacheAction(
@@ -117,13 +103,12 @@ class ClearCache extends Page
                 icon: 'heroicon-s-arrow-path',
                 color: 'danger',
                 modalHeading: 'Alle Caches löschen?',
-                modalDescription: 'Dies löscht alle Caches (Anwendung, Response, Varnish, Konfiguration, Routen, Views). Diese Aktion kann nicht rückgängig gemacht werden.',
+                modalDescription: 'Dies löscht alle Caches (Anwendung, Response, Konfiguration, Routen, Views). Diese Aktion kann nicht rückgängig gemacht werden.',
                 successTitle: 'Alle Caches gelöscht',
                 successBody: 'Alle Caches wurden gelöscht. Routen- und View-Cache wurden neu aufgebaut.',
                 action: static function (): void {
                     Artisan::call('cache:clear');
                     ResponseCache::clear();
-                    (new Varnish())->flush();
                     Artisan::call('config:clear');
                     Artisan::call('route:clear');
                     Artisan::call('view:clear');
