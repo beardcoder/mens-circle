@@ -53,17 +53,24 @@ RUN composer dump-autoload \
 FROM ${FRANKENPHP_IMAGE} AS production
 
 # Install required PHP extensions:
-# - intl:      required by Filament
-# - gd:        image driver for Spatie Media Library (default)
-# - exif:      EXIF data extraction from images
-# - opcache:   bytecode cache for production performance
-# - pdo_pgsql: PostgreSQL driver
+# - intl:    required by Filament
+# - gd:      image driver for Spatie Media Library (default)
+# - exif:    EXIF data extraction from images
+# - opcache: bytecode cache for production performance
 RUN install-php-extensions \
     intl \
     gd \
     exif \
-    opcache \
-    pdo_pgsql
+    opcache
+
+# pdo_pgsql: build from PHP source against plain libpq-dev.
+# install-php-extensions would pull postgresql18-dev, which drags in
+# llvm20/clang20 (Postgres 18 JIT toolchain) — 668 MB of build deps we
+# don't need. libpq-dev alone is enough for the PDO driver.
+RUN apk add --no-cache --virtual .pdo-pgsql-build libpq-dev \
+    && docker-php-ext-install -j"$(nproc)" pdo_pgsql \
+    && apk del --purge .pdo-pgsql-build \
+    && apk add --no-cache libpq
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
