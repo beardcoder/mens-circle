@@ -10,6 +10,7 @@
         "filament/spatie-laravel-settings-plugin": "^5.4.1",
         "laravel-notification-channels/pushover": "^5.0",
         "laravel/framework": "^13.2",
+        "laravel/octane": "^2.17",
         "laravel/socialite": "^5.26.0",
         "laravel/tinker": "^3.0",
         "nunomaduro/essentials": "^1.2",
