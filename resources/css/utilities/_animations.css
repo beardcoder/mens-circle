@@ -1,48 +1,44 @@
 /**
  * Animation Utilities
- * Using IntersectionObserver + Web Animations API for scroll-triggered animations
+ * Smooth, organic scroll-triggered animations via IntersectionObserver + Web Animations API
  *
  * This file provides:
- * - Continuous/looping keyframe animations (used by other CSS files)
- * - Scroll progress indicator
+ * - Marker classes for scroll-triggered reveal animations (JS-driven)
+ * - Continuous/looping keyframe animations for decorative elements
+ * - Scroll progress indicator (CSS scroll-timeline)
  * - Scroll-to-top button
- * - Reduced motion support
+ * - Reduced motion & no-JS fallbacks
  *
- * Scroll-triggered animations are handled by IntersectionObserver
- * with the Web Animations API for smooth, GPU-accelerated playback
  * @see resources/js/components/scroll-animations.ts
  */
 
 /* ============================================
-   Scroll-Triggered Animation Classes
-   Initial states - IntersectionObserver + Web Animations API handles the animation
+   Scroll-Triggered Animation Marker Classes
+   JavaScript handles the actual animation;
+   CSS only provides initial hidden state
    ============================================ */
 
 /**
- * These classes mark elements for scroll-triggered animations.
- * IntersectionObserver detects viewport entry and triggers the Web Animations API
- * for smooth, GPU-accelerated playback with natural easing.
- *
  * Usage:
- *   <div class="fade-in">Fades in from bottom</div>
- *   <div class="fade-in-left fade-in-delay-2">Fades from left with delay</div>
+ *   <div class="fade-in">Fades in from below</div>
+ *   <div class="fade-in-left delay-2">Fades from left with delay</div>
  *   <div class="stagger-children">
- *     <div>Child 1</div>
+ *     <div>Child 1 — cascading reveal</div>
  *     <div>Child 2</div>
  *   </div>
  */
 
-/* Marker classes for scroll animations - no CSS animation needed */
+/* Marker classes — JS sets initial opacity to 0, then animates in */
 .fade-in,
 .fade-in-up,
 .fade-in-down,
 .fade-in-left,
 .fade-in-right,
 .fade-in-scale {
-  /* Initial state and will-change set dynamically by JavaScript */
+  /* Initial state set dynamically by JavaScript */
 }
 
-/* Delay classes - handled by JavaScript */
+/* Delay tiers (applied by JS: 120ms per tier) */
 .delay-1,
 .delay-2,
 .delay-3,
@@ -54,7 +50,7 @@
   /* Delays are applied programmatically by JavaScript */
 }
 
-/* Stagger container - children animate with staggered timing */
+/* Stagger container – children animate with cascading timing */
 .stagger-children {
   /* Container marker for scroll animation stagger effect */
 }
