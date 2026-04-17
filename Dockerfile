@@ -57,11 +57,15 @@ FROM ${FRANKENPHP_IMAGE} AS production
 # - gd:      image driver for Spatie Media Library (default)
 # - exif:    EXIF data extraction from images
 # - opcache: bytecode cache for production performance
+# - pcntl:   signal handling for Octane (SIGINT/SIGTERM)
+# - redis:   phpredis native client for CACHE_STORE=redis
 RUN install-php-extensions \
     intl \
     gd \
     exif \
-    opcache
+    opcache \
+    pcntl \
+    redis
 
 # pdo_pgsql: build from PHP source against plain libpq-dev.
 # install-php-extensions would pull postgresql18-dev, which drags in
