@@ -129,9 +129,7 @@ class ParticipantResource extends Resource
                     ->query(static fn(Builder $query): Builder => $query->has('registrations')),
                 Filter::make('newsletter_subscriber')
                     ->label('Newsletter-Abonnent')
-                    ->query(static fn(Builder $query): Builder => $query->whereHas('newsletterSubscription', static fn(Builder $q) => $q->whereNull(
-                        'unsubscribed_at',
-                    ))),
+                    ->query(static fn(Builder $query): Builder => $query->whereHas('newsletterSubscription', static fn(Builder $q): Builder => $q->whereNull('unsubscribed_at'))),
             ])
             ->recordActions([EditAction::make(), DeleteAction::make()])
             ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])])

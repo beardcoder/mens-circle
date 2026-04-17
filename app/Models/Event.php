@@ -170,6 +170,14 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
         return [url('/'), url('/event'), route('event.show.slug', $this->slug)];
     }
 
+    /**
+     * @return list<string>
+     */
+    public function getCacheKeys(): array
+    {
+        return ['next_event_data'];
+    }
+
     public function generateICalContent(): string
     {
         $startDateTime = $this->event_date

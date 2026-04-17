@@ -49,17 +49,14 @@ final class LlmsController
     private function generateHeader(): array
     {
         $siteName = $this->settings->site_name ?? 'Maennerkreis Niederbayern';
-        $siteDescription
-            = $this->settings->site_description
+        $siteDescription = $this->settings->site_description
             ?? 'Authentischer Austausch, Gemeinschaft und persoenliches Wachstum fuer Maenner in Niederbayern.';
-        $siteTagline = $this->settings->site_tagline ?? '';
 
-        $lines = [];
-        $lines[] = '# ' . $siteName;
-        $lines[] = '';
+        $lines = ['# ' . $siteName, ''];
 
-        if ($siteTagline !== '' && $siteTagline !== '0') {
-            $lines[] = '> ' . $siteTagline;
+        $tagline = $this->settings->site_tagline ?? '';
+        if ($tagline !== '' && $tagline !== '0') {
+            $lines[] = '> ' . $tagline;
             $lines[] = '';
         }
 
@@ -68,27 +65,18 @@ final class LlmsController
         $lines[] = '**Letzte Aktualisierung:** ' . now()->format('d.m.Y H:i') . ' Uhr';
         $lines[] = '**Website:** ' . url('/');
 
-        if ($this->settings->contact_email ?? false) {
-            $lines[] = '**Kontakt E-Mail:** ' . $this->settings->contact_email;
+        foreach ([
+            'Kontakt E-Mail' => $this->settings->contact_email ?? null,
+            'Telefon' => $this->settings->contact_phone ?? null,
+            'Standort' => $this->settings->location ?? null,
+            'WhatsApp Community' => $this->settings->whatsapp_community_link ?? null,
+        ] as $label => $value) {
+            if ($value) {
+                $lines[] = "**{$label}:** {$value}";
+            }
         }
 
-        if ($this->settings->contact_phone ?? false) {
-            $lines[] = '**Telefon:** ' . $this->settings->contact_phone;
-        }
-
-        if ($this->settings->location ?? false) {
-            $lines[] = '**Standort:** ' . $this->settings->location;
-        }
-
-        if ($this->settings->whatsapp_community_link ?? false) {
-            $lines[] = '**WhatsApp Community:** ' . $this->settings->whatsapp_community_link;
-        }
-
-        $lines[] = '';
-        $lines[] = '---';
-        $lines[] = '';
-
-        return $lines;
+        return [...$lines, '', '---', ''];
     }
 
     /**
@@ -98,9 +86,7 @@ final class LlmsController
     {
         $siteName = $this->settings->site_name ?? 'Maennerkreis Niederbayern';
 
-        $lines = [];
-        $lines[] = '## Ueber ' . $siteName;
-        $lines[] = '';
+        $lines = ['## Ueber ' . $siteName, ''];
         $lines[] = 'Der Maennerkreis Niederbayern ist eine Gemeinschaft fuer Maenner, die sich regelmaessig zu Veranstaltungen treffen. Die Website bietet Informationen zu kommenden Events, Anmeldung zu Veranstaltungen und einen Newsletter-Service.';
         $lines[] = '';
 
@@ -125,10 +111,7 @@ final class LlmsController
             $lines[] = '';
         }
 
-        $lines[] = '---';
-        $lines[] = '';
-
-        return $lines;
+        return [...$lines, '---', ''];
     }
 
     /**
@@ -136,32 +119,26 @@ final class LlmsController
      */
     private function generateStatistics(): array
     {
-        $totalEvents = Event::published()->count();
-        $upcomingEventsCount = Event::published()->upcoming()->count();
-        $pastEventsCount = Event::published()->where('event_date', '<', now())->count();
         $totalTestimonials = Testimonial::published()->count();
-        $totalNewsletterSubscribers = NewsletterSubscription::whereNull('unsubscribed_at')->count();
+        $totalSubscribers = NewsletterSubscription::activeCount();
 
-        $lines = [];
-        $lines[] = '## Statistiken';
-        $lines[] = '';
-        $lines[] = '- **Gesamtanzahl Veranstaltungen:** ' . $totalEvents;
-        $lines[] = '- **Kommende Veranstaltungen:** ' . $upcomingEventsCount;
-        $lines[] = '- **Vergangene Veranstaltungen:** ' . $pastEventsCount;
+        $lines = [
+            '## Statistiken',
+            '',
+            '- **Gesamtanzahl Veranstaltungen:** ' . Event::published()->count(),
+            '- **Kommende Veranstaltungen:** ' . Event::published()->upcoming()->count(),
+            '- **Vergangene Veranstaltungen:** ' . Event::published()->where('event_date', '<', now())->count(),
+        ];
 
         if ($totalTestimonials > 0) {
             $lines[] = '- **Veroeffentlichte Erfahrungsberichte:** ' . $totalTestimonials;
         }
 
-        if ($totalNewsletterSubscribers > 0) {
-            $lines[] = '- **Newsletter-Abonnenten:** ' . $totalNewsletterSubscribers;
+        if ($totalSubscribers > 0) {
+            $lines[] = '- **Newsletter-Abonnenten:** ' . $totalSubscribers;
         }
 
-        $lines[] = '';
-        $lines[] = '---';
-        $lines[] = '';
-
-        return $lines;
+        return [...$lines, '', '---', ''];
     }
 
     /**
@@ -169,29 +146,19 @@ final class LlmsController
      */
     private function generateUpcomingEvents(): array
     {
-        $lines = [];
-        $lines[] = '## Kommende Veranstaltungen';
-        $lines[] = '';
+        $events = Event::published()->upcoming()->orderBy('event_date')->get();
 
-        $upcomingEvents = Event::published()
-            ->upcoming()
-            ->orderBy('event_date')
-            ->get();
+        $lines = ['## Kommende Veranstaltungen', ''];
 
-        if ($upcomingEvents->isEmpty()) {
-            $lines[] = 'Aktuell sind keine kommenden Veranstaltungen geplant.';
-            $lines[] = '';
-
-            return $lines;
+        if ($events->isEmpty()) {
+            return [...$lines, 'Aktuell sind keine kommenden Veranstaltungen geplant.', ''];
         }
 
-        foreach ($upcomingEvents as $event) {
+        foreach ($events as $event) {
             $lines[] = '### ' . $event->title;
             $lines[] = '';
             $lines[] = '**Datum:** ' . $event->event_date->format('d.m.Y');
-            $startTime = $event->start_time->format('H:i');
-            $endTime = $event->end_time->format('H:i');
-            $lines[] = "**Uhrzeit:** {$startTime} - {$endTime} Uhr";
+            $lines[] = '**Uhrzeit:** ' . $event->start_time->format('H:i') . ' - ' . $event->end_time->format('H:i') . ' Uhr';
 
             if ($event->location) {
                 $lines[] = '**Ort:** ' . $event->location;
@@ -212,9 +179,8 @@ final class LlmsController
                 $lines[] = $this->convertHtmlToMarkdown($event->description);
             }
 
-            $url = url()->route('event.show.slug', $event->slug);
             $lines[] = '';
-            $lines[] = '**Mehr Informationen und Anmeldung:** ' . $url;
+            $lines[] = '**Mehr Informationen und Anmeldung:** ' . route('event.show.slug', $event->slug);
             $lines[] = '';
             $lines[] = '---';
             $lines[] = '';
@@ -228,31 +194,25 @@ final class LlmsController
      */
     private function generatePastEvents(): array
     {
-        $pastEvents = Event::published()
+        $events = Event::published()
             ->where('event_date', '<', now())
             ->orderByDesc('event_date')
             ->limit(5)
             ->get();
 
-        if ($pastEvents->isEmpty()) {
+        if ($events->isEmpty()) {
             return [];
         }
 
-        $lines = [];
-        $lines[] = '## Vergangene Veranstaltungen (letzte 5)';
-        $lines[] = '';
+        $lines = ['## Vergangene Veranstaltungen (letzte 5)', ''];
 
-        foreach ($pastEvents as $event) {
+        foreach ($events as $event) {
+            $url = route('event.show.slug', $event->slug);
             $date = $event->event_date->format('d.m.Y');
-            $url = url()->route('event.show.slug', $event->slug);
             $lines[] = "- **[{$event->title}]({$url})** - {$date}";
         }
 
-        $lines[] = '';
-        $lines[] = '---';
-        $lines[] = '';
-
-        return $lines;
+        return [...$lines, '', '---', ''];
     }
 
     /**
@@ -260,15 +220,16 @@ final class LlmsController
      */
     private function generatePageContent(): array
     {
-        $lines = [];
-        $lines[] = '## Seiteninhalte';
-        $lines[] = '';
-        $lines[] = '### Startseite';
-        $lines[] = '';
-        $lines[] = 'Die Hauptseite mit einem Ueberblick ueber den Maennerkreis Niederbayern.';
-        $lines[] = '';
-        $lines[] = '**URL:** ' . url()->route('home');
-        $lines[] = '';
+        $lines = [
+            '## Seiteninhalte',
+            '',
+            '### Startseite',
+            '',
+            'Die Hauptseite mit einem Ueberblick ueber den Maennerkreis Niederbayern.',
+            '',
+            '**URL:** ' . route('home'),
+            '',
+        ];
 
         $pages = Page::with('contentBlocks')
             ->published()
@@ -279,8 +240,7 @@ final class LlmsController
         foreach ($pages as $page) {
             $lines[] = '### ' . $page->title;
             $lines[] = '';
-            $url = url()->route('page.show', $page->slug);
-            $lines[] = '**URL:** ' . $url;
+            $lines[] = '**URL:** ' . route('page.show', $page->slug);
             $lines[] = '';
 
             foreach ($page->contentBlocks as $block) {
@@ -305,9 +265,7 @@ final class LlmsController
             return [];
         }
 
-        $lines = [];
-        $lines[] = '## Haeufig gestellte Fragen (FAQ)';
-        $lines[] = '';
+        $lines = ['## Haeufig gestellte Fragen (FAQ)', ''];
 
         foreach ($faqBlocks as $faq) {
             if (!isset($faq['items'])) {
@@ -322,13 +280,13 @@ final class LlmsController
                 continue;
             }
 
-            if (isset($faq['title']) && \is_string($faq['title']) && $faq['title'] !== '') {
-                $lines[] = '### ' . $this->convertHtmlToMarkdown($faq['title']);
+            if ($title = $this->stringField($faq, 'title')) {
+                $lines[] = '### ' . $this->convertHtmlToMarkdown($title);
                 $lines[] = '';
             }
 
-            if (isset($faq['intro']) && \is_string($faq['intro']) && $faq['intro'] !== '') {
-                $lines[] = $faq['intro'];
+            if ($intro = $this->stringField($faq, 'intro')) {
+                $lines[] = $intro;
                 $lines[] = '';
             }
 
@@ -337,37 +295,24 @@ final class LlmsController
                     continue;
                 }
 
-                if (!isset($item['question'], $item['answer'])) {
+                $question = $this->stringField($item, 'question');
+                $answer = $this->stringField($item, 'answer');
+                if (!$question) {
                     continue;
                 }
 
-                if (!\is_string($item['question'])) {
+                if (!$answer) {
                     continue;
                 }
 
-                if ($item['question'] === '') {
-                    continue;
-                }
-
-                if (!\is_string($item['answer'])) {
-                    continue;
-                }
-
-                if ($item['answer'] === '') {
-                    continue;
-                }
-
-                $lines[] = "**Q: {$item['question']}**";
+                $lines[] = "**Q: {$question}**";
                 $lines[] = '';
-                $lines[] = '**A:** ' . $this->convertHtmlToMarkdown($item['answer']);
+                $lines[] = '**A:** ' . $this->convertHtmlToMarkdown($answer);
                 $lines[] = '';
             }
         }
 
-        $lines[] = '---';
-        $lines[] = '';
-
-        return $lines;
+        return [...$lines, '---', ''];
     }
 
     /**
@@ -381,11 +326,7 @@ final class LlmsController
             return [];
         }
 
-        $lines = [];
-        $lines[] = '## Erfahrungsberichte';
-        $lines[] = '';
-        $lines[] = 'Was Teilnehmer ueber den Maennerkreis sagen:';
-        $lines[] = '';
+        $lines = ['## Erfahrungsberichte', '', 'Was Teilnehmer ueber den Maennerkreis sagen:', ''];
 
         foreach ($testimonials as $testimonial) {
             $lines[] = '> ' . $testimonial->quote;
@@ -400,10 +341,7 @@ final class LlmsController
             $lines[] = '';
         }
 
-        $lines[] = '---';
-        $lines[] = '';
-
-        return $lines;
+        return [...$lines, '---', ''];
     }
 
     /**
@@ -414,8 +352,8 @@ final class LlmsController
         return [
             '## Rechtliche Informationen',
             '',
-            '- **[Impressum](' . url()->route('page.show', 'impressum') . '):** Rechtliche Angaben und Anbieterkennzeichnung',
-            '- **[Datenschutz](' . url()->route('page.show', 'datenschutz') . '):** Datenschutzerklaerung gemaess DSGVO',
+            '- **[Impressum](' . route('page.show', 'impressum') . '):** Rechtliche Angaben und Anbieterkennzeichnung',
+            '- **[Datenschutz](' . route('page.show', 'datenschutz') . '):** Datenschutzerklaerung gemaess DSGVO',
             '',
             '---',
             '',
@@ -427,21 +365,22 @@ final class LlmsController
      */
     private function generateActionsSection(): array
     {
-        $lines = [];
-        $lines[] = '## Verfuegbare Aktionen auf der Website';
-        $lines[] = '';
-        $lines[] = '1. **Newsletter-Anmeldung**';
-        $lines[] = '   - Ueber das Formular auf der Startseite koennen sich Interessierte fuer den Newsletter anmelden';
-        $lines[] = '   - Regelmaessige Updates zu neuen Veranstaltungen und Neuigkeiten';
-        $lines[] = '';
-        $lines[] = '2. **Veranstaltungsanmeldung**';
-        $lines[] = '   - Ueber die jeweilige Veranstaltungsseite koennen sich Teilnehmer direkt registrieren';
-        $lines[] = '   - Online-Formular mit persoenlichen Daten und optionalen Notizen';
-        $lines[] = '';
-        $lines[] = '3. **Erfahrungsbericht teilen**';
-        $lines[] = '   - Teilnehmer koennen ihre Erfahrungen ueber ein Formular einreichen';
-        $lines[] = '   - Nach Pruefung werden Erfahrungsberichte auf der Website veroeffentlicht';
-        $lines[] = '';
+        $lines = [
+            '## Verfuegbare Aktionen auf der Website',
+            '',
+            '1. **Newsletter-Anmeldung**',
+            '   - Ueber das Formular auf der Startseite koennen sich Interessierte fuer den Newsletter anmelden',
+            '   - Regelmaessige Updates zu neuen Veranstaltungen und Neuigkeiten',
+            '',
+            '2. **Veranstaltungsanmeldung**',
+            '   - Ueber die jeweilige Veranstaltungsseite koennen sich Teilnehmer direkt registrieren',
+            '   - Online-Formular mit persoenlichen Daten und optionalen Notizen',
+            '',
+            '3. **Erfahrungsbericht teilen**',
+            '   - Teilnehmer koennen ihre Erfahrungen ueber ein Formular einreichen',
+            '   - Nach Pruefung werden Erfahrungsberichte auf der Website veroeffentlicht',
+            '',
+        ];
 
         if ($this->settings->whatsapp_community_link ?? false) {
             $lines[] = '4. **WhatsApp Community beitreten**';
@@ -458,252 +397,171 @@ final class LlmsController
      */
     private function formatContentBlock(ContentBlock $block): array
     {
-        $lines = [];
         /** @var array<string, mixed> $data */
         $data = $block->data;
 
-        switch ($block->type) {
-            case 'hero':
-                if (isset($data['label']) && \is_string($data['label']) && $data['label'] !== '') {
-                    $lines[] = "*{$data['label']}*";
-                    $lines[] = '';
-                }
+        return match ($block->type) {
+            'hero' => $this->formatHeroBlock($data),
+            'text_section' => $this->formatTextSectionBlock($data),
+            'intro' => $this->formatIntroBlock($data),
+            'value_items', 'archetypes', 'journey_steps' => $this->formatItemsBlock($data),
+            'moderator' => $this->formatModeratorBlock($data),
+            'cta' => $this->formatCtaBlock($data),
+            'newsletter' => $this->formatNewsletterBlock($data),
+            'whatsapp_community' => $this->formatWhatsappBlock(),
+            'testimonials' => [
+                '#### Erfahrungsberichte', '',
+                '*Dieser Bereich zeigt automatisch veroeffentlichte Erfahrungsberichte von Teilnehmern.*', '',
+            ],
+            default => [],
+        };
+    }
 
-                if (isset($data['title']) && \is_string($data['title']) && $data['title'] !== '') {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
-                    $lines[] = '';
-                }
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function formatHeroBlock(array $data): array
+    {
+        $lines = $this->appendEyebrow([], $data, 'label');
+        $lines = $this->appendHeading($lines, $data, 'title');
+        $lines = $this->appendParagraph($lines, $data, 'description');
 
-                if (isset($data['description']) && \is_string($data['description']) && $data['description'] !== '') {
-                    $lines[] = $data['description'];
-                    $lines[] = '';
-                }
+        return $this->appendLinkAction($lines, $data, 'button_text', 'button_link', 'Call-to-Action');
+    }
 
-                $hasButtonText = isset($data['button_text']) && \is_string($data['button_text']) && $data['button_text'] !== '';
-                $hasButtonLink = isset($data['button_link']) && \is_string($data['button_link']) && $data['button_link'] !== '';
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function formatTextSectionBlock(array $data): array
+    {
+        $lines = $this->appendEyebrow([], $data, 'eyebrow');
 
-                if ($hasButtonText && $hasButtonLink) {
-                    $lines[] = \sprintf('**Call-to-Action:** [%s](%s)', $data['button_text'], $data['button_link']);
-                    $lines[] = '';
-                }
+        if ($title = $this->stringField($data, 'title')) {
+            $lines[] = '#### ' . $title;
+            $lines[] = '';
+        }
 
-                break;
+        if ($content = $this->stringField($data, 'content')) {
+            $lines[] = $this->convertHtmlToMarkdown($content);
+            $lines[] = '';
+        }
 
-            case 'text_section':
-                if (isset($data['eyebrow']) && \is_string($data['eyebrow']) && $data['eyebrow'] !== '') {
-                    $lines[] = "*{$data['eyebrow']}*";
-                    $lines[] = '';
-                }
+        return $lines;
+    }
 
-                if (isset($data['title']) && \is_string($data['title']) && $data['title'] !== '') {
-                    $lines[] = '#### ' . $data['title'];
-                    $lines[] = '';
-                }
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function formatIntroBlock(array $data): array
+    {
+        $lines = $this->appendEyebrow([], $data, 'eyebrow');
+        $lines = $this->appendHeading($lines, $data, 'title');
+        $lines = $this->appendParagraph($lines, $data, 'text');
 
-                if (isset($data['content']) && \is_string($data['content']) && $data['content'] !== '') {
-                    $lines[] = $this->convertHtmlToMarkdown($data['content']);
-                    $lines[] = '';
-                }
+        if ($quote = $this->stringField($data, 'quote')) {
+            $lines[] = '> ' . $this->convertHtmlToMarkdown($quote);
+            $lines[] = '';
+        }
 
-                break;
+        if (isset($data['values']) && \is_array($data['values'])) {
+            return $this->appendItemList($lines, $data['values']);
+        }
 
-            case 'intro':
-                if (isset($data['eyebrow']) && \is_string($data['eyebrow']) && $data['eyebrow'] !== '') {
-                    $lines[] = "*{$data['eyebrow']}*";
-                    $lines[] = '';
-                }
+        return $lines;
+    }
 
-                if (isset($data['title']) && \is_string($data['title']) && $data['title'] !== '') {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
-                    $lines[] = '';
-                }
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function formatItemsBlock(array $data): array
+    {
+        $lines = $this->appendEyebrow([], $data, 'eyebrow');
+        $lines = $this->appendHeading($lines, $data, 'title');
+        $lines = $this->appendParagraph($lines, $data, 'subtitle');
+        $lines = $this->appendParagraph($lines, $data, 'intro');
 
-                if (isset($data['text']) && \is_string($data['text']) && $data['text'] !== '') {
-                    $lines[] = $data['text'];
-                    $lines[] = '';
-                }
+        $items = $data['items'] ?? $data['steps'] ?? [];
+        if (\is_array($items)) {
+            return $this->appendItemList($lines, $items);
+        }
 
-                if (isset($data['quote']) && \is_string($data['quote']) && $data['quote'] !== '') {
-                    $lines[] = '> ' . $this->convertHtmlToMarkdown($data['quote']);
-                    $lines[] = '';
-                }
+        return $lines;
+    }
 
-                if (isset($data['values']) && \is_array($data['values']) && $data['values'] !== []) {
-                    foreach ($data['values'] as $value) {
-                        if (!\is_array($value)) {
-                            continue;
-                        }
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function formatModeratorBlock(array $data): array
+    {
+        $lines = $this->appendEyebrow([], $data, 'eyebrow');
+        $lines = $this->appendHeading($lines, $data, 'name');
 
-                        if (!isset($value['title'])) {
-                            continue;
-                        }
+        if ($bio = $this->stringField($data, 'bio')) {
+            $lines[] = $this->convertHtmlToMarkdown($bio);
+            $lines[] = '';
+        }
 
-                        if (!\is_string($value['title'])) {
-                            continue;
-                        }
+        if ($quote = $this->stringField($data, 'quote')) {
+            $lines[] = '> ' . $quote;
+            $lines[] = '';
+        }
 
-                        if ($value['title'] === '') {
-                            continue;
-                        }
+        return $lines;
+    }
 
-                        $prefix = $this->getListPrefix($value['number'] ?? null);
-                        $lines[] = "{$prefix}**{$value['title']}**";
-                        if (isset($value['description']) && \is_string($value['description']) && $value['description'] !== '') {
-                            $lines[] = '  ' . $value['description'];
-                        }
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function formatCtaBlock(array $data): array
+    {
+        $lines = $this->appendEyebrow([], $data, 'eyebrow');
+        $lines = $this->appendHeading($lines, $data, 'title');
+        $lines = $this->appendParagraph($lines, $data, 'text');
 
-                        $lines[] = '';
-                    }
-                }
+        return $this->appendLinkAction($lines, $data, 'button_text', 'button_link', 'Aktion');
+    }
 
-                break;
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function formatNewsletterBlock(array $data): array
+    {
+        $lines = $this->appendEyebrow([], $data, 'eyebrow');
+        $lines = $this->appendHeading($lines, $data, 'title');
+        $lines = $this->appendParagraph($lines, $data, 'text');
 
-            case 'value_items':
-            case 'archetypes':
-            case 'journey_steps':
-                if (isset($data['eyebrow']) && \is_string($data['eyebrow']) && $data['eyebrow'] !== '') {
-                    $lines[] = "*{$data['eyebrow']}*";
-                    $lines[] = '';
-                }
+        return [...$lines, '*Besucher koennen sich hier fuer den Newsletter anmelden.*', ''];
+    }
 
-                if (isset($data['title']) && \is_string($data['title']) && $data['title'] !== '') {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
-                    $lines[] = '';
-                }
+    /**
+     * @return array<int, string>
+     */
+    private function formatWhatsappBlock(): array
+    {
+        $lines = [
+            '#### WhatsApp Community',
+            '',
+            'Tritt unserer WhatsApp Community bei und vernetze dich mit anderen Maennern aus der Region.',
+            '',
+        ];
 
-                if (isset($data['subtitle']) && \is_string($data['subtitle']) && $data['subtitle'] !== '') {
-                    $lines[] = $data['subtitle'];
-                    $lines[] = '';
-                }
-
-                if (isset($data['intro']) && \is_string($data['intro']) && $data['intro'] !== '') {
-                    $lines[] = $data['intro'];
-                    $lines[] = '';
-                }
-
-                $items = $data['items'] ?? $data['steps'] ?? [];
-                if (\is_array($items) && $items !== []) {
-                    foreach ($items as $item) {
-                        if (!\is_array($item)) {
-                            continue;
-                        }
-
-                        if (!isset($item['title'])) {
-                            continue;
-                        }
-
-                        if (!\is_string($item['title'])) {
-                            continue;
-                        }
-
-                        if ($item['title'] === '') {
-                            continue;
-                        }
-
-                        $prefix = $this->getListPrefix($item['number'] ?? null);
-                        $lines[] = "{$prefix}**{$item['title']}**";
-
-                        if (isset($item['description']) && \is_string($item['description']) && $item['description'] !== '') {
-                            $lines[] = '  ' . $item['description'];
-                        }
-
-                        $lines[] = '';
-                    }
-                }
-
-                break;
-
-            case 'moderator':
-                if (isset($data['eyebrow']) && \is_string($data['eyebrow']) && $data['eyebrow'] !== '') {
-                    $lines[] = "*{$data['eyebrow']}*";
-                    $lines[] = '';
-                }
-
-                if (isset($data['name']) && \is_string($data['name']) && $data['name'] !== '') {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['name']);
-                    $lines[] = '';
-                }
-
-                if (isset($data['bio']) && \is_string($data['bio']) && $data['bio'] !== '') {
-                    $lines[] = $this->convertHtmlToMarkdown($data['bio']);
-                    $lines[] = '';
-                }
-
-                if (isset($data['quote']) && \is_string($data['quote']) && $data['quote'] !== '') {
-                    $lines[] = '> ' . $data['quote'];
-                    $lines[] = '';
-                }
-
-                break;
-
-            case 'cta':
-                if (isset($data['eyebrow']) && \is_string($data['eyebrow']) && $data['eyebrow'] !== '') {
-                    $lines[] = "*{$data['eyebrow']}*";
-                    $lines[] = '';
-                }
-
-                if (isset($data['title']) && \is_string($data['title']) && $data['title'] !== '') {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
-                    $lines[] = '';
-                }
-
-                if (isset($data['text']) && \is_string($data['text']) && $data['text'] !== '') {
-                    $lines[] = $data['text'];
-                    $lines[] = '';
-                }
-
-                $hasButtonText = isset($data['button_text']) && \is_string($data['button_text']) && $data['button_text'] !== '';
-                $hasButtonLink = isset($data['button_link']) && \is_string($data['button_link']) && $data['button_link'] !== '';
-
-                if ($hasButtonText && $hasButtonLink) {
-                    $lines[] = \sprintf('**Aktion:** [%s](%s)', $data['button_text'], $data['button_link']);
-                    $lines[] = '';
-                }
-
-                break;
-
-            case 'newsletter':
-                if (isset($data['eyebrow']) && \is_string($data['eyebrow']) && $data['eyebrow'] !== '') {
-                    $lines[] = "*{$data['eyebrow']}*";
-                    $lines[] = '';
-                }
-
-                if (isset($data['title']) && \is_string($data['title']) && $data['title'] !== '') {
-                    $lines[] = '#### ' . $this->convertHtmlToMarkdown($data['title']);
-                    $lines[] = '';
-                }
-
-                if (isset($data['text']) && \is_string($data['text']) && $data['text'] !== '') {
-                    $lines[] = $data['text'];
-                    $lines[] = '';
-                }
-
-                $lines[] = '*Besucher koennen sich hier fuer den Newsletter anmelden.*';
-                $lines[] = '';
-                break;
-
-            case 'whatsapp_community':
-                $lines[] = '#### WhatsApp Community';
-                $lines[] = '';
-                $lines[] = 'Tritt unserer WhatsApp Community bei und vernetze dich mit anderen Maennern aus der Region.';
-                $lines[] = '';
-                if ($this->settings->whatsapp_community_link ?? false) {
-                    $lines[] = '**Link zur Community:** ' . $this->settings->whatsapp_community_link;
-                    $lines[] = '';
-                }
-
-                break;
-
-            case 'testimonials':
-                $lines[] = '#### Erfahrungsberichte';
-                $lines[] = '';
-                $lines[] = '*Dieser Bereich zeigt automatisch veroeffentlichte Erfahrungsberichte von Teilnehmern.*';
-                $lines[] = '';
-                break;
-
-            case 'faq':
-                // FAQ blocks are handled separately in extractFaqBlocks()
-                break;
+        if ($this->settings->whatsapp_community_link ?? false) {
+            $lines[] = '**Link zur Community:** ' . $this->settings->whatsapp_community_link;
+            $lines[] = '';
         }
 
         return $lines;
@@ -716,23 +574,11 @@ final class LlmsController
     {
         $faqBlocks = [];
 
-        $pages = Page::with('contentBlocks')->published()->get();
-
-        foreach ($pages as $page) {
+        foreach (Page::with('contentBlocks')->published()->get() as $page) {
             foreach ($page->contentBlocks as $block) {
-                if ($block->type !== 'faq') {
-                    continue;
+                if ($block->type === 'faq' && !empty($block->data['items'] ?? null)) {
+                    $faqBlocks[] = $block->data;
                 }
-
-                if (!isset($block->data['items'])) {
-                    continue;
-                }
-
-                if ($block->data['items'] === []) {
-                    continue;
-                }
-
-                $faqBlocks[] = $block->data;
             }
         }
 
@@ -745,84 +591,149 @@ final class LlmsController
             return '';
         }
 
-        // Remove script and style tags completely
         $html = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $html) ?? $html;
         $html = preg_replace('/<style[^>]*>.*?<\/style>/is', '', $html) ?? $html;
 
-        // Convert common HTML tags to Markdown
         $patterns = [
-            // Headers
             '/<h1[^>]*>(.*?)<\/h1>/is' => '# $1',
             '/<h2[^>]*>(.*?)<\/h2>/is' => '## $1',
             '/<h3[^>]*>(.*?)<\/h3>/is' => '### $1',
             '/<h4[^>]*>(.*?)<\/h4>/is' => '#### $1',
             '/<h5[^>]*>(.*?)<\/h5>/is' => '##### $1',
             '/<h6[^>]*>(.*?)<\/h6>/is' => '###### $1',
-
-            // Strong/Bold
             '/<strong[^>]*>(.*?)<\/strong>/is' => '**$1**',
             '/<b[^>]*>(.*?)<\/b>/is' => '**$1**',
-
-            // Emphasis/Italic
             '/<em[^>]*>(.*?)<\/em>/is' => '*$1*',
             '/<i[^>]*>(.*?)<\/i>/is' => '*$1*',
-
-            // Links
             '/<a[^>]*href=["\']([^"\']*)["\'][^>]*>(.*?)<\/a>/is' => '[$2]($1)',
-
-            // Line breaks
             '/<br[^>]*>/i' => "\n",
             '/<br\s*\/?>/i' => "\n",
-
-            // Paragraphs
             '/<p[^>]*>(.*?)<\/p>/is' => '$1' . "\n\n",
-
-            // Lists
             '/<ul[^>]*>(.*?)<\/ul>/is' => '$1',
             '/<ol[^>]*>(.*?)<\/ol>/is' => '$1',
             '/<li[^>]*>(.*?)<\/li>/is' => '- $1' . "\n",
-
-            // Blockquotes
             '/<blockquote[^>]*>(.*?)<\/blockquote>/is' => '> $1',
-
-            // Code
             '/<code[^>]*>(.*?)<\/code>/is' => '`$1`',
             '/<pre[^>]*>(.*?)<\/pre>/is' => '```' . "\n" . '$1' . "\n" . '```',
-
-            // Horizontal rule
             '/<hr[^>]*>/i' => '---',
-
-            // Spans with special formatting (preserve the content)
             '/<span[^>]*class=["\']light["\'][^>]*>(.*?)<\/span>/is' => '$1',
         ];
 
-        $markdown = $html;
-        foreach ($patterns as $pattern => $replacement) {
-            $markdown = preg_replace($pattern, $replacement, $markdown) ?? $markdown;
-        }
-
-        // Remove remaining HTML tags
+        $markdown = preg_replace(array_keys($patterns), array_values($patterns), $html) ?? $html;
         $markdown = strip_tags($markdown);
-
-        // Clean up multiple newlines
         $markdown = preg_replace("/\n{3,}/", "\n\n", $markdown) ?? $markdown;
-
-        // Decode HTML entities
         $markdown = html_entity_decode($markdown, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
-        // Trim whitespace
         return trim($markdown);
     }
 
     /**
-     * Get list item prefix based on number value
+     * @param array<array-key, mixed> $data
      */
-    private function getListPrefix(mixed $number): string
+    private function stringField(array $data, string $key): ?string
     {
-        if (in_array($number, [null, '', 0, false], true) || !\is_scalar($number)) {
-            return '- ';
+        $value = $data[$key] ?? null;
+
+        return \is_string($value) && $value !== '' ? $value : null;
+    }
+
+    /**
+     * @param array<int, string> $lines
+     * @param array<array-key, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function appendEyebrow(array $lines, array $data, string $key): array
+    {
+        if ($value = $this->stringField($data, $key)) {
+            $lines[] = "*{$value}*";
+            $lines[] = '';
         }
 
-        return $number . '. ';
+        return $lines;
+    }
+
+    /**
+     * @param array<int, string> $lines
+     * @param array<array-key, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function appendHeading(array $lines, array $data, string $key): array
+    {
+        if ($value = $this->stringField($data, $key)) {
+            $lines[] = '#### ' . $this->convertHtmlToMarkdown($value);
+            $lines[] = '';
+        }
+
+        return $lines;
+    }
+
+    /**
+     * @param array<int, string> $lines
+     * @param array<array-key, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function appendParagraph(array $lines, array $data, string $key): array
+    {
+        if ($value = $this->stringField($data, $key)) {
+            $lines[] = $value;
+            $lines[] = '';
+        }
+
+        return $lines;
+    }
+
+    /**
+     * @param array<int, string> $lines
+     * @param array<array-key, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function appendLinkAction(array $lines, array $data, string $textKey, string $linkKey, string $label): array
+    {
+        $text = $this->stringField($data, $textKey);
+        $link = $this->stringField($data, $linkKey);
+
+        if ($text && $link) {
+            $lines[] = \sprintf('**%s:** [%s](%s)', $label, $text, $link);
+            $lines[] = '';
+        }
+
+        return $lines;
+    }
+
+    /**
+     * @param array<int, string> $lines
+     * @param array<array-key, mixed> $items
+     *
+     * @return array<int, string>
+     */
+    private function appendItemList(array $lines, array $items): array
+    {
+        foreach ($items as $item) {
+            if (!\is_array($item)) {
+                continue;
+            }
+
+            $title = $this->stringField($item, 'title');
+            if (!$title) {
+                continue;
+            }
+
+            $number = $item['number'] ?? null;
+            $prefix = \is_scalar($number) && !\in_array($number, [null, '', 0, false], true) ? "{$number}. " : '- ';
+
+            $lines[] = "{$prefix}**{$title}**";
+
+            if ($description = $this->stringField($item, 'description')) {
+                $lines[] = '  ' . $description;
+            }
+
+            $lines[] = '';
+        }
+
+        return $lines;
     }
 }

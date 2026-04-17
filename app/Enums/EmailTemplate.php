@@ -72,11 +72,7 @@ enum EmailTemplate: string
      */
     public static function newsletterTemplates(): array
     {
-        return array_column(
-            array_filter(self::cases(), static fn(self $case): bool => $case->getCategory() === 'newsletter'),
-            null,
-            'value',
-        );
+        return self::templatesForCategory('newsletter');
     }
 
     /**
@@ -84,8 +80,16 @@ enum EmailTemplate: string
      */
     public static function participantTemplates(): array
     {
+        return self::templatesForCategory('participant');
+    }
+
+    /**
+     * @return array<string, EmailTemplate>
+     */
+    private static function templatesForCategory(string $category): array
+    {
         return array_column(
-            array_filter(self::cases(), static fn(self $case): bool => $case->getCategory() === 'participant'),
+            array_filter(self::cases(), static fn(self $case): bool => $case->getCategory() === $category),
             null,
             'value',
         );

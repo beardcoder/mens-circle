@@ -13,4 +13,11 @@ interface DefinesCacheUrls
      * @return list<string>
      */
     public function getCacheUrls(): array;
+
+    /**
+     * Return additional cache keys to forget on model changes.
+     *
+     * @return list<string>
+     */
+    public function getCacheKeys(): array;
 }

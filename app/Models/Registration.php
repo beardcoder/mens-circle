@@ -59,6 +59,14 @@ class Registration extends Model implements DefinesCacheUrls
     }
 
     /**
+     * @return list<string>
+     */
+    public function getCacheKeys(): array
+    {
+        return ['next_event_data'];
+    }
+
+    /**
      * @return BelongsTo<Participant, $this>
      */
     public function participant(): BelongsTo

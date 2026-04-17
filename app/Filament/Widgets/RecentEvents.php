@@ -20,7 +20,7 @@ class RecentEvents extends TableWidget
         return $table
             ->query(
                 Event::query()
-                    ->where('event_date', '>=', now())
+                    ->upcoming()
                     ->oldest('event_date')
                     ->limit(5),
             )

@@ -21,13 +21,21 @@ trait ClearsResponseCache
                 ResponseCache::forget($urls);
             }
 
-            if (\in_array($model->getTable(), ['events', 'registrations'], true)) {
-                cache()->forget('next_event_data');
+            foreach ($model->getCacheKeys() as $key) {
+                cache()->forget($key);
             }
         };
 
         static::created($clearCache);
         static::updated($clearCache);
         static::deleted($clearCache);
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function getCacheKeys(): array
+    {
+        return [];
     }
 }

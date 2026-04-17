@@ -43,4 +43,12 @@ final class EventRegistrationRequest extends JsonFormRequest
         ];
     }
 
+    /**
+     * @return array{event_id: int, first_name: string, last_name: string, email: string, phone_number: ?string, privacy: bool}
+     */
+    public function registrationData(): array
+    {
+        /** @var array{event_id: int, first_name: string, last_name: string, email: string, phone_number: ?string, privacy: bool} */
+        return $this->validated();
+    }
 }

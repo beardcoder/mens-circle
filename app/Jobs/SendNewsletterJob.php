@@ -8,7 +8,6 @@ use App\Enums\NewsletterStatus;
 use App\Mail\NewsletterMail;
 use App\Models\Newsletter;
 use App\Models\NewsletterSubscription;
-use Exception;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -41,9 +40,7 @@ class SendNewsletterJob implements ShouldBeUnique, ShouldQueue
 
     public function handle(): void
     {
-        $this->newsletter->update([
-            'status' => NewsletterStatus::Sending,
-        ]);
+        $this->newsletter->update(['status' => NewsletterStatus::Sending]);
 
         $recipientCount = 0;
         $failedCount = 0;
@@ -55,16 +52,16 @@ class SendNewsletterJob implements ShouldBeUnique, ShouldQueue
                 /** @var NewsletterSubscription $subscription */
                 foreach ($subscriptions as $subscription) {
                     try {
-                        Mail::to($subscription->participant->email)->send(new NewsletterMail($this->newsletter, $subscription));
-
+                        Mail::to($subscription->participant->email)
+                            ->send(new NewsletterMail($this->newsletter, $subscription));
                         $recipientCount++;
-                    } catch (Exception $e) {
+                    } catch (Throwable $e) {
+                        $failedCount++;
                         Log::error('Failed to send newsletter to subscriber', [
                             'newsletter_id' => $this->newsletter->id,
                             'subscription_id' => $subscription->id,
                             'error' => $e->getMessage(),
                         ]);
-                        $failedCount++;
                     }
                 }
 
@@ -93,9 +90,6 @@ class SendNewsletterJob implements ShouldBeUnique, ShouldQueue
             'error' => $exception->getMessage(),
         ]);
 
-        // Reset status to draft so it can be retried manually
-        $this->newsletter->update([
-            'status' => NewsletterStatus::Draft,
-        ]);
+        $this->newsletter->update(['status' => NewsletterStatus::Draft]);
     }
 }

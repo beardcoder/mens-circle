@@ -18,18 +18,12 @@ class SendEventReminders extends Command
     {
         $this->info('Searching for events happening today or tomorrow...');
 
-        $todayStart = now()->startOfDay();
-        $tomorrowEnd = now()->addDay()->endOfDay();
-
         $registrations = Registration::query()
             ->active()
             ->whereNull('reminder_sent_at')
-            ->whereHas(
-                'event',
-                fn($query) => $query
+            ->whereRelation('event', static fn($query) => $query
                 ->where('is_published', true)
-                ->whereBetween('event_date', [$todayStart, $tomorrowEnd]),
-            )
+                ->whereBetween('event_date', [now()->startOfDay(), now()->addDay()->endOfDay()]))
             ->with(['event', 'participant'])
             ->get();
 
@@ -39,26 +33,22 @@ class SendEventReminders extends Command
             return self::SUCCESS;
         }
 
-        $totalSent = 0;
-
         foreach ($registrations as $registration) {
-            $event = $registration->event;
             $participant = $registration->participant;
-            $isToday = $event->event_date->isToday();
+            $event = $registration->event;
 
-            $participant->notify(new EventReminderNotification($registration, $event, $isToday));
+            $participant->notify(new EventReminderNotification($registration, $event, $event->event_date->isToday()));
 
             $registration->update([
                 'reminder_sent_at' => now(),
                 'sms_reminder_sent_at' => $participant->phone ? now() : null,
             ]);
 
-            $totalSent++;
             $this->line("  -> Reminder sent to: {$participant->email} ({$event->title})");
         }
 
         $this->newLine();
-        $this->info("Sent {$totalSent} reminder(s).");
+        $this->info("Sent {$registrations->count()} reminder(s).");
 
         return self::SUCCESS;
     }

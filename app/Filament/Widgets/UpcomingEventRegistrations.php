@@ -19,7 +19,7 @@ class UpcomingEventRegistrations extends TableWidget
 
     public static function canView(): bool
     {
-        return Event::published()->upcoming()->whereHas('activeRegistrations')->exists();
+        return Event::published()->upcoming()->has('activeRegistrations')->exists();
     }
 
     public function table(Table $table): Table
@@ -34,8 +34,8 @@ class UpcomingEventRegistrations extends TableWidget
             ->query(
                 Registration::query()
                     ->with('participant')
-                    ->where('event_id', $nextEvent->id)
-                    ->whereIn('status', [RegistrationStatus::Registered->value, RegistrationStatus::Attended->value])
+                    ->whereBelongsTo($nextEvent)
+                    ->active()
                     ->latest('registered_at'),
             )
             ->columns([

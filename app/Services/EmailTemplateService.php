@@ -16,14 +16,7 @@ class EmailTemplateService
      */
     public function resolve(EmailTemplate $template, ?Event $event = null): array
     {
-        $event ??= Event::nextEvent();
-
-        $replacements = $this->buildReplacements($event);
-
-        return [
-            'subject' => str_replace(array_keys($replacements), array_values($replacements), $template->getSubject()),
-            'content' => str_replace(array_keys($replacements), array_values($replacements), $template->getContent()),
-        ];
+        return $this->replacePlaceholders($template->getSubject(), $template->getContent(), $event);
     }
 
     /**
@@ -33,13 +26,11 @@ class EmailTemplateService
      */
     public function replacePlaceholders(string $subject, string $content, ?Event $event = null): array
     {
-        $event ??= Event::nextEvent();
-
-        $replacements = $this->buildReplacements($event);
+        $replacements = $this->buildReplacements($event ?? Event::nextEvent());
 
         return [
-            'subject' => str_replace(array_keys($replacements), array_values($replacements), $subject),
-            'content' => str_replace(array_keys($replacements), array_values($replacements), $content),
+            'subject' => strtr($subject, $replacements),
+            'content' => strtr($content, $replacements),
         ];
     }
 
@@ -57,10 +48,6 @@ class EmailTemplateService
             return array_fill_keys($eventPlaceholders, '—');
         }
 
-        $eventUrl = route('event.show.slug', [
-            'slug' => $event->slug,
-        ]);
-
         /** @var string $siteName */
         $siteName = config('app.name', '');
 
@@ -69,7 +56,7 @@ class EmailTemplateService
             '{event_date}' => $event->event_date->translatedFormat('l, d. F Y'),
             '{event_time}' => $event->start_time->format('H:i'),
             '{event_location}' => $event->location ?? '—',
-            '{event_url}' => $eventUrl,
+            '{event_url}' => route('event.show.slug', ['slug' => $event->slug]),
             '{available_spots}' => (string) $event->availableSpots,
             '{cost_basis}' => $event->cost_basis ?? '—',
             '{site_name}' => $siteName,
