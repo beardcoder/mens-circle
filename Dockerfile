@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7-labs
 
-ARG PHP_IMAGE=serversideup/php:8.5-frankenphp
+ARG FRANKENPHP_IMAGE=dunglas/frankenphp:1-php8.5
 
 # ----------------------------
 # 1) Frontend build (Vite) with Bun
@@ -21,10 +21,15 @@ RUN bun run build
 # ----------------------------
 # 2) PHP dependencies (Composer) using same PHP as prod
 # ----------------------------
-FROM ${PHP_IMAGE} AS vendor
+FROM ${FRANKENPHP_IMAGE} AS vendor
 WORKDIR /app
 
-# Note: serversideup/php images come with Composer pre-installed
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends git unzip \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 COPY . .
 
 RUN --mount=type=cache,target=/root/.composer/cache \
@@ -37,67 +42,66 @@ RUN --mount=type=cache,target=/root/.composer/cache \
     --ignore-platform-reqs \
     --optimize-autoloader
 
-# ----------------------------
-# 3) Production image (FrankenPHP)
-# ----------------------------
-FROM ${PHP_IMAGE} AS production
 
-# Install PHP extensions
-# - intl: required by Filament
+# ----------------------------
+# 3) Production image (FrankenPHP + Octane, HTTP/3 ready)
+# ----------------------------
+FROM ${FRANKENPHP_IMAGE} AS production
+
+# Install required PHP extensions:
+# - intl:    required by Filament
 # - imagick: ImageMagick for image processing (Spatie Media Library)
-# - gd: GD library for image manipulation
-# - exif: EXIF data extraction from images
-USER root
+# - gd:      GD library for image manipulation
+# - exif:    EXIF data extraction from images
+# - opcache: bytecode cache for production performance
 RUN install-php-extensions \
     intl \
     imagick \
     gd \
-    exif
-USER www-data
+    exif \
+    opcache
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
     LOG_LEVEL=error \
-    PHP_DATE_TIMEZONE=Europe/Berlin \
-    PHP_MEMORY_LIMIT=512M \
-    # Suppress container-level debug/access logging
-    LOG_OUTPUT_LEVEL=error \
-    PHP_DISPLAY_ERRORS=Off \
-    PHP_DISPLAY_STARTUP_ERRORS=Off \
-    # OPcache: skip file timestamp checks (immutable container)
-    PHP_OPCACHE_ENABLE=1 \
-    PHP_OPCACHE_VALIDATE_TIMESTAMPS=0 \
-    PHP_OPCACHE_REVALIDATE_FREQ=0 \
-    PHP_OPCACHE_MEMORY_CONSUMPTION=256 \
-    PHP_OPCACHE_JIT=tracing \
-    PHP_OPCACHE_JIT_BUFFER_SIZE=64M \
-    # Session cookie security
-    PHP_SESSION_COOKIE_SECURE=1 \
-    # Runtime
-    AUTORUN_ENABLED=true \
-    HEALTHCHECK_PATH=/up \
-    CADDY_SERVER_ROOT=/app/public \
-    APP_BASE_DIR=/app
+    OCTANE_SERVER=frankenphp \
+    # Octane / FrankenPHP runtime defaults (override via compose / k8s as needed)
+    OCTANE_HOST=0.0.0.0 \
+    OCTANE_PORT=80 \
+    OCTANE_ADMIN_PORT=2019 \
+    OCTANE_WORKERS=auto \
+    OCTANE_MAX_REQUESTS=500 \
+    # Set OCTANE_HTTPS=true to enable TLS + HTTP/3 (Caddy autocert for OCTANE_HOST)
+    OCTANE_HTTPS=false \
+    OCTANE_HTTP_REDIRECT=false \
+    APP_BASE_PATH=/app \
+    APP_PUBLIC_PATH=/app/public
+
 WORKDIR /app
 
-# Environment defaults for production
+# PHP runtime tuning (opcache, JIT, memory, timezone)
+COPY --chmod=644 docker/php/app.ini /usr/local/etc/php/conf.d/zz-app.ini
 
 # App + vendor from vendor stage (already contains vendor/)
-# Use --chown to avoid heavy chown layers later
-COPY --from=vendor --chown=www-data:www-data /app /app
+COPY --from=vendor --chown=root:root /app /app
 
-# Built assets overlay
-COPY --from=assets --chown=www-data:www-data /app/public/build /app/public/build
+# Built frontend assets
+COPY --from=assets --chown=root:root /app/public/build /app/public/build
 
-# Update and Optimize autoloader
+# Optimize autoloader now that all files are in place
 RUN composer dump-autoload \
     --no-dev \
     --ignore-platform-reqs \
     --classmap-authoritative \
     --no-interaction
 
-# Copy startup scripts to clear response cache on container start
-USER root
-COPY --chmod=755 docker/entrypoint.d/ /etc/entrypoint.d/
-USER www-data
+# Startup hooks (clear response cache, sitemap, etc.) + entrypoint
+COPY --chmod=755 docker/entrypoint.d/ /docker-entrypoint.d/
+COPY --chmod=755 docker/entrypoint.sh /usr/local/bin/docker-entrypoint
+
+# Expose HTTP (80), HTTPS over TCP (443, HTTP/1.1 + HTTP/2),
+# HTTPS over UDP/QUIC (443, HTTP/3), and Caddy admin (2019)
+EXPOSE 80 443 443/udp 2019
+
+ENTRYPOINT ["docker-entrypoint"]
