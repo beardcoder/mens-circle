@@ -25,8 +25,8 @@ FROM ${FRANKENPHP_IMAGE} AS vendor
 WORKDIR /app
 
 RUN apt-get update \
- && apt-get install -y --no-install-recommends git unzip \
- && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends git unzip \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -41,6 +41,12 @@ RUN --mount=type=cache,target=/root/.composer/cache \
     --prefer-dist \
     --ignore-platform-reqs \
     --optimize-autoloader
+
+RUN composer dump-autoload \
+    --no-dev \
+    --ignore-platform-reqs \
+    --classmap-authoritative \
+    --no-interaction
 
 
 # ----------------------------
@@ -88,13 +94,6 @@ COPY --from=vendor --chown=root:root /app /app
 
 # Built frontend assets
 COPY --from=assets --chown=root:root /app/public/build /app/public/build
-
-# Optimize autoloader now that all files are in place
-RUN composer dump-autoload \
-    --no-dev \
-    --ignore-platform-reqs \
-    --classmap-authoritative \
-    --no-interaction
 
 # Startup hooks (clear response cache, sitemap, etc.) + entrypoint
 COPY --chmod=755 docker/entrypoint.d/ /docker-entrypoint.d/
