@@ -140,7 +140,7 @@ docker build -t mens-circle .
 docker run -p 8080:8080 mens-circle
 ```
 
-Startup scripts in `docker/entrypoint.d/` handle cache clearing on container start.
+Startup scripts in `docker/entrypoint.d/` clear and rebuild Laravel caches on container start (`php artisan optimize:clear` + `php artisan optimize`).
 
 ## License
 
