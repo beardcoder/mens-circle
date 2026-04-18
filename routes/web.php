@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\BreathingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\LlmsController;
 use App\Http\Controllers\NewsletterController;
@@ -45,6 +46,8 @@ Route::withoutMiddleware([
     Route::redirect('/events/{slug}', '/event/{slug}', 301);
 
     Route::get('/teile-deine-erfahrung', [TestimonialSubmissionController::class, 'show'])->name('testimonial.form');
+
+    Route::get('/atemuebung', [BreathingController::class, 'show'])->name('breathing.show');
 
     // Dynamic CMS pages (must be last to avoid conflicts)
     Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');

@@ -70,6 +70,13 @@
             data-umami-event-target="faq"
             >Fragen</a
           >
+          <a
+            href="{{ route('breathing.show') }}"
+            class="nav__link"
+            data-umami-event="nav-click"
+            data-umami-event-target="atemuebung"
+            >Atemübung</a
+          >
           @if ($hasNextEvent)
             <a
               href="{{ $nextEventUrl }}"
@@ -174,6 +181,14 @@
                 data-umami-event="footer-link"
                 data-umami-event-target="faq"
                 >FAQ</a
+              >
+            </li>
+            <li>
+              <a
+                href="{{ route('breathing.show') }}"
+                data-umami-event="footer-link"
+                data-umami-event-target="atemuebung"
+                >Atemübung</a
               >
             </li>
             @if ($hasNextEvent)

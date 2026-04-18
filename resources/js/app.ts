@@ -19,6 +19,7 @@ import {
   journeyProgress,
 } from '@/components/scroll-animations';
 import { nativeAccordion } from '@/components/accordion';
+import { breathingApp } from '@/components/breathing';
 import { initUmamiKit } from '@/utils/umami-kit';
 
 // Navigation and header
@@ -49,6 +50,9 @@ register('#addToCalendar', calendarIntegration());
 
 // Accordion (FAQ sections)
 register('.faq-section', nativeAccordion());
+
+// Breathing exercise
+register('#breathingApp', breathingApp());
 
 // Initialize all registered components
 autoInit();
