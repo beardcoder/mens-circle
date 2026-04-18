@@ -1,0 +1,278 @@
+/**
+ * Breathing Section
+ * Interactive Wim-Hof-style breathing exercise
+ */
+
+/* ============================================
+   Hero
+   ============================================ */
+.breathing-hero {
+  position: relative;
+  block-size: 70vh;
+  min-block-size: 50vh;
+  color: var(--text-on-dark);
+  background: linear-gradient(
+    135deg,
+    var(--color-earth-deep) 0%,
+    color-mix(in oklch, var(--color-earth-deep) 75%, var(--color-sage)) 100%
+  );
+}
+
+.breathing-hero .hero__bg::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+}
+
+/* ============================================
+   Section
+   ============================================ */
+.breathing-section {
+  background: var(--bg-secondary);
+}
+
+.breathing__wrapper {
+  display: grid;
+  gap: var(--space-xl);
+  max-inline-size: 760px;
+  margin-inline: auto;
+}
+
+.breathing__intro h2 {
+  margin-block-end: var(--space-md);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.breathing__steps {
+  padding-inline-start: 1.25rem;
+  margin-block-end: var(--space-md);
+  font-size: var(--text-section-body);
+  line-height: var(--leading-relaxed);
+  color: var(--text-muted);
+}
+
+.breathing__steps li {
+  margin-block-end: var(--space-xs);
+}
+
+.breathing__steps strong {
+  color: var(--text-primary);
+}
+
+.breathing__warning {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  background: color-mix(in oklch, var(--color-warning) 12%, transparent);
+  border-inline-start: 3px solid var(--color-warning);
+  border-radius: var(--radius-md);
+}
+
+/* ============================================
+   App
+   ============================================ */
+.breathing-app {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.breathing-app__stage {
+  display: grid;
+  place-items: center;
+  min-block-size: 320px;
+  padding-block: var(--space-md);
+}
+
+.breathing-app__circle {
+  --size: clamp(220px, 45vw, 320px);
+
+  position: relative;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  inline-size: var(--size);
+  block-size: var(--size);
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      color-mix(in oklch, var(--accent-primary) 65%, transparent),
+      color-mix(in oklch, var(--accent-primary) 25%, transparent) 70%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle,
+      color-mix(in oklch, var(--color-earth-deep) 80%, transparent),
+      var(--color-earth-deep)
+    );
+  border-radius: var(--radius-full);
+  box-shadow:
+    0 24px 60px color-mix(in oklch, var(--color-earth-deep) 35%, transparent),
+    inset 0 0 60px color-mix(in oklch, var(--color-earth-deep) 50%, transparent);
+  transform: scale(0.7);
+  transition:
+    transform 1.8s ease-in-out,
+    box-shadow var(--transition-medium);
+}
+
+.breathing-app__circle[data-motion='inhale'] {
+  box-shadow:
+    0 32px 80px color-mix(in oklch, var(--accent-primary) 40%, transparent),
+    inset 0 0 80px color-mix(in oklch, var(--color-earth-deep) 30%, transparent);
+  transform: scale(1.05);
+}
+
+.breathing-app__circle[data-motion='exhale'] {
+  transform: scale(0.7);
+}
+
+.breathing-app__circle[data-motion='hold'] {
+  transform: scale(0.85);
+}
+
+.breathing-app__circle[data-phase='retention'],
+.breathing-app__circle[data-phase='recovery'] {
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      color-mix(in oklch, var(--color-sage) 55%, transparent),
+      color-mix(in oklch, var(--color-sage) 20%, transparent) 70%,
+      transparent 100%
+    ),
+    radial-gradient(circle, var(--color-earth-deep), var(--color-earth-deep));
+  transform: scale(0.85);
+}
+
+.breathing-app__circle[data-phase='complete'] {
+  transform: scale(1);
+}
+
+.breathing-app__phase {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 600;
+  color: var(--text-on-dark);
+  letter-spacing: 0.02em;
+}
+
+.breathing-app__counter {
+  display: block;
+  margin-block-start: var(--space-xs);
+  font-size: 0.9375rem;
+  color: color-mix(in oklch, var(--text-on-dark) 75%, transparent);
+}
+
+/* ============================================
+   Meta
+   ============================================ */
+.breathing-app__meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-sm);
+  text-align: center;
+}
+
+.breathing-app__meta-item {
+  display: grid;
+  gap: var(--space-3xs);
+  padding-block: var(--space-sm);
+  background: color-mix(in oklch, var(--color-sand-light) 60%, transparent);
+  border-radius: var(--radius-md);
+}
+
+.breathing-app__meta-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.breathing-app__meta-value {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+/* ============================================
+   Controls
+   ============================================ */
+.breathing-app__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+.breathing-app__controls .btn {
+  min-inline-size: 160px;
+}
+
+/* ============================================
+   Settings
+   ============================================ */
+.breathing-app__settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-sm);
+  padding-block-start: var(--space-md);
+  border-block-start: 1px solid var(--border-light);
+}
+
+.breathing-app__setting {
+  display: grid;
+  gap: var(--space-2xs);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.breathing-app__setting span {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.breathing-app__setting input {
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.breathing-app__setting input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px
+    color-mix(in oklch, var(--accent-primary) 15%, transparent);
+}
+
+.breathing-app__setting input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .breathing-app__circle {
+    transition: none;
+  }
+}
