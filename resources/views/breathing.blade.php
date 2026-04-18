@@ -11,6 +11,12 @@
     use App\Seo\Data\BreadcrumbItem;
     use App\Seo\Schemas\BreadcrumbSchema;
     use App\Seo\Schemas\WebPageSchema;
+
+    $defaultInhale = 4;
+    $defaultHold = 4;
+    $defaultExhale = 6;
+    $defaultPause = 2;
+    $defaultRounds = 10;
 @endphp
 
 @push ('structured_data')
@@ -43,11 +49,11 @@
         <div
           id="breathingApp"
           class="breathing-app breathing-app--idle fade-in"
-          data-default-inhale="4"
-          data-default-hold="4"
-          data-default-exhale="6"
-          data-default-pause="2"
-          data-default-rounds="10"
+          data-default-inhale="{{ $defaultInhale }}"
+          data-default-hold="{{ $defaultHold }}"
+          data-default-exhale="{{ $defaultExhale }}"
+          data-default-pause="{{ $defaultPause }}"
+          data-default-rounds="{{ $defaultRounds }}"
         >
           <div class="breathing-app__panel">
             <div class="breathing-app__status">
@@ -69,7 +75,7 @@
                   aria-live="polite"
                   aria-atomic="true"
                 >
-                  4
+                  {{ $defaultInhale }}
                 </span>
                 <span class="breathing-app__timer-label">Sek.</span>
               </div>
@@ -78,7 +84,7 @@
             <div class="breathing-app__meta">
               <div class="breathing-app__meta-item">
                 <span>Runde</span>
-                <strong data-breathing-round>0 / 10</strong>
+                <strong data-breathing-round>0 / {{ $defaultRounds }}</strong>
               </div>
               <div class="breathing-app__meta-item">
                 <span>Status</span>
@@ -121,10 +127,10 @@
                   min="2"
                   max="8"
                   step="1"
-                  value="4"
+                  value="{{ $defaultInhale }}"
                   data-breathing-input="inhale"
                 />
-                <output data-breathing-output="inhale">4s</output>
+                <output data-breathing-output="inhale">{{ $defaultInhale }}s</output>
               </div>
             </div>
 
@@ -137,10 +143,10 @@
                   min="0"
                   max="8"
                   step="1"
-                  value="4"
+                  value="{{ $defaultHold }}"
                   data-breathing-input="hold"
                 />
-                <output data-breathing-output="hold">4s</output>
+                <output data-breathing-output="hold">{{ $defaultHold }}s</output>
               </div>
             </div>
 
@@ -153,10 +159,10 @@
                   min="2"
                   max="10"
                   step="1"
-                  value="6"
+                  value="{{ $defaultExhale }}"
                   data-breathing-input="exhale"
                 />
-                <output data-breathing-output="exhale">6s</output>
+                <output data-breathing-output="exhale">{{ $defaultExhale }}s</output>
               </div>
             </div>
 
@@ -169,10 +175,10 @@
                   min="0"
                   max="8"
                   step="1"
-                  value="2"
+                  value="{{ $defaultPause }}"
                   data-breathing-input="pause"
                 />
-                <output data-breathing-output="pause">2s</output>
+                <output data-breathing-output="pause">{{ $defaultPause }}s</output>
               </div>
             </div>
 
@@ -185,10 +191,10 @@
                   min="1"
                   max="20"
                   step="1"
-                  value="10"
+                  value="{{ $defaultRounds }}"
                   data-breathing-input="rounds"
                 />
-                <output data-breathing-output="rounds">10</output>
+                <output data-breathing-output="rounds">{{ $defaultRounds }}</output>
               </div>
             </div>
           </div>
