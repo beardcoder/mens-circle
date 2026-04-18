@@ -348,11 +348,11 @@ export const breathingApp = defineComponent<BreathingAppOptions>(
         primePhase();
       }
 
+      clearTimer();
       state.isCompleted = false;
       state.isRunning = true;
       setStateLabel();
       updateButtons();
-      clearTimer();
       state.timerId = window.setInterval(tick, 1000);
     };
 

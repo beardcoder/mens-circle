@@ -8,6 +8,9 @@ test('breathing page is accessible', function (): void {
     $response = $this->get(route('breathing'));
 
     $response->assertSuccessful();
+    $response->assertSee('<title>Interaktive Atmung – Männerkreis Niederbayern/Straubing</title>', false);
+    $response->assertSee('content="Eine einfache interaktive Atem-App für bewusste Atemrunden mit Einatmen, Halten und Ausatmen."', false);
+    $response->assertSee('rel="canonical" href="' . route('breathing') . '"', false);
     $response->assertSee('Interaktive Atemreise');
     $response->assertSee(route('breathing'), false);
     $response->assertSee('Atmung');
