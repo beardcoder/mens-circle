@@ -39,6 +39,8 @@ Route::withoutMiddleware([
     Route::get('/', [PageController::class, 'home'])->name('home');
     Route::redirect('/home', '/', 301);
 
+    Route::view('/atmung', 'breathing')->name('breathing');
+
     Route::get('/event', [EventController::class, 'showNext'])->name('event.show');
     Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show.slug');
     Route::redirect('/events', '/event', 301);

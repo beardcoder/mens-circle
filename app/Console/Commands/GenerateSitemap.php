@@ -23,6 +23,7 @@ class GenerateSitemap extends Command
         $sitemap = Sitemap::create();
 
         $sitemap->add(Url::create(route('home'))->setPriority(1.0)->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
+        $sitemap->add(Url::create(route('breathing'))->setPriority(0.8)->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
 
         Event::published()
             ->select('slug', 'updated_at')

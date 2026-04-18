@@ -39,6 +39,7 @@ test('sitemap excludes duplicate home page slug and includes canonical urls', fu
     expect($sitemap)->toBeString()->not->toBeEmpty();
     expect($sitemap)
         ->toContain('<loc>' . route('home') . '</loc>')
+        ->toContain('<loc>' . route('breathing') . '</loc>')
         ->toContain('<loc>' . route('event.show.slug', $event->slug) . '</loc>')
         ->toContain('<loc>' . route('page.show', $page->slug) . '</loc>')
         ->not->toContain('<loc>' . route('page.show', 'home') . '</loc>');

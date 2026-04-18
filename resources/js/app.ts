@@ -6,6 +6,7 @@
 import './types';
 import { register, autoInit } from '@beardcoder/stitch-js';
 import { navigation, scrollHeader, scrollToTop } from '@/components/navigation';
+import { breathingApp } from '@/components/breathing';
 import {
   newsletterForm,
   registrationForm,
@@ -43,6 +44,7 @@ register('.journey-section', journeyProgress());
 register('#newsletterForm', newsletterForm());
 register('#registrationForm', registrationForm());
 register('#testimonialForm', testimonialForm());
+register('#breathingApp', breathingApp());
 
 // Calendar integration
 register('#addToCalendar', calendarIntegration());
