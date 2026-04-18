@@ -32,10 +32,7 @@ interface BreathingState {
   timerId: number | null;
 }
 
-const phaseMeta: Record<
-  BreathingPhaseKey,
-  Omit<BreathingPhase, 'duration'>
-> = {
+const phaseMeta: Record<BreathingPhaseKey, Omit<BreathingPhase, 'duration'>> = {
   inhale: {
     key: 'inhale',
     label: 'Einatmen',
@@ -74,9 +71,15 @@ export const breathingApp = defineComponent<BreathingAppOptions>(
   (ctx) => {
     const { options: o } = ctx;
 
-    const startButton = ctx.el.querySelector<HTMLButtonElement>(o.startSelector);
-    const pauseButton = ctx.el.querySelector<HTMLButtonElement>(o.pauseSelector);
-    const resetButton = ctx.el.querySelector<HTMLButtonElement>(o.resetSelector);
+    const startButton = ctx.el.querySelector<HTMLButtonElement>(
+      o.startSelector
+    );
+    const pauseButton = ctx.el.querySelector<HTMLButtonElement>(
+      o.pauseSelector
+    );
+    const resetButton = ctx.el.querySelector<HTMLButtonElement>(
+      o.resetSelector
+    );
     const phaseElement = ctx.el.querySelector<HTMLElement>(o.phaseSelector);
     const instructionElement = ctx.el.querySelector<HTMLElement>(
       o.instructionSelector
@@ -84,7 +87,9 @@ export const breathingApp = defineComponent<BreathingAppOptions>(
     const timerElement = ctx.el.querySelector<HTMLElement>(o.timerSelector);
     const roundElement = ctx.el.querySelector<HTMLElement>(o.roundSelector);
     const stateElement = ctx.el.querySelector<HTMLElement>(o.stateSelector);
-    const inputElements = ctx.el.querySelectorAll<HTMLInputElement>(o.inputSelector);
+    const inputElements = ctx.el.querySelectorAll<HTMLInputElement>(
+      o.inputSelector
+    );
 
     if (
       !startButton ||
@@ -174,6 +179,7 @@ export const breathingApp = defineComponent<BreathingAppOptions>(
           }
 
           const value = readInputValue(key);
+
           output.textContent = key === 'rounds' ? String(value) : `${value}s`;
         }
       );
@@ -229,7 +235,10 @@ export const breathingApp = defineComponent<BreathingAppOptions>(
       );
 
       ctx.el.classList.add(`breathing-app--${phase.key}`);
-      ctx.el.style.setProperty('--breathing-phase-duration', `${phase.duration}s`);
+      ctx.el.style.setProperty(
+        '--breathing-phase-duration',
+        `${phase.duration}s`
+      );
       phaseElement.textContent = phase.label;
       instructionElement.textContent = phase.instruction;
       timerElement.textContent = String(state.secondsRemaining);

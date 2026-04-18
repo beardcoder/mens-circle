@@ -33,13 +33,10 @@
         <h1 class="hero__title">
           Interaktive <span class="highlight">Atemreise</span>
         </h1>
-        <p class="hero__subtitle">
-          Folge dem Rhythmus, finde Ruhe und nimm dir ein paar bewusste Minuten nur für dich.
-        </p>
+        <p class="hero__subtitle">Folge dem Rhythmus, finde Ruhe und nimm dir ein paar bewusste Minuten nur für dich.</p>
       </div>
     </div>
   </section>
-
   <section class="section breathing-section">
     <div class="container">
       <div class="breathing-grid">
@@ -55,16 +52,12 @@
           <div class="breathing-app__panel">
             <div class="breathing-app__status">
               <span class="breathing-app__eyebrow">Geführte Runde</span>
-              <p class="breathing-app__phase" data-breathing-phase aria-live="polite">
-                Bereit
-              </p>
+              <p class="breathing-app__phase" data-breathing-phase aria-live="polite">Bereit</p>
               <p
                 class="breathing-app__instruction"
                 data-breathing-instruction
                 aria-live="polite"
-              >
-                Starte, wenn du bereit bist, und atme weich und gleichmäßig.
-              </p>
+              >Starte, wenn du bereit bist, und atme weich und gleichmäßig.</p>
             </div>
 
             <div class="breathing-app__visual" aria-hidden="true">
@@ -94,13 +87,25 @@
             </div>
 
             <div class="breathing-app__controls">
-              <button type="button" class="btn btn--primary" data-breathing-start>
+              <button
+                type="button"
+                class="btn btn--primary"
+                data-breathing-start
+              >
                 Start
               </button>
-              <button type="button" class="btn btn--secondary" data-breathing-pause>
+              <button
+                type="button"
+                class="btn btn--secondary"
+                data-breathing-pause
+              >
                 Pause
               </button>
-              <button type="button" class="btn btn--secondary" data-breathing-reset>
+              <button
+                type="button"
+                class="btn btn--secondary"
+                data-breathing-reset
+              >
                 Reset
               </button>
             </div>
@@ -195,14 +200,15 @@
             <li>Setze dich aufrecht und entspannt hin.</li>
             <li>Wähle deinen Rhythmus für Einatmen, Halten und Ausatmen.</li>
             <li>Starte die Runde und folge dem Kreis und dem Countdown.</li>
-            <li>Bleibe weich im Atem und pausiere jederzeit, wenn es sich nicht gut anfühlt.</li>
+            <li>
+              Bleibe weich im Atem und pausiere jederzeit, wenn es sich nicht
+              gut anfühlt.
+            </li>
           </ol>
 
           <div class="breathing-info__note">
             <h3>Wichtiger Hinweis</h3>
-            <p>
-              Übe nur im Sitzen oder Liegen und nie im Wasser, beim Autofahren oder in anderen Situationen, in denen Schwindel gefährlich wäre.
-            </p>
+            <p>Übe nur im Sitzen oder Liegen und nie im Wasser, beim Autofahren oder in anderen Situationen, in denen Schwindel gefährlich wäre.</p>
           </div>
         </aside>
       </div>
