@@ -1,10 +1,10 @@
 @extends ('layouts.app')
 
-@section ('title', 'Interaktive Atmung – Männerkreis Niederbayern/ Straubing')
-@section ('meta_title', 'Interaktive Atmung – Männerkreis Niederbayern/ Straubing')
+@section ('title', 'Interaktive Atmung – Männerkreis Niederbayern/Straubing')
+@section ('meta_title', 'Interaktive Atmung – Männerkreis Niederbayern/Straubing')
 @section ('meta_description', 'Eine einfache interaktive Atem-App für bewusste Atemrunden mit Einatmen, Halten und Ausatmen.')
 @section ('canonical', route('breathing'))
-@section ('og_title', 'Interaktive Atmung – Männerkreis Niederbayern/ Straubing')
+@section ('og_title', 'Interaktive Atmung – Männerkreis Niederbayern/Straubing')
 @section ('og_description', 'Starte eine geführte Atemrunde und finde mit einem klaren Rhythmus mehr Ruhe und Präsenz.')
 
 @php
