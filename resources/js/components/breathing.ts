@@ -32,6 +32,23 @@ interface BreathingState {
   timerId: number | null;
 }
 
+const defaultDatasetKeys: Record<BreathingPhaseKey | 'rounds', string> = {
+  inhale: 'defaultInhale',
+  hold: 'defaultHold',
+  exhale: 'defaultExhale',
+  pause: 'defaultPause',
+  rounds: 'defaultRounds',
+};
+
+const breathingPhaseClasses = [
+  'breathing-app--inhale',
+  'breathing-app--hold',
+  'breathing-app--exhale',
+  'breathing-app--pause',
+  'breathing-app--idle',
+  'breathing-app--complete',
+] as const;
+
 const phaseMeta: Record<BreathingPhaseKey, Omit<BreathingPhase, 'duration'>> = {
   inhale: {
     key: 'inhale',
@@ -150,9 +167,7 @@ export const breathingApp = defineComponent<BreathingAppOptions>(
 
     const readInputValue = (key: BreathingPhaseKey | 'rounds'): number => {
       const fallback = Number.parseInt(
-        ctx.el.dataset[
-          `default${key.charAt(0).toUpperCase()}${key.slice(1)}`
-        ] ?? '0',
+        ctx.el.dataset[defaultDatasetKeys[key]] ?? '0',
         10
       );
       const value = inputMap[key]?.value ?? String(fallback);
@@ -225,14 +240,7 @@ export const breathingApp = defineComponent<BreathingAppOptions>(
     };
 
     const syncPhaseUi = (phase: BreathingPhase): void => {
-      ctx.el.classList.remove(
-        'breathing-app--inhale',
-        'breathing-app--hold',
-        'breathing-app--exhale',
-        'breathing-app--pause',
-        'breathing-app--idle',
-        'breathing-app--complete'
-      );
+      ctx.el.classList.remove(...breathingPhaseClasses);
 
       ctx.el.classList.add(`breathing-app--${phase.key}`);
       ctx.el.style.setProperty(
@@ -269,13 +277,7 @@ export const breathingApp = defineComponent<BreathingAppOptions>(
       state.isRunning = false;
       state.isCompleted = true;
       state.secondsRemaining = 0;
-      ctx.el.classList.remove(
-        'breathing-app--inhale',
-        'breathing-app--hold',
-        'breathing-app--exhale',
-        'breathing-app--pause',
-        'breathing-app--idle'
-      );
+      ctx.el.classList.remove(...breathingPhaseClasses);
       ctx.el.classList.add('breathing-app--complete');
       phaseElement.textContent = 'Geschafft';
       instructionElement.textContent =
@@ -372,13 +374,7 @@ export const breathingApp = defineComponent<BreathingAppOptions>(
       state.phaseIndex = 0;
       state.roundsCompleted = 0;
       state.roundsTarget = readInputValue('rounds');
-      ctx.el.classList.remove(
-        'breathing-app--inhale',
-        'breathing-app--hold',
-        'breathing-app--exhale',
-        'breathing-app--pause',
-        'breathing-app--complete'
-      );
+      ctx.el.classList.remove(...breathingPhaseClasses);
       ctx.el.classList.add('breathing-app--idle');
       primePhase();
     };

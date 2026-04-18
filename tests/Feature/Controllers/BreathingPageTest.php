@@ -9,6 +9,8 @@ test('breathing page is accessible', function (): void {
 
     $response->assertSuccessful();
     $response->assertSee('Interaktive Atemreise');
+    $response->assertSee(route('breathing'), false);
+    $response->assertSee('Atmung');
     $response->assertSee('data-breathing-start', false);
 });
 
