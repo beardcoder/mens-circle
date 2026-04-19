@@ -6,6 +6,7 @@
 # than at image-build time.
 
 echo "Optimizing Laravel caches..."
+php artisan optimize:clear --quiet || true
 php artisan optimize --quiet || true
 php artisan icons:cache --quiet || true
 php artisan filament:cache-components --quiet || true
