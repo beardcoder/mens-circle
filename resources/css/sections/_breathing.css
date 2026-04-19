@@ -39,7 +39,10 @@
   position: relative;
   block-size: auto;
   min-block-size: 0;
-  padding-block: clamp(2.5rem, 5vh, 5rem);
+
+  /* Top padding accounts for the fixed header so the title isn't
+     overlapped; bottom padding stays visually centered. */
+  padding-block: clamp(6rem, 12vh, 9rem) clamp(2.5rem, 5vh, 5rem);
   color: var(--text-on-dark);
   background:
     radial-gradient(

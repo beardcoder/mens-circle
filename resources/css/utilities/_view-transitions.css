@@ -1,31 +1,7 @@
 /* ============================================
    PAGE TRANSITIONS
-   ============================================
 
-   Soft CSS-only page entry:
-   - gentle opacity + subtle upward drift on load
-   - no View Transition API (causes blink on iOS)
-   - reduced-motion friendly fallback
+   Intentionally empty. Site-wide page-enter animation was removed
+   because it caused the header and hero area to flash on every
+   navigation. Per-element reveals are handled by motion-reveal.ts.
    ============================================ */
-
-#main {
-  animation: page-enter 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes page-enter {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #main {
-    animation: none;
-  }
-}

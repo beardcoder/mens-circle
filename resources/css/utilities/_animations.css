@@ -2,11 +2,13 @@
  * Animation Utilities
  *
  * This file only provides:
- *  - Initial-state guards for scroll-reveal marker classes so content
- *    doesn't flash before Motion.dev takes over.
+ *  - Initial-state hiding for scroll-reveal marker classes so content
+ *    does not flash before Motion.dev takes over. The hiding is scoped
+ *    to the `.js` class that an inline head script adds synchronously
+ *    before first paint, so no-JS users see everything.
  *  - Shared keyframes used by ambient CSS animations (breathing glows,
- *    scroll-indicator pulse, testimonial spinner rotation) — these live
- *    in CSS because they are continuous/decorative and do not need JS.
+ *    scroll-indicator pulse) — these live in CSS because they are
+ *    continuous/decorative and do not need JS.
  *
  * The actual scroll-reveal motion lives in:
  *   resources/js/components/motion-reveal.ts
@@ -14,19 +16,21 @@
 
 /* ============================================
    Scroll-reveal marker classes
-   JS sets opacity/transform before reveal; the no-JS / reduced-motion
-   fallbacks below guarantee content is always readable without motion.
+   Hidden only when JS is active and the element has not yet been
+   revealed. After animation, JS sets `data-revealed` and the inline
+   transform/opacity are cleared, so no lingering stacking context
+   survives to interfere with z-index frames or box-shadows.
    ============================================ */
-.fade-in,
-.fade-in-up,
-.fade-in-down,
-.fade-in-left,
-.fade-in-right,
-.fade-in-scale,
-.stagger-children > *,
-[data-reveal-stagger] > * {
-  /* State is owned by JS; no initial hiding in CSS so content is
-     visible by default when JavaScript is unavailable. */
+html.js .fade-in:not([data-revealed]),
+html.js .fade-in-up:not([data-revealed]),
+html.js .fade-in-down:not([data-revealed]),
+html.js .fade-in-left:not([data-revealed]),
+html.js .fade-in-right:not([data-revealed]),
+html.js .fade-in-scale:not([data-revealed]),
+html.js .stagger-children > *:not([data-revealed]),
+html.js [data-reveal-stagger] > *:not([data-revealed]) {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
 }
 
 /* ============================================
@@ -126,30 +130,19 @@
 }
 
 /* ============================================
-   Reduced Motion + No-JS fallback
+   Reduced Motion
+   Always show reveal markers at full visibility.
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  .fade-in,
-  .fade-in-up,
-  .fade-in-down,
-  .fade-in-left,
-  .fade-in-right,
-  .fade-in-scale,
-  .stagger-children > *,
-  [data-reveal-stagger] > * {
+  html.js .fade-in,
+  html.js .fade-in-up,
+  html.js .fade-in-down,
+  html.js .fade-in-left,
+  html.js .fade-in-right,
+  html.js .fade-in-scale,
+  html.js .stagger-children > *,
+  html.js [data-reveal-stagger] > * {
     opacity: 1 !important;
     transform: none !important;
   }
-}
-
-.no-js .fade-in,
-.no-js .fade-in-up,
-.no-js .fade-in-down,
-.no-js .fade-in-left,
-.no-js .fade-in-right,
-.no-js .fade-in-scale,
-.no-js .stagger-children > *,
-.no-js [data-reveal-stagger] > * {
-  opacity: 1;
-  transform: none;
 }

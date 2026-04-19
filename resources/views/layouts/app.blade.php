@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
 <head>
+  <script>
+    document.documentElement.classList.add('js');
+  </script>
   @include ('partials.seo-head')
 </head>
 <body>
