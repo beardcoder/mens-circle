@@ -82,14 +82,6 @@
                 class="breathing-app__ring breathing-app__ring--3"
                 aria-hidden="true"
               ></span>
-              <span
-                class="breathing-app__ring breathing-app__ring--4"
-                aria-hidden="true"
-              ></span>
-              <span
-                class="breathing-app__ring breathing-app__ring--5"
-                aria-hidden="true"
-              ></span>
               <span class="breathing-app__core" aria-hidden="true"></span>
               <span class="breathing-app__label">
                 <span class="breathing-app__phase" data-element="phase"

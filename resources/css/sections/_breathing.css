@@ -1,9 +1,10 @@
 /**
  * Breathing Section
  * Interactive Wim-Hof-style breathing exercise.
- * Phone-first: the interactive stage dominates the viewport and uses
- * stacked translucent ring layers with mix-blend-mode for an organic,
- * overlapping look that stays crisp on small screens.
+ * Three translucent rings with per-ring scale — the innermost
+ * ring expands dramatically on inhale, nearly matching the outer
+ * ring's resting size, while the outer ring only breathes softly.
+ * Palette is aligned with the site's earth/terracotta tokens.
  */
 
 /* ============================================
@@ -11,11 +12,11 @@
    ============================================ */
 .breathing-hero,
 .breathing-section {
-  --breathing-bg: oklch(16% 0.02 180deg);
-  --breathing-bg-deep: oklch(10% 0.015 200deg);
-  --breathing-accent: oklch(76% 0.13 170deg);
-  --breathing-accent-dim: oklch(52% 0.11 170deg);
-  --breathing-warm: oklch(72% 0.12 55deg);
+  --breathing-bg: var(--color-earth-deep);
+  --breathing-bg-deep: var(--color-ink);
+  --breathing-accent: var(--color-terracotta-light);
+  --breathing-accent-dim: var(--color-terracotta);
+  --breathing-warm: var(--color-sand);
 }
 
 /* ============================================
@@ -30,12 +31,12 @@
   background:
     radial-gradient(
       ellipse at 20% 10%,
-      color-mix(in oklch, var(--breathing-accent-dim) 28%, transparent),
+      color-mix(in oklch, var(--breathing-accent-dim) 24%, transparent),
       transparent 60%
     ),
     radial-gradient(
       ellipse at 90% 90%,
-      color-mix(in oklch, var(--breathing-warm) 18%, transparent),
+      color-mix(in oklch, var(--breathing-warm) 14%, transparent),
       transparent 55%
     ),
     linear-gradient(
@@ -92,7 +93,7 @@
   margin-block-end: var(--space-md);
   font-size: var(--text-section-body);
   line-height: var(--leading-relaxed);
-  color: color-mix(in oklch, var(--text-on-dark) 75%, transparent);
+  color: color-mix(in oklch, var(--text-on-dark) 78%, transparent);
 }
 
 .breathing__steps li {
@@ -128,7 +129,7 @@
   background:
     radial-gradient(
       ellipse at 50% 20%,
-      color-mix(in oklch, var(--breathing-accent-dim) 18%, transparent),
+      color-mix(in oklch, var(--breathing-accent-dim) 16%, transparent),
       transparent 65%
     ),
     linear-gradient(
@@ -137,11 +138,11 @@
       var(--breathing-bg-deep) 100%
     );
   border: 1px solid
-    color-mix(in oklch, var(--breathing-accent) 15%, transparent);
+    color-mix(in oklch, var(--breathing-accent) 18%, transparent);
   border-radius: clamp(var(--radius-lg), 3vw, var(--radius-xl));
   box-shadow:
     0 40px 80px -20px color-mix(in oklch, black 60%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 6%, transparent);
+    inset 0 1px 0 color-mix(in oklch, var(--color-sand) 8%, transparent);
 }
 
 .breathing-app::before {
@@ -171,7 +172,6 @@
 
 .breathing-app__circle {
   --size: min(82vw, 58svh, 420px);
-  --motion-scale: 0.78;
 
   position: relative;
   display: grid;
@@ -180,87 +180,110 @@
   block-size: var(--size);
   text-align: center;
   isolation: isolate;
-  transform: scale(var(--motion-scale));
-  transition: transform 1.8s var(--ease-smooth);
-}
-
-/* Outer scale for the whole stack, driven by JS data-motion */
-.breathing-app__circle[data-motion='inhale'] {
-  --motion-scale: 1.02;
-}
-
-.breathing-app__circle[data-motion='exhale'] {
-  --motion-scale: 0.78;
-}
-
-.breathing-app__circle[data-motion='hold'] {
-  --motion-scale: 0.92;
-}
-
-.breathing-app__circle[data-phase='retention'],
-.breathing-app__circle[data-phase='recovery'] {
-  --motion-scale: 0.9;
-}
-
-.breathing-app__circle[data-phase='complete'] {
-  --motion-scale: 1;
 }
 
 /* ============================================
-   Ring layers — translucent, overlapping
+   Ring layers — per-ring scale
+   Base sizes are progressively smaller from outer to inner.
+   On inhale, each ring gets its own transform scale: the outer
+   breathes gently while the inner expands dramatically to almost
+   reach the outer ring's resting size.
    ============================================ */
 .breathing-app__ring {
   position: absolute;
   background: radial-gradient(
     circle at 32% 28%,
-    color-mix(in oklch, var(--breathing-accent) 35%, transparent) 0%,
-    color-mix(in oklch, var(--breathing-accent-dim) 22%, transparent) 45%,
+    color-mix(in oklch, var(--breathing-accent) 38%, transparent) 0%,
+    color-mix(in oklch, var(--breathing-accent-dim) 24%, transparent) 45%,
     color-mix(in oklch, var(--breathing-accent-dim) 8%, transparent) 75%,
     transparent 100%
   );
   border-radius: var(--radius-full);
   box-shadow:
-    inset 0 0 40px color-mix(in oklch, var(--breathing-accent) 18%, transparent),
-    inset 0 0 2px color-mix(in oklch, var(--breathing-accent) 35%, transparent);
+    inset 0 0 50px
+      color-mix(in oklch, var(--breathing-accent) 22%, transparent),
+    inset 0 0 2px
+      color-mix(in oklch, var(--breathing-accent) 40%, transparent);
   mix-blend-mode: screen;
-  animation: breathing-drift 7s var(--ease-in-out) infinite;
-  will-change: transform, opacity;
+  transform: scale(var(--ring-scale, 1));
+  transition: transform 1.8s var(--ease-smooth);
+  will-change: transform;
 }
 
+/* Outer — largest at rest, breathes softly */
 .breathing-app__ring--1 {
   inset: 0;
-  opacity: 0.35;
-  animation-delay: 0s;
+  opacity: 0.4;
 }
 
+/* Middle */
 .breathing-app__ring--2 {
-  inset: 8%;
-  opacity: 0.5;
-  animation-delay: -1s;
+  inset: 22%;
+  opacity: 0.6;
 }
 
+/* Inner — smallest at rest, expands dramatically */
 .breathing-app__ring--3 {
-  inset: 17%;
-  opacity: 0.65;
-  animation-delay: -2s;
-}
-
-.breathing-app__ring--4 {
-  inset: 26%;
-  opacity: 0.75;
-  animation-delay: -3s;
-}
-
-.breathing-app__ring--5 {
-  inset: 35%;
+  inset: 42%;
   opacity: 0.85;
-  animation-delay: -4s;
+}
+
+/* ---- Rest / exhale / idle scales ---- */
+.breathing-app__circle .breathing-app__ring--1 {
+  --ring-scale: 1;
+}
+
+.breathing-app__circle .breathing-app__ring--2 {
+  --ring-scale: 1;
+}
+
+.breathing-app__circle .breathing-app__ring--3 {
+  --ring-scale: 1;
+}
+
+/* ---- Inhale: the deeper the ring, the bigger the growth ---- */
+.breathing-app__circle[data-motion='inhale'] .breathing-app__ring--1 {
+  --ring-scale: 1.06;
+}
+
+.breathing-app__circle[data-motion='inhale'] .breathing-app__ring--2 {
+  --ring-scale: 1.5;
+}
+
+.breathing-app__circle[data-motion='inhale'] .breathing-app__ring--3 {
+  --ring-scale: 2.5;
+}
+
+/* ---- Exhale settles back ---- */
+.breathing-app__circle[data-motion='exhale'] .breathing-app__ring--1 {
+  --ring-scale: 0.96;
+}
+
+.breathing-app__circle[data-motion='exhale'] .breathing-app__ring--2 {
+  --ring-scale: 0.9;
+}
+
+.breathing-app__circle[data-motion='exhale'] .breathing-app__ring--3 {
+  --ring-scale: 0.85;
+}
+
+/* ---- Hold: rings sit mid-expansion ---- */
+.breathing-app__circle[data-motion='hold'] .breathing-app__ring--1 {
+  --ring-scale: 1.02;
+}
+
+.breathing-app__circle[data-motion='hold'] .breathing-app__ring--2 {
+  --ring-scale: 1.2;
+}
+
+.breathing-app__circle[data-motion='hold'] .breathing-app__ring--3 {
+  --ring-scale: 1.6;
 }
 
 /* Bright core behind the label */
 .breathing-app__core {
   position: absolute;
-  inset: 42%;
+  inset: 48%;
   background: radial-gradient(
     circle at 35% 30%,
     color-mix(in oklch, var(--breathing-accent) 90%, white 10%),
@@ -274,34 +297,20 @@
   mix-blend-mode: screen;
 }
 
-/* Phase-specific accent hue shifts — cascade to children via custom props */
+/* Phase-specific accent hue shifts — cascade via custom props */
 .breathing-app[data-phase='retention'] {
-  --breathing-accent: oklch(62% 0.11 220deg);
-  --breathing-accent-dim: oklch(40% 0.09 220deg);
+  --breathing-accent: var(--color-sage-light);
+  --breathing-accent-dim: var(--color-sage);
 }
 
 .breathing-app[data-phase='recovery'] {
-  --breathing-accent: oklch(72% 0.13 145deg);
-  --breathing-accent-dim: oklch(48% 0.1 145deg);
+  --breathing-accent: var(--color-sand-light);
+  --breathing-accent-dim: var(--color-sand);
 }
 
 .breathing-app[data-phase='complete'] {
-  --breathing-accent: oklch(80% 0.14 90deg);
-  --breathing-accent-dim: oklch(58% 0.12 90deg);
-}
-
-/* Ambient ring pulse */
-@keyframes breathing-drift {
-  0%,
-  100% {
-    filter: blur(0);
-    scale: 1;
-  }
-
-  50% {
-    filter: blur(0.5px);
-    scale: 1.035;
-  }
+  --breathing-accent: var(--color-terracotta-light);
+  --breathing-accent-dim: var(--color-terracotta);
 }
 
 /* ============================================
@@ -320,16 +329,16 @@
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 6vw, 2.5rem);
   font-weight: 600;
-  color: white;
+  color: var(--text-on-dark);
   letter-spacing: 0.02em;
-  text-shadow: 0 2px 20px color-mix(in oklch, black 60%, transparent);
+  text-shadow: 0 2px 20px color-mix(in oklch, black 65%, transparent);
 }
 
 .breathing-app__counter {
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: color-mix(in oklch, white 75%, transparent);
+  color: color-mix(in oklch, var(--text-on-dark) 75%, transparent);
   letter-spacing: 0.04em;
 }
 
@@ -347,8 +356,8 @@
   display: grid;
   gap: var(--space-3xs);
   padding: var(--space-sm) var(--space-2xs);
-  background: color-mix(in oklch, white 4%, transparent);
-  border: 1px solid color-mix(in oklch, white 6%, transparent);
+  background: color-mix(in oklch, var(--color-sand) 5%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 10%, transparent);
   border-radius: var(--radius-md);
   backdrop-filter: blur(8px);
 }
@@ -356,7 +365,7 @@
 .breathing-app__meta-label {
   font-size: 0.6875rem;
   font-weight: 600;
-  color: color-mix(in oklch, white 55%, transparent);
+  color: color-mix(in oklch, var(--text-on-dark) 58%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -365,7 +374,7 @@
   font-family: var(--font-display);
   font-size: clamp(1rem, 3vw, 1.25rem);
   font-variant-numeric: tabular-nums;
-  color: white;
+  color: var(--text-on-dark);
 }
 
 /* ============================================
@@ -406,22 +415,22 @@
 }
 
 .breathing-app__controls .btn--secondary {
-  color: white;
-  background: color-mix(in oklch, white 10%, transparent);
-  border: 1px solid color-mix(in oklch, white 20%, transparent);
+  color: var(--text-on-dark);
+  background: color-mix(in oklch, var(--color-sand) 10%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 22%, transparent);
   backdrop-filter: blur(8px);
 }
 
 .breathing-app__controls .btn--ghost {
   flex: 0 1 auto;
-  color: color-mix(in oklch, white 70%, transparent);
+  color: color-mix(in oklch, var(--text-on-dark) 70%, transparent);
   background: transparent;
-  border: 1px solid color-mix(in oklch, white 12%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 14%, transparent);
 }
 
 .breathing-app__controls .btn--ghost:hover {
-  color: white;
-  background: color-mix(in oklch, white 6%, transparent);
+  color: var(--text-on-dark);
+  background: color-mix(in oklch, var(--color-sand) 6%, transparent);
 }
 
 /* ============================================
@@ -429,14 +438,15 @@
    ============================================ */
 .breathing-app__settings {
   padding-block-start: var(--space-sm);
-  border-block-start: 1px solid color-mix(in oklch, white 8%, transparent);
+  border-block-start: 1px solid
+    color-mix(in oklch, var(--color-sand) 10%, transparent);
 }
 
 .breathing-app__settings-summary {
   padding-block: var(--space-xs);
   font-size: 0.875rem;
   font-weight: 600;
-  color: color-mix(in oklch, white 75%, transparent);
+  color: color-mix(in oklch, var(--text-on-dark) 75%, transparent);
   text-align: center;
   letter-spacing: 0.04em;
   cursor: pointer;
@@ -469,12 +479,12 @@
   display: grid;
   gap: var(--space-2xs);
   font-size: 0.8125rem;
-  color: color-mix(in oklch, white 65%, transparent);
+  color: color-mix(in oklch, var(--text-on-dark) 65%, transparent);
 }
 
 .breathing-app__setting span {
   font-weight: 600;
-  color: color-mix(in oklch, white 85%, transparent);
+  color: color-mix(in oklch, var(--text-on-dark) 85%, transparent);
 }
 
 .breathing-app__setting input {
@@ -482,9 +492,9 @@
   padding: var(--space-xs) var(--space-sm);
   font-family: var(--font-body);
   font-size: 1rem;
-  color: white;
-  background: color-mix(in oklch, white 5%, transparent);
-  border: 1px solid color-mix(in oklch, white 12%, transparent);
+  color: var(--text-on-dark);
+  background: color-mix(in oklch, var(--color-sand) 6%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 14%, transparent);
   border-radius: var(--radius-md);
   transition:
     border-color var(--transition-fast),
@@ -494,7 +504,7 @@
 
 .breathing-app__setting input:focus {
   outline: none;
-  background: color-mix(in oklch, white 8%, transparent);
+  background: color-mix(in oklch, var(--color-sand) 10%, transparent);
   border-color: var(--breathing-accent);
   box-shadow: 0 0 0 3px
     color-mix(in oklch, var(--breathing-accent) 22%, transparent);
@@ -509,12 +519,8 @@
    Reduced Motion
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  .breathing-app__circle {
-    transition: none;
-  }
-
   .breathing-app__ring {
-    animation: none;
+    transition: none;
   }
 }
 
