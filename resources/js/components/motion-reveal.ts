@@ -1,13 +1,18 @@
 /**
  * Scroll-reveal and journey-progress motion layer.
- * Built on Motion.dev — one calm, unified reveal for the whole site.
+ * Built on Motion.dev's WAAPI-backed `motion/mini` — one calm, unified
+ * reveal for the whole site.
  *
  * The previous direction-variant reveals (up/down/left/right/scale) felt
  * restless; everything here settles in the same direction with the same
  * curve so the page arrives instead of performing.
+ *
+ * `motion/mini` only ships `animate`; viewport detection uses a plain
+ * IntersectionObserver and stagger delays are computed inline — so we
+ * stay on the small WAAPI runtime without pulling in the full engine.
  */
 
-import { animate, inView, stagger } from 'motion';
+import { animate } from 'motion/mini';
 import { defineComponent } from '@beardcoder/stitch-js';
 
 const REVEAL_DISTANCE_PX = 10;
@@ -46,6 +51,36 @@ function readDelayClass(el: HTMLElement): number {
 }
 
 /**
+ * Observe `target` once; run `onEnter` the first time it crosses
+ * `amount` visibility, then stop. Returns a disposer.
+ */
+function onceInView(
+  target: Element,
+  onEnter: () => void,
+  options: { amount?: number; rootMargin?: string } = {}
+): () => void {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        onEnter();
+        observer.disconnect();
+
+        return;
+      }
+    },
+    {
+      threshold: options.amount ?? IN_VIEW_AMOUNT,
+      rootMargin: options.rootMargin ?? '0px',
+    }
+  );
+
+  observer.observe(target);
+
+  return () => observer.disconnect();
+}
+
+/**
  * Reveal a single element when it enters the viewport.
  * Attach to `.fade-in`, `.fade-in-up`, `.fade-in-down`, `.fade-in-left`,
  * `.fade-in-right`, `.fade-in-scale` — all variants now share the same motion.
@@ -62,17 +97,13 @@ export const reveal = defineComponent({}, (ctx) => {
 
   hideForReveal(el);
 
-  const stop = inView(
-    el,
-    () => {
-      animate(
-        el,
-        { opacity: 1, transform: 'translate3d(0, 0, 0)' },
-        { duration: REVEAL_DURATION_S, delay, ease: EASE_SETTLE }
-      ).then(() => settleStyles(el));
-    },
-    { amount: IN_VIEW_AMOUNT }
-  );
+  const stop = onceInView(el, () => {
+    animate(
+      el,
+      { opacity: 1, transform: 'translate3d(0, 0, 0)' },
+      { duration: REVEAL_DURATION_S, delay, ease: EASE_SETTLE }
+    ).then(() => settleStyles(el));
+  });
 
   ctx.onDestroy(() => stop());
 });
@@ -91,21 +122,19 @@ export const revealStagger = defineComponent({}, (ctx) => {
 
   children.forEach(hideForReveal);
 
-  const stop = inView(
-    ctx.el,
-    () => {
+  const stop = onceInView(ctx.el, () => {
+    children.forEach((child, index) => {
       animate(
-        children,
+        child,
         { opacity: 1, transform: 'translate3d(0, 0, 0)' },
         {
           duration: REVEAL_DURATION_S,
+          delay: index * STAGGER_STEP_S,
           ease: EASE_SETTLE,
-          delay: stagger(STAGGER_STEP_S),
         }
-      ).then(() => children.forEach(settleStyles));
-    },
-    { amount: IN_VIEW_AMOUNT }
-  );
+      ).then(() => settleStyles(child));
+    });
+  });
 
   ctx.onDestroy(() => stop());
 });
@@ -148,7 +177,7 @@ export const journeyProgress = defineComponent<JourneyProgressOptions>(
         number.style.willChange = 'opacity, transform';
       }
 
-      const stop = inView(
+      const stop = onceInView(
         step,
         () => {
           step.classList.add(ctx.options.activeClass);
@@ -163,7 +192,7 @@ export const journeyProgress = defineComponent<JourneyProgressOptions>(
             number.style.willChange = '';
           });
         },
-        { amount: 0.3, margin: '0px 0px -20% 0px' }
+        { amount: 0.3, rootMargin: '0px 0px -20% 0px' }
       );
 
       stoppers.push(stop);
@@ -211,16 +240,18 @@ export const activeSection = defineComponent<ActiveSectionOptions>(
       });
     };
 
-    const stoppers = sections.map((section) =>
-      inView(
-        section,
-        () => {
-          setActive(section.id);
-        },
-        { amount: 0.3, margin: '-20% 0px -40% 0px' }
-      )
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        }
+      },
+      { threshold: 0.3, rootMargin: '-20% 0px -40% 0px' }
     );
 
-    ctx.onDestroy(() => stoppers.forEach((stop) => stop()));
+    sections.forEach((section) => observer.observe(section));
+    ctx.onDestroy(() => observer.disconnect());
   }
 );
