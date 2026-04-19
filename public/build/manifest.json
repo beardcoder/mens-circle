@@ -24,7 +24,7 @@
     "src": "node_modules/@fontsource-variable/playfair-display/files/playfair-display-vietnamese-wght-normal.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-_CAPbidC.css",
+    "file": "assets/app-ClBzkZmI.css",
     "name": "app",
     "names": [
       "app.css"
@@ -41,7 +41,7 @@
     ]
   },
   "resources/js/app.ts": {
-    "file": "assets/app-SSqivheF.js",
+    "file": "assets/app-DtBhqyId.js",
     "name": "app",
     "src": "resources/js/app.ts",
     "isEntry": true
