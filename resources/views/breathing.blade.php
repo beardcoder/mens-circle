@@ -118,11 +118,20 @@
           <div class="breathing-app__controls">
             <button
               type="button"
-              class="btn btn--primary"
+              class="btn btn--primary breathing-app__start"
               data-element="start"
+              aria-label="Atemübung starten"
+              title="Atemübung starten"
               data-umami-event="breathing-start"
             >
-              Start
+              <svg
+                data-element="startIcon"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M8 5.14v13.72a1 1 0 0 0 1.54.84l10.3-6.86a1 1 0 0 0 0-1.68L9.54 4.3A1 1 0 0 0 8 5.14Z" />
+              </svg>
             </button>
             <button
               type="button"
@@ -143,46 +152,116 @@
             </button>
           </div>
 
-          <details class="breathing-app__settings">
-            <summary class="breathing-app__settings-summary">
-              Einstellungen
-            </summary>
-            <div class="breathing-app__settings-grid">
-              <label class="breathing-app__setting">
-                <span>Atemzüge je Runde</span>
-                <input
-                  type="number"
-                  data-element="settingBreaths"
-                  min="10"
-                  max="60"
-                  step="1"
-                  value="30"
-                />
-              </label>
-              <label class="breathing-app__setting">
-                <span>Runden</span>
-                <input
-                  type="number"
-                  data-element="settingRounds"
-                  min="1"
-                  max="6"
-                  step="1"
-                  value="3"
-                />
-              </label>
-              <label class="breathing-app__setting">
-                <span>Erholungs-Halt (Sek.)</span>
-                <input
-                  type="number"
-                  data-element="settingRecovery"
-                  min="5"
-                  max="30"
-                  step="1"
-                  value="15"
-                />
-              </label>
+          <div class="breathing-app__settings">
+            <div class="breathing-app__setting breathing-app__setting--wheel">
+              <span class="breathing-app__setting-label"
+                >Atemzüge je Runde</span
+              >
+              <div
+                class="breathing-wheel"
+                data-element="settingBreaths"
+                data-min="10"
+                data-max="60"
+                data-value="30"
+                role="slider"
+                tabindex="0"
+                aria-label="Atemzüge je Runde"
+                aria-valuemin="10"
+                aria-valuemax="60"
+                aria-valuenow="30"
+              >
+                <div
+                  class="breathing-wheel__viewport"
+                  data-element="settingBreathsViewport"
+                >
+                  <div
+                    class="breathing-wheel__track"
+                    data-element="settingBreathsTrack"
+                  ></div>
+                </div>
+                <div
+                  class="breathing-wheel__indicator"
+                  aria-hidden="true"
+                ></div>
+                <div
+                  class="breathing-wheel__fade breathing-wheel__fade--start"
+                  aria-hidden="true"
+                ></div>
+                <div
+                  class="breathing-wheel__fade breathing-wheel__fade--end"
+                  aria-hidden="true"
+                ></div>
+              </div>
             </div>
-          </details>
+            <div class="breathing-app__setting breathing-app__setting--stepper">
+              <span class="breathing-app__setting-label">Runden</span>
+              <div class="breathing-stepper">
+                <button
+                  type="button"
+                  class="breathing-stepper__btn"
+                  data-element="settingRoundsMinus"
+                  aria-label="Eine Runde weniger"
+                >
+                  −
+                </button>
+                <span
+                  class="breathing-stepper__value"
+                  data-element="settingRounds"
+                  data-min="1"
+                  data-max="6"
+                  data-value="3"
+                  role="spinbutton"
+                  aria-valuemin="1"
+                  aria-valuemax="6"
+                  aria-valuenow="3"
+                  >3</span
+                >
+                <button
+                  type="button"
+                  class="breathing-stepper__btn"
+                  data-element="settingRoundsPlus"
+                  aria-label="Eine Runde mehr"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div class="breathing-app__setting breathing-app__setting--stepper">
+              <span class="breathing-app__setting-label"
+                >Erholungs-Halt (Sek.)</span
+              >
+              <div class="breathing-stepper">
+                <button
+                  type="button"
+                  class="breathing-stepper__btn"
+                  data-element="settingRecoveryMinus"
+                  aria-label="Erholungs-Halt verringern"
+                >
+                  −
+                </button>
+                <span
+                  class="breathing-stepper__value"
+                  data-element="settingRecovery"
+                  data-min="5"
+                  data-max="30"
+                  data-value="15"
+                  role="spinbutton"
+                  aria-valuemin="5"
+                  aria-valuemax="30"
+                  aria-valuenow="15"
+                  >15</span
+                >
+                <button
+                  type="button"
+                  class="breathing-stepper__btn"
+                  data-element="settingRecoveryPlus"
+                  aria-label="Erholungs-Halt erhöhen"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
