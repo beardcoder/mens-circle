@@ -43,11 +43,11 @@
         </h1>
         <div class="hero__bottom">
           <p class="hero__description">Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.</p>
-          <div class="hero__cta fade-in-delay-2">
+          <div class="hero__cta">
             <a href="#newsletter" class="btn btn--primary btn--large"
               >Zum Newsletter</a
             >
-            <div class="hero__scroll fade-in-delay-3">
+            <div class="hero__scroll">
               <span>Mehr erfahren</span>
               <div class="hero__scroll-line"></div>
             </div>
@@ -59,7 +59,7 @@
   <!-- Info Section -->
   <section class="section no-event-info-section">
     <div class="container">
-      <div class="no-event-info__layout fade-in">
+      <div class="no-event-info__layout" data-reveal>
         <div class="no-event-info__content">
           <p class="eyebrow">Was ist der Männerkreis?</p>
           <h2 class="section-title no-event-info__title">
@@ -67,7 +67,7 @@
           </h2>
           <p class="no-event-info__text">Der Männerkreis Niederbayern/ Straubing bietet dir einen geschützten Raum, in dem du dich mit anderen Männern austauschen, wachsen und echte Verbindungen aufbauen kannst. Unsere Treffen finden regelmäßig statt – sobald der nächste Termin feststeht, informieren wir dich.</p>
         </div>
-        <div class="no-event-info__visual fade-in fade-in-delay-1">
+        <div class="no-event-info__visual" data-reveal data-reveal-delay="1">
           <div class="no-event-info__quote-area">
             <div class="event-about__circles" aria-hidden="true">
               <div class="event-about__circle event-about__circle--1"></div>
@@ -84,7 +84,7 @@
   <!-- Newsletter Section -->
   <section class="section newsletter-section" id="newsletter">
     <div class="container">
-      <div class="newsletter__layout fade-in">
+      <div class="newsletter__layout" data-reveal>
         <div class="newsletter__content">
           <p class="eyebrow eyebrow--secondary">Newsletter</p>
           <h2 class="section-title newsletter__title">
@@ -115,7 +115,7 @@
   <!-- Back to Home CTA -->
   <section class="section no-event-cta-section">
     <div class="container">
-      <div class="no-event-cta__content fade-in">
+      <div class="no-event-cta__content" data-reveal>
         <p class="eyebrow">Mehr erfahren</p>
         <h2 class="section-title no-event-cta__title">
           Entdecke den <span class="text-italic">Männerkreis</span>

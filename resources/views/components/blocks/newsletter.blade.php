@@ -10,7 +10,7 @@
   aria-labelledby="newsletter-title"
 >
   <div class="container">
-    <div class="newsletter__layout fade-in">
+    <div class="newsletter__layout" data-reveal>
       <div class="newsletter__content">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>

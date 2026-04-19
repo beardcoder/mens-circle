@@ -106,7 +106,7 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer__top stagger-children">
+      <div class="footer__top" data-reveal-stagger>
         <div class="footer__brand">
           <a href="{{ route('home') }}" class="footer__logo">
             <svg
@@ -239,7 +239,7 @@
         </div>
       </div>
 
-      <div class="footer__bottom fade-in">
+      <div class="footer__bottom" data-reveal>
         <p class="footer__copyright">
           {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
         </p>

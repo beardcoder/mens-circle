@@ -17,7 +17,7 @@ import {
   revealStagger,
   activeSection,
   journeyProgress,
-} from '@/components/motion-reveal';
+} from '@/components/reveal';
 import { nativeAccordion } from '@/components/accordion';
 import { breathingApp } from '@/components/breathing';
 import { initUmamiKit } from '@/utils/umami-kit';
@@ -27,12 +27,9 @@ register('#nav', navigation());
 register('#header', scrollHeader());
 register('#scrollToTop', scrollToTop());
 
-// Scroll reveal — one calm motion for any of these markers
-const revealSelector =
-  '.fade-in, .fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right, .fade-in-scale';
-
-register(revealSelector, reveal());
-register('.stagger-children, [data-reveal-stagger]', revealStagger());
+// Scroll reveal — rise + settle as content enters the reading area
+register('[data-reveal]', reveal());
+register('[data-reveal-stagger]', revealStagger());
 
 // Orientation — active nav link and journey step feedback
 register('#nav', activeSection());

@@ -24,7 +24,7 @@
     aria-labelledby="archetypes-title"
   >
     <div class="container">
-      <div class="archetypes__header fade-in">
+      <div class="archetypes__header" data-reveal>
         @if (!empty($data['eyebrow']))
           <p class="eyebrow">{{ $data['eyebrow'] }}</p>
         @endif
@@ -40,7 +40,7 @@
         @endif
       </div>
 
-      <div class="archetypes__grid stagger-children">
+      <div class="archetypes__grid" data-reveal-stagger>
         @foreach ($items as $item)
           @php $icon = $detectIcon($item); @endphp
           <article class="archetype-card archetype-card--{{ $icon }}">

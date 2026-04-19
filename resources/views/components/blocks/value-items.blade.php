@@ -6,7 +6,7 @@
 
 <section class="section values-section">
   <div class="container">
-    <div class="section__header fade-in">
+    <div class="section__header" data-reveal>
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -17,7 +17,7 @@
     </div>
 
     @if (!empty($data['items']) && is_array($data['items']))
-      <div class="intro__values stagger-children">
+      <div class="intro__values" data-reveal-stagger>
         @foreach ($data['items'] as $item)
           <div class="value-item">
             @if (!empty($item['number']))

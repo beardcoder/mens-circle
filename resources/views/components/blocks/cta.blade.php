@@ -6,7 +6,7 @@
 
 <section class="section section--large cta-section">
   <div class="container">
-    <div class="cta__content fade-in">
+    <div class="cta__content" data-reveal>
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif

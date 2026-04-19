@@ -6,7 +6,7 @@
 
 <section class="section" id="{{ Str::slug($data['title'] ?? '') }}">
   <div class="container--narrow container">
-    <div class="section__header fade-in">
+    <div class="section__header" data-reveal>
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -17,7 +17,7 @@
     </div>
 
     @if (!empty($data['content']))
-      <div class="section__content fade-in fade-in-delay-1">
+      <div class="section__content" data-reveal data-reveal-delay="1">
         {!! $data['content'] !!}
       </div>
     @endif

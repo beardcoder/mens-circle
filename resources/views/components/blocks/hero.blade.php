@@ -54,14 +54,14 @@
                         $resolvedButtonLink = $isEventLink ? $nextEventUrl : $data['button_link'];
                     @endphp
           @if ($shouldShowButton)
-            <div class="hero__cta fade-in-delay-3">
+            <div class="hero__cta">
               <a
                 href="{{ $resolvedButtonLink }}"
                 class="btn btn--primary btn--large"
               >
                 {{ $data['button_text'] }}
               </a>
-              <div class="hero__scroll fade-in-delay-4">
+              <div class="hero__scroll">
                 <span>Entdecken</span>
                 <div class="hero__scroll-line" aria-hidden="true"></div>
               </div>

@@ -8,24 +8,28 @@
   <div class="intro__layout">
     <div class="intro__left">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow fade-in">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-reveal>{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
         <h2
-          class="section-title intro__title fade-in fade-in-delay-1"
+          class="section-title intro__title"
           id="intro-title"
+          data-reveal
+          data-reveal-delay="1"
         >
           {!! $data['title'] !!}
         </h2>
       @endif
 
       @if (!empty($data['text']))
-        <p class="intro__text fade-in fade-in-delay-2">{{ $data['text'] }}</p>
+        <p class="intro__text" data-reveal data-reveal-delay="2">
+          {{ $data['text'] }}
+        </p>
       @endif
 
       @if (!empty($data['values']) && is_array($data['values']))
-        <div class="intro__values stagger-children">
+        <div class="intro__values" data-reveal-stagger>
           @foreach ($data['values'] as $value)
             <div class="value-item">
               @if (!empty($value['number']))

@@ -1,7 +1,7 @@
 @if (!empty($settings->whatsapp_community_link))
   <section class="section whatsapp-section" id="whatsapp-community">
     <div class="container">
-      <div class="whatsapp__layout fade-in">
+      <div class="whatsapp__layout" data-reveal>
         <div class="whatsapp__content">
           <p class="eyebrow whatsapp__eyebrow">Community</p>
           <h2 class="section-title whatsapp__title">

@@ -1,41 +1,33 @@
 /**
  * Animation Utilities
  *
- * This file only provides:
- *  - Initial-state hiding for scroll-reveal marker classes so content
- *    does not flash before Motion.dev takes over. The hiding is scoped
- *    to the `.js` class that an inline head script adds synchronously
- *    before first paint, so no-JS users see everything.
- *  - Shared keyframes used by ambient CSS animations (breathing glows,
- *    scroll-indicator pulse) — these live in CSS because they are
- *    continuous/decorative and do not need JS.
+ * Scope is intentionally narrow:
+ *  - Initial hidden state for scroll-reveal elements so they do not
+ *    flash before Motion.dev takes over. An inline head script adds
+ *    `.js` to <html> synchronously before first paint.
+ *  - Shared keyframes for ambient decorative animation (section glows
+ *    and the hero scroll-indicator pulse).
+ *  - Scroll-to-top button transitions.
  *
- * The actual scroll-reveal motion lives in:
- *   resources/js/components/motion-reveal.ts
+ * The actual reveal motion lives in:
+ *   resources/js/components/reveal.ts
  */
 
 /* ============================================
-   Scroll-reveal marker classes
-   Hidden only when JS is active and the element has not yet been
-   revealed. After animation, JS sets `data-revealed` and the inline
-   transform/opacity are cleared, so no lingering stacking context
-   survives to interfere with z-index frames or box-shadows.
+   Scroll-reveal hidden state
+   Only hides while JS is active and the element has not yet been
+   revealed. JS sets `data-revealed` after animating, lifting this
+   rule; inline styles are also cleared, so no stacking context from a
+   lingering transform remains.
    ============================================ */
-html.js .fade-in:not([data-revealed]),
-html.js .fade-in-up:not([data-revealed]),
-html.js .fade-in-down:not([data-revealed]),
-html.js .fade-in-left:not([data-revealed]),
-html.js .fade-in-right:not([data-revealed]),
-html.js .fade-in-scale:not([data-revealed]),
-html.js .stagger-children > *:not([data-revealed]),
+html.js [data-reveal]:not([data-revealed]),
 html.js [data-reveal-stagger] > *:not([data-revealed]) {
   opacity: 0;
-  transform: translate3d(0, 10px, 0);
+  transform: translate3d(0, 24px, 0);
 }
 
 /* ============================================
    Ambient continuous animations
-   Used for the hero/section glows and decorative rings.
    ============================================ */
 @keyframes breathe {
   0%,
@@ -130,17 +122,10 @@ html.js [data-reveal-stagger] > *:not([data-revealed]) {
 }
 
 /* ============================================
-   Reduced Motion
-   Always show reveal markers at full visibility.
+   Reduced Motion — show reveal markers immediately.
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  html.js .fade-in,
-  html.js .fade-in-up,
-  html.js .fade-in-down,
-  html.js .fade-in-left,
-  html.js .fade-in-right,
-  html.js .fade-in-scale,
-  html.js .stagger-children > *,
+  html.js [data-reveal],
   html.js [data-reveal-stagger] > * {
     opacity: 1 !important;
     transform: none !important;

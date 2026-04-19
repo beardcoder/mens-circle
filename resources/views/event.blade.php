@@ -47,7 +47,7 @@
             · {{ $event->location }}
           </p>
           @unless ($event->isPast)
-            <div class="hero__cta fade-in-delay-2">
+            <div class="hero__cta">
               <a
                 href="#anmeldung"
                 class="btn btn--primary btn--large"
@@ -66,7 +66,7 @@
     <!-- Past Event Info Section -->
     <section class="event-register-section" id="anmeldung">
       <div class="event-register__layout">
-        <div class="event-register__content fade-in">
+        <div class="event-register__content" data-reveal>
           <div class="event-register__circles" aria-hidden="true">
             <div class="event-register__circle event-register__circle--1"></div>
             <div class="event-register__circle event-register__circle--2"></div>
@@ -84,7 +84,11 @@
           </p>
         </div>
 
-        <div class="event-register__form-wrap fade-in fade-in-delay-1">
+        <div
+          class="event-register__form-wrap"
+          data-reveal
+          data-reveal-delay="1"
+        >
           <div class="event-register__past-info">
             <p class="event-register__past-text">Dieses Treffen liegt in der Vergangenheit. Eine Anmeldung ist nicht mehr möglich.</p>
             <p class="event-register__past-text">Möchtest du beim nächsten Männerkreis dabei sein? Dann trag dich in unseren Newsletter ein, um über kommende Termine informiert zu werden.</p>
@@ -104,7 +108,7 @@
     <!-- Registration Section - Prominent Placement -->
     <section class="event-register-section" id="anmeldung">
       <div class="event-register__layout">
-        <div class="event-register__content fade-in">
+        <div class="event-register__content" data-reveal>
           <div class="event-register__circles" aria-hidden="true">
             <div class="event-register__circle event-register__circle--1"></div>
             <div class="event-register__circle event-register__circle--2"></div>
@@ -139,7 +143,11 @@
           @endif
         </div>
 
-        <div class="event-register__form-wrap fade-in fade-in-delay-1">
+        <div
+          class="event-register__form-wrap"
+          data-reveal
+          data-reveal-delay="1"
+        >
           <form
             id="registrationForm"
             class="event-register__form"
@@ -234,7 +242,7 @@
   <section class="event-info-section">
     <div class="event-info__bg-text" aria-hidden="true">TERMIN</div>
     <div class="container">
-      <div class="event-info__grid stagger-children">
+      <div class="event-info__grid" data-reveal-stagger>
         <div class="event-info__card event-info__card--date">
           <div class="event-info__card-circle" aria-hidden="true"></div>
           <div class="event-info__card-content">
@@ -272,7 +280,7 @@
         </div>
       </div>
 
-      <div class="event-info__calendar fade-in">
+      <div class="event-info__calendar" data-reveal>
         <button type="button" class="btn btn--secondary" id="addToCalendar">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -290,7 +298,7 @@
   <!-- Event Description Section -->
   <section class="event-about-section">
     <div class="event-about__layout">
-      <div class="event-about__content fade-in">
+      <div class="event-about__content" data-reveal>
         <p class="eyebrow">Über das Treffen</p>
         <h2 class="section-title section-title--lg event-about__title">
           Ein Raum für <br /><span class="text-italic">echte Begegnung</span>
@@ -299,7 +307,7 @@
           {!! nl2br(e($event->description)) !!}
         </div>
       </div>
-      <div class="event-about__visual fade-in fade-in-delay-1">
+      <div class="event-about__visual" data-reveal data-reveal-delay="1">
         <div class="event-about__quote-area">
           <div class="event-about__circles" aria-hidden="true">
             <div class="event-about__circle event-about__circle--1"></div>
@@ -321,7 +329,7 @@
       <div class="event-cta__circle event-cta__circle--2"></div>
     </div>
     <div class="container">
-      <div class="event-cta__content fade-in">
+      <div class="event-cta__content" data-reveal>
         @if ($event->isPast)
           <p class="eyebrow">Interesse geweckt?</p>
           <h2 class="section-title event-cta__title">

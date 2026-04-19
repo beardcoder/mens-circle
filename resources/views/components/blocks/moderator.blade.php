@@ -15,7 +15,7 @@
 <section class="section moderator-section" id="moderator">
   <div class="container">
     <div class="moderator__layout">
-      <div class="moderator__photo-wrapper fade-in">
+      <div class="moderator__photo-wrapper" data-reveal>
         <div class="moderator__photo">
           @if ($media)
             {{ $media->img()->attributes([
@@ -35,7 +35,7 @@
         <div class="moderator__photo-accent"></div>
       </div>
 
-      <div class="moderator__content fade-in fade-in-delay-1">
+      <div class="moderator__content" data-reveal data-reveal-delay="1">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow">{{ $data['eyebrow'] }}</p>
         @endif
