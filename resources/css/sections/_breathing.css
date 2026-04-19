@@ -1,21 +1,48 @@
 /**
  * Breathing Section
- * Interactive Wim-Hof-style breathing exercise
+ * Interactive Wim-Hof-style breathing exercise.
+ * Phone-first: the interactive stage dominates the viewport and uses
+ * stacked translucent ring layers with mix-blend-mode for an organic,
+ * overlapping look that stays crisp on small screens.
  */
 
 /* ============================================
-   Hero
+   Local tokens (scoped to this page)
+   ============================================ */
+.breathing-hero,
+.breathing-section {
+  --breathing-bg: oklch(16% 0.02 180deg);
+  --breathing-bg-deep: oklch(10% 0.015 200deg);
+  --breathing-accent: oklch(76% 0.13 170deg);
+  --breathing-accent-dim: oklch(52% 0.11 170deg);
+  --breathing-warm: oklch(72% 0.12 55deg);
+}
+
+/* ============================================
+   Hero — condensed on phone to keep app above fold
    ============================================ */
 .breathing-hero {
   position: relative;
-  block-size: 70vh;
-  min-block-size: 50vh;
+  block-size: auto;
+  min-block-size: 0;
+  padding-block: clamp(3rem, 6vh, 6rem);
   color: var(--text-on-dark);
-  background: linear-gradient(
-    135deg,
-    var(--color-earth-deep) 0%,
-    color-mix(in oklch, var(--color-earth-deep) 75%, var(--color-sage)) 100%
-  );
+  background:
+    radial-gradient(
+      ellipse at 20% 10%,
+      color-mix(in oklch, var(--breathing-accent-dim) 28%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 90% 90%,
+      color-mix(in oklch, var(--breathing-warm) 18%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(
+      160deg,
+      var(--breathing-bg) 0%,
+      var(--breathing-bg-deep) 100%
+    );
 }
 
 .breathing-hero .hero__bg::before {
@@ -24,28 +51,39 @@
   pointer-events: none;
   content: '';
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.04;
+  opacity: 0.05;
 }
 
 /* ============================================
    Section
    ============================================ */
 .breathing-section {
-  background: var(--bg-secondary);
+  padding-block: clamp(2rem, 5vh, 5rem);
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      color-mix(in oklch, var(--breathing-accent-dim) 10%, transparent),
+      transparent 60%
+    ),
+    var(--breathing-bg);
 }
 
 .breathing__wrapper {
   display: grid;
-  gap: var(--space-xl);
+  gap: var(--space-lg);
   max-inline-size: 760px;
   margin-inline: auto;
+}
+
+.breathing__intro {
+  order: 2;
 }
 
 .breathing__intro h2 {
   margin-block-end: var(--space-md);
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  color: var(--text-primary);
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  color: var(--text-on-dark);
   text-align: center;
 }
 
@@ -54,7 +92,7 @@
   margin-block-end: var(--space-md);
   font-size: var(--text-section-body);
   line-height: var(--leading-relaxed);
-  color: var(--text-muted);
+  color: color-mix(in oklch, var(--text-on-dark) 75%, transparent);
 }
 
 .breathing__steps li {
@@ -62,210 +100,409 @@
 }
 
 .breathing__steps strong {
-  color: var(--text-primary);
+  color: var(--text-on-dark);
 }
 
 .breathing__warning {
   padding: var(--space-sm) var(--space-md);
   font-size: 0.9375rem;
-  color: var(--text-primary);
-  background: color-mix(in oklch, var(--color-warning) 12%, transparent);
+  color: var(--text-on-dark);
+  background: color-mix(in oklch, var(--color-warning) 14%, transparent);
   border-inline-start: 3px solid var(--color-warning);
   border-radius: var(--radius-md);
 }
 
 /* ============================================
-   App
+   App — the main dark stage
    ============================================ */
 .breathing-app {
+  position: relative;
   display: grid;
-  gap: var(--space-lg);
-  padding: var(--space-lg);
-  background: var(--bg-elevated);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  grid-template-rows: 1fr auto auto auto;
+  gap: var(--space-md);
+  order: 1;
+  min-block-size: min(92svh, 720px);
+  padding: clamp(1rem, 4vw, 2rem);
+  overflow: hidden;
+  color: var(--text-on-dark);
+  background:
+    radial-gradient(
+      ellipse at 50% 20%,
+      color-mix(in oklch, var(--breathing-accent-dim) 18%, transparent),
+      transparent 65%
+    ),
+    linear-gradient(
+      180deg,
+      var(--breathing-bg) 0%,
+      var(--breathing-bg-deep) 100%
+    );
+  border: 1px solid
+    color-mix(in oklch, var(--breathing-accent) 15%, transparent);
+  border-radius: clamp(var(--radius-lg), 3vw, var(--radius-xl));
+  box-shadow:
+    0 40px 80px -20px color-mix(in oklch, black 60%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 6%, transparent);
 }
 
+.breathing-app::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: '';
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.04;
+}
+
+.breathing-app > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   Stage + Circle
+   ============================================ */
 .breathing-app__stage {
   display: grid;
   place-items: center;
-  min-block-size: 320px;
-  padding-block: var(--space-md);
+  min-block-size: 0;
 }
 
 .breathing-app__circle {
-  --size: clamp(220px, 45vw, 320px);
+  --size: min(82vw, 58svh, 420px);
+  --motion-scale: 0.78;
 
   position: relative;
   display: grid;
-  place-content: center;
   place-items: center;
   inline-size: var(--size);
   block-size: var(--size);
   text-align: center;
-  background:
-    radial-gradient(
-      circle at 30% 30%,
-      color-mix(in oklch, var(--accent-primary) 65%, transparent),
-      color-mix(in oklch, var(--accent-primary) 25%, transparent) 70%,
-      transparent 100%
-    ),
-    radial-gradient(
-      circle,
-      color-mix(in oklch, var(--color-earth-deep) 80%, transparent),
-      var(--color-earth-deep)
-    );
-  border-radius: var(--radius-full);
-  box-shadow:
-    0 24px 60px color-mix(in oklch, var(--color-earth-deep) 35%, transparent),
-    inset 0 0 60px color-mix(in oklch, var(--color-earth-deep) 50%, transparent);
-  transform: scale(0.7);
-  transition:
-    transform 1.8s ease-in-out,
-    box-shadow var(--transition-medium);
+  isolation: isolate;
+  transform: scale(var(--motion-scale));
+  transition: transform 1.8s var(--ease-smooth);
 }
 
+/* Outer scale for the whole stack, driven by JS data-motion */
 .breathing-app__circle[data-motion='inhale'] {
-  box-shadow:
-    0 32px 80px color-mix(in oklch, var(--accent-primary) 40%, transparent),
-    inset 0 0 80px color-mix(in oklch, var(--color-earth-deep) 30%, transparent);
-  transform: scale(1.05);
+  --motion-scale: 1.02;
 }
 
 .breathing-app__circle[data-motion='exhale'] {
-  transform: scale(0.7);
+  --motion-scale: 0.78;
 }
 
 .breathing-app__circle[data-motion='hold'] {
-  transform: scale(0.85);
+  --motion-scale: 0.92;
 }
 
 .breathing-app__circle[data-phase='retention'],
 .breathing-app__circle[data-phase='recovery'] {
-  background:
-    radial-gradient(
-      circle at 30% 30%,
-      color-mix(in oklch, var(--color-sage) 55%, transparent),
-      color-mix(in oklch, var(--color-sage) 20%, transparent) 70%,
-      transparent 100%
-    ),
-    radial-gradient(circle, var(--color-earth-deep), var(--color-earth-deep));
-  transform: scale(0.85);
+  --motion-scale: 0.9;
 }
 
 .breathing-app__circle[data-phase='complete'] {
-  transform: scale(1);
+  --motion-scale: 1;
+}
+
+/* ============================================
+   Ring layers — translucent, overlapping
+   ============================================ */
+.breathing-app__ring {
+  position: absolute;
+  background: radial-gradient(
+    circle at 32% 28%,
+    color-mix(in oklch, var(--breathing-accent) 35%, transparent) 0%,
+    color-mix(in oklch, var(--breathing-accent-dim) 22%, transparent) 45%,
+    color-mix(in oklch, var(--breathing-accent-dim) 8%, transparent) 75%,
+    transparent 100%
+  );
+  border-radius: var(--radius-full);
+  box-shadow:
+    inset 0 0 40px color-mix(in oklch, var(--breathing-accent) 18%, transparent),
+    inset 0 0 2px color-mix(in oklch, var(--breathing-accent) 35%, transparent);
+  mix-blend-mode: screen;
+  animation: breathing-drift 7s var(--ease-in-out) infinite;
+  will-change: transform, opacity;
+}
+
+.breathing-app__ring--1 {
+  inset: 0;
+  opacity: 0.35;
+  animation-delay: 0s;
+}
+
+.breathing-app__ring--2 {
+  inset: 8%;
+  opacity: 0.5;
+  animation-delay: -1s;
+}
+
+.breathing-app__ring--3 {
+  inset: 17%;
+  opacity: 0.65;
+  animation-delay: -2s;
+}
+
+.breathing-app__ring--4 {
+  inset: 26%;
+  opacity: 0.75;
+  animation-delay: -3s;
+}
+
+.breathing-app__ring--5 {
+  inset: 35%;
+  opacity: 0.85;
+  animation-delay: -4s;
+}
+
+/* Bright core behind the label */
+.breathing-app__core {
+  position: absolute;
+  inset: 42%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    color-mix(in oklch, var(--breathing-accent) 90%, white 10%),
+    color-mix(in oklch, var(--breathing-accent) 70%, transparent) 60%,
+    color-mix(in oklch, var(--breathing-accent-dim) 50%, transparent) 100%
+  );
+  border-radius: var(--radius-full);
+  box-shadow:
+    0 0 60px color-mix(in oklch, var(--breathing-accent) 55%, transparent),
+    0 0 120px color-mix(in oklch, var(--breathing-accent) 25%, transparent);
+  mix-blend-mode: screen;
+}
+
+/* Phase-specific accent hue shifts — cascade to children via custom props */
+.breathing-app[data-phase='retention'] {
+  --breathing-accent: oklch(62% 0.11 220deg);
+  --breathing-accent-dim: oklch(40% 0.09 220deg);
+}
+
+.breathing-app[data-phase='recovery'] {
+  --breathing-accent: oklch(72% 0.13 145deg);
+  --breathing-accent-dim: oklch(48% 0.1 145deg);
+}
+
+.breathing-app[data-phase='complete'] {
+  --breathing-accent: oklch(80% 0.14 90deg);
+  --breathing-accent-dim: oklch(58% 0.12 90deg);
+}
+
+/* Ambient ring pulse */
+@keyframes breathing-drift {
+  0%,
+  100% {
+    filter: blur(0);
+    scale: 1;
+  }
+
+  50% {
+    filter: blur(0.5px);
+    scale: 1.035;
+  }
+}
+
+/* ============================================
+   Label stack inside the circle
+   ============================================ */
+.breathing-app__label {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-2xs);
+  padding: var(--space-sm) var(--space-md);
 }
 
 .breathing-app__phase {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
   font-weight: 600;
-  color: var(--text-on-dark);
+  color: white;
   letter-spacing: 0.02em;
+  text-shadow: 0 2px 20px color-mix(in oklch, black 60%, transparent);
 }
 
 .breathing-app__counter {
   display: block;
-  margin-block-start: var(--space-xs);
-  font-size: 0.9375rem;
-  color: color-mix(in oklch, var(--text-on-dark) 75%, transparent);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: color-mix(in oklch, white 75%, transparent);
+  letter-spacing: 0.04em;
 }
 
 /* ============================================
-   Meta
+   Meta row
    ============================================ */
 .breathing-app__meta {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   text-align: center;
 }
 
 .breathing-app__meta-item {
   display: grid;
   gap: var(--space-3xs);
-  padding-block: var(--space-sm);
-  background: color-mix(in oklch, var(--color-sand-light) 60%, transparent);
+  padding: var(--space-sm) var(--space-2xs);
+  background: color-mix(in oklch, white 4%, transparent);
+  border: 1px solid color-mix(in oklch, white 6%, transparent);
   border-radius: var(--radius-md);
+  backdrop-filter: blur(8px);
 }
 
 .breathing-app__meta-label {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: color-mix(in oklch, white 55%, transparent);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 }
 
 .breathing-app__meta-value {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 3vw, 1.25rem);
   font-variant-numeric: tabular-nums;
-  color: var(--text-primary);
+  color: white;
 }
 
 /* ============================================
-   Controls
+   Controls — phone-friendly
    ============================================ */
 .breathing-app__controls {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   justify-content: center;
 }
 
 .breathing-app__controls .btn {
-  min-inline-size: 160px;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  min-block-size: 52px;
+  padding-inline: var(--space-md);
+}
+
+.breathing-app__controls .btn--primary {
+  flex: 2 1 180px;
+  font-size: 1.0625rem;
+  color: var(--color-earth-deep);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--breathing-accent) 95%, white 5%),
+    var(--breathing-accent-dim)
+  );
+  border: none;
+  box-shadow:
+    0 8px 24px -4px
+      color-mix(in oklch, var(--breathing-accent) 45%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 30%, transparent);
+}
+
+.breathing-app__controls .btn--primary:hover {
+  filter: brightness(1.08);
+}
+
+.breathing-app__controls .btn--secondary {
+  color: white;
+  background: color-mix(in oklch, white 10%, transparent);
+  border: 1px solid color-mix(in oklch, white 20%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.breathing-app__controls .btn--ghost {
+  flex: 0 1 auto;
+  color: color-mix(in oklch, white 70%, transparent);
+  background: transparent;
+  border: 1px solid color-mix(in oklch, white 12%, transparent);
+}
+
+.breathing-app__controls .btn--ghost:hover {
+  color: white;
+  background: color-mix(in oklch, white 6%, transparent);
 }
 
 /* ============================================
-   Settings
+   Settings — collapsible
    ============================================ */
 .breathing-app__settings {
+  padding-block-start: var(--space-sm);
+  border-block-start: 1px solid color-mix(in oklch, white 8%, transparent);
+}
+
+.breathing-app__settings-summary {
+  padding-block: var(--space-xs);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: color-mix(in oklch, white 75%, transparent);
+  text-align: center;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  list-style: none;
+}
+
+.breathing-app__settings-summary::-webkit-details-marker {
+  display: none;
+}
+
+.breathing-app__settings-summary::after {
+  display: inline-block;
+  margin-inline-start: 0.5em;
+  content: '▾';
+  transition: transform var(--transition-fast);
+}
+
+.breathing-app__settings[open] .breathing-app__settings-summary::after {
+  transform: rotate(180deg);
+}
+
+.breathing-app__settings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: var(--space-sm);
-  padding-block-start: var(--space-md);
-  border-block-start: 1px solid var(--border-light);
+  padding-block-start: var(--space-sm);
 }
 
 .breathing-app__setting {
   display: grid;
   gap: var(--space-2xs);
-  font-size: 0.875rem;
-  color: var(--text-muted);
+  font-size: 0.8125rem;
+  color: color-mix(in oklch, white 65%, transparent);
 }
 
 .breathing-app__setting span {
   font-weight: 600;
-  color: var(--text-primary);
+  color: color-mix(in oklch, white 85%, transparent);
 }
 
 .breathing-app__setting input {
+  min-block-size: 44px;
   padding: var(--space-xs) var(--space-sm);
   font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--text-primary);
-  background: var(--bg-primary);
-  border: 2px solid var(--border-medium);
+  color: white;
+  background: color-mix(in oklch, white 5%, transparent);
+  border: 1px solid color-mix(in oklch, white 12%, transparent);
   border-radius: var(--radius-md);
   transition:
     border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
 }
 
 .breathing-app__setting input:focus {
   outline: none;
-  border-color: var(--accent-primary);
+  background: color-mix(in oklch, white 8%, transparent);
+  border-color: var(--breathing-accent);
   box-shadow: 0 0 0 3px
-    color-mix(in oklch, var(--accent-primary) 15%, transparent);
+    color-mix(in oklch, var(--breathing-accent) 22%, transparent);
 }
 
 .breathing-app__setting input:disabled {
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 /* ============================================
@@ -274,5 +511,33 @@
 @media (prefers-reduced-motion: reduce) {
   .breathing-app__circle {
     transition: none;
+  }
+
+  .breathing-app__ring {
+    animation: none;
+  }
+}
+
+/* ============================================
+   Narrow phone tuning
+   ============================================ */
+@media (width < 480px) {
+  .breathing-app {
+    padding: var(--space-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .breathing-app__circle {
+    --size: min(88vw, 52svh);
+  }
+
+  .breathing-app__meta-item {
+    padding: var(--space-xs) var(--space-3xs);
+  }
+
+  .breathing-app__controls .btn {
+    min-block-size: 48px;
+    padding-inline: var(--space-sm);
+    font-size: 0.9375rem;
   }
 }

@@ -70,12 +70,35 @@
         >
           <div class="breathing-app__stage" aria-live="polite">
             <div class="breathing-app__circle" data-element="circle">
-              <span class="breathing-app__phase" data-element="phase"
-                >Bereit</span
-              >
-              <span class="breathing-app__counter" data-element="counter"
-                >3 Runden · 30 Atemzüge</span
-              >
+              <span
+                class="breathing-app__ring breathing-app__ring--1"
+                aria-hidden="true"
+              ></span>
+              <span
+                class="breathing-app__ring breathing-app__ring--2"
+                aria-hidden="true"
+              ></span>
+              <span
+                class="breathing-app__ring breathing-app__ring--3"
+                aria-hidden="true"
+              ></span>
+              <span
+                class="breathing-app__ring breathing-app__ring--4"
+                aria-hidden="true"
+              ></span>
+              <span
+                class="breathing-app__ring breathing-app__ring--5"
+                aria-hidden="true"
+              ></span>
+              <span class="breathing-app__core" aria-hidden="true"></span>
+              <span class="breathing-app__label">
+                <span class="breathing-app__phase" data-element="phase"
+                  >Bereit</span
+                >
+                <span class="breathing-app__counter" data-element="counter"
+                  >3 Runden · 30 Atemzüge</span
+                >
+              </span>
             </div>
           </div>
 
@@ -128,41 +151,46 @@
             </button>
           </div>
 
-          <div class="breathing-app__settings">
-            <label class="breathing-app__setting">
-              <span>Atemzüge je Runde</span>
-              <input
-                type="number"
-                data-element="settingBreaths"
-                min="10"
-                max="60"
-                step="1"
-                value="30"
-              />
-            </label>
-            <label class="breathing-app__setting">
-              <span>Runden</span>
-              <input
-                type="number"
-                data-element="settingRounds"
-                min="1"
-                max="6"
-                step="1"
-                value="3"
-              />
-            </label>
-            <label class="breathing-app__setting">
-              <span>Erholungs-Halt (Sek.)</span>
-              <input
-                type="number"
-                data-element="settingRecovery"
-                min="5"
-                max="30"
-                step="1"
-                value="15"
-              />
-            </label>
-          </div>
+          <details class="breathing-app__settings">
+            <summary class="breathing-app__settings-summary">
+              Einstellungen
+            </summary>
+            <div class="breathing-app__settings-grid">
+              <label class="breathing-app__setting">
+                <span>Atemzüge je Runde</span>
+                <input
+                  type="number"
+                  data-element="settingBreaths"
+                  min="10"
+                  max="60"
+                  step="1"
+                  value="30"
+                />
+              </label>
+              <label class="breathing-app__setting">
+                <span>Runden</span>
+                <input
+                  type="number"
+                  data-element="settingRounds"
+                  min="1"
+                  max="6"
+                  step="1"
+                  value="3"
+                />
+              </label>
+              <label class="breathing-app__setting">
+                <span>Erholungs-Halt (Sek.)</span>
+                <input
+                  type="number"
+                  data-element="settingRecovery"
+                  min="5"
+                  max="30"
+                  step="1"
+                  value="15"
+                />
+              </label>
+            </div>
+          </details>
         </div>
       </div>
     </div>
