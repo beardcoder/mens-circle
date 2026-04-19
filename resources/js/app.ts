@@ -13,11 +13,11 @@ import {
 } from '@/components/forms';
 import { calendarIntegration } from '@/components/calendar';
 import {
-  scrollAnimate,
-  staggerAnimate,
+  reveal,
+  revealStagger,
   activeSection,
   journeyProgress,
-} from '@/components/scroll-animations';
+} from '@/components/motion-reveal';
 import { nativeAccordion } from '@/components/accordion';
 import { breathingApp } from '@/components/breathing';
 import { initUmamiKit } from '@/utils/umami-kit';
@@ -27,17 +27,15 @@ register('#nav', navigation());
 register('#header', scrollHeader());
 register('#scrollToTop', scrollToTop());
 
-// Scroll-driven animations (per-element)
-const fadeSelector =
+// Scroll reveal — one calm motion for any of these markers
+const revealSelector =
   '.fade-in, .fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right, .fade-in-scale';
 
-register(fadeSelector, scrollAnimate());
-register('.stagger-children', staggerAnimate());
+register(revealSelector, reveal());
+register('.stagger-children, [data-reveal-stagger]', revealStagger());
 
-// Section tracking (on nav element)
+// Orientation — active nav link and journey step feedback
 register('#nav', activeSection());
-
-// Journey progress (on section container)
 register('.journey-section', journeyProgress());
 
 // Interactive forms

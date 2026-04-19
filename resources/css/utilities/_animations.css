@@ -1,70 +1,38 @@
 /**
  * Animation Utilities
- * Smooth, organic scroll-triggered animations via IntersectionObserver + Web Animations API
  *
- * This file provides:
- * - Marker classes for scroll-triggered reveal animations (JS-driven)
- * - Continuous/looping keyframe animations for decorative elements
- * - Scroll progress indicator (CSS scroll-timeline)
- * - Scroll-to-top button
- * - Reduced motion & no-JS fallbacks
+ * This file only provides:
+ *  - Initial-state guards for scroll-reveal marker classes so content
+ *    doesn't flash before Motion.dev takes over.
+ *  - Shared keyframes used by ambient CSS animations (breathing glows,
+ *    scroll-indicator pulse, testimonial spinner rotation) — these live
+ *    in CSS because they are continuous/decorative and do not need JS.
  *
- * @see resources/js/components/scroll-animations.ts
+ * The actual scroll-reveal motion lives in:
+ *   resources/js/components/motion-reveal.ts
  */
 
 /* ============================================
-   Scroll-Triggered Animation Marker Classes
-   JavaScript handles the actual animation;
-   CSS only provides initial hidden state
+   Scroll-reveal marker classes
+   JS sets opacity/transform before reveal; the no-JS / reduced-motion
+   fallbacks below guarantee content is always readable without motion.
    ============================================ */
-
-/**
- * Usage:
- *   <div class="fade-in">Fades in from below</div>
- *   <div class="fade-in-left delay-2">Fades from left with delay</div>
- *   <div class="stagger-children">
- *     <div>Child 1 — cascading reveal</div>
- *     <div>Child 2</div>
- *   </div>
- */
-
-/* Marker classes — JS sets initial opacity to 0, then animates in */
 .fade-in,
 .fade-in-up,
 .fade-in-down,
 .fade-in-left,
 .fade-in-right,
-.fade-in-scale {
-  /* Initial state set dynamically by JavaScript */
-}
-
-/* Delay tiers (applied by JS: 120ms per tier) */
-.delay-1,
-.delay-2,
-.delay-3,
-.delay-4,
-.fade-in-delay-1,
-.fade-in-delay-2,
-.fade-in-delay-3,
-.fade-in-delay-4 {
-  /* Delays are applied programmatically by JavaScript */
-}
-
-/* Stagger container – children animate with cascading timing */
-.stagger-children {
-  /* Container marker for scroll animation stagger effect */
-}
-
-.stagger-children > * {
-  /* will-change set dynamically by JavaScript */
+.fade-in-scale,
+.stagger-children > *,
+[data-reveal-stagger] > * {
+  /* State is owned by JS; no initial hiding in CSS so content is
+     visible by default when JavaScript is unavailable. */
 }
 
 /* ============================================
-   Continuous/Looping Keyframe Animations
-   Referenced by hero, event, and button CSS
+   Ambient continuous animations
+   Used for the hero/section glows and decorative rings.
    ============================================ */
-
-/* Breathing / Pulsing animation for decorative elements */
 @keyframes breathe {
   0%,
   100% {
@@ -78,7 +46,6 @@
   }
 }
 
-/* Slower, more organic breathing variant */
 @keyframes breathe-slow {
   0%,
   100% {
@@ -92,27 +59,6 @@
   }
 }
 
-/* Gentle drift for decorative elements */
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-
-  25% {
-    transform: translate(8px, -12px);
-  }
-
-  50% {
-    transform: translate(-4px, -8px);
-  }
-
-  75% {
-    transform: translate(6px, 4px);
-  }
-}
-
-/* Scroll indicator pulse (used by hero scroll line) */
 @keyframes scroll-pulse {
   0%,
   100% {
@@ -126,57 +72,8 @@
   }
 }
 
-/* Spin (used by button loading state) */
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ============================================
-   Scroll Progress Indicator (Scroll-Driven Animation)
-   Uses bleeding-edge scroll-timeline for a
-   CSS-only reading progress bar
-   ============================================ */
-.scroll-progress {
-  position: fixed;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  z-index: calc(var(--z-header) + 1);
-  inline-size: 0%;
-  block-size: 2px;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    var(--accent-primary),
-    var(--color-terracotta-light),
-    var(--color-earth-warm)
-  );
-  box-shadow: 0 0 8px
-    color-mix(in oklch, var(--accent-primary) 40%, transparent);
-  transform-origin: left;
-}
-
-@supports (animation-timeline: scroll()) {
-  .scroll-progress {
-    animation: scroll-progress-fill auto linear;
-    animation-timeline: scroll(root);
-  }
-}
-
-@keyframes scroll-progress-fill {
-  from {
-    inline-size: 0%;
-  }
-
-  to {
-    inline-size: 100%;
-  }
-}
-
 /* ============================================
    Scroll-to-Top Button
-   Appears after scrolling, smooth reveal
    ============================================ */
 .scroll-to-top {
   position: fixed;
@@ -198,31 +95,29 @@
     var(--shadow-lg),
     0 0 0 1px color-mix(in oklch, var(--color-bone) 10%, transparent) inset;
   opacity: 0;
-  transform: translateY(16px) scale(0.9);
+  transform: translateY(12px);
   transition:
     opacity var(--duration-normal) var(--ease-smooth),
     transform var(--duration-normal) var(--ease-smooth),
-    background-color var(--duration-fast) var(--ease-smooth),
-    box-shadow var(--duration-normal) var(--ease-smooth);
+    background-color var(--duration-fast) var(--ease-smooth);
 }
 
 .scroll-to-top.visible {
   pointer-events: auto;
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
 
 .scroll-to-top:hover {
   background: var(--bg-dark);
   box-shadow:
     var(--shadow-xl),
-    0 0 0 1px color-mix(in oklch, var(--color-bone) 12%, transparent) inset,
-    0 0 28px color-mix(in oklch, var(--accent-primary) 30%, transparent);
-  transform: translateY(-2px) scale(1.05);
+    0 0 0 1px color-mix(in oklch, var(--color-bone) 12%, transparent) inset;
+  transform: translateY(-2px);
 }
 
 .scroll-to-top:active {
-  transform: translateY(0) scale(0.95);
+  transform: translateY(0);
 }
 
 .scroll-to-top svg {
@@ -231,8 +126,7 @@
 }
 
 /* ============================================
-   Reduced Motion
-   Respects user preference for less motion
+   Reduced Motion + No-JS fallback
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
   .fade-in,
@@ -241,32 +135,21 @@
   .fade-in-left,
   .fade-in-right,
   .fade-in-scale,
-  .fade-in-delay-1,
-  .fade-in-delay-2,
-  .fade-in-delay-3,
-  .fade-in-delay-4 {
-    /* Ensure visibility when reduced motion is preferred */
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .stagger-children > * {
+  .stagger-children > *,
+  [data-reveal-stagger] > * {
     opacity: 1 !important;
     transform: none !important;
   }
 }
 
-/* ============================================
-   No-JS Fallback
-   Show content if JavaScript is disabled
-   ============================================ */
 .no-js .fade-in,
 .no-js .fade-in-up,
 .no-js .fade-in-down,
 .no-js .fade-in-left,
 .no-js .fade-in-right,
 .no-js .fade-in-scale,
-.no-js .stagger-children > * {
+.no-js .stagger-children > *,
+.no-js [data-reveal-stagger] > * {
   opacity: 1;
   transform: none;
 }

@@ -4,9 +4,6 @@
   @include ('partials.seo-head')
 </head>
 <body>
-  <!-- Scroll Progress Indicator -->
-  <div class="scroll-progress" aria-hidden="true"></div>
-
   <!-- Skip Link -->
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
