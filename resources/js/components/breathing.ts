@@ -37,7 +37,7 @@ const PHASE_LABEL: Record<Phase, string> = {
   complete: 'Geschafft',
 };
 
-const WHEEL_ITEM_WIDTH = 56;
+const PICKER_ITEM_WIDTH = 72;
 
 function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
@@ -81,9 +81,6 @@ export const breathingApp = defineComponent<BreathingOptions>(
     );
     const settingBreaths = root.querySelector<HTMLElement>(
       '[data-element="settingBreaths"]'
-    );
-    const settingBreathsViewport = root.querySelector<HTMLElement>(
-      '[data-element="settingBreathsViewport"]'
     );
     const settingBreathsTrack = root.querySelector<HTMLElement>(
       '[data-element="settingBreathsTrack"]'
@@ -366,134 +363,188 @@ export const breathingApp = defineComponent<BreathingOptions>(
     bindStepper(settingRounds, settingRoundsMinus, settingRoundsPlus);
     bindStepper(settingRecovery, settingRecoveryMinus, settingRecoveryPlus);
 
-    // ---------- iOS-style swipe wheel ----------
-    const setupWheel = (): (() => void) | undefined => {
-      if (!settingBreaths || !settingBreathsViewport || !settingBreathsTrack)
-        return;
+    // ---------- iOS-style swipe picker (pointer-drag, stepped) ----------
+    const setupPicker = (): (() => void) | undefined => {
+      if (!settingBreaths || !settingBreathsTrack) return;
 
       const min = Number.parseInt(settingBreaths.dataset.min ?? '10', 10);
       const max = Number.parseInt(settingBreaths.dataset.max ?? '60', 10);
+      const step = Math.max(
+        1,
+        Number.parseInt(settingBreaths.dataset.step ?? '5', 10)
+      );
       const initial = Number.parseInt(
         settingBreaths.dataset.value ?? String(min),
         10
       );
 
+      const values: number[] = [];
+
+      for (let v = min; v <= max; v += step) values.push(v);
+
       settingBreathsTrack.textContent = '';
-      for (let i = min; i <= max; i += 1) {
-        const item = document.createElement('span');
+      values.forEach((value) => {
+        const item = document.createElement('button');
 
-        item.className = 'breathing-wheel__item';
-        item.dataset.value = String(i);
-        item.textContent = String(i);
+        item.type = 'button';
+        item.className = 'breathing-picker__item';
+        item.dataset.value = String(value);
+        item.textContent = String(value);
+        item.setAttribute('aria-label', `${value} Atemzüge`);
         settingBreathsTrack.appendChild(item);
-      }
-
-      const applyPadding = (): void => {
-        const width = settingBreathsViewport.clientWidth;
-        const pad = Math.max(0, (width - WHEEL_ITEM_WIDTH) / 2);
-
-        settingBreathsTrack.style.paddingInline = `${pad}px`;
-      };
-
-      const setActive = (value: number): void => {
-        const clamped = clamp(value, min, max);
-
-        settingBreaths.dataset.value = String(clamped);
-        settingBreaths.setAttribute('aria-valuenow', String(clamped));
-
-        const items = settingBreathsTrack.querySelectorAll<HTMLElement>(
-          '.breathing-wheel__item'
-        );
-
-        items.forEach((item) => {
-          item.classList.toggle(
-            'is-active',
-            item.dataset.value === String(clamped)
-          );
-        });
-      };
-
-      const scrollToValue = (value: number, smooth = true): void => {
-        const index = clamp(value, min, max) - min;
-
-        settingBreathsViewport.scrollTo({
-          left: index * WHEEL_ITEM_WIDTH,
-          behavior: smooth ? 'smooth' : 'auto',
-        });
-      };
-
-      const valueFromScroll = (): number => {
-        const index = Math.round(
-          settingBreathsViewport.scrollLeft / WHEEL_ITEM_WIDTH
-        );
-
-        return clamp(index + min, min, max);
-      };
-
-      let scrollTimeout: number | null = null;
-      const onScroll = (): void => {
-        const value = valueFromScroll();
-
-        setActive(value);
-
-        if (scrollTimeout !== null) window.clearTimeout(scrollTimeout);
-        scrollTimeout = window.setTimeout(() => {
-          scrollToValue(value);
-        }, 120);
-      };
-
-      settingBreathsViewport.addEventListener('scroll', onScroll, {
-        passive: true,
       });
 
+      const items = Array.from(
+        settingBreathsTrack.querySelectorAll<HTMLElement>(
+          '.breathing-picker__item'
+        )
+      );
+
+      const indexOfValue = (value: number): number => {
+        const snapped = Math.round((value - min) / step);
+
+        return clamp(snapped, 0, values.length - 1);
+      };
+
+      let currentIndex = indexOfValue(initial);
+      let dragOffset = 0;
+      let pointerId: number | null = null;
+      let dragStartX = 0;
+      let dragStartIndex = 0;
+      let dragged = false;
+
+      const applyTransform = (animated: boolean): void => {
+        settingBreathsTrack.style.transition = animated
+          ? 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1)'
+          : 'none';
+        const base = -currentIndex * PICKER_ITEM_WIDTH;
+
+        settingBreathsTrack.style.transform = `translate3d(${base + dragOffset}px, 0, 0)`;
+      };
+
+      const highlight = (index: number): void => {
+        items.forEach((item, i) => {
+          item.classList.toggle('is-active', i === index);
+          item.tabIndex = i === index ? 0 : -1;
+        });
+      };
+
+      const setIndex = (index: number, animated = true): void => {
+        currentIndex = clamp(index, 0, values.length - 1);
+        const value = values[currentIndex] ?? min;
+
+        settingBreaths.dataset.value = String(value);
+        settingBreaths.setAttribute('aria-valuenow', String(value));
+        highlight(currentIndex);
+        applyTransform(animated);
+      };
+
+      const onPointerDown = (event: PointerEvent): void => {
+        if (settingBreaths.getAttribute('aria-disabled') === 'true') return;
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+        pointerId = event.pointerId;
+        dragStartX = event.clientX;
+        dragStartIndex = currentIndex;
+        dragged = false;
+        settingBreathsTrack.setPointerCapture(event.pointerId);
+        settingBreaths.classList.add('is-dragging');
+      };
+
+      const onPointerMove = (event: PointerEvent): void => {
+        if (pointerId !== event.pointerId) return;
+
+        const delta = event.clientX - dragStartX;
+
+        if (!dragged && Math.abs(delta) > 4) dragged = true;
+        dragOffset = delta;
+        applyTransform(false);
+      };
+
+      const onPointerEnd = (event: PointerEvent): void => {
+        if (pointerId !== event.pointerId) return;
+
+        const delta = dragOffset;
+        const indexDelta = Math.round(-delta / PICKER_ITEM_WIDTH);
+
+        pointerId = null;
+        dragOffset = 0;
+        settingBreaths.classList.remove('is-dragging');
+
+        if (dragged) {
+          setIndex(dragStartIndex + indexDelta, true);
+        } else {
+          applyTransform(true);
+        }
+      };
+
+      settingBreathsTrack.addEventListener('pointerdown', onPointerDown);
+      settingBreathsTrack.addEventListener('pointermove', onPointerMove);
+      settingBreathsTrack.addEventListener('pointerup', onPointerEnd);
+      settingBreathsTrack.addEventListener('pointercancel', onPointerEnd);
+
       settingBreathsTrack.addEventListener('click', (event) => {
+        if (dragged) {
+          event.preventDefault();
+          event.stopPropagation();
+          dragged = false;
+
+          return;
+        }
+
         const target = (event.target as HTMLElement).closest<HTMLElement>(
-          '.breathing-wheel__item'
+          '.breathing-picker__item'
         );
 
         if (!target?.dataset.value) return;
-        scrollToValue(Number.parseInt(target.dataset.value, 10));
+
+        const index = indexOfValue(Number.parseInt(target.dataset.value, 10));
+
+        setIndex(index, true);
       });
 
       settingBreaths.addEventListener('keydown', (event) => {
         if (settingBreaths.getAttribute('aria-disabled') === 'true') return;
-        const current = Number.parseInt(
-          settingBreaths.dataset.value ?? String(min),
-          10
-        );
 
         if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
           event.preventDefault();
-          scrollToValue(current - 1);
+          setIndex(currentIndex - 1, true);
         } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
           event.preventDefault();
-          scrollToValue(current + 1);
+          setIndex(currentIndex + 1, true);
+        } else if (event.key === 'Home') {
+          event.preventDefault();
+          setIndex(0, true);
+        } else if (event.key === 'End') {
+          event.preventDefault();
+          setIndex(values.length - 1, true);
         }
       });
 
-      const onResize = (): void => {
-        applyPadding();
-        scrollToValue(
-          Number.parseInt(settingBreaths.dataset.value ?? String(initial), 10),
-          false
-        );
-      };
+      // Trackpad / mouse wheel horizontal swipe
+      settingBreaths.addEventListener(
+        'wheel',
+        (event) => {
+          if (settingBreaths.getAttribute('aria-disabled') === 'true') return;
+          if (Math.abs(event.deltaX) < Math.abs(event.deltaY)) return;
+          event.preventDefault();
+          if (event.deltaX > 10) setIndex(currentIndex + 1, true);
+          else if (event.deltaX < -10) setIndex(currentIndex - 1, true);
+        },
+        { passive: false }
+      );
 
-      window.addEventListener('resize', onResize);
-
-      applyPadding();
-      requestAnimationFrame(() => {
-        scrollToValue(initial, false);
-        setActive(initial);
-      });
+      setIndex(currentIndex, false);
 
       return (): void => {
-        window.removeEventListener('resize', onResize);
-        if (scrollTimeout !== null) window.clearTimeout(scrollTimeout);
+        settingBreathsTrack.removeEventListener('pointerdown', onPointerDown);
+        settingBreathsTrack.removeEventListener('pointermove', onPointerMove);
+        settingBreathsTrack.removeEventListener('pointerup', onPointerEnd);
+        settingBreathsTrack.removeEventListener('pointercancel', onPointerEnd);
       };
     };
 
-    const cleanupWheel = setupWheel();
+    const cleanupWheel = setupPicker();
 
     const lockSettings = (locked: boolean): void => {
       [
