@@ -335,6 +335,13 @@ export const breathingApp = defineComponent<BreathingOptions>(
       handleStart();
     });
 
+    circle.addEventListener('click', () => {
+      if (state.phase === 'idle' || state.phase === 'complete') {
+        lockSettings(true);
+        handleStart();
+      }
+    });
+
     if (holdBtn) {
       holdBtn.addEventListener('click', handleHoldButton);
     }
