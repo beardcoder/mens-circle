@@ -62,7 +62,7 @@
         <div
           id="breathingApp"
           class="breathing-app fade-in"
-          data-breaths="30"
+          data-breaths="35"
           data-rounds="3"
           data-recovery-hold="15"
           data-inhale-ms="1800"
@@ -153,42 +153,38 @@
           </div>
 
           <div class="breathing-app__settings">
-            <div class="breathing-app__setting breathing-app__setting--wheel">
+            <div class="breathing-app__setting breathing-app__setting--picker">
               <span class="breathing-app__setting-label"
                 >Atemzüge je Runde</span
               >
               <div
-                class="breathing-wheel"
+                class="breathing-picker"
                 data-element="settingBreaths"
                 data-min="10"
                 data-max="60"
-                data-value="30"
+                data-step="5"
+                data-value="35"
                 role="slider"
                 tabindex="0"
                 aria-label="Atemzüge je Runde"
                 aria-valuemin="10"
                 aria-valuemax="60"
-                aria-valuenow="30"
+                aria-valuenow="35"
               >
                 <div
-                  class="breathing-wheel__viewport"
-                  data-element="settingBreathsViewport"
-                >
-                  <div
-                    class="breathing-wheel__track"
-                    data-element="settingBreathsTrack"
-                  ></div>
-                </div>
-                <div
-                  class="breathing-wheel__indicator"
+                  class="breathing-picker__indicator"
                   aria-hidden="true"
                 ></div>
                 <div
-                  class="breathing-wheel__fade breathing-wheel__fade--start"
+                  class="breathing-picker__track"
+                  data-element="settingBreathsTrack"
+                ></div>
+                <div
+                  class="breathing-picker__fade breathing-picker__fade--start"
                   aria-hidden="true"
                 ></div>
                 <div
-                  class="breathing-wheel__fade breathing-wheel__fade--end"
+                  class="breathing-picker__fade breathing-picker__fade--end"
                   aria-hidden="true"
                 ></div>
               </div>
