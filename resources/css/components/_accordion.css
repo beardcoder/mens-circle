@@ -1,6 +1,6 @@
 /**
  * Accordion Component
- * Modern accordion using <details>/<summary> with Motion.dev animations
+ * Modern accordion using <details>/<summary>.
  *
  * Structure:
  *   <details class="accordion-item">
@@ -9,9 +9,6 @@
  *       <div class="accordion-item__body">Answer</div>
  *     </div>
  *   </details>
- *
- * Animations are handled by Motion.dev for smooth, performant transitions
- * @see https://motion.dev/docs/inview
  */
 
 /* ============================================

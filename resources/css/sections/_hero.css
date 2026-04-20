@@ -203,7 +203,6 @@
   inline-size: 1px;
   block-size: 80px;
   background: linear-gradient(to bottom, var(--accent-primary), transparent);
-  animation: scroll-pulse 2.5s ease-in-out infinite;
 }
 
 /* ============================================

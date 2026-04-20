@@ -59,7 +59,7 @@
   <!-- Info Section -->
   <section class="section no-event-info-section">
     <div class="container">
-      <div class="no-event-info__layout" data-reveal>
+      <div class="no-event-info__layout">
         <div class="no-event-info__content">
           <p class="eyebrow">Was ist der Männerkreis?</p>
           <h2 class="section-title no-event-info__title">
@@ -67,7 +67,7 @@
           </h2>
           <p class="no-event-info__text">Der Männerkreis Niederbayern/ Straubing bietet dir einen geschützten Raum, in dem du dich mit anderen Männern austauschen, wachsen und echte Verbindungen aufbauen kannst. Unsere Treffen finden regelmäßig statt – sobald der nächste Termin feststeht, informieren wir dich.</p>
         </div>
-        <div class="no-event-info__visual" data-reveal data-reveal-delay="1">
+        <div class="no-event-info__visual">
           <div class="no-event-info__quote-area">
             <div class="event-about__circles" aria-hidden="true">
               <div class="event-about__circle event-about__circle--1"></div>
@@ -84,7 +84,7 @@
   <!-- Newsletter Section -->
   <section class="section newsletter-section" id="newsletter">
     <div class="container">
-      <div class="newsletter__layout" data-reveal>
+      <div class="newsletter__layout">
         <div class="newsletter__content">
           <p class="eyebrow eyebrow--secondary">Newsletter</p>
           <h2 class="section-title newsletter__title">
@@ -115,7 +115,7 @@
   <!-- Back to Home CTA -->
   <section class="section no-event-cta-section">
     <div class="container">
-      <div class="no-event-cta__content" data-reveal>
+      <div class="no-event-cta__content">
         <p class="eyebrow">Mehr erfahren</p>
         <h2 class="section-title no-event-cta__title">
           Entdecke den <span class="text-italic">Männerkreis</span>

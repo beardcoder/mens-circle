@@ -1,7 +1,5 @@
 /* ============================================
    PAGE TRANSITIONS
 
-   Intentionally empty. Site-wide page-enter animation was removed
-   because it caused the header and hero area to flash on every
-   navigation. Per-element reveals are handled by motion-reveal.ts.
+   Intentionally empty.
    ============================================ */
