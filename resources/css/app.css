@@ -35,6 +35,7 @@
    ============================================ */
 @import url('utilities/_layout.css');
 @import url('utilities/_animations.css');
+@import url('utilities/_scroll-animations.css');
 @import url('utilities/_visual.css');
 @import url('utilities/_view-transitions.css');
 

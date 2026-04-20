@@ -1,0 +1,400 @@
+/**
+ * Scroll Animations — 2026 organic motion
+ *
+ * Every animation here follows the css-animate skill:
+ *  - Animates only `opacity`, `transform`, `filter` (GPU-composited).
+ *  - Prefers native `animation-timeline: view()` / `scroll()` over JS.
+ *  - Falls back to IntersectionObserver toggling `.is-visible` (see scroll-animations.ts).
+ *  - Respects `prefers-reduced-motion` — no motion, instant visibility.
+ *
+ * Motion vocabulary for this project:
+ *  - Spring easing with a whisper of overshoot (ease-spring, ease-lift).
+ *  - Multi-property entrances: translate + scale + micro-blur for depth.
+ *  - Nonlinear stagger so reveals don't feel mechanical.
+ */
+
+/* ============================================
+   Local motion tokens
+   ============================================ */
+:root {
+  /* Gentle spring with a soft overshoot — entrances */
+  --ease-lift: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Spring with perceptible overshoot — cards, chips */
+  --ease-bounce: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  /* Entrance timings */
+  --reveal-duration: 950ms;
+  --reveal-child-duration: 720ms;
+}
+
+/* ============================================
+   Page scroll progress bar
+   ============================================ */
+.scroll-progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--z-tooltip);
+  block-size: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklch, var(--accent-primary) 85%, transparent) 0%,
+    var(--accent-primary) 60%,
+    color-mix(
+        in oklch,
+        var(--accent-primary) 70%,
+        var(--color-terracotta-light)
+      )
+      100%
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: scroll-progress-grow linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes scroll-progress-grow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================
+   Reveal baseline (IntersectionObserver fallback)
+
+   Hidden by default, transitions to visible when `.is-visible` is
+   added by scroll-animations.ts. Organic state: translated, slightly
+   scaled down, and micro-blurred for a sense of depth.
+   ============================================ */
+[data-reveal],
+.intro-section,
+.moderator-section,
+.journey-section,
+.archetypes-section,
+.testimonials-section,
+.testimonial-form-section,
+.faq-section,
+.newsletter-section,
+.whatsapp-section,
+.cta-section,
+.event-section,
+.no-event-section,
+.legal-section {
+  opacity: 0;
+  filter: blur(4px);
+  transform: translate3d(0, 2rem, 0) scale(0.975);
+  transition:
+    opacity var(--reveal-duration) var(--ease-lift),
+    transform var(--reveal-duration) var(--ease-lift),
+    filter var(--reveal-duration) var(--ease-lift);
+  will-change: opacity, transform, filter;
+}
+
+[data-reveal].is-visible,
+.intro-section.is-visible,
+.moderator-section.is-visible,
+.journey-section.is-visible,
+.archetypes-section.is-visible,
+.testimonials-section.is-visible,
+.testimonial-form-section.is-visible,
+.faq-section.is-visible,
+.newsletter-section.is-visible,
+.whatsapp-section.is-visible,
+.cta-section.is-visible,
+.event-section.is-visible,
+.no-event-section.is-visible,
+.legal-section.is-visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* ============================================
+   Organic staggered reveal for grids / lists
+
+   The delay curve is nonlinear — items further down the grid wait
+   slightly longer than a linear cadence would, which reads as
+   "organic" rather than mechanical.
+   ============================================ */
+.intro__values .value-item,
+.journey-section .journey__step,
+.archetypes-section .archetype-card,
+.testimonials-section .testimonial-card,
+.faq-section .faq__item {
+  opacity: 0;
+  transform: translate3d(0, 1.25rem, 0) scale(0.97);
+  transition:
+    opacity var(--reveal-child-duration) var(--ease-lift),
+    transform var(--reveal-child-duration) var(--ease-bounce);
+
+  /* Nonlinear stagger: 0, 80, 170, 270, 380, 500 ms */
+  transition-delay: calc(
+    var(--index, 0) * 60ms + var(--index, 0) * var(--index, 0) * 10ms
+  );
+}
+
+.intro-section.is-visible .intro__values .value-item,
+.journey-section.is-visible .journey__step,
+.archetypes-section.is-visible .archetype-card,
+.testimonials-section.is-visible .testimonial-card,
+.faq-section.is-visible .faq__item {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.intro__values .value-item:nth-child(1),
+.journey-section .journey__step:nth-child(1),
+.archetypes-section .archetype-card:nth-child(1),
+.testimonials-section .testimonial-card:nth-child(1),
+.faq-section .faq__item:nth-child(1) {
+  --index: 0;
+}
+
+.intro__values .value-item:nth-child(2),
+.journey-section .journey__step:nth-child(2),
+.archetypes-section .archetype-card:nth-child(2),
+.testimonials-section .testimonial-card:nth-child(2),
+.faq-section .faq__item:nth-child(2) {
+  --index: 1;
+}
+
+.intro__values .value-item:nth-child(3),
+.journey-section .journey__step:nth-child(3),
+.archetypes-section .archetype-card:nth-child(3),
+.testimonials-section .testimonial-card:nth-child(3),
+.faq-section .faq__item:nth-child(3) {
+  --index: 2;
+}
+
+.intro__values .value-item:nth-child(4),
+.journey-section .journey__step:nth-child(4),
+.archetypes-section .archetype-card:nth-child(4),
+.testimonials-section .testimonial-card:nth-child(4),
+.faq-section .faq__item:nth-child(4) {
+  --index: 3;
+}
+
+.intro__values .value-item:nth-child(5),
+.journey-section .journey__step:nth-child(5),
+.archetypes-section .archetype-card:nth-child(5),
+.testimonials-section .testimonial-card:nth-child(5),
+.faq-section .faq__item:nth-child(5) {
+  --index: 4;
+}
+
+.intro__values .value-item:nth-child(n + 6),
+.journey-section .journey__step:nth-child(n + 6),
+.archetypes-section .archetype-card:nth-child(n + 6),
+.testimonials-section .testimonial-card:nth-child(n + 6),
+.faq-section .faq__item:nth-child(n + 6) {
+  --index: 5;
+}
+
+/* ============================================
+   Hero entrance — organic lift + depth blur
+
+   Compound motion: translate → scale → defocus → focus. The
+   blur/scale combo reads as "stepping forward into frame".
+   animation-fill-mode: both ensures no FOUC before delay elapses.
+   ============================================ */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translate3d(0, 1.75rem, 0) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.hero .hero__label,
+.hero .hero__title,
+.hero .hero__description,
+.hero .hero__cta {
+  animation: hero-rise 1100ms var(--ease-lift) both;
+}
+
+.hero .hero__label {
+  animation-delay: 80ms;
+}
+
+.hero .hero__title {
+  animation-delay: 180ms;
+}
+
+.hero .hero__description {
+  animation-delay: 360ms;
+}
+
+.hero .hero__cta {
+  animation-delay: 540ms;
+}
+
+/* ============================================
+   Hero scroll parallax (native scroll timeline)
+
+   Background drifts and zooms gently, decorative circles pull
+   upward at different rates. Runs on the compositor only, no JS.
+   ============================================ */
+@supports (animation-timeline: scroll()) {
+  .hero__bg {
+    animation: hero-bg-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100vh;
+    will-change: transform, opacity;
+  }
+
+  .hero__circle--1 {
+    animation: hero-float-slow linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 120vh;
+  }
+
+  .hero__circle--2 {
+    animation: hero-float-medium linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 120vh;
+  }
+
+  .hero__circle--3 {
+    animation: hero-float-fast linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 120vh;
+  }
+
+  .hero__circle--4 {
+    animation: hero-float-medium linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 120vh;
+  }
+}
+
+@keyframes hero-bg-drift {
+  to {
+    opacity: 0.55;
+    transform: translate3d(0, -8%, 0) scale(1.08);
+  }
+}
+
+@keyframes hero-float-slow {
+  to {
+    transform: translate3d(-2%, -18%, 0);
+  }
+}
+
+@keyframes hero-float-medium {
+  to {
+    transform: translate3d(3%, -30%, 0);
+  }
+}
+
+@keyframes hero-float-fast {
+  to {
+    transform: translate3d(-4%, -46%, 0);
+  }
+}
+
+/* ============================================
+   Native CSS scroll-driven reveal (sections)
+
+   Preferred over the transition-based fallback: the timeline is
+   pinned to viewport position, so scrubbing back and forth feels
+   natural instead of one-shot.
+   ============================================ */
+@supports (animation-timeline: view()) {
+  [data-reveal],
+  .intro-section,
+  .moderator-section,
+  .journey-section,
+  .archetypes-section,
+  .testimonials-section,
+  .testimonial-form-section,
+  .faq-section,
+  .newsletter-section,
+  .whatsapp-section,
+  .cta-section,
+  .event-section,
+  .no-event-section,
+  .legal-section {
+    transition: none;
+    animation: reveal-lift linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 35%;
+  }
+}
+
+@keyframes reveal-lift {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translate3d(0, 2rem, 0) scale(0.975);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* ============================================
+   Reduced motion — remove all motion, keep content visible
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  .intro-section,
+  .moderator-section,
+  .journey-section,
+  .archetypes-section,
+  .testimonials-section,
+  .testimonial-form-section,
+  .faq-section,
+  .newsletter-section,
+  .whatsapp-section,
+  .cta-section,
+  .event-section,
+  .no-event-section,
+  .legal-section,
+  .intro__values .value-item,
+  .journey-section .journey__step,
+  .archetypes-section .archetype-card,
+  .testimonials-section .testimonial-card,
+  .faq-section .faq__item {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+    animation: none;
+    will-change: auto;
+  }
+
+  .hero .hero__label,
+  .hero .hero__title,
+  .hero .hero__description,
+  .hero .hero__cta,
+  .hero__bg,
+  .hero__circle--1,
+  .hero__circle--2,
+  .hero__circle--3,
+  .hero__circle--4 {
+    filter: none;
+    transform: none;
+    animation: none;
+  }
+
+  .scroll-progress {
+    display: none;
+  }
+}
