@@ -1,17 +1,32 @@
 /**
- * Scroll Animations
+ * Scroll Animations — 2026 organic motion
  *
- * Performant entrance animations triggered by scroll position.
+ * Every animation here follows the css-animate skill:
+ *  - Animates only `opacity`, `transform`, `filter` (GPU-composited).
+ *  - Prefers native `animation-timeline: view()` / `scroll()` over JS.
+ *  - Falls back to IntersectionObserver toggling `.is-visible` (see scroll-animations.ts).
+ *  - Respects `prefers-reduced-motion` — no motion, instant visibility.
  *
- * Strategy:
- *  - Animate only `opacity` and `transform` (GPU-composited).
- *  - Native path: `animation-timeline: view()` for jank-free, main-thread-free motion.
- *  - Fallback: IntersectionObserver toggles `.is-visible` (see scroll-animations.ts).
- *  - Respect `prefers-reduced-motion` — no transform, instant opacity.
- *
- * Targets top-level section selectors and select child grids so Blade templates
- * don't need per-section markup changes.
+ * Motion vocabulary for this project:
+ *  - Spring easing with a whisper of overshoot (ease-spring, ease-lift).
+ *  - Multi-property entrances: translate + scale + micro-blur for depth.
+ *  - Nonlinear stagger so reveals don't feel mechanical.
  */
+
+/* ============================================
+   Local motion tokens
+   ============================================ */
+:root {
+  /* Gentle spring with a soft overshoot — entrances */
+  --ease-lift: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Spring with perceptible overshoot — cards, chips */
+  --ease-bounce: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  /* Entrance timings */
+  --reveal-duration: 950ms;
+  --reveal-child-duration: 720ms;
+}
 
 /* ============================================
    Page scroll progress bar
@@ -23,7 +38,17 @@
   z-index: var(--z-tooltip);
   block-size: 2px;
   pointer-events: none;
-  background: var(--accent-primary);
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklch, var(--accent-primary) 85%, transparent) 0%,
+    var(--accent-primary) 60%,
+    color-mix(
+        in oklch,
+        var(--accent-primary) 70%,
+        var(--color-terracotta-light)
+      )
+      100%
+  );
   transform: scaleX(0);
   transform-origin: left;
   will-change: transform;
@@ -43,12 +68,11 @@
 }
 
 /* ============================================
-   Reveal base (IntersectionObserver fallback)
+   Reveal baseline (IntersectionObserver fallback)
 
-   Baseline state hides content. `.is-visible` is added by
-   resources/js/components/scroll-animations.ts once the element
-   enters the viewport. The transition uses composited properties
-   only.
+   Hidden by default, transitions to visible when `.is-visible` is
+   added by scroll-animations.ts. Organic state: translated, slightly
+   scaled down, and micro-blurred for a sense of depth.
    ============================================ */
 [data-reveal],
 .intro-section,
@@ -65,11 +89,13 @@
 .no-event-section,
 .legal-section {
   opacity: 0;
-  transform: translate3d(0, 1.5rem, 0);
+  filter: blur(4px);
+  transform: translate3d(0, 2rem, 0) scale(0.975);
   transition:
-    opacity 700ms var(--ease-smooth),
-    transform 700ms var(--ease-smooth);
-  will-change: opacity, transform;
+    opacity var(--reveal-duration) var(--ease-lift),
+    transform var(--reveal-duration) var(--ease-lift),
+    filter var(--reveal-duration) var(--ease-lift);
+  will-change: opacity, transform, filter;
 }
 
 [data-reveal].is-visible,
@@ -87,15 +113,16 @@
 .no-event-section.is-visible,
 .legal-section.is-visible {
   opacity: 1;
-  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 /* ============================================
-   Staggered reveal for grids / lists
+   Organic staggered reveal for grids / lists
 
-   Children animate in sequence once their parent is visible.
-   50ms stagger keeps total under the 500ms budget from the
-   css-animate skill's checklist.
+   The delay curve is nonlinear — items further down the grid wait
+   slightly longer than a linear cadence would, which reads as
+   "organic" rather than mechanical.
    ============================================ */
 .intro__values .value-item,
 .journey-section .journey__step,
@@ -103,11 +130,15 @@
 .testimonials-section .testimonial-card,
 .faq-section .faq__item {
   opacity: 0;
-  transform: translate3d(0, 1rem, 0);
+  transform: translate3d(0, 1.25rem, 0) scale(0.97);
   transition:
-    opacity 500ms var(--ease-smooth),
-    transform 500ms var(--ease-smooth);
-  transition-delay: calc(var(--index, 0) * 60ms);
+    opacity var(--reveal-child-duration) var(--ease-lift),
+    transform var(--reveal-child-duration) var(--ease-bounce);
+
+  /* Nonlinear stagger: 0, 80, 170, 270, 380, 500 ms */
+  transition-delay: calc(
+    var(--index, 0) * 60ms + var(--index, 0) * var(--index, 0) * 10ms
+  );
 }
 
 .intro-section.is-visible .intro__values .value-item,
@@ -116,7 +147,7 @@
 .testimonials-section.is-visible .testimonial-card,
 .faq-section.is-visible .faq__item {
   opacity: 1;
-  transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 .intro__values .value-item:nth-child(1),
@@ -168,48 +199,119 @@
 }
 
 /* ============================================
-   Hero entrance (one-shot on page load, not scroll-driven)
+   Hero entrance — organic lift + depth blur
 
-   Title, subtitle, CTA rise + fade sequentially. Uses
-   animation-fill-mode: both so the pre-animation state matches
-   the first keyframe and there's no flash of unstyled motion.
+   Compound motion: translate → scale → defocus → focus. The
+   blur/scale combo reads as "stepping forward into frame".
+   animation-fill-mode: both ensures no FOUC before delay elapses.
    ============================================ */
 @keyframes hero-rise {
   from {
     opacity: 0;
-    transform: translate3d(0, 1.25rem, 0);
+    filter: blur(6px);
+    transform: translate3d(0, 1.75rem, 0) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
+.hero .hero__label,
 .hero .hero__title,
-.hero .hero__subtitle,
-.hero .hero__cta,
-.hero .hero__eyebrow {
-  animation: hero-rise 700ms var(--ease-smooth) both;
+.hero .hero__description,
+.hero .hero__cta {
+  animation: hero-rise 1100ms var(--ease-lift) both;
 }
 
-.hero .hero__eyebrow {
-  animation-delay: 0ms;
+.hero .hero__label {
+  animation-delay: 80ms;
 }
 
 .hero .hero__title {
-  animation-delay: 120ms;
+  animation-delay: 180ms;
 }
 
-.hero .hero__subtitle {
-  animation-delay: 280ms;
+.hero .hero__description {
+  animation-delay: 360ms;
 }
 
 .hero .hero__cta {
-  animation-delay: 440ms;
+  animation-delay: 540ms;
 }
 
 /* ============================================
-   Native CSS scroll-driven animations
+   Hero scroll parallax (native scroll timeline)
 
-   Chrome 115+, Safari 18+. Where supported, we override the
-   JS-based toggle with a smoother, main-thread-free timeline
-   pinned to viewport entry.
+   Background drifts and zooms gently, decorative circles pull
+   upward at different rates. Runs on the compositor only, no JS.
+   ============================================ */
+@supports (animation-timeline: scroll()) {
+  .hero__bg {
+    animation: hero-bg-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100vh;
+    will-change: transform, opacity;
+  }
+
+  .hero__circle--1 {
+    animation: hero-float-slow linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 120vh;
+  }
+
+  .hero__circle--2 {
+    animation: hero-float-medium linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 120vh;
+  }
+
+  .hero__circle--3 {
+    animation: hero-float-fast linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 120vh;
+  }
+
+  .hero__circle--4 {
+    animation: hero-float-medium linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 120vh;
+  }
+}
+
+@keyframes hero-bg-drift {
+  to {
+    opacity: 0.55;
+    transform: translate3d(0, -8%, 0) scale(1.08);
+  }
+}
+
+@keyframes hero-float-slow {
+  to {
+    transform: translate3d(-2%, -18%, 0);
+  }
+}
+
+@keyframes hero-float-medium {
+  to {
+    transform: translate3d(3%, -30%, 0);
+  }
+}
+
+@keyframes hero-float-fast {
+  to {
+    transform: translate3d(-4%, -46%, 0);
+  }
+}
+
+/* ============================================
+   Native CSS scroll-driven reveal (sections)
+
+   Preferred over the transition-based fallback: the timeline is
+   pinned to viewport position, so scrubbing back and forth feels
+   natural instead of one-shot.
    ============================================ */
 @supports (animation-timeline: view()) {
   [data-reveal],
@@ -227,31 +329,28 @@
   .no-event-section,
   .legal-section {
     transition: none;
-    animation: reveal-up linear both;
+    animation: reveal-lift linear both;
     animation-timeline: view();
-    animation-range: entry 0% cover 30%;
+    animation-range: entry 5% cover 35%;
   }
 }
 
-@keyframes reveal-up {
+@keyframes reveal-lift {
   from {
     opacity: 0;
-    transform: translate3d(0, 1.5rem, 0);
+    filter: blur(4px);
+    transform: translate3d(0, 2rem, 0) scale(0.975);
   }
 
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
 /* ============================================
-   Reduced motion
-
-   The global @media rule in base/_variables.css already zeroes
-   --duration-* tokens, but those tokens aren't consumed by the
-   animations above. Override explicitly here to prevent motion
-   and keep content visible.
+   Reduced motion — remove all motion, keep content visible
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
   [data-reveal],
@@ -274,16 +373,24 @@
   .testimonials-section .testimonial-card,
   .faq-section .faq__item {
     opacity: 1;
+    filter: none;
     transform: none;
     transition: none;
     animation: none;
     will-change: auto;
   }
 
+  .hero .hero__label,
   .hero .hero__title,
-  .hero .hero__subtitle,
+  .hero .hero__description,
   .hero .hero__cta,
-  .hero .hero__eyebrow {
+  .hero__bg,
+  .hero__circle--1,
+  .hero__circle--2,
+  .hero__circle--3,
+  .hero__circle--4 {
+    filter: none;
+    transform: none;
     animation: none;
   }
 
