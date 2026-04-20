@@ -39,7 +39,7 @@
   <section class="section testimonial-form-section">
     <div class="container">
       <div class="testimonial-form__wrapper">
-        <div class="testimonial-form__intro" data-reveal>
+        <div class="testimonial-form__intro">
           <h2>Deine Stimme zählt</h2>
           <p>Der Männerkreis lebt von authentischen Begegnungen. Wenn du Teil unserer Community bist und deine Erfahrung teilen möchtest, würden wir uns freuen, von dir zu hören.</p>
           <p>Dein Testimonial wird nach Prüfung auf unserer Website veröffentlicht und kann anderen Männern helfen zu verstehen, was der Kreis bedeuten kann.</p>
@@ -48,7 +48,6 @@
         <form
           id="testimonialForm"
           class="testimonial-form"
-          data-reveal
           data-submit-url="{{ route('testimonial.submit') }}"
         >
           @csrf

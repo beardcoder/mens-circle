@@ -12,12 +12,6 @@ import {
   testimonialForm,
 } from '@/components/forms';
 import { calendarIntegration } from '@/components/calendar';
-import {
-  reveal,
-  revealStagger,
-  activeSection,
-  journeyProgress,
-} from '@/components/reveal';
 import { nativeAccordion } from '@/components/accordion';
 import { breathingApp } from '@/components/breathing';
 import { initUmamiKit } from '@/utils/umami-kit';
@@ -26,14 +20,6 @@ import { initUmamiKit } from '@/utils/umami-kit';
 register('#nav', navigation());
 register('#header', scrollHeader());
 register('#scrollToTop', scrollToTop());
-
-// Scroll reveal — rise + settle as content enters the reading area
-register('[data-reveal]', reveal());
-register('[data-reveal-stagger]', revealStagger());
-
-// Orientation — active nav link and journey step feedback
-register('#nav', activeSection());
-register('.journey-section', journeyProgress());
 
 // Interactive forms
 register('#newsletterForm', newsletterForm());

@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
 <head>
-  <script>
-    document.documentElement.classList.add('js');
-  </script>
   @include ('partials.seo-head')
 </head>
 <body>
@@ -106,7 +103,7 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer__top" data-reveal-stagger>
+      <div class="footer__top">
         <div class="footer__brand">
           <a href="{{ route('home') }}" class="footer__logo">
             <svg
@@ -239,7 +236,7 @@
         </div>
       </div>
 
-      <div class="footer__bottom" data-reveal>
+      <div class="footer__bottom">
         <p class="footer__copyright">
           {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
         </p>

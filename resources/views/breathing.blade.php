@@ -37,7 +37,7 @@
   <section class="section breathing-section">
     <div class="container">
       <div class="breathing__wrapper">
-        <div class="breathing__intro" data-reveal>
+        <div class="breathing__intro">
           <h2>So funktioniert es</h2>
           <ol class="breathing__steps">
             <li>
@@ -62,7 +62,6 @@
         <div
           id="breathingApp"
           class="breathing-app"
-          data-reveal
           data-breaths="35"
           data-rounds="3"
           data-recovery-hold="15"

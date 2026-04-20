@@ -34,7 +34,7 @@
   aria-labelledby="journey-title"
 >
   <div class="container">
-    <div class="journey__header" data-reveal>
+    <div class="journey__header">
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -51,7 +51,7 @@
     </div>
 
     @if (!empty($steps) && is_array($steps))
-      <div class="journey__steps" data-reveal-stagger>
+      <div class="journey__steps">
         @foreach ($steps as $step)
           <div class="journey__step">
             @if (!empty($step['number']))

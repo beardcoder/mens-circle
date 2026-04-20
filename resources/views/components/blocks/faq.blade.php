@@ -25,7 +25,7 @@
 <section class="section section--large faq-section" id="faq">
   <div class="container">
     <div class="faq__layout">
-      <div class="faq__header" data-reveal>
+      <div class="faq__header">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow">{{ $data['eyebrow'] }}</p>
         @endif
@@ -40,7 +40,7 @@
       </div>
 
       @if (!empty($faqItems) && is_array($faqItems))
-        <div class="faq__list" data-reveal data-reveal-delay="1">
+        <div class="faq__list">
           @foreach ($faqItems as $item)
             @if (!empty($item['question']) && !empty($item['answer']))
               <details

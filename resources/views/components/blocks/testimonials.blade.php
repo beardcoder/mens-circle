@@ -33,7 +33,7 @@
   aria-labelledby="testimonials-title"
 >
   <div class="container">
-    <div class="testimonials__header" data-reveal>
+    <div class="testimonials__header">
       <p class="eyebrow">Community Stimmen</p>
       <h2 class="section-title testimonials__title" id="testimonials-title">
         Was <span class="highlight">Teilnehmer</span> sagen
@@ -41,7 +41,7 @@
       <p class="testimonials__subtitle">Authentische Einblicke von Männern, die den Kreis erleben</p>
     </div>
 
-    <div class="testimonials__grid" data-reveal-stagger>
+    <div class="testimonials__grid">
       @foreach ($testimonials as $testimonial)
         <article class="testimonial-item">
           <blockquote class="testimonial-item__quote">
