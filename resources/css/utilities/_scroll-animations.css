@@ -1,0 +1,293 @@
+/**
+ * Scroll Animations
+ *
+ * Performant entrance animations triggered by scroll position.
+ *
+ * Strategy:
+ *  - Animate only `opacity` and `transform` (GPU-composited).
+ *  - Native path: `animation-timeline: view()` for jank-free, main-thread-free motion.
+ *  - Fallback: IntersectionObserver toggles `.is-visible` (see scroll-animations.ts).
+ *  - Respect `prefers-reduced-motion` — no transform, instant opacity.
+ *
+ * Targets top-level section selectors and select child grids so Blade templates
+ * don't need per-section markup changes.
+ */
+
+/* ============================================
+   Page scroll progress bar
+   ============================================ */
+.scroll-progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--z-tooltip);
+  block-size: 2px;
+  pointer-events: none;
+  background: var(--accent-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: scroll-progress-grow linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes scroll-progress-grow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================
+   Reveal base (IntersectionObserver fallback)
+
+   Baseline state hides content. `.is-visible` is added by
+   resources/js/components/scroll-animations.ts once the element
+   enters the viewport. The transition uses composited properties
+   only.
+   ============================================ */
+[data-reveal],
+.intro-section,
+.moderator-section,
+.journey-section,
+.archetypes-section,
+.testimonials-section,
+.testimonial-form-section,
+.faq-section,
+.newsletter-section,
+.whatsapp-section,
+.cta-section,
+.event-section,
+.no-event-section,
+.legal-section {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+  transition:
+    opacity 700ms var(--ease-smooth),
+    transform 700ms var(--ease-smooth);
+  will-change: opacity, transform;
+}
+
+[data-reveal].is-visible,
+.intro-section.is-visible,
+.moderator-section.is-visible,
+.journey-section.is-visible,
+.archetypes-section.is-visible,
+.testimonials-section.is-visible,
+.testimonial-form-section.is-visible,
+.faq-section.is-visible,
+.newsletter-section.is-visible,
+.whatsapp-section.is-visible,
+.cta-section.is-visible,
+.event-section.is-visible,
+.no-event-section.is-visible,
+.legal-section.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* ============================================
+   Staggered reveal for grids / lists
+
+   Children animate in sequence once their parent is visible.
+   50ms stagger keeps total under the 500ms budget from the
+   css-animate skill's checklist.
+   ============================================ */
+.intro__values .value-item,
+.journey-section .journey__step,
+.archetypes-section .archetype-card,
+.testimonials-section .testimonial-card,
+.faq-section .faq__item {
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
+  transition:
+    opacity 500ms var(--ease-smooth),
+    transform 500ms var(--ease-smooth);
+  transition-delay: calc(var(--index, 0) * 60ms);
+}
+
+.intro-section.is-visible .intro__values .value-item,
+.journey-section.is-visible .journey__step,
+.archetypes-section.is-visible .archetype-card,
+.testimonials-section.is-visible .testimonial-card,
+.faq-section.is-visible .faq__item {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.intro__values .value-item:nth-child(1),
+.journey-section .journey__step:nth-child(1),
+.archetypes-section .archetype-card:nth-child(1),
+.testimonials-section .testimonial-card:nth-child(1),
+.faq-section .faq__item:nth-child(1) {
+  --index: 0;
+}
+
+.intro__values .value-item:nth-child(2),
+.journey-section .journey__step:nth-child(2),
+.archetypes-section .archetype-card:nth-child(2),
+.testimonials-section .testimonial-card:nth-child(2),
+.faq-section .faq__item:nth-child(2) {
+  --index: 1;
+}
+
+.intro__values .value-item:nth-child(3),
+.journey-section .journey__step:nth-child(3),
+.archetypes-section .archetype-card:nth-child(3),
+.testimonials-section .testimonial-card:nth-child(3),
+.faq-section .faq__item:nth-child(3) {
+  --index: 2;
+}
+
+.intro__values .value-item:nth-child(4),
+.journey-section .journey__step:nth-child(4),
+.archetypes-section .archetype-card:nth-child(4),
+.testimonials-section .testimonial-card:nth-child(4),
+.faq-section .faq__item:nth-child(4) {
+  --index: 3;
+}
+
+.intro__values .value-item:nth-child(5),
+.journey-section .journey__step:nth-child(5),
+.archetypes-section .archetype-card:nth-child(5),
+.testimonials-section .testimonial-card:nth-child(5),
+.faq-section .faq__item:nth-child(5) {
+  --index: 4;
+}
+
+.intro__values .value-item:nth-child(n + 6),
+.journey-section .journey__step:nth-child(n + 6),
+.archetypes-section .archetype-card:nth-child(n + 6),
+.testimonials-section .testimonial-card:nth-child(n + 6),
+.faq-section .faq__item:nth-child(n + 6) {
+  --index: 5;
+}
+
+/* ============================================
+   Hero entrance (one-shot on page load, not scroll-driven)
+
+   Title, subtitle, CTA rise + fade sequentially. Uses
+   animation-fill-mode: both so the pre-animation state matches
+   the first keyframe and there's no flash of unstyled motion.
+   ============================================ */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+}
+
+.hero .hero__title,
+.hero .hero__subtitle,
+.hero .hero__cta,
+.hero .hero__eyebrow {
+  animation: hero-rise 700ms var(--ease-smooth) both;
+}
+
+.hero .hero__eyebrow {
+  animation-delay: 0ms;
+}
+
+.hero .hero__title {
+  animation-delay: 120ms;
+}
+
+.hero .hero__subtitle {
+  animation-delay: 280ms;
+}
+
+.hero .hero__cta {
+  animation-delay: 440ms;
+}
+
+/* ============================================
+   Native CSS scroll-driven animations
+
+   Chrome 115+, Safari 18+. Where supported, we override the
+   JS-based toggle with a smoother, main-thread-free timeline
+   pinned to viewport entry.
+   ============================================ */
+@supports (animation-timeline: view()) {
+  [data-reveal],
+  .intro-section,
+  .moderator-section,
+  .journey-section,
+  .archetypes-section,
+  .testimonials-section,
+  .testimonial-form-section,
+  .faq-section,
+  .newsletter-section,
+  .whatsapp-section,
+  .cta-section,
+  .event-section,
+  .no-event-section,
+  .legal-section {
+    transition: none;
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ============================================
+   Reduced motion
+
+   The global @media rule in base/_variables.css already zeroes
+   --duration-* tokens, but those tokens aren't consumed by the
+   animations above. Override explicitly here to prevent motion
+   and keep content visible.
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  .intro-section,
+  .moderator-section,
+  .journey-section,
+  .archetypes-section,
+  .testimonials-section,
+  .testimonial-form-section,
+  .faq-section,
+  .newsletter-section,
+  .whatsapp-section,
+  .cta-section,
+  .event-section,
+  .no-event-section,
+  .legal-section,
+  .intro__values .value-item,
+  .journey-section .journey__step,
+  .archetypes-section .archetype-card,
+  .testimonials-section .testimonial-card,
+  .faq-section .faq__item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+    will-change: auto;
+  }
+
+  .hero .hero__title,
+  .hero .hero__subtitle,
+  .hero .hero__cta,
+  .hero .hero__eyebrow {
+    animation: none;
+  }
+
+  .scroll-progress {
+    display: none;
+  }
+}
