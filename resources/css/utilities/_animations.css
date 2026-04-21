@@ -58,11 +58,11 @@
     var(--shadow-lg),
     0 0 0 1px color-mix(in oklch, var(--color-bone) 10%, transparent) inset;
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(8px);
   transition:
-    opacity var(--duration-normal) var(--ease-smooth),
-    transform var(--duration-normal) var(--ease-smooth),
-    background-color var(--duration-fast) var(--ease-smooth);
+    opacity var(--motion-standard),
+    transform var(--motion-standard),
+    background-color var(--motion-quick);
 }
 
 .scroll-to-top.visible {
@@ -76,7 +76,7 @@
   box-shadow:
     var(--shadow-xl),
     0 0 0 1px color-mix(in oklch, var(--color-bone) 12%, transparent) inset;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .scroll-to-top:active {

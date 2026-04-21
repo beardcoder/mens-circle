@@ -5,59 +5,49 @@
  * element; no per-section CSS is needed.
  *
  * Attributes
- *   data-anim="rise"        Translate up + fade (default)
- *   data-anim="fade"        Opacity only (for stable layouts)
- *   data-anim="scale"       Scale up + fade
- *   data-anim="lift"        Rise + scale (hero-style subtle 3D)
- *   data-anim="slide-left"  From the right
- *   data-anim="slide-right" From the left
- *   data-anim="zoom"        For images — scale from 1.06 → 1 with fade
- *   data-anim="blur"        Focus-in (desktop only; no-op on mobile)
+ *   data-anim="rise"        Translate up + fade (default — most content)
+ *   data-anim="fade"        Opacity only (stable layouts, text overlays)
+ *   data-anim="scale"       Scale up + fade (cards, containers, images)
+ *   data-anim="lift"        Alias → rise (kept for template compatibility)
+ *   data-anim="slide-left"  Alias → rise (kept for template compatibility)
+ *   data-anim="slide-right" Alias → rise (kept for template compatibility)
+ *   data-anim="zoom"        Alias → scale (kept for template compatibility)
+ *   data-anim="blur"        Alias → fade (kept for template compatibility)
  *
- *   data-anim-group         Auto-stagger direct children (supports
- *                           nested [data-anim])
+ *   data-anim-group         Auto-stagger direct children
  *   style="--anim-delay:Nms" Manual delay override
  *   style="--anim-index:N"   Manual stagger index override
  *
  * Approach
- *   Animates only `opacity`, `transform`, `filter` — composited properties.
- *   Native path uses `animation-timeline: view()` so reveals stay pinned to
- *   scroll position. Fallback path uses IntersectionObserver (see
- *   scroll-animations.ts) that toggles `.is-visible` on each element.
- *
- *   Mobile-first: smaller distances, shorter durations, no blur. Desktop
- *   widens distance and enables blur for added depth. `prefers-reduced-motion`
- *   cancels every variant.
+ *   Animates only `opacity` and `transform` — composited properties only.
+ *   Native path uses `animation-timeline: view()` (modern browsers, compositor).
+ *   Fallback path uses IntersectionObserver via scroll-animations.ts.
+ *   `prefers-reduced-motion` cancels every variant.
  */
 
 /* ============================================
    Local tokens
    ============================================ */
 :root {
-  /* Apple-like ease-out — strong initial motion, gentle settle */
-  --anim-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Distances — mobile baseline, deliberately restrained */
+  --anim-distance: 0.5rem;
 
-  /* Distances — mobile baseline */
-  --anim-distance: 0.75rem;
-  --anim-distance-x: 1rem;
-
-  /* Durations tuned for quick mobile reveals */
-  --anim-duration: 650ms;
+  /* Duration — shorter than interactive states to feel purposeful */
+  --anim-duration: 600ms;
 
   /* Stagger cadence */
-  --anim-step: 70ms;
+  --anim-step: 60ms;
 
-  /* Scroll range for native path (short & tight for Apple feel) */
+  /* Scroll range for native path */
   --anim-range-start: entry 5%;
-  --anim-range-end: cover 20%;
+  --anim-range-end: cover 22%;
 }
 
 @media (width >= 768px) {
   :root {
-    --anim-distance: 1.25rem;
-    --anim-distance-x: 1.75rem;
-    --anim-duration: 750ms;
-    --anim-step: 80ms;
+    --anim-distance: 0.875rem;
+    --anim-duration: 700ms;
+    --anim-step: 70ms;
   }
 }
 
@@ -103,16 +93,14 @@
 /* ============================================
    Fallback baseline (IntersectionObserver path)
 
-   Every `[data-anim]` starts hidden in its variant-specific state and
-   interpolates to resting when `.is-visible` is added. Using `translate3d`
-   to guarantee a compositor layer on every device.
+   Every `[data-anim]` starts hidden and transitions to rest when `.is-visible`
+   is added. Only `opacity` and `transform` — compositor-only, no reflows.
    ============================================ */
 [data-anim] {
   opacity: 0;
   transition:
-    opacity var(--anim-duration) var(--anim-ease),
-    transform var(--anim-duration) var(--anim-ease),
-    filter var(--anim-duration) var(--anim-ease);
+    opacity var(--anim-duration) var(--ease-settle),
+    transform var(--anim-duration) var(--ease-settle);
   transition-delay: var(
     --anim-delay,
     calc(var(--anim-index, 0) * var(--anim-step))
@@ -120,63 +108,39 @@
   will-change: opacity, transform;
 }
 
+/* rise — default for most content */
+[data-anim],
 [data-anim='rise'],
-[data-anim=''],
-[data-anim]:not([data-anim]) {
-  transform: translate3d(0, var(--anim-distance), 0);
-}
-
-[data-anim='rise'] {
-  transform: translate3d(0, var(--anim-distance), 0);
-}
-
-[data-anim='fade'] {
-  transform: none;
-}
-
-[data-anim='scale'] {
-  transform: scale(0.96);
-}
-
-[data-anim='lift'] {
-  transform: translate3d(0, var(--anim-distance), 0) scale(0.985);
-}
-
-[data-anim='slide-left'] {
-  transform: translate3d(var(--anim-distance-x), 0, 0);
-}
-
+[data-anim='lift'],
+[data-anim='slide-left'],
 [data-anim='slide-right'] {
-  transform: translate3d(calc(-1 * var(--anim-distance-x)), 0, 0);
+  transform: translate3d(0, var(--anim-distance), 0);
 }
 
-[data-anim='zoom'] {
-  transform: scale(1.06);
-}
-
+/* fade — opacity only, no movement */
+[data-anim='fade'],
 [data-anim='blur'] {
   transform: none;
 }
 
-@media (width >= 768px) {
-  [data-anim='blur'] {
-    filter: blur(6px);
-  }
+/* scale — for cards, containers */
+[data-anim='scale'],
+[data-anim='zoom'] {
+  transform: scale(0.97);
 }
 
 [data-anim].is-visible {
   opacity: 1;
-  filter: none;
   transform: none;
 }
 
 /* ============================================
    Native scroll-timeline path
 
-   Runs on the compositor only — no main-thread cost. Each variant has its
-   own keyframe that animates from the variant's starting state (set above)
-   back to rest. The shared `to`-only keyframe lets `animation-fill-mode:
-   both` hold the element's own starting styles during backwards fill.
+   Runs on the compositor only — no main-thread cost. `animation-duration: 1ms`
+   with `linear` timing lets the scroll position drive the progress directly.
+   `animation-fill-mode: both` preserves the starting state (hidden) until
+   the element enters the defined range, then holds the end state (visible).
    ============================================ */
 @supports (animation-timeline: view()) {
   [data-anim] {
@@ -192,12 +156,22 @@
     animation-timeline: view();
     animation-range: var(--anim-range-start) var(--anim-range-end);
   }
+
+  /* Above-the-fold content (hero) uses time-based entrance instead of
+     scroll-timeline, otherwise the reveal completes before the user ever
+     sees it. Runs once on page load with the same stagger cadence. */
+  .hero [data-anim],
+  .hero__content [data-anim] {
+    animation-timeline: auto;
+    animation-duration: var(--duration-slow);
+    animation-timing-function: var(--ease-settle);
+    animation-range: normal;
+  }
 }
 
 @keyframes anim-settle {
   to {
     opacity: 1;
-    filter: none;
     transform: none;
   }
 }
@@ -205,56 +179,17 @@
 /* ============================================
    Auto-stagger inside [data-anim-group]
 
-   Up to 12 positions — enough for grids and lists. Deeper children fall
-   back to index 11 so the cascade never grows uncomfortably long.
+   8 positions — enough for any grid or list. Beyond index 7, elements
+   share the final delay to prevent runaway cascades.
    ============================================ */
-[data-anim-group] > :nth-child(1) {
-  --anim-index: 0;
-}
-
-[data-anim-group] > :nth-child(2) {
-  --anim-index: 1;
-}
-
-[data-anim-group] > :nth-child(3) {
-  --anim-index: 2;
-}
-
-[data-anim-group] > :nth-child(4) {
-  --anim-index: 3;
-}
-
-[data-anim-group] > :nth-child(5) {
-  --anim-index: 4;
-}
-
-[data-anim-group] > :nth-child(6) {
-  --anim-index: 5;
-}
-
-[data-anim-group] > :nth-child(7) {
-  --anim-index: 6;
-}
-
-[data-anim-group] > :nth-child(8) {
-  --anim-index: 7;
-}
-
-[data-anim-group] > :nth-child(9) {
-  --anim-index: 8;
-}
-
-[data-anim-group] > :nth-child(10) {
-  --anim-index: 9;
-}
-
-[data-anim-group] > :nth-child(11) {
-  --anim-index: 10;
-}
-
-[data-anim-group] > :nth-child(n + 12) {
-  --anim-index: 11;
-}
+[data-anim-group] > :nth-child(1) { --anim-index: 0; }
+[data-anim-group] > :nth-child(2) { --anim-index: 1; }
+[data-anim-group] > :nth-child(3) { --anim-index: 2; }
+[data-anim-group] > :nth-child(4) { --anim-index: 3; }
+[data-anim-group] > :nth-child(5) { --anim-index: 4; }
+[data-anim-group] > :nth-child(6) { --anim-index: 5; }
+[data-anim-group] > :nth-child(7) { --anim-index: 6; }
+[data-anim-group] > :nth-child(n + 8) { --anim-index: 7; }
 
 /* ============================================
    Hero — scroll-linked parallax (decorative only)

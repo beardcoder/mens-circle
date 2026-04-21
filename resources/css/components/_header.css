@@ -35,8 +35,7 @@
   font-size: 1.25rem;
   color: var(--color-bone);
   letter-spacing: -0.02em;
-  transition: opacity var(--transition-medium);
-  will-change: opacity;
+  transition: opacity var(--motion-standard);
 }
 
 .logo:hover {
@@ -70,12 +69,17 @@
   font-weight: 500;
   color: var(--color-bone);
   letter-spacing: 0.02em;
-  transition: opacity var(--transition-medium);
-  will-change: opacity;
+  transition: opacity var(--motion-standard);
 }
 
 .nav__link:hover {
   opacity: 0.8;
+}
+
+.nav__link:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 6px;
+  border-radius: var(--radius-sm);
 }
 
 /* Underline effect */
@@ -87,7 +91,7 @@
   block-size: 1px;
   content: '';
   background: var(--accent-primary);
-  transition: inline-size var(--transition-medium) var(--ease-spring);
+  transition: inline-size var(--motion-standard);
 }
 
 .nav__link:hover::after {
@@ -106,6 +110,12 @@
   cursor: pointer;
   background: none;
   border: none;
+  border-radius: var(--radius-sm);
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
 }
 
 .nav-toggle span {

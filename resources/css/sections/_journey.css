@@ -128,8 +128,8 @@
 }
 
 .journey__step:hover .journey__step-number {
-  opacity: 0.5;
-  transform: translateY(-4px);
+  opacity: 0.4;
+  transform: translateY(-2px);
 }
 
 .journey__step:first-child {

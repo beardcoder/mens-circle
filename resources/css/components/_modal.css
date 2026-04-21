@@ -9,19 +9,17 @@
 @keyframes modal-backdrop-in {
   from {
     opacity: 0;
-    backdrop-filter: blur(0);
   }
 
   to {
     opacity: 1;
-    backdrop-filter: blur(4px);
   }
 }
 
 @keyframes modal-in {
   from {
     opacity: 0;
-    transform: scale(0.92) translateY(20px);
+    transform: scale(0.96) translateY(12px);
   }
 
   to {
@@ -46,7 +44,7 @@
 
 .calendar-modal.open {
   display: flex;
-  animation: modal-backdrop-in 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  animation: modal-backdrop-in var(--motion-standard);
 }
 
 .calendar-modal__content {
@@ -57,7 +55,7 @@
   background: var(--bg-primary);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2xl);
-  animation: modal-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: modal-in var(--motion-enter);
 }
 
 .calendar-modal__content h3 {
@@ -76,30 +74,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
-}
-
-.calendar-modal__buttons > * {
-  animation: modal-button-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-}
-
-.calendar-modal__buttons > *:nth-child(1) {
-  animation-delay: 0.15s;
-}
-
-.calendar-modal__buttons > *:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-@keyframes modal-button-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* ============================================
