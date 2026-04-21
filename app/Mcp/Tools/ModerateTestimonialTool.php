@@ -32,6 +32,10 @@ final class ModerateTestimonialTool extends Tool
         $testimonial = Testimonial::withTrashed()->findOrFail((int) $request->get('testimonial_id'));
         $decision = (string) $request->get('decision', 'publish');
 
+        if (! in_array($decision, ['publish', 'reject'], true)) {
+            throw new RuntimeException('decision muss publish oder reject sein.');
+        }
+
         if ($decision === 'reject') {
             $this->action->reject($testimonial);
 

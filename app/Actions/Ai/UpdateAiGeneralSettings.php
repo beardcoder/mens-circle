@@ -38,7 +38,19 @@ final readonly class UpdateAiGeneralSettings
         $filtered = array_intersect_key($data, array_flip(self::ALLOWED_FIELDS));
 
         foreach ($filtered as $key => $value) {
-            $this->settings->{$key} = $value;
+            match ($key) {
+                'site_name' => $this->settings->site_name = $value,
+                'site_tagline' => $this->settings->site_tagline = $value,
+                'site_description' => $this->settings->site_description = $value,
+                'contact_email' => $this->settings->contact_email = $value,
+                'contact_phone' => $this->settings->contact_phone = $value,
+                'location' => $this->settings->location = $value,
+                'whatsapp_community_link' => $this->settings->whatsapp_community_link = $value,
+                'social_links' => $this->settings->social_links = $value,
+                'footer_text' => $this->settings->footer_text = $value,
+                'event_default_max_participants' => $this->settings->event_default_max_participants = $value,
+                default => null,
+            };
         }
 
         $this->settings->save();

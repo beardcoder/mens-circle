@@ -23,7 +23,7 @@ final class AiAuditLogger
             'action' => $action,
             'actor_id' => $user?->getAuthIdentifier(),
             'actor_email' => data_get($user, 'email'),
-            'via' => request()?->expectsJson() ? 'http' : 'mcp',
+            'via' => app()->bound('mcp.request') ? 'mcp' : 'http',
             'ip' => request()?->ip(),
             ...$context,
         ]);

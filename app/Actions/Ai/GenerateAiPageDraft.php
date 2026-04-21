@@ -54,7 +54,7 @@ final readonly class GenerateAiPageDraft
                     'title' => $title,
                     'description' => Str::limit($prompt, 220),
                     'button_text' => 'Mehr erfahren',
-                    'button_link' => route('event.show'),
+                    'button_link' => route('home'),
                 ],
             ],
             [
@@ -74,7 +74,7 @@ final readonly class GenerateAiPageDraft
                     'title' => 'Möchtest du dabei sein?',
                     'text' => 'Nutze diesen Entwurf als Ausgangspunkt und passe ihn im Admin-Bereich weiter an.',
                     'button_text' => 'Zum nächsten Event',
-                    'button_link' => route('event.show'),
+                    'button_link' => route('home'),
                 ],
             ],
         ];

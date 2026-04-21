@@ -22,7 +22,7 @@ final class GetEventTool extends Tool
 
     public function handle(Request $request): Response
     {
-        $event = Event::query()->with('media')->withCount('activeRegistrations')->findOrFail((int) $request->get('event_id'));
+        $event = Event::query()->withCount('activeRegistrations')->findOrFail((int) $request->get('event_id'));
 
         return Response::structured([
             'data' => $this->formatter->event($event, includeRegistrations: true),

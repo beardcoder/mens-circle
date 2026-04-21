@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Testimonial;
+use Carbon\CarbonImmutable;
 use App\Models\User;
 use Illuminate\Support\Str;
 
@@ -32,14 +33,18 @@ test('site context endpoint returns structured json with bearer token', function
 test('event planning endpoint parses month names from the prompt', function (): void {
     config()->set('services.ai_management.token', 'test-token');
 
+    $expectedYear = CarbonImmutable::now()->month > 1 || (CarbonImmutable::now()->month === 1 && CarbonImmutable::now()->day > 15)
+        ? CarbonImmutable::now()->year + 1
+        : CarbonImmutable::now()->year;
+
     $this->withHeader('Authorization', 'Bearer test-token')
         ->postJson(route('ai.events.plan'), [
             'prompt' => 'Plane bitte ein Männerkreis-Event im Januar zum Thema Mut und Klarheit.',
         ])
         ->assertSuccessful()
         ->assertJsonPath('data.start_time', '19:00')
+        ->assertJsonPath('data.event_date', sprintf('%d-01-15', $expectedYear))
         ->assertJson(fn ($json) => $json
-            ->where('data.event_date', fn (string $value): bool => str_ends_with($value, '-01-15'))
             ->where('data.title', fn (string $value): bool => str_contains($value, 'Januar'))
             ->etc());
 });

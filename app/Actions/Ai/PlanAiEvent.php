@@ -83,7 +83,7 @@ final readonly class PlanAiEvent
 
         if ($matchedMonth !== null) {
             $year = $now->year;
-            if ($matchedMonth < $now->month) {
+            if ($matchedMonth < $now->month || ($matchedMonth === $now->month && $now->day > 15)) {
                 $year++;
             }
 

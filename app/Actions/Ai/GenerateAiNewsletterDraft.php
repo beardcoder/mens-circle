@@ -55,7 +55,7 @@ final readonly class GenerateAiNewsletterDraft
         ];
 
         if ($event instanceof Event) {
-            $lines[] = '<p>unser nächstes Treffen findet am <strong>' . $event->event_date->translatedFormat('d. F Y') . '</strong> in ' . e((string) $event->location) . ' statt.</p>';
+            $lines[] = '<p>unser nächstes Treffen findet am <strong>' . e($event->event_date->translatedFormat('d. F Y')) . '</strong> in ' . e((string) $event->location) . ' statt.</p>';
             if ($event->description) {
                 $lines[] = '<p>' . e(Str::limit(strip_tags($event->description), 280)) . '</p>';
             }
