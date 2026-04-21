@@ -7,6 +7,7 @@ namespace App\Mcp\Tools;
 use App\Actions\Ai\PlanAiEvent;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 
 final class PlanEventTool extends Tool
@@ -19,10 +20,10 @@ final class PlanEventTool extends Tool
         private readonly PlanAiEvent $action,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         return Response::structured([
-            'data' => $this->action->execute((string) $request->get('prompt', '')),
+            'data' => $this->action->execute($request->string('prompt', '')->toString()),
         ]);
     }
 }

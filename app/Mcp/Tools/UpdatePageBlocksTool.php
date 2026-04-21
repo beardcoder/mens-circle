@@ -9,6 +9,7 @@ use App\Models\Page;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 
 final class UpdatePageBlocksTool extends Tool
@@ -22,13 +23,12 @@ final class UpdatePageBlocksTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
-        $page = Page::query()->with('contentBlocks')->findOrFail((int) $request->get('page_id'));
-        $contentBlocks = $request->get('content_blocks', []);
-        if (! is_array($contentBlocks)) {
-            $contentBlocks = [];
-        }
+        $page = Page::query()->with('contentBlocks')->findOrFail($request->integer('page_id'));
+        $raw = $request->get('content_blocks', []);
+        /** @var array<int, array<string, mixed>> $contentBlocks */
+        $contentBlocks = is_array($raw) ? $raw : [];
 
         $page = $this->action->execute($page, $contentBlocks);
 

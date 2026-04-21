@@ -19,8 +19,8 @@ final readonly class GenerateAiPageDraft
      */
     public function execute(array $data): Page
     {
-        $title = (string) $data['title'];
-        $prompt = (string) $data['prompt'];
+        $title = is_string($data['title'] ?? null) ? $data['title'] : '';
+        $prompt = is_string($data['prompt'] ?? null) ? $data['prompt'] : '';
 
         $page = Page::create([
             'title' => $title,
@@ -37,7 +37,7 @@ final readonly class GenerateAiPageDraft
             'slug' => $page->slug,
         ]);
 
-        return $page->fresh('contentBlocks');
+        return $page->fresh('contentBlocks') ?? $page;
     }
 
     /**

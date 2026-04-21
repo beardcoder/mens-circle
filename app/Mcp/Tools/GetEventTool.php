@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 
 final class GetEventTool extends Tool
@@ -20,9 +21,9 @@ final class GetEventTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
-        $event = Event::query()->withCount('activeRegistrations')->findOrFail((int) $request->get('event_id'));
+        $event = Event::query()->withCount('activeRegistrations')->findOrFail($request->integer('event_id'));
 
         return Response::structured([
             'data' => $this->formatter->event($event, includeRegistrations: true),

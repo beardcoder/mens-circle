@@ -39,7 +39,7 @@ final class EventManagementController
     public function plan(PlanEventRequest $request, PlanAiEvent $action): JsonResponse
     {
         return response()->json([
-            'data' => $action->execute((string) $request->validated()['prompt']),
+            'data' => $action->execute($request->string('prompt')->toString()),
         ]);
     }
 

@@ -9,6 +9,7 @@ use App\Models\Newsletter;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 use RuntimeException;
 
@@ -23,13 +24,13 @@ final class SendNewsletterTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         if (! $request->boolean('confirm_send')) {
             throw new RuntimeException('Zum Versand ist confirm_send=true erforderlich.');
         }
 
-        $newsletter = Newsletter::query()->findOrFail((int) $request->get('newsletter_id'));
+        $newsletter = Newsletter::query()->findOrFail($request->integer('newsletter_id'));
         $newsletter = $this->action->execute($newsletter);
 
         return Response::structured([

@@ -8,6 +8,7 @@ use App\Actions\Ai\UpdateAiGeneralSettings;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 use RuntimeException;
 
@@ -22,7 +23,7 @@ final class UpdateGeneralSettingsTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         if (! $request->boolean('confirm')) {
             throw new RuntimeException('Zum Aktualisieren ist confirm=true erforderlich.');

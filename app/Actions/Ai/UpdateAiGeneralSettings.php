@@ -39,16 +39,16 @@ final readonly class UpdateAiGeneralSettings
 
         foreach ($filtered as $key => $value) {
             match ($key) {
-                'site_name' => $this->settings->site_name = $value,
-                'site_tagline' => $this->settings->site_tagline = $value,
-                'site_description' => $this->settings->site_description = $value,
-                'contact_email' => $this->settings->contact_email = $value,
-                'contact_phone' => $this->settings->contact_phone = $value,
-                'location' => $this->settings->location = $value,
-                'whatsapp_community_link' => $this->settings->whatsapp_community_link = $value,
-                'social_links' => $this->settings->social_links = $value,
-                'footer_text' => $this->settings->footer_text = $value,
-                'event_default_max_participants' => $this->settings->event_default_max_participants = $value,
+                'site_name' => $this->settings->site_name = is_string($value) ? $value : '',
+                'site_tagline' => $this->settings->site_tagline = is_string($value) ? $value : '',
+                'site_description' => $this->settings->site_description = is_string($value) ? $value : '',
+                'contact_email' => $this->settings->contact_email = is_string($value) ? $value : '',
+                'contact_phone' => $this->settings->contact_phone = is_string($value) ? $value : null,
+                'location' => $this->settings->location = is_string($value) ? $value : '',
+                'whatsapp_community_link' => $this->settings->whatsapp_community_link = is_string($value) ? $value : null,
+                'social_links' => $this->settings->social_links = is_array($value) ? array_map(static fn(mixed $v): string => is_string($v) ? $v : '', $value) : null,
+                'footer_text' => $this->settings->footer_text = is_string($value) ? $value : '',
+                'event_default_max_participants' => $this->settings->event_default_max_participants = is_int($value) ? $value : (is_numeric($value) ? (int) $value : 0),
                 default => null,
             };
         }

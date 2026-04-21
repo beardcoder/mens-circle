@@ -24,6 +24,6 @@ final readonly class SetAiEventPublicationState
             'is_published' => $isPublished,
         ]);
 
-        return $event->fresh();
+        return $event->fresh() ?? $event;
     }
 }

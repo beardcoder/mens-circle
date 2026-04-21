@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 use RuntimeException;
 
@@ -23,13 +24,13 @@ final class PublishEventTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         if (! $request->boolean('confirm')) {
             throw new RuntimeException('Zum Veröffentlichen ist confirm=true erforderlich.');
         }
 
-        $event = Event::query()->findOrFail((int) $request->get('event_id'));
+        $event = Event::query()->findOrFail($request->integer('event_id'));
         $event = $this->action->execute($event, $request->boolean('is_published', true));
         $event->loadCount('activeRegistrations');
 

@@ -25,7 +25,7 @@ final readonly class ModerateAiTestimonial
             'testimonial_id' => $testimonial->id,
         ]);
 
-        return $testimonial->fresh();
+        return $testimonial->fresh() ?? $testimonial;
     }
 
     public function reject(Testimonial $testimonial): void

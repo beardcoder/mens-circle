@@ -25,6 +25,6 @@ final readonly class SetAiPagePublicationState
             'is_published' => $isPublished,
         ]);
 
-        return $page->fresh('contentBlocks');
+        return $page->fresh('contentBlocks') ?? $page;
     }
 }

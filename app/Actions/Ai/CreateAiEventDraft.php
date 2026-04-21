@@ -19,12 +19,16 @@ final readonly class CreateAiEventDraft
      */
     public function execute(array $data): Event
     {
+        $eventDate = is_string($data['event_date']) ? $data['event_date'] : '';
+        $startTime = is_string($data['start_time']) ? $data['start_time'] : '';
+        $endTime = is_string($data['end_time']) ? $data['end_time'] : '';
+
         $event = Event::create([
             'title' => $data['title'],
             'description' => $data['description'] ?? null,
-            'event_date' => CarbonImmutable::parse((string) $data['event_date']),
-            'start_time' => CarbonImmutable::parse((string) ($data['event_date'] . ' ' . $data['start_time'])),
-            'end_time' => CarbonImmutable::parse((string) ($data['event_date'] . ' ' . $data['end_time'])),
+            'event_date' => CarbonImmutable::parse($eventDate),
+            'start_time' => CarbonImmutable::parse($eventDate . ' ' . $startTime),
+            'end_time' => CarbonImmutable::parse($eventDate . ' ' . $endTime),
             'location' => $data['location'],
             'street' => $data['street'] ?? null,
             'postal_code' => $data['postal_code'] ?? null,

@@ -21,16 +21,16 @@ final readonly class UpdateAiEvent
     {
         $payload = $data;
 
-        if (isset($payload['event_date'], $payload['start_time'])) {
-            $payload['start_time'] = $this->parseEventTime((string) $payload['event_date'], (string) $payload['start_time']);
+        if (isset($payload['event_date'], $payload['start_time']) && is_string($payload['event_date']) && is_string($payload['start_time'])) {
+            $payload['start_time'] = $this->parseEventTime($payload['event_date'], $payload['start_time']);
         }
 
-        if (isset($payload['event_date'], $payload['end_time'])) {
-            $payload['end_time'] = $this->parseEventTime((string) $payload['event_date'], (string) $payload['end_time']);
+        if (isset($payload['event_date'], $payload['end_time']) && is_string($payload['event_date']) && is_string($payload['end_time'])) {
+            $payload['end_time'] = $this->parseEventTime($payload['event_date'], $payload['end_time']);
         }
 
-        if (isset($payload['event_date'])) {
-            $payload['event_date'] = CarbonImmutable::parse((string) $payload['event_date']);
+        if (isset($payload['event_date']) && is_string($payload['event_date'])) {
+            $payload['event_date'] = CarbonImmutable::parse($payload['event_date']);
         }
 
         $event->update($payload);
@@ -40,7 +40,7 @@ final readonly class UpdateAiEvent
             'updated_fields' => array_keys($data),
         ]);
 
-        return $event->fresh(['media']);
+        return $event->fresh(['media']) ?? $event;
     }
 
     private function parseEventTime(string $date, string $time): CarbonImmutable

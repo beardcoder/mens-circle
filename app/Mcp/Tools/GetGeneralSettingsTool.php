@@ -8,6 +8,7 @@ use App\Services\Ai\AiDataFormatter;
 use App\Settings\GeneralSettings;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 
 final class GetGeneralSettingsTool extends Tool
@@ -21,7 +22,7 @@ final class GetGeneralSettingsTool extends Tool
         private readonly GeneralSettings $settings,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         return Response::structured([
             'data' => $this->formatter->settings($this->settings),

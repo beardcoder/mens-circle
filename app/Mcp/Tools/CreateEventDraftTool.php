@@ -8,6 +8,7 @@ use App\Actions\Ai\CreateAiEventDraft;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 
 final class CreateEventDraftTool extends Tool
@@ -21,7 +22,7 @@ final class CreateEventDraftTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         $event = $this->action->execute($request->all());
         $event->loadCount('activeRegistrations');

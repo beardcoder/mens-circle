@@ -8,6 +8,7 @@ use App\Models\Testimonial;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 
 final class ListPendingTestimonialsTool extends Tool
@@ -20,7 +21,7 @@ final class ListPendingTestimonialsTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         $testimonials = Testimonial::query()->where('is_published', false)->orderByDesc('created_at')->get();
 

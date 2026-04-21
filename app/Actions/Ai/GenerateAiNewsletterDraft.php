@@ -22,9 +22,9 @@ final readonly class GenerateAiNewsletterDraft
     public function execute(array $data): Newsletter
     {
         $nextEvent = Event::nextEvent();
-        $prompt = trim((string) ($data['prompt'] ?? ''));
-        $subject = (string) ($data['subject'] ?? $this->generateSubject($nextEvent));
-        $content = (string) ($data['content'] ?? $this->generateContent($nextEvent, $prompt));
+        $prompt = trim(is_string($data['prompt'] ?? null) ? $data['prompt'] : '');
+        $subject = is_string($data['subject'] ?? null) ? $data['subject'] : $this->generateSubject($nextEvent);
+        $content = is_string($data['content'] ?? null) ? $data['content'] : $this->generateContent($nextEvent, $prompt);
 
         $newsletter = Newsletter::create([
             'subject' => $subject,

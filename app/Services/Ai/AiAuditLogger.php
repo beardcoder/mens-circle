@@ -25,7 +25,7 @@ final class AiAuditLogger
             'actor_id' => $user?->getAuthIdentifier(),
             'actor_email' => data_get($user, 'email'),
             'via' => app()->bound('mcp.request') ? 'mcp' : 'http',
-            'ip' => request()?->ip(),
+            'ip' => request()->ip(),
             ...$context,
         ]);
     }

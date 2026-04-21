@@ -8,6 +8,7 @@ use App\Models\Page;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 
 final class GetPageTool extends Tool
@@ -20,9 +21,9 @@ final class GetPageTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
-        $page = Page::query()->with('contentBlocks')->findOrFail((int) $request->get('page_id'));
+        $page = Page::query()->with('contentBlocks')->findOrFail($request->integer('page_id'));
 
         return Response::structured([
             'data' => $this->formatter->page($page),

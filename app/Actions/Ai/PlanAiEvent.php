@@ -87,7 +87,7 @@ final readonly class PlanAiEvent
                 $year++;
             }
 
-            return CarbonImmutable::create($year, $matchedMonth, 15)->startOfDay();
+            return (CarbonImmutable::create($year, $matchedMonth, 15) ?? CarbonImmutable::now())->startOfDay();
         }
 
         return $now->addMonth()->day(15)->startOfDay();

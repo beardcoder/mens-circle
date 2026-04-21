@@ -8,6 +8,7 @@ use App\Actions\Ai\GenerateAiNewsletterDraft;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 
 final class GenerateNewsletterTool extends Tool
@@ -21,7 +22,7 @@ final class GenerateNewsletterTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         $newsletter = $this->action->execute($request->all());
 

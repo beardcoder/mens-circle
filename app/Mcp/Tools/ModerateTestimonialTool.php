@@ -9,6 +9,7 @@ use App\Models\Testimonial;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 use RuntimeException;
 
@@ -23,14 +24,14 @@ final class ModerateTestimonialTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         if (! $request->boolean('confirm')) {
             throw new RuntimeException('Zur Moderation ist confirm=true erforderlich.');
         }
 
-        $testimonial = Testimonial::withTrashed()->findOrFail((int) $request->get('testimonial_id'));
-        $decision = (string) $request->get('decision', 'publish');
+        $testimonial = Testimonial::withTrashed()->findOrFail($request->integer('testimonial_id'));
+        $decision = $request->string('decision', 'publish')->toString();
 
         if (! in_array($decision, ['publish', 'reject'], true)) {
             throw new RuntimeException('decision muss publish oder reject sein.');

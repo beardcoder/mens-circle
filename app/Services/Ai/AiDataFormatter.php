@@ -8,6 +8,7 @@ use App\Models\ContentBlock;
 use App\Models\Event;
 use App\Models\Newsletter;
 use App\Models\Page;
+use App\Models\Registration;
 use App\Models\Testimonial;
 use App\Settings\GeneralSettings;
 use Illuminate\Support\Collection;
@@ -48,16 +49,16 @@ final class AiDataFormatter
                         ->with('participant')
                         ->orderByDesc('registered_at')
                         ->get())
-                    ->map(static fn($registration): array => [
+                    ->map(static fn(Registration $registration): array => [
                         'id' => $registration->id,
                         'status' => $registration->status->value,
-                        'registered_at' => $registration->registered_at?->toIso8601String(),
+                        'registered_at' => $registration->registered_at->toIso8601String(),
                         'participant' => [
-                            'id' => $registration->participant?->id,
-                            'first_name' => $registration->participant?->first_name,
-                            'last_name' => $registration->participant?->last_name,
-                            'email' => $registration->participant?->email,
-                            'phone_number' => $registration->participant?->phone_number,
+                            'id' => $registration->participant->id,
+                            'first_name' => $registration->participant->first_name,
+                            'last_name' => $registration->participant->last_name,
+                            'email' => $registration->participant->email,
+                            'phone_number' => $registration->participant->phone,
                         ],
                     ])->values()->all()
                 : null,

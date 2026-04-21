@@ -25,6 +25,6 @@ final readonly class UpdateAiPageBlocks
             'block_count' => count($contentBlocks),
         ]);
 
-        return $page->fresh('contentBlocks');
+        return $page->fresh('contentBlocks') ?? $page;
     }
 }

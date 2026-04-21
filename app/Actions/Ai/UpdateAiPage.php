@@ -19,8 +19,8 @@ final readonly class UpdateAiPage
      */
     public function execute(Page $page, array $data): Page
     {
-        if (isset($data['published_at']) && $data['published_at'] !== null) {
-            $data['published_at'] = CarbonImmutable::parse((string) $data['published_at']);
+        if (isset($data['published_at']) && is_string($data['published_at'])) {
+            $data['published_at'] = CarbonImmutable::parse($data['published_at']);
         }
 
         $page->update($data);
@@ -30,6 +30,6 @@ final readonly class UpdateAiPage
             'updated_fields' => array_keys($data),
         ]);
 
-        return $page->fresh('contentBlocks');
+        return $page->fresh('contentBlocks') ?? $page;
     }
 }

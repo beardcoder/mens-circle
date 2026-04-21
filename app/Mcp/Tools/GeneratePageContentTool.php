@@ -8,6 +8,7 @@ use App\Actions\Ai\GenerateAiPageDraft;
 use App\Services\Ai\AiDataFormatter;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
+use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
 
 final class GeneratePageContentTool extends Tool
@@ -21,7 +22,7 @@ final class GeneratePageContentTool extends Tool
         private readonly AiDataFormatter $formatter,
     ) {}
 
-    public function handle(Request $request): Response
+    public function handle(Request $request): ResponseFactory
     {
         $page = $this->action->execute($request->all());
 
