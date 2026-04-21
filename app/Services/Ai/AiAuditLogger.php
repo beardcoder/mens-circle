@@ -7,6 +7,7 @@ namespace App\Services\Ai;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use function data_get;
 
 final class AiAuditLogger
 {
@@ -21,7 +22,7 @@ final class AiAuditLogger
         Log::info('AI management action executed', [
             'action' => $action,
             'actor_id' => $user?->getAuthIdentifier(),
-            'actor_email' => $user instanceof \App\Models\User ? $user->email : null,
+            'actor_email' => data_get($user, 'email'),
             'via' => request()?->expectsJson() ? 'http' : 'mcp',
             'ip' => request()?->ip(),
             ...$context,

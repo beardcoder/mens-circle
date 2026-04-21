@@ -66,17 +66,28 @@ final readonly class PlanAiEvent
         $prompt = Str::lower($prompt);
         $now = CarbonImmutable::now()->startOfMonth();
 
+        $matchedMonth = null;
+        $matchedPosition = null;
+
         foreach ($monthMap as $monthName => $month) {
-            if (! Str::contains($prompt, $monthName)) {
+            $position = mb_strpos($prompt, $monthName);
+            if ($position === false) {
                 continue;
             }
 
+            if ($matchedPosition === null || $position < $matchedPosition) {
+                $matchedMonth = $month;
+                $matchedPosition = $position;
+            }
+        }
+
+        if ($matchedMonth !== null) {
             $year = $now->year;
-            if ($month < $now->month) {
+            if ($matchedMonth < $now->month) {
                 $year++;
             }
 
-            return CarbonImmutable::create($year, $month, 15)->startOfDay();
+            return CarbonImmutable::create($year, $matchedMonth, 15)->startOfDay();
         }
 
         return $now->addMonth()->day(15)->startOfDay();

@@ -28,6 +28,22 @@ test('site context endpoint returns structured json with bearer token', function
         ]);
 });
 
+
+test('event planning endpoint parses month names from the prompt', function (): void {
+    config()->set('services.ai_management.token', 'test-token');
+
+    $this->withHeader('Authorization', 'Bearer test-token')
+        ->postJson(route('ai.events.plan'), [
+            'prompt' => 'Plane bitte ein Männerkreis-Event im Januar zum Thema Mut und Klarheit.',
+        ])
+        ->assertSuccessful()
+        ->assertJsonPath('data.start_time', '19:00')
+        ->assertJson(fn ($json) => $json
+            ->where('data.event_date', fn (string $value): bool => str_ends_with($value, '-01-15'))
+            ->where('data.title', fn (string $value): bool => str_contains($value, 'Januar'))
+            ->etc());
+});
+
 test('authenticated users can manage ai pages', function (): void {
     $this->actingAs(User::factory()->create());
 

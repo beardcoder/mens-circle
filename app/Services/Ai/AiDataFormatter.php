@@ -42,10 +42,12 @@ final class AiDataFormatter
             'is_published' => $event->is_published,
             'image_url' => $event->getFirstMediaUrl('event_image', 'webp') ?: null,
             'registrations' => $includeRegistrations
-                ? $event->registrations()
-                    ->with('participant')
-                    ->orderByDesc('registered_at')
-                    ->get()
+                ? ($event->relationLoaded('registrations')
+                    ? $event->registrations
+                    : $event->registrations()
+                        ->with('participant')
+                        ->orderByDesc('registered_at')
+                        ->get())
                     ->map(static fn ($registration): array => [
                         'id' => $registration->id,
                         'status' => $registration->status->value,

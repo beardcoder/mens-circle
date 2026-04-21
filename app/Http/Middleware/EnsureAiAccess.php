@@ -16,16 +16,20 @@ final class EnsureAiAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $configuredToken = config('services.ai_management.token');
-        $bearerToken = $request->bearerToken();
-        $hasToken = is_string($configuredToken) && $configuredToken !== '' && is_string($bearerToken) && hash_equals($configuredToken, $bearerToken);
-
-        if (auth()->check() || $hasToken) {
+        if (auth()->check() || $this->isValidBearerToken(config('services.ai_management.token'), $request->bearerToken())) {
             return $next($request);
         }
 
         return new JsonResponse([
             'message' => 'Nicht autorisiert für die KI-Verwaltung.',
         ], 401);
+    }
+
+    private function isValidBearerToken(mixed $configuredToken, ?string $bearerToken): bool
+    {
+        return is_string($configuredToken)
+            && $configuredToken !== ''
+            && is_string($bearerToken)
+            && hash_equals($configuredToken, $bearerToken);
     }
 }

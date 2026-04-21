@@ -39,8 +39,10 @@ final class NewsletterManagementController
         try {
             $newsletter = $action->execute($newsletter);
         } catch (RuntimeException $runtimeException) {
+            report($runtimeException);
+
             return response()->json([
-                'message' => $runtimeException->getMessage(),
+                'message' => 'Newsletter kann nicht versendet werden.',
             ], 409);
         }
 
