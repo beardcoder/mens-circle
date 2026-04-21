@@ -15,6 +15,15 @@ test('ai management routes require ai access', function (): void {
     $this->getJson(route('ai.site-context'))->assertUnauthorized();
 });
 
+test('remote mcp endpoint requires ai access', function (): void {
+    $this->postJson('/mcp', [
+        'jsonrpc' => '2.0',
+        'id' => 1,
+        'method' => 'initialize',
+        'params' => [],
+    ])->assertUnauthorized();
+});
+
 test('site context endpoint returns structured json with bearer token', function (): void {
     config()->set('services.ai_management.token', 'test-token');
 
