@@ -6,20 +6,20 @@
 
 <section class="section values-section">
   <div class="container">
-    <div class="section__header">
+    <div class="section__header" data-anim-group>
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title">{{ $data['title'] }}</h2>
+        <h2 class="section-title" data-anim="rise">{{ $data['title'] }}</h2>
       @endif
     </div>
 
     @if (!empty($data['items']) && is_array($data['items']))
-      <div class="intro__values">
+      <div class="intro__values" data-anim-group>
         @foreach ($data['items'] as $item)
-          <div class="value-item">
+          <div class="value-item" data-anim="rise">
             @if (!empty($item['number']))
               <span class="value-item__number">{{ $item['number'] }}</span>
             @endif

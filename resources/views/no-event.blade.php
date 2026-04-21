@@ -33,17 +33,17 @@
     </div>
 
     <div class="container">
-      <div class="hero__content">
-        <p class="hero__label">Männerkreis Niederbayern/ Straubing</p>
-        <h1 class="hero__title">
+      <div class="hero__content" data-anim-group>
+        <p class="hero__label" data-anim="rise">Männerkreis Niederbayern/ Straubing</p>
+        <h1 class="hero__title" data-anim="lift">
           <span class="hero__title-line">Aktuell ist kein</span>
           <span class="hero__title-line"
             ><span class="text-italic">Termin</span> geplant</span
           >
         </h1>
         <div class="hero__bottom">
-          <p class="hero__description">Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.</p>
-          <div class="hero__cta">
+          <p class="hero__description" data-anim="rise">Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.</p>
+          <div class="hero__cta" data-anim="rise">
             <a href="#newsletter" class="btn btn--primary btn--large"
               >Zum Newsletter</a
             >
@@ -60,14 +60,14 @@
   <section class="section no-event-info-section">
     <div class="container">
       <div class="no-event-info__layout">
-        <div class="no-event-info__content">
-          <p class="eyebrow">Was ist der Männerkreis?</p>
-          <h2 class="section-title no-event-info__title">
+        <div class="no-event-info__content" data-anim-group>
+          <p class="eyebrow" data-anim="rise">Was ist der Männerkreis?</p>
+          <h2 class="section-title no-event-info__title" data-anim="rise">
             Ein Raum für <span class="text-italic">echte Begegnung</span>
           </h2>
-          <p class="no-event-info__text">Der Männerkreis Niederbayern/ Straubing bietet dir einen geschützten Raum, in dem du dich mit anderen Männern austauschen, wachsen und echte Verbindungen aufbauen kannst. Unsere Treffen finden regelmäßig statt – sobald der nächste Termin feststeht, informieren wir dich.</p>
+          <p class="no-event-info__text" data-anim="rise">Der Männerkreis Niederbayern/ Straubing bietet dir einen geschützten Raum, in dem du dich mit anderen Männern austauschen, wachsen und echte Verbindungen aufbauen kannst. Unsere Treffen finden regelmäßig statt – sobald der nächste Termin feststeht, informieren wir dich.</p>
         </div>
-        <div class="no-event-info__visual">
+        <div class="no-event-info__visual" data-anim="scale">
           <div class="no-event-info__quote-area">
             <div class="event-about__circles" aria-hidden="true">
               <div class="event-about__circle event-about__circle--1"></div>
@@ -85,15 +85,15 @@
   <section class="section newsletter-section" id="newsletter">
     <div class="container">
       <div class="newsletter__layout">
-        <div class="newsletter__content">
-          <p class="eyebrow eyebrow--secondary">Newsletter</p>
-          <h2 class="section-title newsletter__title">
+        <div class="newsletter__content" data-anim-group>
+          <p class="eyebrow eyebrow--secondary" data-anim="rise">Newsletter</p>
+          <h2 class="section-title newsletter__title" data-anim="rise">
             Bleib <span class="text-italic">informiert</span>
           </h2>
-          <p class="newsletter__text">Erhalte als Erster Bescheid, wenn unser nächstes Treffen stattfindet. Kein Spam, nur relevante Informationen zum Männerkreis.</p>
+          <p class="newsletter__text" data-anim="rise">Erhalte als Erster Bescheid, wenn unser nächstes Treffen stattfindet. Kein Spam, nur relevante Informationen zum Männerkreis.</p>
         </div>
 
-        <div class="newsletter__form-wrapper">
+        <div class="newsletter__form-wrapper" data-anim="scale">
           <form id="newsletterForm" class="newsletter__form">
             <input
               type="email"
@@ -115,13 +115,16 @@
   <!-- Back to Home CTA -->
   <section class="section no-event-cta-section">
     <div class="container">
-      <div class="no-event-cta__content">
-        <p class="eyebrow">Mehr erfahren</p>
-        <h2 class="section-title no-event-cta__title">
+      <div class="no-event-cta__content" data-anim-group>
+        <p class="eyebrow" data-anim="rise">Mehr erfahren</p>
+        <h2 class="section-title no-event-cta__title" data-anim="rise">
           Entdecke den <span class="text-italic">Männerkreis</span>
         </h2>
-        <p class="no-event-cta__text">Erfahre mehr über uns, unsere Werte und was dich bei einem Treffen erwartet.</p>
-        <a href="{{ route('home') }}" class="btn btn--primary btn--large"
+        <p class="no-event-cta__text" data-anim="rise">Erfahre mehr über uns, unsere Werte und was dich bei einem Treffen erwartet.</p>
+        <a
+          href="{{ route('home') }}"
+          class="btn btn--primary btn--large"
+          data-anim="rise"
           >Zur Startseite</a
         >
       </div>

@@ -26,12 +26,12 @@
   <section class="hero testimonial-form-hero">
     <div class="hero__bg"></div>
     <div class="container">
-      <div class="hero__content">
-        <p class="hero__label">Community Stimmen</p>
-        <h1 class="hero__title">
+      <div class="hero__content" data-anim-group>
+        <p class="hero__label" data-anim="rise">Community Stimmen</p>
+        <h1 class="hero__title" data-anim="lift">
           Teile deine <span class="highlight">Erfahrung</span>
         </h1>
-        <p class="hero__subtitle">Deine Geschichte kann anderen Männern Mut machen, den ersten Schritt zu wagen.</p>
+        <p class="hero__subtitle" data-anim="rise">Deine Geschichte kann anderen Männern Mut machen, den ersten Schritt zu wagen.</p>
       </div>
     </div>
   </section>
@@ -39,7 +39,7 @@
   <section class="section testimonial-form-section">
     <div class="container">
       <div class="testimonial-form__wrapper">
-        <div class="testimonial-form__intro">
+        <div class="testimonial-form__intro" data-anim="rise">
           <h2>Deine Stimme zählt</h2>
           <p>Der Männerkreis lebt von authentischen Begegnungen. Wenn du Teil unserer Community bist und deine Erfahrung teilen möchtest, würden wir uns freuen, von dir zu hören.</p>
           <p>Dein Testimonial wird nach Prüfung auf unserer Website veröffentlicht und kann anderen Männern helfen zu verstehen, was der Kreis bedeuten kann.</p>
@@ -48,6 +48,7 @@
         <form
           id="testimonialForm"
           class="testimonial-form"
+          data-anim="scale"
           data-submit-url="{{ route('testimonial.submit') }}"
         >
           @csrf

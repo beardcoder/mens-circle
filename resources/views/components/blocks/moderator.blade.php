@@ -15,7 +15,7 @@
 <section class="section moderator-section" id="moderator">
   <div class="container">
     <div class="moderator__layout">
-      <div class="moderator__photo-wrapper">
+      <div class="moderator__photo-wrapper" data-anim="slide-right">
         <div class="moderator__photo">
           @if ($media)
             {{ $media->img()->attributes([
@@ -35,21 +35,25 @@
         <div class="moderator__photo-accent"></div>
       </div>
 
-      <div class="moderator__content">
+      <div class="moderator__content" data-anim-group>
         @if (!empty($data['eyebrow']))
-          <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+          <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
         @endif
 
         @if (!empty($data['name']))
-          <h2 class="moderator__name">{!! $data['name'] !!}</h2>
+          <h2 class="moderator__name" data-anim="rise">
+            {!! $data['name'] !!}
+          </h2>
         @endif
 
         @if (!empty($data['bio']))
-          <div class="moderator__bio">{!! $data['bio'] !!}</div>
+          <div class="moderator__bio" data-anim="rise">
+            {!! $data['bio'] !!}
+          </div>
         @endif
 
         @if (!empty($data['quote']))
-          <blockquote class="moderator__quote">
+          <blockquote class="moderator__quote" data-anim="rise">
             <p>{{ $data['quote'] }}</p>
           </blockquote>
         @endif

@@ -2,16 +2,16 @@
   <section class="section whatsapp-section" id="whatsapp-community">
     <div class="container">
       <div class="whatsapp__layout">
-        <div class="whatsapp__content">
-          <p class="eyebrow whatsapp__eyebrow">Community</p>
-          <h2 class="section-title whatsapp__title">
+        <div class="whatsapp__content" data-anim-group>
+          <p class="eyebrow whatsapp__eyebrow" data-anim="rise">Community</p>
+          <h2 class="section-title whatsapp__title" data-anim="rise">
             Tritt unserer
             <span class="text-italic">WhatsApp Community</span> bei
           </h2>
-          <p class="whatsapp__text">Bleibe mit anderen Männern in Verbindung, erhalte Erinnerungen zu unseren Treffen und tausche dich zwischen den Kreisen aus. Ein Raum für Austausch und gegenseitige Unterstützung.</p>
+          <p class="whatsapp__text" data-anim="rise">Bleibe mit anderen Männern in Verbindung, erhalte Erinnerungen zu unseren Treffen und tausche dich zwischen den Kreisen aus. Ein Raum für Austausch und gegenseitige Unterstützung.</p>
         </div>
 
-        <div class="whatsapp__action">
+        <div class="whatsapp__action" data-anim="scale">
           <a
             href="{{ $settings->whatsapp_community_link }}"
             target="_blank"

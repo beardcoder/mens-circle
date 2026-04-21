@@ -24,26 +24,33 @@
     aria-labelledby="archetypes-title"
   >
     <div class="container">
-      <div class="archetypes__header">
+      <div class="archetypes__header" data-anim-group>
         @if (!empty($data['eyebrow']))
-          <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+          <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
         @endif
 
         @if (!empty($data['title']))
-          <h2 class="section-title archetypes__title" id="archetypes-title">
+          <h2
+            class="section-title archetypes__title"
+            id="archetypes-title"
+            data-anim="rise"
+          >
             {{ $data['title'] }}
           </h2>
         @endif
 
         @if (!empty($data['intro']))
-          <p class="archetypes__intro">{{ $data['intro'] }}</p>
+          <p class="archetypes__intro" data-anim="rise">{{ $data['intro'] }}</p>
         @endif
       </div>
 
-      <div class="archetypes__grid">
+      <div class="archetypes__grid" data-anim-group>
         @foreach ($items as $item)
           @php $icon = $detectIcon($item); @endphp
-          <article class="archetype-card archetype-card--{{ $icon }}">
+          <article
+            class="archetype-card archetype-card--{{ $icon }}"
+            data-anim="lift"
+          >
             <div class="archetype-card__background-icon" aria-hidden="true">
               @php $svgPath = public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg'); @endphp
               @if (file_exists($svgPath))
