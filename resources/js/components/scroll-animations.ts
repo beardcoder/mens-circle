@@ -28,26 +28,9 @@ const prefersReducedMotion = (): boolean =>
   typeof globalThis.matchMedia === 'function' &&
   globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const REVEAL_SELECTOR = [
-  '[data-reveal]',
-  '.intro-section',
-  '.moderator-section',
-  '.journey-section',
-  '.archetypes-section',
-  '.testimonials-section',
-  '.testimonial-form-section',
-  '.faq-section',
-  '.newsletter-section',
-  '.whatsapp-section',
-  '.cta-section',
-  '.event-section',
-  '.no-event-section',
-  '.legal-section',
-].join(',');
-
 export const scrollAnimations = defineComponent<ScrollAnimationsOptions>(
   {
-    selector: REVEAL_SELECTOR,
+    selector: '[data-anim]',
     visibleClass: 'is-visible',
     rootMargin: '0px 0px -10% 0px',
     threshold: 0.08,

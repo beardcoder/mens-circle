@@ -34,26 +34,30 @@
   aria-labelledby="journey-title"
 >
   <div class="container">
-    <div class="journey__header">
+    <div class="journey__header" data-anim-group>
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title journey__title" id="journey-title">
+        <h2
+          class="section-title journey__title"
+          id="journey-title"
+          data-anim="rise"
+        >
           {!! $data['title'] !!}
         </h2>
       @endif
 
       @if (!empty($data['subtitle']))
-        <p class="journey__subtitle">{{ $data['subtitle'] }}</p>
+        <p class="journey__subtitle" data-anim="rise">{{ $data['subtitle'] }}</p>
       @endif
     </div>
 
     @if (!empty($steps) && is_array($steps))
-      <div class="journey__steps">
+      <div class="journey__steps" data-anim-group>
         @foreach ($steps as $step)
-          <div class="journey__step">
+          <div class="journey__step" data-anim="lift">
             @if (!empty($step['number']))
               <div class="journey__step-number" aria-hidden="true">
                 {{ $step['number'] }}
