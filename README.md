@@ -64,6 +64,103 @@ php artisan pail           # Real-time log viewer
 bun run dev                # Vite HMR dev server
 ```
 
+## MCP Access for Claude / ChatGPT
+
+This project now exposes the AI management server in two ways:
+
+- **Local stdio MCP** for local tools via `/home/runner/work/mens-circle/mens-circle/.mcp.json` and `/home/runner/work/mens-circle/mens-circle/opencode.json`
+- **Remote HTTP MCP** at `/mcp` for hosted Claude / ChatGPT-style clients
+
+### Remote MCP endpoint
+
+When the app is deployed, the remote MCP endpoint is:
+
+```text
+https://your-domain.example/mcp
+```
+
+Protect it with a bearer token in `.env`:
+
+```dotenv
+AI_MANAGEMENT_TOKEN=replace-with-a-long-random-token
+```
+
+The remote MCP route is rate-limited and uses the same AI access guard as the `/api/ai/*` endpoints.
+
+### Local MCP usage
+
+For local development, start the existing stdio server:
+
+```bash
+php artisan mcp:start mens-circle-ai
+```
+
+Or use the already-checked-in config files:
+
+- `/home/runner/work/mens-circle/mens-circle/.mcp.json`
+- `/home/runner/work/mens-circle/mens-circle/opencode.json`
+
+### Claude remote MCP setup
+
+In a Claude client that supports **remote MCP servers**, register the server URL and bearer token:
+
+```json
+{
+  "mcpServers": {
+    "mens-circle-remote": {
+      "type": "http",
+      "url": "https://your-domain.example/mcp",
+      "headers": {
+        "Authorization": "Bearer replace-with-a-long-random-token"
+      }
+    }
+  }
+}
+```
+
+If your Claude client only supports local stdio MCP servers, keep using:
+
+```json
+{
+  "mcpServers": {
+    "mens-circle-ai": {
+      "command": "php",
+      "args": ["artisan", "mcp:start", "mens-circle-ai"]
+    }
+  }
+}
+```
+
+### ChatGPT remote MCP setup
+
+Use the same remote MCP URL in any ChatGPT-compatible MCP client or gateway:
+
+- **URL:** `https://your-domain.example/mcp`
+- **Auth header:** `Authorization: Bearer <AI_MANAGEMENT_TOKEN>`
+
+If you are testing locally, expose your app temporarily with a tunnel such as `ngrok` or `cloudflared`, then point Claude / ChatGPT to the public `/mcp` URL.
+
+### Quick verification
+
+After deployment, verify the route is reachable:
+
+```bash
+curl -i https://your-domain.example/mcp
+```
+
+Expected result:
+
+- `405 Method Not Allowed` for a plain GET request
+- authenticated POST requests from an MCP client are accepted
+
+### Important notes
+
+- The MCP server returns **structured JSON**, not rendered HTML
+- Write operations still require explicit confirmation in the tool arguments
+- German content generation is the default
+- Keep `AI_MANAGEMENT_TOKEN` private and rotate it if it is exposed
+- For browser-based third-party integrations, place the app behind TLS and configure any required reverse-proxy / CORS rules in your deployment layer
+
 ## Code Quality
 
 ```bash

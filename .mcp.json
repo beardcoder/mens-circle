@@ -6,6 +6,14 @@
                 "artisan",
                 "boost:mcp"
             ]
+        },
+        "mens-circle-ai": {
+            "command": "php",
+            "args": [
+                "artisan",
+                "mcp:start",
+                "mens-circle-ai"
+            ]
         }
     }
 }

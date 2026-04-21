@@ -5,6 +5,11 @@
             "type": "local",
             "enabled": true,
             "command": ["php", "artisan", "boost:mcp"]
+        },
+        "mens-circle-ai": {
+            "type": "local",
+            "enabled": true,
+            "command": ["php", "artisan", "mcp:start", "mens-circle-ai"]
         }
     }
 }
