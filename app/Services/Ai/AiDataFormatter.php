@@ -48,7 +48,7 @@ final class AiDataFormatter
                         ->with('participant')
                         ->orderByDesc('registered_at')
                         ->get())
-                    ->map(static fn ($registration): array => [
+                    ->map(static fn($registration): array => [
                         'id' => $registration->id,
                         'status' => $registration->status->value,
                         'registered_at' => $registration->registered_at?->toIso8601String(),
@@ -77,7 +77,7 @@ final class AiDataFormatter
             'is_published' => $page->is_published,
             'published_at' => $page->published_at?->toIso8601String(),
             'content_blocks' => $page->contentBlocks
-                ->map(static fn (ContentBlock $block): array => [
+                ->map(static fn(ContentBlock $block): array => [
                     'type' => $block->type,
                     'order' => $block->order,
                     'block_id' => $block->block_id,
@@ -95,7 +95,7 @@ final class AiDataFormatter
      */
     public function pages(Collection $pages): array
     {
-        return $pages->map(fn (Page $page): array => $this->page($page))->values()->all();
+        return $pages->map(fn(Page $page): array => $this->page($page))->values()->all();
     }
 
     /**
@@ -105,7 +105,7 @@ final class AiDataFormatter
      */
     public function events(Collection $events): array
     {
-        return $events->map(fn (Event $event): array => $this->event($event))->values()->all();
+        return $events->map(fn(Event $event): array => $this->event($event))->values()->all();
     }
 
     /**
@@ -147,7 +147,7 @@ final class AiDataFormatter
      */
     public function testimonials(Collection $testimonials): array
     {
-        return $testimonials->map(fn (Testimonial $testimonial): array => $this->testimonial($testimonial))->values()->all();
+        return $testimonials->map(fn(Testimonial $testimonial): array => $this->testimonial($testimonial))->values()->all();
     }
 
     /**

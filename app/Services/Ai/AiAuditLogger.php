@@ -7,6 +7,7 @@ namespace App\Services\Ai;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+
 use function data_get;
 
 final class AiAuditLogger

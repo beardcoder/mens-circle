@@ -53,8 +53,8 @@ test('event planning endpoint parses month names from the prompt', function (): 
         ->assertSuccessful()
         ->assertJsonPath('data.start_time', '19:00')
         ->assertJsonPath('data.event_date', sprintf('%d-01-15', $expectedYear))
-        ->assertJson(fn ($json) => $json
-            ->where('data.title', fn (string $value): bool => str_contains($value, 'Januar'))
+        ->assertJson(fn($json) => $json
+            ->where('data.title', fn(string $value): bool => str_contains($value, 'Januar'))
             ->etc());
 });
 

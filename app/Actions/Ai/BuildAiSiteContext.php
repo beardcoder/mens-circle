@@ -45,7 +45,7 @@ final readonly class BuildAiSiteContext
                 'block_types' => Page::query()
                     ->with('contentBlocks')
                     ->get()
-                    ->flatMap(static fn (Page $page) => $page->contentBlocks->pluck('type'))
+                    ->flatMap(static fn(Page $page) => $page->contentBlocks->pluck('type'))
                     ->unique()
                     ->values()
                     ->all(),
