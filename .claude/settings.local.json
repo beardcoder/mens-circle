@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "mcp__laravel-boost__search-docs",
-      "mcp__laravel-boost__application-info"
+      "mcp__laravel-boost__application-info",
+      "mcp__mens-circle-ai__site_overview"
     ]
   },
   "enableAllProjectMcpServers": true,
