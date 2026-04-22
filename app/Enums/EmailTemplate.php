@@ -98,23 +98,66 @@ enum EmailTemplate: string
     private function newsletterNewEventContent(): string
     {
         return <<<'HTML'
-            <h2>Ein neues Treffen steht an!</h2>
-
-            <p>Wir laden dich herzlich zu unserem nächsten Männerkreis ein.</p>
-
-            <p><strong>{event_title}</strong><br>
-            📅 {event_date} um {event_time} Uhr<br>
-            📍 {event_location}</p>
-
-            <p>Der Männerkreis ist ein geschützter Raum, in dem wir als Männer zusammenkommen – offen, ehrlich und ohne Masken. Egal ob du zum ersten Mal dabei bist oder schon länger Teil unserer Gemeinschaft: Du bist willkommen.</p>
-
-            <p><strong>Teilnahme:</strong> {cost_basis}</p>
-
-            <p>Es sind noch <strong>{available_spots} Plätze</strong> frei. Sichere dir jetzt deinen Platz:</p>
-
-            <p>👉 <a href="{event_url}">Jetzt anmelden</a></p>
-
-            <p>Wir freuen uns auf dich!</p>
+            <h2>Ein neues Treffen steht an</h2>
+            
+            <p>Hallo {first_name},</p>
+            
+            <p>
+                am <strong>{event_date}</strong> findet unser nächster Männerkreis statt.
+            </p>
+            
+            <div class="event-box">
+                <p>
+                    <strong>{event_title}</strong><br>
+                    📅 {event_date} um {event_time} Uhr<br>
+                    📍 {event_location}
+                </p>
+            </div>
+            
+            <p>
+                Dieser Abend ist eine Einladung, wieder bei dir selbst anzukommen.
+                Nicht als Rolle. Nicht als Maske. Sondern als Mann, der bereit ist,
+                ehrlich hinzuschauen und bewusst da zu sein.
+            </p>
+            
+            <p>
+                Im Männerkreis entsteht ein Raum, in dem Klarheit, Würde und echte Verbindung Platz haben.
+                Wir kommen zusammen, um uns auszutauschen, in den Körper zu kommen und uns gegenseitig
+                auf Augenhöhe zu begegnen.
+            </p>
+            
+            <p>
+                Für mich bedeutet Männerarbeit nicht, härter zu werden.
+                Sondern präsenter. Aufrechter. Wahrhaftiger.
+                Mit einer Kraft, die nicht drücken muss, sondern halten kann.
+            </p>
+            
+            <p>
+                Egal, ob du zum ersten Mal dabei bist oder schon länger Teil des Kreises bist:
+                Du bist willkommen.
+            </p>
+            
+            <p>
+                <strong>Teilnahme:</strong> {cost_basis}
+            </p>
+            
+            <p>
+                Es sind noch <strong>{available_spots} Plätze</strong> frei.
+                Wenn du spürst, dass dieser Abend für dich dran ist, dann sichere dir gerne deinen Platz.
+            </p>
+            
+            <p>
+                👉 <a href="{event_url}">Jetzt anmelden</a>
+            </p>
+            
+            <p>
+                Ich freue mich, wenn du dabei bist.
+            </p>
+            
+            <p>
+                Herzliche Grüße<br>
+                Markus
+            </p>
             HTML;
     }
 
