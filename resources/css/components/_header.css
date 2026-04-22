@@ -5,6 +5,16 @@
 
 /* ============================================
    Header Base
+
+   The header runs two coordinated scroll-linked layers:
+   1. An isolated `::before` that paints the "scrolled" background
+      (blur + tinted fill + shadow). On hero pages it fades in with
+      scroll; off-hero pages pin it opaque. Keeping this on a
+      pseudo-element means we can interpolate its opacity cleanly
+      without fighting `backdrop-filter` rendering quirks.
+   2. A `color`-based tone shift on the header itself — children
+      inherit via `currentColor`, so nav, logo, and toggle move
+      together as a single unit.
    ============================================ */
 .header {
   position: fixed;
@@ -12,9 +22,30 @@
   inset-inline: 0;
   z-index: var(--z-header);
   padding-block: var(--space-md);
+  color: var(--text-primary);
   transition:
-    background-color var(--transition-medium),
-    backdrop-filter var(--transition-medium);
+    padding-block var(--transition-medium),
+    color var(--transition-medium);
+}
+
+/* Scrolled-state overlay (rendered via ::before so we can fade it
+   independently of the header's own color/padding morph) */
+.header::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: '';
+  background: color-mix(in oklch, var(--bg-primary) 92%, transparent);
+  border-block-end: 1px solid
+    color-mix(in oklch, var(--border-light) 60%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in oklch, var(--color-ink) 3%, transparent),
+    0 8px 20px -8px color-mix(in oklch, var(--color-ink) 10%, transparent),
+    0 24px 48px -16px color-mix(in oklch, var(--color-ink) 8%, transparent);
+  opacity: 0;
+  backdrop-filter: blur(22px) saturate(140%);
+  transition: opacity var(--transition-medium);
 }
 
 .header__inner {
@@ -33,7 +64,7 @@
   align-items: center;
   font-family: var(--font-display);
   font-size: 1.25rem;
-  color: var(--color-bone);
+  color: inherit;
   letter-spacing: -0.02em;
   transition: opacity var(--motion-standard);
 }
@@ -67,7 +98,7 @@
   position: relative;
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--color-bone);
+  color: inherit;
   letter-spacing: 0.02em;
   transition: opacity var(--motion-standard);
 }
@@ -122,92 +153,88 @@
   display: block;
   inline-size: 28px;
   block-size: 2px;
-  background: var(--color-bone);
+  background: currentcolor;
   transform-origin: center;
   transition:
     transform var(--transition-medium),
-    opacity var(--transition-medium),
-    background var(--transition-medium);
+    opacity var(--transition-medium);
 }
 
 /* ============================================
-   Header States - No Hero
+   Hero-page initial tone
+
+   On pages that start with a hero image, the header sits on top of a
+   dark visual — text flips to bone until the page has scrolled.
+   Without a hero, the header is always in its resting (solid) state.
    ============================================ */
-body:not(:has(.hero)) .header {
-  background: color-mix(in oklch, var(--bg-primary) 92%, transparent);
-  border-block-end: 1px solid
-    color-mix(in oklch, var(--border-light) 60%, transparent);
-  backdrop-filter: blur(18px) saturate(140%);
-}
-
-body:not(:has(.hero)) .logo,
-body:not(:has(.hero)) .nav__link {
-  color: var(--text-primary);
-}
-
-body:not(:has(.hero)) .nav-toggle span {
-  background: var(--text-primary);
-}
-
-@supports not selector(body:has(.hero)) {
-  body.no-hero .header {
-    background: color-mix(in oklch, var(--bg-primary) 92%, transparent);
-    border-block-end: 1px solid
-      color-mix(in oklch, var(--border-light) 60%, transparent);
-    backdrop-filter: blur(18px) saturate(140%);
-  }
-
-  body.no-hero .logo,
-  body.no-hero .nav__link {
-    color: var(--text-primary);
-  }
-
-  body.no-hero .nav-toggle span {
-    background: var(--text-primary);
-  }
-}
-
-/* ============================================
-   Header States - On Hero
-   ============================================ */
-.header--on-hero:not(.scrolled) {
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklch, var(--bg-dark) 12%, transparent) 0%,
-    transparent 85%
-  );
-}
-
-.header--on-hero:not(.scrolled) .logo,
-.header--on-hero:not(.scrolled) .nav__link {
+body:has(.hero) .header {
   color: var(--color-bone);
 }
 
-.header--on-hero:not(.scrolled) .nav-toggle span {
-  background: var(--color-bone);
+body:not(:has(.hero)) .header::before {
+  opacity: 1;
+}
+
+/* Fallback for browsers without :has() — requires the scroll-header
+   JS component to tag the body with has-hero / no-hero. */
+@supports not selector(body:has(.hero)) {
+  body.has-hero .header {
+    color: var(--color-bone);
+  }
+
+  body.no-hero .header::before {
+    opacity: 1;
+  }
 }
 
 /* ============================================
-   Header States - Scrolled
+   Scroll-linked morph (native scroll-timeline)
+
+   On hero pages: as the user scrolls the first ~180px, the header
+   continuously morphs from "transparent over hero" to "solid with
+   blur + dark text". Runs on the compositor — no JS scroll listener,
+   no binary snap.
+
+   Fallback (below) covers browsers without scroll-timeline support
+   by using the JS-added `.scrolled` class for a non-animated swap.
    ============================================ */
-.header.scrolled {
-  background: color-mix(in oklch, var(--bg-primary) 92%, transparent);
-  border-block-end: 1px solid
-    color-mix(in oklch, var(--border-light) 60%, transparent);
-  box-shadow:
-    0 1px 0 color-mix(in oklch, var(--color-ink) 3%, transparent),
-    0 8px 20px -8px color-mix(in oklch, var(--color-ink) 10%, transparent),
-    0 24px 48px -16px color-mix(in oklch, var(--color-ink) 8%, transparent);
-  backdrop-filter: blur(24px) saturate(140%);
+@supports (animation-timeline: scroll()) {
+  body:has(.hero) .header {
+    animation: header-color-morph linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 180px;
+  }
+
+  body:has(.hero) .header::before {
+    animation: header-overlay-fade linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 180px;
+  }
 }
 
-.header.scrolled .logo,
-.header.scrolled .nav__link {
-  color: var(--text-primary);
+@keyframes header-color-morph {
+  to {
+    padding-block: calc(var(--space-md) * 0.78);
+    color: var(--text-primary);
+  }
 }
 
-.header.scrolled .nav-toggle span {
-  background: var(--text-primary);
+@keyframes header-overlay-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fallback: non-animated swap when scroll-timeline isn't supported.
+   The JS sets `.scrolled` past 50px of scroll. */
+@supports not (animation-timeline: scroll()) {
+  body:has(.hero) .header.scrolled {
+    color: var(--text-primary);
+  }
+
+  body:has(.hero) .header.scrolled::before {
+    opacity: 1;
+  }
 }
 
 /* ============================================

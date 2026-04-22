@@ -2,12 +2,16 @@
    CROSS-DOCUMENT VIEW TRANSITIONS
 
    Enables MPA page transitions using the View Transitions API.
-   Requires Chrome 126+ / Edge 126+; gracefully ignored in older browsers.
+   Requires Chrome 126+ / Edge 126+ / Safari 18.2+; gracefully ignored
+   elsewhere.
 
-   The `view-transitions-toolkit` package provides `useAutoTypes()`, which
-   listens to `pageswap`/`pagereveal` and injects `from-{route}` / `to-{route}`
-   types into the active transition. CSS here uses those types to differentiate
-   animations per navigation direction.
+   Design goals:
+   - Organic, cinematic feel (soft blur + gentle scale)
+   - No visible "mid-fade haze": old is almost gone before new appears
+     by using asymmetric timing (old fades out fast, new fades in slow,
+     with a small delay so the curves don't intersect at 50%).
+   - Directional bias for `home ↔ event` drawn from the toolkit's
+     `useAutoTypes()` — other routes share the default soft dissolve.
    ============================================ */
 
 @view-transition {
@@ -15,106 +19,145 @@
 }
 
 /* ============================================
-   Named elements
+   Named regions
 
-   The header is identical on every page. Naming it isolates it from the
-   root snapshot so it stays put while the page content transitions.
+   The header is byte-identical across pages, so giving it a name
+   isolates it from the root snapshot — it stays put instead of
+   cross-fading with itself.
    ============================================ */
 .header {
   view-transition-name: site-header;
 }
 
-/* Exclude purely functional overlays from capture */
+/* Functional overlays must not be captured */
 .scroll-progress,
-.scroll-to-top {
+.scroll-to-top,
+.calendar-modal {
   view-transition-name: none;
 }
 
 /* ============================================
-   Default durations
+   Header: keep quiet
 
-   Browser default is 0.25s ease. We tighten root and relax named groups
-   to match the site's motion tokens.
+   Duration here is intentionally short: the header doesn't change
+   visually, so anything longer just adds latency.
    ============================================ */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 300ms;
-  animation-timing-function: var(--ease-settle, ease-in-out);
+::view-transition-group(site-header) {
+  animation-duration: 200ms;
 }
 
 ::view-transition-old(site-header),
 ::view-transition-new(site-header) {
-  animation-duration: 180ms;
+  animation-duration: 200ms;
 }
 
 /* ============================================
-   Keyframes
+   Root: organic dissolve
+
+   Asymmetric timing is the anti-blink trick:
+   - Old uses `ease-release` (front-loaded) → mostly gone by 40%
+   - New uses `ease-settle` (back-loaded) with a 80ms delay → comes in
+     after the old has largely cleared, so the midpoint is dominated
+     by one image, not a hazy composite of two.
+   - A gentle blur + scale masks any remaining crossover.
    ============================================ */
-@keyframes vt-slide-out-left {
+@keyframes vt-out {
   to {
-    translate: -3% 0;
     opacity: 0;
+    filter: blur(6px);
+    scale: 1.01;
   }
 }
 
-@keyframes vt-slide-in-right {
+@keyframes vt-in {
   from {
-    translate: 3% 0;
     opacity: 0;
+    filter: blur(6px);
+    scale: 0.99;
   }
 }
 
-@keyframes vt-slide-out-right {
-  to {
-    translate: 3% 0;
-    opacity: 0;
-  }
+::view-transition-old(root) {
+  animation:
+    vt-out 360ms var(--ease-release, cubic-bezier(0.2, 0, 0, 1)) both;
 }
 
-@keyframes vt-slide-in-left {
-  from {
-    translate: -3% 0;
-    opacity: 0;
-  }
+::view-transition-new(root) {
+  animation:
+    vt-in 500ms 80ms var(--ease-settle, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 
 /* ============================================
-   Route-typed animations
+   Directional drift — home ↔ event
 
-   `from-event` / `to-event` are injected by useAutoTypes() in
-   resources/js/components/view-transitions.ts.
-
-   Forward (home → event): old slides left, new comes from right.
-   Back (event → home):    old slides right, new comes from left.
-   All other routes:       default cross-fade (no override needed).
+   Same asymmetric principle, with a subtle horizontal bias to give
+   navigation direction. Distance is deliberately small (2.5%) —
+   enough to feel intentional, not disorienting.
    ============================================ */
+@keyframes vt-drift-out-left {
+  to {
+    opacity: 0;
+    filter: blur(6px);
+    scale: 1.01;
+    translate: -2.5% 0;
+  }
+}
+
+@keyframes vt-drift-in-right {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    scale: 0.99;
+    translate: 2.5% 0;
+  }
+}
+
+@keyframes vt-drift-out-right {
+  to {
+    opacity: 0;
+    filter: blur(6px);
+    scale: 1.01;
+    translate: 2.5% 0;
+  }
+}
+
+@keyframes vt-drift-in-left {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    scale: 0.99;
+    translate: -2.5% 0;
+  }
+}
+
 :root:active-view-transition-type(to-event) {
   &::view-transition-old(root) {
-    animation-name: vt-slide-out-left;
+    animation-name: vt-drift-out-left;
   }
 
   &::view-transition-new(root) {
-    animation-name: vt-slide-in-right;
+    animation-name: vt-drift-in-right;
   }
 }
 
 :root:active-view-transition-type(from-event) {
   &::view-transition-old(root) {
-    animation-name: vt-slide-out-right;
+    animation-name: vt-drift-out-right;
   }
 
   &::view-transition-new(root) {
-    animation-name: vt-slide-in-left;
+    animation-name: vt-drift-in-left;
   }
 }
 
 /* ============================================
-   Reduced motion — opt-out
+   Reduced motion — collapse to near-instant swap
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
   }
 }
