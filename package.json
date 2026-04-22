@@ -41,6 +41,7 @@
     },
     "packageManager": "bun@1.3.13",
     "dependencies": {
-        "@beardcoder/stitch-js": "^1.0.4"
+        "@beardcoder/stitch-js": "^1.0.4",
+        "view-transitions-toolkit": "^1.0.0"
     }
 }

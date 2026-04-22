@@ -1,5 +1,120 @@
 /* ============================================
-   PAGE TRANSITIONS
+   CROSS-DOCUMENT VIEW TRANSITIONS
 
-   Intentionally empty.
+   Enables MPA page transitions using the View Transitions API.
+   Requires Chrome 126+ / Edge 126+; gracefully ignored in older browsers.
+
+   The `view-transitions-toolkit` package provides `useAutoTypes()`, which
+   listens to `pageswap`/`pagereveal` and injects `from-{route}` / `to-{route}`
+   types into the active transition. CSS here uses those types to differentiate
+   animations per navigation direction.
    ============================================ */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* ============================================
+   Named elements
+
+   The header is identical on every page. Naming it isolates it from the
+   root snapshot so it stays put while the page content transitions.
+   ============================================ */
+.header {
+  view-transition-name: site-header;
+}
+
+/* Exclude purely functional overlays from capture */
+.scroll-progress,
+.scroll-to-top {
+  view-transition-name: none;
+}
+
+/* ============================================
+   Default durations
+
+   Browser default is 0.25s ease. We tighten root and relax named groups
+   to match the site's motion tokens.
+   ============================================ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 300ms;
+  animation-timing-function: var(--ease-settle, ease-in-out);
+}
+
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation-duration: 180ms;
+}
+
+/* ============================================
+   Keyframes
+   ============================================ */
+@keyframes vt-slide-out-left {
+  to {
+    translate: -3% 0;
+    opacity: 0;
+  }
+}
+
+@keyframes vt-slide-in-right {
+  from {
+    translate: 3% 0;
+    opacity: 0;
+  }
+}
+
+@keyframes vt-slide-out-right {
+  to {
+    translate: 3% 0;
+    opacity: 0;
+  }
+}
+
+@keyframes vt-slide-in-left {
+  from {
+    translate: -3% 0;
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   Route-typed animations
+
+   `from-event` / `to-event` are injected by useAutoTypes() in
+   resources/js/components/view-transitions.ts.
+
+   Forward (home → event): old slides left, new comes from right.
+   Back (event → home):    old slides right, new comes from left.
+   All other routes:       default cross-fade (no override needed).
+   ============================================ */
+:root:active-view-transition-type(to-event) {
+  &::view-transition-old(root) {
+    animation-name: vt-slide-out-left;
+  }
+
+  &::view-transition-new(root) {
+    animation-name: vt-slide-in-right;
+  }
+}
+
+:root:active-view-transition-type(from-event) {
+  &::view-transition-old(root) {
+    animation-name: vt-slide-out-right;
+  }
+
+  &::view-transition-new(root) {
+    animation-name: vt-slide-in-left;
+  }
+}
+
+/* ============================================
+   Reduced motion — opt-out
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.01ms !important;
+  }
+}
