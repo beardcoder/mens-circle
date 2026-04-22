@@ -33,7 +33,7 @@ test('resolve replaces placeholders with event data', function (): void {
         ->and($result['content'])
         ->toContain('Auf Spendenbasis')
         ->and($result['content'])
-        ->toContain('8 Plätze');
+        ->toContain('Jetzt anmelden');
 });
 
 test('resolve uses next event when no event provided', function (): void {
@@ -117,7 +117,7 @@ test('resolve calculates available spots correctly', function (): void {
     $event->loadCount('activeRegistrations');
 
     $service = new EmailTemplateService();
-    $result = $service->resolve(EmailTemplate::NewsletterNewEvent, $event);
+    $result = $service->resolve(EmailTemplate::NewsletterEventReminder, $event);
 
     expect($result['content'])->toContain('5 Plätze');
 });

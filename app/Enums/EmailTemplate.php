@@ -98,23 +98,30 @@ enum EmailTemplate: string
     private function newsletterNewEventContent(): string
     {
         return <<<'HTML'
-            <h2>Ein neues Treffen steht an!</h2>
+            <p>Hallo {first_name},</p>
 
-            <p>Wir laden dich herzlich zu unserem nächsten Männerkreis ein.</p>
+            <p>am {event_date} findet unser nächster Männerkreis statt:</p>
 
             <p><strong>{event_title}</strong><br>
             📅 {event_date} um {event_time} Uhr<br>
             📍 {event_location}</p>
 
-            <p>Der Männerkreis ist ein geschützter Raum, in dem wir als Männer zusammenkommen – offen, ehrlich und ohne Masken. Egal ob du zum ersten Mal dabei bist oder schon länger Teil unserer Gemeinschaft: Du bist willkommen.</p>
+            <p>Der Männerkreis ist ein Raum für Männer, die nicht nur funktionieren wollen. Ein Abend, an dem du ankommen darfst. Ohne Rolle. Ohne Fassade. Ohne irgendetwas beweisen zu müssen.</p>
 
-            <p><strong>Teilnahme:</strong> {cost_basis}</p>
+            <p>Wir kommen zusammen, um ehrlich zu werden, in den Körper zu kommen und uns mit dem zu verbinden, was im Alltag oft untergeht: Klarheit, Ruhe, Kraft und echter Austausch unter Männern.</p>
 
-            <p>Es sind noch <strong>{available_spots} Plätze</strong> frei. Sichere dir jetzt deinen Platz:</p>
+            <p>Egal, ob du zum ersten Mal dabei bist oder schon länger Teil des Kreises bist: Du bist willkommen.</p>
+
+            <p>Die Teilnahme ist auf Spendenbasis. Als Orientierung empfehlen wir {cost_basis}.</p>
+
+            <p>Es sind nur noch wenige Plätze frei. Wenn du dabei sein möchtest, melde dich am besten direkt an:</p>
 
             <p>👉 <a href="{event_url}">Jetzt anmelden</a></p>
 
-            <p>Wir freuen uns auf dich!</p>
+            <p>Ich freue mich, wenn du dabei bist.</p>
+
+            <p>Herzliche Grüße,<br>
+            Markus</p>
             HTML;
     }
 
