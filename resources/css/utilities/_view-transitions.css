@@ -19,36 +19,20 @@
 }
 
 /* ============================================
-   Named regions
+   Capture exclusions
 
-   The header is byte-identical across pages, so giving it a name
-   isolates it from the root snapshot — it stays put instead of
-   cross-fading with itself.
+   The header intentionally is NOT named — its appearance depends on
+   scroll position (tinted backdrop + dark text when scrolled, bone
+   text when over hero). Capturing it as a separate transition group
+   produced a visible blink when the old page (scrolled) and new page
+   (scroll=0) cross-faded with different backgrounds and tones.
+   Letting the header travel with root lets the organic dissolve
+   blur through the mismatch instead of snapping across it.
    ============================================ */
-.header {
-  view-transition-name: site-header;
-}
-
-/* Functional overlays must not be captured */
 .scroll-progress,
 .scroll-to-top,
 .calendar-modal {
   view-transition-name: none;
-}
-
-/* ============================================
-   Header: keep quiet
-
-   Duration here is intentionally short: the header doesn't change
-   visually, so anything longer just adds latency.
-   ============================================ */
-::view-transition-group(site-header) {
-  animation-duration: 200ms;
-}
-
-::view-transition-old(site-header),
-::view-transition-new(site-header) {
-  animation-duration: 200ms;
 }
 
 /* ============================================

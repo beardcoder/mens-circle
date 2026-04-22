@@ -29,22 +29,25 @@
 }
 
 /* Scrolled-state overlay (rendered via ::before so we can fade it
-   independently of the header's own color/padding morph) */
+   independently of the header's own color/padding morph).
+
+   The fill is deliberately thin (~55%): the heavy lifting is done by
+   `backdrop-filter`, which frosts the content below. A solid tint
+   would read as a flash against colorful hero imagery. */
 .header::before {
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   content: '';
-  background: color-mix(in oklch, var(--bg-primary) 92%, transparent);
+  background: color-mix(in oklch, var(--bg-primary) 55%, transparent);
   border-block-end: 1px solid
-    color-mix(in oklch, var(--border-light) 60%, transparent);
+    color-mix(in oklch, var(--border-light) 45%, transparent);
   box-shadow:
-    0 1px 0 color-mix(in oklch, var(--color-ink) 3%, transparent),
-    0 8px 20px -8px color-mix(in oklch, var(--color-ink) 10%, transparent),
-    0 24px 48px -16px color-mix(in oklch, var(--color-ink) 8%, transparent);
+    0 1px 0 color-mix(in oklch, var(--color-ink) 2%, transparent),
+    0 10px 24px -10px color-mix(in oklch, var(--color-ink) 8%, transparent);
   opacity: 0;
-  backdrop-filter: blur(22px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(150%);
   transition: opacity var(--transition-medium);
 }
 
