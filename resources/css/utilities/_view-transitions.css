@@ -5,30 +5,19 @@
    Requires Chrome 126+ / Edge 126+ / Safari 18.2+; gracefully ignored
    elsewhere.
 
-   Design goals:
-   - Organic, cinematic feel (soft blur + gentle scale)
-   - No visible "mid-fade haze": old is almost gone before new appears
-     by using asymmetric timing (old fades out fast, new fades in slow,
-     with a small delay so the curves don't intersect at 50%).
-   - Directional bias for `home ↔ event` drawn from the toolkit's
-     `useAutoTypes()` — other routes share the default soft dissolve.
+   Implementation: sanfter Crossfade.
+   Alt- und Neu-Snapshot animieren parallel mit identischer Dauer und
+   Easing. `mix-blend-mode: plus-lighter` sorgt dafür, dass sich die
+   Opacities beider Pseudoelemente additiv mischen statt sich
+   gegenseitig zu verdunkeln — der 50/50-Punkt erreicht volle
+   Helligkeit, kein grauer Zwischenmoment.
    ============================================ */
 
 @view-transition {
   navigation: auto;
 }
 
-/* ============================================
-   Capture exclusions
-
-   The header intentionally is NOT named — its appearance depends on
-   scroll position (tinted backdrop + dark text when scrolled, bone
-   text when over hero). Capturing it as a separate transition group
-   produced a visible blink when the old page (scrolled) and new page
-   (scroll=0) cross-faded with different backgrounds and tones.
-   Letting the header travel with root lets the organic dissolve
-   blur through the mismatch instead of snapping across it.
-   ============================================ */
+/* Funktionale Overlays dürfen nicht erfasst werden */
 .scroll-progress,
 .scroll-to-top,
 .calendar-modal {
@@ -36,106 +25,102 @@
 }
 
 /* ============================================
-   Root: organic dissolve
+   Root-Crossfade
 
-   Asymmetric timing is the anti-blink trick:
-   - Old uses `ease-release` (front-loaded) → mostly gone by 40%
-   - New uses `ease-settle` (back-loaded) with a 80ms delay → comes in
-     after the old has largely cleared, so the midpoint is dominated
-     by one image, not a hazy composite of two.
-   - A gentle blur + scale masks any remaining crossover.
+   Beide Layer laufen gleichzeitig, gleiche Dauer, gleiche Kurve.
+   `plus-lighter` ist der vorgesehene Blend-Mode für nahtlose
+   Überblendungen in View Transitions.
    ============================================ */
-@keyframes vt-out {
+::view-transition-group(root) {
+  animation-duration: 520ms;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: plus-lighter;
+  animation-duration: 520ms;
+  animation-timing-function: var(
+    --ease-settle,
+    cubic-bezier(0.22, 1, 0.36, 1)
+  );
+}
+
+@keyframes vt-fade-out {
   to {
     opacity: 0;
-    filter: blur(6px);
-    scale: 1.01;
   }
 }
 
-@keyframes vt-in {
+@keyframes vt-fade-in {
   from {
     opacity: 0;
-    filter: blur(6px);
-    scale: 0.99;
   }
 }
 
 ::view-transition-old(root) {
-  animation:
-    vt-out 360ms var(--ease-release, cubic-bezier(0.2, 0, 0, 1)) both;
+  animation-name: vt-fade-out;
 }
 
 ::view-transition-new(root) {
-  animation:
-    vt-in 500ms 80ms var(--ease-settle, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  animation-name: vt-fade-in;
 }
 
 /* ============================================
-   Directional drift — home ↔ event
+   Richtungsvariante — home ↔ event
 
-   Same asymmetric principle, with a subtle horizontal bias to give
-   navigation direction. Distance is deliberately small (2.5%) —
-   enough to feel intentional, not disorienting.
+   Gleicher Crossfade, dazu ein dezenter horizontaler Versatz (1.5%)
+   als Richtungshinweis. Die Opacity-Überlagerung bleibt symmetrisch.
    ============================================ */
-@keyframes vt-drift-out-left {
+@keyframes vt-crossfade-out-left {
   to {
     opacity: 0;
-    filter: blur(6px);
-    scale: 1.01;
-    translate: -2.5% 0;
+    translate: -1.5% 0;
   }
 }
 
-@keyframes vt-drift-in-right {
+@keyframes vt-crossfade-in-right {
   from {
     opacity: 0;
-    filter: blur(6px);
-    scale: 0.99;
-    translate: 2.5% 0;
+    translate: 1.5% 0;
   }
 }
 
-@keyframes vt-drift-out-right {
+@keyframes vt-crossfade-out-right {
   to {
     opacity: 0;
-    filter: blur(6px);
-    scale: 1.01;
-    translate: 2.5% 0;
+    translate: 1.5% 0;
   }
 }
 
-@keyframes vt-drift-in-left {
+@keyframes vt-crossfade-in-left {
   from {
     opacity: 0;
-    filter: blur(6px);
-    scale: 0.99;
-    translate: -2.5% 0;
+    translate: -1.5% 0;
   }
 }
 
 :root:active-view-transition-type(to-event) {
   &::view-transition-old(root) {
-    animation-name: vt-drift-out-left;
+    animation-name: vt-crossfade-out-left;
   }
 
   &::view-transition-new(root) {
-    animation-name: vt-drift-in-right;
+    animation-name: vt-crossfade-in-right;
   }
 }
 
 :root:active-view-transition-type(from-event) {
   &::view-transition-old(root) {
-    animation-name: vt-drift-out-right;
+    animation-name: vt-crossfade-out-right;
   }
 
   &::view-transition-new(root) {
-    animation-name: vt-drift-in-left;
+    animation-name: vt-crossfade-in-left;
   }
 }
 
 /* ============================================
-   Reduced motion — collapse to near-instant swap
+   Reduced motion — Crossfade auf nahezu instant reduzieren
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
