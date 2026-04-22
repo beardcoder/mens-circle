@@ -1,159 +1,37 @@
 <x-mail::message>
   <p style="text-align: center; margin: 0 0 6px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #b86f52; text-transform: uppercase; letter-spacing: 0.2em">Erinnerung</p>
 
-  # {{ $isToday ? 'Heute' : 'Morgen' }} ist es soweit!
+  Hallo {{ $registration->participant->first_name }},
 
-  <p style="text-align: center; color: #5c4a3a; font-size: 15px; margin-bottom: 32px">Hallo {{ $registration->participant->first_name }}, dein Termin<br /><strong>{{ $event->title }}</strong> findet {{ $isToday ? 'heute' : 'morgen' }} statt.</p>
+  am {{ $event->event_date->translatedFormat('l, d. F Y') }} findet unser nächster Männerkreis statt:
 
-  <table
-    width="100%"
-    cellpadding="0"
-    cellspacing="0"
-    role="presentation"
-    style="margin: 0 0 36px"
-  >
-    <tr>
-      <td
-        style="
-          height: 2px;
-          background-color: #c4b49a;
-          font-size: 0;
-          line-height: 0;
-        "
-      >
-        &nbsp;
-      </td>
-    </tr>
-    <tr>
-      <td style="background-color: #f4f0e8; padding: 28px">
-        <p style="margin: 0 0 20px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; color: #b86f52; text-transform: uppercase; letter-spacing: 0.15em">Dein Termin</p>
-        <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-          <tr>
-            <td
-              width="90"
-              style="
-                padding: 6px 0;
-                vertical-align: top;
-                font-family: 'DM Sans', sans-serif;
-                font-size: 11px;
-                font-weight: 600;
-                color: #7a6248;
-                text-transform: uppercase;
-                letter-spacing: 0.08em;
-              "
-            >
-              Datum
-            </td>
-            <td
-              style="
-                padding: 6px 0;
-                font-family: 'DM Sans', sans-serif;
-                font-size: 15px;
-                color: #2c2418;
-              "
-            >
-              {{ $event->event_date->translatedFormat('l, d. F Y') }}
-            </td>
-          </tr>
-          <tr>
-            <td
-              width="90"
-              style="
-                padding: 6px 0;
-                vertical-align: top;
-                font-family: 'DM Sans', sans-serif;
-                font-size: 11px;
-                font-weight: 600;
-                color: #7a6248;
-                text-transform: uppercase;
-                letter-spacing: 0.08em;
-              "
-            >
-              Uhrzeit
-            </td>
-            <td
-              style="
-                padding: 6px 0;
-                font-family: 'DM Sans', sans-serif;
-                font-size: 15px;
-                color: #2c2418;
-              "
-            >
-              {{ $event->start_time->format('H:i') }} – {{ $event->end_time->format('H:i') }} Uhr
-            </td>
-          </tr>
-          <tr>
-            <td
-              width="90"
-              style="
-                padding: 6px 0;
-                vertical-align: top;
-                font-family: 'DM Sans', sans-serif;
-                font-size: 11px;
-                font-weight: 600;
-                color: #7a6248;
-                text-transform: uppercase;
-                letter-spacing: 0.08em;
-              "
-            >
-              Ort
-            </td>
-            <td
-              style="
-                padding: 6px 0;
-                font-family: 'DM Sans', sans-serif;
-                font-size: 15px;
-                color: #2c2418;
-              "
-            >
-              {{ $event->location }}
-            </td>
-          </tr>
-          @if ($event->location_details)
-            <tr>
-              <td
-                width="90"
-                style="
-                  padding: 6px 0;
-                  vertical-align: top;
-                  font-family: 'DM Sans', sans-serif;
-                  font-size: 11px;
-                  font-weight: 600;
-                  color: #7a6248;
-                  text-transform: uppercase;
-                  letter-spacing: 0.08em;
-                "
-              >
-                Treffpunkt
-              </td>
-              <td
-                style="
-                  padding: 6px 0;
-                  font-family: 'DM Sans', sans-serif;
-                  font-size: 15px;
-                  color: #3a342c;
-                "
-              >
-                {!! nl2br(e($event->location_details)) !!}
-              </td>
-            </tr>
-          @endif
-        </table>
-      </td>
-    </tr>
-  </table>
+  ---
 
-  ## Zur Erinnerung
+  **{{ $event->title }}**
 
-  {!! nl2br(e($event->description)) !!}
+  📅 {{ $event->event_date->translatedFormat('l, d. F Y') }}, {{ $event->start_time->format('H:i') }} – {{ $event->end_time->format('H:i') }} Uhr
+  📍 {{ $event->location }}
 
-  **Teilnahme:** {{ $event->cost_basis }}
+  ---
 
-  ## Bitte beachten - Komm pünktlich – wir starten gemeinsam - Bring eine offene
-  Haltung und Bereitschaft für echte Begegnung mit - Kurzfristig verhindert?
-  Schreib uns bitte an [hallo@mens-circle.de](mailto:hallo@mens-circle.de) ---
-  Bis {{ $isToday ? 'gleich' : 'morgen' }}! Herzliche Grüße,<br />
-  **{{ config('app.name') }}**
+  Der Männerkreis ist ein Raum für Männer, die nicht nur funktionieren wollen. Ein Abend, an dem du ankommen darfst. Ohne Rolle. Ohne Fassade. Ohne irgendetwas beweisen zu müssen.
+
+  Wir kommen zusammen, um ehrlich zu werden, in den Körper zu kommen und uns mit dem zu verbinden, was im Alltag oft untergeht: Klarheit, Ruhe, Kraft und echter Austausch unter Männern.
+
+  Egal, ob du zum ersten Mal dabei bist oder schon länger Teil des Kreises bist: Du bist willkommen.
+
+  Die Teilnahme ist auf Spendenbasis. Als Orientierung empfehlen wir {{ $event->cost_basis }}.
+
+  Es sind nur noch wenige Plätze frei. Wenn du dabei sein möchtest, melde dich am besten direkt an:
+
+  <x-mail::button :url="route('event.show.slug', $event->slug)">
+    Jetzt anmelden
+  </x-mail::button>
+
+  Ich freue mich, wenn du dabei bist.
+
+  Herzliche Grüße,
+  Markus
 
   <x-mail::subcopy>
     Diese Erinnerung wurde an {{ $registration->participant->email }} gesendet,
