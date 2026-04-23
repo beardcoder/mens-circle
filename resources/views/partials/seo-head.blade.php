@@ -94,15 +94,6 @@
     $dmSansPath = $manifest['node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2']['file'] ?? null;
     $playfairPath = $manifest['node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2']['file'] ?? null;
 @endphp
-@if ($dmSansPath)
-  <link
-    rel="preload"
-    href="{{ asset('build/' . $dmSansPath) }}"
-    as="font"
-    type="font/woff2"
-    crossorigin
-  />
-@endif
 @if ($playfairPath)
   <link
     rel="preload"
@@ -110,6 +101,17 @@
     as="font"
     type="font/woff2"
     crossorigin
+    fetchpriority="high"
+  />
+@endif
+@if ($dmSansPath)
+  <link
+    rel="preload"
+    href="{{ asset('build/' . $dmSansPath) }}"
+    as="font"
+    type="font/woff2"
+    crossorigin
+    fetchpriority="high"
   />
 @endif
 

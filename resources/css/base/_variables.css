@@ -103,9 +103,11 @@
   /* ============================================
      Typography Scale
      ============================================ */
-  --font-display: 'Playfair Display Variable', georgia, serif;
-  --font-body: 'DM Sans Variable', system-ui, sans-serif;
-  --font-accent: 'Playfair Display Variable', georgia, serif;
+  --font-display:
+    'Playfair Display Variable', 'Playfair Display Fallback', georgia, serif;
+  --font-body: 'DM Sans Variable', 'DM Sans Fallback', system-ui, sans-serif;
+  --font-accent:
+    'Playfair Display Variable', 'Playfair Display Fallback', georgia, serif;
 
   /* Fluid Type Scale using clamp() */
   --text-xs: clamp(0.625rem, 0.5rem + 0.25vw, 0.75rem);
@@ -152,33 +154,53 @@
      ============================================ */
 
   /* Canonical easings */
-  --ease-settle:  cubic-bezier(0.22, 1, 0.36, 1);       /* Content arriving: scroll reveals, overlays */
-  --ease-precise: cubic-bezier(0.4, 0, 0.2, 1);         /* Interactive: hover, press, toggles */
-  --ease-release: cubic-bezier(0.2, 0, 0, 1);           /* Content leaving: collapse, dismiss */
-  --ease-ambient: cubic-bezier(0.43, 0.13, 0.23, 0.96); /* Ambient motion: breathing circles only */
+  --ease-settle: cubic-bezier(
+    0.22,
+    1,
+    0.36,
+    1
+  ); /* Content arriving: scroll reveals, overlays */
+  --ease-precise: cubic-bezier(
+    0.4,
+    0,
+    0.2,
+    1
+  ); /* Interactive: hover, press, toggles */
+  --ease-release: cubic-bezier(
+    0.2,
+    0,
+    0,
+    1
+  ); /* Content leaving: collapse, dismiss */
+  --ease-ambient: cubic-bezier(
+    0.43,
+    0.13,
+    0.23,
+    0.96
+  ); /* Ambient motion: breathing circles only */
 
   /* Legacy aliases — internal use, prefer canonical names above */
-  --ease-out:     var(--ease-settle);
-  --ease-in-out:  var(--ease-precise);
-  --ease-spring:  var(--ease-settle);  /* Bounce removed — aliased to settle */
+  --ease-out: var(--ease-settle);
+  --ease-in-out: var(--ease-precise);
+  --ease-spring: var(--ease-settle); /* Bounce removed — aliased to settle */
   --ease-organic: var(--ease-ambient);
-  --ease-smooth:  var(--ease-settle);
+  --ease-smooth: var(--ease-settle);
 
   /* Duration scale */
-  --duration-fast:   150ms;
+  --duration-fast: 150ms;
   --duration-normal: 300ms;
-  --duration-slow:   500ms;
+  --duration-slow: 500ms;
   --duration-slower: 700ms;
 
   /* Composite shorthands */
-  --motion-quick:    var(--duration-fast)   var(--ease-precise);
+  --motion-quick: var(--duration-fast) var(--ease-precise);
   --motion-standard: var(--duration-normal) var(--ease-precise);
-  --motion-enter:    var(--duration-slow)   var(--ease-settle);
+  --motion-enter: var(--duration-slow) var(--ease-settle);
 
   /* Legacy shorthands — mapped to composites */
-  --transition-fast:   var(--motion-quick);
+  --transition-fast: var(--motion-quick);
   --transition-medium: var(--motion-standard);
-  --transition-slow:   var(--duration-slower) var(--ease-settle);
+  --transition-slow: var(--duration-slower) var(--ease-settle);
 
   /* ============================================
      Layout
