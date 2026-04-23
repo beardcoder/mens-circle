@@ -1,78 +1,63 @@
 /**
- * Männerkreis Niederbayern/ Straubing - Main Stylesheet
- * =========================================
+ * Männerkreis Niederbayern / Straubing — Main Stylesheet
+ * =======================================================
  *
- * Modern CSS Architecture (2025)
+ * Cascade architecture. Every stylesheet is loaded into a named layer so the
+ * cascade order is explicit and predictable. Un-layered styles beat all layers,
+ * so we keep the top-level file clean of loose rules.
  *
- * Features:
- * - CSS Custom Properties with @property for animations
- * - OKLCH color space for perceptually uniform colors
- * - Logical properties for internationalization
- * - Native CSS nesting
- * - Container queries ready
- * - Scroll-driven animations support
- * - Reduced motion support
- * - Dark mode with prefers-color-scheme
+ *   reset     — normalize browser defaults
+ *   tokens    — design tokens (colors, spacing, type, motion)
+ *   base      — element defaults (typography, fonts)
+ *   layout    — page-level layout utilities
+ *   components— reusable UI (buttons, header, footer, accordion, forms, modal)
+ *   sections  — page sections (hero, intro, faq, etc.)
+ *   utilities — single-purpose helpers, animations, print
  *
- * Structure:
- * 1. Base (variables, reset, typography)
- * 2. Utilities (layout, animations, visual)
- * 3. Components (buttons, header, footer, cards, forms, modal)
- * 4. Sections (hero, intro, moderator, journey, faq, newsletter, cta, event, legal)
+ * Features in use across the codebase:
+ *   - OKLCH color space for perceptually uniform colors
+ *   - Logical properties for internationalization
+ *   - Native CSS nesting
+ *   - Container queries where helpful
+ *   - Scroll-driven animations (animation-timeline)
+ *   - prefers-reduced-motion / prefers-color-scheme
  */
 
-/* ============================================
-   BASE
-   ============================================ */
+@layer reset, tokens, base, layout, components, sections, utilities;
+
 @import url('@fontsource-variable/playfair-display');
 @import url('@fontsource-variable/dm-sans');
-@import url('base/_fonts.css');
-@import url('base/_variables.css');
-@import url('base/_reset.css');
-@import url('base/_typography.css');
-
-/* ============================================
-   UTILITIES
-   ============================================ */
-@import url('utilities/_layout.css');
-@import url('utilities/_animations.css');
-@import url('utilities/_scroll-animations.css');
-@import url('utilities/_visual.css');
-@import url('utilities/_view-transitions.css');
-
-/* ============================================
-   COMPONENTS
-   ============================================ */
-@import url('components/_buttons.css');
-@import url('components/_header.css');
-@import url('components/_footer.css');
-@import url('components/_cards.css');
-@import url('components/_accordion.css');
-@import url('components/_forms.css');
-@import url('components/_modal.css');
-@import url('components/_toast.css');
-
-/* ============================================
-   SECTIONS
-   ============================================ */
-@import url('sections/_hero.css');
-@import url('sections/_intro.css');
-@import url('sections/_moderator.css');
-@import url('sections/_journey.css');
-@import url('sections/_archetypes.css');
-@import url('sections/_testimonials.css');
-@import url('sections/_testimonial-form.css');
-@import url('sections/_breathing.css');
-@import url('sections/_faq.css');
-@import url('sections/_newsletter.css');
-@import url('sections/_whatsapp.css');
-@import url('sections/_cta.css');
-@import url('sections/_event.css');
-@import url('sections/_no-event.css');
-@import url('sections/_error.css');
-@import url('sections/_legal.css');
-
-/* ============================================
-   PRINT
-   ============================================ */
-@import url('utilities/_print.css');
+@import url('base/_reset.css') layer(reset);
+@import url('base/_variables.css') layer(tokens);
+@import url('base/_fonts.css') layer(tokens);
+@import url('base/_typography.css') layer(base);
+@import url('utilities/_layout.css') layer(layout);
+@import url('components/_buttons.css') layer(components);
+@import url('components/_header.css') layer(components);
+@import url('components/_footer.css') layer(components);
+@import url('components/_cards.css') layer(components);
+@import url('components/_accordion.css') layer(components);
+@import url('components/_forms.css') layer(components);
+@import url('components/_modal.css') layer(components);
+@import url('components/_toast.css') layer(components);
+@import url('sections/_hero.css') layer(sections);
+@import url('sections/_intro.css') layer(sections);
+@import url('sections/_moderator.css') layer(sections);
+@import url('sections/_journey.css') layer(sections);
+@import url('sections/_archetypes.css') layer(sections);
+@import url('sections/_testimonials.css') layer(sections);
+@import url('sections/_testimonial-form.css') layer(sections);
+@import url('sections/_breathing.css') layer(sections);
+@import url('sections/_faq.css') layer(sections);
+@import url('sections/_newsletter.css') layer(sections);
+@import url('sections/_whatsapp.css') layer(sections);
+@import url('sections/_cta.css') layer(sections);
+@import url('sections/_event.css') layer(sections);
+@import url('sections/_no-event.css') layer(sections);
+@import url('sections/_error.css') layer(sections);
+@import url('sections/_legal.css') layer(sections);
+@import url('utilities/_animations.css') layer(utilities);
+@import url('utilities/_scroll-animations.css') layer(utilities);
+@import url('utilities/_visual.css') layer(utilities);
+@import url('utilities/_view-transitions.css') layer(utilities);
+@import url('utilities/_print.css') layer(utilities);

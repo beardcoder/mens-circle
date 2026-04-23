@@ -160,18 +160,21 @@
     0.36,
     1
   ); /* Content arriving: scroll reveals, overlays */
+
   --ease-precise: cubic-bezier(
     0.4,
     0,
     0.2,
     1
   ); /* Interactive: hover, press, toggles */
+
   --ease-release: cubic-bezier(
     0.2,
     0,
     0,
     1
   ); /* Content leaving: collapse, dismiss */
+
   --ease-ambient: cubic-bezier(
     0.43,
     0.13,

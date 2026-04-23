@@ -47,20 +47,20 @@
             @if (!empty($item['question']) && !empty($item['answer']))
               <details
                 data-anim="rise"
-                class="faq-item"
+                class="accordion-item"
                 name="faq-accordion"
                 data-m:toggle="action=faq_toggle;element=details;target=question;location=faq_section"
               >
                 <summary
-                  class="faq-item__question"
+                  class="accordion-item__trigger"
                   data-umami-event="faq-expand"
                   data-umami-event-question="{{ Str::limit($item['question'], 50) }}"
                 >
                   <span>{{ $item['question'] }}</span>
-                  <span class="faq-item__icon" aria-hidden="true"></span>
+                  <span class="accordion-item__icon" aria-hidden="true"></span>
                 </summary>
-                <div class="faq-item__answer">
-                  <div class="faq-item__answer-inner">
+                <div class="accordion-item__content">
+                  <div class="accordion-item__body">
                     {!! $item['answer'] !!}
                   </div>
                 </div>

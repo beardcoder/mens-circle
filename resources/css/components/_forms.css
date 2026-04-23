@@ -66,8 +66,8 @@
   cursor: pointer;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.form-group input:focus-visible,
+.form-group textarea:focus-visible {
   outline: none;
   background: var(--bg-input-focus);
   border-color: var(--accent-primary);
@@ -166,7 +166,7 @@
   border-color: color-mix(in oklch, var(--accent-primary) 45%, transparent);
 }
 
-.newsletter__input:focus {
+.newsletter__input:focus-visible {
   outline: none;
   background: var(--bg-input-focus);
   border-color: var(--accent-primary);

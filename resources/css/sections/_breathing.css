@@ -710,7 +710,10 @@
 }
 
 .breathing-picker__item:focus-visible {
-  outline: none;
+  color: var(--text-on-dark);
+  outline: 2px solid var(--breathing-accent);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .breathing-picker__item.is-active {
