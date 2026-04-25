@@ -50,16 +50,10 @@
   margin-inline: auto;
 }
 
-/* Uses .eyebrow from typography.css */
-
-.cta__title {
-  margin-block-end: var(--space-sm);
-}
-
-/* Uses .section-title .text-italic from typography.css */
-
+/* Eyebrow + .section-title use the shared rhythm. CTA only adds the
+   gap between the intro paragraph and the action button. */
 .cta__text {
-  margin-block-end: var(--space-lg);
+  margin-block-end: var(--rhythm-block);
   font-size: var(--text-section-body-lg);
   line-height: var(--leading-relaxed);
   color: var(--text-secondary);

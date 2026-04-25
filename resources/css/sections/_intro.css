@@ -53,7 +53,7 @@
 
 .intro__text {
   max-inline-size: var(--content-max-text);
-  margin-block-end: var(--space-lg);
+  margin-block-end: var(--rhythm-block);
   font-size: var(--text-section-body-lg);
   line-height: var(--leading-relaxed);
   color: var(--text-secondary);

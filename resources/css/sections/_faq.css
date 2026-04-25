@@ -27,31 +27,20 @@
 }
 
 /* ============================================
-   FAQ Header (Sticky Sidebar)
+   FAQ Header — sticky sidebar layout. Uses `.section-header` for
+   typography rhythm; FAQ adds the sticky behavior on top.
    ============================================ */
 .faq__header {
   position: sticky;
   inset-block-start: 140px;
+  margin-block-end: 0; /* sidebar layout owns spacing, not the header */
+  text-align: start;
 
   @media (width < 900px) {
     position: relative;
     inset-block-start: 0;
+    margin-block-end: var(--rhythm-block);
   }
-}
-
-/* Uses .eyebrow from typography.css */
-
-.faq__title {
-  margin-block-end: var(--space-sm);
-  line-height: 1;
-}
-
-/* Uses .section-title .text-italic from typography.css */
-
-.faq__intro {
-  font-size: var(--text-section-body);
-  line-height: var(--leading-relaxed);
-  color: var(--text-secondary);
 }
 
 /* ============================================

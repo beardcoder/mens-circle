@@ -11,12 +11,12 @@ interface NativeAccordionOptions {
 
 /**
  * Native details accordion component
- * Attach to a wrapper containing .accordion-item or .faq-item <details> elements
+ * Attach to a wrapper containing .accordion-item <details> elements
  * Enforces single-open-per-group using the name attribute
  */
 export const nativeAccordion = defineComponent<NativeAccordionOptions>(
   {
-    itemSelector: '.accordion-item, .faq-item',
+    itemSelector: '.accordion-item',
   },
   (ctx) => {
     const { options: o } = ctx;
@@ -37,7 +37,7 @@ export const nativeAccordion = defineComponent<NativeAccordionOptions>(
 
       ctx.el
         .querySelectorAll<HTMLDetailsElement>(
-          `.accordion-item[name="${groupName}"], .faq-item[name="${groupName}"]`
+          `.accordion-item[name="${groupName}"]`
         )
         .forEach((sibling) => {
           if (sibling !== details) {

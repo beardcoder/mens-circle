@@ -33,13 +33,9 @@
   aria-labelledby="testimonials-title"
 >
   <div class="container">
-    <div class="testimonials__header" data-anim-group>
+    <div class="section-header" data-anim-group>
       <p class="eyebrow" data-anim="rise">Community Stimmen</p>
-      <h2
-        class="section-title testimonials__title"
-        id="testimonials-title"
-        data-anim="rise"
-      >
+      <h2 class="section-title" id="testimonials-title" data-anim="rise">
         Was <span class="highlight">Teilnehmer</span> sagen
       </h2>
       <p class="testimonials__subtitle" data-anim="rise">Authentische Einblicke von Männern, die den Kreis erleben</p>

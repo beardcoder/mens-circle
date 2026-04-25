@@ -39,10 +39,7 @@
 ::view-transition-new(root) {
   mix-blend-mode: plus-lighter;
   animation-duration: 520ms;
-  animation-timing-function: var(
-    --ease-settle,
-    cubic-bezier(0.22, 1, 0.36, 1)
-  );
+  animation-timing-function: var(--ease-settle, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 @keyframes vt-fade-out {

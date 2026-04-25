@@ -182,14 +182,37 @@
    8 positions — enough for any grid or list. Beyond index 7, elements
    share the final delay to prevent runaway cascades.
    ============================================ */
-[data-anim-group] > :nth-child(1) { --anim-index: 0; }
-[data-anim-group] > :nth-child(2) { --anim-index: 1; }
-[data-anim-group] > :nth-child(3) { --anim-index: 2; }
-[data-anim-group] > :nth-child(4) { --anim-index: 3; }
-[data-anim-group] > :nth-child(5) { --anim-index: 4; }
-[data-anim-group] > :nth-child(6) { --anim-index: 5; }
-[data-anim-group] > :nth-child(7) { --anim-index: 6; }
-[data-anim-group] > :nth-child(n + 8) { --anim-index: 7; }
+[data-anim-group] > :nth-child(1) {
+  --anim-index: 0;
+}
+
+[data-anim-group] > :nth-child(2) {
+  --anim-index: 1;
+}
+
+[data-anim-group] > :nth-child(3) {
+  --anim-index: 2;
+}
+
+[data-anim-group] > :nth-child(4) {
+  --anim-index: 3;
+}
+
+[data-anim-group] > :nth-child(5) {
+  --anim-index: 4;
+}
+
+[data-anim-group] > :nth-child(6) {
+  --anim-index: 5;
+}
+
+[data-anim-group] > :nth-child(7) {
+  --anim-index: 6;
+}
+
+[data-anim-group] > :nth-child(n + 8) {
+  --anim-index: 7;
+}
 
 /* ============================================
    Hero — scroll-linked parallax (decorative only)

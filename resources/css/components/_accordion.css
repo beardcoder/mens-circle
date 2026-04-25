@@ -1,61 +1,62 @@
 /**
  * Accordion Component
- * Modern accordion using <details>/<summary>.
  *
- * Structure:
+ * Uses the native <details>/<summary> pattern so the open/closed state is
+ * owned by the browser. JS is not required — `interpolate-size: allow-keywords`
+ * (enabled globally in _variables.css) animates height from 0 to auto.
+ *
+ * Markup:
  *   <details class="accordion-item">
- *     <summary class="accordion-item__trigger">Question</summary>
+ *     <summary class="accordion-item__trigger">
+ *       <span>Question</span>
+ *       <span class="accordion-item__icon" aria-hidden="true"></span>
+ *     </summary>
  *     <div class="accordion-item__content">
  *       <div class="accordion-item__body">Answer</div>
  *     </div>
  *   </details>
  */
 
-/* ============================================
-   Accordion Item (Details Element)
-   ============================================ */
-.accordion-item,
-.faq-item {
+.accordion-item {
+  --_accent: var(--accent-primary);
+  --_icon-size: 1.75rem;
+  --_icon-mark: 0.625rem;
+  --_icon-stroke: 1.5px;
+
   position: relative;
   border-block-end: 1px solid var(--border-light);
-}
 
-.accordion-item:first-child,
-.faq-item:first-child {
-  border-block-start: 1px solid var(--border-light);
-}
+  &:first-child {
+    border-block-start: 1px solid var(--border-light);
+  }
 
-/* Accent bar indicator — marks the open item */
-.accordion-item::before,
-.faq-item::before {
-  position: absolute;
-  inset-block: var(--space-sm);
-  inset-inline-start: 0;
-  inline-size: 2px;
-  pointer-events: none;
-  content: '';
-  background: var(--accent-primary);
-  border-radius: var(--radius-full);
-  opacity: 0;
-  transform: scaleY(0.4);
-  transform-origin: center;
-  transition:
-    opacity var(--motion-standard),
-    transform var(--motion-standard);
-}
+  /* Accent bar — marks the open item from the inline-start edge */
+  &::before {
+    position: absolute;
+    inset-block: var(--space-sm);
+    inset-inline-start: 0;
+    inline-size: 2px;
+    pointer-events: none;
+    content: '';
+    background: var(--_accent);
+    border-radius: var(--radius-full);
+    opacity: 0;
+    transform: scaleY(0.4);
+    transition:
+      opacity var(--motion-standard),
+      transform var(--motion-standard);
+  }
 
-/* Open state — accent bar expands from center */
-.accordion-item[open]::before,
-.faq-item[open]::before {
-  opacity: 1;
-  transform: scaleY(1);
+  &[open]::before {
+    opacity: 1;
+    transform: scaleY(1);
+  }
 }
 
 /* ============================================
-   Accordion Trigger (Summary Element)
+   Trigger (summary)
    ============================================ */
-.accordion-item__trigger,
-.faq-item__question {
+.accordion-item__trigger {
   display: flex;
   gap: var(--space-md);
   align-items: center;
@@ -71,112 +72,94 @@
   cursor: pointer;
   list-style: none;
   transition: color var(--motion-quick);
-}
 
-/* Remove default marker */
-.accordion-item__trigger::marker,
-.accordion-item__trigger::-webkit-details-marker,
-.faq-item__question::marker,
-.faq-item__question::-webkit-details-marker {
-  display: none;
-}
+  /* Strip the native disclosure marker across engines */
+  &::marker,
+  &::-webkit-details-marker {
+    display: none;
+  }
 
-.accordion-item__trigger:hover,
-.faq-item__question:hover {
-  color: var(--accent-primary);
-}
+  &:hover {
+    color: var(--_accent);
 
-.accordion-item__trigger:hover .accordion-item__icon,
-.faq-item__question:hover .faq-item__icon {
-  background: color-mix(in oklch, var(--accent-primary) 14%, transparent);
-  border-color: var(--accent-primary);
-}
+    .accordion-item__icon {
+      background: color-mix(in oklch, var(--_accent) 14%, transparent);
+      border-color: var(--_accent);
+    }
+  }
 
-.accordion-item__trigger:focus-visible,
-.faq-item__question:focus-visible {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  &:focus-visible {
+    outline: 2px solid var(--_accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
 }
 
 /* ============================================
-   Accordion Icon (Plus/Minus)
+   Icon (plus → minus by rotating the vertical stroke)
    ============================================ */
-.accordion-item__icon,
-.faq-item__icon {
+.accordion-item__icon {
   position: relative;
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  inline-size: 28px;
-  block-size: 28px;
+  inline-size: var(--_icon-size);
+  block-size: var(--_icon-size);
   background: color-mix(in oklch, var(--color-earth-warm) 12%, transparent);
   border: 1px solid var(--color-earth-warm);
   border-radius: var(--radius-full);
   transition:
     background-color var(--motion-standard),
     border-color var(--motion-standard);
+
+  &::before,
+  &::after {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    content: '';
+    background: var(--color-earth-warm);
+    border-radius: var(--radius-full);
+    transform: translate(-50%, -50%);
+    transition:
+      background-color var(--motion-standard),
+      transform var(--motion-standard);
+  }
+
+  /* horizontal stroke */
+  &::before {
+    inline-size: var(--_icon-mark);
+    block-size: var(--_icon-stroke);
+  }
+
+  /* vertical stroke — rotates flat on open */
+  &::after {
+    inline-size: var(--_icon-stroke);
+    block-size: var(--_icon-mark);
+  }
 }
 
-/* Horizontal line (persistent) */
-.accordion-item__icon::before,
-.faq-item__icon::before {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: 10px;
-  block-size: 1.5px;
-  content: '';
-  background: var(--color-earth-warm);
-  border-radius: var(--radius-full);
-  transform: translate(-50%, -50%);
-  transition: background-color var(--motion-standard);
-}
+.accordion-item[open] {
+  .accordion-item__icon {
+    background: var(--_accent);
+    border-color: var(--_accent);
 
-/* Vertical line — rotates to merge into horizontal on open */
-.accordion-item__icon::after,
-.faq-item__icon::after {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: 1.5px;
-  block-size: 10px;
-  content: '';
-  background: var(--color-earth-warm);
-  border-radius: var(--radius-full);
-  transform: translate(-50%, -50%);
-  transition:
-    background-color var(--motion-standard),
-    transform var(--motion-standard);
-}
+    &::before,
+    &::after {
+      background: var(--color-bone);
+    }
 
-/* Open state — color shift only, no scale, no glow */
-.accordion-item[open] .accordion-item__icon,
-.faq-item[open] .faq-item__icon {
-  background: var(--accent-primary);
-  border-color: var(--accent-primary);
-}
-
-.accordion-item[open] .accordion-item__icon::before,
-.accordion-item[open] .accordion-item__icon::after,
-.faq-item[open] .faq-item__icon::before,
-.faq-item[open] .faq-item__icon::after {
-  background: var(--color-bone);
-}
-
-.accordion-item[open] .accordion-item__icon::after,
-.faq-item[open] .faq-item__icon::after {
-  transform: translate(-50%, -50%) rotate(90deg);
+    &::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+  }
 }
 
 /* ============================================
-   Accordion Content (Answer Container)
-   Uses interpolate-size: allow-keywords (supported in _variables.css)
-   for smooth height transition from 0 to auto.
+   Content — height animates via interpolate-size
    ============================================ */
-.accordion-item__content,
-.faq-item__answer {
+.accordion-item__content {
   block-size: 0;
   overflow: hidden;
   opacity: 0;
@@ -185,84 +168,65 @@
     opacity var(--duration-normal) var(--ease-settle);
 }
 
-.accordion-item[open] > .accordion-item__content,
-.faq-item[open] > .faq-item__answer {
+.accordion-item[open] > .accordion-item__content {
   block-size: auto;
   opacity: 1;
 }
 
-/* ============================================
-   Accordion Body (Inner Content)
-   ============================================ */
-.accordion-item__body,
-.faq-item__answer-inner {
+.accordion-item__body {
   padding-block: var(--space-md);
   padding-inline: var(--space-md);
   font-size: 1rem;
   line-height: var(--leading-relaxed);
   color: var(--text-secondary);
-}
 
-.accordion-item__body p:last-child,
-.faq-item__answer-inner p:last-child {
-  margin-block-end: 0;
-}
+  p:last-child {
+    margin-block-end: 0;
+  }
 
-.accordion-item__body a,
-.faq-item__answer-inner a {
-  color: var(--accent-primary);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color var(--transition-fast);
-}
+  a {
+    color: var(--_accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
 
-.accordion-item__body a:hover,
-.faq-item__answer-inner a:hover {
-  color: var(--color-earth-warm);
+    &:hover {
+      color: var(--color-earth-warm);
+    }
+  }
 }
 
 /* ============================================
-   Reduced Motion
+   Reduced motion — no transitions, instant open/close
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  .accordion-item::before,
-  .accordion-item__trigger,
-  .accordion-item__icon,
-  .accordion-item__icon::before,
-  .accordion-item__icon::after,
-  .accordion-item__content,
-  .faq-item::before,
-  .faq-item__question,
-  .faq-item__icon,
-  .faq-item__icon::before,
-  .faq-item__icon::after,
-  .faq-item__answer {
+  .accordion-item,
+  .accordion-item *,
+  .accordion-item *::before,
+  .accordion-item *::after {
     transition: none;
   }
 
-  /* Show content immediately without animation */
-  .accordion-item[open] > .accordion-item__content,
-  .faq-item[open] > .faq-item__answer {
+  .accordion-item[open] > .accordion-item__content {
     block-size: auto;
     opacity: 1;
   }
 
-  .accordion-item:not([open]) > .accordion-item__content,
-  .faq-item:not([open]) > .faq-item__answer {
+  .accordion-item:not([open]) > .accordion-item__content {
     display: none;
   }
 }
 
 /* ============================================
-   No-JS Fallback
+   No-JS fallback — content is visible; native <details> handles toggle
    ============================================ */
-.no-js .accordion-item__content,
-.no-js .faq-item__answer {
-  block-size: auto;
-  opacity: 1;
-}
+.no-js {
+  .accordion-item__content {
+    block-size: auto;
+    opacity: 1;
+  }
 
-.no-js .accordion-item:not([open]) > .accordion-item__content,
-.no-js .faq-item:not([open]) > .faq-item__answer {
-  display: none;
+  .accordion-item:not([open]) > .accordion-item__content {
+    display: none;
+  }
 }

@@ -24,23 +24,19 @@
     aria-labelledby="archetypes-title"
   >
     <div class="container">
-      <div class="archetypes__header" data-anim-group>
+      <div class="section-header" data-anim-group>
         @if (!empty($data['eyebrow']))
           <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
         @endif
 
         @if (!empty($data['title']))
-          <h2
-            class="section-title archetypes__title"
-            id="archetypes-title"
-            data-anim="rise"
-          >
+          <h2 class="section-title" id="archetypes-title" data-anim="rise">
             {{ $data['title'] }}
           </h2>
         @endif
 
         @if (!empty($data['intro']))
-          <p class="archetypes__intro" data-anim="rise">{{ $data['intro'] }}</p>
+          <p class="section-intro" data-anim="rise">{{ $data['intro'] }}</p>
         @endif
       </div>
 

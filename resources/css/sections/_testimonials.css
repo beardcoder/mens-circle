@@ -22,36 +22,21 @@
   opacity: 0.25;
 }
 
-/* ============================================
-   Testimonials Header
-   ============================================ */
-.testimonials__header {
-  position: relative;
-  z-index: 1;
-  max-inline-size: 800px;
-  padding-block-end: var(--space-lg);
-  margin-inline: auto;
-  text-align: center;
-}
-
-.testimonials__title {
-  margin-block-end: var(--space-md);
-  margin-inline: auto;
-  color: var(--text-primary);
-}
-
-.testimonials__title .highlight {
-  margin-inline: 0;
-  font-style: italic;
-  color: var(--accent-primary);
-}
-
+/* Header uses shared `.section-header` + `.section-title` from
+   typography.css. The italic subtitle keeps a section-local class
+   because it diverges from `.section-intro` (italic, narrower). */
 .testimonials__subtitle {
   max-inline-size: 58ch;
+  margin-block: 0;
   margin-inline: auto;
+  font-size: var(--text-section-body);
   font-style: italic;
-  line-height: 1.6;
+  line-height: var(--leading-normal);
   color: var(--text-muted);
+}
+
+.testimonials-section .section-title .highlight {
+  color: var(--accent-primary);
 }
 
 /* ============================================
