@@ -65,16 +65,14 @@
 }
 
 /* ============================================
-   WhatsApp Content
+   WhatsApp Content — title size + colors override the shared
+   `.section-title`; vertical rhythm comes from typography.
    ============================================ */
-
-/* Extends .eyebrow with custom WhatsApp green */
 .whatsapp__eyebrow {
   color: oklch(80% 0.12 145deg);
 }
 
 .whatsapp__title {
-  margin-block-end: var(--space-md);
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.2;
   color: var(--text-on-dark);
@@ -86,6 +84,7 @@
 
 .whatsapp__text {
   max-inline-size: var(--content-max-text);
+  margin-block-end: 0;
   font-size: var(--text-section-body);
   line-height: var(--leading-relaxed);
   color: oklch(85% 0.03 145deg);

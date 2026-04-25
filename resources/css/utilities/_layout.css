@@ -17,14 +17,20 @@
   max-inline-size: var(--container-narrow);
 }
 
+.container--prose {
+  max-inline-size: var(--container-prose);
+}
+
 /* ============================================
    Section System
+   Block padding wired to the semantic rhythm scale so every section
+   feels evenly weighted regardless of theme.
    ============================================ */
 .section {
   position: relative;
-  padding-block: var(--space-xl);
+  padding-block: var(--rhythm-section);
 }
 
 .section--large {
-  padding-block: var(--space-2xl);
+  padding-block: var(--rhythm-section-lg);
 }

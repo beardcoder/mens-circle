@@ -60,17 +60,15 @@
 }
 
 /* ============================================
-   Newsletter Content
+   Newsletter Content — title color flips on dark; spacing comes from
+   the shared `.section-title` rhythm.
    ============================================ */
-
-/* Uses .eyebrow.eyebrow--secondary from typography.css */
-
 .newsletter__title {
-  margin-block-end: var(--space-md);
   color: var(--text-on-dark);
 }
 
 .newsletter__text {
+  margin-block-end: 0;
   font-size: var(--text-section-body);
   line-height: var(--leading-relaxed);
   color: var(--color-sand);

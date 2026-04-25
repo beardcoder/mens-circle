@@ -8,23 +8,8 @@
   background: var(--bg-secondary);
 }
 
-.archetypes__header {
-  max-inline-size: 780px;
-  margin-block-end: var(--space-lg);
-  margin-inline: auto;
-  text-align: center;
-}
-
-.archetypes__title {
-  margin-block-end: var(--space-sm);
-}
-
-.archetypes__intro {
-  margin: 0;
-  font-size: var(--text-section-body);
-  line-height: var(--leading-relaxed);
-  color: var(--text-secondary);
-}
+/* Header uses shared `.section-header` + `.section-title` + `.section-intro`
+   from typography.css — no per-section overrides. */
 
 .archetypes__grid {
   position: relative;

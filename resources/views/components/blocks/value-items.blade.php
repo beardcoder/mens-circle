@@ -6,7 +6,7 @@
 
 <section class="section values-section">
   <div class="container">
-    <div class="section__header" data-anim-group>
+    <div class="section-header" data-anim-group>
       @if (!empty($data['eyebrow']))
         <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
       @endif

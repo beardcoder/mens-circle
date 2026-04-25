@@ -149,6 +149,17 @@
   --space-3xl: clamp(8rem, 4rem + 9vw, 16rem);
 
   /* ============================================
+     Semantic Rhythm Tokens
+     One source of truth for vertical rhythm so every section feels
+     the same regardless of which file styles it.
+     ============================================ */
+  --rhythm-section: var(--space-xl); /* default section block padding */
+  --rhythm-section-lg: var(--space-2xl); /* prominent section padding */
+  --rhythm-block: var(--space-lg); /* header → body of a section */
+  --rhythm-stack: var(--space-sm); /* eyebrow → title → intro inside a header */
+  --rhythm-cluster: var(--space-xs); /* tight inline groups */
+
+  /* ============================================
      Motion System — Settled Weight
      Four semantic easings. No spring, no bounce.
      ============================================ */
@@ -211,6 +222,7 @@
   --container-width: 1400px;
   --container-narrow: 900px;
   --container-wide: 1800px;
+  --container-prose: 760px; /* centered text blocks (section headers, intros) */
 
   /* Safe area insets for mobile */
   --safe-area-inset-top: env(safe-area-inset-top, 0px);

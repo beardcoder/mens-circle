@@ -34,17 +34,13 @@
   aria-labelledby="journey-title"
 >
   <div class="container">
-    <div class="journey__header" data-anim-group>
+    <div class="section-header section-header--on-dark" data-anim-group>
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow eyebrow--secondary" data-anim="rise">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2
-          class="section-title journey__title"
-          id="journey-title"
-          data-anim="rise"
-        >
+        <h2 class="section-title" id="journey-title" data-anim="rise">
           {!! $data['title'] !!}
         </h2>
       @endif
