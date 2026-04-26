@@ -215,19 +215,6 @@ body:not(:has(.hero)) .header::before {
   }
 }
 
-@keyframes header-color-morph {
-  to {
-    padding-block: calc(var(--space-md) * 0.78);
-    color: var(--text-primary);
-  }
-}
-
-@keyframes header-overlay-fade {
-  to {
-    opacity: 1;
-  }
-}
-
 /* Fallback: non-animated swap when scroll-timeline isn't supported.
    The JS sets `.scrolled` past 50px of scroll. */
 @supports not (animation-timeline: scroll()) {
@@ -410,25 +397,6 @@ body:not(:has(.hero)) .header::before {
 
   .nav.open .nav__cta:hover {
     transform: translateY(0) scale(1.05);
-  }
-}
-
-@keyframes nav-pulse {
-  0% {
-    box-shadow: 0 0 0 0
-      color-mix(in oklch, var(--accent-primary) 25%, transparent);
-    opacity: 0.35;
-  }
-
-  60% {
-    box-shadow: 0 0 0 24px
-      color-mix(in oklch, var(--accent-primary) 0%, transparent);
-    opacity: 0.12;
-  }
-
-  100% {
-    box-shadow: 0 0 0 32px transparent;
-    opacity: 0;
   }
 }
 

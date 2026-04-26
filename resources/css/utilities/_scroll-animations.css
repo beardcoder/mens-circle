@@ -84,12 +84,6 @@
   }
 }
 
-@keyframes scroll-progress-grow {
-  to {
-    transform: scaleX(1);
-  }
-}
-
 /* ============================================
    Fallback baseline (IntersectionObserver path)
 
@@ -169,13 +163,6 @@
   }
 }
 
-@keyframes anim-settle {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 /* ============================================
    Auto-stagger inside [data-anim-group]
 
@@ -251,31 +238,6 @@
     animation: hero-float-medium linear both;
     animation-timeline: scroll(root);
     animation-range: 0 120vh;
-  }
-}
-
-@keyframes hero-bg-drift {
-  to {
-    opacity: 0.65;
-    transform: translate3d(0, -6%, 0) scale(1.06);
-  }
-}
-
-@keyframes hero-float-slow {
-  to {
-    transform: translate3d(-1%, -14%, 0);
-  }
-}
-
-@keyframes hero-float-medium {
-  to {
-    transform: translate3d(2%, -24%, 0);
-  }
-}
-
-@keyframes hero-float-fast {
-  to {
-    transform: translate3d(-3%, -38%, 0);
   }
 }
 

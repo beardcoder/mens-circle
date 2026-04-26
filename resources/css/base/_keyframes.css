@@ -3,14 +3,17 @@
  *
  * Defined OUTSIDE any cascade layer so the animation lookup never has
  * to cross layer boundaries. Per spec `@keyframes` are looked up
- * globally, but real-world browser/preprocessor combinations have
- * shipped subtle regressions when the rule lives inside `@layer`.
- * Keeping them unlayered is the recommended defensive pattern.
+ * globally, but real-world Vite/lightningcss builds have shipped subtle
+ * regressions when the rule lives inside `@layer`. Keeping them
+ * unlayered is the recommended defensive pattern.
  *
- * Used by ambient decorative circles in hero, intro, cta, newsletter,
- * whatsapp, event sections.
+ * Grouped by domain so the file stays scannable.
  */
 
+/* ============================================
+   Ambient breathing — used by decorative circles in hero / intro /
+   cta / newsletter / whatsapp / event sections.
+   ============================================ */
 @keyframes breathe {
   0%,
   100% {
@@ -34,5 +37,238 @@
   50% {
     opacity: 0.28;
     transform: scale(1.06) rotate(0.6deg);
+  }
+}
+
+/* ============================================
+   Hero — scroll-driven parallax for the background and decorative
+   circles. Drives `animation-timeline: scroll(root)` on `.hero__bg`
+   and `.hero__circle--N`.
+   ============================================ */
+@keyframes hero-bg-drift {
+  to {
+    opacity: 0.65;
+    transform: translate3d(0, -6%, 0) scale(1.06);
+  }
+}
+
+@keyframes hero-float-slow {
+  to {
+    transform: translate3d(-1%, -14%, 0);
+  }
+}
+
+@keyframes hero-float-medium {
+  to {
+    transform: translate3d(2%, -24%, 0);
+  }
+}
+
+@keyframes hero-float-fast {
+  to {
+    transform: translate3d(-3%, -38%, 0);
+  }
+}
+
+/* ============================================
+   Scroll-reveal — `[data-anim]` entrance and the page progress bar.
+   ============================================ */
+@keyframes scroll-progress-grow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes anim-settle {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================
+   Header — scroll-driven color morph and overlay fade.
+   ============================================ */
+@keyframes header-color-morph {
+  to {
+    padding-block: calc(var(--space-md) * 0.78);
+    color: var(--text-primary);
+  }
+}
+
+@keyframes header-overlay-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes nav-pulse {
+  0% {
+    box-shadow: 0 0 0 0
+      color-mix(in oklch, var(--accent-primary) 25%, transparent);
+    opacity: 0.35;
+  }
+
+  60% {
+    box-shadow: 0 0 0 24px
+      color-mix(in oklch, var(--accent-primary) 0%, transparent);
+    opacity: 0.12;
+  }
+
+  100% {
+    box-shadow: 0 0 0 32px transparent;
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   Modal / dialog enter animations.
+   ============================================ */
+@keyframes modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================
+   Form — submit button spinner.
+   ============================================ */
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 50;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 25, 50;
+    stroke-dashoffset: -10;
+  }
+
+  100% {
+    stroke-dasharray: 25, 50;
+    stroke-dashoffset: -35;
+  }
+}
+
+/* ============================================
+   Breathing meditation app — phase-based ring animations.
+   ============================================ */
+@keyframes breathing-idle {
+  0%,
+  100% {
+    transform: scale(0.98);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes breathing-idle-inner {
+  0%,
+  100% {
+    transform: scale(0.95);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+}
+
+@keyframes breathing-wave-outer {
+  0%,
+  100% {
+    transform: scale(0.98);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes breathing-wave-mid {
+  0%,
+  100% {
+    transform: scale(0.92);
+  }
+
+  50% {
+    transform: scale(1.5);
+  }
+}
+
+@keyframes breathing-wave-inner {
+  0%,
+  100% {
+    transform: scale(0.88);
+  }
+
+  50% {
+    transform: scale(2.5);
+  }
+}
+
+/* ============================================
+   View transitions — root crossfade and directional variants.
+   ============================================ */
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-crossfade-out-left {
+  to {
+    opacity: 0;
+    translate: -1.5% 0;
+  }
+}
+
+@keyframes vt-crossfade-in-right {
+  from {
+    opacity: 0;
+    translate: 1.5% 0;
+  }
+}
+
+@keyframes vt-crossfade-out-right {
+  to {
+    opacity: 0;
+    translate: 1.5% 0;
+  }
+}
+
+@keyframes vt-crossfade-in-left {
+  from {
+    opacity: 0;
+    translate: -1.5% 0;
   }
 }

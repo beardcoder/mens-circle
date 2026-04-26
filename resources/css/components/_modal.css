@@ -1,32 +1,10 @@
 /**
  * Modal Component
  * Accessible modal/dialog patterns
+ *
+ * Keyframes (`modal-backdrop-in`, `modal-in`) live in base/_keyframes.css
+ * so the animation lookup never has to cross cascade layer boundaries.
  */
-
-/* ============================================
-   Modal Animations
-   ============================================ */
-@keyframes modal-backdrop-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes modal-in {
-  from {
-    opacity: 0;
-    transform: scale(0.96) translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
 
 /* ============================================
    Calendar Modal
