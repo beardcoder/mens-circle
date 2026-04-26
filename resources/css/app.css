@@ -27,6 +27,11 @@
 
 @import url('@fontsource-variable/playfair-display');
 @import url('@fontsource-variable/dm-sans');
+
+/* Global @keyframes — kept unlayered so the animation lookup never has
+   to cross cascade layer boundaries. Used by ambient breathing circles
+   in hero / intro / cta / newsletter / whatsapp / event sections. */
+@import url('base/_keyframes.css');
 @import url('base/_reset.css') layer(reset);
 @import url('base/_variables.css') layer(tokens);
 @import url('base/_fonts.css') layer(tokens);

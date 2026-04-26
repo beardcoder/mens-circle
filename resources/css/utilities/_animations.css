@@ -1,39 +1,10 @@
 /**
  * Animation Utilities
  *
- * Scope is intentionally narrow:
- *  - Shared keyframes for ambient decorative animation (section glows).
- *  - Scroll-to-top button transitions.
+ * Scope is intentionally narrow: only the scroll-to-top button styles.
+ * Shared `@keyframes` live in base/_keyframes.css (unlayered) so the
+ * animation lookup never has to cross cascade layer boundaries.
  */
-
-/* ============================================
-   Ambient continuous animations
-   ============================================ */
-@keyframes breathe {
-  0%,
-  100% {
-    opacity: 0.16;
-    transform: scale(0.92);
-  }
-
-  50% {
-    opacity: 0.34;
-    transform: scale(1.12);
-  }
-}
-
-@keyframes breathe-slow {
-  0%,
-  100% {
-    opacity: 0.1;
-    transform: scale(0.94) rotate(-0.4deg);
-  }
-
-  50% {
-    opacity: 0.28;
-    transform: scale(1.06) rotate(0.6deg);
-  }
-}
 
 /* ============================================
    Scroll-to-Top Button
