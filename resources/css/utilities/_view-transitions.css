@@ -42,18 +42,6 @@
   animation-timing-function: var(--ease-settle, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
-@keyframes vt-fade-out {
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes vt-fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
 ::view-transition-old(root) {
   animation-name: vt-fade-out;
 }
@@ -67,35 +55,8 @@
 
    Gleicher Crossfade, dazu ein dezenter horizontaler Versatz (1.5%)
    als Richtungshinweis. Die Opacity-Überlagerung bleibt symmetrisch.
+   The `vt-*` keyframes are defined in base/_keyframes.css.
    ============================================ */
-@keyframes vt-crossfade-out-left {
-  to {
-    opacity: 0;
-    translate: -1.5% 0;
-  }
-}
-
-@keyframes vt-crossfade-in-right {
-  from {
-    opacity: 0;
-    translate: 1.5% 0;
-  }
-}
-
-@keyframes vt-crossfade-out-right {
-  to {
-    opacity: 0;
-    translate: 1.5% 0;
-  }
-}
-
-@keyframes vt-crossfade-in-left {
-  from {
-    opacity: 0;
-    translate: -1.5% 0;
-  }
-}
-
 :root:active-view-transition-type(to-event) {
   &::view-transition-old(root) {
     animation-name: vt-crossfade-out-left;

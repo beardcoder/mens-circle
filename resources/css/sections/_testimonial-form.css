@@ -248,28 +248,7 @@
   animation: dash 1.5s ease-in-out infinite;
 }
 
-@keyframes rotate {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes dash {
-  0% {
-    stroke-dasharray: 1, 50;
-    stroke-dashoffset: 0;
-  }
-
-  50% {
-    stroke-dasharray: 25, 50;
-    stroke-dashoffset: -10;
-  }
-
-  100% {
-    stroke-dasharray: 25, 50;
-    stroke-dashoffset: -35;
-  }
-}
+/* `rotate` and `dash` keyframes are defined in base/_keyframes.css. */
 
 /* Form note */
 .form__note {

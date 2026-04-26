@@ -261,27 +261,8 @@
   animation: breathing-idle-inner 7s var(--ease-in-out) infinite -1.2s;
 }
 
-@keyframes breathing-idle {
-  0%,
-  100% {
-    transform: scale(0.98);
-  }
-
-  50% {
-    transform: scale(1.04);
-  }
-}
-
-@keyframes breathing-idle-inner {
-  0%,
-  100% {
-    transform: scale(0.95);
-  }
-
-  50% {
-    transform: scale(1.25);
-  }
-}
+/* `breathing-idle` / `breathing-idle-inner` keyframes are defined in
+   base/_keyframes.css. */
 
 /* ---- Breathing: continuous wave, no pause between inhale and exhale ----
    Each ring uses its own keyframes with a different amplitude so the outer
@@ -306,38 +287,8 @@
     infinite;
 }
 
-@keyframes breathing-wave-outer {
-  0%,
-  100% {
-    transform: scale(0.98);
-  }
-
-  50% {
-    transform: scale(1.06);
-  }
-}
-
-@keyframes breathing-wave-mid {
-  0%,
-  100% {
-    transform: scale(0.92);
-  }
-
-  50% {
-    transform: scale(1.5);
-  }
-}
-
-@keyframes breathing-wave-inner {
-  0%,
-  100% {
-    transform: scale(0.88);
-  }
-
-  50% {
-    transform: scale(2.5);
-  }
-}
+/* `breathing-wave-outer/mid/inner` keyframes are defined in
+   base/_keyframes.css. */
 
 /* ---- Hold (retention): rings sit expanded ---- */
 .breathing-app__circle[data-motion='hold-high'] .breathing-app__ring--1 {
