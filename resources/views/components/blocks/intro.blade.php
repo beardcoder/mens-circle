@@ -32,27 +32,23 @@
               @if (!empty($value['number']))
                 <span class="value-item__number">{{ $value['number'] }}</span>
               @endif
-              <div class="value-item__content">
-                @if (!empty($value['title']))
-                  <h3>{{ $value['title'] }}</h3>
-                @endif
-                @if (!empty($value['description']))
-                  <p>{{ $value['description'] }}</p>
-                @endif
-              </div>
+              @if (!empty($value['title']))
+                <h3 class="value-item__title">{{ $value['title'] }}</h3>
+              @endif
+              @if (!empty($value['description']))
+                <p class="value-item__description">{{ $value['description'] }}</p>
+              @endif
             </div>
           @endforeach
         </div>
       @endif
     </div>
 
-    <div class="intro__right">
-      <div class="intro__image-area" data-anim="scale">
-        <div class="intro__image-circles"></div>
-        @if (!empty($data['quote']))
-          <p class="intro__image-text" data-anim="fade">{!! $data['quote'] !!}</p>
-        @endif
-      </div>
+    <div class="intro__image-area" data-anim="scale">
+      <div class="intro__image-circles" aria-hidden="true"></div>
+      @if (!empty($data['quote']))
+        <p class="intro__image-text" data-anim="fade">{!! $data['quote'] !!}</p>
+      @endif
     </div>
   </div>
 </section>
