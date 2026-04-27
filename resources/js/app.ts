@@ -16,7 +16,7 @@ import { nativeAccordion } from '@/components/accordion';
 import { breathingApp } from '@/components/breathing';
 import { scrollAnimations } from '@/components/scroll-animations';
 import { initUmamiKit } from '@/utils/umami-kit';
-import { initViewTransitions } from '@/components/view-transitions';
+import { initSwup } from '@/components/swup-init';
 
 // Navigation and header
 register('#nav', navigation());
@@ -44,8 +44,9 @@ register('body', scrollAnimations());
 // Initialize all registered components
 autoInit();
 
-// View transitions (MPA cross-document — no stitch component needed)
-initViewTransitions();
+// AJAX page transitions (Swup 4) — owns native View Transitions for
+// supporting browsers and replaces #main on link clicks.
+initSwup();
 
 // Analytics tracking (standalone, not a stitch component)
 if (document.readyState === 'loading') {

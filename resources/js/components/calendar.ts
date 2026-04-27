@@ -84,7 +84,7 @@ export const calendarIntegration = defineComponent<CalendarOptions>(
       o.googleSelector
     );
 
-    const eventData: EventData = window.eventData ?? {
+    const fallback: EventData = {
       title: 'Männerkreis Niederbayern/ Straubing',
       description:
         'Treffen des Männerkreis Niederbayern/ Straubing. Ein Raum für echte Begegnung unter Männern.',
@@ -94,6 +94,18 @@ export const calendarIntegration = defineComponent<CalendarOptions>(
       endDate: '2025-01-24',
       endTime: '21:30',
     };
+    const ds = (ctx.el as HTMLElement).dataset;
+    const eventData: EventData = ds.eventTitle
+      ? {
+          title: ds.eventTitle,
+          description: ds.eventDescription ?? '',
+          location: ds.eventLocation ?? '',
+          startDate: ds.eventStartDate ?? '',
+          startTime: ds.eventStartTime ?? '',
+          endDate: ds.eventEndDate ?? '',
+          endTime: ds.eventEndTime ?? '',
+        }
+      : (window.eventData ?? fallback);
 
     if (calendarICS) {
       const icsContent = generateICS(eventData);

@@ -279,7 +279,18 @@
       </div>
 
       <div class="event-info__calendar">
-        <button type="button" class="btn btn--secondary" id="addToCalendar">
+        <button
+          type="button"
+          class="btn btn--secondary"
+          id="addToCalendar"
+          data-event-title="{{ $event->title }}"
+          data-event-description="{{ strip_tags($event->description) }}"
+          data-event-location="{{ $event->location }}"
+          data-event-start-date="{{ $event->event_date->format('Y-m-d') }}"
+          data-event-start-time="{{ $event->start_time->format('H:i') }}"
+          data-event-end-date="{{ $event->event_date->format('Y-m-d') }}"
+          data-event-end-time="{{ $event->end_time->format('H:i') }}"
+        >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -365,17 +376,3 @@
   </section>
 @endsection
 
-@push ('scripts')
-  <script>
-    // Pass event data to JavaScript for calendar integration
-    window.eventData = {
-      title: @json ($event->title),
-      description: @json (strip_tags($event->description)),
-      location: @json ($event->location),
-      startDate: @json ($event->event_date->format('Y-m-d')),
-      startTime: @json ($event->start_time->format('H:i')),
-      endDate: @json ($event->event_date->format('Y-m-d')),
-      endTime: @json ($event->end_time->format('H:i')),
-    };
-  </script>
-@endpush
