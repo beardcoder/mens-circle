@@ -41,32 +41,13 @@
 }
 
 /* ============================================
-   Hero — scroll-driven parallax for the background and decorative
-   circles. Drives `animation-timeline: scroll(root)` on `.hero__bg`
-   and `.hero__circle--N`.
+   Hero — scroll-driven parallax on the background image.
+   Drives `animation-timeline: scroll(root)` on `.hero__bg`.
    ============================================ */
 @keyframes hero-bg-drift {
   to {
     opacity: 0.65;
     transform: translate3d(0, -6%, 0) scale(1.06);
-  }
-}
-
-@keyframes hero-float-slow {
-  to {
-    transform: translate3d(-1%, -14%, 0);
-  }
-}
-
-@keyframes hero-float-medium {
-  to {
-    transform: translate3d(2%, -24%, 0);
-  }
-}
-
-@keyframes hero-float-fast {
-  to {
-    transform: translate3d(-3%, -38%, 0);
   }
 }
 

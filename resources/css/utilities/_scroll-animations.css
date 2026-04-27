@@ -202,11 +202,11 @@
 }
 
 /* ============================================
-   Hero — scroll-linked parallax (decorative only)
+   Hero — scroll-linked parallax on the background only
 
-   Gentle drift on the background + differential float on the decorative
-   circles. Runs on the compositor. The hero content itself uses regular
-   `data-anim` attributes set in the hero blade component.
+   The decorative circles keep their ambient `breathe` animation defined
+   in `_hero.css`; layering scroll-driven parallax on top would clobber
+   the shorthand `animation` and cancel the breathing pulse.
    ============================================ */
 @supports (animation-timeline: scroll()) {
   .hero__bg {
@@ -214,43 +214,6 @@
     animation-timeline: scroll(root);
     animation-range: 0 100vh;
     will-change: transform, opacity;
-  }
-
-  .hero__circle--1 {
-    animation: hero-float-slow linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0 120vh;
-  }
-
-  .hero__circle--2 {
-    animation: hero-float-medium linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0 120vh;
-  }
-
-  .hero__circle--3 {
-    animation: hero-float-fast linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0 120vh;
-  }
-
-  .hero__circle--4 {
-    animation: hero-float-medium linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0 120vh;
-  }
-}
-
-/* Mobile: skip decorative parallax to save GPU */
-@media (width <= 767px) {
-  @supports (animation-timeline: scroll()) {
-    .hero__bg,
-    .hero__circle--1,
-    .hero__circle--2,
-    .hero__circle--3,
-    .hero__circle--4 {
-      animation: none;
-    }
   }
 }
 
