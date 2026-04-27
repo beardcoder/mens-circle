@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Contracts\DefinesCacheUrls;
 use App\Enums\RegistrationStatus;
 use App\Observers\RegistrationObserver;
 use App\Traits\ClearsResponseCache;
@@ -35,36 +34,13 @@ use Override;
 #[Fillable(['participant_id', 'event_id', 'status', 'registered_at', 'cancelled_at', 'reminder_sent_at', 'sms_reminder_sent_at'])]
 #[ObservedBy(RegistrationObserver::class)]
 #[UseFactory(RegistrationFactory::class)]
-class Registration extends Model implements DefinesCacheUrls
+class Registration extends Model
 {
     use ClearsResponseCache;
 
     /** @use HasFactory<RegistrationFactory> */
     use HasFactory;
     use SoftDeletes;
-
-    /**
-     * @return list<string>
-     */
-    public function getCacheUrls(): array
-    {
-        $eventSlug = $this->relationLoaded('event')
-            ? $this->event->slug
-            : Event::query()->where('id', $this->event_id)->value('slug');
-
-        return array_values(array_filter([
-            url('/event'),
-            $eventSlug ? route('event.show.slug', $eventSlug) : null,
-        ]));
-    }
-
-    /**
-     * @return list<string>
-     */
-    public function getCacheKeys(): array
-    {
-        return ['next_event_data'];
-    }
 
     /**
      * @return BelongsTo<Participant, $this>

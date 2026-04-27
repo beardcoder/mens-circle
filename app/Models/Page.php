@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Contracts\DefinesCacheUrls;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\PageFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -35,7 +34,7 @@ use Spatie\Sluggable\SlugOptions;
  */
 #[Fillable(['title', 'slug', 'meta', 'is_published', 'published_at'])]
 #[UseFactory(PageFactory::class)]
-class Page extends Model implements DefinesCacheUrls, HasMedia
+class Page extends Model implements HasMedia
 {
     use ClearsResponseCache;
 
@@ -44,14 +43,6 @@ class Page extends Model implements DefinesCacheUrls, HasMedia
     use HasSlug;
     use InteractsWithMedia;
     use SoftDeletes;
-
-    /**
-     * @return list<string>
-     */
-    public function getCacheUrls(): array
-    {
-        return [$this->slug === 'home' ? url('/') : route('page.show', $this->slug)];
-    }
 
     #[Override]
     public function getSlugOptions(): SlugOptions

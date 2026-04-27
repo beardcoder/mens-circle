@@ -13,7 +13,6 @@ use App\Seo\Schemas\OrganizationSchema;
 use App\Seo\Schemas\WebSiteSchema;
 use App\Settings\GeneralSettings;
 use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -63,10 +62,10 @@ class AppServiceProvider extends ServiceProvider
             'components.blocks.hero',
         ], static function (ViewContract $view): void {
             try {
-                $nextEvent = Cache::flexible('next_event_data', [300, 600], static fn() => Event::published()
+                $nextEvent = Event::published()
                     ->upcoming()
                     ->orderBy('event_date')
-                    ->first(['slug']));
+                    ->first(['slug']);
 
                 $view->with([
                     'hasNextEvent' => $nextEvent !== null,

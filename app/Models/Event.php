@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Contracts\DefinesCacheUrls;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -59,7 +58,7 @@ use Spatie\Sluggable\SlugOptions;
     'is_published',
 ])]
 #[UseFactory(EventFactory::class)]
-class Event extends Model implements DefinesCacheUrls, HasMedia
+class Event extends Model implements HasMedia
 {
     use ClearsResponseCache;
 
@@ -160,22 +159,6 @@ class Event extends Model implements DefinesCacheUrls, HasMedia
 
             return implode(', ', $parts);
         });
-    }
-
-    /**
-     * @return list<string>
-     */
-    public function getCacheUrls(): array
-    {
-        return [url('/'), url('/event'), route('event.show.slug', $this->slug)];
-    }
-
-    /**
-     * @return list<string>
-     */
-    public function getCacheKeys(): array
-    {
-        return ['next_event_data'];
     }
 
     public function generateICalContent(): string

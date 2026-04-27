@@ -22,7 +22,6 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 app/
 ├── Checks/                  # Spatie Health checks (Mail, Queue, SevenIo SMS)
 ├── Console/Commands/        # SendEventReminders, GenerateSitemap
-├── Contracts/               # DefinesCacheUrls interface
 ├── Enums/                   # RegistrationStatus, NewsletterStatus, SocialLinkType, Heroicon
 ├── Filament/
 │   ├── Forms/               # Reusable form schemas (ParticipantForms)

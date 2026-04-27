@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Contracts\DefinesCacheUrls;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\TestimonialFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -28,20 +27,12 @@ use Override;
  */
 #[Fillable(['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order'])]
 #[UseFactory(TestimonialFactory::class)]
-class Testimonial extends Model implements DefinesCacheUrls
+class Testimonial extends Model
 {
     /** @use HasFactory<TestimonialFactory> */
     use HasFactory;
     use ClearsResponseCache;
     use SoftDeletes;
-
-    /**
-     * @return list<string>
-     */
-    public function getCacheUrls(): array
-    {
-        return [url('/')];
-    }
 
     #[Override]
     protected function casts(): array

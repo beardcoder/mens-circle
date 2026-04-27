@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Contracts\DefinesCacheUrls;
 use App\Traits\ClearsResponseCache;
 use Database\Factories\ContentBlockFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -27,7 +26,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 #[Fillable(['page_id', 'type', 'data', 'block_id', 'order'])]
 #[UseFactory(ContentBlockFactory::class)]
-class ContentBlock extends Model implements DefinesCacheUrls, HasMedia
+class ContentBlock extends Model implements HasMedia
 {
     /** @use HasFactory<ContentBlockFactory> */
     use HasFactory;
@@ -35,24 +34,6 @@ class ContentBlock extends Model implements DefinesCacheUrls, HasMedia
     use ClearsResponseCache;
 
     /**
-     * @return list<string>
-     */
-    public function getCacheUrls(): array
-    {
-        $slug = $this->relationLoaded('page')
-            ? $this->page->slug
-            : Page::query()->where('id', $this->page_id)->value('slug');
-
-        if ($slug === null) {
-            return [];
-        }
-
-        return [$slug === 'home' ? url('/') : route('page.show', $slug)];
-    }
-
-    /**
-     * Relationship to Page
-     *
      * @return BelongsTo<Page, $this>
      */
     public function page(): BelongsTo
