@@ -35,10 +35,6 @@
   }
 }
 
-.toast--visible:hover {
-  transform: translateY(-2px) scale(1);
-}
-
 .toast--hiding {
   pointer-events: none;
   opacity: 0;
@@ -212,9 +208,5 @@
 @media (prefers-reduced-motion: reduce) {
   .toast {
     transition: none;
-  }
-
-  .toast:hover {
-    transform: none;
   }
 }

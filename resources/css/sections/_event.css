@@ -256,7 +256,6 @@
   padding: var(--space-lg);
   overflow: hidden;
   border-inline-end: 1px solid var(--border-light);
-  transition: background-color var(--transition-medium);
 }
 
 .event-info__card:last-child {
@@ -285,11 +284,6 @@
   }
 }
 
-/* Hover effect */
-.event-info__card:hover {
-  background: var(--bg-secondary);
-}
-
 /* Decorative circle */
 .event-info__card-circle {
   position: absolute;
@@ -300,14 +294,6 @@
   border: 1px solid var(--border-light);
   border-radius: 50%;
   opacity: 0.3;
-  transition:
-    opacity var(--transition-medium),
-    transform var(--transition-medium);
-}
-
-.event-info__card:hover .event-info__card-circle {
-  opacity: 0.5;
-  transform: scale(1.1);
 }
 
 .event-info__card h3 {
