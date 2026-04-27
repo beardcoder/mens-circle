@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\ClearsResponseCache;
 use Database\Factories\ParticipantFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -26,6 +27,8 @@ use Illuminate\Notifications\Notification;
 #[UseFactory(ParticipantFactory::class)]
 class Participant extends Model
 {
+    use ClearsResponseCache;
+
     /** @use HasFactory<ParticipantFactory> */
     use HasFactory;
     use Notifiable;
