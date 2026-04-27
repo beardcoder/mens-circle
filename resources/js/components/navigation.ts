@@ -212,3 +212,95 @@ export const scrollToTop = defineComponent<ScrollToTopOptions>(
     });
   }
 );
+
+interface ScrollProgressOptions {
+  smoothing: number;
+}
+
+/**
+ * Scroll progress indicator
+ *
+ * Drives the top progress bar via inline `transform: scaleX(...)`. We do this
+ * in JS instead of `animation-timeline: scroll(root)` because the native
+ * timeline remaps to a new percentage the instant `scrollHeight` changes
+ * (lazy images settling, fonts loading, accordions opening, Swup container
+ * swaps), which the user perceives as the bar "jumping" while scrolling.
+ *
+ * A small lerp toward the target value smooths those height-change jumps
+ * into a glide while still only animating `transform` on the compositor.
+ */
+export const scrollProgress = defineComponent<ScrollProgressOptions>(
+  {
+    smoothing: 0.18,
+  },
+  (ctx) => {
+    if (
+      typeof globalThis.matchMedia === 'function' &&
+      globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return;
+    }
+
+    const bar = ctx.el;
+    const { smoothing } = ctx.options;
+
+    const root = document.documentElement;
+    let target = 0;
+    let current = 0;
+    let raf = 0;
+    let running = false;
+
+    const computeTarget = (): void => {
+      const max = root.scrollHeight - globalThis.innerHeight;
+
+      target = max > 0 ? Math.min(1, Math.max(0, root.scrollTop / max)) : 0;
+    };
+
+    const tick = (): void => {
+      const delta = target - current;
+
+      if (Math.abs(delta) < 0.0005) {
+        current = target;
+        bar.style.transform = `scaleX(${current})`;
+        running = false;
+
+        return;
+      }
+
+      current += delta * smoothing;
+      bar.style.transform = `scaleX(${current})`;
+      raf = requestAnimationFrame(tick);
+    };
+
+    const schedule = (): void => {
+      computeTarget();
+
+      if (running) return;
+
+      running = true;
+      raf = requestAnimationFrame(tick);
+    };
+
+    computeTarget();
+    current = target;
+    bar.style.transform = `scaleX(${current})`;
+
+    globalThis.addEventListener('scroll', schedule, { passive: true });
+    globalThis.addEventListener('resize', schedule);
+
+    const resizeObserver =
+      typeof ResizeObserver === 'function'
+        ? new ResizeObserver(schedule)
+        : null;
+
+    resizeObserver?.observe(root);
+    if (document.body) resizeObserver?.observe(document.body);
+
+    ctx.onDestroy(() => {
+      cancelAnimationFrame(raf);
+      globalThis.removeEventListener('scroll', schedule);
+      globalThis.removeEventListener('resize', schedule);
+      resizeObserver?.disconnect();
+    });
+  }
+);

@@ -52,14 +52,9 @@
 }
 
 /* ============================================
-   Scroll-reveal — `[data-anim]` entrance and the page progress bar.
+   Scroll-reveal — `[data-anim]` entrance.
+   The page progress bar is driven from JS; see scrollProgress.
    ============================================ */
-@keyframes scroll-progress-grow {
-  to {
-    transform: scaleX(1);
-  }
-}
-
 @keyframes anim-settle {
   to {
     opacity: 1;

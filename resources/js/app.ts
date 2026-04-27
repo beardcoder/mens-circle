@@ -5,7 +5,12 @@
 
 import './types';
 import { register, autoInit } from '@beardcoder/stitch-js';
-import { navigation, scrollHeader, scrollToTop } from '@/components/navigation';
+import {
+  navigation,
+  scrollHeader,
+  scrollProgress,
+  scrollToTop,
+} from '@/components/navigation';
 import {
   newsletterForm,
   registrationForm,
@@ -22,6 +27,7 @@ import { initSwup } from '@/components/swup-init';
 register('#nav', navigation());
 register('#header', scrollHeader());
 register('#scrollToTop', scrollToTop());
+register('.scroll-progress', scrollProgress());
 
 // Interactive forms
 register('#newsletterForm', newsletterForm());
