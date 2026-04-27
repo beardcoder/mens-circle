@@ -60,9 +60,10 @@
 }
 
 /* ============================================
-   Intro Right (Visual)
+   Intro Visual — single grid cell that owns the background, the
+   decorative circles, and the centered quote.
    ============================================ */
-.intro__right {
+.intro__image-area {
   position: relative;
   display: flex;
   align-items: center;
@@ -72,19 +73,10 @@
 }
 
 @media (width <= 1000px) {
-  .intro__right {
+  .intro__image-area {
     order: 1;
     min-block-size: 50vh;
   }
-}
-
-.intro__image-area {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
 }
 
 /* Noise texture */

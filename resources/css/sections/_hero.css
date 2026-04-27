@@ -187,7 +187,7 @@
    Scroll Indicator
    ============================================ */
 .hero__scroll {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   gap: var(--space-xs);
   align-items: center;
@@ -199,9 +199,10 @@
   writing-mode: vertical-rl;
 }
 
-.hero__scroll-line {
+.hero__scroll::after {
   inline-size: 1px;
   block-size: 80px;
+  content: '';
   background: linear-gradient(to bottom, var(--accent-primary), transparent);
 }
 

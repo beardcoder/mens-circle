@@ -4,25 +4,23 @@
  */
 
 /* ============================================
-   FAQ Section Base
+   FAQ Section — sticky-sidebar layout lives on the .container itself
+   so the grid is one level shallower in the DOM.
    ============================================ */
 .faq-section {
   overflow: hidden;
   background: var(--bg-primary);
-}
 
-/* ============================================
-   FAQ Layout
-   ============================================ */
-.faq__layout {
-  display: grid;
-  grid-template-columns: 0.35fr 0.65fr;
-  gap: var(--space-xl);
-  align-items: start;
+  & > .container {
+    display: grid;
+    grid-template-columns: 0.35fr 0.65fr;
+    gap: var(--space-xl);
+    align-items: start;
 
-  @media (width < 900px) {
-    grid-template-columns: 1fr;
-    gap: var(--space-lg);
+    @media (width < 900px) {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
   }
 }
 

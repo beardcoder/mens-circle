@@ -61,10 +61,7 @@
               >
                 {{ $data['button_text'] }}
               </a>
-              <div class="hero__scroll">
-                <span>Entdecken</span>
-                <div class="hero__scroll-line" aria-hidden="true"></div>
-              </div>
+              <span class="hero__scroll" aria-hidden="true">Entdecken</span>
             </div>
           @endif
         @endif

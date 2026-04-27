@@ -24,15 +24,13 @@
               <span class="value-item__number">{{ $item['number'] }}</span>
             @endif
 
-            <div class="value-item__content">
-              @if (!empty($item['title']))
-                <h3>{{ $item['title'] }}</h3>
-              @endif
+            @if (!empty($item['title']))
+              <h3 class="value-item__title">{{ $item['title'] }}</h3>
+            @endif
 
-              @if (!empty($item['description']))
-                <p>{{ $item['description'] }}</p>
-              @endif
-            </div>
+            @if (!empty($item['description']))
+              <p class="value-item__description">{{ $item['description'] }}</p>
+            @endif
           </div>
         @endforeach
       </div>
