@@ -53,6 +53,12 @@
 
 /* ============================================
    Scroll progress bar
+
+   The transform is driven by JS (see `scrollProgress` in
+   resources/js/components/navigation.ts) with a small lerp so layout-shifts
+   that change `scrollHeight` (image/font loading, accordions, Swup swaps)
+   glide instead of snapping to a new percentage. Compositor-only — JS
+   only writes `transform: scaleX(...)`.
    ============================================ */
 .scroll-progress {
   position: fixed;
@@ -75,13 +81,6 @@
   transform: scaleX(0);
   transform-origin: left;
   will-change: transform;
-}
-
-@supports (animation-timeline: scroll()) {
-  .scroll-progress {
-    animation: scroll-progress-grow linear both;
-    animation-timeline: scroll(root);
-  }
 }
 
 /* ============================================
