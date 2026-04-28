@@ -10,6 +10,7 @@ use App\Models\NewsletterSubscription;
 use App\Models\Page;
 use App\Models\Testimonial;
 use App\Settings\GeneralSettings;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 
 final class LlmsController
@@ -27,14 +28,16 @@ final class LlmsController
 
     private function generateLlmsTxt(): string
     {
+        $publishedPages = Page::with('contentBlocks')->published()->orderBy('title')->get();
+
         $lines = [
             ...$this->generateHeader(),
             ...$this->generateAboutSection(),
             ...$this->generateStatistics(),
             ...$this->generateUpcomingEvents(),
             ...$this->generatePastEvents(),
-            ...$this->generatePageContent(),
-            ...$this->generateFaqSection(),
+            ...$this->generatePageContent($publishedPages),
+            ...$this->generateFaqSection($publishedPages),
             ...$this->generateTestimonials(),
             ...$this->generateLegalSection(),
             ...$this->generateActionsSection(),
@@ -122,12 +125,19 @@ final class LlmsController
         $totalTestimonials = Testimonial::published()->count();
         $totalSubscribers = NewsletterSubscription::activeCount();
 
+        $eventStats = Event::query()
+            ->published()
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('SUM(CASE WHEN event_date >= ? THEN 1 ELSE 0 END) as upcoming', [now()])
+            ->selectRaw('SUM(CASE WHEN event_date < ? THEN 1 ELSE 0 END) as past', [now()])
+            ->first();
+
         $lines = [
             '## Statistiken',
             '',
-            '- **Gesamtanzahl Veranstaltungen:** ' . Event::published()->count(),
-            '- **Kommende Veranstaltungen:** ' . Event::published()->upcoming()->count(),
-            '- **Vergangene Veranstaltungen:** ' . Event::published()->where('event_date', '<', now())->count(),
+            '- **Gesamtanzahl Veranstaltungen:** ' . (int) ($eventStats->total ?? 0),
+            '- **Kommende Veranstaltungen:** ' . (int) ($eventStats->upcoming ?? 0),
+            '- **Vergangene Veranstaltungen:** ' . (int) ($eventStats->past ?? 0),
         ];
 
         if ($totalTestimonials > 0) {
@@ -216,9 +226,11 @@ final class LlmsController
     }
 
     /**
+     * @param Collection<int, Page> $publishedPages
+     *
      * @return array<int, string>
      */
-    private function generatePageContent(): array
+    private function generatePageContent(Collection $publishedPages): array
     {
         $lines = [
             '## Seiteninhalte',
@@ -231,11 +243,7 @@ final class LlmsController
             '',
         ];
 
-        $pages = Page::with('contentBlocks')
-            ->published()
-            ->whereNotIn('slug', ['home', 'impressum', 'datenschutz'])
-            ->orderBy('title')
-            ->get();
+        $pages = $publishedPages->whereNotIn('slug', ['home', 'impressum', 'datenschutz']);
 
         foreach ($pages as $page) {
             $lines[] = '### ' . $page->title;
@@ -255,11 +263,13 @@ final class LlmsController
     }
 
     /**
+     * @param Collection<int, Page> $publishedPages
+     *
      * @return array<int, string>
      */
-    private function generateFaqSection(): array
+    private function generateFaqSection(Collection $publishedPages): array
     {
-        $faqBlocks = $this->extractFaqBlocks();
+        $faqBlocks = $this->extractFaqBlocks($publishedPages);
 
         if ($faqBlocks === []) {
             return [];
@@ -568,13 +578,15 @@ final class LlmsController
     }
 
     /**
+     * @param Collection<int, Page> $publishedPages
+     *
      * @return array<int, array<string, mixed>>
      */
-    private function extractFaqBlocks(): array
+    private function extractFaqBlocks(Collection $publishedPages): array
     {
         $faqBlocks = [];
 
-        foreach (Page::with('contentBlocks')->published()->get() as $page) {
+        foreach ($publishedPages as $page) {
             foreach ($page->contentBlocks as $block) {
                 if ($block->type === 'faq' && !empty($block->data['items'] ?? null)) {
                     $faqBlocks[] = $block->data;

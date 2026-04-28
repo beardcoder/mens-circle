@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Notifications\EventRegistrationConfirmed;
 use App\Notifications\EventRegistrationReceived;
 use App\Notifications\WaitlistRegistrationConfirmed;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Notification;
 use RuntimeException;
 
@@ -83,12 +84,20 @@ final readonly class RegisterForEvent
     {
         if ($isWaitlist) {
             $participant->notify(new WaitlistRegistrationConfirmed($registration, $event));
-            Notification::send(User::all(), new EventRegistrationReceived($registration, $event, $participant, isWaitlist: true));
+            Notification::send($this->admins(), new EventRegistrationReceived($registration, $event, $participant, isWaitlist: true));
 
             return;
         }
 
         $participant->notify(new EventRegistrationConfirmed($registration, $event));
-        Notification::send(User::all(), new EventRegistrationReceived($registration, $event, $participant));
+        Notification::send($this->admins(), new EventRegistrationReceived($registration, $event, $participant));
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    private function admins(): Collection
+    {
+        return User::query()->select(['id', 'name', 'email'])->get();
     }
 }
