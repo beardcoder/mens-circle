@@ -32,6 +32,8 @@ use Spatie\Sluggable\SlugOptions;
  * @property int $max_participants
  * @property bool $is_published
  * @property string $title
+ * @property string $slug
+ * @property ?string $cost_basis
  * @property ?string $description
  * @property ?string $location
  * @property int $activeRegistrationsCount

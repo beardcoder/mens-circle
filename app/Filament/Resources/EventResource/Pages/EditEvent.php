@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\EventResource\Pages;
 
 use App\Enums\EmailTemplate;
+use App\Enums\MessengerTemplate;
 use App\Enums\RegistrationStatus;
 use App\Filament\Resources\EventResource;
 use App\Mail\EventParticipantMessage;
@@ -24,6 +25,7 @@ use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Override;
@@ -36,12 +38,41 @@ class EditEvent extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            $this->messengerTextsAction(),
             $this->sendMessageAction(),
             EventResource::replicateAction(),
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),
         ];
+    }
+
+    private function messengerTextsAction(): Action
+    {
+        return Action::make('messengerTexts')
+            ->label('Messenger-Texte')
+            ->icon(Heroicon::OutlinedChatBubbleLeftRight)
+            ->color('info')
+            ->modalHeading('Messenger-Texte')
+            ->modalDescription('Fertige Texte für WhatsApp, Signal, Telegram & Co. – direkt kopieren und verschicken.')
+            ->modalSubmitAction(false)
+            ->modalCancelActionLabel('Schließen')
+            ->modalWidth('3xl')
+            ->modalContent(function (): View {
+                /** @var Event $event */
+                $event = $this->record;
+                $service = app(EmailTemplateService::class);
+
+                $variants = [];
+                foreach (MessengerTemplate::availableForSpots($event->availableSpots) as $template) {
+                    $variants[$template->value] = [
+                        'label' => $template->getLabel(),
+                        'text' => $service->renderForMessenger($template->getContent(), $event),
+                    ];
+                }
+
+                return view('filament.components.messenger-texts', ['variants' => $variants]);
+            });
     }
 
     private function sendMessageAction(): Action
