@@ -94,6 +94,91 @@ test('replace placeholders works with custom strings', function (): void {
     expect($result['subject'])->toContain('Custom Event')->and($result['content'])->toContain('Regensburg');
 });
 
+test('renderForMessenger replaces placeholders with event values', function (): void {
+    $event = Event::factory()
+        ->published()
+        ->create([
+            'title' => 'Männerkreis Mai',
+            'event_date' => now()->addDays(7),
+            'start_time' => now()->setTime(19, 30),
+            'end_time' => now()->setTime(21, 30),
+            'location' => 'Straubing',
+            'cost_basis' => 'Auf Spendenbasis',
+        ]);
+
+    $service = new EmailTemplateService();
+    $text = $service->renderForMessenger(
+        "{event_title}\n{event_time} Uhr\n{event_location}\nTeilnahme: {cost_basis}\nAnmeldung:\n{event_url}",
+        $event,
+    );
+
+    expect($text)
+        ->toContain('Männerkreis Mai')
+        ->toContain('19:30 Uhr')
+        ->toContain('Straubing')
+        ->toContain('Teilnahme: Auf Spendenbasis')
+        ->toContain(route('event.show.slug', ['slug' => $event->slug]))
+        ->not->toContain('—')
+        ->not->toContain('{');
+});
+
+test('renderForMessenger removes label lines that lost their value', function (): void {
+    $event = Event::factory()
+        ->published()
+        ->create([
+            'title' => 'Männerkreis',
+            'event_date' => now()->addDays(7),
+            'start_time' => now()->setTime(19, 0),
+            'end_time' => now()->setTime(21, 0),
+            'location' => 'Straubing',
+            'cost_basis' => '',
+        ]);
+
+    $service = new EmailTemplateService();
+    $text = $service->renderForMessenger(
+        "{event_title}\nTeilnahme: {cost_basis}\nAnmeldung:\n{event_url}",
+        $event,
+    );
+
+    expect($text)
+        ->not->toContain('Teilnahme:')
+        ->not->toContain('—')
+        ->toContain('Männerkreis')
+        ->toContain('Anmeldung:')
+        ->toContain(route('event.show.slug', ['slug' => $event->slug]));
+});
+
+test('renderForMessenger collapses multiple blank lines', function (): void {
+    $event = Event::factory()
+        ->published()
+        ->create([
+            'title' => 'Test',
+            'event_date' => now()->addDays(2),
+            'start_time' => now()->setTime(19, 0),
+            'end_time' => now()->setTime(21, 0),
+            'cost_basis' => '',
+        ]);
+
+    $service = new EmailTemplateService();
+    $text = $service->renderForMessenger(
+        "Zeile A\n\n\n\nTeilnahme: {cost_basis}\n\n\nZeile B",
+        $event,
+    );
+
+    expect($text)->not->toMatch('/\n{3,}/');
+});
+
+test('renderForMessenger returns empty placeholders cleanly when no event exists', function (): void {
+    $service = new EmailTemplateService();
+    $text = $service->renderForMessenger("Teilnahme: {cost_basis}\nTitel: {event_title}");
+
+    expect($text)
+        ->not->toContain('—')
+        ->not->toContain('{')
+        ->not->toContain('Teilnahme:')
+        ->not->toContain('Titel:');
+});
+
 test('resolve calculates available spots correctly', function (): void {
     $event = Event::factory()
         ->published()
