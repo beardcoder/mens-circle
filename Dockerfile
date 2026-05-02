@@ -19,14 +19,14 @@ RUN bun run build
 
 
 # ----------------------------
-# 2) PHP dependencies (Composer) using same PHP as prod
+# 2) PHP dependencies (Composer)
 # ----------------------------
-FROM ${FRANKENPHP_IMAGE} AS vendor
+# Using composer:2 (Alpine-based) which ships with git + unzip pre-installed,
+# so we don't need `apk add` here. --ignore-platform-reqs makes the resolver
+# independent of this image's PHP version; the autoload classmap is plain
+# PHP and runs fine under the production PHP 8.5 image.
+FROM composer:2 AS vendor
 WORKDIR /app
-
-RUN apk add --no-cache git unzip
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
