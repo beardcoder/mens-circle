@@ -120,6 +120,23 @@ test('event full address is null when street is missing', function (): void {
     expect($event->fullAddress)->toBeNull();
 });
 
+test('event hasCoordinates is true when both lat and lng are set', function (): void {
+    $event = Event::factory()->withCoordinates(48.8767, 12.5719)->create();
+
+    expect($event->hasCoordinates)->toBeTrue()
+        ->and($event->latitude)->toBe(48.8767)
+        ->and($event->longitude)->toBe(12.5719);
+});
+
+test('event hasCoordinates is false when coordinates are missing', function (): void {
+    $event = Event::factory()->create([
+        'latitude' => null,
+        'longitude' => null,
+    ]);
+
+    expect($event->hasCoordinates)->toBeFalse();
+});
+
 test('published scope filters published events', function (): void {
     Event::factory()->create(['is_published' => true]);
     Event::factory()->create(['is_published' => false]);

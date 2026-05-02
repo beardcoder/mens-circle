@@ -98,4 +98,15 @@ class EventFactory extends Factory
             'end_time' => $yesterday->copy()->setTime(21, 0),
         ]);
     }
+
+    /**
+     * Set explicit coordinates for the event location (defaults to Straubing center).
+     */
+    public function withCoordinates(float $latitude = 48.8767, float $longitude = 12.5719): static
+    {
+        return $this->state(fn(array $attributes): array => [
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+        ]);
+    }
 }

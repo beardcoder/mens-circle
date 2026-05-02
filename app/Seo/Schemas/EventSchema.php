@@ -35,6 +35,26 @@ final readonly class EventSchema
             ->addressRegion('Bayern')
             ->addressCountry('DE');
 
+        if ($this->event->street !== null && $this->event->street !== '') {
+            $address = $address->streetAddress($this->event->street);
+        }
+
+        if ($this->event->postal_code !== null && $this->event->postal_code !== '') {
+            $address = $address->postalCode($this->event->postal_code);
+        }
+
+        $place = Schema::place()
+            ->name($this->event->location ?? 'Straubing')
+            ->address($address);
+
+        if ($this->event->hasCoordinates) {
+            $place = $place->geo(
+                Schema::geoCoordinates()
+                    ->latitude((float) $this->event->latitude)
+                    ->longitude((float) $this->event->longitude),
+            );
+        }
+
         $organizer = Schema::organization()
             ->setProperty('@id', (string) Uri::of(url('/'))->withFragment('organization'))
             ->name($this->settings->site_name)
@@ -53,11 +73,7 @@ final readonly class EventSchema
             ->setProperty('endDate', $endDate)
             ->setProperty('eventStatus', 'https://schema.org/EventScheduled')
             ->setProperty('eventAttendanceMode', 'https://schema.org/OfflineEventAttendanceMode')
-            ->location(
-                Schema::place()
-                    ->name($this->event->location ?? 'Straubing')
-                    ->address($address),
-            )
+            ->location($place)
             ->organizer($organizer)
             ->performer(
                 Schema::organization()->setProperty('@id', (string) Uri::of(url('/'))->withFragment('organization')),

@@ -304,6 +304,69 @@
       </div>
     </div>
   </section>
+  @if ($event->hasCoordinates)
+    <!-- Event Location Map (Leaflet, lazy-loaded) -->
+    <section class="event-map-section">
+      <div class="container">
+        <div class="event-map__header" data-anim-group>
+          <p class="eyebrow" data-anim="rise">Anfahrt</p>
+          <h2
+            class="section-title section-title--lg event-map__title"
+            data-anim="rise"
+          >
+            So findest du <span class="text-italic">zu uns</span>
+          </h2>
+          @if ($event->fullAddress)
+            <p class="event-map__subtitle" data-anim="rise">{{ $event->fullAddress }}</p>
+          @else
+            <p class="event-map__subtitle" data-anim="rise">{{ $event->location }}</p>
+          @endif
+        </div>
+
+        <div
+          class="event-map"
+          data-event-map
+          data-state="idle"
+          data-lat="{{ $event->latitude }}"
+          data-lng="{{ $event->longitude }}"
+          data-title="{{ $event->location }}"
+          data-address="{{ $event->fullAddress ?? $event->location }}"
+          aria-label="Karte zum Veranstaltungsort"
+        >
+          <div
+            class="event-map__canvas"
+            role="application"
+            aria-label="Interaktive Karte"
+          ></div>
+        </div>
+
+        <div class="event-map__actions">
+          <a
+            href="https://www.openstreetmap.org/?mlat={{ $event->latitude }}&mlon={{ $event->longitude }}#map=17/{{ $event->latitude }}/{{ $event->longitude }}"
+            target="_blank"
+            rel="noopener"
+            class="btn btn--secondary"
+            data-umami-event="map-click"
+            data-umami-event-action="open-osm"
+          >
+            In OpenStreetMap öffnen
+          </a>
+          <a
+            href="https://www.google.com/maps/dir/?api=1&destination={{ $event->latitude }},{{ $event->longitude }}"
+            target="_blank"
+            rel="noopener"
+            class="btn btn--primary"
+            data-umami-event="map-click"
+            data-umami-event-action="get-directions"
+          >
+            Route mit Google Maps
+          </a>
+        </div>
+
+        <p class="event-map__attribution">Karte von <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkenden</p>
+      </div>
+    </section>
+  @endif
   <!-- Event Description Section -->
   <section class="event-about-section">
     <div class="event-about__layout">
@@ -375,4 +438,3 @@
     </div>
   </section>
 @endsection
-
