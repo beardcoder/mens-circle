@@ -36,11 +36,17 @@ use Spatie\Sluggable\SlugOptions;
  * @property ?string $cost_basis
  * @property ?string $description
  * @property ?string $location
+ * @property ?string $street
+ * @property ?string $postal_code
+ * @property ?string $city
+ * @property ?float $latitude
+ * @property ?float $longitude
  * @property int $activeRegistrationsCount
  * @property int $availableSpots
  * @property bool $isFull
  * @property bool $isPast
  * @property ?string $fullAddress
+ * @property bool $hasCoordinates
  */
 #[Fillable([
     'title',
@@ -54,6 +60,8 @@ use Spatie\Sluggable\SlugOptions;
     'street',
     'postal_code',
     'city',
+    'latitude',
+    'longitude',
     'location_details',
     'max_participants',
     'cost_basis',
@@ -163,6 +171,14 @@ class Event extends Model implements HasMedia
         });
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
+    protected function hasCoordinates(): Attribute
+    {
+        return Attribute::make(get: fn(): bool => $this->latitude !== null && $this->longitude !== null);
+    }
+
     public function generateICalContent(): string
     {
         $startDateTime = $this->event_date
@@ -205,6 +221,8 @@ class Event extends Model implements HasMedia
             'start_time' => 'datetime',
             'end_time' => 'datetime',
             'is_published' => 'boolean',
+            'latitude' => 'float',
+            'longitude' => 'float',
         ];
     }
 

@@ -17,6 +17,7 @@ import {
   testimonialForm,
 } from '@/components/forms';
 import { calendarIntegration } from '@/components/calendar';
+import { eventMap } from '@/components/event-map';
 import { nativeAccordion } from '@/components/accordion';
 import { breathingApp } from '@/components/breathing';
 import { scrollAnimations } from '@/components/scroll-animations';
@@ -36,6 +37,9 @@ register('#testimonialForm', testimonialForm());
 
 // Calendar integration
 register('#addToCalendar', calendarIntegration());
+
+// Event location map (Leaflet, lazy-loaded on viewport intersection)
+register('[data-event-map]', eventMap());
 
 // Accordion (FAQ sections)
 register('.faq-section', nativeAccordion());

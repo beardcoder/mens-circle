@@ -58,6 +58,7 @@
 @import url('sections/_whatsapp.css') layer(sections);
 @import url('sections/_cta.css') layer(sections);
 @import url('sections/_event.css') layer(sections);
+@import url('sections/_event-map.css') layer(sections);
 @import url('sections/_no-event.css') layer(sections);
 @import url('sections/_error.css') layer(sections);
 @import url('sections/_legal.css') layer(sections);
