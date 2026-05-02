@@ -159,9 +159,11 @@ class EventResource extends Resource
                                 ->icon(Heroicon::OutlinedMapPin)
                                 ->color('primary')
                                 ->action(static function (Get $get, Set $set, GeocodingService $geocoder): void {
-                                    $street = (string) ($get('street') ?? '');
-                                    $postalCode = (string) ($get('postal_code') ?? '');
-                                    $city = (string) ($get('city') ?? '');
+                                    $toString = static fn(mixed $value): string => is_string($value) ? $value : '';
+
+                                    $street = $toString($get('street'));
+                                    $postalCode = $toString($get('postal_code'));
+                                    $city = $toString($get('city'));
 
                                     $parts = array_filter([
                                         $street,

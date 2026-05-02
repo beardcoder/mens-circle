@@ -25,8 +25,8 @@ class GeocodingService
             return null;
         }
 
-        $appName = (string) config('app.name', 'mens-circle');
-        $appUrl = (string) config('app.url', 'https://example.com');
+        $appName = is_string($name = config('app.name')) ? $name : 'mens-circle';
+        $appUrl = is_string($url = config('app.url')) ? $url : 'https://example.com';
 
         try {
             $response = Http::withHeaders([
@@ -41,8 +41,8 @@ class GeocodingService
                     'limit' => 1,
                     'addressdetails' => 0,
                 ]);
-        } catch (ConnectionException $e) {
-            Log::warning('Geocoding request failed', ['address' => $address, 'error' => $e->getMessage()]);
+        } catch (ConnectionException $connectionException) {
+            Log::warning('Geocoding request failed', ['address' => $address, 'error' => $connectionException->getMessage()]);
 
             return null;
         }
