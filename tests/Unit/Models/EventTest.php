@@ -137,6 +137,18 @@ test('event hasCoordinates is false when coordinates are missing', function (): 
     expect($event->hasCoordinates)->toBeFalse();
 });
 
+test('event hasCoordinates is false when columns are absent from attributes', function (): void {
+    // Simulates the state right after deploying new code but before the
+    // latitude/longitude migration has run on production: under strict models
+    // accessing a missing attribute throws — the accessor must survive.
+    $event = Event::factory()->create();
+    $attributes = $event->getAttributes();
+    unset($attributes['latitude'], $attributes['longitude']);
+    $event->setRawAttributes($attributes, sync: true);
+
+    expect($event->hasCoordinates)->toBeFalse();
+});
+
 test('published scope filters published events', function (): void {
     Event::factory()->create(['is_published' => true]);
     Event::factory()->create(['is_published' => false]);
