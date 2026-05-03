@@ -176,7 +176,11 @@ class Event extends Model implements HasMedia
      */
     protected function hasCoordinates(): Attribute
     {
-        return Attribute::make(get: fn(): bool => $this->latitude !== null && $this->longitude !== null);
+        // Read raw attributes so the accessor survives a deploy where the
+        // latitude/longitude migration hasn't run yet — under strict models
+        // ($model->latitude) would throw MissingAttributeException.
+        return Attribute::make(get: fn(): bool => ($this->attributes['latitude'] ?? null) !== null
+            && ($this->attributes['longitude'] ?? null) !== null);
     }
 
     public function generateICalContent(): string
