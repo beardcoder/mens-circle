@@ -13,17 +13,23 @@
 /* ============================================
    Ambient breathing — used by decorative circles in hero / intro /
    cta / newsletter / whatsapp / event sections.
+
+   Using individual transform properties (`scale`, `rotate`) instead of
+   the `transform` shorthand so these keyframes can be layered on top of
+   an element that uses the `translate` individual property for
+   centering, or that has a second `animation` for scroll-driven parallax.
+   Individual transform properties compose without clobbering each other.
    ============================================ */
 @keyframes breathe {
   0%,
   100% {
     opacity: 0.16;
-    transform: scale(0.92);
+    scale: 0.92;
   }
 
   50% {
     opacity: 0.34;
-    transform: scale(1.12);
+    scale: 1.12;
   }
 }
 
@@ -31,23 +37,43 @@
   0%,
   100% {
     opacity: 0.1;
-    transform: scale(0.94) rotate(-0.4deg);
+    rotate: -0.4deg;
+    scale: 0.94;
   }
 
   50% {
     opacity: 0.28;
-    transform: scale(1.06) rotate(0.6deg);
+    rotate: 0.6deg;
+    scale: 1.06;
   }
 }
 
 /* ============================================
-   Hero — scroll-driven parallax on the background image.
-   Drives `animation-timeline: scroll(root)` on `.hero__bg`.
+   Hero — scroll-driven parallax layers.
+   Three independent layers create genuine depth:
+     hero-bg-drift     → background (most movement, deepest layer)
+     hero-circles-drift → circles container (mid-speed, middle layer)
+     hero-content-drift → text content (barely moves, foreground)
+   All use individual transform properties to compose cleanly with
+   other transforms on the same elements.
    ============================================ */
 @keyframes hero-bg-drift {
   to {
-    opacity: 0.65;
-    transform: translate3d(0, -6%, 0) scale(1.06);
+    opacity: 0.7;
+    scale: 1.08;
+    translate: 0 -8%;
+  }
+}
+
+@keyframes hero-circles-drift {
+  to {
+    translate: 0 -4%;
+  }
+}
+
+@keyframes hero-content-drift {
+  to {
+    translate: 0 -1.5%;
   }
 }
 

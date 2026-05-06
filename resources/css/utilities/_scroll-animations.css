@@ -201,18 +201,42 @@
 }
 
 /* ============================================
-   Hero — scroll-linked parallax on the background only
+   Hero — multi-layer scroll-driven parallax
+
+   Three independent layers create genuine depth. Background drifts
+   most (-8% + 1.08× scale), circles drift at half speed (-4%), and
+   the text content barely moves (-1.5%) to stay readable while still
+   contributing to the layered feel.
+
+   All three use individual transform properties (translate, scale) so
+   the breathing animations on circles (which use the `scale` property)
+   compose cleanly without being overridden.
 
    The decorative circles keep their ambient `breathe` animation defined
-   in `_hero.css`; layering scroll-driven parallax on top would clobber
-   the shorthand `animation` and cancel the breathing pulse.
+   in `_hero.css`. Layering parallax on the *container* (.hero__circles)
+   rather than each individual circle avoids touching the shorthand
+   `animation` on those elements.
    ============================================ */
 @supports (animation-timeline: scroll()) {
   .hero__bg {
     animation: hero-bg-drift linear both;
     animation-timeline: scroll(root);
     animation-range: 0 100vh;
-    will-change: transform, opacity;
+    will-change: translate, scale, opacity;
+  }
+
+  .hero__circles {
+    animation: hero-circles-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100vh;
+    will-change: translate;
+  }
+
+  .hero__content {
+    animation: hero-content-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 80vh;
+    will-change: translate;
   }
 }
 
@@ -230,12 +254,16 @@
   }
 
   .hero__bg,
+  .hero__circles,
+  .hero__content,
   .hero__circle--1,
   .hero__circle--2,
   .hero__circle--3,
   .hero__circle--4 {
     filter: none;
     transform: none;
+    scale: none;
+    translate: none;
     animation: none;
   }
 

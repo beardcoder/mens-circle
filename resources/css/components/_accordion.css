@@ -157,20 +157,16 @@
 }
 
 /* ============================================
-   Content — height animates via interpolate-size
+   Content — height/opacity animated by JS (WAAPI)
+
+   JS intercepts every summary click, uses Element.animate() to drive a
+   smooth height + opacity transition in both open and close directions.
+   CSS only supplies `overflow: hidden` so the content is clipped during
+   the JS-managed transition; JS removes that restriction once the
+   animation completes so the panel reflows naturally (e.g. on resize).
    ============================================ */
 .accordion-item__content {
-  block-size: 0;
   overflow: hidden;
-  opacity: 0;
-  transition:
-    block-size var(--duration-slow) var(--ease-settle),
-    opacity var(--duration-normal) var(--ease-settle);
-}
-
-.accordion-item[open] > .accordion-item__content {
-  block-size: auto;
-  opacity: 1;
 }
 
 .accordion-item__body {
@@ -207,14 +203,8 @@
     transition: none;
   }
 
-  .accordion-item[open] > .accordion-item__content {
-    block-size: auto;
-    opacity: 1;
-  }
-
-  .accordion-item:not([open]) > .accordion-item__content {
-    display: none;
-  }
+  /* JS checks prefers-reduced-motion and skips WAAPI; it toggles
+     details.open directly without animating content height/opacity. */
 }
 
 /* ============================================
@@ -222,8 +212,7 @@
    ============================================ */
 .no-js {
   .accordion-item__content {
-    block-size: auto;
-    opacity: 1;
+    overflow: visible;
   }
 
   .accordion-item:not([open]) > .accordion-item__content {
