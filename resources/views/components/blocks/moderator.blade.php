@@ -13,6 +13,10 @@
 @endphp
 
 <section class="section moderator-section" id="moderator">
+  <span class="moderator__watermark" aria-hidden="true">BEGLEITER</span>
+  <span class="story-chapter story-chapter--end" aria-hidden="true">
+    Kapitel 03 / Begleitung
+  </span>
   <div class="container">
     <div class="moderator__layout">
       <div class="moderator__photo-wrapper" data-anim="slide-right">

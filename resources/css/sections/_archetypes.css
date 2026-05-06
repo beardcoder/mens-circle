@@ -4,8 +4,14 @@
  */
 
 .archetypes-section {
+  position: relative;
   overflow: hidden;
-  background: var(--bg-secondary);
+  background: linear-gradient(
+    180deg,
+    var(--bg-secondary) 0%,
+    color-mix(in oklch, var(--color-parchment) 72%, var(--color-sand-light))
+      100%
+  );
 }
 
 /* Header uses shared `.section-header` + `.section-title` + `.section-intro`
@@ -15,23 +21,30 @@
   position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-block: 1px solid var(--border-light);
+  gap: clamp(0.8rem, 1.6vw, 1.15rem);
 }
 
 .archetype-card {
   position: relative;
   min-block-size: 15rem;
-  padding: var(--space-lg) var(--space-md);
+  padding: clamp(1.35rem, 3vw, 2.3rem);
   overflow: hidden;
-  border-inline-start: 1px solid var(--border-light);
-}
-
-.archetype-card:nth-child(odd) {
-  border-inline-start: none;
-}
-
-.archetype-card:nth-child(n + 3) {
-  border-block-start: 1px solid var(--border-light);
+  background:
+    radial-gradient(
+      circle at 86% 18%,
+      color-mix(in oklch, var(--accent-primary) 10%, transparent) 0 8rem,
+      transparent 18rem
+    ),
+    color-mix(in oklch, var(--color-bone) 62%, transparent);
+  border: 1px solid
+    color-mix(in oklch, var(--color-earth-warm) 15%, transparent);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 20px 48px -40px
+    color-mix(in oklch, var(--color-earth-deep) 50%, transparent);
+  transition:
+    border-color var(--motion-standard),
+    box-shadow var(--motion-standard),
+    transform var(--motion-quick);
 }
 
 .archetype-card:last-child:nth-child(odd) {
@@ -42,7 +55,7 @@
   position: relative;
   z-index: 2;
   display: grid;
-  gap: var(--space-xs);
+  gap: 0.7rem;
   padding-inline-end: clamp(4rem, 9vw, 8rem);
 }
 
@@ -52,7 +65,10 @@
   inset-inline-end: clamp(-5.5rem, -4.2vw, -2.6rem);
   z-index: 1;
   pointer-events: none;
-  opacity: 0.16;
+  opacity: 0.13;
+  transition:
+    opacity var(--motion-standard),
+    transform var(--motion-standard);
 }
 
 .archetype-card__background-icon svg {
@@ -67,7 +83,7 @@
   font-size: clamp(1.56rem, 2.2vw, 1.98rem);
   line-height: 1.15;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .archetype-card__description {
@@ -76,6 +92,17 @@
   font-size: var(--text-section-body);
   line-height: var(--leading-relaxed);
   color: var(--text-secondary);
+}
+
+.archetype-card:hover {
+  border-color: color-mix(in oklch, var(--accent-primary) 34%, transparent);
+  box-shadow: var(--shadow-ritual);
+  transform: translateY(-3px);
+}
+
+.archetype-card:hover .archetype-card__background-icon {
+  opacity: 0.2;
+  transform: translateX(-0.35rem);
 }
 
 .archetype-card--warrior .archetype-card__background-icon svg {
@@ -105,16 +132,6 @@
 
   .archetype-card {
     min-block-size: auto;
-    border-block-start: 1px solid var(--border-light);
-    border-inline-start: none;
-  }
-
-  .archetype-card:first-child {
-    border-block-start: none;
-  }
-
-  .archetype-card:last-child:nth-child(odd) {
-    grid-column: auto;
   }
 }
 

@@ -45,6 +45,12 @@ export const navigation = defineComponent<NavigationOptions>(
       );
     };
 
+    const focusFirstMenuItem = (): void => {
+      const firstLink = ctx.el.querySelector<HTMLElement>(o.linkSelector);
+
+      firstLink?.focus({ preventScroll: true });
+    };
+
     const open = (): void => {
       state.scrollPosition = window.scrollY;
       state.isOpen = true;
@@ -55,6 +61,7 @@ export const navigation = defineComponent<NavigationOptions>(
       document.body.style.top = `-${state.scrollPosition}px`;
 
       updateAriaAttributes(true);
+      window.setTimeout(focusFirstMenuItem, 120);
     };
 
     const close = (options: { restoreScroll?: boolean } = {}): void => {
@@ -76,6 +83,7 @@ export const navigation = defineComponent<NavigationOptions>(
       }
 
       updateAriaAttributes(false);
+      navToggle.focus({ preventScroll: true });
     };
 
     const toggle = (): void => {

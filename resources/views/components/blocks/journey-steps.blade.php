@@ -33,6 +33,9 @@
   id="reise"
   aria-labelledby="journey-title"
 >
+  <span class="story-chapter story-chapter--on-dark" aria-hidden="true">
+    Kapitel 04 / Die Schwelle
+  </span>
   <div class="container">
     <div class="section-header section-header--on-dark" data-anim-group>
       @if (!empty($data['eyebrow']))

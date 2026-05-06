@@ -1,135 +1,237 @@
 /**
  * Button Components
- * Modern, accessible buttons
+ * Confident ritual-inspired buttons with stable dimensions and accessible states.
  */
 
-/* ============================================
-   Base Button Styles
-   ============================================ */
 .btn {
-  --btn-bg: var(--accent-primary);
+  --btn-bg: var(--surface-smoke);
   --btn-color: var(--color-bone);
-  --btn-border: transparent;
-  --btn-hover-bg: var(--bg-dark);
-  --btn-hover-color: var(--color-bone);
-  --btn-shadow: var(--shadow-md);
-  --btn-shadow-hover:
-    var(--shadow-xl),
-    0 0 24px color-mix(in oklch, var(--accent-primary) 18%, transparent);
+  --btn-border: color-mix(in oklch, var(--accent-primary) 34%, transparent);
+  --btn-shadow: var(--shadow-ritual);
+  --btn-glow: color-mix(in oklch, var(--accent-primary) 0%, transparent);
+  --btn-padding-block: 0.92rem;
+  --btn-padding-inline: 1.45rem;
 
   position: relative;
   display: inline-flex;
-  gap: 0.75rem;
+  gap: 0.72rem;
   align-items: center;
   justify-content: center;
-  padding-block: 1rem;
-  padding-inline: 2rem;
+  min-block-size: 3rem;
+  padding-block: var(--btn-padding-block);
+  padding-inline: var(--btn-padding-inline);
+  overflow: hidden;
   font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 700;
   color: var(--btn-color);
+  text-align: center;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
   background: var(--btn-bg);
-  border: 1.5px solid var(--btn-border);
+  border: 1px solid var(--btn-border);
   border-radius: var(--radius-full);
   box-shadow: var(--btn-shadow);
+  isolation: isolate;
+  transform: translateY(0);
   transition:
-    background-color var(--motion-standard),
     color var(--motion-standard),
+    background var(--motion-standard),
     border-color var(--motion-standard),
+    box-shadow var(--motion-standard),
     transform var(--motion-quick),
-    box-shadow var(--motion-standard);
+    opacity var(--motion-quick);
+}
+
+.btn::before,
+.btn::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: '';
+  border-radius: inherit;
+  transition:
+    opacity var(--motion-standard),
+    transform var(--motion-standard);
+}
+
+.btn::before {
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0 28%,
+      color-mix(in oklch, white 28%, transparent) 42%,
+      transparent 58% 100%
+    ),
+    radial-gradient(circle at 50% 0%, var(--btn-glow) 0%, transparent 62%);
+  opacity: 0;
+  transform: translateX(-22%);
+}
+
+.btn::after {
+  border: 1px solid color-mix(in oklch, white 16%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in oklch, white 24%, transparent);
+  opacity: 0.72;
 }
 
 .btn:hover {
-  color: var(--btn-hover-color);
-  background: var(--btn-hover-bg);
-  box-shadow: var(--btn-shadow-hover);
-  transform: translateY(-1px);
+  border-color: color-mix(in oklch, var(--accent-primary) 56%, white);
+  box-shadow:
+    var(--btn-shadow),
+    0 12px 34px -18px
+      color-mix(in oklch, var(--accent-primary) 56%, transparent);
+  transform: translateY(-2px);
+}
+
+.btn:hover::before {
+  opacity: 1;
+  transform: translateX(18%);
 }
 
 .btn:active {
   box-shadow: var(--shadow-sm);
-  transform: translateY(0);
-  transition-duration: var(--duration-fast);
+  transform: translateY(0) scale(0.99);
 }
 
 .btn:focus-visible {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 3px;
+  outline: 2px solid color-mix(in oklch, var(--accent-primary) 84%, white);
+  outline-offset: 4px;
+  box-shadow: var(--btn-shadow), var(--focus-ring-strong);
 }
 
 .btn:disabled,
 .btn[aria-disabled='true'] {
   pointer-events: none;
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.52;
+  filter: saturate(0.75);
+  transform: none;
 }
 
 .btn svg {
   flex-shrink: 0;
-  inline-size: 1em;
-  block-size: 1em;
+  inline-size: 1.05em;
+  block-size: 1.05em;
 }
 
-/* ============================================
-   Button Variants
-   ============================================ */
-
-/* Primary (default) */
 .btn--primary {
   --btn-bg: linear-gradient(
     180deg,
-    color-mix(in oklch, var(--accent-primary) 96%, white) 0%,
-    var(--accent-primary) 100%
+    color-mix(in oklch, var(--accent-ember) 94%, white) 0%,
+    var(--accent-primary) 58%,
+    color-mix(in oklch, var(--accent-primary) 74%, var(--color-earth-deep)) 100%
   );
   --btn-color: var(--color-bone);
-  --btn-hover-bg: linear-gradient(
-    180deg,
-    var(--color-earth-dark) 0%,
-    var(--color-earth-deep) 100%
-  );
-  --btn-hover-color: var(--color-bone);
+  --btn-border: color-mix(in oklch, var(--accent-primary) 78%, white);
+  --btn-glow: color-mix(in oklch, var(--accent-primary) 24%, transparent);
 }
 
-/* Secondary (outlined) */
-.btn--secondary {
-  --btn-bg: transparent;
+.btn--secondary,
+.btn--outline {
+  --btn-bg: color-mix(in oklch, var(--surface-glass) 74%, transparent);
   --btn-color: var(--text-primary);
-  --btn-border: var(--text-primary);
-  --btn-hover-bg: var(--text-primary);
-  --btn-hover-color: var(--bg-primary);
+  --btn-border: color-mix(in oklch, var(--color-earth-warm) 32%, transparent);
+  --btn-shadow:
+    0 1px 0 color-mix(in oklch, white 44%, transparent) inset,
+    0 18px 34px -28px
+      color-mix(in oklch, var(--color-earth-deep) 46%, transparent);
+}
+
+.btn--secondary:hover,
+.btn--outline:hover {
+  --btn-bg: color-mix(
+    in oklch,
+    var(--color-earth-deep) 92%,
+    var(--accent-primary)
+  );
+  --btn-color: var(--color-bone);
+
+  color: var(--color-bone);
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-color: currentcolor;
+  --btn-border: transparent;
   --btn-shadow: none;
+
+  min-block-size: 2.7rem;
+  padding-inline: 0.95rem;
+  box-shadow: none;
 }
 
-/* ============================================
-   Button Sizes
-   ============================================ */
+.btn--ghost::after {
+  opacity: 0;
+}
+
+.btn--ghost:hover {
+  background: color-mix(in oklch, currentcolor 8%, transparent);
+  border-color: color-mix(in oklch, currentcolor 12%, transparent);
+  box-shadow: none;
+}
+
+.btn--link {
+  --btn-bg: transparent;
+  --btn-color: var(--accent-primary);
+  --btn-border: transparent;
+  --btn-shadow: none;
+
+  min-block-size: auto;
+  padding: 0;
+  text-transform: none;
+  letter-spacing: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.btn--link::before,
+.btn--link::after {
+  display: none;
+}
+
+.btn--link:hover {
+  color: var(--color-earth-warm);
+  box-shadow: none;
+  transform: none;
+}
+
 .btn--large {
-  padding-block: 1.25rem;
-  padding-inline: 2.5rem;
-  font-size: 0.85rem;
+  --btn-padding-block: 1.08rem;
+  --btn-padding-inline: clamp(1.5rem, 2vw, 2.25rem);
+
+  min-block-size: 3.45rem;
+  font-size: 0.82rem;
 }
 
-/* ============================================
-   Social / Icon Buttons
-   ============================================ */
+.btn--icon,
+.icon-btn {
+  inline-size: 2.8rem;
+  min-inline-size: 2.8rem;
+  block-size: 2.8rem;
+  min-block-size: 2.8rem;
+  padding: 0;
+  border-radius: var(--radius-full);
+}
+
 .social-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: 40px;
-  block-size: 40px;
+  inline-size: 42px;
+  block-size: 42px;
   color: var(--color-sand);
-  background: color-mix(in oklch, var(--color-sand) 10%, transparent);
+  background: color-mix(in oklch, var(--color-sand) 9%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
   border-radius: var(--radius-full);
+  box-shadow: inset 0 1px 0 color-mix(in oklch, white 8%, transparent);
   transition:
     background-color var(--motion-quick),
     color var(--motion-quick),
+    border-color var(--motion-quick),
     transform var(--motion-quick),
     box-shadow var(--motion-quick);
 }
@@ -137,15 +239,18 @@
 .social-icon:hover {
   color: var(--text-on-dark);
   background: var(--accent-primary);
+  border-color: color-mix(in oklch, var(--accent-primary) 80%, white);
   box-shadow:
     0 2px 6px color-mix(in oklch, var(--color-ink) 10%, transparent),
-    0 6px 16px color-mix(in oklch, var(--accent-primary) 28%, transparent);
-  transform: translateY(-2px) scale(1.04);
+    0 10px 24px -12px
+      color-mix(in oklch, var(--accent-primary) 45%, transparent);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .social-icon:focus-visible {
   outline: 2px solid var(--accent-primary);
   outline-offset: 3px;
+  box-shadow: var(--focus-ring);
 }
 
 .social-icon:active {
@@ -155,4 +260,18 @@
 .social-icon svg {
   inline-size: 20px;
   block-size: 20px;
+}
+
+@media (width <= 480px) {
+  .btn {
+    inline-size: 100%;
+    white-space: normal;
+  }
+
+  .btn--icon,
+  .icon-btn,
+  .social-icon,
+  .breathing-app__start {
+    inline-size: var(--button-icon-size, 2.8rem);
+  }
 }

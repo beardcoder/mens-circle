@@ -8,15 +8,10 @@
    ============================================ */
 .testimonial-form-hero {
   position: relative;
-  block-size: 100vh;
-  min-block-size: 50vh;
+  block-size: 82svh;
+  min-block-size: 38rem;
   color: var(--text-on-dark);
-  background: linear-gradient(
-    135deg,
-    var(--color-earth-deep) 0%,
-    color-mix(in oklch, var(--color-earth-deep) 90%, var(--color-terracotta))
-      100%
-  );
+  background: var(--surface-ritual);
 }
 
 .testimonial-form-hero .hero__bg::before {
@@ -32,10 +27,27 @@
    Form Section
    ============================================ */
 .testimonial-form-section {
-  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-parchment);
+}
+
+.testimonial-form-section::before {
+  position: absolute;
+  inset-block-start: -9rem;
+  inset-inline-end: -8rem;
+  inline-size: clamp(18rem, 36vw, 34rem);
+  aspect-ratio: 1;
+  pointer-events: none;
+  content: '';
+  border: 1px solid color-mix(in oklch, var(--accent-primary) 18%, transparent);
+  border-radius: 50%;
+  opacity: 0.75;
 }
 
 .testimonial-form__wrapper {
+  position: relative;
+  z-index: 1;
   max-inline-size: 700px;
   margin-inline: auto;
 }
@@ -67,15 +79,23 @@
    Form Styles
    ============================================ */
 .testimonial-form {
-  background: var(--bg-elevated);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  padding: clamp(1rem, 3vw, 2rem);
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in oklch, var(--color-bone) 86%, transparent),
+      color-mix(in oklch, var(--color-parchment) 72%, transparent)
+    ),
+    var(--surface-card);
+  border: 1px solid
+    color-mix(in oklch, var(--color-earth-warm) 18%, transparent);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-ritual);
 }
 
 /* Form groups */
 .form__group {
-  position: relative;
-  margin-block-end: var(--space-lg);
+  margin-block-end: var(--space-md);
 }
 
 .form__group:last-of-type {
@@ -101,101 +121,23 @@
 }
 
 /* Inputs */
-.form__input,
-.form__textarea {
-  inline-size: 100%;
-  padding: var(--space-sm) var(--space-md);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--text-primary);
-  background: var(--bg-primary);
-  border: 2px solid var(--border-medium);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  transition:
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    background-color var(--transition-fast);
-}
-
-.form__input::placeholder,
-.form__textarea::placeholder {
-  color: var(--text-muted);
-}
-
-.form__textarea {
-  min-block-size: 150px;
-  resize: vertical;
-}
-
-.form__input:hover,
-.form__textarea:hover {
-  border-color: var(--border-dark);
-}
-
-.form__input:focus-visible,
-.form__textarea:focus-visible {
-  outline: none;
-  background: var(--bg-primary);
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px
-    color-mix(in oklch, var(--accent-primary) 15%, transparent);
-}
-
-/* Hints */
-.form__hint {
-  display: block;
-  margin-block-start: var(--space-xs);
-  font-size: 0.875rem;
-  color: var(--text-muted);
-}
 
 /* Character counter */
 .form__counter {
-  position: absolute;
-  inset-block-end: calc(var(--space-sm) + var(--space-xs));
-  inset-inline-end: var(--space-md);
+  justify-self: end;
+  padding-block: 0.16rem;
+  padding-inline: 0.45rem;
+  margin-block-start: -0.35rem;
   font-size: 0.8125rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   pointer-events: none;
+  background: color-mix(in oklch, var(--color-bone) 54%, transparent);
+  border-radius: var(--radius-full);
 }
 
 /* Checkbox */
 .form__group--checkbox {
-  margin-block-start: var(--space-xl);
-}
-
-.form__checkbox-label {
-  display: flex;
-  gap: var(--space-sm);
-  align-items: flex-start;
-  cursor: pointer;
-}
-
-.form__checkbox {
-  flex-shrink: 0;
-  inline-size: 20px;
-  block-size: 20px;
-  margin-block-start: 2px;
-  accent-color: var(--accent-primary);
-  cursor: pointer;
-}
-
-.form__checkbox-text {
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--text-primary);
-}
-
-.form__checkbox-text .link {
-  color: var(--accent-primary);
-  text-decoration: underline;
-  transition: opacity var(--transition-fast);
-}
-
-.form__checkbox-text .link:hover {
-  opacity: 0.8;
+  margin-block-start: var(--space-lg);
 }
 
 /* Messages */
@@ -205,6 +147,10 @@
   font-size: 0.9375rem;
   line-height: 1.6;
   border-radius: var(--radius-md);
+}
+
+.form__message[hidden] {
+  display: none;
 }
 
 .form__message.success {

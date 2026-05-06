@@ -10,7 +10,13 @@
   position: relative;
   overflow: hidden;
   text-align: center;
-  background: var(--bg-tertiary);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      color-mix(in oklch, var(--accent-primary) 10%, transparent) 0 15rem,
+      transparent 34rem
+    ),
+    var(--bg-tertiary);
 }
 
 /* Decorative circles */
@@ -29,7 +35,7 @@
 .cta-section::before {
   inline-size: 50vw;
   block-size: 50vw;
-  opacity: 0.3;
+  opacity: 0.22;
   animation: breathe-slow 24s var(--ease-organic) infinite;
 }
 
@@ -47,7 +53,14 @@
   position: relative;
   z-index: 1;
   max-inline-size: 700px;
+  padding: clamp(1.4rem, 4vw, 3rem);
   margin-inline: auto;
+  background: color-mix(in oklch, var(--color-bone) 50%, transparent);
+  border: 1px solid
+    color-mix(in oklch, var(--color-earth-warm) 14%, transparent);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-ritual);
+  backdrop-filter: blur(10px);
 }
 
 /* Eyebrow + .section-title use the shared rhythm. CTA only adds the

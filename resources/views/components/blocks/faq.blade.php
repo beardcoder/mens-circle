@@ -23,6 +23,7 @@
 @endif
 
 <section class="section section--large faq-section" id="faq">
+  <span class="story-chapter" aria-hidden="true">Kapitel 06 / Vertrauen</span>
   <div class="container">
     <div
       class="section-header section-header--start faq__header"

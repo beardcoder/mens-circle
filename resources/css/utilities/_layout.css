@@ -11,6 +11,7 @@
   max-inline-size: var(--container-width);
   padding-inline: var(--space-md);
   margin-inline: auto;
+  container-type: inline-size;
 }
 
 .container--narrow {

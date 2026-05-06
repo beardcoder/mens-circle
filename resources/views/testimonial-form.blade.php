@@ -144,11 +144,7 @@
             </label>
           </div>
 
-          <div
-            id="formMessage"
-            class="form__message"
-            style="display: none"
-          ></div>
+          <div id="formMessage" class="form__message" hidden></div>
 
           <div class="form__actions">
             <button type="submit" class="btn btn--primary" id="submitBtn">

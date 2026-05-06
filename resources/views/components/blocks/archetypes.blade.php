@@ -23,6 +23,9 @@
     id="archetypen"
     aria-labelledby="archetypes-title"
   >
+    <span class="story-chapter story-chapter--end" aria-hidden="true">
+      Kapitel 05 / Archetypen
+    </span>
     <div class="container">
       <div class="section-header" data-anim-group>
         @if (!empty($data['eyebrow']))

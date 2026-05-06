@@ -36,6 +36,17 @@ body {
   font-size: var(--text-base);
   line-height: 1.7;
   color: var(--text-primary);
+  background:
+    radial-gradient(
+      circle at 12% -8%,
+      color-mix(in oklch, var(--accent-primary) 8%, transparent) 0 18rem,
+      transparent 38rem
+    ),
+    linear-gradient(
+      180deg,
+      var(--bg-primary) 0%,
+      color-mix(in oklch, var(--bg-secondary) 72%, var(--bg-primary)) 100%
+    );
   background-color: var(--bg-primary);
 }
 
@@ -113,7 +124,7 @@ textarea:not([rows]) {
 
 /* Anything that has been anchored to should have extra scroll margin */
 :target {
-  scroll-margin-block: 5ex;
+  scroll-margin-block: calc(5ex + 5rem);
 }
 
 /* Remove default button styles */
@@ -131,8 +142,9 @@ fieldset {
 
 /* Focus styles */
 :focus-visible {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 3px;
+  outline: 2px solid color-mix(in oklch, var(--accent-primary) 86%, white);
+  outline-offset: 4px;
+  box-shadow: var(--focus-ring);
   transition: outline-offset var(--transition-fast);
 }
 

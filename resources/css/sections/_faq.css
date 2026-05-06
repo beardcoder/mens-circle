@@ -8,10 +8,13 @@
    so the grid is one level shallower in the DOM.
    ============================================ */
 .faq-section {
+  position: relative;
   overflow: hidden;
-  background: var(--bg-primary);
+  background: var(--surface-parchment);
 
   & > .container {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 0.35fr 0.65fr;
     gap: var(--space-xl);
@@ -47,4 +50,5 @@
 .faq__list {
   display: flex;
   flex-direction: column;
+  gap: 0;
 }
