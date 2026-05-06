@@ -1,41 +1,69 @@
 /**
  * Button Components
- * Modern, accessible buttons
+ *
+ * Design-token-driven button system. All sizing, color and spacing
+ * values are driven by CSS custom properties so variants only override
+ * the tokens they need to change.
+ *
+ * Variants:  .btn--primary  .btn--secondary  .btn--ghost
+ * Sizes:     .btn--sm  .btn--large
+ * Context:   .btn--on-dark  (secondary / ghost on dark backgrounds)
+ *
+ * Loading sub-elements (add inside any .btn):
+ *   .btn__text   — visible label; hidden while loading
+ *   .btn__loader — spinner wrapper; shown while loading
  */
 
 /* ============================================
-   Base Button Styles
+   Base Button
    ============================================ */
 .btn {
+  /* ── Spacing tokens ──────────────────────── */
+  --btn-gap: var(--space-xs);
+  --btn-pad-block: var(--space-sm);
+  --btn-pad-inline: var(--space-md);
+
+  /* ── Typography tokens ───────────────────── */
+  --btn-font-size: 0.8rem;
+  --btn-text-transform: uppercase;
+  --btn-letter-spacing: 0.1em;
+
+  /* ── Shape token ─────────────────────────── */
+  --btn-radius: var(--radius-full);
+  --btn-border-width: 1.5px;
+
+  /* ── Color tokens (default = primary-like) ── */
   --btn-bg: var(--accent-primary);
   --btn-color: var(--color-bone);
-  --btn-border: transparent;
+  --btn-border-color: transparent;
+  --btn-shadow: var(--shadow-md);
+
+  /* ── Hover color tokens ──────────────────── */
   --btn-hover-bg: var(--bg-dark);
   --btn-hover-color: var(--color-bone);
-  --btn-shadow: var(--shadow-md);
-  --btn-shadow-hover:
+  --btn-hover-shadow:
     var(--shadow-xl),
     0 0 24px color-mix(in oklch, var(--accent-primary) 18%, transparent);
 
   position: relative;
   display: inline-flex;
-  gap: 0.75rem;
+  gap: var(--btn-gap);
   align-items: center;
   justify-content: center;
-  padding-block: 1rem;
-  padding-inline: 2rem;
+  padding-block: var(--btn-pad-block);
+  padding-inline: var(--btn-pad-inline);
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: var(--btn-font-size);
   font-weight: 600;
   color: var(--btn-color);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: var(--btn-text-transform);
+  letter-spacing: var(--btn-letter-spacing);
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
   background: var(--btn-bg);
-  border: 1.5px solid var(--btn-border);
-  border-radius: var(--radius-full);
+  border: var(--btn-border-width) solid var(--btn-border-color);
+  border-radius: var(--btn-radius);
   box-shadow: var(--btn-shadow);
   transition:
     background-color var(--motion-standard),
@@ -48,7 +76,7 @@
 .btn:hover {
   color: var(--btn-hover-color);
   background: var(--btn-hover-bg);
-  box-shadow: var(--btn-shadow-hover);
+  box-shadow: var(--btn-hover-shadow);
   transform: translateY(-1px);
 }
 
@@ -77,10 +105,10 @@
 }
 
 /* ============================================
-   Button Variants
+   Variants
    ============================================ */
 
-/* Primary (default) */
+/* Primary — gradient fill, earth-dark on hover */
 .btn--primary {
   --btn-bg: linear-gradient(
     180deg,
@@ -96,23 +124,96 @@
   --btn-hover-color: var(--color-bone);
 }
 
-/* Secondary (outlined) */
+/* Secondary — transparent with border, fills on hover */
 .btn--secondary {
   --btn-bg: transparent;
   --btn-color: var(--text-primary);
-  --btn-border: var(--text-primary);
+  --btn-border-color: var(--text-primary);
   --btn-hover-bg: var(--text-primary);
   --btn-hover-color: var(--bg-primary);
   --btn-shadow: none;
+  --btn-hover-shadow: none;
+}
+
+/* Ghost — text-only, no border or shadow */
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-color: var(--text-secondary);
+  --btn-border-color: transparent;
+  --btn-shadow: none;
+  --btn-hover-bg: color-mix(in oklch, var(--text-primary) 6%, transparent);
+  --btn-hover-color: var(--text-primary);
+  --btn-hover-shadow: none;
+}
+
+.btn--ghost:hover {
+  /* Ghost never lifts — suppress the translateY from the base hover rule. */
+  transform: none;
 }
 
 /* ============================================
-   Button Sizes
+   Context modifier: on-dark
+   Adjusts secondary / ghost for placement on dark section backgrounds.
+   Combine: .btn--secondary.btn--on-dark  /  .btn--ghost.btn--on-dark
    ============================================ */
+.btn--on-dark {
+  --btn-color: var(--text-on-dark);
+  --btn-border-color: color-mix(in oklch, var(--color-sand) 20%, transparent);
+  --btn-bg: color-mix(in oklch, var(--color-sand) 8%, transparent);
+  --btn-hover-bg: color-mix(in oklch, var(--color-sand) 14%, transparent);
+  --btn-hover-color: var(--text-on-dark);
+  --btn-hover-shadow: none;
+}
+
+.btn--ghost.btn--on-dark {
+  --btn-bg: transparent;
+  --btn-border-color: transparent;
+  --btn-color: color-mix(in oklch, var(--text-on-dark) 60%, transparent);
+  --btn-hover-bg: transparent;
+  --btn-hover-color: var(--text-on-dark);
+}
+
+/* ============================================
+   Sizes
+   ============================================ */
+.btn--sm {
+  --btn-pad-block: var(--space-xs);
+  --btn-pad-inline: var(--space-sm);
+  --btn-font-size: 0.7rem;
+}
+
 .btn--large {
-  padding-block: 1.25rem;
-  padding-inline: 2.5rem;
-  font-size: 0.85rem;
+  --btn-pad-block: 1.25rem;
+  --btn-pad-inline: 2.5rem;
+  --btn-font-size: 0.85rem;
+}
+
+/* ============================================
+   Loading state
+   JS sets `.btn--loading` (or `disabled`) on the button while a
+   request is in flight. `btn__text` fades out; `btn__loader` appears.
+   ============================================ */
+.btn__text {
+  transition: opacity var(--motion-quick);
+}
+
+.btn__loader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn--loading {
+  pointer-events: none;
+  cursor: wait;
+
+  .btn__text {
+    opacity: 0;
+  }
+
+  .btn__loader {
+    position: absolute;
+  }
 }
 
 /* ============================================

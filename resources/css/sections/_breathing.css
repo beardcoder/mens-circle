@@ -451,33 +451,16 @@
   margin-inline-start: 3px;
 }
 
-.breathing-app__controls .btn--secondary {
-  color: var(--text-on-dark);
-  background: color-mix(in oklch, var(--color-sand) 8%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 20%, transparent);
+/* .btn--secondary and .btn--ghost on dark: color overrides come from
+   the global .btn--on-dark modifier (see _buttons.css). Only keep the
+   breathing-specific sizing and backdrop-filter here. */
+.breathing-app__controls .btn--on-dark {
   backdrop-filter: blur(8px);
 }
 
-.breathing-app__controls .btn--secondary:hover {
-  color: var(--text-on-dark);
-  background: color-mix(in oklch, var(--color-sand) 14%, transparent);
-  border-color: color-mix(in oklch, var(--color-sand) 30%, transparent);
-}
-
-.breathing-app__controls .btn--ghost {
+.breathing-app__controls .btn--ghost.btn--on-dark {
   padding-inline: var(--space-sm);
   font-size: 0.75rem;
-  color: color-mix(in oklch, var(--text-on-dark) 60%, transparent);
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-.breathing-app__controls .btn--ghost:hover {
-  color: var(--text-on-dark);
-  background: transparent;
-  box-shadow: none;
-  transform: none;
 }
 
 /* ============================================

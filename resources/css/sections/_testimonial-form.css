@@ -231,11 +231,7 @@
   min-inline-size: 200px;
 }
 
-.btn__loader {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
+/* .btn__loader is defined in components/_buttons.css. */
 
 .spinner {
   animation: rotate 1s linear infinite;

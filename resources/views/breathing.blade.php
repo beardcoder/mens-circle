@@ -135,7 +135,7 @@
             </button>
             <button
               type="button"
-              class="btn btn--secondary"
+              class="btn btn--secondary btn--on-dark"
               data-element="hold"
               hidden
               data-umami-event="breathing-resume"
@@ -144,7 +144,7 @@
             </button>
             <button
               type="button"
-              class="btn btn--ghost"
+              class="btn btn--ghost btn--on-dark"
               data-element="reset"
               data-umami-event="breathing-reset"
             >

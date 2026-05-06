@@ -112,34 +112,29 @@
   }
 }
 
+/* ============================================
+   WhatsApp join button
+   Extends the .btn system — add `btn btn--large whatsapp__button` in
+   the Blade. Only overrides the color/shadow tokens specific to the
+   WhatsApp green brand colour; layout and behaviour come from .btn.
+   ============================================ */
+
+/* WhatsApp brand colours */
 .whatsapp__button {
-  display: inline-flex;
-  gap: var(--space-xs);
-  align-items: center;
-  padding: var(--space-sm) var(--space-md);
-  font-family: var(--font-body);
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: white;
-  text-decoration: none;
-  background: oklch(60% 0.15 145deg);
-  border-radius: var(--radius-full, 9999px);
-  box-shadow:
+  --btn-bg: oklch(60% 0.15 145deg);
+  --btn-color: white;
+  --btn-border-color: transparent;
+  --btn-text-transform: none;
+  --btn-letter-spacing: 0;
+  --btn-font-size: 1.125rem;
+  --btn-shadow:
     0 4px 14px oklch(40% 0.1 145deg / 30%),
     0 2px 6px oklch(40% 0.1 145deg / 20%);
-  transition: all var(--transition-medium);
-}
-
-.whatsapp__button:hover {
-  background: oklch(55% 0.16 145deg);
-  box-shadow:
+  --btn-hover-bg: oklch(55% 0.16 145deg);
+  --btn-hover-color: white;
+  --btn-hover-shadow:
     0 6px 20px oklch(40% 0.1 145deg / 40%),
     0 4px 10px oklch(40% 0.1 145deg / 30%);
-  transform: translateY(-2px);
-}
-
-.whatsapp__button:active {
-  transform: translateY(0);
 }
 
 .whatsapp__icon {
