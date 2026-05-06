@@ -24,10 +24,6 @@ const supportsNativeScrollTimeline = (): boolean =>
   typeof CSS.supports === 'function' &&
   CSS.supports('animation-timeline', 'view()');
 
-const prefersReducedMotion = (): boolean =>
-  typeof globalThis.matchMedia === 'function' &&
-  globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 export const scrollAnimations = defineComponent<ScrollAnimationsOptions>(
   {
     selector: '[data-anim]',
@@ -46,7 +42,7 @@ export const scrollAnimations = defineComponent<ScrollAnimationsOptions>(
     // If the browser supports native scroll-driven animations, the CSS handles
     // everything. Mark targets visible so the JS-driven baseline (hidden) is
     // ignored and the native animation can take over cleanly.
-    if (supportsNativeScrollTimeline() || prefersReducedMotion()) {
+    if (supportsNativeScrollTimeline()) {
       targets.forEach((el) => el.classList.add(o.visibleClass));
 
       return;

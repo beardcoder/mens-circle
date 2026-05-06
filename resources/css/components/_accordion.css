@@ -193,21 +193,6 @@
 }
 
 /* ============================================
-   Reduced motion — no transitions, instant open/close
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .accordion-item,
-  .accordion-item *,
-  .accordion-item *::before,
-  .accordion-item *::after {
-    transition: none;
-  }
-
-  /* JS checks prefers-reduced-motion and skips WAAPI; it toggles
-     details.open directly without animating content height/opacity. */
-}
-
-/* ============================================
    No-JS fallback — content is visible; native <details> handles toggle
    ============================================ */
 .no-js {

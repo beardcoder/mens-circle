@@ -26,24 +26,6 @@ const DURATION_CLOSE = 320;
  */
 const EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
-/**
- * Resolved once at module initialisation. Using `matchMedia(...).matches`
- * is cheap, but calling it inside every animation handler (open/close/sibling
- * close) adds redundant queries to the main thread. Cache it and let the
- * browser's change event update it for long-lived pages.
- */
-let reducedMotion =
-  typeof globalThis.matchMedia === 'function' &&
-  globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-if (typeof globalThis.matchMedia === 'function') {
-  globalThis
-    .matchMedia('(prefers-reduced-motion: reduce)')
-    .addEventListener('change', (e) => {
-      reducedMotion = e.matches;
-    });
-}
-
 interface NativeAccordionOptions {
   itemSelector: string;
 }
@@ -73,11 +55,6 @@ export const nativeAccordion = defineComponent<NativeAccordionOptions>(
       const content = getContent(details);
 
       if (!content) {
-        details.open = true;
-        return;
-      }
-
-      if (reducedMotion) {
         details.open = true;
         return;
       }
@@ -126,11 +103,6 @@ export const nativeAccordion = defineComponent<NativeAccordionOptions>(
       const content = getContent(details);
 
       if (!content || !details.open) return;
-
-      if (reducedMotion) {
-        details.open = false;
-        return;
-      }
 
       // Cancel any animation already running on this item.
       animationMap.get(details)?.cancel();

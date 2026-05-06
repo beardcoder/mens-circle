@@ -22,7 +22,6 @@
  *   Animates only `opacity` and `transform` — composited properties only.
  *   Native path uses `animation-timeline: view()` (modern browsers, compositor).
  *   Fallback path uses IntersectionObserver via scroll-animations.ts.
- *   `prefers-reduced-motion` cancels every variant.
  */
 
 /* ============================================
@@ -237,37 +236,5 @@
     animation-timeline: scroll(root);
     animation-range: 0 80vh;
     will-change: translate;
-  }
-}
-
-/* ============================================
-   Reduced motion — full opt-out
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  [data-anim] {
-    opacity: 1;
-    filter: none;
-    transform: none;
-    transition: none;
-    animation: none;
-    will-change: auto;
-  }
-
-  .hero__bg,
-  .hero__circles,
-  .hero__content,
-  .hero__circle--1,
-  .hero__circle--2,
-  .hero__circle--3,
-  .hero__circle--4 {
-    filter: none;
-    transform: none;
-    scale: none;
-    translate: none;
-    animation: none;
-  }
-
-  .scroll-progress {
-    display: none;
   }
 }

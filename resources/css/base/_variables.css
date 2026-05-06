@@ -344,18 +344,6 @@
 }
 
 /* ============================================
-   Reduced Motion Preference
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --duration-fast: 0ms;
-    --duration-normal: 0ms;
-    --duration-slow: 0ms;
-    --duration-slower: 0ms;
-  }
-}
-
-/* ============================================
    Smooth auto-height transitions (progressive)
    ============================================ */
 @supports (interpolate-size: allow-keywords) {

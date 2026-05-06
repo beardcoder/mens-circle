@@ -90,13 +90,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .event-map[data-state='idle'] .event-map__canvas::before,
-  .event-map[data-state='loading'] .event-map__canvas::before {
-    animation: none;
-  }
-}
-
 /* Marker — div icon with inline SVG, themed to terracotta accent. */
 .event-map__marker {
   background: none;
