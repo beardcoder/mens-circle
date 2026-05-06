@@ -172,6 +172,13 @@
   opacity: 0.6;
 }
 
+/* Dark-context override: the event registration section uses a dark background
+   so the generic .form-helper (which defaults to var(--text-secondary) / dark ink)
+   would be near-invisible. Force a light sand tone to meet contrast requirements. */
+.event-register-section .form-helper {
+  color: color-mix(in oklch, var(--color-sand) 85%, transparent);
+}
+
 /* Past Event Info */
 .event-register__past-info {
   inline-size: 100%;
@@ -183,7 +190,7 @@
   margin-block-end: var(--space-md);
   font-size: var(--text-lg);
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--color-sand);
 }
 
 .event-register__past-text:last-of-type {

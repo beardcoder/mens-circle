@@ -133,6 +133,16 @@
   color: var(--text-secondary);
 }
 
+/* Optional-field label suffix */
+.form-label-optional {
+  margin-inline-start: 0.35em;
+  font-size: 0.75em;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 /* ============================================
    Newsletter Form
    ============================================ */

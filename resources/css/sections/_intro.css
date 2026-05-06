@@ -129,7 +129,10 @@
   inset-inline-start: 50%;
   inline-size: 80%;
   aspect-ratio: 1 / 1;
-  transform: translate(-50%, -50%);
+
+  /* Use `translate` so that `breathe` keyframes (which only set
+     `transform: scale()`) do not override the centering offset. */
+  translate: -50% -50%;
   animation: breathe 22s ease-in-out infinite -6s;
 }
 

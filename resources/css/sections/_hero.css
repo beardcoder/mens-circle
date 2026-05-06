@@ -235,7 +235,7 @@
 
 @media (width <= 480px) {
   .hero__title {
-    font-size: clamp(3rem, 10vw, 3rem);
+    font-size: clamp(2.25rem, 8vw, 3rem);
   }
 
   .hero__label {

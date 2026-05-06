@@ -51,7 +51,7 @@
 .calendar-modal__buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: var(--space-xs);
 }
 
 /* ============================================
