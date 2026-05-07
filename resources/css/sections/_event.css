@@ -10,7 +10,7 @@
   position: relative;
   overflow: hidden;
   color: var(--text-on-dark);
-  background: var(--surface-ritual);
+  background: var(--bg-dark);
 }
 
 /* Noise texture */
@@ -145,15 +145,8 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-xl) var(--space-lg);
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in oklch, var(--color-bone) 8%, transparent),
-      color-mix(in oklch, var(--color-earth-dark) 38%, transparent)
-    ),
-    color-mix(in oklch, var(--bg-primary) 5%, transparent);
-  border-inline-start: 1px solid
-    color-mix(in oklch, var(--color-sand) 14%, transparent);
+  background: color-mix(in oklch, var(--bg-primary) 5%, transparent);
+  border-inline-start: 1px solid var(--border-on-dark);
 }
 
 @media (width <= 900px) {
@@ -167,12 +160,6 @@
 .event-register__form {
   inline-size: 100%;
   max-inline-size: 480px;
-  padding: clamp(1rem, 2.5vw, 1.5rem);
-  background: color-mix(in oklch, var(--surface-glass-dark) 54%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-ritual-dark);
-  backdrop-filter: blur(12px);
 }
 
 .event-register__submit {

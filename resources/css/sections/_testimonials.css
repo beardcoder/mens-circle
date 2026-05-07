@@ -9,7 +9,7 @@
 .testimonials-section {
   position: relative;
   overflow: hidden;
-  background: var(--surface-parchment);
+  background: var(--bg-secondary);
 }
 
 /* Subtle pattern overlay */
@@ -47,7 +47,7 @@
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.8rem, 1.6vw, 1.15rem);
+  border-block: 1px solid var(--border-light);
 }
 
 /* ============================================
@@ -59,16 +59,15 @@
   flex-direction: column;
   min-block-size: 16rem;
   padding: var(--space-lg) var(--space-md);
-  background: color-mix(in oklch, var(--color-bone) 62%, transparent);
-  border: 1px solid
-    color-mix(in oklch, var(--color-earth-warm) 14%, transparent);
-  border-radius: var(--radius-2xl);
-  box-shadow: 0 20px 48px -40px
-    color-mix(in oklch, var(--color-earth-deep) 50%, transparent);
-  transition:
-    border-color var(--motion-standard),
-    box-shadow var(--motion-standard),
-    transform var(--motion-quick);
+  border-inline-start: 1px solid var(--border-light);
+}
+
+.testimonial-item:nth-child(odd) {
+  border-inline-start: none;
+}
+
+.testimonial-item:nth-child(n + 3) {
+  border-block-start: 1px solid var(--border-light);
 }
 
 .testimonial-item:last-child:nth-child(odd) {
@@ -102,14 +101,7 @@
   flex-direction: column;
   gap: var(--space-xs);
   padding-block-start: var(--space-md);
-  border-block-start: 1px solid
-    color-mix(in oklch, var(--color-earth-warm) 18%, transparent);
-}
-
-.testimonial-item:hover {
-  border-color: color-mix(in oklch, var(--accent-primary) 30%, transparent);
-  box-shadow: var(--shadow-ritual);
-  transform: translateY(-3px);
+  border-block-start: 1px solid var(--border-light);
 }
 
 .testimonial-item__name {
@@ -131,6 +123,12 @@
 
   .testimonial-item {
     min-block-size: auto;
+    border-block-start: 1px solid var(--border-light);
+    border-inline-start: none;
+  }
+
+  .testimonial-item:first-child {
+    border-block-start: none;
   }
 
   .testimonial-item:last-child:nth-child(odd) {

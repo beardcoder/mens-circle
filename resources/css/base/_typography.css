@@ -16,17 +16,17 @@ h6 {
   font-weight: 400;
   line-height: 1;
   color: var(--text-primary);
-  letter-spacing: 0;
+  letter-spacing: -0.04em;
 }
 
 h1 {
   font-size: var(--text-5xl);
-  line-height: 0.92;
+  line-height: 0.9;
 }
 
 h2 {
   font-size: var(--text-4xl);
-  line-height: 1;
+  line-height: 0.95;
 }
 
 h3 {
@@ -72,7 +72,6 @@ p:last-child {
    so each section breathes the same way.
    ============================================ */
 .section-header {
-  position: relative;
   max-inline-size: var(--container-prose);
   margin-block-end: var(--rhythm-block);
   margin-inline: auto;
@@ -107,10 +106,10 @@ p:last-child {
 }
 
 .eyebrow::before {
-  inline-size: clamp(1.75rem, 5vw, 3.4rem);
+  inline-size: 28px;
   block-size: 1px;
   content: '';
-  background: linear-gradient(90deg, currentcolor, transparent);
+  background: currentcolor;
   opacity: 0.5;
 }
 
@@ -126,12 +125,12 @@ p:last-child {
    ============================================ */
 .section-title {
   margin-block-end: var(--rhythm-stack);
-  font-size: clamp(2.25rem, 4.6vw, 4.25rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   line-height: 1.1;
 }
 
 .section-title--lg {
-  font-size: clamp(2.75rem, 6vw, 5.8rem);
+  font-size: clamp(2.5rem, 6vw, 5rem);
   line-height: 1;
 }
 
@@ -158,38 +157,9 @@ p:last-child {
   color: var(--text-secondary);
 }
 
-.section-title,
-.section-intro,
-.hero__title,
-.hero__description {
-  text-wrap: balance;
-}
-
 .section-header--on-dark .section-intro,
 .section-header--on-dark > p:last-child {
   color: var(--text-on-dark-secondary);
-}
-
-.story-chapter {
-  position: absolute;
-  inset-block-start: clamp(2rem, 8vw, 5rem);
-  inset-inline-start: clamp(1rem, 6vw, 5rem);
-  z-index: 1;
-  font-size: 0.68rem;
-  font-weight: 800;
-  color: color-mix(in oklch, var(--text-accent) 44%, transparent);
-  text-transform: uppercase;
-  letter-spacing: 0.24em;
-  pointer-events: none;
-}
-
-.story-chapter--end {
-  inset-inline: auto clamp(1rem, 6vw, 5rem);
-}
-
-.section-header--on-dark ~ .story-chapter,
-.story-chapter--on-dark {
-  color: color-mix(in oklch, var(--accent-secondary) 58%, transparent);
 }
 
 /* ============================================

@@ -5,7 +5,6 @@
 @endphp
 
 <section class="intro-section" id="ueber" aria-labelledby="intro-title">
-  <span class="story-chapter" aria-hidden="true">Kapitel 02 / Ankommen</span>
   <div class="intro__layout">
     <div class="intro__left" data-anim-group>
       @if (!empty($data['eyebrow']))

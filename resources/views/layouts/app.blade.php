@@ -89,13 +89,7 @@
           @endif
         </nav>
 
-        <button
-          class="nav-toggle"
-          id="navToggle"
-          aria-label="Menü öffnen"
-          aria-controls="nav"
-          aria-expanded="false"
-        >
+        <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
           <span></span>
           <span></span>
           <span></span>

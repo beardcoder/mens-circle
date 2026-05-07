@@ -31,12 +31,6 @@
     <div class="hero__circle hero__circle--4"></div>
   </div>
 
-  <div class="hero__storyline" aria-hidden="true">
-    <span>01</span>
-    <span></span>
-    <span>Eintritt in den Kreis</span>
-  </div>
-
   <div class="container">
     <div class="hero__content" data-anim-group>
       @if (!empty($data['label']))

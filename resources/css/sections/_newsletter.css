@@ -10,7 +10,7 @@
   position: relative;
   overflow: hidden;
   color: var(--text-on-dark);
-  background: var(--surface-ritual);
+  background: var(--bg-section-alt);
 }
 
 /* Noise texture */
@@ -47,15 +47,9 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(22rem, 0.75fr);
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-xl);
   align-items: center;
-  padding: clamp(1rem, 2.5vw, 1.6rem);
-  background: color-mix(in oklch, var(--surface-glass-dark) 64%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 12%, transparent);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-ritual-dark);
-  backdrop-filter: blur(14px) saturate(120%);
 }
 
 @media (width <= 800px) {
@@ -85,5 +79,4 @@
    ============================================ */
 .newsletter__form-wrapper {
   position: relative;
-  padding: clamp(0.2rem, 1vw, 0.6rem);
 }

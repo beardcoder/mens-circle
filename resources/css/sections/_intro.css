@@ -7,14 +7,11 @@
    Intro Section Base
    ============================================ */
 .intro-section {
-  position: relative;
   overflow: hidden;
-  background: var(--surface-parchment);
+  background: var(--bg-primary);
 }
 
 .intro__layout {
-  position: relative;
-  z-index: 1;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: var(--space-xl);
@@ -72,16 +69,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background:
-    radial-gradient(
-      circle at 50% 42%,
-      color-mix(in oklch, var(--accent-primary) 14%, transparent) 0 12rem,
-      transparent 26rem
-    ),
-    var(--surface-smoke);
-  border-start-start-radius: var(--radius-2xl);
-  border-end-start-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-ritual-dark);
+  background: var(--bg-section-alt);
 }
 
 @media (width <= 1000px) {
@@ -103,8 +91,7 @@
 .intro__image-text {
   position: relative;
   z-index: 1;
-  max-inline-size: 520px;
-  padding-inline: var(--space-md);
+  max-inline-size: 500px;
   margin-block-end: 0;
   font-family: var(--font-display);
   font-size: var(--text-2xl);
@@ -112,7 +99,6 @@
   line-height: 1.3;
   color: var(--text-on-dark);
   text-align: center;
-  text-shadow: 0 12px 32px color-mix(in oklch, black 36%, transparent);
 }
 
 .intro__image-circles {
@@ -153,5 +139,5 @@
 .intro__values {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0;
 }

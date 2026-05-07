@@ -12,23 +12,24 @@
   background: var(--bg-tertiary);
 }
 
-.moderator__watermark {
+/* Decorative text */
+.moderator-section::before {
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: -5%;
-  z-index: 0;
   font-family: var(--font-display);
   font-size: clamp(4rem, 12vw, 10rem);
   color: var(--border-light);
   letter-spacing: 0.1em;
   white-space: nowrap;
   pointer-events: none;
+  content: 'BEGLEITER';
   opacity: 0.5;
   transform: translateY(-50%) rotate(-90deg);
 }
 
 @media (width <= 900px) {
-  .moderator__watermark {
+  .moderator-section::before {
     display: none;
   }
 }
@@ -37,8 +38,6 @@
    Moderator Layout
    ============================================ */
 .moderator__layout {
-  position: relative;
-  z-index: 1;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: var(--space-xl);
@@ -71,10 +70,7 @@
 
 .moderator__photo {
   position: relative;
-  overflow: hidden;
-  background: var(--surface-smoke);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-ritual-dark);
+  background: var(--bg-section-alt);
 }
 
 /* Noise texture */
@@ -126,8 +122,7 @@
   inset-block: var(--space-md) calc(var(--space-md) * -1);
   inset-inline: var(--space-md) calc(var(--space-md) * -1);
   z-index: -1;
-  border: 1px solid color-mix(in oklch, var(--accent-primary) 62%, transparent);
-  border-radius: var(--radius-2xl);
+  border: 1px solid var(--accent-primary);
   opacity: 0.5;
 }
 
