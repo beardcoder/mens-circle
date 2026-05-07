@@ -49,19 +49,11 @@
    Driven from `_hero.css` via `animation-timeline: scroll(root)`.
    ============================================ */
 
-/* Distant: image holds the world, gently zooms (we step back). */
-@keyframes hero-parallax-deep {
-  to {
-    filter: brightness(0.78) saturate(0.85);
-    transform: translate3d(0, -4%, 0) scale(1.08);
-  }
-}
-
-/* Mid-ground: decorative circles drift further, fading to dust. */
+/* Mid-ground: decorative circles drift up gently, fading to dust. */
 @keyframes hero-parallax-mid {
   to {
-    opacity: 0.45;
-    transform: translate3d(0, -18%, 0);
+    opacity: 0.55;
+    transform: translate3d(0, -8%, 0);
   }
 }
 
@@ -69,7 +61,7 @@
 @keyframes hero-parallax-fore {
   to {
     opacity: 0;
-    transform: translate3d(0, -32%, 0);
+    transform: translate3d(0, -22%, 0);
   }
 }
 
@@ -95,7 +87,17 @@
   }
 }
 
-@keyframes story-thread-flow {
+/* Eyebrow underline — draws from a partial scale to full as the
+   eyebrow enters view (used by `.eyebrow::before`). */
+@keyframes eyebrow-trace {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Ambient thread — slow horizontal pulse for decorative section
+   lines (e.g. journey divider). */
+@keyframes thread-drift {
   0%,
   100% {
     opacity: 0.45;
@@ -105,19 +107,6 @@
   50% {
     opacity: 0.9;
     transform: translate3d(0, 0, 0) scaleX(1);
-  }
-}
-
-@keyframes story-marker-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0
-      color-mix(in oklch, var(--accent-primary) 0%, transparent);
-  }
-
-  50% {
-    box-shadow: 0 0 0 8px
-      color-mix(in oklch, var(--accent-primary) 12%, transparent);
   }
 }
 

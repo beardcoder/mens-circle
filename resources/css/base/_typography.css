@@ -92,6 +92,8 @@ p:last-child {
    Reusable component for section labels
    ============================================ */
 .eyebrow {
+  --eyebrow-line: color-mix(in oklch, currentcolor 72%, transparent);
+
   position: relative;
   display: inline-flex;
   gap: 0.75rem;
@@ -106,14 +108,50 @@ p:last-child {
 }
 
 .eyebrow::before {
-  inline-size: 28px;
+  inline-size: clamp(2rem, 5vw, 4.5rem);
   block-size: 1px;
   content: '';
-  background: currentcolor;
-  opacity: 0.5;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--eyebrow-line) 24%,
+    var(--eyebrow-line)
+  );
+  transform: scaleX(0.35);
+  transform-origin: right;
+  transition:
+    opacity var(--duration-slow) var(--ease-settle),
+    transform var(--duration-slower) var(--ease-settle);
+}
+
+/* Reveal the line as the eyebrow enters view. Native scroll-timeline
+   path runs on the compositor; the IO fallback toggles `.is-visible`. */
+.eyebrow.is-visible::before,
+.eyebrow[data-anim].is-visible::before {
+  transform: scaleX(1);
+}
+
+@supports (animation-timeline: view()) {
+  .eyebrow[data-anim]::before {
+    animation: eyebrow-trace 1ms linear both;
+    animation-timeline: view();
+    animation-range: entry 4% cover 24%;
+  }
+
+  /* Hero eyebrows use the time-based entrance — same reasoning as
+     the [data-anim] children above the fold. */
+  .hero .eyebrow[data-anim]::before,
+  .hero__content .eyebrow[data-anim]::before {
+    animation-timeline: auto;
+    animation-duration: var(--duration-slower);
+    animation-timing-function: var(--ease-settle);
+    animation-range: normal;
+  }
 }
 
 .eyebrow--secondary {
+  --eyebrow-line: color-mix(in oklch, var(--accent-secondary) 72%, transparent);
+
   color: var(--accent-secondary);
 }
 

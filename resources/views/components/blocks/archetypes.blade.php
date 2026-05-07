@@ -25,11 +25,6 @@
   >
     <div class="container">
       <div class="section-header" data-anim-group>
-        <p class="story-kicker" data-anim="trace">
-          <span>Kapitel 05</span>
-          <span>Innere Kräfte</span>
-        </p>
-
         @if (!empty($data['eyebrow']))
           <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
         @endif

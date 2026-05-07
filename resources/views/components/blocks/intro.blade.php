@@ -7,11 +7,6 @@
 <section class="intro-section" id="ueber" aria-labelledby="intro-title">
   <div class="intro__layout">
     <div class="intro__left" data-anim-group>
-      <p class="story-kicker" data-anim="trace">
-        <span>Kapitel 02</span>
-        <span>Die Schwelle</span>
-      </p>
-
       @if (!empty($data['eyebrow']))
         <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
       @endif
