@@ -7,7 +7,9 @@
    Form Group
    ============================================ */
 .form-group {
+  position: relative;
   margin-block-end: var(--space-sm);
+  transition: transform var(--motion-quick);
 }
 
 .form-group label {
@@ -18,6 +20,15 @@
   color: var(--accent-secondary);
   text-transform: uppercase;
   letter-spacing: 0.15em;
+  transition: color var(--motion-standard);
+}
+
+.form-group:focus-within {
+  transform: translate3d(0, -0.125rem, 0);
+}
+
+.form-group:focus-within label {
+  color: var(--accent-primary);
 }
 
 /* ============================================
@@ -64,6 +75,19 @@
   margin-block-start: 0.2rem;
   accent-color: var(--accent-primary);
   cursor: pointer;
+  transition:
+    box-shadow var(--motion-standard),
+    transform var(--motion-quick);
+}
+
+.form-checkbox input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px
+    color-mix(in oklch, var(--accent-primary) 22%, transparent);
+}
+
+.form-checkbox input:active {
+  transform: scale(0.94);
 }
 
 .form-group input:focus-visible,

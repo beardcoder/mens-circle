@@ -24,6 +24,41 @@
   padding: var(--space-lg) var(--space-md);
   overflow: hidden;
   border-inline-start: 1px solid var(--border-light);
+  transition:
+    background-color var(--motion-standard),
+    border-color var(--motion-standard),
+    transform var(--motion-standard);
+}
+
+.archetype-card::before {
+  position: absolute;
+  inset-block: var(--space-md);
+  inset-inline-start: 0;
+  inline-size: 2px;
+  content: '';
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transform: scaleY(0.35);
+  transform-origin: center;
+  transition:
+    opacity var(--motion-standard),
+    transform var(--motion-standard);
+}
+
+.archetype-card:hover {
+  background: color-mix(in oklch, var(--accent-primary) 5%, transparent);
+  border-color: color-mix(
+    in oklch,
+    var(--accent-primary) 28%,
+    var(--border-light)
+  );
+  transform: translate3d(0, -0.25rem, 0);
+}
+
+.archetype-card:hover::before {
+  opacity: 1;
+  transform: scaleY(1);
 }
 
 .archetype-card:nth-child(odd) {
@@ -53,12 +88,24 @@
   z-index: 1;
   pointer-events: none;
   opacity: 0.16;
+  transition:
+    opacity var(--motion-standard),
+    transform var(--motion-standard);
 }
 
 .archetype-card__background-icon svg {
   inline-size: clamp(16rem, 32vw, 22rem);
   block-size: clamp(16rem, 32vw, 22rem);
   transform: translateY(-50%) rotate(-8deg);
+  transition: transform var(--duration-slow) var(--ease-settle);
+}
+
+.archetype-card:hover .archetype-card__background-icon {
+  opacity: 0.22;
+}
+
+.archetype-card:hover .archetype-card__background-icon svg {
+  transform: translateY(-50%) rotate(-5deg) scale(1.03);
 }
 
 .archetype-card__title {

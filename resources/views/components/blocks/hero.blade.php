@@ -33,6 +33,14 @@
 
   <div class="container">
     <div class="hero__content" data-anim-group>
+      <p
+        class="story-kicker story-kicker--on-dark hero__chapter"
+        data-anim="trace"
+      >
+        <span>Kapitel 01</span>
+        <span>Der Ruf</span>
+      </p>
+
       @if (!empty($data['label']))
         <p class="hero__label" data-anim="rise">{{ $data['label'] }}</p>
       @endif

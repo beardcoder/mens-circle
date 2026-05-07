@@ -25,6 +25,9 @@
 
   position: relative;
   border-block-end: 1px solid var(--border-light);
+  transition:
+    background-color var(--motion-standard),
+    border-color var(--motion-standard);
 
   &:first-child {
     border-block-start: 1px solid var(--border-light);
@@ -50,6 +53,11 @@
   &[open]::before {
     opacity: 1;
     transform: scaleY(1);
+  }
+
+  &:has(.accordion-item__trigger:hover),
+  &[open] {
+    background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
   }
 }
 
@@ -110,6 +118,7 @@
   border: 1px solid var(--color-earth-warm);
   border-radius: var(--radius-full);
   transition:
+    padding-inline var(--motion-standard),
     background-color var(--motion-standard),
     border-color var(--motion-standard);
 
@@ -141,6 +150,17 @@
 }
 
 .accordion-item[open] {
+  border-block-end-color: color-mix(
+    in oklch,
+    var(--accent-primary) 35%,
+    var(--border-light)
+  );
+
+  .accordion-item__trigger {
+    padding-inline-start: var(--space-md);
+    color: var(--_accent);
+  }
+
   .accordion-item__icon {
     background: var(--_accent);
     border-color: var(--_accent);
@@ -179,6 +199,11 @@
   font-size: 1rem;
   line-height: var(--leading-relaxed);
   color: var(--text-secondary);
+  opacity: 0.82;
+  transform: translate3d(0, -0.25rem, 0);
+  transition:
+    opacity var(--duration-slow) var(--ease-settle),
+    transform var(--duration-slow) var(--ease-settle);
 
   p:last-child {
     margin-block-end: 0;
@@ -196,25 +221,9 @@
   }
 }
 
-/* ============================================
-   Reduced motion — no transitions, instant open/close
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .accordion-item,
-  .accordion-item *,
-  .accordion-item *::before,
-  .accordion-item *::after {
-    transition: none;
-  }
-
-  .accordion-item[open] > .accordion-item__content {
-    block-size: auto;
-    opacity: 1;
-  }
-
-  .accordion-item:not([open]) > .accordion-item__content {
-    display: none;
-  }
+.accordion-item[open] .accordion-item__body {
+  opacity: 1;
+  transform: none;
 }
 
 /* ============================================

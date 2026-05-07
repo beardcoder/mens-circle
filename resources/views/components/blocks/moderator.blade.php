@@ -36,6 +36,11 @@
       </div>
 
       <div class="moderator__content" data-anim-group>
+        <p class="story-kicker" data-anim="trace">
+          <span>Kapitel 03</span>
+          <span>Der Begleiter</span>
+        </p>
+
         @if (!empty($data['eyebrow']))
           <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
         @endif

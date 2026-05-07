@@ -709,16 +709,6 @@
 }
 
 /* ============================================
-   Reduced Motion
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .breathing-app__ring {
-    transition: none;
-    animation: none !important;
-  }
-}
-
-/* ============================================
    Narrow phone tuning
    ============================================ */
 @media (width < 480px) {

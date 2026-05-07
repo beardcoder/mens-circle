@@ -203,10 +203,3 @@
     max-inline-size: none;
   }
 }
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .toast {
-    transition: none;
-  }
-}

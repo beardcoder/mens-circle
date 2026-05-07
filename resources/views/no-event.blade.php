@@ -34,6 +34,14 @@
 
     <div class="container">
       <div class="hero__content" data-anim-group>
+        <p
+          class="story-kicker story-kicker--on-dark hero__chapter"
+          data-anim="trace"
+        >
+          <span>Zwischenraum</span>
+          <span>Der nächste Kreis</span>
+        </p>
+
         <p class="hero__label" data-anim="rise">Männerkreis Niederbayern/ Straubing</p>
         <h1 class="hero__title" data-anim="lift">
           <span class="hero__title-line">Aktuell ist kein</span>
@@ -61,6 +69,11 @@
     <div class="container">
       <div class="no-event-info__layout">
         <div class="no-event-info__content" data-anim-group>
+          <p class="story-kicker" data-anim="trace">
+            <span>Kapitel</span>
+            <span>Verbunden bleiben</span>
+          </p>
+
           <p class="eyebrow" data-anim="rise">Was ist der Männerkreis?</p>
           <h2 class="section-title no-event-info__title" data-anim="rise">
             Ein Raum für <span class="text-italic">echte Begegnung</span>

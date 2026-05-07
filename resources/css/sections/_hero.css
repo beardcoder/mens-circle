@@ -10,7 +10,7 @@
   position: relative;
   display: flex;
   align-items: flex-end;
-  block-size: 100vh;
+  block-size: 100svh;
   min-block-size: 700px;
   padding-block-end: var(--space-xl);
   overflow: hidden;
@@ -19,7 +19,7 @@
 
 @media (width > 600px) {
   .hero {
-    min-block-size: 1000px;
+    min-block-size: min(880px, 100svh);
   }
 }
 
@@ -121,6 +121,10 @@
   inline-size: 100%;
 }
 
+.hero__chapter {
+  margin-block-end: var(--space-md);
+}
+
 .hero__label {
   display: inline-flex;
   gap: var(--space-sm);
@@ -143,7 +147,7 @@
 .hero__title {
   max-inline-size: 100%;
   margin-block-end: var(--space-md);
-  font-size: clamp(2.75rem, 8vw + 1rem, 9rem);
+  font-size: clamp(2.75rem, 7vw + 0.75rem, 8rem);
   line-height: 0.9;
   color: var(--text-on-dark);
   hyphens: auto;

@@ -28,6 +28,11 @@
       class="section-header section-header--start faq__header"
       data-anim-group
     >
+      <p class="story-kicker" data-anim="trace">
+        <span>Kapitel 06</span>
+        <span>Klärung</span>
+      </p>
+
       @if (!empty($data['eyebrow']))
         <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
       @endif

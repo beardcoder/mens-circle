@@ -76,15 +76,3 @@
     animation-name: vt-crossfade-in-left;
   }
 }
-
-/* ============================================
-   Reduced motion — Crossfade auf nahezu instant reduzieren
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0ms !important;
-  }
-}

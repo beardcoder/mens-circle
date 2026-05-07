@@ -8,6 +8,7 @@
  *   data-anim="rise"        Translate up + fade (default — most content)
  *   data-anim="fade"        Opacity only (stable layouts, text overlays)
  *   data-anim="scale"       Scale up + fade (cards, containers, images)
+ *   data-anim="trace"       Short lateral trace for story markers
  *   data-anim="lift"        Alias → rise (kept for template compatibility)
  *   data-anim="slide-left"  Alias → rise (kept for template compatibility)
  *   data-anim="slide-right" Alias → rise (kept for template compatibility)
@@ -22,7 +23,6 @@
  *   Animates only `opacity` and `transform` — composited properties only.
  *   Native path uses `animation-timeline: view()` (modern browsers, compositor).
  *   Fallback path uses IntersectionObserver via scroll-animations.ts.
- *   `prefers-reduced-motion` cancels every variant.
  */
 
 /* ============================================
@@ -122,6 +122,10 @@
   transform: scale(0.97);
 }
 
+[data-anim='trace'] {
+  transform: translate3d(-0.625rem, 0, 0);
+}
+
 [data-anim].is-visible {
   opacity: 1;
   transform: none;
@@ -213,33 +217,5 @@
     animation-timeline: scroll(root);
     animation-range: 0 100vh;
     will-change: transform, opacity;
-  }
-}
-
-/* ============================================
-   Reduced motion — full opt-out
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  [data-anim] {
-    opacity: 1;
-    filter: none;
-    transform: none;
-    transition: none;
-    animation: none;
-    will-change: auto;
-  }
-
-  .hero__bg,
-  .hero__circle--1,
-  .hero__circle--2,
-  .hero__circle--3,
-  .hero__circle--4 {
-    filter: none;
-    transform: none;
-    animation: none;
-  }
-
-  .scroll-progress {
-    display: none;
   }
 }

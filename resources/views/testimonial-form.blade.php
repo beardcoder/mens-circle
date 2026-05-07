@@ -27,6 +27,14 @@
     <div class="hero__bg"></div>
     <div class="container">
       <div class="hero__content" data-anim-group>
+        <p
+          class="story-kicker story-kicker--on-dark hero__chapter"
+          data-anim="trace"
+        >
+          <span>Stimme</span>
+          <span>Deine Geschichte</span>
+        </p>
+
         <p class="hero__label" data-anim="rise">Community Stimmen</p>
         <h1 class="hero__title" data-anim="lift">
           Teile deine <span class="highlight">Erfahrung</span>

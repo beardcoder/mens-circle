@@ -20,7 +20,7 @@
  *   - Native CSS nesting
  *   - Container queries where helpful
  *   - Scroll-driven animations (animation-timeline)
- *   - prefers-reduced-motion / prefers-color-scheme
+ *   - prefers-color-scheme
  */
 
 @layer reset, tokens, base, layout, components, sections, utilities;

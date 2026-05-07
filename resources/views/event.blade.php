@@ -37,6 +37,14 @@
 
     <div class="container">
       <div class="hero__content" data-anim-group>
+        <p
+          class="story-kicker story-kicker--on-dark hero__chapter"
+          data-anim="trace"
+        >
+          <span>Treffen</span>
+          <span>{{ $event->isPast ? 'Rückblick' : 'Einladung' }}</span>
+        </p>
+
         <p class="hero__label" data-anim="rise">{{ $event->isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
         <h1 class="hero__title" data-anim="lift">
           <span class="hero__title-line">{{ $event->title }}</span>

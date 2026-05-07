@@ -234,13 +234,6 @@ export const scrollProgress = defineComponent<ScrollProgressOptions>(
     smoothing: 0.18,
   },
   (ctx) => {
-    if (
-      typeof globalThis.matchMedia === 'function' &&
-      globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      return;
-    }
-
     const bar = ctx.el;
     const { smoothing } = ctx.options;
 
