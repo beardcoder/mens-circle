@@ -293,3 +293,60 @@
   inline-size: 100%;
   block-size: 100%;
 }
+
+/* ============================================
+   Cinematic Parallax — depth & chapter close
+
+   Three layers (deep / mid / fore) drift at different rates as the
+   user scrolls past the hero. A vignette deepens at the end so the
+   first chapter feels like it closes on its own beat. Compositor-only:
+   transform, opacity, filter. Disabled under reduced-motion.
+   ============================================ */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Distant — bg image holds the scene, gently pulls back. */
+    .hero__bg-image,
+    .hero__bg {
+      animation: hero-parallax-deep linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 110vh;
+      will-change: transform, filter;
+    }
+
+    /* Mid — decorative circles travel further, fade to dust.
+       The wrapper carries the parallax so individual circles keep
+       their `breathe` shorthand intact. */
+    .hero__circles {
+      animation: hero-parallax-mid linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+      will-change: transform, opacity;
+    }
+
+    /* Fore — content lifts past us and dissolves. Faster than the
+       background; that delta is what reads as depth. */
+    .hero__content {
+      animation: hero-parallax-fore linear both;
+      animation-timeline: scroll(root);
+      animation-range: 12vh 95vh;
+      will-change: transform, opacity;
+    }
+
+    /* Chapter close — a soft vignette draws in around the edges as
+       we leave the hero, like the closing of a film's first scene. */
+    .hero::after {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      content: '';
+      box-shadow: inset 0 0 18rem 3rem
+        color-mix(in oklch, var(--color-earth-deep) 80%, transparent);
+      opacity: 0;
+      animation: hero-parallax-vignette linear both;
+      animation-timeline: scroll(root);
+      animation-range: 30vh 100vh;
+      will-change: opacity;
+    }
+  }
+}
