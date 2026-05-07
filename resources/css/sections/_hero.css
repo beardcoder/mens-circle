@@ -7,10 +7,7 @@
    Hero Base
    ============================================ */
 .hero {
-  --hero-fade-target: var(--bg-primary);
-
   position: relative;
-  z-index: 1;
   display: flex;
   align-items: flex-end;
   block-size: 100svh;
@@ -18,21 +15,6 @@
   padding-block-end: var(--space-xl);
   overflow: hidden;
   background: var(--bg-dark);
-}
-
-.hero::after {
-  position: absolute;
-  inset-block-end: -1px;
-  inset-inline: 0;
-  z-index: 3;
-  block-size: clamp(3rem, 8vw, 7rem);
-  pointer-events: none;
-  content: '';
-  background: linear-gradient(
-    180deg,
-    transparent,
-    color-mix(in oklch, var(--hero-fade-target) 88%, transparent)
-  );
 }
 
 @media (width > 600px) {
@@ -274,8 +256,6 @@
    Event Hero Variant
    ============================================ */
 .event-hero {
-  --hero-fade-target: var(--bg-dark);
-
   align-items: flex-end;
   min-block-size: 70vh;
   padding-block: 140px var(--space-xl);

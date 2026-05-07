@@ -203,3 +203,19 @@
 [data-anim-group] > :nth-child(n + 8) {
   --anim-index: 7;
 }
+
+/* ============================================
+   Hero — scroll-linked parallax on the background only
+
+   The decorative circles keep their ambient `breathe` animation defined
+   in `_hero.css`; layering scroll-driven parallax on top would clobber
+   the shorthand `animation` and cancel the breathing pulse.
+   ============================================ */
+@supports (animation-timeline: scroll()) {
+  .hero__bg {
+    animation: hero-bg-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100vh;
+    will-change: transform, opacity;
+  }
+}
