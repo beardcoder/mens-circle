@@ -35,10 +35,7 @@
 >
   <div class="container">
     <div class="section-header section-header--on-dark" data-anim-group>
-      <p
-        class="story-kicker story-kicker--on-dark"
-        data-anim="trace"
-      >
+      <p class="story-kicker story-kicker--on-dark" data-anim="trace">
         <span>Kapitel 04</span>
         <span>Der Weg</span>
       </p>

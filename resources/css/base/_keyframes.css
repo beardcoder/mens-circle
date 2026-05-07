@@ -41,17 +41,6 @@
 }
 
 /* ============================================
-   Hero — scroll-driven parallax on the background image.
-   Drives `animation-timeline: scroll(root)` on `.hero__bg`.
-   ============================================ */
-@keyframes hero-bg-drift {
-  to {
-    opacity: 0.65;
-    transform: translate3d(0, -6%, 0) scale(1.06);
-  }
-}
-
-/* ============================================
    Scroll-reveal — `[data-anim]` entrance.
    The page progress bar is driven from JS; see scrollProgress.
    ============================================ */
@@ -85,6 +74,31 @@
   50% {
     box-shadow: 0 0 0 8px
       color-mix(in oklch, var(--accent-primary) 12%, transparent);
+  }
+}
+
+@keyframes layer-overlap-settle {
+  from {
+    opacity: 0.94;
+    transform: translate3d(0, 3rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes layer-shadow-breathe {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: translate3d(-3%, 0, 0) scaleX(0.92);
+  }
+
+  50% {
+    opacity: 0.48;
+    transform: translate3d(3%, 0, 0) scaleX(1);
   }
 }
 

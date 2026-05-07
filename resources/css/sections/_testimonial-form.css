@@ -7,6 +7,8 @@
    Hero
    ============================================ */
 .testimonial-form-hero {
+  --hero-fade-target: var(--bg-secondary);
+
   position: relative;
   block-size: 100vh;
   min-block-size: 50vh;

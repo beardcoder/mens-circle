@@ -7,8 +7,31 @@
    Intro Section Base
    ============================================ */
 .intro-section {
+  position: relative;
+  z-index: 2;
+  margin-block-start: clamp(-4.5rem, -7vw, -2rem);
   overflow: hidden;
   background: var(--bg-primary);
+  border-start-start-radius: clamp(1.25rem, 4vw, 3rem);
+  border-start-end-radius: clamp(1.25rem, 4vw, 3rem);
+  box-shadow: 0 -2rem 5rem -3rem
+    color-mix(in oklch, var(--color-ink) 55%, transparent);
+}
+
+.intro-section::after {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: clamp(1.5rem, 8vw, 10rem);
+  block-size: 1px;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklch, var(--accent-primary) 38%, transparent),
+    transparent
+  );
+  animation: layer-shadow-breathe 8s var(--ease-ambient) infinite;
 }
 
 .intro__layout {
@@ -16,9 +39,22 @@
   grid-template-columns: 1.1fr 0.9fr;
   gap: var(--space-xl);
   min-block-size: 100vh;
+  padding-block-start: clamp(2.5rem, 5vw, 4rem);
+}
+
+@supports (animation-timeline: view()) {
+  .intro__layout {
+    animation: layer-overlap-settle linear both;
+    animation-timeline: view();
+    animation-range: entry -12% cover 28%;
+  }
 }
 
 @media (width <= 1000px) {
+  .intro-section {
+    margin-block-start: clamp(-2.5rem, -8vw, -1.25rem);
+  }
+
   .intro__layout {
     grid-template-columns: 1fr;
     min-block-size: auto;
