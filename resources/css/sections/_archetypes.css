@@ -27,6 +27,7 @@
   transition:
     background-color var(--motion-standard),
     border-color var(--motion-standard),
+    box-shadow var(--motion-standard),
     transform var(--motion-standard);
 }
 
@@ -53,7 +54,8 @@
     var(--accent-primary) 28%,
     var(--border-light)
   );
-  transform: translate3d(0, -0.25rem, 0);
+  box-shadow: 0 8px 32px color-mix(in oklch, var(--accent-primary) 10%, transparent);
+  transform: translate3d(0, -0.5rem, 0) scale(1.01);
 }
 
 .archetype-card:hover::before {
@@ -101,20 +103,23 @@
 }
 
 .archetype-card:hover .archetype-card__background-icon {
-  opacity: 0.22;
+  opacity: 0.28;
 }
 
 .archetype-card:hover .archetype-card__background-icon svg {
-  transform: translateY(-50%) rotate(-5deg) scale(1.03);
+  filter: drop-shadow(
+    0 0 16px color-mix(in oklch, var(--accent-primary) 35%, transparent)
+  );
+  transform: translateY(-50%) rotate(-3deg) scale(1.1);
 }
 
 .archetype-card__title {
   margin-block-end: var(--space-xs);
   font-family: var(--font-display);
-  font-size: clamp(1.56rem, 2.2vw, 1.98rem);
-  line-height: 1.15;
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  line-height: 1.1;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
 }
 
 .archetype-card__description {

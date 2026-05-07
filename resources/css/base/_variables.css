@@ -36,8 +36,8 @@
   --color-earth-warm: oklch(46% 0.05 68deg);
 
   /* Terracotta Accents */
-  --color-terracotta: oklch(58% 0.13 46deg);
-  --color-terracotta-light: oklch(70% 0.11 46deg);
+  --color-terracotta: oklch(61% 0.16 44deg);
+  --color-terracotta-light: oklch(72% 0.14 45deg);
 
   /* Neutral Sand Tones */
   --color-sand: oklch(76% 0.04 75deg);
@@ -143,10 +143,10 @@
   --space-xs: 0.5rem;
   --space-sm: 1rem;
   --space-md: clamp(1.5rem, 1rem + 1.5vw, 2rem);
-  --space-lg: clamp(2.5rem, 1.5rem + 3vw, 4rem);
-  --space-xl: clamp(4rem, 2rem + 5vw, 8rem);
-  --space-2xl: clamp(6rem, 3rem + 7vw, 12rem);
-  --space-3xl: clamp(8rem, 4rem + 9vw, 16rem);
+  --space-lg: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  --space-xl: clamp(4.5rem, 2rem + 6vw, 9rem);
+  --space-2xl: clamp(7rem, 3rem + 8vw, 14rem);
+  --space-3xl: clamp(9rem, 4rem + 10vw, 18rem);
 
   /* ============================================
      Semantic Rhythm Tokens

@@ -32,18 +32,18 @@
   </div>
 
   <div class="container">
-    <div class="hero__content" data-anim-group>
+    <div class="hero__content">
       @if (!empty($data['label']))
-        <p class="hero__label" data-anim="rise">{{ $data['label'] }}</p>
+        <p class="hero__label">{{ $data['label'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h1 class="hero__title" data-anim="lift">{!! $data['title'] !!}</h1>
+        <h1 class="hero__title">{!! $data['title'] !!}</h1>
       @endif
 
       <div class="hero__bottom">
         @if (!empty($data['description']))
-          <p class="hero__description" data-anim="rise">{{ $data['description'] }}</p>
+          <p class="hero__description">{{ $data['description'] }}</p>
         @endif
 
         @if (!empty($data['button_text']) && !empty($data['button_link']))
@@ -54,7 +54,7 @@
                         $resolvedButtonLink = $isEventLink ? $nextEventUrl : $data['button_link'];
                     @endphp
           @if ($shouldShowButton)
-            <div class="hero__cta" data-anim="rise">
+            <div class="hero__cta">
               <a
                 href="{{ $resolvedButtonLink }}"
                 class="btn btn--primary btn--large"

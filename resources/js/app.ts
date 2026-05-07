@@ -20,7 +20,6 @@ import { calendarIntegration } from '@/components/calendar';
 import { eventMap } from '@/components/event-map';
 import { nativeAccordion } from '@/components/accordion';
 import { breathingApp } from '@/components/breathing';
-import { scrollAnimations } from '@/components/scroll-animations';
 import { initUmamiKit } from '@/utils/umami-kit';
 import { initSwup } from '@/components/swup-init';
 
@@ -47,9 +46,6 @@ register('.faq-section', nativeAccordion());
 // Breathing exercise
 register('#breathingApp', breathingApp());
 
-// Scroll-triggered reveal animations (IntersectionObserver fallback —
-// native animation-timeline: view() handles supporting browsers via CSS)
-register('body', scrollAnimations());
 
 // Initialize all registered components
 autoInit();

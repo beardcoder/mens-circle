@@ -255,6 +255,109 @@
 }
 
 /* ============================================
+   Float — gentle rhythmic levitation. Used by the moderator photo
+   for a living, present quality. Compositor-only (transform only).
+   ============================================ */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-0.625rem) scale(1.005);
+  }
+}
+
+/* ============================================
+   Scale pop — springy entrance for grid items and cards.
+   Overshoots slightly then settles — creates an energetic feel
+   without true spring physics. Used by data-anim="pop".
+   ============================================ */
+@keyframes scale-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+
+  60% {
+    transform: scale(1.03);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   Number bloom — large display numbers (journey steps, value
+   counts) reveal from a compressed, blurred state.
+   ============================================ */
+@keyframes number-bloom {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: scale(0.6) translateY(0.25em);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================
+   Scroll line pulse — the hero scroll indicator line sweeps
+   downward in a loop to invite the eye to scroll.
+   ============================================ */
+@keyframes scroll-line-sweep {
+  0% {
+    opacity: 1;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  45% {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+
+  55% {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+/* ============================================
+   Glow pulse — accent glow radiating outward. Used on the
+   journey step marker dot (::before) to add a living quality.
+   ============================================ */
+@keyframes dot-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 color-mix(in oklch, var(--accent-secondary) 40%, transparent),
+      0 0 0 4px color-mix(in oklch, var(--accent-secondary) 10%, transparent);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 6px color-mix(in oklch, var(--accent-secondary) 0%, transparent),
+      0 0 0 12px color-mix(in oklch, var(--accent-secondary) 0%, transparent);
+  }
+}
+
+/* ============================================
    View transitions — root crossfade and directional variants.
    ============================================ */
 @keyframes vt-fade-out {

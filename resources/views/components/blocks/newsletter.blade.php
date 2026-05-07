@@ -11,27 +11,27 @@
 >
   <div class="container">
     <div class="newsletter__layout">
-      <div class="newsletter__content" data-anim-group>
+      <div class="newsletter__content">
         @if (!empty($data['eyebrow']))
-          <p class="eyebrow eyebrow--secondary" data-anim="rise">{{ $data['eyebrow'] }}</p>
+          <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>
         @endif
 
         @if (!empty($data['title']))
           <h2
             class="section-title newsletter__title"
             id="newsletter-title"
-            data-anim="rise"
+
           >
             {!! $data['title'] !!}
           </h2>
         @endif
 
         @if (!empty($data['text']))
-          <p class="newsletter__text" data-anim="rise">{{ $data['text'] }}</p>
+          <p class="newsletter__text">{{ $data['text'] }}</p>
         @endif
       </div>
 
-      <div class="newsletter__form-wrapper" data-anim="scale">
+      <div class="newsletter__form-wrapper">
         <form
           id="newsletterForm"
           class="newsletter__form"

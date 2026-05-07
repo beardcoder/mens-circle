@@ -36,18 +36,18 @@
     </div>
 
     <div class="container">
-      <div class="hero__content" data-anim-group>
-        <p class="hero__label" data-anim="rise">{{ $event->isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
-        <h1 class="hero__title" data-anim="lift">
+      <div class="hero__content">
+        <p class="hero__label">{{ $event->isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
+        <h1 class="hero__title">
           <span class="hero__title-line">{{ $event->title }}</span>
         </h1>
         <div class="hero__bottom">
-          <p class="hero__description" data-anim="rise">
+          <p class="hero__description">
             {{ $event->event_date->translatedFormat('l') }}, {{ $event->event_date->format('d.m.Y') }} · {{ $event->start_time->format('H:i') }} Uhr
             · {{ $event->location }}
           </p>
           @unless ($event->isPast)
-            <div class="hero__cta" data-anim="rise">
+            <div class="hero__cta">
               <a
                 href="#anmeldung"
                 class="btn btn--primary btn--large"
@@ -234,8 +234,8 @@
   <section class="event-info-section">
     <div class="event-info__bg-text" aria-hidden="true">TERMIN</div>
     <div class="container">
-      <div class="event-info__grid" data-anim-group>
-        <div class="event-info__card event-info__card--date" data-anim="lift">
+      <div class="event-info__grid">
+        <div class="event-info__card event-info__card--date">
           <div class="event-info__card-circle" aria-hidden="true"></div>
           <div class="event-info__card-content">
             <h3>Datum</h3>
@@ -244,7 +244,7 @@
           </div>
         </div>
 
-        <div class="event-info__card event-info__card--time" data-anim="lift">
+        <div class="event-info__card event-info__card--time">
           <div class="event-info__card-circle" aria-hidden="true"></div>
           <div class="event-info__card-content">
             <h3>Uhrzeit</h3>
@@ -255,7 +255,7 @@
 
         <div
           class="event-info__card event-info__card--location"
-          data-anim="lift"
+
         >
           <div class="event-info__card-circle" aria-hidden="true"></div>
           <div class="event-info__card-content">
@@ -267,7 +267,7 @@
 
         <div
           class="event-info__card event-info__card--participants"
-          data-anim="lift"
+
         >
           <div class="event-info__card-circle" aria-hidden="true"></div>
           <div class="event-info__card-content">
@@ -308,18 +308,18 @@
     <!-- Event Location Map (Leaflet, lazy-loaded) -->
     <section class="event-map-section">
       <div class="container">
-        <div class="event-map__header" data-anim-group>
-          <p class="eyebrow" data-anim="rise">Anfahrt</p>
+        <div class="event-map__header">
+          <p class="eyebrow">Anfahrt</p>
           <h2
             class="section-title section-title--lg event-map__title"
-            data-anim="rise"
+
           >
             So findest du <span class="text-italic">zu uns</span>
           </h2>
           @if ($event->fullAddress)
-            <p class="event-map__subtitle" data-anim="rise">{{ $event->fullAddress }}</p>
+            <p class="event-map__subtitle">{{ $event->fullAddress }}</p>
           @else
-            <p class="event-map__subtitle" data-anim="rise">{{ $event->location }}</p>
+            <p class="event-map__subtitle">{{ $event->location }}</p>
           @endif
         </div>
 
@@ -370,19 +370,19 @@
   <!-- Event Description Section -->
   <section class="event-about-section">
     <div class="event-about__layout">
-      <div class="event-about__content" data-anim-group>
-        <p class="eyebrow" data-anim="rise">Über das Treffen</p>
+      <div class="event-about__content">
+        <p class="eyebrow">Über das Treffen</p>
         <h2
           class="section-title section-title--lg event-about__title"
-          data-anim="rise"
+
         >
           Ein Raum für <br /><span class="text-italic">echte Begegnung</span>
         </h2>
-        <div class="event-about__text" data-anim="rise">
+        <div class="event-about__text">
           {!! nl2br(e($event->description)) !!}
         </div>
       </div>
-      <div class="event-about__visual" data-anim="scale">
+      <div class="event-about__visual">
         <div class="event-about__quote-area">
           <div class="event-about__circles" aria-hidden="true">
             <div class="event-about__circle event-about__circle--1"></div>
@@ -404,30 +404,30 @@
       <div class="event-cta__circle event-cta__circle--2"></div>
     </div>
     <div class="container">
-      <div class="event-cta__content" data-anim-group>
+      <div class="event-cta__content">
         @if ($event->isPast)
-          <p class="eyebrow" data-anim="rise">Interesse geweckt?</p>
-          <h2 class="section-title event-cta__title" data-anim="rise">
+          <p class="eyebrow">Interesse geweckt?</p>
+          <h2 class="section-title event-cta__title">
             Bleib <span class="text-italic">informiert</span>
           </h2>
           <a
             href="{{ route('home') }}#newsletter"
             class="btn btn--primary btn--large"
-            data-anim="rise"
+
             data-umami-event="cta-click"
             data-umami-event-location="event-cta-bottom"
             data-umami-event-action="go-to-newsletter"
             >Newsletter abonnieren</a
           >
         @else
-          <p class="eyebrow" data-anim="rise">Bereit?</p>
-          <h2 class="section-title event-cta__title" data-anim="rise">
+          <p class="eyebrow">Bereit?</p>
+          <h2 class="section-title event-cta__title">
             Melde dich <span class="text-italic">jetzt</span> an
           </h2>
           <a
             href="#anmeldung"
             class="btn btn--primary btn--large"
-            data-anim="rise"
+
             data-umami-event="cta-click"
             data-umami-event-location="event-cta-bottom"
             data-umami-event-action="scroll-to-registration"

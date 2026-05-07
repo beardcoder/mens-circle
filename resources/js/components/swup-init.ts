@@ -22,9 +22,6 @@ export function initSwup(): Swup {
   });
 
   swup.hooks.on('content:replace', () => {
-    // The body-scoped scroll-animations component observes elements inside
-    // #main; tear it down before re-init so the new content gets fresh
-    // IntersectionObservers.
     destroyAll('body');
     initStitch();
   });

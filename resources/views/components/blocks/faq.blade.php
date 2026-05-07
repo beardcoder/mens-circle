@@ -26,27 +26,27 @@
   <div class="container">
     <div
       class="section-header section-header--start faq__header"
-      data-anim-group
+
     >
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow" data-anim="rise">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title" data-anim="rise">{!! $data['title'] !!}</h2>
+        <h2 class="section-title">{!! $data['title'] !!}</h2>
       @endif
 
       @if (!empty($data['intro']))
-        <p class="section-intro" data-anim="rise">{{ $data['intro'] }}</p>
+        <p class="section-intro">{{ $data['intro'] }}</p>
       @endif
     </div>
 
     @if (!empty($faqItems) && is_array($faqItems))
-      <div class="faq__list" data-anim-group>
+      <div class="faq__list">
         @foreach ($faqItems as $item)
           @if (!empty($item['question']) && !empty($item['answer']))
             <details
-              data-anim="rise"
+
               class="accordion-item"
               name="faq-accordion"
               data-m:toggle="action=faq_toggle;element=details;target=question;location=faq_section"

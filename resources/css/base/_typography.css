@@ -16,17 +16,17 @@ h6 {
   font-weight: 400;
   line-height: 1;
   color: var(--text-primary);
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
 }
 
 h1 {
   font-size: var(--text-5xl);
-  line-height: 0.9;
+  line-height: 0.88;
 }
 
 h2 {
   font-size: var(--text-4xl);
-  line-height: 0.95;
+  line-height: 0.93;
 }
 
 h3 {
@@ -99,17 +99,17 @@ p:last-child {
   gap: 0.75rem;
   align-items: center;
   margin-block-end: var(--rhythm-stack);
-  font-size: 0.65rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
   color: var(--text-accent);
   text-align: inherit;
   text-transform: uppercase;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.32em;
 }
 
 .eyebrow::before {
-  inline-size: clamp(2rem, 5vw, 4.5rem);
-  block-size: 1px;
+  inline-size: clamp(2.5rem, 5vw, 5rem);
+  block-size: 1.5px;
   content: '';
   background: linear-gradient(
     90deg,
@@ -117,38 +117,9 @@ p:last-child {
     var(--eyebrow-line) 24%,
     var(--eyebrow-line)
   );
-  transform: scaleX(0.35);
-  transform-origin: right;
-  transition:
-    opacity var(--duration-slow) var(--ease-settle),
-    transform var(--duration-slower) var(--ease-settle);
-}
-
-/* Reveal the line as the eyebrow enters view. Native scroll-timeline
-   path runs on the compositor; the IO fallback toggles `.is-visible`. */
-.eyebrow.is-visible::before,
-.eyebrow[data-anim].is-visible::before {
   transform: scaleX(1);
+  transform-origin: right;
 }
-
-@supports (animation-timeline: view()) {
-  .eyebrow[data-anim]::before {
-    animation: eyebrow-trace 1ms linear both;
-    animation-timeline: view();
-    animation-range: entry 4% cover 24%;
-  }
-
-  /* Hero eyebrows use the time-based entrance — same reasoning as
-     the [data-anim] children above the fold. */
-  .hero .eyebrow[data-anim]::before,
-  .hero__content .eyebrow[data-anim]::before {
-    animation-timeline: auto;
-    animation-duration: var(--duration-slower);
-    animation-timing-function: var(--ease-settle);
-    animation-range: normal;
-  }
-}
-
 .eyebrow--secondary {
   --eyebrow-line: color-mix(in oklch, var(--accent-secondary) 72%, transparent);
 
@@ -163,12 +134,12 @@ p:last-child {
    ============================================ */
 .section-title {
   margin-block-end: var(--rhythm-stack);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  line-height: 1.1;
+  font-size: clamp(2.25rem, 5.5vw, 4.5rem);
+  line-height: 1.05;
 }
 
 .section-title--lg {
-  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-size: clamp(2.75rem, 7vw, 6rem);
   line-height: 1;
 }
 
@@ -176,7 +147,7 @@ p:last-child {
 .section-title .highlight {
   margin-inline: -0.05em 0.08em;
   font-style: italic;
-  color: var(--color-earth-warm);
+  color: var(--accent-primary);
 }
 
 .section-title--light .text-italic,
@@ -190,7 +161,7 @@ p:last-child {
 .section-header > p:last-child,
 .section-intro {
   margin-block-end: 0;
-  font-size: var(--text-section-body);
+  font-size: var(--text-section-body-lg);
   line-height: var(--leading-relaxed);
   color: var(--text-secondary);
 }
