@@ -34,14 +34,16 @@
 >
   <div class="container">
     <div class="section-header">
-      <p class="eyebrow">Community Stimmen</p>
-      <h2 class="section-title" id="testimonials-title">
+      <p class="eyebrow" data-animate="fade-down">Community Stimmen</p>
+      <h2 class="section-title" id="testimonials-title" data-animate="fade-up">
         Was <span class="highlight">Teilnehmer</span> sagen
       </h2>
-      <p class="testimonials__subtitle">Authentische Einblicke von Männern, die den Kreis erleben</p>
+      <p class="testimonials__subtitle" data-animate="fade-up">
+        Authentische Einblicke von Männern, die den Kreis erleben
+      </p>
     </div>
 
-    <div class="testimonials__grid">
+    <div class="testimonials__grid" data-animate-stagger="fade-up">
       @foreach ($testimonials as $testimonial)
         <article class="testimonial-item">
           <blockquote class="testimonial-item__quote">

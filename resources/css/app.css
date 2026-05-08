@@ -21,7 +21,10 @@
  *   - Container queries where helpful
  *   - Scroll-driven animations (animation-timeline)
  *   - prefers-color-scheme
+ *   - Tailwind CSS utilities
  */
+
+@import 'tailwindcss';
 
 @layer reset, tokens, base, layout, components, sections, utilities;
 
@@ -64,6 +67,7 @@
 @import url('sections/_legal.css') layer(sections);
 @import url('utilities/_animations.css') layer(utilities);
 @import url('utilities/_scroll-animations.css') layer(utilities);
+@import url('utilities/_view-timeline-animations.css') layer(utilities);
 @import url('utilities/_parallax.css') layer(utilities);
 @import url('utilities/_visual.css') layer(utilities);
 @import url('utilities/_view-transitions.css') layer(utilities);
