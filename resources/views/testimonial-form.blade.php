@@ -48,7 +48,6 @@
         <form
           id="testimonialForm"
           class="testimonial-form"
-
           data-submit-url="{{ route('testimonial.submit') }}"
         >
           @csrf

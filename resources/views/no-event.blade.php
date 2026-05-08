@@ -34,7 +34,6 @@
 
     <div class="container">
       <div class="hero__content">
-
         <p class="hero__label">Männerkreis Niederbayern/ Straubing</p>
         <h1 class="hero__title">
           <span class="hero__title-line">Aktuell ist kein</span>
@@ -122,10 +121,7 @@
           Entdecke den <span class="text-italic">Männerkreis</span>
         </h2>
         <p class="no-event-cta__text">Erfahre mehr über uns, unsere Werte und was dich bei einem Treffen erwartet.</p>
-        <a
-          href="{{ route('home') }}"
-          class="btn btn--primary btn--large"
-
+        <a href="{{ route('home') }}" class="btn btn--primary btn--large"
           >Zur Startseite</a
         >
       </div>

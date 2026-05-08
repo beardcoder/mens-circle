@@ -61,37 +61,73 @@
     /* Stagger direct children of grids — pure CSS, index-free.
        nth-child cadence keeps it simple and predictable. */
     :where(
-      .archetypes__grid,
-      .values__grid,
-      .testimonials__grid,
-      .event-info__grid,
-      .journey__steps
-    )
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .event-info__grid,
+        .journey__steps
+      )
       > * {
       animation-delay: calc(var(--rev-step, 80ms) * var(--rev-i, 0));
     }
 
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(1) {
       --rev-i: 0;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(2) {
       --rev-i: 1;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(3) {
       --rev-i: 2;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(4) {
       --rev-i: 3;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(5) {
       --rev-i: 4;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(6) {
       --rev-i: 5;
     }
@@ -176,4 +212,3 @@
     filter: saturate(1.05);
   }
 }
-

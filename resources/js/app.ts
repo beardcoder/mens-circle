@@ -41,42 +41,51 @@ window.testimonialCharCounter = testimonialCharCounter;
 
 // Initialize scroll-based components (they don't need Alpine)
 const headerEl = document.getElementById('header');
+
 if (headerEl) {
   scrollHeader()(headerEl);
 }
 
 const scrollToTopEl = document.getElementById('scrollToTop');
+
 if (scrollToTopEl) {
   scrollToTop()(scrollToTopEl);
 }
 
-const scrollProgressEls = document.querySelectorAll<HTMLElement>('.scroll-progress');
+const scrollProgressEls =
+  document.querySelectorAll<HTMLElement>('.scroll-progress');
+
 scrollProgressEls.forEach((el) => scrollProgress()(el));
 
 // Initialize forms (keep existing logic)
 const newsletterFormEl = document.getElementById('newsletterForm');
+
 if (newsletterFormEl) {
   newsletterForm()(newsletterFormEl);
 }
 
 const registrationFormEl = document.getElementById('registrationForm');
+
 if (registrationFormEl) {
   registrationForm()(registrationFormEl);
 }
 
 const testimonialFormEl = document.getElementById('testimonialForm');
+
 if (testimonialFormEl) {
   testimonialForm()(testimonialFormEl);
 }
 
 // Initialize calendar integration
 const calendarEl = document.getElementById('addToCalendar');
+
 if (calendarEl) {
   calendarIntegration()(calendarEl);
 }
 
 // Initialize event map (Leaflet, lazy-loaded)
 const eventMapEls = document.querySelectorAll<HTMLElement>('[data-event-map]');
+
 eventMapEls.forEach((el) => eventMap()(el));
 
 // AJAX page transitions (Swup 4) — owns native View Transitions for

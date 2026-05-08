@@ -48,10 +48,16 @@
           <span class="logo__text">Männerkreis</span>
         </a>
 
-        <nav class="nav" id="nav">
+        <nav
+          class="nav"
+          id="nav"
+          x-data="window.mobileNav()"
+          :class="{ open: isOpen }"
+        >
           <a
             href="{{ route('home') }}#ueber"
             class="nav__link"
+            @click="handleLinkClick()"
             data-umami-event="nav-click"
             data-umami-event-target="ueber"
             >Über</a
@@ -59,6 +65,7 @@
           <a
             href="{{ route('home') }}#reise"
             class="nav__link"
+            @click="handleLinkClick()"
             data-umami-event="nav-click"
             data-umami-event-target="reise"
             >Die Reise</a
@@ -66,6 +73,7 @@
           <a
             href="{{ route('home') }}#faq"
             class="nav__link"
+            @click="handleLinkClick()"
             data-umami-event="nav-click"
             data-umami-event-target="faq"
             >Fragen</a
@@ -73,6 +81,7 @@
           <a
             href="{{ route('breathing.show') }}"
             class="nav__link"
+            @click="handleLinkClick()"
             data-umami-event="nav-click"
             data-umami-event-target="atemuebung"
             >Atemübung</a
@@ -81,6 +90,7 @@
             <a
               href="{{ $nextEventUrl }}"
               class="btn btn--primary btn--large nav__cta"
+              @click="handleLinkClick()"
               data-umami-event="cta-click"
               data-umami-event-location="header"
               data-umami-event-action="go-to-event"
@@ -89,7 +99,15 @@
           @endif
         </nav>
 
-        <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          :class="{ active: isOpen }"
+          @click="toggle()"
+          @keydown.escape="if (isOpen) close();"
+          :aria-expanded="isOpen"
+          :aria-label="isOpen ? 'Menü schließen' : 'Menü öffnen'"
+        >
           <span></span>
           <span></span>
           <span></span>

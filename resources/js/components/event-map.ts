@@ -10,8 +10,6 @@
  * maps app (uses geo: URI on mobile, OSM directions on desktop).
  */
 
-import { defineComponent } from '@beardcoder/stitch-js';
-
 interface EventMapOptions {
   zoom: number;
   rootMargin: string;
@@ -63,13 +61,13 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
-export const eventMap = defineComponent<EventMapOptions>(
-  {
+export function eventMap(
+  options: EventMapOptions = {
     zoom: 16,
     rootMargin: '200px',
-  },
-  (ctx) => {
-    const el = ctx.el as HTMLElement;
+  }
+) {
+  return (el: HTMLElement) => {
     const data = readDataset(el);
 
     if (!data) {
@@ -79,6 +77,7 @@ export const eventMap = defineComponent<EventMapOptions>(
     }
 
     let initialized = false;
+    let cleanupFn: (() => void) | null = null;
 
     const init = async (): Promise<void> => {
       if (initialized) return;
@@ -99,7 +98,7 @@ export const eventMap = defineComponent<EventMapOptions>(
         scrollWheelZoom: false,
         zoomControl: true,
         attributionControl: true,
-      }).setView([data.lat, data.lng], ctx.options.zoom);
+      }).setView([data.lat, data.lng], options.zoom);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -142,11 +141,11 @@ export const eventMap = defineComponent<EventMapOptions>(
       container.addEventListener('click', enableWheel);
       container.addEventListener('mouseleave', disableWheel);
 
-      ctx.onDestroy(() => {
+      cleanupFn = () => {
         container.removeEventListener('click', enableWheel);
         container.removeEventListener('mouseleave', disableWheel);
         map.remove();
-      });
+      };
 
       el.dataset.state = 'ready';
     };
@@ -154,7 +153,7 @@ export const eventMap = defineComponent<EventMapOptions>(
     if (typeof IntersectionObserver === 'undefined') {
       void init();
 
-      return;
+      return cleanupFn;
     }
 
     const observer = new IntersectionObserver(
@@ -167,11 +166,14 @@ export const eventMap = defineComponent<EventMapOptions>(
           }
         }
       },
-      { rootMargin: ctx.options.rootMargin }
+      { rootMargin: options.rootMargin }
     );
 
     observer.observe(el);
 
-    ctx.onDestroy(() => observer.disconnect());
-  }
-);
+    return () => {
+      observer.disconnect();
+      cleanupFn?.();
+    };
+  };
+}

@@ -5,7 +5,7 @@
 
 export function accordion() {
   return {
-    activeItem: null,
+    activeItem: null as string | null,
 
     toggle(itemId: string): void {
       this.activeItem = this.activeItem === itemId ? null : itemId;

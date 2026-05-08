@@ -202,9 +202,14 @@ async function submitFormRequest(
 export function newsletterForm() {
   return (el: HTMLElement) => {
     const form = el as HTMLFormElement;
+
     if (form.tagName !== 'FORM') return;
 
-    setupAbandonTracking(form, TRACKING_EVENTS.NEWSLETTER_ABANDON_FILLED, 'newsletter');
+    setupAbandonTracking(
+      form,
+      TRACKING_EVENTS.NEWSLETTER_ABANDON_FILLED,
+      'newsletter'
+    );
 
     const handleSubmit = (e: Event): void => {
       e.preventDefault();
@@ -214,6 +219,7 @@ export function newsletterForm() {
 
       if (!validateEmail(email)) {
         showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
+
         return;
       }
 
@@ -242,6 +248,7 @@ export function newsletterForm() {
 export function registrationForm() {
   return (el: HTMLElement) => {
     const form = el as HTMLFormElement;
+
     if (form.tagName !== 'FORM') return;
 
     setupAbandonTracking(
@@ -266,16 +273,19 @@ export function registrationForm() {
 
       if (!firstName || !lastName) {
         showToast('error', 'Bitte fülle alle Pflichtfelder aus.');
+
         return;
       }
 
       if (!validateEmail(email)) {
         showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
+
         return;
       }
 
       if (!privacy) {
         showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
+
         return;
       }
 
@@ -314,6 +324,7 @@ export function registrationForm() {
 export function testimonialForm() {
   return (el: HTMLElement) => {
     const form = el as HTMLFormElement;
+
     if (form.tagName !== 'FORM') return;
 
     setupAbandonTracking(
@@ -342,16 +353,19 @@ export function testimonialForm() {
           'error',
           'Bitte teile deine Erfahrung mit uns (mindestens 10 Zeichen).'
         );
+
         return;
       }
 
       if (!validateEmail(email)) {
         showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
+
         return;
       }
 
       if (!privacy) {
         showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
+
         return;
       }
 
@@ -394,6 +408,7 @@ export function testimonialCharCounter() {
     count: 0,
     updateCount(event: Event): void {
       const textarea = event.target as HTMLTextAreaElement;
+
       this.count = textarea.value.length;
     },
   };

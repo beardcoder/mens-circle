@@ -41,15 +41,11 @@
         @endif
 
         @if (!empty($data['name']))
-          <h2 class="moderator__name">
-            {!! $data['name'] !!}
-          </h2>
+          <h2 class="moderator__name">{!! $data['name'] !!}</h2>
         @endif
 
         @if (!empty($data['bio']))
-          <div class="moderator__bio">
-            {!! $data['bio'] !!}
-          </div>
+          <div class="moderator__bio">{!! $data['bio'] !!}</div>
         @endif
 
         @if (!empty($data['quote']))

@@ -24,10 +24,7 @@
 
 <section class="section section--large faq-section" id="faq">
   <div class="container">
-    <div
-      class="section-header section-header--start faq__header"
-
-    >
+    <div class="section-header section-header--start faq__header">
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif

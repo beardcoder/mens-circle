@@ -69,7 +69,8 @@
 .testimonial-item:hover {
   z-index: 1;
   background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
-  box-shadow: 0 8px 28px color-mix(in oklch, var(--accent-primary) 10%, transparent);
+  box-shadow: 0 8px 28px
+    color-mix(in oklch, var(--accent-primary) 10%, transparent);
   transform: translateY(-0.3rem) scale(1.01);
 }
 
