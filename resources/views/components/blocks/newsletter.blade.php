@@ -5,29 +5,31 @@
 @endphp
 
 <section
-  class="section newsletter-section"
+  class="relative overflow-hidden py-xl text-text-on-dark bg-bg-section-alt newsletter-section"
   id="newsletter"
   aria-labelledby="newsletter-title"
 >
-  <div class="container">
-    <div class="newsletter__layout">
-      <div class="newsletter__content animate-fade-right">
+  <div class="w-full max-w-container px-md mx-auto">
+    <div class="relative z-10 grid grid-cols-2 gap-xl items-center max-[800px]:grid-cols-1 max-[800px]:gap-lg">
+      <div class="animate-fade-right">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>
         @endif
 
         @if (!empty($data['title']))
-          <h2 class="section-title newsletter__title" id="newsletter-title">
+          <h2 class="section-title text-text-on-dark" id="newsletter-title">
             {!! $data['title'] !!}
           </h2>
         @endif
 
         @if (!empty($data['text']))
-          <p class="newsletter__text">{{ $data['text'] }}</p>
+          <p class="mb-0 text-[length:var(--text-section-body)] leading-relaxed text-sand">
+            {{ $data['text'] }}
+          </p>
         @endif
       </div>
 
-      <div class="newsletter__form-wrapper animate-fade-left">
+      <div class="relative animate-fade-left">
         <form
           id="newsletterForm"
           class="newsletter__form"
