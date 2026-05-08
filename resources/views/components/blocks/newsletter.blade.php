@@ -11,7 +11,7 @@
 >
   <div class="container">
     <div class="newsletter__layout">
-      <div class="newsletter__content">
+      <div class="newsletter__content" data-animate="fade-right">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>
         @endif
@@ -27,7 +27,7 @@
         @endif
       </div>
 
-      <div class="newsletter__form-wrapper">
+      <div class="newsletter__form-wrapper" data-animate="fade-left">
         <form
           id="newsletterForm"
           class="newsletter__form"

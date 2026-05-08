@@ -1,0 +1,131 @@
+/**
+ * Scroll-Based View Timeline Animations
+ *
+ * Uses CSS animation-timeline: view() for scroll-driven animations.
+ * Elements animate when they come into view during scrolling.
+ *
+ * Animation ranges:
+ * - entry: animation starts when element enters viewport
+ * - cover: animation spans entire element visibility
+ * - exit: animation happens as element exits viewport
+ */
+
+/* Base animation timeline setup */
+[data-animate] {
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  [data-animate] {
+    animation: none !important;
+  }
+}
+
+/* Fade Up - Default for most content */
+[data-animate='fade-up'] {
+  animation-name: fade-up;
+}
+
+/* Fade Down - Headers, titles */
+[data-animate='fade-down'] {
+  animation-name: fade-down;
+}
+
+/* Fade Left - Right-side content */
+[data-animate='fade-left'] {
+  animation-name: fade-left;
+}
+
+/* Fade Right - Left-side content */
+[data-animate='fade-right'] {
+  animation-name: fade-right;
+}
+
+/* Scale Up - Cards, buttons, CTAs */
+[data-animate='scale-up'] {
+  animation-name: scale-up;
+}
+
+/* Scale Down - Hero elements */
+[data-animate='scale-down'] {
+  animation-name: scale-down;
+}
+
+/* Slide Up - Footer, bottom sections */
+[data-animate='slide-up'] {
+  animation-name: slide-up;
+}
+
+/* Slide Down - Top sections */
+[data-animate='slide-down'] {
+  animation-name: slide-down;
+}
+
+/* Slide Left - Right panels */
+[data-animate='slide-left'] {
+  animation-name: slide-left;
+}
+
+/* Slide Right - Left panels */
+[data-animate='slide-right'] {
+  animation-name: slide-right;
+}
+
+/* Staggered animations for lists/grids */
+[data-animate-stagger] > * {
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+[data-animate-stagger='fade-up'] > * {
+  animation-name: fade-up;
+}
+
+[data-animate-stagger='scale-up'] > * {
+  animation-name: scale-up;
+}
+
+/* Add delays for stagger effect */
+[data-animate-stagger] > :nth-child(1) {
+  animation-delay: 0ms;
+}
+
+[data-animate-stagger] > :nth-child(2) {
+  animation-delay: 100ms;
+}
+
+[data-animate-stagger] > :nth-child(3) {
+  animation-delay: 200ms;
+}
+
+[data-animate-stagger] > :nth-child(4) {
+  animation-delay: 300ms;
+}
+
+[data-animate-stagger] > :nth-child(5) {
+  animation-delay: 400ms;
+}
+
+[data-animate-stagger] > :nth-child(6) {
+  animation-delay: 500ms;
+}
+
+/* Longer animation range for slower animations */
+[data-animate-slow] {
+  animation-timeline: view();
+  animation-range: entry 0% cover 50%;
+}
+
+/* Shorter animation range for quick animations */
+[data-animate-fast] {
+  animation-timeline: view();
+  animation-range: entry 0% cover 20%;
+}
+
+/* Custom timing for hero and large elements */
+[data-animate-hero] {
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
