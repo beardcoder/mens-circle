@@ -1,19 +1,12 @@
 /**
  * Newsletter Section
- * Email signup section
+ * Decorative effects (noise texture, gradient glow)
+ * Layout migrated to Tailwind utilities in template
  */
 
 /* ============================================
-   Newsletter Section Base
+   Noise Texture Overlay
    ============================================ */
-.newsletter-section {
-  position: relative;
-  overflow: hidden;
-  color: var(--text-on-dark);
-  background: var(--bg-section-alt);
-}
-
-/* Noise texture */
 .newsletter-section::before {
   position: absolute;
   inset: 0;
@@ -23,7 +16,9 @@
   opacity: 0.04;
 }
 
-/* Gradient glow */
+/* ============================================
+   Animated Gradient Glow
+   ============================================ */
 .newsletter-section::after {
   position: absolute;
   inset-block-start: -30%;
@@ -38,45 +33,4 @@
     transparent 50%
   );
   animation: breathe-slow 20s var(--ease-organic) infinite;
-}
-
-/* ============================================
-   Newsletter Layout
-   ============================================ */
-.newsletter__layout {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-xl);
-  align-items: center;
-}
-
-@media (width <= 800px) {
-  .newsletter__layout {
-    grid-template-columns: 1fr;
-    gap: var(--space-lg);
-  }
-}
-
-/* ============================================
-   Newsletter Content — title color flips on dark; spacing comes from
-   the shared `.section-title` rhythm.
-   ============================================ */
-.newsletter__title {
-  color: var(--text-on-dark);
-}
-
-.newsletter__text {
-  margin-block-end: 0;
-  font-size: var(--text-section-body);
-  line-height: var(--leading-relaxed);
-  color: var(--color-sand);
-}
-
-/* ============================================
-   Newsletter Form
-   ============================================ */
-.newsletter__form-wrapper {
-  position: relative;
 }

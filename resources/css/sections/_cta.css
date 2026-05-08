@@ -1,19 +1,12 @@
 /**
  * CTA Section
- * Call-to-action section
+ * Decorative breathing circles (keep custom animations)
+ * Layout migrated to Tailwind utilities in template
  */
 
 /* ============================================
-   CTA Section Base
+   Decorative Breathing Circles
    ============================================ */
-.cta-section {
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  background: var(--bg-tertiary);
-}
-
-/* Decorative circles */
 .cta-section::before,
 .cta-section::after {
   position: absolute;
@@ -38,23 +31,4 @@
   block-size: 35vw;
   opacity: 0.2;
   animation: breathe 20s var(--ease-organic) infinite -8s;
-}
-
-/* ============================================
-   CTA Content
-   ============================================ */
-.cta__content {
-  position: relative;
-  z-index: 1;
-  max-inline-size: 700px;
-  margin-inline: auto;
-}
-
-/* Eyebrow + .section-title use the shared rhythm. CTA only adds the
-   gap between the intro paragraph and the action button. */
-.cta__text {
-  margin-block-end: var(--rhythm-block);
-  font-size: var(--text-section-body-lg);
-  line-height: var(--leading-relaxed);
-  color: var(--text-secondary);
 }
