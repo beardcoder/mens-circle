@@ -34,16 +34,8 @@
  *   - Tailwind CSS v4 utilities
  */
 
-@import 'tailwindcss';
-
-@layer reset, tokens, base, components, sections, utilities;
-
 @import url('@fontsource-variable/playfair-display');
 @import url('@fontsource-variable/dm-sans');
-
-/* Global @keyframes — kept unlayered so the animation lookup never has
-   to cross cascade layer boundaries. Used by ambient breathing circles
-   in hero / intro / cta / newsletter / whatsapp / event sections. */
 @import url('base/_keyframes.css');
 @import url('base/_reset.css') layer(reset);
 @import url('base/_variables.css') layer(tokens);
@@ -80,3 +72,10 @@
 @import url('utilities/_visual.css') layer(utilities);
 @import url('utilities/_view-transitions.css') layer(utilities);
 @import url('utilities/_print.css') layer(utilities);
+/* stylelint-disable-next-line import-notation */
+@import 'tailwindcss';
+
+/* stylelint-disable-next-line at-rule-no-unknown */
+@config '../../tailwind.config.js';
+
+@layer reset, tokens, base, components, sections, utilities;
