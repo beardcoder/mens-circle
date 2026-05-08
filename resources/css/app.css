@@ -67,7 +67,6 @@
 @import url('sections/_legal.css') layer(sections);
 @import url('utilities/_animations.css') layer(utilities);
 @import url('utilities/_scroll-animations.css') layer(utilities);
-@import url('utilities/_view-timeline-animations.css') layer(utilities);
 @import url('utilities/_parallax.css') layer(utilities);
 @import url('utilities/_visual.css') layer(utilities);
 @import url('utilities/_view-transitions.css') layer(utilities);

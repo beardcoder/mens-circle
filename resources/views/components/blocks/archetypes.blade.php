@@ -26,21 +26,21 @@
     <div class="container">
       <div class="section-header">
         @if (!empty($data['eyebrow']))
-          <p class="eyebrow" data-animate="fade-down">{{ $data['eyebrow'] }}</p>
+          <p class="eyebrow animate-fade-down">{{ $data['eyebrow'] }}</p>
         @endif
 
         @if (!empty($data['title']))
-          <h2 class="section-title" id="archetypes-title" data-animate="fade-up">
+          <h2 class="section-title animate-fade-up" id="archetypes-title">
             {{ $data['title'] }}
           </h2>
         @endif
 
         @if (!empty($data['intro']))
-          <p class="section-intro" data-animate="fade-up">{{ $data['intro'] }}</p>
+          <p class="section-intro animate-fade-up">{{ $data['intro'] }}</p>
         @endif
       </div>
 
-      <div class="archetypes__grid" data-animate-stagger="scale-up">
+      <div class="archetypes__grid animate-scale-up">
         @foreach ($items as $item)
           @php $icon = $detectIcon($item); @endphp
           <article class="archetype-card archetype-card--{{ $icon }}">
