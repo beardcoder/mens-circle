@@ -72,10 +72,10 @@
 @import url('utilities/_visual.css') layer(utilities);
 @import url('utilities/_view-transitions.css') layer(utilities);
 @import url('utilities/_print.css') layer(utilities);
-/* stylelint-disable-next-line import-notation */
+/* stylelint-disable-next-line import-notation -- Tailwind v4 uses a bare package import here. */
 @import 'tailwindcss';
 
-/* stylelint-disable-next-line at-rule-no-unknown */
+/* stylelint-disable-next-line at-rule-no-unknown -- Tailwind v4 reads the legacy JS config through this directive. */
 @config '../../tailwind.config.js';
 
 @layer reset, tokens, base, components, sections, utilities;
