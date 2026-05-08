@@ -54,7 +54,8 @@
     var(--accent-primary) 28%,
     var(--border-light)
   );
-  box-shadow: 0 8px 32px color-mix(in oklch, var(--accent-primary) 10%, transparent);
+  box-shadow: 0 8px 32px
+    color-mix(in oklch, var(--accent-primary) 10%, transparent);
   transform: translate3d(0, -0.5rem, 0) scale(1.01);
 }
 

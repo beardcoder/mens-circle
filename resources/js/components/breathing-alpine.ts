@@ -19,6 +19,7 @@ const PICKER_ITEM_WIDTH = 72;
 function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
   const remainder = Math.floor(seconds % 60);
+
   return `${minutes.toString().padStart(2, '0')}:${remainder.toString().padStart(2, '0')}`;
 }
 
@@ -60,6 +61,13 @@ export function breathingApp(initialConfig: {
     pickerStartIndex: 0,
     pickerCurrentIndex: 0,
 
+    // Alpine magic properties (injected by Alpine.js at runtime)
+    $el: null as unknown as HTMLElement,
+    $refs: {} as Record<string, HTMLElement>,
+    $nextTick: (callback: () => void) => {
+      setTimeout(callback, 0);
+    },
+
     // Computed
     get phaseLabel(): string {
       return PHASE_LABEL[this.phase];
@@ -78,6 +86,7 @@ export function breathingApp(initialConfig: {
       if (this.phase === 'recovery') {
         return `Halten · ${this.timer}s`;
       }
+
       return 'Nimm dir einen Moment, spüre nach.';
     },
 
@@ -156,8 +165,12 @@ export function breathingApp(initialConfig: {
       const timerTick = (): void => {
         if (this.phase !== 'breathing') return;
         this.timer = Math.floor((performance.now() - startedAt) / 1000);
-        this.rafHandle = window.setTimeout(timerTick, 1000) as unknown as number;
+        this.rafHandle = window.setTimeout(
+          timerTick,
+          1000
+        ) as unknown as number;
       };
+
       this.rafHandle = window.setTimeout(timerTick, 1000) as unknown as number;
     },
 
@@ -168,10 +181,14 @@ export function breathingApp(initialConfig: {
       this.timer = 0;
 
       const tick = (): void => {
-        const elapsed = Math.floor((performance.now() - this.retentionStart) / 1000);
+        const elapsed = Math.floor(
+          (performance.now() - this.retentionStart) / 1000
+        );
+
         this.timer = elapsed;
         this.rafHandle = requestAnimationFrame(tick);
       };
+
       this.rafHandle = requestAnimationFrame(tick);
     },
 
@@ -179,6 +196,7 @@ export function breathingApp(initialConfig: {
       this.clearScheduled();
       this.phase = 'recovery';
       let remaining = this.config.recoveryHold;
+
       this.timer = remaining;
 
       const tick = (): void => {
@@ -189,11 +207,13 @@ export function breathingApp(initialConfig: {
           } else {
             this.startBreathing();
           }
+
           return;
         }
         this.timer = remaining;
         this.timerHandle = window.setTimeout(tick, 1000);
       };
+
       this.timerHandle = window.setTimeout(tick, 1000);
     },
 
@@ -217,6 +237,7 @@ export function breathingApp(initialConfig: {
     handleStart(): void {
       this.readSettings();
       const nextCycle = this.config.inhaleMs + this.config.exhaleMs;
+
       this.$el.style.setProperty('--breathing-cycle-ms', `${nextCycle}ms`);
       this.round = 0;
       this.breath = 0;
@@ -254,10 +275,16 @@ export function breathingApp(initialConfig: {
       // Settings are bound via x-model, so they're already in config
     },
 
-    stepSetting(key: 'rounds' | 'recoveryHold', delta: number, min: number, max: number): void {
+    stepSetting(
+      key: 'rounds' | 'recoveryHold',
+      delta: number,
+      min: number,
+      max: number
+    ): void {
       if (this.settingsLocked) return;
       const current = this.config[key];
       const next = clamp(current + delta, min, max);
+
       if (next !== current) {
         this.config[key] = next;
       }
@@ -267,17 +294,20 @@ export function breathingApp(initialConfig: {
     setupPicker(): void {
       this.$nextTick(() => {
         const track = this.$refs.pickerTrack as HTMLElement;
+
         if (!track) return;
 
         const min = 10;
         const max = 60;
         const step = 5;
         const values: number[] = [];
+
         for (let v = min; v <= max; v += step) values.push(v);
 
         track.innerHTML = '';
         values.forEach((value) => {
           const item = document.createElement('button');
+
           item.type = 'button';
           item.className = 'breathing-picker__item';
           item.dataset.value = String(value);
@@ -287,7 +317,9 @@ export function breathingApp(initialConfig: {
         });
 
         const initialIndex = values.indexOf(this.config.breaths);
-        this.pickerCurrentIndex = initialIndex >= 0 ? initialIndex : Math.floor(values.length / 2);
+
+        this.pickerCurrentIndex =
+          initialIndex >= 0 ? initialIndex : Math.floor(values.length / 2);
         this.applyPickerTransform(false);
         this.highlightPickerItem();
       });
@@ -303,6 +335,7 @@ export function breathingApp(initialConfig: {
       this.pickerDragging = false;
 
       const track = this.$refs.pickerTrack as HTMLElement;
+
       track.setPointerCapture(event.pointerId);
     },
 
@@ -310,6 +343,7 @@ export function breathingApp(initialConfig: {
       if (this.pickerPointerId !== event.pointerId) return;
 
       const delta = event.clientX - this.pickerStartX;
+
       if (!this.pickerDragging && Math.abs(delta) > 4) {
         this.pickerDragging = true;
       }
@@ -338,16 +372,21 @@ export function breathingApp(initialConfig: {
         event.preventDefault();
         event.stopPropagation();
         this.pickerDragging = false;
+
         return;
       }
 
-      const target = (event.target as HTMLElement).closest<HTMLElement>('.breathing-picker__item');
+      const target = (event.target as HTMLElement).closest<HTMLElement>(
+        '.breathing-picker__item'
+      );
+
       if (!target?.dataset.value) return;
 
       const value = Number.parseInt(target.dataset.value, 10);
       const min = 10;
       const step = 5;
       const index = (value - min) / step;
+
       this.setPickerIndex(index, true);
     },
 
@@ -366,6 +405,7 @@ export function breathingApp(initialConfig: {
       } else if (event.key === 'End') {
         event.preventDefault();
         const max = Math.floor((60 - 10) / 5);
+
         this.setPickerIndex(max, true);
       }
     },
@@ -394,20 +434,26 @@ export function breathingApp(initialConfig: {
 
     applyPickerTransform(animated: boolean): void {
       const track = this.$refs.pickerTrack as HTMLElement;
+
       if (!track) return;
 
       track.style.transition = animated
         ? 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1)'
         : 'none';
       const base = -this.pickerCurrentIndex * PICKER_ITEM_WIDTH;
+
       track.style.transform = `translate3d(${base + this.pickerOffset}px, 0, 0)`;
     },
 
     highlightPickerItem(): void {
       const track = this.$refs.pickerTrack as HTMLElement;
+
       if (!track) return;
 
-      const items = track.querySelectorAll<HTMLElement>('.breathing-picker__item');
+      const items = track.querySelectorAll<HTMLElement>(
+        '.breathing-picker__item'
+      );
+
       items.forEach((item, i) => {
         item.classList.toggle('is-active', i === this.pickerCurrentIndex);
         item.tabIndex = i === this.pickerCurrentIndex ? 0 : -1;

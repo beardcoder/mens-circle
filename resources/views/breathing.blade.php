@@ -61,7 +61,15 @@
 
         <div
           class="breathing-app"
-          x-data="window.breathingApp({ breaths: 35, rounds: 3, recoveryHold: 15, inhaleMs: 1800, exhaleMs: 1800 })"
+          x-data="
+            window.breathingApp({
+              breaths: 35,
+              rounds: 3,
+              recoveryHold: 15,
+              inhaleMs: 1800,
+              exhaleMs: 1800,
+            })
+          "
           x-init="init()"
           :data-phase="phase"
           :style="`--breathing-cycle-ms: ${cycleMs}ms`"
@@ -70,7 +78,13 @@
             <div
               class="breathing-app__circle"
               :data-phase="phase"
-              :data-motion="phase === 'breathing' ? 'wave' : phase === 'retention' ? 'hold-high' : phase === 'recovery' ? 'hold-low' : ''"
+              :data-motion="phase === 'breathing'
+                ? 'wave'
+                : phase === 'retention'
+                  ? 'hold-high'
+                  : phase === 'recovery'
+                    ? 'hold-low'
+                    : ''"
               @click="handleCircleClick()"
             >
               <span
@@ -88,7 +102,10 @@
               <span class="breathing-app__core" aria-hidden="true"></span>
               <span class="breathing-app__label">
                 <span class="breathing-app__phase" x-text="phaseLabel"></span>
-                <span class="breathing-app__counter" x-text="counterText"></span>
+                <span
+                  class="breathing-app__counter"
+                  x-text="counterText"
+                ></span>
               </span>
             </div>
           </div>
@@ -100,7 +117,10 @@
             </div>
             <div class="breathing-app__meta-item">
               <span class="breathing-app__meta-label">Atemzug</span>
-              <span class="breathing-app__meta-value" x-html="breathText"></span>
+              <span
+                class="breathing-app__meta-value"
+                x-html="breathText"
+              ></span>
             </div>
             <div class="breathing-app__meta-item">
               <span class="breathing-app__meta-label">Zeit</span>
@@ -118,11 +138,7 @@
               :title="startButtonLabel"
               data-umami-event="breathing-start"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M8 5.14v13.72a1 1 0 0 0 1.54.84l10.3-6.86a1 1 0 0 0 0-1.68L9.54 4.3A1 1 0 0 0 8 5.14Z" />
               </svg>
             </button>

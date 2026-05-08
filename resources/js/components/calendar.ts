@@ -1,9 +1,8 @@
 /**
  * Calendar Integration Component
- * Handles ICS and Google Calendar export using stitch-js
+ * Handles ICS and Google Calendar export
  */
 
-import { defineComponent } from '@beardcoder/stitch-js';
 import type { EventData } from '@/types';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 
@@ -68,20 +67,22 @@ function generateGoogleCalendarUrl(event: EventData): string {
  * Calendar integration component
  * Attach to #addToCalendar — manages calendar export modal and download links
  */
-export const calendarIntegration = defineComponent<CalendarOptions>(
-  {
+export function calendarIntegration(
+  options: CalendarOptions = {
     modalSelector: '#calendarModal',
     icsSelector: '#calendarICS',
     googleSelector: '#calendarGoogle',
-  },
-  (ctx) => {
-    const { options: o } = ctx;
-    const calendarModal = document.querySelector<HTMLElement>(o.modalSelector);
+  }
+) {
+  return (el: HTMLElement) => {
+    const calendarModal = document.querySelector<HTMLElement>(
+      options.modalSelector
+    );
     const calendarICS = document.querySelector<HTMLAnchorElement>(
-      o.icsSelector
+      options.icsSelector
     );
     const calendarGoogle = document.querySelector<HTMLAnchorElement>(
-      o.googleSelector
+      options.googleSelector
     );
 
     const fallback: EventData = {
@@ -94,7 +95,8 @@ export const calendarIntegration = defineComponent<CalendarOptions>(
       endDate: '2025-01-24',
       endTime: '21:30',
     };
-    const ds = (ctx.el as HTMLElement).dataset;
+
+    const ds = el.dataset;
     const eventData: EventData = ds.eventTitle
       ? {
           title: ds.eventTitle,
@@ -107,22 +109,23 @@ export const calendarIntegration = defineComponent<CalendarOptions>(
         }
       : (window.eventData ?? fallback);
 
+    let icsBlobUrl: string | null = null;
+
     if (calendarICS) {
       const icsContent = generateICS(eventData);
       const blob = new Blob([icsContent], {
         type: 'text/calendar;charset=utf-8',
       });
-      const icsBlobUrl = URL.createObjectURL(blob);
 
+      icsBlobUrl = URL.createObjectURL(blob);
       calendarICS.href = icsBlobUrl;
-      ctx.onDestroy(() => URL.revokeObjectURL(icsBlobUrl));
     }
 
     if (calendarGoogle) {
       calendarGoogle.href = generateGoogleCalendarUrl(eventData);
     }
 
-    ctx.on('click', () => {
+    const handleButtonClick = (): void => {
       if (!calendarModal) return;
 
       trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, {
@@ -130,45 +133,40 @@ export const calendarIntegration = defineComponent<CalendarOptions>(
       });
 
       calendarModal.classList.add('open');
-    });
+    };
 
-    if (calendarICS) {
-      const handleICSClick = (): void => {
-        trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
-          event: eventData.title,
-        });
-      };
+    const handleICSClick = (): void => {
+      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
+        event: eventData.title,
+      });
+    };
 
-      calendarICS.addEventListener('click', handleICSClick);
-      ctx.onDestroy(() =>
-        calendarICS.removeEventListener('click', handleICSClick)
-      );
-    }
+    const handleGoogleClick = (): void => {
+      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
+        event: eventData.title,
+      });
+    };
 
-    if (calendarGoogle) {
-      const handleGoogleClick = (): void => {
-        trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
-          event: eventData.title,
-        });
-      };
+    const handleModalClick = (e: MouseEvent): void => {
+      if (e.target === calendarModal && calendarModal) {
+        calendarModal.classList.remove('open');
+      }
+    };
 
-      calendarGoogle.addEventListener('click', handleGoogleClick);
-      ctx.onDestroy(() =>
-        calendarGoogle.removeEventListener('click', handleGoogleClick)
-      );
-    }
+    el.addEventListener('click', handleButtonClick);
+    calendarICS?.addEventListener('click', handleICSClick);
+    calendarGoogle?.addEventListener('click', handleGoogleClick);
+    calendarModal?.addEventListener('click', handleModalClick);
 
-    if (calendarModal) {
-      const handleModalClick = (e: MouseEvent): void => {
-        if (e.target === calendarModal) {
-          calendarModal.classList.remove('open');
-        }
-      };
-
-      calendarModal.addEventListener('click', handleModalClick);
-      ctx.onDestroy(() =>
-        calendarModal.removeEventListener('click', handleModalClick)
-      );
-    }
-  }
-);
+    // Cleanup function (not currently called, but documents cleanup logic)
+    return () => {
+      el.removeEventListener('click', handleButtonClick);
+      calendarICS?.removeEventListener('click', handleICSClick);
+      calendarGoogle?.removeEventListener('click', handleGoogleClick);
+      calendarModal?.removeEventListener('click', handleModalClick);
+      if (icsBlobUrl) {
+        URL.revokeObjectURL(icsBlobUrl);
+      }
+    };
+  };
+}

@@ -17,9 +17,7 @@
     </div>
 
     @if (!empty($data['content']))
-      <div class="section__content">
-        {!! $data['content'] !!}
-      </div>
+      <div class="section__content">{!! $data['content'] !!}</div>
     @endif
   </div>
 </section>

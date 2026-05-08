@@ -12,9 +12,7 @@
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title cta__title">
-          {!! $data['title'] !!}
-        </h2>
+        <h2 class="section-title cta__title">{!! $data['title'] !!}</h2>
       @endif
 
       @if (!empty($data['text']))
@@ -32,7 +30,6 @@
           <a
             href="{{ $resolvedButtonLink }}"
             class="btn btn--primary btn--large"
-
             data-umami-event="cta-click"
             data-umami-event-location="cta-block"
             data-umami-event-text="{{ $data['button_text'] }}"

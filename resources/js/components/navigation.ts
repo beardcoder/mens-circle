@@ -26,6 +26,7 @@ export function scrollHeader(
 
     const updateScrollState = (): void => {
       const scrolled = window.scrollY > options.scrollThreshold || !hasHero;
+
       el.classList.toggle('scrolled', scrolled);
     };
 
@@ -34,6 +35,7 @@ export function scrollHeader(
 
     if (hasHero) {
       const hero = document.querySelector<HTMLElement>(options.heroSelector);
+
       if (!hero) return;
 
       const observer = new IntersectionObserver(
@@ -114,11 +116,11 @@ export function scrollProgress(
     const root = document.documentElement;
     let target = 0;
     let current = 0;
-    let raf = 0;
     let running = false;
 
     const computeTarget = (): void => {
       const max = root.scrollHeight - globalThis.innerHeight;
+
       target = max > 0 ? Math.min(1, Math.max(0, root.scrollTop / max)) : 0;
     };
 
@@ -129,19 +131,20 @@ export function scrollProgress(
         current = target;
         el.style.transform = `scaleX(${current})`;
         running = false;
+
         return;
       }
 
       current += delta * smoothing;
       el.style.transform = `scaleX(${current})`;
-      raf = requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
     };
 
     const schedule = (): void => {
       computeTarget();
       if (running) return;
       running = true;
-      raf = requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
     };
 
     computeTarget();
@@ -152,7 +155,9 @@ export function scrollProgress(
     globalThis.addEventListener('resize', schedule);
 
     const resizeObserver =
-      typeof ResizeObserver === 'function' ? new ResizeObserver(schedule) : null;
+      typeof ResizeObserver === 'function'
+        ? new ResizeObserver(schedule)
+        : null;
 
     resizeObserver?.observe(root);
     if (document.body) resizeObserver?.observe(document.body);

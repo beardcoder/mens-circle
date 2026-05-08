@@ -253,10 +253,7 @@
           </div>
         </div>
 
-        <div
-          class="event-info__card event-info__card--location"
-
-        >
+        <div class="event-info__card event-info__card--location">
           <div class="event-info__card-circle" aria-hidden="true"></div>
           <div class="event-info__card-content">
             <h3>Ort</h3>
@@ -265,10 +262,7 @@
           </div>
         </div>
 
-        <div
-          class="event-info__card event-info__card--participants"
-
-        >
+        <div class="event-info__card event-info__card--participants">
           <div class="event-info__card-circle" aria-hidden="true"></div>
           <div class="event-info__card-content">
             <h3>Teilnehmer</h3>
@@ -310,10 +304,7 @@
       <div class="container">
         <div class="event-map__header">
           <p class="eyebrow">Anfahrt</p>
-          <h2
-            class="section-title section-title--lg event-map__title"
-
-          >
+          <h2 class="section-title section-title--lg event-map__title">
             So findest du <span class="text-italic">zu uns</span>
           </h2>
           @if ($event->fullAddress)
@@ -372,10 +363,7 @@
     <div class="event-about__layout">
       <div class="event-about__content">
         <p class="eyebrow">Über das Treffen</p>
-        <h2
-          class="section-title section-title--lg event-about__title"
-
-        >
+        <h2 class="section-title section-title--lg event-about__title">
           Ein Raum für <br /><span class="text-italic">echte Begegnung</span>
         </h2>
         <div class="event-about__text">
@@ -413,7 +401,6 @@
           <a
             href="{{ route('home') }}#newsletter"
             class="btn btn--primary btn--large"
-
             data-umami-event="cta-click"
             data-umami-event-location="event-cta-bottom"
             data-umami-event-action="go-to-newsletter"
@@ -427,7 +414,6 @@
           <a
             href="#anmeldung"
             class="btn btn--primary btn--large"
-
             data-umami-event="cta-click"
             data-umami-event-location="event-cta-bottom"
             data-umami-event-action="scroll-to-registration"
