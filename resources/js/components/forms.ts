@@ -1,9 +1,9 @@
 /**
  * Form Components
- * Newsletter, registration, and testimonial forms using stitch-js
+ * Newsletter, registration, and testimonial forms
+ * Core logic preserved, Alpine.js used for UI enhancements where needed
  */
 
-import { defineComponent } from '@beardcoder/stitch-js';
 import { validateEmail } from '@/utils/helpers';
 import { showToast } from '@/utils/toast';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
@@ -89,8 +89,7 @@ function getFormCompletionState(form: HTMLFormElement): FormCompletionState {
 function setupAbandonTracking(
   form: HTMLFormElement,
   eventName: string,
-  formType: string,
-  onDestroy: (fn: () => void) => void
+  formType: string
 ): { markSubmitted: () => void } {
   let hasSubmitted = false;
   let hasTracked = false;
@@ -147,14 +146,6 @@ function setupAbandonTracking(
     capture: true,
   });
 
-  onDestroy(() => {
-    form.removeEventListener('input', markInteraction);
-    form.removeEventListener('change', markInteraction);
-    form.removeEventListener('submit', markSubmitted);
-    window.removeEventListener('pagehide', trackAbandonIfFilled);
-    window.removeEventListener('beforeunload', trackAbandonIfFilled);
-  });
-
   return { markSubmitted };
 }
 
@@ -204,28 +195,18 @@ async function submitFormRequest(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface NewsletterFormOptions {}
-
 /**
  * Newsletter form component
  * Attach to #newsletterForm
  */
-export const newsletterForm = defineComponent<NewsletterFormOptions>(
-  {},
-  (ctx) => {
-    const form = ctx.el as HTMLFormElement;
-
+export function newsletterForm() {
+  return (el: HTMLElement) => {
+    const form = el as HTMLFormElement;
     if (form.tagName !== 'FORM') return;
 
-    setupAbandonTracking(
-      form,
-      TRACKING_EVENTS.NEWSLETTER_ABANDON_FILLED,
-      'newsletter',
-      (fn) => ctx.onDestroy(fn)
-    );
+    setupAbandonTracking(form, TRACKING_EVENTS.NEWSLETTER_ABANDON_FILLED, 'newsletter');
 
-    ctx.on('submit', (e) => {
+    const handleSubmit = (e: Event): void => {
       e.preventDefault();
 
       const formData = new FormData(form);
@@ -233,7 +214,6 @@ export const newsletterForm = defineComponent<NewsletterFormOptions>(
 
       if (!validateEmail(email)) {
         showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
-
         return;
       }
 
@@ -249,32 +229,28 @@ export const newsletterForm = defineComponent<NewsletterFormOptions>(
             error: error.message,
           })
       );
-    });
-  }
-);
+    };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface RegistrationFormOptions {}
+    form.addEventListener('submit', handleSubmit);
+  };
+}
 
 /**
  * Event registration form component
  * Attach to #registrationForm
  */
-export const registrationForm = defineComponent<RegistrationFormOptions>(
-  {},
-  (ctx) => {
-    const form = ctx.el as HTMLFormElement;
-
+export function registrationForm() {
+  return (el: HTMLElement) => {
+    const form = el as HTMLFormElement;
     if (form.tagName !== 'FORM') return;
 
     setupAbandonTracking(
       form,
       TRACKING_EVENTS.EVENT_REGISTRATION_ABANDON_FILLED,
-      'event-registration',
-      (fn) => ctx.onDestroy(fn)
+      'event-registration'
     );
 
-    ctx.on('submit', (e) => {
+    const handleSubmit = (e: Event): void => {
       e.preventDefault();
 
       const formData = new FormData(form);
@@ -290,19 +266,16 @@ export const registrationForm = defineComponent<RegistrationFormOptions>(
 
       if (!firstName || !lastName) {
         showToast('error', 'Bitte fülle alle Pflichtfelder aus.');
-
         return;
       }
 
       if (!validateEmail(email)) {
         showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
-
         return;
       }
 
       if (!privacy) {
         showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
-
         return;
       }
 
@@ -328,48 +301,30 @@ export const registrationForm = defineComponent<RegistrationFormOptions>(
             error: error.message,
           })
       );
-    });
-  }
-);
+    };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface TestimonialFormOptions {}
+    form.addEventListener('submit', handleSubmit);
+  };
+}
 
 /**
  * Testimonial form component
  * Attach to #testimonialForm
  */
-export const testimonialForm = defineComponent<TestimonialFormOptions>(
-  {},
-  (ctx) => {
-    const form = ctx.el as HTMLFormElement;
-
+export function testimonialForm() {
+  return (el: HTMLElement) => {
+    const form = el as HTMLFormElement;
     if (form.tagName !== 'FORM') return;
 
     setupAbandonTracking(
       form,
       TRACKING_EVENTS.TESTIMONIAL_ABANDON_FILLED,
-      'testimonial',
-      (fn) => ctx.onDestroy(fn)
+      'testimonial'
     );
 
-    const quoteTextarea = ctx.query<HTMLTextAreaElement>('#quote');
-    const charCount = document.getElementById('charCount');
+    const submitUrl = form.dataset.submitUrl ?? '';
 
-    if (quoteTextarea && charCount) {
-      const handleInput = (): void => {
-        charCount.textContent = String(quoteTextarea.value.length);
-      };
-
-      quoteTextarea.addEventListener('input', handleInput);
-      ctx.onDestroy(() =>
-        quoteTextarea.removeEventListener('input', handleInput)
-      );
-    }
-
-    const submitUrl = ctx.el.dataset.submitUrl ?? '';
-
-    ctx.on('submit', (e) => {
+    const handleSubmit = (e: Event): void => {
       e.preventDefault();
 
       const formData = new FormData(form);
@@ -387,19 +342,16 @@ export const testimonialForm = defineComponent<TestimonialFormOptions>(
           'error',
           'Bitte teile deine Erfahrung mit uns (mindestens 10 Zeichen).'
         );
-
         return;
       }
 
       if (!validateEmail(email)) {
         showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
-
         return;
       }
 
       if (!privacy) {
         showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
-
         return;
       }
 
@@ -420,10 +372,6 @@ export const testimonialForm = defineComponent<TestimonialFormOptions>(
           privacy: privacy ? 1 : 0,
         },
         () => {
-          if (charCount) {
-            charCount.textContent = '0';
-          }
-
           trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUCCESS);
         },
         (error) =>
@@ -431,6 +379,22 @@ export const testimonialForm = defineComponent<TestimonialFormOptions>(
             error: error.message,
           })
       );
-    });
-  }
-);
+    };
+
+    form.addEventListener('submit', handleSubmit);
+  };
+}
+
+/**
+ * Alpine.js component for testimonial character counter
+ * Use in template: x-data="testimonialCharCounter()"
+ */
+export function testimonialCharCounter() {
+  return {
+    count: 0,
+    updateCount(event: Event): void {
+      const textarea = event.target as HTMLTextAreaElement;
+      this.count = textarea.value.length;
+    },
+  };
+}
