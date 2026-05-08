@@ -8,25 +8,21 @@
   <div class="intro__layout">
     <div class="intro__left">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow" data-animate="fade-down">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow animate-fade-down">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2
-          class="section-title intro__title"
-          id="intro-title"
-          data-animate="fade-up"
-        >
+        <h2 class="section-title intro__title animate-fade-up" id="intro-title">
           {!! $data['title'] !!}
         </h2>
       @endif
 
       @if (!empty($data['text']))
-        <p class="intro__text" data-animate="fade-up">{{ $data['text'] }}</p>
+        <p class="intro__text animate-fade-up">{{ $data['text'] }}</p>
       @endif
 
       @if (!empty($data['values']) && is_array($data['values']))
-        <div class="intro__values" data-animate-stagger="fade-up">
+        <div class="intro__values animate-fade-up">
           @foreach ($data['values'] as $value)
             <div class="value-item">
               @if (!empty($value['number']))
@@ -44,7 +40,7 @@
       @endif
     </div>
 
-    <div class="intro__image-area" data-animate="fade-left">
+    <div class="intro__image-area animate-fade-left">
       <div class="intro__image-circles" aria-hidden="true"></div>
       @if (!empty($data['quote']))
         <p class="intro__image-text">{!! $data['quote'] !!}</p>

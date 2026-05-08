@@ -36,26 +36,26 @@
   <div class="container">
     <div class="section-header section-header--on-dark">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow eyebrow--secondary" data-animate="fade-down">
+        <p class="eyebrow eyebrow--secondary animate-fade-down">
           {{ $data['eyebrow'] }}
         </p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title" id="journey-title" data-animate="fade-up">
+        <h2 class="section-title animate-fade-up" id="journey-title">
           {!! $data['title'] !!}
         </h2>
       @endif
 
       @if (!empty($data['subtitle']))
-        <p class="journey__subtitle" data-animate="fade-up">
+        <p class="journey__subtitle animate-fade-up">
           {{ $data['subtitle'] }}
         </p>
       @endif
     </div>
 
     @if (!empty($steps) && is_array($steps))
-      <div class="journey__steps" data-animate-stagger="fade-up">
+      <div class="journey__steps animate-fade-up">
         @foreach ($steps as $step)
           <div class="journey__step">
             @if (!empty($step['number']))
