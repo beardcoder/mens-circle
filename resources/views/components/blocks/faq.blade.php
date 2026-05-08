@@ -42,24 +42,21 @@
     </div>
 
     @if (!empty($faqItems) && is_array($faqItems))
-      <div class="faq__list">
-        @foreach ($faqItems as $item)
+      <div class="faq__list" x-data="window.accordion()">
+        @foreach ($faqItems as $index => $item)
           @if (!empty($item['question']) && !empty($item['answer']))
             <details
-
               class="accordion-item"
-              name="faq-accordion"
-              data-m:toggle="action=faq_toggle;element=details;target=question;location=faq_section"
+              :open="isOpen('faq-{{ $index }}')"
+              @toggle="if ($event.target.open) toggle('faq-{{ $index }}')"
+              data-umami-event="faq-expand"
+              data-umami-event-question="{{ Str::limit($item['question'], 50) }}"
             >
-              <summary
-                class="accordion-item__trigger"
-                data-umami-event="faq-expand"
-                data-umami-event-question="{{ Str::limit($item['question'], 50) }}"
-              >
+              <summary class="accordion-item__trigger">
                 <span>{{ $item['question'] }}</span>
                 <span class="accordion-item__icon" aria-hidden="true"></span>
               </summary>
-              <div class="accordion-item__content">
+              <div class="accordion-item__content" x-collapse>
                 <div class="accordion-item__body">{!! $item['answer'] !!}</div>
               </div>
             </details>

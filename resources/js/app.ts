@@ -1,54 +1,83 @@
 /**
  * Männerkreis Niederbayern / Straubing - Application Entry Point
- * Built with @beardcoder/stitch-js progressive enhancement framework
+ * Built with Alpine.js for progressive enhancement
  */
 
 import './types';
-import { register, autoInit } from '@beardcoder/stitch-js';
-import {
-  navigation,
-  scrollHeader,
-  scrollProgress,
-  scrollToTop,
-} from '@/components/navigation';
+import './alpine'; // Initialize Alpine.js
+import { accordion } from '@/components/accordion-alpine';
+import { mobileNav } from '@/components/navigation-alpine';
+import { breathingApp } from '@/components/breathing-alpine';
 import {
   newsletterForm,
   registrationForm,
   testimonialForm,
+  testimonialCharCounter,
 } from '@/components/forms';
 import { calendarIntegration } from '@/components/calendar';
 import { eventMap } from '@/components/event-map';
-import { nativeAccordion } from '@/components/accordion';
-import { breathingApp } from '@/components/breathing';
+import {
+  scrollHeader,
+  scrollToTop,
+  scrollProgress,
+} from '@/components/navigation';
 import { initUmamiKit } from '@/utils/umami-kit';
 import { initSwup } from '@/components/swup-init';
 
-// Navigation and header
-register('#nav', navigation());
-register('#header', scrollHeader());
-register('#scrollToTop', scrollToTop());
-register('.scroll-progress', scrollProgress());
+// Make Alpine components globally available
+declare global {
+  interface Window {
+    accordion: typeof accordion;
+    mobileNav: typeof mobileNav;
+    breathingApp: typeof breathingApp;
+    testimonialCharCounter: typeof testimonialCharCounter;
+  }
+}
 
-// Interactive forms
-register('#newsletterForm', newsletterForm());
-register('#registrationForm', registrationForm());
-register('#testimonialForm', testimonialForm());
+window.accordion = accordion;
+window.mobileNav = mobileNav;
+window.breathingApp = breathingApp;
+window.testimonialCharCounter = testimonialCharCounter;
 
-// Calendar integration
-register('#addToCalendar', calendarIntegration());
+// Initialize scroll-based components (they don't need Alpine)
+const headerEl = document.getElementById('header');
+if (headerEl) {
+  scrollHeader()(headerEl);
+}
 
-// Event location map (Leaflet, lazy-loaded on viewport intersection)
-register('[data-event-map]', eventMap());
+const scrollToTopEl = document.getElementById('scrollToTop');
+if (scrollToTopEl) {
+  scrollToTop()(scrollToTopEl);
+}
 
-// Accordion (FAQ sections)
-register('.faq-section', nativeAccordion());
+const scrollProgressEls = document.querySelectorAll<HTMLElement>('.scroll-progress');
+scrollProgressEls.forEach((el) => scrollProgress()(el));
 
-// Breathing exercise
-register('#breathingApp', breathingApp());
+// Initialize forms (keep existing logic)
+const newsletterFormEl = document.getElementById('newsletterForm');
+if (newsletterFormEl) {
+  newsletterForm()(newsletterFormEl);
+}
 
+const registrationFormEl = document.getElementById('registrationForm');
+if (registrationFormEl) {
+  registrationForm()(registrationFormEl);
+}
 
-// Initialize all registered components
-autoInit();
+const testimonialFormEl = document.getElementById('testimonialForm');
+if (testimonialFormEl) {
+  testimonialForm()(testimonialFormEl);
+}
+
+// Initialize calendar integration
+const calendarEl = document.getElementById('addToCalendar');
+if (calendarEl) {
+  calendarIntegration()(calendarEl);
+}
+
+// Initialize event map (Leaflet, lazy-loaded)
+const eventMapEls = document.querySelectorAll<HTMLElement>('[data-event-map]');
+eventMapEls.forEach((el) => eventMap()(el));
 
 // AJAX page transitions (Swup 4) — owns native View Transitions for
 // supporting browsers and replaces #main on link clicks.
