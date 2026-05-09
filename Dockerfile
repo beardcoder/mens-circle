@@ -14,6 +14,7 @@ RUN --mount=type=cache,target=/root/.bun/install/cache \
 
 COPY resources/ resources/
 COPY vite.config.ts ./
+COPY tailwind.config.js ./
 COPY public/ public/
 RUN bun run build
 
