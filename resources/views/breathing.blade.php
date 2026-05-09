@@ -1,7 +1,7 @@
 @extends ('layouts.app')
 
 @section ('title', 'Atemübung – Männerkreis Niederbayern/ Straubing')
-@section ('meta_description', 'Eine geführte, interaktive Atemübung im Stil der Wim-Hof-Methode. Drei Runden bewusster Atem für Klarheit, Energie und innere Ruhe.')
+@section ('meta_description', 'Eine geführte, interaktive Atemübung im Stil der Wim-Hof-Methode.')
 @section ('og_title', 'Atemübung – Männerkreis Niederbayern/ Straubing')
 
 @php
@@ -22,240 +22,236 @@
 @endpush
 
 @section ('content')
-  <!-- Breathing Hero -->
-  <section class="hero breathing-hero">
-    <div class="hero__bg"></div>
-    <div class="container">
-      <div class="hero__content">
-        <p class="hero__label">Bewusster Atem</p>
-        <h1 class="hero__title">Atem<span class="highlight">übung</span></h1>
-        <p class="hero__subtitle">Drei Runden bewusster Atem im Stil der Wim-Hof-Methode. Für Klarheit, Energie und innere Ruhe.</p>
-      </div>
+  <section
+    data-hero
+    class="relative isolate overflow-hidden bg-[var(--bg-deep)] text-[var(--color-parchment)]"
+  >
+    <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+      <div
+        class="absolute -top-20 -right-20 h-96 w-96 rounded-full bg-[var(--color-sage)]/30 blur-3xl animate-breathe"
+      ></div>
+    </div>
+    <div class="container-page flex min-h-[50vh] flex-col justify-center py-20">
+      <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">Bewusster Atem</p>
+      <h1
+        x-reveal
+        class="font-display text-5xl font-semibold leading-tight md:text-7xl"
+      >
+        Atem<span class="text-italic">übung</span>
+      </h1>
+      <p x-reveal class="mt-4 max-w-xl text-lg text-[var(--color-sand)]">Drei Runden bewusster Atem im Stil der Wim-Hof-Methode. Für Klarheit, Energie und innere Ruhe.</p>
     </div>
   </section>
-  <!-- Breathing Section -->
-  <section class="section breathing-section">
-    <div class="container">
-      <div class="breathing__wrapper">
-        <div class="breathing__intro">
-          <h2>So funktioniert es</h2>
-          <ol class="breathing__steps">
-            <li>
-              <strong>Tief atmen:</strong> 30 kräftige Atemzüge — vollständig
-              einatmen, locker ausatmen.
-            </li>
-            <li>
-              <strong>Halten:</strong> Nach der letzten Ausatmung den Atem so
-              lange wie möglich anhalten.
-            </li>
-            <li>
-              <strong>Erholung:</strong> Tief einatmen und 15 Sekunden halten.
-              Dann normal weiteratmen.
-            </li>
-          </ol>
-          <p class="breathing__warning">
-            <strong>Wichtig:</strong> Übe niemals im Wasser oder beim
-            Autofahren. Setze oder lege dich entspannt hin.
-          </p>
+  <section class="section-y">
+    <div
+      class="container-page grid gap-12 lg:grid-cols-[1fr_2fr] lg:items-start"
+    >
+      <aside x-reveal class="rounded-2xl bg-[var(--bg-alt)] p-8">
+        <h2 class="font-display text-2xl font-semibold">So funktioniert es</h2>
+        <ol class="mt-4 flex flex-col gap-3 text-sm text-[var(--fg-muted)]">
+          <li>
+            <strong class="text-[var(--fg)]">Tief atmen:</strong> 30 kräftige
+            Atemzüge — vollständig einatmen, locker ausatmen.
+          </li>
+          <li>
+            <strong class="text-[var(--fg)]">Halten:</strong> Nach der letzten
+            Ausatmung den Atem so lange wie möglich anhalten.
+          </li>
+          <li>
+            <strong class="text-[var(--fg)]">Erholung:</strong> Tief einatmen
+            und 15 Sekunden halten. Dann normal weiteratmen.
+          </li>
+        </ol>
+        <p class="mt-6 rounded-lg border border-[var(--color-warning)]/40 bg-[var(--color-warning)]/10 px-4 py-3 text-sm">
+          <strong>Wichtig:</strong> Übe niemals im Wasser oder beim Autofahren.
+        </p>
+      </aside>
+
+      <div
+        x-data="breathing"
+        :data-phase="phase"
+        class="flex flex-col items-center gap-10"
+      >
+        {{-- Visual stage --}}
+        <div
+          class="relative grid h-80 w-80 place-items-center"
+          aria-live="polite"
+        >
+          <span
+            :class="phase === 'breathing'
+              ? 'animate-breathe'
+              : phase === 'retention'
+                ? 'scale-110 opacity-80'
+                : phase === 'recovery'
+                  ? 'scale-90 opacity-50'
+                  : ''"
+            class="absolute inset-0 rounded-full border-2 border-[var(--accent)]/30 transition-all duration-1000 ease-[var(--ease-ambient)]"
+          ></span>
+          <span
+            :class="phase === 'breathing'
+              ? 'animate-breathe [animation-delay:0.5s]'
+              : ''"
+            class="absolute inset-8 rounded-full border-2 border-[var(--accent)]/50 transition-all duration-1000"
+          ></span>
+          <span
+            :class="phase === 'breathing'
+              ? 'animate-breathe [animation-delay:1s]'
+              : ''"
+            class="absolute inset-16 rounded-full bg-gradient-to-br from-[var(--accent)]/40 to-[var(--accent)]/10 transition-all duration-1000"
+          ></span>
+          <div class="relative text-center">
+            <div
+              class="font-display text-3xl font-semibold"
+              x-text="phaseLabel"
+            ></div>
+            <div
+              class="mt-2 text-sm text-[var(--fg-muted)]"
+              x-text="counter"
+            ></div>
+          </div>
         </div>
 
-        <div
-          id="breathingApp"
-          class="breathing-app"
-          data-breaths="35"
-          data-rounds="3"
-          data-recovery-hold="15"
-          data-inhale-ms="1800"
-          data-exhale-ms="1800"
-        >
-          <div class="breathing-app__stage" aria-live="polite">
-            <div class="breathing-app__circle" data-element="circle">
+        {{-- Meta --}}
+        <dl class="grid w-full max-w-md grid-cols-3 gap-4 text-center text-sm">
+          <div class="rounded-xl bg-[var(--bg-alt)] p-3">
+            <dt
+              class="text-xs uppercase tracking-widest text-[var(--fg-muted)]"
+            >
+              Runde
+            </dt>
+            <dd class="mt-1 font-display text-lg font-semibold">
+              <span x-text="round"></span> / <span x-text="rounds"></span>
+            </dd>
+          </div>
+          <div class="rounded-xl bg-[var(--bg-alt)] p-3">
+            <dt
+              class="text-xs uppercase tracking-widest text-[var(--fg-muted)]"
+            >
+              Atemzug
+            </dt>
+            <dd class="mt-1 font-display text-lg font-semibold">
+              <span x-text="breath"></span> / <span x-text="breaths"></span>
+            </dd>
+          </div>
+          <div class="rounded-xl bg-[var(--bg-alt)] p-3">
+            <dt
+              class="text-xs uppercase tracking-widest text-[var(--fg-muted)]"
+            >
+              Zeit
+            </dt>
+            <dd
+              class="mt-1 font-display text-lg font-semibold tabular-nums"
+              x-text="timer"
+            ></dd>
+          </div>
+        </dl>
+
+        {{-- Controls --}}
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            x-show="isIdle"
+            @click="start"
+            class="btn btn-primary btn-large"
+            data-umami-event="breathing-start"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5" aria-hidden="true"><path d="M8 5.14v13.72a1 1 0 0 0 1.54.84l10.3-6.86a1 1 0 0 0 0-1.68L9.54 4.3A1 1 0 0 0 8 5.14Z" /></svg>
+            <span
+              x-text="
+                phase === 'complete' ? 'Erneut starten' : 'Atemübung starten'
+              "
+            ></span>
+          </button>
+          <button
+            type="button"
+            x-show="isHolding"
+            @click="releaseHold"
+            class="btn btn-secondary"
+            data-umami-event="breathing-resume"
+          >
+            <span
+              x-text="phase === 'recovery' ? 'Weiteratmen' : 'Atem freigeben'"
+            ></span>
+          </button>
+          <button
+            type="button"
+            @click="reset"
+            class="btn btn-ghost"
+            data-umami-event="breathing-reset"
+          >
+            Zurücksetzen
+          </button>
+        </div>
+
+        {{-- Settings --}}
+        <div class="grid w-full max-w-md gap-6">
+          <div>
+            <span class="text-sm font-medium"
+              >Atemzüge je Runde:
               <span
-                class="breathing-app__ring breathing-app__ring--1"
-                aria-hidden="true"
-              ></span>
+                x-text="breaths"
+                class="font-display text-lg text-[var(--accent)]"
+              ></span
+            ></span>
+            <input
+              type="range"
+              min="10"
+              max="60"
+              step="5"
+              :value="breaths"
+              @input="setBreaths(parseInt($event.target.value))"
+              :disabled="!isIdle"
+              class="mt-2 w-full accent-[var(--accent)]"
+            />
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium">Runden</span>
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                @click="stepRounds(-1)"
+                :disabled="!isIdle"
+                class="grid h-9 w-9 place-items-center rounded-full border border-[var(--border)] disabled:opacity-50"
+              >
+                −
+              </button>
               <span
-                class="breathing-app__ring breathing-app__ring--2"
-                aria-hidden="true"
+                class="font-display text-lg font-semibold w-6 text-center"
+                x-text="rounds"
               ></span>
-              <span
-                class="breathing-app__ring breathing-app__ring--3"
-                aria-hidden="true"
-              ></span>
-              <span class="breathing-app__core" aria-hidden="true"></span>
-              <span class="breathing-app__label">
-                <span class="breathing-app__phase" data-element="phase"
-                  >Bereit</span
-                >
-                <span class="breathing-app__counter" data-element="counter"
-                  >3 Runden · 30 Atemzüge</span
-                >
-              </span>
+              <button
+                type="button"
+                @click="stepRounds(1)"
+                :disabled="!isIdle"
+                class="grid h-9 w-9 place-items-center rounded-full border border-[var(--border)] disabled:opacity-50"
+              >
+                +
+              </button>
             </div>
           </div>
-
-          <div class="breathing-app__meta">
-            <div class="breathing-app__meta-item">
-              <span class="breathing-app__meta-label">Runde</span>
-              <span class="breathing-app__meta-value" data-element="round"
-                >0&nbsp;/&nbsp;3</span
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium">Erholungs-Halt (Sek.)</span>
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                @click="stepRecovery(-1)"
+                :disabled="!isIdle"
+                class="grid h-9 w-9 place-items-center rounded-full border border-[var(--border)] disabled:opacity-50"
               >
-            </div>
-            <div class="breathing-app__meta-item">
-              <span class="breathing-app__meta-label">Atemzug</span>
-              <span class="breathing-app__meta-value" data-element="breath"
-                >0&nbsp;/&nbsp;30</span
+                −
+              </button>
+              <span
+                class="font-display text-lg font-semibold w-8 text-center"
+                x-text="recoveryHold"
+              ></span>
+              <button
+                type="button"
+                @click="stepRecovery(1)"
+                :disabled="!isIdle"
+                class="grid h-9 w-9 place-items-center rounded-full border border-[var(--border)] disabled:opacity-50"
               >
-            </div>
-            <div class="breathing-app__meta-item">
-              <span class="breathing-app__meta-label">Zeit</span>
-              <span class="breathing-app__meta-value" data-element="timer"
-                >00:00</span
-              >
-            </div>
-          </div>
-
-          <div class="breathing-app__controls">
-            <button
-              type="button"
-              class="btn btn--primary breathing-app__start"
-              data-element="start"
-              aria-label="Atemübung starten"
-              title="Atemübung starten"
-              data-umami-event="breathing-start"
-            >
-              <svg
-                data-element="startIcon"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M8 5.14v13.72a1 1 0 0 0 1.54.84l10.3-6.86a1 1 0 0 0 0-1.68L9.54 4.3A1 1 0 0 0 8 5.14Z" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              class="btn btn--secondary"
-              data-element="hold"
-              hidden
-              data-umami-event="breathing-resume"
-            >
-              Atem freigeben
-            </button>
-            <button
-              type="button"
-              class="btn btn--ghost"
-              data-element="reset"
-              data-umami-event="breathing-reset"
-            >
-              Zurücksetzen
-            </button>
-          </div>
-
-          <div class="breathing-app__settings">
-            <div class="breathing-app__setting breathing-app__setting--picker">
-              <span class="breathing-app__setting-label"
-                >Atemzüge je Runde</span
-              >
-              <div
-                class="breathing-picker"
-                data-element="settingBreaths"
-                data-min="10"
-                data-max="60"
-                data-step="5"
-                data-value="35"
-                role="slider"
-                tabindex="0"
-                aria-label="Atemzüge je Runde"
-                aria-valuemin="10"
-                aria-valuemax="60"
-                aria-valuenow="35"
-              >
-                <div
-                  class="breathing-picker__indicator"
-                  aria-hidden="true"
-                ></div>
-                <div
-                  class="breathing-picker__track"
-                  data-element="settingBreathsTrack"
-                ></div>
-                <div
-                  class="breathing-picker__fade breathing-picker__fade--start"
-                  aria-hidden="true"
-                ></div>
-                <div
-                  class="breathing-picker__fade breathing-picker__fade--end"
-                  aria-hidden="true"
-                ></div>
-              </div>
-            </div>
-            <div class="breathing-app__setting breathing-app__setting--stepper">
-              <span class="breathing-app__setting-label">Runden</span>
-              <div class="breathing-stepper">
-                <button
-                  type="button"
-                  class="breathing-stepper__btn"
-                  data-element="settingRoundsMinus"
-                  aria-label="Eine Runde weniger"
-                >
-                  −
-                </button>
-                <span
-                  class="breathing-stepper__value"
-                  data-element="settingRounds"
-                  data-min="1"
-                  data-max="6"
-                  data-value="3"
-                  role="spinbutton"
-                  aria-valuemin="1"
-                  aria-valuemax="6"
-                  aria-valuenow="3"
-                  >3</span
-                >
-                <button
-                  type="button"
-                  class="breathing-stepper__btn"
-                  data-element="settingRoundsPlus"
-                  aria-label="Eine Runde mehr"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-            <div class="breathing-app__setting breathing-app__setting--stepper">
-              <span class="breathing-app__setting-label"
-                >Erholungs-Halt (Sek.)</span
-              >
-              <div class="breathing-stepper">
-                <button
-                  type="button"
-                  class="breathing-stepper__btn"
-                  data-element="settingRecoveryMinus"
-                  aria-label="Erholungs-Halt verringern"
-                >
-                  −
-                </button>
-                <span
-                  class="breathing-stepper__value"
-                  data-element="settingRecovery"
-                  data-min="5"
-                  data-max="30"
-                  data-value="15"
-                  role="spinbutton"
-                  aria-valuemin="5"
-                  aria-valuemax="30"
-                  aria-valuenow="15"
-                  >15</span
-                >
-                <button
-                  type="button"
-                  class="breathing-stepper__btn"
-                  data-element="settingRecoveryPlus"
-                  aria-label="Erholungs-Halt erhöhen"
-                >
-                  +
-                </button>
-              </div>
+                +
+              </button>
             </div>
           </div>
         </div>

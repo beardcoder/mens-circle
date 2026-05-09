@@ -1,7 +1,7 @@
 @extends ('layouts.app')
 
 @section ('title', 'Datenschutz – Männerkreis Niederbayern/ Straubing')
-@section ('meta_description', 'Datenschutzerklärung des Männerkreis Niederbayern/ Straubing. Informationen zur Verarbeitung Ihrer personenbezogenen Daten.')
+@section ('meta_description', 'Datenschutzerklärung des Männerkreis Niederbayern/ Straubing.')
 @section ('robots', 'index, follow')
 
 @php
@@ -17,14 +17,16 @@
     ]))->toScript() !!}
   {!! (new WebPageSchema(
         title: 'Datenschutzerklärung',
-        description: 'Datenschutzerklärung des Männerkreis Niederbayern/ Straubing. Informationen zur Verarbeitung Ihrer personenbezogenen Daten.',
+        description: 'Datenschutzerklärung des Männerkreis Niederbayern/ Straubing.',
     ))->toScript() !!}
 @endpush
 
 @section ('content')
-  <section class="section">
-    <div class="container--narrow container">
-      <h1>Datenschutzerklärung</h1>
+  <section class="section-y">
+    <div class="container-narrow prose-block text-[var(--fg-muted)]">
+      <h1 class="font-display text-4xl font-semibold text-[var(--fg)]">
+        Datenschutzerklärung
+      </h1>
 
       <h2>1. Datenschutz auf einen Blick</h2>
       <h3>Allgemeine Hinweise</h3>
@@ -46,7 +48,7 @@
       <p>Unsere Internetseiten verwenden so genannte „Cookies". Cookies sind kleine Textdateien und richten auf Ihrem Endgerät keinen Schaden an.</p>
 
       <h3>Server-Log-Dateien</h3>
-      <p>Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt.</p>
+      <p>Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien.</p>
 
       <h3>Kontaktformular</h3>
       <p>Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert.</p>

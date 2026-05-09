@@ -4,7 +4,7 @@
 use App\Enums\SocialLinkType;
 
 $socialType = $type instanceof SocialLinkType ? $type : SocialLinkType::tryFrom($type ?? '') ?? SocialLinkType::Other;
-$iconSvg = $socialType->getIcon(24);
+$iconSvg = $socialType->getIcon(20);
 $title = $label ?: $socialType->getLabel();
 
 $isInternal = str_starts_with($url, 'mailto:') || str_starts_with($url, 'tel:');
@@ -24,8 +24,9 @@ if (!$isInternal) {
 }
 
 $isTextVariant = $variant === 'link';
-$linkClass = $isTextVariant ? 'social-link' : 'social-icon';
-$iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
+$linkClass = $isTextVariant
+    ? 'inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-[var(--color-sand)] transition-colors hover:border-[var(--color-terracotta-light)] hover:text-[var(--color-terracotta-light)]'
+    : 'grid h-10 w-10 place-items-center rounded-full border border-[var(--border)] text-[var(--fg)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]';
 @endphp
 
 <a
@@ -37,9 +38,9 @@ $iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
   data-umami-event-platform="{{ $socialType->value }}"
   {{ $attributes->merge(['class' => $linkClass]) }}
 >
-  <span class="{{ $iconClass }}">{!! $iconSvg !!}</span>
+  <span class="grid h-5 w-5 place-items-center">{!! $iconSvg !!}</span>
   @if ($isTextVariant)
-    <span class="social-link__label">{{ $title }}</span>
+    <span>{{ $title }}</span>
   @else
     <span class="sr-only">{{ $title }}</span>
   @endif

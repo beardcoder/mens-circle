@@ -13,3 +13,6 @@ declare module '*.css' {
 
   export default content;
 }
+
+declare module '@alpinejs/collapse';
+declare module '@alpinejs/intersect';

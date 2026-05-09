@@ -1,70 +1,493 @@
-/**
- * Männerkreis Niederbayern / Straubing — Main Stylesheet
- * =======================================================
- *
- * Cascade architecture. Every stylesheet is loaded into a named layer so the
- * cascade order is explicit and predictable. Un-layered styles beat all layers,
- * so we keep the top-level file clean of loose rules.
- *
- *   reset     — normalize browser defaults
- *   tokens    — design tokens (colors, spacing, type, motion)
- *   base      — element defaults (typography, fonts)
- *   layout    — page-level layout utilities
- *   components— reusable UI (buttons, header, footer, accordion, forms, modal)
- *   sections  — page sections (hero, intro, faq, etc.)
- *   utilities — single-purpose helpers, animations, print
- *
- * Features in use across the codebase:
- *   - OKLCH color space for perceptually uniform colors
- *   - Logical properties for internationalization
- *   - Native CSS nesting
- *   - Container queries where helpful
- *   - Scroll-driven animations (animation-timeline)
- *   - prefers-color-scheme
- */
-
-@layer reset, tokens, base, layout, components, sections, utilities;
-
+@import url('tailwindcss');
+@import url('tw-animate-css');
 @import url('@fontsource-variable/playfair-display');
 @import url('@fontsource-variable/dm-sans');
 
-/* Global @keyframes — kept unlayered so the animation lookup never has
-   to cross cascade layer boundaries. Used by ambient breathing circles
-   in hero / intro / cta / newsletter / whatsapp / event sections. */
-@import url('base/_keyframes.css');
-@import url('base/_reset.css') layer(reset);
-@import url('base/_variables.css') layer(tokens);
-@import url('base/_fonts.css') layer(tokens);
-@import url('base/_typography.css') layer(base);
-@import url('utilities/_layout.css') layer(layout);
-@import url('components/_buttons.css') layer(components);
-@import url('components/_header.css') layer(components);
-@import url('components/_footer.css') layer(components);
-@import url('components/_cards.css') layer(components);
-@import url('components/_accordion.css') layer(components);
-@import url('components/_forms.css') layer(components);
-@import url('components/_modal.css') layer(components);
-@import url('components/_toast.css') layer(components);
-@import url('sections/_hero.css') layer(sections);
-@import url('sections/_intro.css') layer(sections);
-@import url('sections/_moderator.css') layer(sections);
-@import url('sections/_journey.css') layer(sections);
-@import url('sections/_archetypes.css') layer(sections);
-@import url('sections/_testimonials.css') layer(sections);
-@import url('sections/_testimonial-form.css') layer(sections);
-@import url('sections/_breathing.css') layer(sections);
-@import url('sections/_faq.css') layer(sections);
-@import url('sections/_newsletter.css') layer(sections);
-@import url('sections/_whatsapp.css') layer(sections);
-@import url('sections/_cta.css') layer(sections);
-@import url('sections/_event.css') layer(sections);
-@import url('sections/_event-map.css') layer(sections);
-@import url('sections/_no-event.css') layer(sections);
-@import url('sections/_error.css') layer(sections);
-@import url('sections/_legal.css') layer(sections);
-@import url('utilities/_animations.css') layer(utilities);
-@import url('utilities/_scroll-animations.css') layer(utilities);
-@import url('utilities/_parallax.css') layer(utilities);
-@import url('utilities/_visual.css') layer(utilities);
-@import url('utilities/_view-transitions.css') layer(utilities);
-@import url('utilities/_print.css') layer(utilities);
+@theme {
+  /* ============================================================
+     OKLCH Brand Palette — perceptually uniform earth tones
+     ============================================================ */
+  --color-earth-deep: oklch(18% 0.026 68deg);
+  --color-earth-dark: oklch(24% 0.033 68deg);
+  --color-earth-mid: oklch(35% 0.04 68deg);
+  --color-earth-warm: oklch(46% 0.05 68deg);
+  --color-terracotta: oklch(61% 0.16 44deg);
+  --color-terracotta-light: oklch(72% 0.14 45deg);
+  --color-sand: oklch(76% 0.04 75deg);
+  --color-sand-light: oklch(89% 0.02 75deg);
+  --color-parchment: oklch(95% 0.01 75deg);
+  --color-bone: oklch(98% 0.005 75deg);
+  --color-ink: oklch(13% 0.01 68deg);
+  --color-ink-soft: oklch(24% 0.02 68deg);
+  --color-sage: oklch(45% 0.08 145deg);
+  --color-sage-light: oklch(55% 0.06 145deg);
+
+  /* Semantic statuses */
+  --color-success: oklch(58% 0.15 145deg);
+  --color-error: oklch(55% 0.18 25deg);
+  --color-info: oklch(60% 0.12 240deg);
+  --color-warning: oklch(68% 0.16 75deg);
+
+  /* ============================================================
+     Typography
+     ============================================================ */
+  --font-display:
+    'Playfair Display Variable', 'Playfair Display Fallback', georgia, serif;
+  --font-body: 'DM Sans Variable', 'DM Sans Fallback', system-ui, sans-serif;
+  --default-font-family: var(--font-body);
+
+  /* Fluid type scale */
+  --text-xs: clamp(0.625rem, 0.5rem + 0.25vw, 0.75rem);
+  --text-sm: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --text-xl: clamp(1.25rem, 1rem + 1vw, 2rem);
+  --text-2xl: clamp(1.5rem, 1rem + 2vw, 3rem);
+  --text-3xl: clamp(2rem, 1rem + 3vw, 4rem);
+  --text-4xl: clamp(2.5rem, 1rem + 5vw, 6rem);
+  --text-5xl: clamp(3rem, 1rem + 7vw, 8rem);
+  --text-6xl: clamp(4rem, 1rem + 10vw, 12rem);
+  --text-massive: clamp(5rem, 2rem + 15vw, 18rem);
+
+  /* ============================================================
+     Spacing — fluid section rhythm
+     ============================================================ */
+  --spacing-section: clamp(4.5rem, 2rem + 6vw, 9rem);
+  --spacing-section-lg: clamp(7rem, 3rem + 8vw, 14rem);
+  --spacing-block: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  --spacing-stack: clamp(1.5rem, 1rem + 1.5vw, 2rem);
+
+  /* ============================================================
+     Containers
+     ============================================================ */
+  --container-prose: 760px;
+  --container-narrow: 900px;
+  --container-default: 1400px;
+  --container-wide: 1800px;
+
+  /* ============================================================
+     Motion — settled, no bounce
+     ============================================================ */
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-precise: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-release: cubic-bezier(0.2, 0, 0, 1);
+  --ease-ambient: cubic-bezier(0.43, 0.13, 0.23, 0.96);
+  --default-transition-duration: 300ms;
+  --default-transition-timing-function: var(--ease-precise);
+
+  /* ============================================================
+     Custom keyframes & animation utilities
+     ============================================================ */
+  --animate-fade-in: fade-in 0.7s var(--ease-settle) both;
+  --animate-fade-up: fade-up 0.8s var(--ease-settle) both;
+  --animate-fade-down: fade-down 0.8s var(--ease-settle) both;
+  --animate-fade-left: fade-left 0.8s var(--ease-settle) both;
+  --animate-fade-right: fade-right 0.8s var(--ease-settle) both;
+  --animate-zoom-in: zoom-in 0.7s var(--ease-settle) both;
+  --animate-breathe: breathe 8s var(--ease-ambient) infinite;
+  --animate-glow: glow 6s var(--ease-ambient) infinite alternate;
+  --animate-float: float 12s var(--ease-ambient) infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(2rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-down {
+    from {
+      opacity: 0;
+      transform: translateY(-2rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-left {
+    from {
+      opacity: 0;
+      transform: translateX(-2rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fade-right {
+    from {
+      opacity: 0;
+      transform: translateX(2rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes zoom-in {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes breathe {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.85;
+      transform: scale(1.08);
+    }
+  }
+
+  @keyframes glow {
+    from {
+      opacity: 0.3;
+    }
+
+    to {
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-1.5rem);
+    }
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+
+    to {
+      background-position: 200% 0;
+    }
+  }
+}
+
+/* ============================================================
+   Dark theme via prefers-color-scheme
+   ============================================================ */
+@layer base {
+  :root {
+    color-scheme: light dark;
+
+    --bg: var(--color-bone);
+    --bg-alt: var(--color-parchment);
+    --bg-deep: var(--color-earth-deep);
+    --fg: var(--color-ink);
+    --fg-muted: var(--color-ink-soft);
+    --accent: var(--color-terracotta);
+    --border: var(--color-sand-light);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: var(--color-ink);
+      --bg-alt: var(--color-earth-deep);
+      --bg-deep: var(--color-earth-deep);
+      --fg: var(--color-parchment);
+      --fg-muted: oklch(80% 0.02 75deg);
+      --accent: var(--color-terracotta-light);
+      --border: color-mix(in oklch, var(--color-earth-mid) 40%, transparent);
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    line-height: 1.7;
+    color: var(--fg);
+    background-color: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  /* Smooth height auto for collapse */
+  @supports (interpolate-size: allow-keywords) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}
+
+/* ============================================================
+   Reveal-on-scroll utility — works with x-intersect
+   ============================================================ */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(2rem);
+  transition:
+    opacity 0.8s var(--ease-settle),
+    transform 0.8s var(--ease-settle);
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility reveal-fade {
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-settle);
+
+  &.is-visible {
+    opacity: 1;
+  }
+}
+
+@utility reveal-zoom {
+  opacity: 0;
+  transform: scale(0.94);
+  transition:
+    opacity 0.7s var(--ease-settle),
+    transform 0.7s var(--ease-settle);
+
+  &.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   Project utility shortcuts — Tailwind v4 @utility directive
+   ============================================================ */
+@utility container-page {
+  inline-size: 100%;
+  max-inline-size: var(--container-default);
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  margin-inline: auto;
+}
+
+@utility container-narrow {
+  inline-size: 100%;
+  max-inline-size: var(--container-narrow);
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  margin-inline: auto;
+}
+
+@utility container-prose {
+  inline-size: 100%;
+  max-inline-size: var(--container-prose);
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  margin-inline: auto;
+}
+
+@utility section-y {
+  padding-block: var(--spacing-section);
+}
+
+@utility section-y-lg {
+  padding-block: var(--spacing-section-lg);
+}
+
+@utility eyebrow {
+  display: inline-block;
+  margin-block-end: 1rem;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+@utility section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+
+@utility section-title-lg {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+
+@utility text-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--accent);
+}
+
+@utility btn {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 1.75rem;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  transition:
+    transform var(--default-transition-duration) var(--ease-precise),
+    background-color var(--default-transition-duration) var(--ease-precise),
+    color var(--default-transition-duration) var(--ease-precise),
+    box-shadow var(--default-transition-duration) var(--ease-precise);
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+  }
+}
+
+@utility btn-primary {
+  color: var(--color-bone);
+  background: var(--accent);
+  box-shadow: 0 8px 24px color-mix(in oklch, var(--accent) 25%, transparent);
+
+  &:hover {
+    background: var(--color-terracotta-light);
+  }
+}
+
+@utility btn-secondary {
+  color: var(--fg);
+  background: transparent;
+  border-color: var(--border);
+
+  &:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+@utility btn-ghost {
+  color: var(--fg-muted);
+  background: transparent;
+  border: none;
+
+  &:hover {
+    color: var(--fg);
+  }
+}
+
+@utility btn-large {
+  padding: 1.05rem 2.25rem;
+  font-size: var(--text-lg);
+}
+
+@utility prose-block {
+  max-inline-size: 65ch;
+
+  & h1,
+  & h2,
+  & h3,
+  & h4 {
+    margin-block: 1.5em 0.5em;
+    font-family: var(--font-display);
+  }
+
+  & p {
+    margin-block: 0.75em;
+  }
+
+  & a {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  & ul,
+  & ol {
+    padding-inline-start: 1.5rem;
+    margin-block: 0.75em;
+  }
+
+  & li {
+    margin-block: 0.25em;
+  }
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  inset-block-start: -100%;
+  inset-inline-start: 0;
+  z-index: 9999;
+  padding: 1rem 1.5rem;
+  color: var(--color-bone);
+  background: var(--color-ink);
+  border-radius: 0 0 0.5rem;
+
+  &:focus-visible {
+    inset-block-start: 0;
+  }
+}

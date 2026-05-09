@@ -5,19 +5,15 @@
 @section ('robots', 'noindex, nofollow')
 
 @section ('content')
-  <section class="section section--large">
-    <div class="container--narrow container">
-      <div class="error-page">
-        <div class="error-page__content">
-          <h1 class="error-page__title">Newsletter abgemeldet</h1>
-          <p class="error-page__text">{{ $message }}</p>
-          <div class="error-page__actions">
-            <a href="{{ route('home') }}" class="btn btn--primary"
-              >Zurück zur Startseite</a
-            >
-          </div>
-        </div>
-      </div>
+  <section class="section-y-lg">
+    <div class="container-narrow text-center">
+      <h1 class="font-display text-4xl font-semibold md:text-5xl">
+        Newsletter abgemeldet
+      </h1>
+      <p class="mt-4 text-lg text-[var(--fg-muted)]">{{ $message }}</p>
+      <a href="{{ route('home') }}" class="btn btn-primary mt-8"
+        >Zurück zur Startseite</a
+      >
     </div>
   </section>
 @endsection

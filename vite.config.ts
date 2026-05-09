@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [
@@ -7,10 +8,11 @@ export default defineConfig({
       input: ['resources/css/app.css', 'resources/js/app.ts'],
       refresh: true,
     }),
+    tailwindcss(),
   ],
   resolve: {
     alias: {
-      '@stitch': '@beardcoder/stitch-js',
+      '@': '/resources/js',
     },
   },
   server: {

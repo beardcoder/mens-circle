@@ -1,7 +1,7 @@
 @extends ('layouts.app')
 
 @section ('title', 'Impressum – Männerkreis Niederbayern/ Straubing')
-@section ('meta_description', 'Impressum und rechtliche Angaben des Männerkreis Niederbayern/ Straubing gemäß § 5 TMG.')
+@section ('meta_description', 'Impressum und rechtliche Angaben des Männerkreis Niederbayern/ Straubing.')
 @section ('robots', 'index, follow')
 
 @php
@@ -17,14 +17,16 @@
     ]))->toScript() !!}
   {!! (new WebPageSchema(
         title: 'Impressum',
-        description: 'Impressum und rechtliche Angaben des Männerkreis Niederbayern/ Straubing gemäß § 5 TMG.',
+        description: 'Impressum und rechtliche Angaben.',
     ))->toScript() !!}
 @endpush
 
 @section ('content')
-  <section class="section">
-    <div class="container--narrow container">
-      <h1>Impressum</h1>
+  <section class="section-y">
+    <div class="container-narrow prose-block text-[var(--fg-muted)]">
+      <h1 class="font-display text-4xl font-semibold text-[var(--fg)]">
+        Impressum
+      </h1>
 
       <h2>Angaben gemäß § 5 TMG</h2>
       <p>
@@ -36,19 +38,17 @@
       </p>
 
       <h2>Kontakt</h2>
-      <p>
-        E-Mail: <a href="mailto:hallo@mens-circle.de">hallo@mens-circle.de</a>
-      </p>
+      <p>E-Mail: <a href="mailto:hallo@mens-circle.de">hallo@mens-circle.de</a></p>
 
       <h2>Haftungsausschluss</h2>
       <h3>Haftung für Inhalte</h3>
       <p>Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
 
       <h3>Haftung für Links</h3>
-      <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen.</p>
+      <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben.</p>
 
       <h2>Urheberrecht</h2>
-      <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+      <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht.</p>
     </div>
   </section>
 @endsection

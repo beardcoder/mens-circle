@@ -1,147 +1,134 @@
+@php
+    $logoSvg = '<svg fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" clip-rule="evenodd" viewBox="0 0 396 397" class="h-9 w-9 shrink-0">
+      <path fill="currentColor" d="M19.664 171.425s.655-3.856 6.266-3.446c4.634.339 4.265 5.2 4.265 5.2 2.633 39.979 21.063 70.21 21.063 70.21s-36.274-19.308-31.594-71.964M68.22 80.74s-3.914 6.2 2.715 10.79c7.799 5.401 12.497-.26 12.497-.26s22.94-39.58 78.984-54.41c62.286-16.482 128.715 5.265 128.715 5.265S258.531.245 175.288 9.946C102.037 18.483 68.22 80.74 68.22 80.74"/>
+      <path fill="currentColor" d="M38.474 97.38q1.968-.257 4.01-.258c17.114 0 31.008 13.895 31.008 31.009s-13.894 31.008-31.008 31.008c-26.309 0-54.461-31.126-18.138-87.76 11.882-18.52 33.8-38.704 52.655-49.5C111.64 2.049 144.285 0 144.285 0S72.508 23.758 38.475 97.379M251.649 350.072s-3.667 1.36-6.117-3.703c-2.023-4.183 2.371-6.294 2.371-6.294 33.306-22.27 50.271-53.345 50.271-53.345s1.417 41.068-46.525 63.342M148.832 353.369s7.327.29 7.988-7.747c.778-9.454-6.474-10.693-6.474-10.693s-45.748-.076-86.614-41.197C18.316 248.032 3.935 179.63 3.935 179.63s-19.97 49.173 30.054 116.413c44.02 59.168 114.843 57.327 114.843 57.327"/>
+      <path fill="currentColor" d="M178.118 370.81a31 31 0 0 1-2.227-3.343c-8.558-14.822-3.471-33.802 11.35-42.359s33.801-3.471 42.358 11.35c13.155 22.784.275 62.728-66.934 59.588-21.979-1.03-50.418-9.92-69.196-20.85-34.491-20.082-52.588-47.33-52.588-47.33s56.463 50.281 137.237 42.945M294.606 59.948s3.011 2.495-.149 7.15c-2.61 3.843-6.637 1.092-6.637 1.092-35.938-17.708-71.333-16.863-71.333-16.863s34.858-21.76 78.119 8.62M348.86 147.345s-3.414-6.49-10.704-3.044c-8.576 4.053-6.023 10.952-6.023 10.952s22.808 39.658 7.63 95.608c-16.87 62.183-68.919 108.838-68.919 108.838s52.57-7.292 85.79-84.234c29.232-67.706-7.775-128.12-7.775-128.12"/>
+      <path fill="currentColor" d="M349.324 113.259a31 31 0 0 1-1.782 3.6c-8.557 14.823-27.537 19.908-42.358 11.35-14.822-8.556-19.907-27.536-11.35-42.358 13.154-22.784 54.186-31.601 85.071 28.173 10.098 19.55 16.62 48.623 16.541 70.35-.145 39.912-14.694 69.209-14.694 69.209s15.313-74.04-31.428-140.324"/>
+    </svg>';
+@endphp
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
 <head>
   @include ('partials.seo-head')
 </head>
-<body>
-  <!-- Skip Link -->
+<body class="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
-  <!-- Scroll progress indicator -->
-  <div class="scroll-progress" aria-hidden="true"></div>
+  {{-- Smooth scroll progress bar --}}
+  <div
+    x-data="scrollProgress"
+    class="fixed inset-x-0 top-0 z-[1000] h-0.5 origin-left bg-[var(--accent)]"
+    :style="`transform: scaleX(${width})`"
+    aria-hidden="true"
+  ></div>
 
-  <!-- Header -->
-  <header class="header" id="header">
-    <div class="container">
-      <div class="header__inner">
+  {{-- Header --}}
+  <header
+    x-data="siteHeader"
+    :class="{
+      'bg-[var(--bg)]/90 backdrop-blur-md shadow-sm': scrolled,
+      'bg-transparent': !scrolled && onHero,
+    }"
+    class="fixed inset-x-0 top-0 z-[999] transition-colors duration-300"
+  >
+    <div class="container-page flex items-center justify-between gap-4 py-4">
+      <a
+        href="{{ route('home') }}"
+        class="flex items-center gap-3 font-display text-xl font-semibold text-[var(--fg)]"
+        aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite"
+      >
+        {!! $logoSvg !!}
+        <span>Männerkreis</span>
+      </a>
+
+      <nav
+        :class="navOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'"
+        class="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col items-center justify-center gap-8 bg-[var(--bg)] p-8 transition-transform duration-300 ease-[var(--ease-precise)] md:static md:flex md:w-auto md:max-w-none md:flex-row md:gap-6 md:bg-transparent md:p-0"
+      >
+        @foreach ([
+            ['#ueber', 'Über'],
+            ['#reise', 'Die Reise'],
+            ['#faq', 'Fragen'],
+        ] as $link)
+          <a
+            href="{{ route('home') . $link[0] }}"
+            class="text-base font-medium text-[var(--fg)] transition-colors hover:text-[var(--accent)]"
+            data-umami-event="nav-click"
+            data-umami-event-target="{{ ltrim($link[0], '#') }}"
+            @click="onLinkClick"
+            >{{ $link[1] }}</a
+          >
+        @endforeach
         <a
-          href="{{ route('home') }}"
-          class="logo"
-          aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite"
+          href="{{ route('breathing.show') }}"
+          class="text-base font-medium text-[var(--fg)] transition-colors hover:text-[var(--accent)]"
+          data-umami-event="nav-click"
+          data-umami-event-target="atemuebung"
+          @click="onLinkClick"
+          >Atemübung</a
         >
-          <svg
-            class="logo__icon"
-            fill-rule="evenodd"
-            stroke-linejoin="round"
-            stroke-miterlimit="2"
-            clip-rule="evenodd"
-            viewBox="0 0 396 397"
+        @if ($hasNextEvent)
+          <a
+            href="{{ $nextEventUrl }}"
+            class="btn btn-primary btn-large"
+            data-umami-event="cta-click"
+            data-umami-event-location="header"
+            data-umami-event-action="go-to-event"
+            @click="onLinkClick"
+            >Nächster Termin</a
           >
-            <path
-              fill="currentColor"
-              d="M19.664 171.425s.655-3.856 6.266-3.446c4.634.339 4.265 5.2 4.265 5.2 2.633 39.979 21.063 70.21 21.063 70.21s-36.274-19.308-31.594-71.964M68.22 80.74s-3.914 6.2 2.715 10.79c7.799 5.401 12.497-.26 12.497-.26s22.94-39.58 78.984-54.41c62.286-16.482 128.715 5.265 128.715 5.265S258.531.245 175.288 9.946C102.037 18.483 68.22 80.74 68.22 80.74"
-            />
-            <path
-              fill="currentColor"
-              d="M38.474 97.38q1.968-.257 4.01-.258c17.114 0 31.008 13.895 31.008 31.009s-13.894 31.008-31.008 31.008c-26.309 0-54.461-31.126-18.138-87.76 11.882-18.52 33.8-38.704 52.655-49.5C111.64 2.049 144.285 0 144.285 0S72.508 23.758 38.475 97.379M251.649 350.072s-3.667 1.36-6.117-3.703c-2.023-4.183 2.371-6.294 2.371-6.294 33.306-22.27 50.271-53.345 50.271-53.345s1.417 41.068-46.525 63.342M148.832 353.369s7.327.29 7.988-7.747c.778-9.454-6.474-10.693-6.474-10.693s-45.748-.076-86.614-41.197C18.316 248.032 3.935 179.63 3.935 179.63s-19.97 49.173 30.054 116.413c44.02 59.168 114.843 57.327 114.843 57.327"
-            />
-            <path
-              fill="currentColor"
-              d="M178.118 370.81a31 31 0 0 1-2.227-3.343c-8.558-14.822-3.471-33.802 11.35-42.359s33.801-3.471 42.358 11.35c13.155 22.784.275 62.728-66.934 59.588-21.979-1.03-50.418-9.92-69.196-20.85-34.491-20.082-52.588-47.33-52.588-47.33s56.463 50.281 137.237 42.945M294.606 59.948s3.011 2.495-.149 7.15c-2.61 3.843-6.637 1.092-6.637 1.092-35.938-17.708-71.333-16.863-71.333-16.863s34.858-21.76 78.119 8.62M348.86 147.345s-3.414-6.49-10.704-3.044c-8.576 4.053-6.023 10.952-6.023 10.952s22.808 39.658 7.63 95.608c-16.87 62.183-68.919 108.838-68.919 108.838s52.57-7.292 85.79-84.234c29.232-67.706-7.775-128.12-7.775-128.12"
-            />
-            <path
-              fill="currentColor"
-              d="M349.324 113.259a31 31 0 0 1-1.782 3.6c-8.557 14.823-27.537 19.908-42.358 11.35-14.822-8.556-19.907-27.536-11.35-42.358 13.154-22.784 54.186-31.601 85.071 28.173 10.098 19.55 16.62 48.623 16.541 70.35-.145 39.912-14.694 69.209-14.694 69.209s15.313-74.04-31.428-140.324"
-            />
+        @endif
+
+        <button
+          type="button"
+          @click="toggleNav"
+          class="absolute top-4 right-4 grid h-10 w-10 place-items-center rounded-full border border-[var(--border)] md:hidden"
+          aria-label="Menü schließen"
+          x-show="navOpen"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
-
-          <span class="logo__text">Männerkreis</span>
-        </a>
-
-        <nav class="nav" id="nav">
-          <a
-            href="{{ route('home') }}#ueber"
-            class="nav__link"
-            data-umami-event="nav-click"
-            data-umami-event-target="ueber"
-            >Über</a
-          >
-          <a
-            href="{{ route('home') }}#reise"
-            class="nav__link"
-            data-umami-event="nav-click"
-            data-umami-event-target="reise"
-            >Die Reise</a
-          >
-          <a
-            href="{{ route('home') }}#faq"
-            class="nav__link"
-            data-umami-event="nav-click"
-            data-umami-event-target="faq"
-            >Fragen</a
-          >
-          <a
-            href="{{ route('breathing.show') }}"
-            class="nav__link"
-            data-umami-event="nav-click"
-            data-umami-event-target="atemuebung"
-            >Atemübung</a
-          >
-          @if ($hasNextEvent)
-            <a
-              href="{{ $nextEventUrl }}"
-              class="btn btn--primary btn--large nav__cta"
-              data-umami-event="cta-click"
-              data-umami-event-location="header"
-              data-umami-event-action="go-to-event"
-              >Nächster Termin</a
-            >
-          @endif
-        </nav>
-
-        <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
-          <span></span>
-          <span></span>
-          <span></span>
         </button>
-      </div>
+      </nav>
+
+      <button
+        type="button"
+        @click="toggleNav"
+        x-show="!navOpen"
+        class="grid h-10 w-10 place-items-center rounded-full border border-[var(--border)] md:hidden"
+        aria-label="Menü öffnen"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main id="main">
+  <main id="main" class="pt-20">
     @yield ('content')
   </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__top">
-        <div class="footer__brand">
-          <a href="{{ route('home') }}" class="footer__logo">
-            <svg
-              class="footer__logo-icon"
-              fill-rule="evenodd"
-              stroke-linejoin="round"
-              stroke-miterlimit="2"
-              clip-rule="evenodd"
-              viewBox="0 0 396 397"
-            >
-              <path
-                fill="currentColor"
-                d="M19.664 171.425s.655-3.856 6.266-3.446c4.634.339 4.265 5.2 4.265 5.2 2.633 39.979 21.063 70.21 21.063 70.21s-36.274-19.308-31.594-71.964M68.22 80.74s-3.914 6.2 2.715 10.79c7.799 5.401 12.497-.26 12.497-.26s22.94-39.58 78.984-54.41c62.286-16.482 128.715 5.265 128.715 5.265S258.531.245 175.288 9.946C102.037 18.483 68.22 80.74 68.22 80.74"
-              />
-              <path
-                fill="currentColor"
-                d="M38.474 97.38q1.968-.257 4.01-.258c17.114 0 31.008 13.895 31.008 31.009s-13.894 31.008-31.008 31.008c-26.309 0-54.461-31.126-18.138-87.76 11.882-18.52 33.8-38.704 52.655-49.5C111.64 2.049 144.285 0 144.285 0S72.508 23.758 38.475 97.379M251.649 350.072s-3.667 1.36-6.117-3.703c-2.023-4.183 2.371-6.294 2.371-6.294 33.306-22.27 50.271-53.345 50.271-53.345s1.417 41.068-46.525 63.342M148.832 353.369s7.327.29 7.988-7.747c.778-9.454-6.474-10.693-6.474-10.693s-45.748-.076-86.614-41.197C18.316 248.032 3.935 179.63 3.935 179.63s-19.97 49.173 30.054 116.413c44.02 59.168 114.843 57.327 114.843 57.327"
-              />
-              <path
-                fill="currentColor"
-                d="M178.118 370.81a31 31 0 0 1-2.227-3.343c-8.558-14.822-3.471-33.802 11.35-42.359s33.801-3.471 42.358 11.35c13.155 22.784.275 62.728-66.934 59.588-21.979-1.03-50.418-9.92-69.196-20.85-34.491-20.082-52.588-47.33-52.588-47.33s56.463 50.281 137.237 42.945M294.606 59.948s3.011 2.495-.149 7.15c-2.61 3.843-6.637 1.092-6.637 1.092-35.938-17.708-71.333-16.863-71.333-16.863s34.858-21.76 78.119 8.62M348.86 147.345s-3.414-6.49-10.704-3.044c-8.576 4.053-6.023 10.952-6.023 10.952s22.808 39.658 7.63 95.608c-16.87 62.183-68.919 108.838-68.919 108.838s52.57-7.292 85.79-84.234c29.232-67.706-7.775-128.12-7.775-128.12"
-              />
-              <path
-                fill="currentColor"
-                d="M349.324 113.259a31 31 0 0 1-1.782 3.6c-8.557 14.823-27.537 19.908-42.358 11.35-14.822-8.556-19.907-27.536-11.35-42.358 13.154-22.784 54.186-31.601 85.071 28.173 10.098 19.55 16.62 48.623 16.541 70.35-.145 39.912-14.694 69.209-14.694 69.209s15.313-74.04-31.428-140.324"
-              />
-            </svg>
-
+  <footer class="bg-[var(--bg-deep)] text-[var(--color-parchment)] py-16">
+    <div class="container-page">
+      <div class="grid gap-12 md:grid-cols-3">
+        <div>
+          <a
+            href="{{ route('home') }}"
+            class="flex items-center gap-3 font-display text-xl font-semibold mb-4"
+          >
+            {!! $logoSvg !!}
             <span>{{ $settings?->site_name ?? 'Männerkreis' }}</span>
           </a>
-          <p class="footer__text">
+          <p class="text-sm text-[var(--color-sand)] leading-relaxed mb-6">
             {{ $settings?->site_description ?: 'Ein Raum für echte Begegnung unter Männern. Authentischer Austausch, Gemeinschaft und persönliches Wachstum in Niederbayern.' }}
           </p>
           @if (!empty($socialLinks))
-            <ul class="footer__social-links">
+            <ul class="flex flex-wrap gap-3">
               @foreach ($socialLinks as $link)
                 <li>
                   <x-social-icon
@@ -156,12 +143,13 @@
           @endif
         </div>
 
-        <div class="footer__nav">
-          <h3 class="footer__heading">Navigation</h3>
-          <ul class="footer__links">
+        <div>
+          <h3 class="font-display text-lg mb-4">Navigation</h3>
+          <ul class="space-y-2 text-sm text-[var(--color-sand)]">
             <li>
               <a
                 href="{{ route('home') }}#ueber"
+                class="hover:text-[var(--color-terracotta-light)]"
                 data-umami-event="footer-link"
                 data-umami-event-target="ueber"
                 >Über uns</a
@@ -170,6 +158,7 @@
             <li>
               <a
                 href="{{ route('home') }}#reise"
+                class="hover:text-[var(--color-terracotta-light)]"
                 data-umami-event="footer-link"
                 data-umami-event-target="reise"
                 >Die Reise</a
@@ -178,6 +167,7 @@
             <li>
               <a
                 href="{{ route('home') }}#faq"
+                class="hover:text-[var(--color-terracotta-light)]"
                 data-umami-event="footer-link"
                 data-umami-event-target="faq"
                 >FAQ</a
@@ -186,6 +176,7 @@
             <li>
               <a
                 href="{{ route('breathing.show') }}"
+                class="hover:text-[var(--color-terracotta-light)]"
                 data-umami-event="footer-link"
                 data-umami-event-target="atemuebung"
                 >Atemübung</a
@@ -195,6 +186,7 @@
               <li>
                 <a
                   href="{{ $nextEventUrl }}"
+                  class="hover:text-[var(--color-terracotta-light)]"
                   data-umami-event="footer-link"
                   data-umami-event-target="event"
                   >Nächster Termin</a
@@ -204,13 +196,14 @@
           </ul>
         </div>
 
-        <div class="footer__contact">
-          <h3 class="footer__heading">Kontakt</h3>
-          <ul class="footer__links">
+        <div>
+          <h3 class="font-display text-lg mb-4">Kontakt</h3>
+          <ul class="space-y-2 text-sm text-[var(--color-sand)]">
             @if ($settings?->contact_email)
               <li>
                 <a
                   href="mailto:{{ $settings->contact_email }}"
+                  class="hover:text-[var(--color-terracotta-light)]"
                   data-umami-event="contact-click"
                   data-umami-event-type="email"
                   >E-Mail schreiben</a
@@ -221,6 +214,7 @@
               <li>
                 <a
                   href="tel:{{ str_replace([' ', '-', '(', ')'], '', $settings->contact_phone) }}"
+                  class="hover:text-[var(--color-terracotta-light)]"
                   data-umami-event="contact-click"
                   data-umami-event-type="phone"
                   >{{ $settings->contact_phone }}</a
@@ -230,6 +224,7 @@
             <li>
               <a
                 href="{{ route('home') }}#newsletter"
+                class="hover:text-[var(--color-terracotta-light)]"
                 data-umami-event="footer-link"
                 data-umami-event-target="newsletter"
                 >Newsletter</a
@@ -239,21 +234,19 @@
         </div>
       </div>
 
-      <div class="footer__bottom">
-        <p class="footer__copyright">
-          {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
-        </p>
-        <div class="footer__legal">
+      <div
+        class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-sm text-[var(--color-sand)] md:flex-row md:items-center"
+      >
+        <p>{{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}</p>
+        <div class="flex gap-6">
           <a
             href="{{ route('page.show', 'impressum') }}"
-            data-umami-event="footer-link"
-            data-umami-event-target="impressum"
+            class="hover:text-[var(--color-terracotta-light)]"
             >Impressum</a
           >
           <a
             href="{{ route('page.show', 'datenschutz') }}"
-            data-umami-event="footer-link"
-            data-umami-event-target="datenschutz"
+            class="hover:text-[var(--color-terracotta-light)]"
             >Datenschutz</a
           >
         </div>
@@ -261,54 +254,20 @@
     </div>
   </footer>
 
-  <!-- Scroll to Top Button -->
+  {{-- Scroll-to-top --}}
   <button
-    class="scroll-to-top"
-    id="scrollToTop"
+    x-data="scrollToTop"
+    x-show="visible"
+    x-transition.opacity
+    @click="go"
+    class="fixed bottom-6 right-6 z-[100] grid h-12 w-12 place-items-center rounded-full bg-[var(--accent)] text-white shadow-lg transition-transform hover:-translate-y-0.5"
     aria-label="Nach oben scrollen"
-    title="Nach oben"
   >
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true">
       <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
   </button>
 
-  <!-- Calendar Modal -->
-  <div class="calendar-modal" id="calendarModal">
-    <div class="calendar-modal__content">
-      <h3>In Kalender speichern</h3>
-      <p>Wähle deinen Kalender:</p>
-      <div class="calendar-modal__buttons">
-        <a
-          href="#"
-          id="calendarGoogle"
-          class="btn btn--secondary"
-          target="_blank"
-          rel="noopener"
-        >
-          Google Calendar
-        </a>
-        <a
-          href="#"
-          id="calendarICS"
-          class="btn btn--secondary"
-          download="maennerkreis-straubing.ics"
-        >
-          Apple/Outlook (.ics)
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- JavaScript -->
   <script>
     window.routes = {
       newsletter: '{{ route('newsletter.subscribe') }}',

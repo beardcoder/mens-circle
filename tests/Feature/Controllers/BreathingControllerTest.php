@@ -8,8 +8,8 @@ test('breathing page is reachable and renders the interactive app', function ():
     $response
         ->assertOk()
         ->assertSee('Atemübung', false)
-        ->assertSee('breathingApp', false)
-        ->assertSee('data-element=start', false);
+        ->assertSee('x-data=breathing', false)
+        ->assertSee('phaseLabel', false);
 });
 
 test('breathing page is linked from the layout navigation', function (): void {

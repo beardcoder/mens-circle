@@ -29,47 +29,54 @@
 @endif
 
 <section
-  class="section section--large journey-section"
+  class="section-y-lg bg-[var(--bg-deep)] text-[var(--color-parchment)]"
   id="reise"
   aria-labelledby="journey-title"
 >
-  <div class="container">
-    <div class="section-header section-header--on-dark">
+  <div class="container-page">
+    <div x-reveal class="mb-16 max-w-2xl">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['eyebrow'] }}</p>
       @endif
-
       @if (!empty($data['title']))
-        <h2 class="section-title" id="journey-title">
+        <h2
+          class="section-title-lg text-[var(--color-parchment)]"
+          id="journey-title"
+        >
           {!! $data['title'] !!}
         </h2>
       @endif
-
       @if (!empty($data['subtitle']))
-        <p class="journey__subtitle">{{ $data['subtitle'] }}</p>
+        <p class="mt-4 text-lg text-[var(--color-sand)]">{{ $data['subtitle'] }}</p>
       @endif
     </div>
 
-    @if (!empty($steps) && is_array($steps))
-      <div class="journey__steps">
+    @if (!empty($steps))
+      <ol class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         @foreach ($steps as $step)
-          <div class="journey__step">
+          <li
+            x-reveal
+            class="relative rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm"
+          >
             @if (!empty($step['number']))
-              <div class="journey__step-number" aria-hidden="true">
+              <div
+                class="font-display text-6xl font-semibold text-[var(--color-terracotta-light)]/40"
+                aria-hidden="true"
+              >
                 {{ $step['number'] }}
               </div>
             @endif
-
             @if (!empty($step['title']))
-              <h3 class="journey__step-title">{{ $step['title'] }}</h3>
+              <h3 class="mt-2 font-display text-xl font-medium">
+                {{ $step['title'] }}
+              </h3>
             @endif
-
             @if (!empty($step['description']))
-              <p class="journey__step-text">{{ $step['description'] }}</p>
+              <p class="mt-3 text-sm text-[var(--color-sand)] leading-relaxed">{{ $step['description'] }}</p>
             @endif
-          </div>
+          </li>
         @endforeach
-      </div>
+      </ol>
     @endif
   </div>
 </section>
