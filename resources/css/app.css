@@ -1,7 +1,7 @@
-@import url('tailwindcss');
-@import url('tw-animate-css');
-@import url('@fontsource-variable/playfair-display');
-@import url('@fontsource-variable/dm-sans');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@fontsource-variable/playfair-display';
+@import '@fontsource-variable/dm-sans';
 
 @theme {
   /* ============================================================
