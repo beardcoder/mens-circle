@@ -136,6 +136,7 @@
               @click="handleStart()"
               :aria-label="startButtonLabel"
               :title="startButtonLabel"
+              data-element="start"
               data-umami-event="breathing-start"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
