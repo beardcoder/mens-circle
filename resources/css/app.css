@@ -7,20 +7,20 @@
   /* ============================================================
      OKLCH Brand Palette — perceptually uniform earth tones
      ============================================================ */
-  --color-earth-deep: oklch(18% 0.026 68deg);
-  --color-earth-dark: oklch(24% 0.033 68deg);
-  --color-earth-mid: oklch(35% 0.04 68deg);
-  --color-earth-warm: oklch(46% 0.05 68deg);
-  --color-terracotta: oklch(61% 0.16 44deg);
-  --color-terracotta-light: oklch(72% 0.14 45deg);
-  --color-sand: oklch(76% 0.04 75deg);
-  --color-sand-light: oklch(89% 0.02 75deg);
-  --color-parchment: oklch(95% 0.01 75deg);
-  --color-bone: oklch(98% 0.005 75deg);
-  --color-ink: oklch(13% 0.01 68deg);
-  --color-ink-soft: oklch(24% 0.02 68deg);
-  --color-sage: oklch(45% 0.08 145deg);
-  --color-sage-light: oklch(55% 0.06 145deg);
+  --color-earth-deep: oklch(15% 0.028 68deg);
+  --color-earth-dark: oklch(22% 0.035 68deg);
+  --color-earth-mid: oklch(34% 0.045 68deg);
+  --color-earth-warm: oklch(46% 0.055 68deg);
+  --color-terracotta: oklch(58% 0.18 42deg);
+  --color-terracotta-light: oklch(72% 0.16 45deg);
+  --color-sand: oklch(76% 0.045 75deg);
+  --color-sand-light: oklch(86% 0.025 75deg);
+  --color-parchment: oklch(94% 0.014 75deg);
+  --color-bone: oklch(97.5% 0.008 75deg);
+  --color-ink: oklch(13% 0.012 68deg);
+  --color-ink-soft: oklch(28% 0.025 68deg);
+  --color-sage: oklch(44% 0.085 145deg);
+  --color-sage-light: oklch(55% 0.065 145deg);
 
   /* Semantic statuses */
   --color-success: oklch(58% 0.15 145deg);
@@ -213,22 +213,42 @@
 
     --bg: var(--color-bone);
     --bg-alt: var(--color-parchment);
+    --bg-soft: oklch(91% 0.02 75deg);
     --bg-deep: var(--color-earth-deep);
     --fg: var(--color-ink);
-    --fg-muted: var(--color-ink-soft);
+    --fg-muted: oklch(38% 0.028 68deg);
+    --fg-subtle: oklch(52% 0.025 68deg);
     --accent: var(--color-terracotta);
-    --border: var(--color-sand-light);
+    --accent-soft: color-mix(
+      in oklch,
+      var(--color-terracotta) 12%,
+      transparent
+    );
+    --border: oklch(82% 0.025 75deg);
+    --border-soft: oklch(88% 0.018 75deg);
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: var(--color-ink);
       --bg-alt: var(--color-earth-deep);
+      --bg-soft: oklch(20% 0.025 68deg);
       --bg-deep: var(--color-earth-deep);
       --fg: var(--color-parchment);
-      --fg-muted: oklch(80% 0.02 75deg);
+      --fg-muted: oklch(78% 0.025 75deg);
+      --fg-subtle: oklch(64% 0.025 75deg);
       --accent: var(--color-terracotta-light);
-      --border: color-mix(in oklch, var(--color-earth-mid) 40%, transparent);
+      --accent-soft: color-mix(
+        in oklch,
+        var(--color-terracotta-light) 18%,
+        transparent
+      );
+      --border: color-mix(in oklch, var(--color-earth-mid) 55%, transparent);
+      --border-soft: color-mix(
+        in oklch,
+        var(--color-earth-mid) 35%,
+        transparent
+      );
     }
   }
 
@@ -287,40 +307,6 @@
 /* ============================================================
    Reveal-on-scroll utility — works with x-intersect
    ============================================================ */
-@utility reveal {
-  opacity: 0;
-  transform: translateY(2rem);
-  transition:
-    opacity 0.8s var(--ease-settle),
-    transform 0.8s var(--ease-settle);
-
-  &.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@utility reveal-fade {
-  opacity: 0;
-  transition: opacity 0.8s var(--ease-settle);
-
-  &.is-visible {
-    opacity: 1;
-  }
-}
-
-@utility reveal-zoom {
-  opacity: 0;
-  transform: scale(0.94);
-  transition:
-    opacity 0.7s var(--ease-settle),
-    transform 0.7s var(--ease-settle);
-
-  &.is-visible {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
 
 /* ============================================================
    Project utility shortcuts — Tailwind v4 @utility directive

@@ -29,7 +29,7 @@ Alpine.plugin(intersect);
 /* ------------------------------------------------------------------ */
 /*  Reveal-on-scroll directive: <div x-reveal>...</div>                */
 /* ------------------------------------------------------------------ */
-Alpine.directive('reveal', (el, { modifiers }) => {
+Alpine.directive('reveal', (el, { modifiers, expression }) => {
   const once = !modifiers.includes('repeat');
   const threshold = modifiers.includes('full')
     ? 0.9
@@ -37,16 +37,45 @@ Alpine.directive('reveal', (el, { modifiers }) => {
       ? 0.5
       : 0.15;
 
-  el.classList.add('reveal');
+  // Variant: fade | up (default) | down | left | right | zoom
+  const variant = modifiers.includes('fade')
+    ? ['fade-in']
+    : modifiers.includes('zoom')
+      ? ['fade-in', 'zoom-in-95']
+      : modifiers.includes('left')
+        ? ['fade-in', 'slide-in-from-left-8']
+        : modifiers.includes('right')
+          ? ['fade-in', 'slide-in-from-right-8']
+          : modifiers.includes('down')
+            ? ['fade-in', 'slide-in-from-top-8']
+            : ['fade-in', 'slide-in-from-bottom-8'];
+
+  // Duration: read from `slow` | `fast` | default 700
+  const duration = modifiers.includes('slow')
+    ? 'duration-1000'
+    : modifiers.includes('fast')
+      ? 'duration-500'
+      : 'duration-700';
+
+  // Delay: pass via expression e.g. `x-reveal="120"` → delay-120
+  const delay =
+    expression && /^\d+$/.test(expression) ? `delay-${expression}` : null;
+
+  // Initial state — invisible until intersected
+  el.classList.add('opacity-0');
 
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
+          entry.target.classList.remove('opacity-0');
+          entry.target.classList.add('animate-in', ...variant, duration);
+          if (delay) entry.target.classList.add(delay);
           if (once) observer.unobserve(entry.target);
         } else if (!once) {
-          entry.target.classList.remove('is-visible');
+          entry.target.classList.add('opacity-0');
+          entry.target.classList.remove('animate-in', ...variant, duration);
+          if (delay) entry.target.classList.remove(delay);
         }
       }
     },
