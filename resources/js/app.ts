@@ -57,9 +57,12 @@ Alpine.directive('reveal', (el, { modifiers, expression }) => {
       ? 'duration-500'
       : 'duration-700';
 
-  // Delay: pass via expression e.g. `x-reveal="120"` → delay-120
-  const delay =
-    expression && /^\d+$/.test(expression) ? `delay-${expression}` : null;
+  // Delay: pass via expression e.g. `x-reveal="120"` → animation-delay 120ms.
+  // We set inline style so we don't depend on Tailwind seeing dynamic class names.
+  const delayMs =
+    expression && /^\d+$/.test(expression)
+      ? Number.parseInt(expression, 10)
+      : 0;
 
   // Initial state — invisible until intersected
   el.classList.add('opacity-0');
@@ -67,15 +70,16 @@ Alpine.directive('reveal', (el, { modifiers, expression }) => {
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
+        const target = entry.target as HTMLElement;
         if (entry.isIntersecting) {
-          entry.target.classList.remove('opacity-0');
-          entry.target.classList.add('animate-in', ...variant, duration);
-          if (delay) entry.target.classList.add(delay);
-          if (once) observer.unobserve(entry.target);
+          target.classList.remove('opacity-0');
+          target.classList.add('animate-in', ...variant, duration);
+          if (delayMs > 0) target.style.animationDelay = `${delayMs}ms`;
+          if (once) observer.unobserve(target);
         } else if (!once) {
-          entry.target.classList.add('opacity-0');
-          entry.target.classList.remove('animate-in', ...variant, duration);
-          if (delay) entry.target.classList.remove(delay);
+          target.classList.add('opacity-0');
+          target.classList.remove('animate-in', ...variant, duration);
+          target.style.animationDelay = '';
         }
       }
     },
