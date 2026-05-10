@@ -229,6 +229,7 @@
     --fg-subtle: oklch(52% 0.025 68deg);
     --accent: var(--color-terracotta);
     --accent-soft: color-mix(in oklch, var(--color-terracotta) 8%, transparent);
+    --focus-ring: color-mix(in oklch, var(--accent) 72%, var(--color-ink));
     --border: oklch(82% 0.025 75deg);
     --border-soft: oklch(88% 0.018 75deg);
   }
@@ -248,6 +249,7 @@
         var(--color-terracotta-light) 12%,
         transparent
       );
+      --focus-ring: color-mix(in oklch, var(--accent) 76%, white);
       --border: color-mix(in oklch, var(--color-earth-mid) 55%, transparent);
       --border-soft: color-mix(
         in oklch,
@@ -279,7 +281,7 @@
   }
 
   :where(a, button, input, textarea, select, summary):focus-visible {
-    outline: 2px solid color-mix(in oklch, var(--accent) 62%, white);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 3px;
   }
 
@@ -487,6 +489,17 @@
   display: block;
 }
 
+@utility hero-title-emphasis {
+  & .text-italic {
+    font-style: italic;
+    color: color-mix(
+      in oklch,
+      var(--color-terracotta-light) 60%,
+      var(--color-parchment)
+    );
+  }
+}
+
 @utility text-italic {
   font-family: var(--font-display);
   font-style: italic;
@@ -588,6 +601,16 @@
 @utility btn-large {
   padding: 1.18rem 2.55rem;
   font-size: 0.8rem;
+}
+
+@utility btn-top {
+  color: white;
+  background: color-mix(in oklch, var(--accent) 88%, var(--color-earth-mid));
+  border: 1px solid
+    color-mix(in oklch, var(--accent) 68%, var(--color-earth-mid));
+  border-radius: 9999px;
+  box-shadow: 0 12px 24px -14px
+    color-mix(in oklch, var(--color-ink) 45%, transparent);
 }
 
 @utility nav-indexed {

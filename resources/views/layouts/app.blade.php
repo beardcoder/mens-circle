@@ -344,7 +344,7 @@
     x-show="visible"
     x-transition.opacity
     @click="go"
-    class="fixed bottom-6 right-6 z-[100] grid h-12 w-12 place-items-center rounded-full border border-[color-mix(in_oklch,var(--accent)_68%,var(--color-earth-mid))] bg-[color-mix(in_oklch,var(--accent)_88%,var(--color-earth-mid))] text-white shadow-[0_12px_24px_-14px_color-mix(in_oklch,var(--color-ink)_45%,transparent)] transition-transform hover:-translate-y-0.5"
+    class="btn-top fixed bottom-6 right-6 z-[100] grid h-12 w-12 place-items-center transition-transform hover:-translate-y-0.5"
     aria-label="Nach oben scrollen"
   >
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true">
