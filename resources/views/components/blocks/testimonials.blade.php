@@ -30,37 +30,40 @@
 <section class="section-y-lg" id="stimmen" aria-labelledby="testimonials-title">
   <div class="container-page">
     <div
-      class="mb-16 max-w-3xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      class="section-header animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
     >
       <p class="eyebrow">Community Stimmen</p>
-      <h2 class="section-title-lg" id="testimonials-title">
+      <h2
+        class="section-title-lg split-title max-w-[16ch]"
+        id="testimonials-title"
+      >
         Was <span class="text-italic">Teilnehmer</span> sagen
       </h2>
-      <p class="mt-6 text-lg leading-[1.85] text-[var(--fg-muted)]">Authentische Einblicke von Männern, die den Kreis erleben</p>
+      <p class="section-intro">Authentische Einblicke von Männern, die den Kreis erleben</p>
     </div>
 
-    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+    <div class="grid items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
       @foreach ($testimonials as $testimonial)
         <article
-          class="group relative flex flex-col gap-6 border border-[var(--border)] bg-[var(--bg-alt)] p-10 transition-colors duration-500 hover:bg-[var(--bg)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+          class="card-light editorial-panel group relative flex h-full flex-col gap-6 p-8 md:p-9 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--bg)_80%,var(--bg-alt))] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
         >
           <span
-            class="font-display text-6xl leading-none text-[var(--accent)]/50"
+            class="font-display text-7xl leading-none text-[var(--accent)]/28"
             aria-hidden="true"
             >»</span
           >
           <blockquote
-            class="font-display text-xl italic leading-[1.5] text-[var(--fg)]"
+            class="font-display text-[clamp(1.15rem,0.95rem+0.7vw,1.55rem)] italic leading-[1.65] text-[var(--fg)]"
           >
             {{ $testimonial->quote }}
           </blockquote>
           @if ($testimonial->author_name || $testimonial->role)
             <div
-              class="mt-auto flex flex-col gap-1 border-t border-[var(--border)] pt-5 text-sm"
+              class="mt-auto grid gap-1 border-t border-[color-mix(in_oklch,var(--border)_80%,transparent)] pt-5 text-sm"
             >
               @if ($testimonial->author_name)
                 <cite
-                  class="font-display text-base font-medium not-italic text-[var(--fg)]"
+                  class="font-display text-[1.08rem] font-medium not-italic text-[var(--fg)]"
                   >{{ $testimonial->author_name }}</cite
                 >
               @endif

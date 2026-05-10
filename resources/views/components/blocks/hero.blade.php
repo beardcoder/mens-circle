@@ -19,13 +19,13 @@
 <section
   data-hero
   role="banner"
-  class="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-gradient-to-b from-[var(--color-earth-deep)] to-[var(--color-earth-dark)] pb-24 text-[var(--color-parchment)]"
+  class="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-gradient-to-b from-[var(--color-earth-deep)] via-[var(--color-earth-dark)] to-[var(--color-earth-deep)] pb-20 text-[var(--color-parchment)] md:pb-24"
   style="min-block-size: min(880px, 100svh)"
 >
   {{-- Bg image --}}
   @if ($media)
     {{ $media->img()->attributes([
-        'class' => 'absolute inset-0 -z-10 h-full w-full object-cover opacity-30 mix-blend-luminosity',
+        'class' => 'absolute inset-0 -z-10 h-full w-full object-cover opacity-24 mix-blend-luminosity',
         'loading' => 'eager',
         'fetchpriority' => 'high',
         'aria-hidden' => 'true',
@@ -35,44 +35,44 @@
   {{-- Warm radial glow --}}
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
     <div
-      class="absolute inset-0 [background:radial-gradient(ellipse_80%_60%_at_70%_30%,color-mix(in_oklch,var(--accent)_22%,transparent)_0%,transparent_50%),radial-gradient(ellipse_60%_50%_at_20%_80%,color-mix(in_oklch,var(--accent)_12%,transparent)_0%,transparent_40%)]"
+      class="absolute inset-0 [background:radial-gradient(ellipse_80%_60%_at_70%_30%,color-mix(in_oklch,var(--accent)_14%,transparent)_0%,transparent_52%),radial-gradient(ellipse_60%_50%_at_20%_80%,color-mix(in_oklch,var(--accent)_8%,transparent)_0%,transparent_43%)]"
     ></div>
   </div>
 
   {{-- Decorative circles --}}
   <div class="hero-decor" aria-hidden="true">
     <span
-      class="-top-[15vw] -right-[25vw] h-[70vw] w-[70vw] animate-breathe [animation-duration:18s]"
+      class="-top-[15vw] -right-[25vw] h-[70vw] w-[70vw] animate-breathe [animation-duration:24s]"
     ></span>
     <span
-      class="-top-[5vw] -right-[15vw] h-[50vw] w-[50vw] animate-breathe [animation-delay:-5s] [animation-duration:22s]"
+      class="-top-[5vw] -right-[15vw] h-[50vw] w-[50vw] animate-breathe [animation-delay:-5s] [animation-duration:30s]"
     ></span>
     <span
-      class="top-[2vw] -right-[8vw] h-[35vw] w-[35vw] animate-breathe [animation-delay:-10s] [animation-duration:25s]"
+      class="top-[2vw] -right-[8vw] h-[35vw] w-[35vw] animate-breathe [animation-delay:-10s] [animation-duration:34s]"
     ></span>
     <span
-      class="-bottom-[45vw] -left-[45vw] h-[90vw] w-[90vw] animate-breathe [animation-delay:-3s] [animation-duration:30s]"
+      class="-bottom-[45vw] -left-[45vw] h-[90vw] w-[90vw] animate-breathe [animation-delay:-3s] [animation-duration:38s]"
     ></span>
   </div>
 
   <div class="container-page relative z-10 w-full">
     @if (!empty($data['label']))
-      <p class="eyebrow text-[var(--color-terracotta-light)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">{{ $data['label'] }}</p>
+      <p class="eyebrow text-[var(--color-terracotta-light)]/85 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">{{ $data['label'] }}</p>
     @endif
 
     @if (!empty($data['title']))
       <h1
-        class="hero-title animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+        class="hero-title display-title split-title max-w-[16ch] text-[var(--color-parchment)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%] [&_.text-italic]:text-[color-mix(in_oklch,var(--color-terracotta-light)_60%,var(--color-parchment))] [&_.text-italic]:italic"
       >
         {!! $data['title'] !!}
       </h1>
     @endif
 
     <div
-      class="mt-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
+      class="mt-10 grid gap-10 md:mt-12 md:grid-cols-[minmax(0,1fr)_auto] md:items-end"
     >
       @if (!empty($data['description']))
-        <p class="max-w-[480px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">{{ $data['description'] }}</p>
+        <p class="max-w-[58ch] text-base leading-[1.92] text-[var(--color-sand)] md:text-lg animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">{{ $data['description'] }}</p>
       @endif
 
       @if ($shouldShowButton)
@@ -85,11 +85,11 @@
             >{{ $data['button_text'] }}</a
           >
           <span
-            class="inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-[var(--color-sand)]/60"
+            class="inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-sand)]/60"
             aria-hidden="true"
           >
-            <span class="h-px w-8 bg-[var(--color-sand)]/40"></span>
-            Entdecken
+            <span class="h-px w-10 bg-[var(--color-sand)]/35"></span>
+            Nächster Schritt
           </span>
         </div>
       @endif

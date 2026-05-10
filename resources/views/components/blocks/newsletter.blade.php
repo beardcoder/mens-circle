@@ -11,37 +11,39 @@
 >
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
     <div
-      class="absolute inset-0 [background:radial-gradient(ellipse_70%_60%_at_30%_50%,color-mix(in_oklch,var(--accent)_18%,transparent)_0%,transparent_55%)]"
+      class="absolute inset-0 [background:radial-gradient(ellipse_70%_60%_at_30%_50%,color-mix(in_oklch,var(--accent)_12%,transparent)_0%,transparent_58%)]"
     ></div>
     <span
-      class="absolute -top-[15vw] -right-[15vw] block h-[50vw] w-[50vw] rounded-full border border-[var(--color-sand)]/15 animate-breathe [animation-duration:22s]"
+      class="absolute -top-[15vw] -right-[15vw] block h-[50vw] w-[50vw] rounded-full border border-[var(--color-sand)]/11 animate-breathe [animation-duration:30s]"
     ></span>
   </div>
 
-  <div class="container-page grid gap-12 md:grid-cols-2 md:items-center">
+  <div
+    class="container-page grid gap-12 md:grid-cols-[1fr_auto] md:items-center"
+  >
     <div
       class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
     >
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow text-[var(--color-terracotta-light)]/90">{{ $data['eyebrow'] }}</p>
       @endif
       @if (!empty($data['title']))
         <h2
-          class="section-title-lg text-[var(--color-parchment)]"
+          class="section-title-lg split-title max-w-[15ch] text-[var(--color-parchment)]"
           id="newsletter-title"
         >
           {!! $data['title'] !!}
         </h2>
       @endif
       @if (!empty($data['text']))
-        <p class="mt-6 text-lg leading-[1.85] text-[var(--color-sand)]">{{ $data['text'] }}</p>
+        <p class="section-intro mt-6 max-w-[58ch] text-[var(--color-sand)]">{{ $data['text'] }}</p>
       @endif
     </div>
 
     <form
       x-data="newsletterForm"
       @submit.prevent="submit($event)"
-      class="flex flex-col gap-3 sm:flex-row sm:items-center animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      class="card-dark grid w-full max-w-xl gap-3 rounded-[1.2rem] p-5 sm:grid-cols-[1fr_auto] sm:items-center animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
       aria-label="Newsletter-Anmeldung"
     >
       <label for="newsletter-email" class="sr-only">E-Mail-Adresse</label>
@@ -54,7 +56,7 @@
         required
         autocomplete="email"
         inputmode="email"
-        class="flex-1 rounded-full border border-white/15 bg-white/5 px-6 py-4 text-base text-[var(--color-parchment)] placeholder:text-[var(--color-sand)]/60 backdrop-blur-sm transition-colors focus:border-[var(--color-terracotta-light)] focus:outline-none focus:bg-white/10"
+        class="w-full rounded-full border border-white/15 bg-white/5 px-6 py-4 text-base text-[var(--color-parchment)] placeholder:text-[var(--color-sand)]/60 backdrop-blur-sm transition-colors focus:border-[var(--color-terracotta-light)] focus:bg-white/10 focus:outline-none"
       />
       <button type="submit" class="btn btn-primary">Anmelden</button>
     </form>

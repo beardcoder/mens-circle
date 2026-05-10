@@ -24,28 +24,28 @@
   >
     {{-- Subtle top-warm + bottom-cold radial glows --}}
     <span
-      class="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(ellipse_60%_45%_at_15%_0%,color-mix(in_oklch,var(--color-terracotta)_18%,transparent)_0%,transparent_60%),radial-gradient(ellipse_50%_40%_at_85%_100%,color-mix(in_oklch,var(--color-sage)_14%,transparent)_0%,transparent_55%)]"
+      class="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(ellipse_60%_45%_at_15%_0%,color-mix(in_oklch,var(--color-terracotta)_12%,transparent)_0%,transparent_62%),radial-gradient(ellipse_50%_40%_at_85%_100%,color-mix(in_oklch,var(--color-sage)_10%,transparent)_0%,transparent_58%)]"
       aria-hidden="true"
     ></span>
 
     <div class="container-page relative">
       {{-- Section header --}}
       <div
-        class="mb-20 max-w-3xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+        class="section-header max-w-4xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
       >
         @if (!empty($data['eyebrow']))
           <p class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['eyebrow'] }}</p>
         @endif
         @if (!empty($data['title']))
           <h2
-            class="section-title-lg text-[var(--color-parchment)]"
+            class="section-title-lg split-title text-[var(--color-parchment)]"
             id="archetypes-title"
           >
             {{ $data['title'] }}
           </h2>
         @endif
         @if (!empty($data['intro']))
-          <p class="mt-6 text-lg leading-[1.85] text-[var(--color-sand)]">{{ $data['intro'] }}</p>
+          <p class="section-intro max-w-[58ch] text-[var(--color-sand)]">{{ $data['intro'] }}</p>
         @endif
       </div>
 
@@ -56,26 +56,24 @@
           aria-hidden="true"
         ></span>
 
-        <ul
-          class="grid grid-cols-1 gap-px bg-[color-mix(in_oklch,var(--color-sand)_15%,transparent)] sm:grid-cols-2 lg:grid-cols-3"
-        >
+        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           @foreach ($items as $i => $item)
             @php
                 $icon = $detectIcon($item);
                 $svgPath = public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg');
             @endphp
             <li
-              class="group relative isolate flex min-h-[440px] flex-col overflow-hidden bg-[var(--color-earth-deep)] px-8 pb-12 pt-14 transition-colors duration-500 hover:bg-[var(--color-earth-dark)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+              class="card-dark group relative isolate flex min-h-[420px] flex-col overflow-hidden px-8 pb-10 pt-12 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--color-earth-dark)_86%,transparent)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
             >
               {{-- Accent dot at top-left --}}
               <span
-                class="absolute -top-1.5 left-8 block h-3 w-3 rounded-full bg-[var(--color-terracotta-light)] shadow-[0_0_16px_color-mix(in_oklch,var(--color-terracotta-light)_60%,transparent)]"
+                class="absolute -top-1.5 left-8 block h-2.5 w-2.5 rounded-full bg-[var(--color-terracotta-light)] shadow-[0_0_12px_color-mix(in_oklch,var(--color-terracotta-light)_36%,transparent)]"
                 aria-hidden="true"
               ></span>
 
               {{-- Background SVG icon — large, low opacity, shifts on hover --}}
               <span
-                class="pointer-events-none absolute -right-10 -bottom-10 block h-72 w-72 text-[var(--color-terracotta)]/12 transition-all duration-700 ease-[var(--ease-ambient)] group-hover:scale-105 group-hover:text-[var(--color-terracotta)]/25"
+                class="pointer-events-none absolute -right-10 -bottom-10 block h-72 w-72 text-[var(--color-terracotta)]/10 transition-all duration-700 ease-[var(--ease-ambient)] group-hover:scale-105 group-hover:text-[var(--color-terracotta)]/16"
                 aria-hidden="true"
               >
                 @if (file_exists($svgPath))
@@ -86,11 +84,11 @@
               {{-- Index --}}
               <div class="flex items-baseline gap-3 font-display leading-none">
                 <span
-                  class="text-[0.7rem] font-medium uppercase tracking-[0.28em] text-[var(--color-terracotta-light)]/80"
+                  class="text-[0.68rem] font-medium uppercase tracking-[0.26em] text-[var(--color-terracotta-light)]/80"
                   >Archetyp</span
                 >
                 <span
-                  class="text-2xl font-medium tabular-nums text-[var(--color-parchment)]/90"
+                  class="text-2xl font-medium tabular-nums text-[var(--color-parchment)]/86"
                   >{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }}</span
                 >
               </div>
@@ -98,7 +96,7 @@
               {{-- Title --}}
               @if (!empty($item['title']))
                 <h3
-                  class="relative mt-8 font-display text-4xl font-medium leading-[1.05] text-[var(--color-parchment)]"
+                  class="relative mt-7 font-display text-[clamp(2rem,1.2rem+1.5vw,3rem)] font-medium leading-[1.02] text-[var(--color-parchment)]"
                 >
                   {{ $item['title'] }}
                 </h3>
@@ -106,12 +104,12 @@
 
               {{-- Description --}}
               @if (!empty($item['description']))
-                <p class="relative mt-5 max-w-[28ch] text-[0.95rem] leading-[1.85] text-[var(--color-sand)]/90">{{ $item['description'] }}</p>
+                <p class="relative mt-4 max-w-[30ch] text-[0.96rem] leading-[1.84] text-[var(--color-sand)]/88">{{ $item['description'] }}</p>
               @endif
 
               {{-- Bottom hairline that grows on hover --}}
               <span
-                class="absolute bottom-6 left-8 right-8 h-px origin-left scale-x-0 bg-[var(--color-terracotta-light)]/60 transition-transform duration-500 ease-[var(--ease-settle)] group-hover:scale-x-100"
+                class="absolute bottom-6 left-8 right-8 h-px origin-left scale-x-0 bg-[var(--color-terracotta-light)]/45 transition-transform duration-500 ease-[var(--ease-settle)] group-hover:scale-x-100"
                 aria-hidden="true"
               ></span>
             </li>

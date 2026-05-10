@@ -42,63 +42,67 @@
 >
   {{-- Subtle bottom warm glow + ambient circle --}}
   <span
-    class="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(ellipse_80%_60%_at_50%_100%,color-mix(in_oklch,var(--accent)_16%,transparent)_0%,transparent_50%)]"
+    class="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(ellipse_80%_60%_at_50%_100%,color-mix(in_oklch,var(--accent)_11%,transparent)_0%,transparent_56%)]"
     aria-hidden="true"
   ></span>
   <span
-    class="pointer-events-none absolute -bottom-[20vw] -right-[20vw] block h-[60vw] w-[60vw] rounded-full border border-[var(--color-sand)]/10 animate-breathe [animation-duration:32s]"
+    class="pointer-events-none absolute -bottom-[20vw] -right-[20vw] block h-[60vw] w-[60vw] rounded-full border border-[var(--color-sand)]/10 animate-breathe [animation-duration:40s]"
     aria-hidden="true"
   ></span>
 
   <div class="container-page relative">
     {{-- Section header --}}
     <div
-      class="mb-20 max-w-3xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      class="section-header max-w-4xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
     >
       @if (!empty($data['eyebrow']))
         <p class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['eyebrow'] }}</p>
       @endif
       @if (!empty($data['title']))
         <h2
-          class="section-title-lg text-[var(--color-parchment)]"
+          class="section-title-lg split-title text-[var(--color-parchment)]"
           id="journey-title"
         >
           {!! $data['title'] !!}
         </h2>
       @endif
       @if (!empty($data['subtitle']))
-        <p class="mt-6 font-display text-2xl italic leading-snug text-[var(--color-sand)]/80">{{ $data['subtitle'] }}</p>
+        <p class="section-intro max-w-[58ch] text-[var(--color-sand)]/85">{{ $data['subtitle'] }}</p>
       @endif
     </div>
 
-    {{-- Horizontal timeline thread (desktop) --}}
+    {{-- Editorial timeline --}}
     <div class="relative">
       <span
-        class="pointer-events-none absolute inset-x-0 top-0 hidden h-px bg-[linear-gradient(90deg,transparent,color-mix(in_oklch,var(--color-terracotta-light)_60%,transparent),transparent)] lg:block"
+        class="pointer-events-none absolute left-6 top-0 bottom-0 w-px bg-[linear-gradient(180deg,transparent,color-mix(in_oklch,var(--color-terracotta-light)_46%,transparent),transparent)] md:hidden"
+        aria-hidden="true"
+      ></span>
+      <span
+        class="pointer-events-none absolute inset-x-0 top-0 hidden h-px bg-[linear-gradient(90deg,transparent,color-mix(in_oklch,var(--color-terracotta-light)_48%,transparent),transparent)] lg:block"
         aria-hidden="true"
       ></span>
 
       <ol
-        class="grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:gap-y-0 {{ $colClass }}"
+        class="grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:gap-y-0 {{ $colClass }}"
       >
         @foreach ($steps as $step)
           <li
-            class="group relative flex flex-col gap-5 px-6 pt-12 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--color-sand)_4%,transparent)] lg:px-8 lg:pt-14 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-[var(--color-sand)]/15 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+            class="group card-dark relative flex flex-col gap-4 px-7 py-8 md:py-10 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--color-earth-dark)_88%,transparent)] md:ml-6 lg:ml-0 lg:rounded-none lg:border-0 lg:bg-transparent lg:px-8 lg:pt-14 lg:pb-10 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-[var(--color-sand)]/15 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
           >
             {{-- Accent dot at top --}}
             <span
-              class="absolute -top-1.5 left-6 block h-3 w-3 rounded-full bg-[var(--color-terracotta-light)] shadow-[0_0_16px_color-mix(in_oklch,var(--color-terracotta-light)_70%,transparent)] lg:left-8"
+              class="absolute top-8 -left-[1.45rem] block h-2.5 w-2.5 rounded-full bg-[var(--color-terracotta-light)] shadow-[0_0_14px_color-mix(in_oklch,var(--color-terracotta-light)_45%,transparent)] md:-left-[1.55rem] md:top-10 lg:-top-1.5 lg:left-8"
               aria-hidden="true"
             ></span>
 
             @if (!empty($step['number']))
               <div class="flex items-baseline gap-3 font-display leading-none">
                 <span
-                  class="text-xs font-medium uppercase tracking-[0.25em] text-[var(--color-terracotta-light)]/80"
+                  class="text-xs font-medium uppercase tracking-[0.23em] text-[var(--color-terracotta-light)]/80"
                   >Schritt</span
                 >
                 <span
-                  class="text-6xl font-medium text-[var(--color-parchment)]"
+                  class="number-label text-[var(--color-parchment)]/82"
                   >{{ str_pad((string) $step['number'], 2, '0', STR_PAD_LEFT) }}</span
                 >
               </div>
@@ -106,14 +110,14 @@
 
             @if (!empty($step['title']))
               <h3
-                class="font-display text-2xl font-medium leading-tight text-[var(--color-parchment)]"
+                class="font-display text-[clamp(1.5rem,1rem+1vw,2rem)] font-medium leading-tight text-[var(--color-parchment)]"
               >
                 {{ $step['title'] }}
               </h3>
             @endif
 
             @if (!empty($step['description']))
-              <p class="text-[0.95rem] leading-[1.85] text-[var(--color-sand)]/90">{{ $step['description'] }}</p>
+              <p class="text-[0.95rem] leading-[1.82] text-[var(--color-sand)]/90">{{ $step['description'] }}</p>
             @endif
           </li>
         @endforeach

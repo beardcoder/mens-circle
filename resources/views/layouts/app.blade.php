@@ -193,18 +193,22 @@
     @yield ('content')
   </main>
 
-  <footer class="bg-[var(--bg-deep)] text-[var(--color-parchment)] py-16">
+  <footer
+    class="bg-[var(--bg-deep)] py-16 text-[var(--color-parchment)] md:py-20"
+  >
     <div class="container-page">
-      <div class="grid gap-12 md:grid-cols-3">
+      <div
+        class="grid gap-12 border-b border-white/10 pb-12 md:grid-cols-[1.2fr_1fr_1fr] md:gap-10"
+      >
         <div>
           <a
             href="{{ route('home') }}"
-            class="flex items-center gap-3 font-display text-xl font-semibold mb-4"
+            class="mb-5 flex items-center gap-3 font-display text-xl font-semibold tracking-[-0.02em]"
           >
             {!! $logoSvg !!}
             <span>{{ $settings?->site_name ?? 'Männerkreis' }}</span>
           </a>
-          <p class="text-sm text-[var(--color-sand)] leading-relaxed mb-6">
+          <p class="mb-6 max-w-[42ch] text-sm leading-relaxed text-[var(--color-sand)]">
             {{ $settings?->site_description ?: 'Ein Raum für echte Begegnung unter Männern. Authentischer Austausch, Gemeinschaft und persönliches Wachstum in Niederbayern.' }}
           </p>
           @if (!empty($socialLinks))
@@ -224,7 +228,7 @@
         </div>
 
         <div>
-          <h3 class="font-display text-lg mb-4">Navigation</h3>
+          <h3 class="mb-4 font-display text-lg">Navigation</h3>
           <ul class="space-y-2 text-sm text-[var(--color-sand)]">
             <li>
               <a
@@ -277,7 +281,7 @@
         </div>
 
         <div>
-          <h3 class="font-display text-lg mb-4">Kontakt</h3>
+          <h3 class="mb-4 font-display text-lg">Kontakt</h3>
           <ul class="space-y-2 text-sm text-[var(--color-sand)]">
             @if ($settings?->contact_email)
               <li>
@@ -315,7 +319,7 @@
       </div>
 
       <div
-        class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-sm text-[var(--color-sand)] md:flex-row md:items-center"
+        class="mt-6 flex flex-col items-start justify-between gap-4 pt-2 text-sm text-[var(--color-sand)] md:flex-row md:items-center"
       >
         <p>{{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}</p>
         <div class="flex gap-6">
@@ -340,7 +344,7 @@
     x-show="visible"
     x-transition.opacity
     @click="go"
-    class="fixed bottom-6 right-6 z-[100] grid h-12 w-12 place-items-center rounded-full bg-[var(--accent)] text-white shadow-lg transition-transform hover:-translate-y-0.5"
+    class="fixed bottom-6 right-6 z-[100] grid h-12 w-12 place-items-center rounded-full border border-[color-mix(in_oklch,var(--accent)_68%,var(--color-earth-mid))] bg-[color-mix(in_oklch,var(--accent)_88%,var(--color-earth-mid))] text-white shadow-[0_12px_24px_-14px_color-mix(in_oklch,var(--color-ink)_45%,transparent)] transition-transform hover:-translate-y-0.5"
     aria-label="Nach oben scrollen"
   >
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true">
