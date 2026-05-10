@@ -48,7 +48,7 @@
     <div class="container-page relative z-10 w-full">
       <p class="eyebrow text-[var(--color-terracotta-light)]/85 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">Männerkreis Niederbayern/ Straubing</p>
       <h1
-        class="hero-title display-title split-title max-w-[16ch] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+        class="hero-title split-title max-w-[16ch] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
       >
         <span class="hero-title-line">Aktuell ist kein</span>
         <span class="hero-title-line"
@@ -84,7 +84,7 @@
         <div
           class="pointer-events-none absolute inset-x-10 top-7 h-px bg-[linear-gradient(90deg,transparent,color-mix(in_oklch,var(--accent)_36%,transparent),transparent)]"
         ></div>
-        <p class="editorial-quote relative grid h-full place-items-center text-center">»Bleib<br /><span class="text-italic">verbunden</span>«</p>
+        <p class="editorial-quote editorial-quote-centered relative grid h-full place-items-center">»Bleib<br /><span class="text-italic">verbunden</span>«</p>
       </div>
     </div>
   </section>

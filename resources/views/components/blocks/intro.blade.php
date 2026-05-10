@@ -10,7 +10,7 @@
   aria-labelledby="intro-title"
 >
   <div
-    class="container-page grid gap-14 lg:grid-cols-[1.08fr_0.92fr] lg:items-start"
+    class="container-page grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-start"
   >
     <div
       class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
@@ -68,7 +68,11 @@
         class="editorial-panel card-light relative min-h-80 rounded-[1.5rem] px-8 py-10 md:px-10"
       >
         @if (!empty($data['quote']))
-          <p class="editorial-quote relative z-10 max-w-full text-left text-[var(--fg)]">{!! $data['quote'] !!}</p>
+          <blockquote
+            class="editorial-quote relative z-10 max-w-full text-left text-[var(--fg)]"
+          >
+            {!! $data['quote'] !!}
+          </blockquote>
         @else
           <span
             class="pointer-events-none absolute right-10 top-10 h-28 w-28 rounded-full border border-[var(--accent)]/30"

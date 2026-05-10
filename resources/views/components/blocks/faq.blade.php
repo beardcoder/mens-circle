@@ -47,6 +47,7 @@
                 type="button"
                 @click="openIndex = openIndex === {{ $i }} ? null : {{ $i }}"
                 :aria-expanded="openIndex === {{ $i }}"
+                id="faq-question-{{ $i }}"
                 aria-controls="faq-answer-{{ $i }}"
                 class="group flex w-full items-center justify-between gap-6 py-7 text-left font-display text-[clamp(1.3rem,1.05rem+0.8vw,1.9rem)] font-medium leading-[1.35] text-[var(--fg)] transition-colors hover:text-[color-mix(in_oklch,var(--accent)_65%,var(--fg))]"
                 data-umami-event="faq-expand"
@@ -66,6 +67,8 @@
               </button>
               <div
                 id="faq-answer-{{ $i }}"
+                role="region"
+                aria-labelledby="faq-question-{{ $i }}"
                 x-show="openIndex === {{ $i }}"
                 x-collapse
               >

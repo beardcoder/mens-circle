@@ -66,7 +66,7 @@
         <blockquote
           class="card-light editorial-panel mt-10 rounded-[1.2rem] px-7 py-6 font-display text-[clamp(1.3rem,1rem+0.9vw,1.9rem)] italic leading-[1.6] text-[var(--fg)]"
         >
-          <p class="editorial-quote max-w-full before:-top-3 before:left-0">»{{ $data['quote'] }}«</p>
+          <p class="editorial-quote max-w-full">»{{ $data['quote'] }}«</p>
         </blockquote>
       @endif
     </div>
