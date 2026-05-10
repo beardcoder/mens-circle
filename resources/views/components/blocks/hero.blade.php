@@ -62,7 +62,7 @@
 
     @if (!empty($data['title']))
       <h1
-        class="hero-title hero-title-emphasis split-title max-w-[16ch] text-[var(--color-parchment)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+        class="hero-title hero-title-emphasis split-title max-w-[22ch] md:max-w-[19ch] xl:max-w-[17ch] text-[var(--color-parchment)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
       >
         {!! $data['title'] !!}
       </h1>

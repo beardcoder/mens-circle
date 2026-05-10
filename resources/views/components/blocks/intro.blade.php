@@ -5,7 +5,7 @@
 @endphp
 
 <section
-  class="section-y-lg bg-[var(--bg-alt)]"
+  class="section-y-lg editorial-light"
   id="ueber"
   aria-labelledby="intro-title"
 >

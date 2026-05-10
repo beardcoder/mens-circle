@@ -742,6 +742,22 @@
   color: var(--fg-muted);
 }
 
+@utility editorial-light {
+  --bg: var(--color-bone);
+  --bg-alt: var(--color-parchment);
+  --fg: var(--color-ink);
+  --fg-muted: color-mix(in oklch, var(--color-ink) 74%, var(--color-earth-mid));
+  --border: oklch(82% 0.025 75deg);
+  --border-soft: oklch(88% 0.018 75deg);
+
+  color: var(--color-ink);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--color-bone) 90%, var(--color-parchment)),
+    color-mix(in oklch, var(--color-parchment) 90%, var(--color-bone))
+  );
+}
+
 @utility editorial-quote {
   position: relative;
   max-inline-size: 28ch;
@@ -769,6 +785,12 @@
   &::before {
     inset-inline-start: 50%;
     transform: translateX(-50%);
+  }
+}
+
+@utility editorial-quote-plain {
+  &::before {
+    content: none;
   }
 }
 

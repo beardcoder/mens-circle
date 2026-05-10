@@ -4,7 +4,7 @@
     $data = $block->data;
 @endphp
 
-<section class="section-y bg-[var(--bg-alt)]">
+<section class="section-y editorial-light">
   <div class="container-page">
     <div
       class="section-header animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"

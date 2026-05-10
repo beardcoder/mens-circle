@@ -20,7 +20,7 @@
   @endpush
 @endif
 
-<section class="section-y-lg" id="faq">
+<section class="section-y-lg editorial-light" id="faq">
   <div class="container-narrow">
     <div
       class="section-header animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"

@@ -27,7 +27,11 @@
   </script>
 @endpush
 
-<section class="section-y-lg" id="stimmen" aria-labelledby="testimonials-title">
+<section
+  class="section-y-lg editorial-light"
+  id="stimmen"
+  aria-labelledby="testimonials-title"
+>
   <div class="container-page">
     <div
       class="section-header animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"

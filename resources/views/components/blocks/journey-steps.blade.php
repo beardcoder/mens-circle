@@ -83,15 +83,15 @@
       ></span>
 
       <ol
-        class="grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-6 lg:gap-y-0 {{ $colClass }}"
+        class="grid grid-cols-1 gap-y-8 md:grid-cols-2 md:gap-x-6 lg:gap-y-0 {{ $colClass }}"
       >
         @foreach ($steps as $step)
           <li
-            class="group card-dark relative flex flex-col gap-4 px-7 py-8 md:py-10 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--color-earth-dark)_88%,transparent)] md:ml-6 lg:ml-0 lg:rounded-none lg:border-0 lg:bg-transparent lg:px-8 lg:pt-14 lg:pb-10 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-[var(--color-sand)]/15 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+            class="group card-dark relative flex flex-col gap-4 px-7 py-8 md:py-10 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--color-earth-dark)_88%,transparent)] lg:rounded-none lg:border-0 lg:bg-transparent lg:px-8 lg:pt-14 lg:pb-10 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-[var(--color-sand)]/15 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
           >
             {{-- Accent dot at top --}}
             <span
-              class="absolute top-8 -left-[1.45rem] block h-2.5 w-2.5 rounded-full bg-[var(--color-terracotta-light)] shadow-[0_0_14px_color-mix(in_oklch,var(--color-terracotta-light)_45%,transparent)] md:-left-[1.55rem] md:top-10 lg:-top-1.5 lg:left-8"
+              class="absolute top-8 -left-[1.45rem] block h-2.5 w-2.5 rounded-full bg-[var(--color-terracotta-light)] shadow-[0_0_14px_color-mix(in_oklch,var(--color-terracotta-light)_45%,transparent)] md:left-7 md:top-8 lg:-top-1.5 lg:left-8"
               aria-hidden="true"
             ></span>
 
