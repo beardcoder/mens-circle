@@ -124,7 +124,7 @@
           x-data="registrationForm({{ $event->id }})"
           @submit.prevent="submit($event)"
           x-reveal
-          class="flex flex-col gap-5 rounded-3xl bg-[var(--bg)] p-8 text-[var(--fg)] shadow-[0_20px_40px_-10px_color-mix(in_oklch,var(--color-ink)_25%,transparent)] md:p-10"
+          class="flex flex-col gap-5 bg-[var(--bg)] p-8 text-[var(--fg)] md:p-12"
           autocomplete="on"
         >
           <input type="hidden" name="event_id" value="{{ $event->id }}" />
@@ -218,7 +218,7 @@
       @else
         <div
           x-reveal
-          class="flex flex-col gap-4 rounded-3xl bg-[var(--bg)] p-8 text-[var(--fg)] md:p-10"
+          class="flex flex-col gap-4 bg-[var(--bg)] p-8 text-[var(--fg)] md:p-12"
         >
           <p class="text-[var(--fg-muted)]">Dieses Treffen liegt in der Vergangenheit. Eine Anmeldung ist nicht mehr möglich.</p>
           <p class="text-[var(--fg-muted)]">Möchtest du beim nächsten Männerkreis dabei sein? Dann trag dich in unseren Newsletter ein.</p>
@@ -249,7 +249,7 @@
         ] as $card)
           <div
             x-reveal
-            class="group relative isolate overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg)] p-7 shadow-[0_2px_4px_color-mix(in_oklch,var(--color-ink)_4%,transparent),0_12px_24px_-6px_color-mix(in_oklch,var(--color-ink)_8%,transparent)] transition-transform duration-500 hover:-translate-y-1"
+            class="group relative isolate overflow-hidden border border-[var(--border)] bg-[var(--bg)] p-8 transition-colors duration-500 hover:bg-[var(--bg-alt)]"
           >
             <span
               class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-[var(--accent)]/15 to-transparent blur-xl transition-opacity duration-500 group-hover:opacity-100"
@@ -345,7 +345,7 @@
           data-title="{{ $event->location }}"
           data-address="{{ $event->fullAddress ?? $event->location }}"
           aria-label="Karte zum Veranstaltungsort"
-          class="aspect-[16/9] overflow-hidden rounded-2xl border border-[var(--border)]"
+          class="aspect-[16/9] overflow-hidden border border-[var(--border)]"
         >
           <div
             data-map-canvas

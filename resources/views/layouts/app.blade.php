@@ -52,7 +52,7 @@
 
       <nav
         :class="navOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'"
-        class="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col items-center justify-center gap-8 bg-[var(--bg)] p-8 text-[var(--fg)] transition-transform duration-300 ease-[var(--ease-precise)] md:static md:flex md:w-auto md:max-w-none md:flex-row md:items-center md:gap-8 md:bg-transparent md:p-0 md:text-inherit"
+        class="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col items-center justify-center gap-10 bg-[var(--bg)] p-8 text-[var(--fg)] transition-transform duration-300 ease-[var(--ease-precise)] md:static md:flex md:w-auto md:max-w-none md:flex-row md:items-center md:gap-12 md:bg-transparent md:p-0 md:text-inherit"
       >
         @foreach ([
             ['#ueber', 'Über'],
@@ -61,7 +61,7 @@
         ] as $link)
           <a
             href="{{ route('home') . $link[0] }}"
-            class="text-[0.78rem] font-semibold uppercase tracking-[0.18em] transition-colors hover:text-[var(--accent)]"
+            class="nav-link"
             data-umami-event="nav-click"
             data-umami-event-target="{{ ltrim($link[0], '#') }}"
             @click="onLinkClick"
@@ -70,7 +70,7 @@
         @endforeach
         <a
           href="{{ route('breathing.show') }}"
-          class="text-[0.78rem] font-semibold uppercase tracking-[0.18em] transition-colors hover:text-[var(--accent)]"
+          class="nav-link"
           data-umami-event="nav-click"
           data-umami-event-target="atemuebung"
           @click="onLinkClick"

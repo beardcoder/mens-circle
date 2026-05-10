@@ -17,16 +17,14 @@
   >
     <div x-reveal class="relative aspect-[4/5] w-full max-w-md mx-auto md:mx-0">
       <span
-        class="absolute -inset-6 rounded-3xl bg-gradient-to-br from-[var(--accent)]/25 via-transparent to-[var(--color-earth-warm)]/15 blur-2xl"
+        class="absolute -bottom-8 -right-8 h-40 w-40 rounded-full border-2 border-[var(--accent)]/40 animate-breathe"
         aria-hidden="true"
       ></span>
       <span
-        class="absolute -bottom-6 -right-6 h-32 w-32 rounded-full border-2 border-[var(--accent)]/30 animate-breathe"
+        class="absolute -top-6 -left-6 block h-24 w-24 bg-[var(--accent)]"
         aria-hidden="true"
       ></span>
-      <div
-        class="relative h-full w-full overflow-hidden rounded-2xl bg-[var(--bg-alt)] shadow-[0_20px_40px_-10px_color-mix(in_oklch,var(--color-ink)_15%,transparent)]"
-      >
+      <div class="relative h-full w-full overflow-hidden bg-[var(--bg-alt)]">
         @if ($media)
           {{ $media->img()->attributes([
               'class' => 'h-full w-full object-cover',

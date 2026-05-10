@@ -41,7 +41,7 @@
       @foreach ($testimonials as $testimonial)
         <article
           x-reveal
-          class="group relative flex flex-col gap-6 rounded-3xl border border-[var(--border)] bg-[var(--bg-alt)] p-10 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--accent)]/40 hover:shadow-[0_20px_40px_-10px_color-mix(in_oklch,var(--color-ink)_12%,transparent)]"
+          class="group relative flex flex-col gap-6 border border-[var(--border)] bg-[var(--bg-alt)] p-10 transition-colors duration-500 hover:bg-[var(--bg)]"
         >
           <span
             class="font-display text-6xl leading-none text-[var(--accent)]/50"

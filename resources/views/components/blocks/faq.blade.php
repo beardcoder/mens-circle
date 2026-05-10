@@ -52,7 +52,7 @@
                 <span>{{ $item['question'] }}</span>
                 <span
                   :class="openIndex === {{ $i }} ? 'rotate-45 border-[var(--accent)] text-[var(--accent)]' : ''"
-                  class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[var(--border)] text-[var(--fg-muted)] transition-all duration-300 group-hover:border-[var(--accent)] group-hover:text-[var(--accent)]"
+                  class="grid h-10 w-10 shrink-0 place-items-center border border-[var(--border)] text-[var(--fg-muted)] transition-all duration-300 group-hover:border-[var(--accent)] group-hover:text-[var(--accent)]"
                   aria-hidden="true"
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-4 w-4">

@@ -16,9 +16,7 @@
     </div>
 
     @if (!empty($data['items']) && is_array($data['items']))
-      <div
-        class="grid gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-3 lg:rounded-3xl lg:overflow-hidden"
-      >
+      <div class="grid gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-3">
         @foreach ($data['items'] as $item)
           <div
             x-reveal

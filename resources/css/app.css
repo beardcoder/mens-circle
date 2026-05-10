@@ -371,20 +371,20 @@
 
 @utility section-title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 1rem + 3vw, 4rem);
+  font-size: clamp(2.25rem, 1rem + 3.5vw, 4.5rem);
   font-weight: 500;
-  line-height: 1.05;
+  line-height: 1;
   color: var(--fg);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 @utility section-title-lg {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 1rem + 5vw, 6rem);
+  font-size: clamp(2.75rem, 1rem + 5.5vw, 7rem);
   font-weight: 500;
-  line-height: 0.98;
+  line-height: 0.95;
   color: var(--fg);
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
 }
 
 @utility hero-title {
@@ -413,33 +413,29 @@
   gap: 0.75rem;
   align-items: center;
   justify-content: center;
-  padding: 1.1rem 2.25rem;
+  padding: 1.15rem 2.5rem;
   font-family: var(--font-body);
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
   border: 1.5px solid transparent;
   border-radius: 9999px;
-  box-shadow:
-    0 2px 4px color-mix(in oklch, var(--color-ink) 4%, transparent),
-    0 6px 12px -2px color-mix(in oklch, var(--color-ink) 8%, transparent);
   transition:
-    transform 150ms var(--ease-precise),
+    transform 200ms var(--ease-precise),
     background-color 300ms var(--ease-precise),
     color 300ms var(--ease-precise),
-    border-color 300ms var(--ease-precise),
-    box-shadow 300ms var(--ease-precise);
+    border-color 300ms var(--ease-precise);
 
   &:hover {
-    transform: translateY(-2px) scale(1.015);
+    transform: translateY(-2px);
   }
 
   &:active {
-    transform: translateY(0) scale(0.985);
+    transform: translateY(0);
   }
 
   &:disabled {
@@ -452,10 +448,18 @@
 @utility btn-primary {
   color: var(--color-bone);
   background: var(--accent);
-  box-shadow: 0 8px 24px color-mix(in oklch, var(--accent) 30%, transparent);
 
   &:hover {
     background: color-mix(in oklch, var(--accent) 80%, var(--color-ink));
+  }
+}
+
+@utility btn-light {
+  color: var(--color-ink);
+  background: var(--color-parchment);
+
+  &:hover {
+    background: var(--color-bone);
   }
 }
 
@@ -484,6 +488,34 @@
 @utility btn-large {
   padding: 1.25rem 2.75rem;
   font-size: 0.85rem;
+}
+
+@utility nav-link {
+  position: relative;
+  display: inline-block;
+  padding-block: 0.25rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: inherit;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: opacity 300ms var(--ease-precise);
+
+  &::after {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inline-size: 0;
+    block-size: 1px;
+    content: '';
+    background: currentcolor;
+    transition: inline-size 300ms var(--ease-precise);
+  }
+
+  &:hover::after {
+    inline-size: 100%;
+  }
 }
 
 @utility hero-decor {

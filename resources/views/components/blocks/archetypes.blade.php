@@ -18,26 +18,29 @@
 
 @if (!empty($items) && is_array($items))
   <section
-    class="section-y-lg bg-[var(--bg-alt)]"
+    class="section-y-lg bg-[var(--color-earth-deep)] text-[var(--color-parchment)]"
     id="archetypen"
     aria-labelledby="archetypes-title"
   >
     <div class="container-page">
       <div x-reveal class="mb-16 max-w-3xl">
         @if (!empty($data['eyebrow']))
-          <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+          <p class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['eyebrow'] }}</p>
         @endif
         @if (!empty($data['title']))
-          <h2 class="section-title-lg" id="archetypes-title">
+          <h2
+            class="section-title-lg text-[var(--color-parchment)]"
+            id="archetypes-title"
+          >
             {{ $data['title'] }}
           </h2>
         @endif
         @if (!empty($data['intro']))
-          <p class="mt-6 text-lg leading-[1.85] text-[var(--fg-muted)]">{{ $data['intro'] }}</p>
+          <p class="mt-6 text-lg leading-[1.85] text-[var(--color-sand)]">{{ $data['intro'] }}</p>
         @endif
       </div>
 
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-3">
         @foreach ($items as $item)
           @php
               $icon = $detectIcon($item);
@@ -45,7 +48,7 @@
           @endphp
           <article
             x-reveal
-            class="group relative isolate flex min-h-[420px] flex-col justify-end overflow-hidden rounded-3xl bg-gradient-to-br from-[var(--color-earth-deep)] via-[var(--color-earth-dark)] to-[var(--color-earth-deep)] p-10 text-[var(--color-parchment)] shadow-[0_8px_32px_color-mix(in_oklch,var(--color-ink)_18%,transparent)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-10px_color-mix(in_oklch,var(--color-ink)_25%,transparent)]"
+            class="group relative isolate flex min-h-[440px] flex-col justify-end overflow-hidden bg-[var(--color-earth-deep)] p-12 text-[var(--color-parchment)] transition-colors duration-500 hover:bg-[var(--color-earth-dark)]"
           >
             <span
               class="pointer-events-none absolute -right-12 -bottom-12 block h-72 w-72 text-[var(--color-terracotta)]/15 transition-all duration-700 group-hover:scale-110 group-hover:text-[var(--color-terracotta)]/25"

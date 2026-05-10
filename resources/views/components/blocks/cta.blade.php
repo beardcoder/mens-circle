@@ -8,10 +8,10 @@
 @endphp
 
 <section class="section-y-lg">
-  <div class="container-page">
+  <div class="px-0">
     <div
       x-reveal
-      class="relative isolate mx-auto flex max-w-4xl flex-col items-center gap-8 overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[var(--color-earth-deep)] via-[var(--color-earth-dark)] to-[var(--color-earth-deep)] p-12 text-center text-[var(--color-parchment)] shadow-[0_20px_40px_-10px_color-mix(in_oklch,var(--color-ink)_25%,transparent)] md:p-20"
+      class="relative isolate flex flex-col items-center gap-8 overflow-hidden bg-[var(--color-earth-deep)] p-12 text-center text-[var(--color-parchment)] md:p-24"
     >
       {{-- Decorative circles --}}
       <span

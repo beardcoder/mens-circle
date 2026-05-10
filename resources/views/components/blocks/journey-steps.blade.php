@@ -64,9 +64,7 @@
     </div>
 
     @if (!empty($steps))
-      <ol
-        class="grid gap-px bg-white/5 lg:grid-cols-3 lg:rounded-3xl lg:overflow-hidden"
-      >
+      <ol class="grid gap-px bg-white/10 lg:grid-cols-3">
         @foreach ($steps as $step)
           <li
             x-reveal
