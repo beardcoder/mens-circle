@@ -35,7 +35,7 @@ Alpine.directive('reveal', (el, { modifiers, expression }) => {
     ? 0.9
     : modifiers.includes('half')
       ? 0.5
-      : 0.15;
+      : 0;
 
   // Variant: fade | up (default) | down | left | right | zoom
   const variant = modifiers.includes('fade')

@@ -1,0 +1,218 @@
+- generic [active] [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Männerkreis Niederbayern - Startseite" [ref=e5] [cursor=pointer]:
+        - /url: http://localhost:8000
+        - img [ref=e6]
+        - generic [ref=e11]: Männerkreis
+      - navigation [ref=e12]:
+        - link "01 Über" [ref=e13] [cursor=pointer]:
+          - /url: http://localhost:8000#ueber
+          - generic [ref=e14]: "01"
+          - generic [ref=e15]: Über
+        - link "02 Die Reise" [ref=e16] [cursor=pointer]:
+          - /url: http://localhost:8000#reise
+          - generic [ref=e17]: "02"
+          - generic [ref=e18]: Die Reise
+        - link "03 Fragen" [ref=e19] [cursor=pointer]:
+          - /url: http://localhost:8000#faq
+          - generic [ref=e20]: "03"
+          - generic [ref=e21]: Fragen
+        - link "04 Atemübung" [ref=e22] [cursor=pointer]:
+          - /url: http://localhost:8000/atemuebung
+          - generic [ref=e23]: "04"
+          - generic [ref=e24]: Atemübung
+  - main [ref=e25]:
+    - banner [ref=e26]:
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: Straubing / Niederbayern
+        - heading "Ein Raum fürechte Begegnung" [level=1] [ref=e29]:
+          - text: Ein Raum für
+          - generic [ref=e30]: echte Begegnung
+        - generic [ref=e31]:
+          - paragraph [ref=e32]: Der Männerkreis ist ein geschützter Ort, an dem du dich zeigen kannst, wie du wirklich bist. Authentischer Austausch. Ehrliche Gemeinschaft. Persönliches Wachstum.
+          - generic [ref=e33]:
+            - link "Dabei sein" [ref=e34] [cursor=pointer]:
+              - /url: /termin
+            - generic [ref=e35]: Entdecken
+    - region "Was ist ein Männerkreis?" [ref=e37]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - paragraph [ref=e40]: Was uns verbindet
+          - heading "Was ist ein Männerkreis?" [level=2] [ref=e41]:
+            - text: Was ist ein
+            - text: Männerkreis?
+          - paragraph [ref=e42]: Ein Männerkreis ist ein regelmäßiges Treffen von Männern, die sich in einem geschützten Rahmen begegnen möchten. Hier geht es nicht um Smalltalk oder Leistung – sondern um echte Verbindung, ehrliche Worte und das Gefühl, gehört und gesehen zu werden.
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e45]: "01"
+              - heading "Authentischer Austausch" [level=3] [ref=e46]
+              - paragraph [ref=e47]: Hier darfst du sagen, was dich wirklich bewegt – ohne Maske, ohne Rolle.
+            - generic [ref=e48]:
+              - generic [ref=e49]: "02"
+              - heading "Ehrliche Gemeinschaft" [level=3] [ref=e50]
+              - paragraph [ref=e51]: Verbindung entsteht, wenn wir uns gegenseitig wirklich zuhören.
+            - generic [ref=e52]:
+              - generic [ref=e53]: "03"
+              - heading "Persönliches Wachstum" [level=3] [ref=e54]
+              - paragraph [ref=e55]: Durch Reflexion und Feedback entwickeln wir uns gemeinsam weiter.
+        - paragraph [ref=e61]:
+          - text: „Im Kreis sitzen Männer,
+          - text: die sich trauen,
+          - text: echt zu sein."
+    - generic [ref=e63]:
+      - img [ref=e69]
+      - generic [ref=e72]:
+        - paragraph [ref=e73]: Dein Begleiter
+        - heading "Markus Sommer" [level=2] [ref=e74]:
+          - text: Markus
+          - text: Sommer
+        - generic [ref=e75]:
+          - paragraph [ref=e76]: Ich bin Markus, gebürtiger Niederbayer und Gründer des Männerkreises Straubing. Seit Jahren beschäftige ich mich mit der Frage, was es bedeutet, als Mann authentisch zu leben – jenseits von Rollenbildern und gesellschaftlichen Erwartungen.
+          - paragraph [ref=e77]: "Der Männerkreis ist für mich ein Herzensanliegen: Ein Ort, an dem wir uns gegenseitig stärken, herausfordern und unterstützen können."
+        - blockquote [ref=e78]:
+          - paragraph [ref=e79]: »„Wahre Stärke zeigt sich nicht im Alleingang, sondern in der Bereitschaft, sich anderen zu öffnen."«
+    - region "Die Reise im Kreis" [ref=e80]:
+      - generic [ref=e81]:
+        - generic [ref=e82]:
+          - paragraph [ref=e83]: Der Weg
+          - heading "Die Reise im Kreis" [level=2] [ref=e84]
+          - paragraph [ref=e85]: Jedes Treffen folgt einem natürlichen Rhythmus
+        - list [ref=e87]:
+          - listitem [ref=e88]:
+            - generic [ref=e90]:
+              - generic [ref=e91]: Schritt
+              - generic [ref=e92]: "01"
+            - heading "Ankommen" [level=3] [ref=e93]
+            - paragraph [ref=e94]: Wir beginnen mit einer Runde des Ankommens. Jeder teilt kurz, wie er gerade da ist – körperlich, emotional, mental.
+          - listitem [ref=e95]:
+            - generic [ref=e97]:
+              - generic [ref=e98]: Schritt
+              - generic [ref=e99]: "02"
+            - heading "Öffnen" [level=3] [ref=e100]
+            - paragraph [ref=e101]: Im geschützten Raum des Kreises öffnen wir uns. Themen, die uns bewegen, finden Raum und Gehör.
+          - listitem [ref=e102]:
+            - generic [ref=e104]:
+              - generic [ref=e105]: Schritt
+              - generic [ref=e106]: "03"
+            - heading "Wachsen" [level=3] [ref=e107]
+            - paragraph [ref=e108]: Durch ehrliches Feedback und Spiegelung entstehen neue Perspektiven. Wir lernen von und mit einander.
+          - listitem [ref=e109]:
+            - generic [ref=e111]:
+              - generic [ref=e112]: Schritt
+              - generic [ref=e113]: "04"
+            - heading "Integrieren" [level=3] [ref=e114]
+            - paragraph [ref=e115]: Zum Abschluss verankern wir das Erlebte. Was nehmen wir mit? Was setzen wir im Alltag um?
+    - generic [ref=e117]:
+      - generic [ref=e118]:
+        - paragraph [ref=e119]: Fragen & Antworten
+        - heading "Häufige Fragen" [level=2] [ref=e120]:
+          - text: Häufige
+          - text: Fragen
+        - paragraph [ref=e121]: Alles, was du wissen solltest, bevor du zum ersten Mal dabei bist.
+      - generic [ref=e122]:
+        - button "Für wen ist der Männerkreis?" [ref=e124]:
+          - generic [ref=e125]: Für wen ist der Männerkreis?
+          - img [ref=e127]
+        - button "Wo und wie oft trifft sich der Kreis?" [ref=e129]:
+          - generic [ref=e130]: Wo und wie oft trifft sich der Kreis?
+          - img [ref=e132]
+        - button "Wie läuft ein Treffen ab?" [ref=e134]:
+          - generic [ref=e135]: Wie läuft ein Treffen ab?
+          - img [ref=e137]
+        - button "Was kostet die Teilnahme?" [ref=e139]:
+          - generic [ref=e140]: Was kostet die Teilnahme?
+          - img [ref=e142]
+        - button "Ist alles vertraulich?" [ref=e144]:
+          - generic [ref=e145]: Ist alles vertraulich?
+          - img [ref=e147]
+        - button "Ist das Therapie oder Coaching?" [ref=e149]:
+          - generic [ref=e150]: Ist das Therapie oder Coaching?
+          - img [ref=e152]
+    - region "Bleib verbunden" [ref=e153]:
+      - generic [ref=e154]:
+        - generic [ref=e155]:
+          - paragraph [ref=e156]: In Verbindung bleiben
+          - heading "Bleib verbunden" [level=2] [ref=e157]
+          - paragraph [ref=e158]: Erhalte Informationen zu kommenden Treffen, Impulse zum Thema Männlichkeit und Neuigkeiten aus dem Männerkreis Niederbayern/ Straubing.
+        - form "Newsletter-Anmeldung" [ref=e159]:
+          - generic [ref=e160]: E-Mail-Adresse
+          - textbox "E-Mail-Adresse" [ref=e161]:
+            - /placeholder: Deine E-Mail-Adresse
+          - button "Anmelden" [ref=e162] [cursor=pointer]
+    - generic [ref=e166]:
+      - paragraph [ref=e167]: Nächstes Treffen
+      - heading "Sei beim nächsten Mal dabei" [level=2] [ref=e168]:
+        - text: Sei beim nächsten
+        - text: Mal dabei
+      - paragraph [ref=e169]: Der nächste Männerkreis findet bald statt. Sichere dir deinen Platz und erlebe, was echte Männergemeinschaft bedeutet.
+      - link "Zum Termin & Anmeldung" [ref=e170] [cursor=pointer]:
+        - /url: /termin
+  - contentinfo [ref=e171]:
+    - generic [ref=e172]:
+      - generic [ref=e173]:
+        - generic [ref=e174]:
+          - link "Männerkreis Niederbayern" [ref=e175] [cursor=pointer]:
+            - /url: http://localhost:8000
+            - img [ref=e176]
+            - generic [ref=e181]: Männerkreis Niederbayern
+          - paragraph [ref=e182]: Der Männerkreis ist ein geschützter Ort, an dem du dich zeigen kannst, wie du wirklich bist.
+        - generic [ref=e183]:
+          - heading "Navigation" [level=3] [ref=e184]
+          - list [ref=e185]:
+            - listitem [ref=e186]:
+              - link "Über uns" [ref=e187] [cursor=pointer]:
+                - /url: http://localhost:8000#ueber
+            - listitem [ref=e188]:
+              - link "Die Reise" [ref=e189] [cursor=pointer]:
+                - /url: http://localhost:8000#reise
+            - listitem [ref=e190]:
+              - link "FAQ" [ref=e191] [cursor=pointer]:
+                - /url: http://localhost:8000#faq
+            - listitem [ref=e192]:
+              - link "Atemübung" [ref=e193] [cursor=pointer]:
+                - /url: http://localhost:8000/atemuebung
+        - generic [ref=e194]:
+          - heading "Kontakt" [level=3] [ref=e195]
+          - list [ref=e196]:
+            - listitem [ref=e197]:
+              - link "E-Mail schreiben" [ref=e198] [cursor=pointer]:
+                - /url: mailto:kontakt@mens-circle.de
+            - listitem [ref=e199]:
+              - link "Newsletter" [ref=e200] [cursor=pointer]:
+                - /url: http://localhost:8000#newsletter
+      - generic [ref=e201]:
+        - paragraph [ref=e202]: © 2026 Männerkreis Niederbayern. Alle Rechte vorbehalten.
+        - generic [ref=e203]:
+          - link "Impressum" [ref=e204] [cursor=pointer]:
+            - /url: http://localhost:8000/impressum
+          - link "Datenschutz" [ref=e205] [cursor=pointer]:
+            - /url: http://localhost:8000/datenschutz
+  - generic [ref=e208]:
+    - generic [ref=e210]:
+      - generic [ref=e211] [cursor=pointer]:
+        - generic: Request
+      - generic [ref=e212] [cursor=pointer]:
+        - generic: Timeline
+      - generic [ref=e213] [cursor=pointer]:
+        - generic: Views
+        - generic [ref=e214]: "11"
+      - generic [ref=e215] [cursor=pointer]:
+        - generic: Queries
+        - generic [ref=e216]: "9"
+      - generic [ref=e217] [cursor=pointer]:
+        - generic: Models
+        - generic [ref=e218]: "9"
+      - generic [ref=e219] [cursor=pointer]:
+        - generic: Cache
+        - generic [ref=e220]: "1"
+    - generic [ref=e221]:
+      - generic [ref=e229] [cursor=pointer]: GET /
+      - generic [ref=e230] [cursor=pointer]:
+        - generic: 38.67ms
+      - generic [ref=e232] [cursor=pointer]:
+        - generic: 3MB
+      - generic [ref=e234] [cursor=pointer]:
+        - generic: 13.x

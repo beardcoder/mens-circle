@@ -1,0 +1,124 @@
+- generic [active] [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Männerkreis Niederbayern - Startseite" [ref=e5] [cursor=pointer]:
+        - /url: http://localhost:8000
+        - img [ref=e6]
+        - generic [ref=e11]: Männerkreis
+      - navigation [ref=e12]:
+        - link "01 Über" [ref=e13] [cursor=pointer]:
+          - /url: http://localhost:8000#ueber
+          - generic [ref=e14]: "01"
+          - generic [ref=e15]: Über
+        - link "02 Die Reise" [ref=e16] [cursor=pointer]:
+          - /url: http://localhost:8000#reise
+          - generic [ref=e17]: "02"
+          - generic [ref=e18]: Die Reise
+        - link "03 Fragen" [ref=e19] [cursor=pointer]:
+          - /url: http://localhost:8000#faq
+          - generic [ref=e20]: "03"
+          - generic [ref=e21]: Fragen
+        - link "04 Atemübung" [ref=e22] [cursor=pointer]:
+          - /url: http://localhost:8000/atemuebung
+          - generic [ref=e23]: "04"
+          - generic [ref=e24]: Atemübung
+  - main [ref=e25]:
+    - generic [ref=e27]:
+      - paragraph [ref=e28]: Männerkreis Niederbayern/ Straubing
+      - heading "Aktuell ist kein Termin geplant" [level=1] [ref=e29]:
+        - generic [ref=e30]: Aktuell ist kein
+        - generic [ref=e31]: Termin geplant
+      - generic [ref=e32]:
+        - paragraph [ref=e33]: Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.
+        - link "Zum Newsletter" [ref=e34] [cursor=pointer]:
+          - /url: "#newsletter"
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Was ist der Männerkreis?
+        - heading "Ein Raum für echte Begegnung" [level=2] [ref=e39]
+        - paragraph [ref=e40]: Der Männerkreis Niederbayern/ Straubing bietet dir einen geschützten Raum, in dem du dich mit anderen Männern austauschen, wachsen und echte Verbindungen aufbauen kannst.
+      - paragraph [ref=e44]:
+        - text: »Bleib
+        - generic [ref=e45]: verbunden
+        - text: «
+    - generic [ref=e47]:
+      - generic [ref=e48]:
+        - paragraph [ref=e49]: Newsletter
+        - heading "Bleib informiert" [level=2] [ref=e50]
+        - paragraph [ref=e51]: Erhalte als Erster Bescheid, wenn unser nächstes Treffen stattfindet. Kein Spam.
+      - generic [ref=e52]:
+        - generic [ref=e53]: E-Mail-Adresse
+        - textbox "E-Mail-Adresse" [ref=e54]:
+          - /placeholder: Deine E-Mail-Adresse
+        - button "Anmelden" [ref=e55] [cursor=pointer]
+    - generic [ref=e58]:
+      - paragraph [ref=e59]: Mehr erfahren
+      - heading "Entdecke den Männerkreis" [level=2] [ref=e60]
+      - paragraph [ref=e61]: Erfahre mehr über uns, unsere Werte und was dich bei einem Treffen erwartet.
+      - link "Zur Startseite" [ref=e62] [cursor=pointer]:
+        - /url: http://localhost:8000
+  - contentinfo [ref=e63]:
+    - generic [ref=e64]:
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - link "Männerkreis Niederbayern" [ref=e67] [cursor=pointer]:
+            - /url: http://localhost:8000
+            - img [ref=e68]
+            - generic [ref=e73]: Männerkreis Niederbayern
+          - paragraph [ref=e74]: Der Männerkreis ist ein geschützter Ort, an dem du dich zeigen kannst, wie du wirklich bist.
+        - generic [ref=e75]:
+          - heading "Navigation" [level=3] [ref=e76]
+          - list [ref=e77]:
+            - listitem [ref=e78]:
+              - link "Über uns" [ref=e79] [cursor=pointer]:
+                - /url: http://localhost:8000#ueber
+            - listitem [ref=e80]:
+              - link "Die Reise" [ref=e81] [cursor=pointer]:
+                - /url: http://localhost:8000#reise
+            - listitem [ref=e82]:
+              - link "FAQ" [ref=e83] [cursor=pointer]:
+                - /url: http://localhost:8000#faq
+            - listitem [ref=e84]:
+              - link "Atemübung" [ref=e85] [cursor=pointer]:
+                - /url: http://localhost:8000/atemuebung
+        - generic [ref=e86]:
+          - heading "Kontakt" [level=3] [ref=e87]
+          - list [ref=e88]:
+            - listitem [ref=e89]:
+              - link "E-Mail schreiben" [ref=e90] [cursor=pointer]:
+                - /url: mailto:kontakt@mens-circle.de
+            - listitem [ref=e91]:
+              - link "Newsletter" [ref=e92] [cursor=pointer]:
+                - /url: http://localhost:8000#newsletter
+      - generic [ref=e93]:
+        - paragraph [ref=e94]: © 2026 Männerkreis Niederbayern. Alle Rechte vorbehalten.
+        - generic [ref=e95]:
+          - link "Impressum" [ref=e96] [cursor=pointer]:
+            - /url: http://localhost:8000/impressum
+          - link "Datenschutz" [ref=e97] [cursor=pointer]:
+            - /url: http://localhost:8000/datenschutz
+  - generic [ref=e100]:
+    - generic [ref=e102]:
+      - generic [ref=e103] [cursor=pointer]:
+        - generic: Request
+      - generic [ref=e104] [cursor=pointer]:
+        - generic: Timeline
+      - generic [ref=e105] [cursor=pointer]:
+        - generic: Views
+        - generic [ref=e106]: "5"
+      - generic [ref=e107] [cursor=pointer]:
+        - generic: Queries
+        - generic [ref=e108]: "3"
+      - generic [ref=e109] [cursor=pointer]:
+        - generic: Cache
+        - generic [ref=e110]: "1"
+    - generic [ref=e111]:
+      - generic [ref=e119] [cursor=pointer]: GET /event
+      - generic [ref=e120] [cursor=pointer]:
+        - generic: 41.11ms
+      - generic [ref=e122] [cursor=pointer]:
+        - generic: 3MB
+      - generic [ref=e124] [cursor=pointer]:
+        - generic: 13.x
