@@ -22,7 +22,9 @@
 
 <section class="section-y-lg" id="faq">
   <div class="container-narrow">
-    <div x-reveal class="mb-16">
+    <div
+      class="mb-16 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+    >
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif

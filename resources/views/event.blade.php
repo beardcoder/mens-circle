@@ -48,20 +48,23 @@
     </div>
 
     <div class="container-page relative z-10 w-full">
-      <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">{{ $event->isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
-      <h1 x-reveal class="hero-title">{{ $event->title }}</h1>
+      <p class="eyebrow text-[var(--color-terracotta-light)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">{{ $event->isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
+      <h1
+        class="hero-title animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
+        {{ $event->title }}
+      </h1>
       <div
         class="mt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
       >
-        <p x-reveal class="max-w-[520px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">
+        <p class="max-w-[520px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">
           {{ $event->event_date->translatedFormat('l') }}, {{ $event->event_date->format('d.m.Y') }} · {{ $event->start_time->format('H:i') }} Uhr
           · {{ $event->location }}
         </p>
         @unless ($event->isPast)
           <a
-            x-reveal
             href="#anmeldung"
-            class="btn btn-primary btn-large"
+            class="btn btn-primary btn-large animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
             data-umami-event="cta-click"
             data-umami-event-location="hero"
             data-umami-event-action="scroll-to-registration"
@@ -92,7 +95,9 @@
     <div
       class="container-page section-y grid gap-12 md:grid-cols-[1fr_1.1fr] md:items-center"
     >
-      <div x-reveal>
+      <div
+        class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         @if ($event->isPast)
           <p class="eyebrow text-[var(--color-terracotta-light)]">Rückblick</p>
           <h2 class="section-title-lg text-[var(--color-parchment)]">
@@ -123,7 +128,7 @@
         <form
           x-data="registrationForm({{ $event->id }})"
           @submit.prevent="submit($event)"
-          x-reveal
+          class-reveal-up-PLACEHOLDER
           class="flex flex-col gap-5 bg-[var(--bg)] p-8 text-[var(--fg)] md:p-12"
           autocomplete="on"
         >
@@ -217,8 +222,7 @@
         </form>
       @else
         <div
-          x-reveal
-          class="flex flex-col gap-4 bg-[var(--bg)] p-8 text-[var(--fg)] md:p-12"
+          class="flex flex-col gap-4 bg-[var(--bg)] p-8 text-[var(--fg)] md:p-12 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
         >
           <p class="text-[var(--fg-muted)]">Dieses Treffen liegt in der Vergangenheit. Eine Anmeldung ist nicht mehr möglich.</p>
           <p class="text-[var(--fg-muted)]">Möchtest du beim nächsten Männerkreis dabei sein? Dann trag dich in unseren Newsletter ein.</p>
@@ -248,8 +252,7 @@
             ['Teilnehmer', 'Max. ' . $event->max_participants, $event->cost_basis],
         ] as $card)
           <div
-            x-reveal
-            class="group relative isolate overflow-hidden border border-[var(--border)] bg-[var(--bg)] p-8 transition-colors duration-500 hover:bg-[var(--bg-alt)]"
+            class="group relative isolate overflow-hidden border border-[var(--border)] bg-[var(--bg)] p-8 transition-colors duration-500 hover:bg-[var(--bg-alt)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
           >
             <span
               class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-[var(--accent)]/15 to-transparent blur-xl transition-opacity duration-500 group-hover:opacity-100"
@@ -330,7 +333,9 @@
   @if ($event->hasCoordinates)
     <section class="section-y bg-[var(--bg-alt)]">
       <div class="container-page">
-        <div x-reveal class="mb-8">
+        <div
+          class="mb-8 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+        >
           <p class="eyebrow">Anfahrt</p>
           <h2 class="section-title-lg">
             So findest du <span class="text-italic">zu uns</span>
@@ -382,7 +387,9 @@
   {{-- Description --}}
   <section class="section-y">
     <div class="container-page grid gap-12 md:grid-cols-2 md:items-center">
-      <div x-reveal>
+      <div
+        class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         <p class="eyebrow">Über das Treffen</p>
         <h2 class="section-title-lg">
           Ein Raum für <br /><span class="text-italic">echte Begegnung</span>
@@ -391,7 +398,9 @@
           {!! nl2br(e($event->description)) !!}
         </div>
       </div>
-      <div x-reveal.zoom class="relative aspect-square w-full max-w-md mx-auto">
+      <div
+        class="relative aspect-square w-full max-w-md mx-auto animate-reveal-zoom timeline-view animate-range-[entry_5%_cover_30%]"
+      >
         <div
           class="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--color-terracotta)]/20 to-[var(--color-earth-warm)]/20 blur-2xl"
         ></div>
@@ -410,7 +419,9 @@
   {{-- Final CTA --}}
   <section class="section-y bg-[var(--bg-alt)]">
     <div class="container-page text-center">
-      <div x-reveal class="mx-auto max-w-2xl">
+      <div
+        class="mx-auto max-w-2xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         @if ($event->isPast)
           <p class="eyebrow">Interesse geweckt?</p>
           <h2 class="section-title-lg">

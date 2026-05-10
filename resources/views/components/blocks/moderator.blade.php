@@ -15,7 +15,9 @@
   <div
     class="container-page grid gap-16 md:grid-cols-[1fr_1.2fr] md:items-center"
   >
-    <div x-reveal class="relative aspect-[4/5] w-full max-w-md mx-auto md:mx-0">
+    <div
+      class="relative aspect-[4/5] w-full max-w-md mx-auto md:mx-0 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+    >
       <span
         class="absolute -bottom-8 -right-8 h-40 w-40 rounded-full border-2 border-[var(--accent)]/40 animate-breathe"
         aria-hidden="true"
@@ -44,7 +46,9 @@
       </div>
     </div>
 
-    <div x-reveal>
+    <div
+      class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+    >
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif

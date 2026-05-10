@@ -52,7 +52,9 @@
 
   <div class="container-page relative">
     {{-- Section header --}}
-    <div x-reveal class="mb-20 max-w-3xl">
+    <div
+      class="mb-20 max-w-3xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+    >
       @if (!empty($data['eyebrow']))
         <p class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['eyebrow'] }}</p>
       @endif
@@ -81,8 +83,7 @@
       >
         @foreach ($steps as $step)
           <li
-            x-reveal
-            class="group relative flex flex-col gap-5 px-6 pt-12 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--color-sand)_4%,transparent)] lg:px-8 lg:pt-14 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-[var(--color-sand)]/15"
+            class="group relative flex flex-col gap-5 px-6 pt-12 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--color-sand)_4%,transparent)] lg:px-8 lg:pt-14 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-[var(--color-sand)]/15 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
           >
             {{-- Accent dot at top --}}
             <span

@@ -27,69 +27,6 @@ Alpine.plugin(collapse);
 Alpine.plugin(intersect);
 
 /* ------------------------------------------------------------------ */
-/*  Reveal-on-scroll directive: <div x-reveal>...</div>                */
-/* ------------------------------------------------------------------ */
-Alpine.directive('reveal', (el, { modifiers, expression }) => {
-  const once = !modifiers.includes('repeat');
-  const threshold = modifiers.includes('full')
-    ? 0.9
-    : modifiers.includes('half')
-      ? 0.5
-      : 0;
-
-  // Variant: fade | up (default) | down | left | right | zoom
-  const variant = modifiers.includes('fade')
-    ? ['fade-in']
-    : modifiers.includes('zoom')
-      ? ['fade-in', 'zoom-in-95']
-      : modifiers.includes('left')
-        ? ['fade-in', 'slide-in-from-left-8']
-        : modifiers.includes('right')
-          ? ['fade-in', 'slide-in-from-right-8']
-          : modifiers.includes('down')
-            ? ['fade-in', 'slide-in-from-top-8']
-            : ['fade-in', 'slide-in-from-bottom-8'];
-
-  // Duration: read from `slow` | `fast` | default 700
-  const duration = modifiers.includes('slow')
-    ? 'duration-1000'
-    : modifiers.includes('fast')
-      ? 'duration-500'
-      : 'duration-700';
-
-  // Delay: pass via expression e.g. `x-reveal="120"` → animation-delay 120ms.
-  // We set inline style so we don't depend on Tailwind seeing dynamic class names.
-  const delayMs =
-    expression && /^\d+$/.test(expression)
-      ? Number.parseInt(expression, 10)
-      : 0;
-
-  // Initial state — invisible until intersected
-  el.classList.add('opacity-0');
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        const target = entry.target as HTMLElement;
-        if (entry.isIntersecting) {
-          target.classList.remove('opacity-0');
-          target.classList.add('animate-in', ...variant, duration);
-          if (delayMs > 0) target.style.animationDelay = `${delayMs}ms`;
-          if (once) observer.unobserve(target);
-        } else if (!once) {
-          target.classList.add('opacity-0');
-          target.classList.remove('animate-in', ...variant, duration);
-          target.style.animationDelay = '';
-        }
-      }
-    },
-    { threshold, rootMargin: '0px 0px -10% 0px' }
-  );
-
-  observer.observe(el);
-});
-
-/* ------------------------------------------------------------------ */
 /*  Header: scroll state + hero detection                              */
 /* ------------------------------------------------------------------ */
 Alpine.data('siteHeader', () => ({

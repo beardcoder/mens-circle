@@ -29,7 +29,9 @@
 
 <section class="section-y-lg" id="stimmen" aria-labelledby="testimonials-title">
   <div class="container-page">
-    <div x-reveal class="mb-16 max-w-3xl">
+    <div
+      class="mb-16 max-w-3xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+    >
       <p class="eyebrow">Community Stimmen</p>
       <h2 class="section-title-lg" id="testimonials-title">
         Was <span class="text-italic">Teilnehmer</span> sagen
@@ -40,8 +42,7 @@
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
       @foreach ($testimonials as $testimonial)
         <article
-          x-reveal
-          class="group relative flex flex-col gap-6 border border-[var(--border)] bg-[var(--bg-alt)] p-10 transition-colors duration-500 hover:bg-[var(--bg)]"
+          class="group relative flex flex-col gap-6 border border-[var(--border)] bg-[var(--bg-alt)] p-10 transition-colors duration-500 hover:bg-[var(--bg)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
         >
           <span
             class="font-display text-6xl leading-none text-[var(--accent)]/50"

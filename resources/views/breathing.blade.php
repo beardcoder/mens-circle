@@ -42,18 +42,22 @@
     </div>
 
     <div class="container-page relative z-10 w-full">
-      <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">Bewusster Atem</p>
-      <h1 x-reveal class="hero-title">
+      <p class="eyebrow text-[var(--color-terracotta-light)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">Bewusster Atem</p>
+      <h1
+        class="hero-title animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         Atem<span class="text-italic">übung</span>
       </h1>
-      <p x-reveal class="mt-8 max-w-[520px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">Drei Runden bewusster Atem im Stil der Wim-Hof-Methode. Für Klarheit, Energie und innere Ruhe.</p>
+      <p class="mt-8 max-w-[520px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">Drei Runden bewusster Atem im Stil der Wim-Hof-Methode. Für Klarheit, Energie und innere Ruhe.</p>
     </div>
   </section>
   <section class="section-y">
     <div
       class="container-page grid gap-12 lg:grid-cols-[1fr_2fr] lg:items-start"
     >
-      <aside x-reveal class="rounded-2xl bg-[var(--bg-alt)] p-8">
+      <aside
+        class="rounded-2xl bg-[var(--bg-alt)] p-8 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         <h2 class="font-display text-2xl font-semibold">So funktioniert es</h2>
         <ol class="mt-4 flex flex-col gap-3 text-sm text-[var(--fg-muted)]">
           <li>

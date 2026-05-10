@@ -6,7 +6,9 @@
 
 <section class="section-y" id="{{ Str::slug($data['title'] ?? '') }}">
   <div class="container-narrow">
-    <div x-reveal class="mb-8">
+    <div
+      class="mb-8 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+    >
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -16,7 +18,9 @@
     </div>
 
     @if (!empty($data['content']))
-      <div x-reveal class="prose-block text-[var(--fg-muted)]">
+      <div
+        class="prose-block text-[var(--fg-muted)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         {!! $data['content'] !!}
       </div>
     @endif

@@ -8,7 +8,9 @@
   <div
     class="container-page grid gap-16 md:grid-cols-[1.1fr_1fr] md:items-center"
   >
-    <div x-reveal>
+    <div
+      class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+    >
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -26,7 +28,9 @@
       @if (!empty($data['values']) && is_array($data['values']))
         <div class="mt-12 grid gap-10 sm:grid-cols-2">
           @foreach ($data['values'] as $value)
-            <div x-reveal class="border-l-2 border-[var(--accent)]/30 pl-5">
+            <div
+              class="border-l-2 border-[var(--accent)]/30 pl-5 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+            >
               @if (!empty($value['number']))
                 <span
                   class="block font-display text-5xl font-medium leading-none text-[var(--accent)]"
@@ -48,8 +52,7 @@
     </div>
 
     <div
-      x-reveal.zoom
-      class="relative aspect-square w-full max-w-md mx-auto md:mx-0 md:ml-auto"
+      class="relative aspect-square w-full max-w-md mx-auto md:mx-0 md:ml-auto animate-reveal-zoom timeline-view animate-range-[entry_5%_cover_30%]"
     >
       <div
         class="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--color-terracotta)]/30 via-transparent to-[var(--color-earth-warm)]/15 blur-3xl"

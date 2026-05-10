@@ -2,8 +2,7 @@
   <section class="section-y" id="whatsapp-community">
     <div class="container-page">
       <div
-        x-reveal
-        class="relative isolate overflow-hidden bg-[var(--bg-alt)] p-12 md:p-20"
+        class="relative isolate overflow-hidden bg-[var(--bg-alt)] p-12 md:p-20 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
       >
         <span
           class="pointer-events-none absolute -top-20 -right-20 block h-72 w-72 rounded-full bg-[#25D366]/10 blur-3xl"

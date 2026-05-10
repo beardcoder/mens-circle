@@ -6,7 +6,9 @@
 
 <section class="section-y bg-[var(--bg-alt)]">
   <div class="container-page">
-    <div x-reveal class="mb-16 max-w-3xl">
+    <div
+      class="mb-16 max-w-3xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+    >
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -19,8 +21,7 @@
       <div class="grid gap-px bg-[var(--border)] sm:grid-cols-2 lg:grid-cols-3">
         @foreach ($data['items'] as $item)
           <div
-            x-reveal
-            class="group relative flex flex-col gap-4 bg-[var(--bg)] p-10 transition-colors duration-500 hover:bg-[var(--bg-alt)]"
+            class="group relative flex flex-col gap-4 bg-[var(--bg)] p-10 transition-colors duration-500 hover:bg-[var(--bg-alt)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
           >
             @if (!empty($item['number']))
               <span

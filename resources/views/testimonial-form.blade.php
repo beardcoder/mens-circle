@@ -42,16 +42,20 @@
     </div>
 
     <div class="container-page relative z-10 w-full">
-      <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">Community Stimmen</p>
-      <h1 x-reveal class="hero-title">
+      <p class="eyebrow text-[var(--color-terracotta-light)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">Community Stimmen</p>
+      <h1
+        class="hero-title animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         Teile deine <span class="text-italic">Erfahrung</span>
       </h1>
-      <p x-reveal class="mt-8 max-w-[520px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">Deine Geschichte kann anderen Männern Mut machen, den ersten Schritt zu wagen.</p>
+      <p class="mt-8 max-w-[520px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">Deine Geschichte kann anderen Männern Mut machen, den ersten Schritt zu wagen.</p>
     </div>
   </section>
   <section class="section-y">
     <div class="container-narrow">
-      <div x-reveal class="prose-block mb-8 text-[var(--fg-muted)]">
+      <div
+        class="prose-block mb-8 text-[var(--fg-muted)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         <h2 class="font-display text-2xl font-semibold text-[var(--fg)]">
           Deine Stimme zählt
         </h2>
@@ -62,8 +66,7 @@
       <form
         x-data="testimonialForm('{{ route('testimonial.submit') }}')"
         @submit.prevent="submit($event)"
-        x-reveal
-        class="flex flex-col gap-5 rounded-2xl bg-[var(--bg-alt)] p-8"
+        class="flex flex-col gap-5 rounded-2xl bg-[var(--bg-alt)] p-8 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
       >
         @csrf
 

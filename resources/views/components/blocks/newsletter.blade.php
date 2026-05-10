@@ -19,7 +19,9 @@
   </div>
 
   <div class="container-page grid gap-12 md:grid-cols-2 md:items-center">
-    <div x-reveal>
+    <div
+      class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+    >
       @if (!empty($data['eyebrow']))
         <p class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['eyebrow'] }}</p>
       @endif
@@ -39,8 +41,7 @@
     <form
       x-data="newsletterForm"
       @submit.prevent="submit($event)"
-      x-reveal
-      class="flex flex-col gap-3 sm:flex-row sm:items-center"
+      class="flex flex-col gap-3 sm:flex-row sm:items-center animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
       aria-label="Newsletter-Anmeldung"
     >
       <label for="newsletter-email" class="sr-only">E-Mail-Adresse</label>

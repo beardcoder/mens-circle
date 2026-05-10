@@ -10,8 +10,7 @@
 <section class="section-y-lg">
   <div class="px-0">
     <div
-      x-reveal
-      class="relative isolate flex flex-col items-center gap-8 overflow-hidden bg-[var(--color-earth-deep)] p-12 text-center text-[var(--color-parchment)] md:p-24"
+      class="relative isolate flex flex-col items-center gap-8 overflow-hidden bg-[var(--color-earth-deep)] p-12 text-center text-[var(--color-parchment)] md:p-24 animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
     >
       {{-- Decorative circles --}}
       <span

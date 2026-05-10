@@ -57,22 +57,28 @@
 
   <div class="container-page relative z-10 w-full">
     @if (!empty($data['label']))
-      <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['label'] }}</p>
+      <p class="eyebrow text-[var(--color-terracotta-light)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">{{ $data['label'] }}</p>
     @endif
 
     @if (!empty($data['title']))
-      <h1 x-reveal class="hero-title">{!! $data['title'] !!}</h1>
+      <h1
+        class="hero-title animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
+        {!! $data['title'] !!}
+      </h1>
     @endif
 
     <div
       class="mt-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
     >
       @if (!empty($data['description']))
-        <p x-reveal class="max-w-[480px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">{{ $data['description'] }}</p>
+        <p class="max-w-[480px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">{{ $data['description'] }}</p>
       @endif
 
       @if ($shouldShowButton)
-        <div x-reveal class="flex flex-col items-start gap-3 md:items-end">
+        <div
+          class="flex flex-col items-start gap-3 md:items-end animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+        >
           <a
             href="{{ $resolvedButtonLink }}"
             class="btn btn-primary btn-large"

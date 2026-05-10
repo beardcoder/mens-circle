@@ -46,8 +46,10 @@
     </div>
 
     <div class="container-page relative z-10 w-full">
-      <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">Männerkreis Niederbayern/ Straubing</p>
-      <h1 x-reveal class="hero-title">
+      <p class="eyebrow text-[var(--color-terracotta-light)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">Männerkreis Niederbayern/ Straubing</p>
+      <h1
+        class="hero-title animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         <span class="hero-title-line">Aktuell ist kein</span>
         <span class="hero-title-line"
           ><span class="text-italic">Termin</span> geplant</span
@@ -56,8 +58,10 @@
       <div
         class="mt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
       >
-        <p x-reveal class="max-w-[480px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.</p>
-        <a x-reveal href="#newsletter" class="btn btn-primary btn-large"
+        <p class="max-w-[480px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.</p>
+        <a
+          href="#newsletter"
+          class="btn btn-primary btn-large animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
           >Zum Newsletter</a
         >
       </div>
@@ -65,14 +69,18 @@
   </section>
   <section class="section-y">
     <div class="container-page grid gap-12 md:grid-cols-2 md:items-center">
-      <div x-reveal>
+      <div
+        class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         <p class="eyebrow">Was ist der Männerkreis?</p>
         <h2 class="section-title-lg">
           Ein Raum für <span class="text-italic">echte Begegnung</span>
         </h2>
         <p class="mt-4 text-lg text-[var(--fg-muted)]">Der Männerkreis Niederbayern/ Straubing bietet dir einen geschützten Raum, in dem du dich mit anderen Männern austauschen, wachsen und echte Verbindungen aufbauen kannst.</p>
       </div>
-      <div x-reveal.zoom class="relative aspect-square w-full max-w-md mx-auto">
+      <div
+        class="relative aspect-square w-full max-w-md mx-auto animate-reveal-zoom timeline-view animate-range-[entry_5%_cover_30%]"
+      >
         <div
           class="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--color-terracotta)]/20 to-transparent blur-2xl"
         ></div>
@@ -88,7 +96,9 @@
     id="newsletter"
   >
     <div class="container-page grid gap-12 md:grid-cols-2 md:items-center">
-      <div x-reveal>
+      <div
+        class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         <p class="eyebrow text-[var(--color-terracotta-light)]">Newsletter</p>
         <h2 class="section-title-lg text-[var(--color-parchment)]">
           Bleib <span class="text-italic">informiert</span>
@@ -98,8 +108,7 @@
       <form
         x-data="newsletterForm"
         @submit.prevent="submit($event)"
-        x-reveal
-        class="flex flex-col gap-3 sm:flex-row sm:items-center"
+        class="flex flex-col gap-3 sm:flex-row sm:items-center animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
       >
         <label for="newsletter-email-noevent" class="sr-only"
           >E-Mail-Adresse</label
@@ -120,7 +129,9 @@
   <x-blocks.whatsapp-community />
   <section class="section-y">
     <div class="container-page text-center">
-      <div x-reveal class="mx-auto max-w-2xl">
+      <div
+        class="mx-auto max-w-2xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         <p class="eyebrow">Mehr erfahren</p>
         <h2 class="section-title-lg">
           Entdecke den <span class="text-italic">Männerkreis</span>

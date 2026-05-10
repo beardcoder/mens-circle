@@ -89,6 +89,15 @@
   --animate-float: float 12s var(--ease-ambient) infinite;
   --animate-shimmer: shimmer 2s linear infinite;
 
+  /* Scroll-driven reveal tokens — linear timing because scroll IS the
+     time. Use together with arbitrary [animation-timeline:view()] and
+     [animation-range:entry_5%_cover_25%] classes. */
+  --animate-reveal-up: scroll-reveal-up linear both;
+  --animate-reveal-fade: scroll-reveal-fade linear both;
+  --animate-reveal-zoom: scroll-reveal-zoom linear both;
+  --animate-reveal-left: scroll-reveal-left linear both;
+  --animate-reveal-right: scroll-reveal-right linear both;
+
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -307,6 +316,88 @@
 /* ============================================================
    Reveal-on-scroll utility — works with x-intersect
    ============================================================ */
+
+/* ============================================================
+   Scroll-driven reveals — native CSS, no JS
+
+   Each utility hides the element initially, then runs a one-shot
+   keyframe driven by the element's own scroll position via the
+   view() timeline. In browsers without animation-timeline support
+   (Firefox at time of writing) the @supports gate is skipped and
+   the element stays at its natural rendered state — no flash, no
+   broken layout, just no animation. Progressive enhancement.
+   ============================================================ */
+@keyframes scroll-reveal-up {
+  from {
+    opacity: 0;
+    translate: 0 2rem;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes scroll-reveal-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scroll-reveal-zoom {
+  from {
+    opacity: 0;
+    scale: 0.94;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes scroll-reveal-left {
+  from {
+    opacity: 0;
+    translate: -2rem 0;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes scroll-reveal-right {
+  from {
+    opacity: 0;
+    translate: 2rem 0;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* Scroll timelines — match tailwind-animations.com API.
+   Use with named --animate-reveal-* keyframes and animate-range-* range. */
+@utility timeline-view {
+  animation-timeline: view();
+}
+
+@utility timeline-scroll {
+  animation-timeline: scroll();
+}
+
+@utility animate-range-* {
+  animation-range: --value([*]);
+}
 
 /* ============================================================
    Project utility shortcuts — Tailwind v4 @utility directive

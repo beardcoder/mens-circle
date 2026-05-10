@@ -30,7 +30,9 @@
 
     <div class="container-page relative">
       {{-- Section header --}}
-      <div x-reveal class="mb-20 max-w-3xl">
+      <div
+        class="mb-20 max-w-3xl animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+      >
         @if (!empty($data['eyebrow']))
           <p class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['eyebrow'] }}</p>
         @endif
@@ -63,8 +65,7 @@
                 $svgPath = public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg');
             @endphp
             <li
-              x-reveal="{{ $i * 80 }}"
-              class="group relative isolate flex min-h-[440px] flex-col overflow-hidden bg-[var(--color-earth-deep)] px-8 pb-12 pt-14 transition-colors duration-500 hover:bg-[var(--color-earth-dark)]"
+              class="group relative isolate flex min-h-[440px] flex-col overflow-hidden bg-[var(--color-earth-deep)] px-8 pb-12 pt-14 transition-colors duration-500 hover:bg-[var(--color-earth-dark)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
             >
               {{-- Accent dot at top-left --}}
               <span

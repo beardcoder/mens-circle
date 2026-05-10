@@ -11,7 +11,7 @@
 <head>
   @include ('partials.seo-head')
 </head>
-<body x-data class="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
+<body class="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
   {{-- Smooth scroll progress bar --}}
