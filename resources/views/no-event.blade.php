@@ -58,12 +58,14 @@
       <div
         class="mt-10 grid gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end"
       >
-        <p class="max-w-[58ch] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.</p>
-        <a
-          href="#newsletter"
-          class="btn btn-primary btn-large animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
-          >Zum Newsletter</a
+        <p class="hero-subline animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.</p>
+        <div
+          class="hero-cta-group md:justify-items-end animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
         >
+          <a href="#newsletter" class="btn btn-primary btn-large"
+            >Zum Newsletter</a
+          >
+        </div>
       </div>
     </div>
   </section>

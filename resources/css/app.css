@@ -478,11 +478,11 @@
 
 @utility hero-title {
   font-family: var(--font-display);
-  font-size: clamp(3.45rem, 9vw + 0.6rem, 10.5rem);
+  font-size: clamp(3.7rem, 10vw + 0.7rem, 11.8rem);
   font-weight: 500;
-  line-height: 0.85;
+  line-height: 0.82;
   color: var(--text-on-dark, var(--color-parchment));
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   hyphens: auto;
   text-wrap: balance;
   overflow-wrap: break-word;
@@ -497,10 +497,27 @@
     font-style: italic;
     color: color-mix(
       in oklch,
-      var(--color-terracotta-light) 60%,
+      var(--color-terracotta-light) 52%,
       var(--color-parchment)
     );
+    letter-spacing: -0.015em;
   }
+}
+
+@utility hero-subline {
+  max-inline-size: 56ch;
+  font-size: clamp(1.03rem, 0.95rem + 0.35vw, 1.3rem);
+  line-height: 1.95;
+  color: color-mix(in oklch, var(--color-sand) 90%, var(--color-parchment));
+}
+
+@utility hero-cta-group {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  padding-block-start: clamp(0.65rem, 0.45rem + 0.35vw, 1rem);
+  border-block-start: 1px solid
+    color-mix(in oklch, var(--color-sand) 20%, transparent);
 }
 
 @utility text-italic {
@@ -676,8 +693,9 @@
 
   & > span {
     position: absolute;
-    border: 1px solid color-mix(in oklch, var(--color-sand) 25%, transparent);
+    border: 1px solid color-mix(in oklch, var(--color-sand) 20%, transparent);
     border-radius: 50%;
+    opacity: 0.48;
   }
 }
 
@@ -829,6 +847,44 @@
     color-mix(in oklch, var(--bg) 88%, transparent)
   );
   border: 1px solid color-mix(in oklch, var(--border) 75%, transparent);
+}
+
+@utility quote-panel {
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklch, var(--bg-alt) 84%, transparent),
+    color-mix(in oklch, var(--bg) 94%, transparent)
+  );
+  border: 1px solid color-mix(in oklch, var(--border-soft) 68%, transparent);
+  border-radius: clamp(1.25rem, 1rem + 0.8vw, 1.95rem);
+  box-shadow: 0 26px 44px -42px
+    color-mix(in oklch, var(--color-ink) 22%, transparent);
+}
+
+@utility archetype-panel {
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklch, var(--color-earth-dark) 91%, transparent),
+    color-mix(in oklch, var(--color-earth-deep) 93%, transparent)
+  );
+  border: 1px solid color-mix(in oklch, var(--color-sand) 16%, transparent);
+  border-radius: clamp(1.2rem, 1rem + 0.4vw, 1.6rem);
+  box-shadow:
+    0 1px 0 color-mix(in oklch, var(--color-sand) 8%, transparent),
+    0 28px 42px -38px color-mix(in oklch, var(--color-ink) 58%, transparent);
+}
+
+@utility testimonial-panel {
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklch, var(--bg-alt) 86%, transparent),
+    color-mix(in oklch, var(--bg) 92%, transparent)
+  );
+  border: 1px solid color-mix(in oklch, var(--border) 68%, transparent);
+  border-radius: clamp(1.1rem, 0.95rem + 0.5vw, 1.5rem);
+  box-shadow:
+    0 1px 0 color-mix(in oklch, var(--color-ink) 8%, transparent),
+    0 24px 40px -40px color-mix(in oklch, var(--color-ink) 18%, transparent);
 }
 
 @utility hairline-grid {

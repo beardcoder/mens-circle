@@ -56,14 +56,14 @@
           aria-hidden="true"
         ></span>
 
-        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           @foreach ($items as $i => $item)
             @php
                 $icon = $detectIcon($item);
                 $svgPath = public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg');
             @endphp
             <li
-              class="card-dark group relative isolate flex min-h-[420px] flex-col overflow-hidden px-8 pb-10 pt-12 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--color-earth-dark)_86%,transparent)] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+              class="archetype-panel group relative isolate flex min-h-[430px] flex-col overflow-hidden px-8 pb-11 pt-12 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--color-earth-dark)_89%,var(--color-earth-deep))] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
             >
               {{-- Accent dot at top-left --}}
               <span
@@ -73,7 +73,7 @@
 
               {{-- Background SVG icon — large, low opacity, shifts on hover --}}
               <span
-                class="pointer-events-none absolute -right-10 -bottom-10 block h-72 w-72 text-[var(--color-terracotta)]/10 transition-all duration-700 ease-[var(--ease-ambient)] group-hover:scale-105 group-hover:text-[var(--color-terracotta)]/16"
+                class="pointer-events-none absolute -right-8 -bottom-10 block h-72 w-72 text-[var(--color-terracotta)]/8 transition-all duration-700 ease-[var(--ease-ambient)] group-hover:scale-105 group-hover:text-[var(--color-terracotta)]/12"
                 aria-hidden="true"
               >
                 @if (file_exists($svgPath))
@@ -88,7 +88,7 @@
                   >Archetyp</span
                 >
                 <span
-                  class="text-2xl font-medium tabular-nums text-[var(--color-parchment)]/86"
+                  class="number-label text-[var(--color-parchment)]/55"
                   >{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }}</span
                 >
               </div>
@@ -96,7 +96,7 @@
               {{-- Title --}}
               @if (!empty($item['title']))
                 <h3
-                  class="relative mt-7 font-display text-[clamp(2rem,1.2rem+1.5vw,3rem)] font-medium leading-[1.02] text-[var(--color-parchment)]"
+                  class="relative mt-8 font-display text-[clamp(2.3rem,1.45rem+1.65vw,3.3rem)] font-medium leading-[0.98] text-[var(--color-parchment)]"
                 >
                   {{ $item['title'] }}
                 </h3>
@@ -104,7 +104,7 @@
 
               {{-- Description --}}
               @if (!empty($item['description']))
-                <p class="relative mt-4 max-w-[30ch] text-[0.96rem] leading-[1.84] text-[var(--color-sand)]/88">{{ $item['description'] }}</p>
+                <p class="relative mt-6 max-w-[30ch] text-[0.96rem] leading-[1.88] text-[var(--color-sand)]/86">{{ $item['description'] }}</p>
               @endif
 
               {{-- Bottom hairline that grows on hover --}}

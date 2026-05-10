@@ -10,7 +10,7 @@
   aria-labelledby="intro-title"
 >
   <div
-    class="container-page grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-start"
+    class="container-page grid gap-14 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-20"
   >
     <div
       class="animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
@@ -58,18 +58,18 @@
     </div>
 
     <div
-      class="relative mx-auto grid w-full max-w-xl content-start gap-8 lg:mx-0 lg:pl-10 animate-reveal-zoom timeline-view animate-range-[entry_5%_cover_30%]"
+      class="relative mx-auto grid w-full max-w-2xl content-start gap-8 lg:mx-0 lg:pl-8 animate-reveal-zoom timeline-view animate-range-[entry_5%_cover_30%]"
     >
       <div
-        class="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,color-mix(in_oklch,var(--accent)_40%,transparent),transparent)]"
+        class="pointer-events-none absolute inset-x-2 top-0 h-px bg-[linear-gradient(90deg,transparent,color-mix(in_oklch,var(--accent)_30%,transparent),transparent)]"
         aria-hidden="true"
       ></div>
       <div
-        class="editorial-panel card-light relative min-h-80 rounded-[1.5rem] px-8 py-10 md:px-10"
+        class="quote-panel hairline-grid relative min-h-96 px-10 py-14 md:px-14 md:py-16"
       >
         @if (!empty($data['quote']))
           <blockquote
-            class="editorial-quote relative z-10 max-w-full text-left text-[var(--fg)]"
+            class="editorial-quote relative z-10 max-w-full text-left text-[clamp(1.7rem,1.35rem+1vw,2.8rem)] leading-[1.5] text-[var(--fg)]"
           >
             {!! $data['quote'] !!}
           </blockquote>

@@ -46,24 +46,24 @@
       <p class="section-intro">Authentische Einblicke von Männern, die den Kreis erleben</p>
     </div>
 
-    <div class="grid items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="grid items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3">
       @foreach ($testimonials as $testimonial)
         <article
-          class="card-light editorial-panel group relative flex h-full flex-col gap-6 p-8 md:p-9 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--bg)_80%,var(--bg-alt))] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+          class="testimonial-panel group relative flex h-full flex-col gap-8 px-8 py-10 md:px-9 md:py-11 transition-colors duration-500 hover:bg-[color-mix(in_oklch,var(--bg)_86%,var(--bg-alt))] animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
         >
           <span
-            class="font-display text-7xl leading-none text-[var(--accent)]/28"
+            class="pointer-events-none absolute right-8 top-6 font-display text-[clamp(4.4rem,3vw+2rem,6.8rem)] leading-none text-[var(--accent)]/14"
             aria-hidden="true"
             >»</span
           >
           <blockquote
-            class="font-display text-[clamp(1.15rem,0.95rem+0.7vw,1.55rem)] italic leading-[1.65] text-[var(--fg)]"
+            class="relative z-10 font-display text-[clamp(1.33rem,1rem+0.8vw,1.95rem)] italic leading-[1.64] text-[var(--fg)]"
           >
             {{ $testimonial->quote }}
           </blockquote>
           @if ($testimonial->author_name || $testimonial->role)
             <div
-              class="mt-auto grid gap-1 border-t border-[color-mix(in_oklch,var(--border)_80%,transparent)] pt-5 text-sm"
+              class="mt-auto grid gap-1 border-t border-[color-mix(in_oklch,var(--border)_74%,transparent)] pt-6 text-sm"
             >
               @if ($testimonial->author_name)
                 <cite

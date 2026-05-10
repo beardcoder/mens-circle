@@ -35,21 +35,12 @@
   {{-- Warm radial glow --}}
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
     <div
-      class="absolute inset-0 [background:radial-gradient(ellipse_80%_60%_at_70%_30%,color-mix(in_oklch,var(--accent)_14%,transparent)_0%,transparent_52%),radial-gradient(ellipse_60%_50%_at_20%_80%,color-mix(in_oklch,var(--accent)_8%,transparent)_0%,transparent_43%)]"
+      class="absolute inset-0 [background:radial-gradient(ellipse_72%_58%_at_72%_28%,color-mix(in_oklch,var(--accent)_10%,transparent)_0%,transparent_54%),radial-gradient(ellipse_52%_40%_at_18%_84%,color-mix(in_oklch,var(--accent)_5%,transparent)_0%,transparent_46%)]"
     ></div>
   </div>
 
   {{-- Decorative circles --}}
   <div class="hero-decor" aria-hidden="true">
-    <span
-      class="-top-[15vw] -right-[25vw] h-[70vw] w-[70vw] animate-breathe [animation-duration:24s]"
-    ></span>
-    <span
-      class="-top-[5vw] -right-[15vw] h-[50vw] w-[50vw] animate-breathe [animation-delay:-5s] [animation-duration:30s]"
-    ></span>
-    <span
-      class="top-[2vw] -right-[8vw] h-[35vw] w-[35vw] animate-breathe [animation-delay:-10s] [animation-duration:34s]"
-    ></span>
     <span
       class="-bottom-[45vw] -left-[45vw] h-[90vw] w-[90vw] animate-breathe [animation-delay:-3s] [animation-duration:38s]"
     ></span>
@@ -72,12 +63,12 @@
       class="mt-10 grid gap-10 md:mt-12 md:grid-cols-[minmax(0,1fr)_auto] md:items-end"
     >
       @if (!empty($data['description']))
-        <p class="max-w-[58ch] text-base leading-[1.92] text-[var(--color-sand)] md:text-lg animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">{{ $data['description'] }}</p>
+        <p class="hero-subline animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]">{{ $data['description'] }}</p>
       @endif
 
       @if ($shouldShowButton)
         <div
-          class="flex flex-col items-start gap-3 md:items-end animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
+          class="hero-cta-group md:justify-items-end animate-reveal-up timeline-view animate-range-[entry_5%_cover_25%]"
         >
           <a
             href="{{ $resolvedButtonLink }}"
@@ -85,10 +76,10 @@
             >{{ $data['button_text'] }}</a
           >
           <span
-            class="inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-sand)]/60"
+            class="inline-flex items-center gap-2 text-[0.64rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-sand)]/58"
             aria-hidden="true"
           >
-            <span class="h-px w-10 bg-[var(--color-sand)]/35"></span>
+            <span class="h-px w-12 bg-[var(--color-sand)]/33"></span>
             Nächster Schritt
           </span>
         </div>
