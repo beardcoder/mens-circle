@@ -50,32 +50,34 @@
         <span>Männerkreis</span>
       </a>
 
-      <nav
-        :class="navOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'"
-        class="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col items-center justify-center gap-10 bg-[var(--bg)] p-8 text-[var(--fg)] transition-transform duration-300 ease-[var(--ease-precise)] md:static md:flex md:w-auto md:max-w-none md:flex-row md:items-center md:gap-12 md:bg-transparent md:p-0 md:text-inherit"
-      >
-        @foreach ([
-            ['#ueber', 'Über'],
-            ['#reise', 'Die Reise'],
-            ['#faq', 'Fragen'],
-        ] as $link)
+      @php
+          $navLinks = [
+              ['url' => route('home') . '#ueber',   'label' => 'Über',      'sub' => 'Was wir sind',    'target' => 'ueber'],
+              ['url' => route('home') . '#reise',   'label' => 'Die Reise', 'sub' => 'Wie es abläuft',  'target' => 'reise'],
+              ['url' => route('home') . '#faq',     'label' => 'Fragen',    'sub' => 'Häufig gestellt', 'target' => 'faq'],
+              ['url' => route('breathing.show'),    'label' => 'Atemübung', 'sub' => 'Bewusster Atem',  'target' => 'atemuebung'],
+          ];
+      @endphp
+
+      {{-- Desktop nav: indexed links with hover italic sublabel --}}
+      <nav class="hidden items-center gap-10 md:flex">
+        @foreach ($navLinks as $i => $link)
           <a
-            href="{{ route('home') . $link[0] }}"
-            class="nav-link"
+            href="{{ $link['url'] }}"
+            class="nav-indexed group relative flex items-baseline gap-1.5"
             data-umami-event="nav-click"
-            data-umami-event-target="{{ ltrim($link[0], '#') }}"
-            @click="onLinkClick"
-            >{{ $link[1] }}</a
+            data-umami-event-target="{{ $link['target'] }}"
           >
+            <span
+              class="font-display text-[0.65rem] tabular-nums tracking-widest opacity-50 transition-opacity duration-300 group-hover:opacity-90"
+              >{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }}</span
+            >
+            <span
+              class="text-[0.95rem] font-medium tracking-wide"
+              >{{ $link['label'] }}</span
+            >
+          </a>
         @endforeach
-        <a
-          href="{{ route('breathing.show') }}"
-          class="nav-link"
-          data-umami-event="nav-click"
-          data-umami-event-target="atemuebung"
-          @click="onLinkClick"
-          >Atemübung</a
-        >
         @if ($hasNextEvent)
           <a
             href="{{ $nextEventUrl }}"
@@ -83,38 +85,107 @@
             data-umami-event="cta-click"
             data-umami-event-location="header"
             data-umami-event-action="go-to-event"
-            @click="onLinkClick"
             >Nächster Termin</a
           >
         @endif
-
-        <button
-          type="button"
-          @click="toggleNav"
-          class="absolute top-5 right-5 grid h-10 w-10 place-items-center rounded-full border border-[var(--border)] md:hidden"
-          aria-label="Menü schließen"
-          x-show="navOpen"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
       </nav>
 
+      {{-- Mobile burger toggle --}}
       <button
         type="button"
         @click="toggleNav"
-        x-show="!navOpen"
-        class="relative z-[1001] grid h-10 w-10 place-items-center rounded-full border border-current/30 md:hidden"
-        aria-label="Menü öffnen"
+        :aria-expanded="navOpen"
+        class="relative z-[1001] grid h-11 w-11 place-items-center md:hidden"
+        aria-label="Menü öffnen oder schließen"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5" aria-hidden="true">
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
+        <span class="relative block h-3.5 w-6">
+          <span
+            :class="navOpen ? 'rotate-45 top-1/2 -translate-y-1/2' : 'top-0'"
+            class="absolute inset-x-0 h-px bg-current transition-all duration-300"
+          ></span>
+          <span
+            :class="navOpen ? 'opacity-0' : 'opacity-100'"
+            class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-current transition-opacity duration-200"
+          ></span>
+          <span
+            :class="navOpen
+              ? '-rotate-45 top-1/2 -translate-y-1/2'
+              : 'top-full -translate-y-px'"
+            class="absolute inset-x-0 h-px bg-current transition-all duration-300"
+          ></span>
+        </span>
       </button>
+    </div>
+
+    {{-- Mobile fullscreen overlay menu --}}
+    <div
+      x-show="navOpen"
+      x-cloak
+      x-transition:enter="transition ease-[var(--ease-settle)] duration-500"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-[var(--ease-precise)] duration-300"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      class="fixed inset-0 z-40 bg-[var(--color-earth-deep)] text-[var(--color-parchment)] md:hidden"
+      style="display: none"
+    >
+      <div
+        class="container-page flex h-full flex-col justify-center pt-24 pb-12"
+      >
+        <ul class="flex flex-col gap-1">
+          @foreach ($navLinks as $i => $link)
+            <li
+              x-show="navOpen"
+              x-transition:enter="transition ease-[var(--ease-settle)] duration-700"
+              x-transition:enter-start="opacity-0 translate-y-4"
+              x-transition:enter-end="opacity-100 translate-y-0"
+              style="transition-delay: {{ 100 + $i * 80 }}ms;"
+            >
+              <a
+                href="{{ $link['url'] }}"
+                @click="onLinkClick"
+                class="group flex items-baseline gap-4 border-b border-white/10 py-5"
+                data-umami-event="nav-click"
+                data-umami-event-target="{{ $link['target'] }}"
+              >
+                <span
+                  class="font-display text-xs tabular-nums tracking-widest text-[var(--color-terracotta-light)]/70"
+                  >{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }}</span
+                >
+                <span
+                  class="font-display text-4xl font-medium leading-none transition-colors group-hover:text-[var(--color-terracotta-light)]"
+                  >{{ $link['label'] }}</span
+                >
+                <span
+                  class="ml-auto self-center font-display text-sm italic text-[var(--color-sand)]/60"
+                  >{{ $link['sub'] }}</span
+                >
+              </a>
+            </li>
+          @endforeach
+        </ul>
+
+        @if ($hasNextEvent)
+          <div
+            x-show="navOpen"
+            x-transition:enter="transition ease-[var(--ease-settle)] duration-700"
+            x-transition:enter-start="opacity-0 translate-y-4"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            style="transition-delay: {{ 100 + count($navLinks) * 80 }}ms;"
+            class="mt-12"
+          >
+            <a
+              href="{{ $nextEventUrl }}"
+              @click="onLinkClick"
+              class="btn btn-primary btn-large"
+              data-umami-event="cta-click"
+              data-umami-event-location="mobile-menu"
+              >Nächster Termin</a
+            >
+          </div>
+        @endif
+      </div>
     </div>
   </header>
 

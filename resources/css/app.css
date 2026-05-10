@@ -236,6 +236,15 @@
     scroll-behavior: smooth;
   }
 
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  [x-cloak] {
+    display: none !important;
+  }
+
   body {
     font-family: var(--font-body);
     line-height: 1.7;
@@ -485,6 +494,30 @@
 @utility btn-large {
   padding: 1.25rem 2.75rem;
   font-size: 0.85rem;
+}
+
+@utility nav-indexed {
+  position: relative;
+  padding-block: 0.4rem;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 300ms var(--ease-precise);
+
+  &::after {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inline-size: 0;
+    block-size: 1px;
+    content: '';
+    background: currentcolor;
+    opacity: 0.7;
+    transition: inline-size 400ms var(--ease-settle);
+  }
+
+  &:hover::after {
+    inline-size: 100%;
+  }
 }
 
 @utility nav-link {
