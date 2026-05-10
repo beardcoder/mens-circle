@@ -29,30 +29,37 @@
 
 <section class="section-y-lg" id="stimmen" aria-labelledby="testimonials-title">
   <div class="container-page">
-    <div x-reveal class="mb-12 max-w-3xl">
+    <div x-reveal class="mb-16 max-w-3xl">
       <p class="eyebrow">Community Stimmen</p>
       <h2 class="section-title-lg" id="testimonials-title">
         Was <span class="text-italic">Teilnehmer</span> sagen
       </h2>
-      <p class="mt-4 text-lg text-[var(--fg-muted)]">Authentische Einblicke von Männern, die den Kreis erleben</p>
+      <p class="mt-6 text-lg leading-[1.85] text-[var(--fg-muted)]">Authentische Einblicke von Männern, die den Kreis erleben</p>
     </div>
 
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
       @foreach ($testimonials as $testimonial)
         <article
           x-reveal
-          class="rounded-2xl border border-[var(--border)] bg-[var(--bg-alt)] p-8 transition-transform hover:-translate-y-1"
+          class="group relative flex flex-col gap-6 rounded-3xl border border-[var(--border)] bg-[var(--bg-alt)] p-10 transition-all duration-500 hover:-translate-y-1 hover:border-[var(--accent)]/40 hover:shadow-[0_20px_40px_-10px_color-mix(in_oklch,var(--color-ink)_12%,transparent)]"
         >
-          <blockquote
-            class="font-display text-lg italic leading-relaxed text-[var(--fg)]"
+          <span
+            class="font-display text-6xl leading-none text-[var(--accent)]/50"
+            aria-hidden="true"
+            >»</span
           >
-            »{{ $testimonial->quote }}«
+          <blockquote
+            class="font-display text-xl italic leading-[1.5] text-[var(--fg)]"
+          >
+            {{ $testimonial->quote }}
           </blockquote>
           @if ($testimonial->author_name || $testimonial->role)
-            <div class="mt-6 flex flex-col gap-1 text-sm">
+            <div
+              class="mt-auto flex flex-col gap-1 border-t border-[var(--border)] pt-5 text-sm"
+            >
               @if ($testimonial->author_name)
                 <cite
-                  class="not-italic font-medium text-[var(--fg)]"
+                  class="font-display text-base font-medium not-italic text-[var(--fg)]"
                   >{{ $testimonial->author_name }}</cite
                 >
               @endif

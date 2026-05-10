@@ -18,11 +18,12 @@
   {{-- Event Hero --}}
   <section
     data-hero
-    class="relative isolate overflow-hidden bg-[var(--bg-deep)] text-[var(--color-parchment)]"
+    class="relative isolate flex min-h-[90svh] items-end overflow-hidden bg-gradient-to-b from-[var(--color-earth-deep)] to-[var(--color-earth-dark)] pb-24 text-[var(--color-parchment)]"
+    style="min-block-size: min(800px, 90svh)"
   >
     @if ($eventImage)
       {{ $eventImage->img()->attributes([
-          'class' => 'absolute inset-0 -z-10 h-full w-full object-cover opacity-30',
+          'class' => 'absolute inset-0 -z-10 h-full w-full object-cover opacity-25 mix-blend-luminosity',
           'loading' => 'eager',
           'fetchpriority' => 'high',
           'aria-hidden' => 'true',
@@ -31,25 +32,28 @@
     @endif
     <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
       <div
-        class="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[var(--color-terracotta)]/30 blur-3xl animate-breathe"
-      ></div>
-      <div
-        class="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[var(--color-earth-warm)]/20 blur-3xl animate-breathe [animation-delay:3s]"
+        class="absolute inset-0 [background:radial-gradient(ellipse_80%_60%_at_70%_30%,color-mix(in_oklch,var(--accent)_22%,transparent)_0%,transparent_50%),radial-gradient(ellipse_60%_50%_at_20%_80%,color-mix(in_oklch,var(--accent)_12%,transparent)_0%,transparent_40%)]"
       ></div>
     </div>
+    <div class="hero-decor" aria-hidden="true">
+      <span
+        class="-top-[15vw] -right-[25vw] h-[70vw] w-[70vw] animate-breathe [animation-duration:18s]"
+      ></span>
+      <span
+        class="-top-[5vw] -right-[15vw] h-[50vw] w-[50vw] animate-breathe [animation-delay:-5s] [animation-duration:22s]"
+      ></span>
+      <span
+        class="-bottom-[40vw] -left-[40vw] h-[80vw] w-[80vw] animate-breathe [animation-delay:-3s] [animation-duration:30s]"
+      ></span>
+    </div>
 
-    <div class="container-page flex min-h-[60vh] flex-col justify-end py-24">
+    <div class="container-page relative z-10 w-full">
       <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">{{ $event->isPast ? 'Vergangenes Treffen' : 'Nächstes Treffen' }}</p>
-      <h1
-        x-reveal
-        class="font-display text-4xl font-semibold leading-tight tracking-tight md:text-6xl"
-      >
-        {{ $event->title }}
-      </h1>
+      <h1 x-reveal class="hero-title">{{ $event->title }}</h1>
       <div
-        class="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+        class="mt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
       >
-        <p x-reveal class="text-lg text-[var(--color-sand)]">
+        <p x-reveal class="max-w-[520px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">
           {{ $event->event_date->translatedFormat('l') }}, {{ $event->event_date->format('d.m.Y') }} · {{ $event->start_time->format('H:i') }} Uhr
           · {{ $event->location }}
         </p>
@@ -68,32 +72,50 @@
     </div>
   </section>
   {{-- Registration / Past info --}}
-  <section class="section-y bg-[var(--bg-alt)]" id="anmeldung">
-    <div class="container-page grid gap-10 md:grid-cols-2 md:items-start">
+  <section
+    class="relative isolate overflow-hidden bg-gradient-to-br from-[var(--color-earth-deep)] to-[var(--color-earth-dark)] text-[var(--color-parchment)]"
+    id="anmeldung"
+  >
+    <span
+      class="pointer-events-none absolute -top-[10vw] -left-[10vw] block h-[40vw] w-[40vw] rounded-full border border-[var(--color-sand)]/15 animate-breathe [animation-duration:24s]"
+      aria-hidden="true"
+    ></span>
+    <span
+      class="pointer-events-none absolute bottom-0 right-0 block h-[60vw] w-[60vw] translate-x-1/3 translate-y-1/3 rounded-full border border-[var(--color-sand)]/10 animate-breathe [animation-delay:-6s] [animation-duration:30s]"
+      aria-hidden="true"
+    ></span>
+    <span
+      class="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(ellipse_70%_60%_at_30%_30%,color-mix(in_oklch,var(--accent)_18%,transparent)_0%,transparent_50%)]"
+      aria-hidden="true"
+    ></span>
+
+    <div
+      class="container-page section-y grid gap-12 md:grid-cols-[1fr_1.1fr] md:items-center"
+    >
       <div x-reveal>
         @if ($event->isPast)
-          <p class="eyebrow">Rückblick</p>
-          <h2 class="section-title-lg">
+          <p class="eyebrow text-[var(--color-terracotta-light)]">Rückblick</p>
+          <h2 class="section-title-lg text-[var(--color-parchment)]">
             Dieses Treffen <br /><span class="text-italic"
               >hat stattgefunden</span
             >
           </h2>
-          <p class="mt-4 text-lg text-[var(--fg-muted)]">Am {{ $event->event_date->format('d.m.Y') }}</p>
+          <p class="mt-6 text-lg text-[var(--color-sand)]">Am {{ $event->event_date->format('d.m.Y') }}</p>
         @elseif ($event->isFull)
-          <p class="eyebrow">Warteliste</p>
-          <h2 class="section-title-lg">
+          <p class="eyebrow text-[var(--color-terracotta-light)]">Warteliste</p>
+          <h2 class="section-title-lg text-[var(--color-parchment)]">
             Trag dich auf die <br /><span class="text-italic"
               >Warteliste ein</span
             >
           </h2>
-          <p class="mt-4 inline-flex rounded-full bg-[var(--color-error)]/10 px-4 py-1 text-sm font-medium text-[var(--color-error)]">Ausgebucht</p>
-          <p class="mt-3 text-sm text-[var(--fg-muted)]">Bei Absagen rückt die Warteliste automatisch nach. Du wirst sofort per E-Mail informiert.</p>
+          <p class="mt-6 inline-flex rounded-full bg-[var(--color-error)]/20 px-4 py-1.5 text-sm font-medium text-[var(--color-error)]">Ausgebucht</p>
+          <p class="mt-3 max-w-md text-sm leading-relaxed text-[var(--color-sand)]">Bei Absagen rückt die Warteliste automatisch nach. Du wirst sofort per E-Mail informiert.</p>
         @else
-          <p class="eyebrow">Sei dabei</p>
-          <h2 class="section-title-lg">
+          <p class="eyebrow text-[var(--color-terracotta-light)]">Sei dabei</p>
+          <h2 class="section-title-lg text-[var(--color-parchment)]">
             Sichere dir <br /><span class="text-italic">deinen Platz</span>
           </h2>
-          <p class="mt-4 text-lg text-[var(--fg-muted)]"><span class="font-display text-2xl font-semibold text-[var(--accent)]">{{ $event->availableSpots }}</span> von {{ $event->max_participants }} Plätzen frei</p>
+          <p class="mt-6 text-lg text-[var(--color-sand)]"><span class="font-display text-3xl font-semibold text-[var(--color-terracotta-light)]">{{ $event->availableSpots }}</span> von {{ $event->max_participants }} Plätzen frei</p>
         @endif
       </div>
 
@@ -102,7 +124,7 @@
           x-data="registrationForm({{ $event->id }})"
           @submit.prevent="submit($event)"
           x-reveal
-          class="flex flex-col gap-4 rounded-2xl bg-[var(--bg)] p-8 shadow-sm"
+          class="flex flex-col gap-5 rounded-3xl bg-[var(--bg)] p-8 text-[var(--fg)] shadow-[0_20px_40px_-10px_color-mix(in_oklch,var(--color-ink)_25%,transparent)] md:p-10"
           autocomplete="on"
         >
           <input type="hidden" name="event_id" value="{{ $event->id }}" />
@@ -196,7 +218,7 @@
       @else
         <div
           x-reveal
-          class="flex flex-col gap-4 rounded-2xl bg-[var(--bg)] p-8"
+          class="flex flex-col gap-4 rounded-3xl bg-[var(--bg)] p-8 text-[var(--fg)] md:p-10"
         >
           <p class="text-[var(--fg-muted)]">Dieses Treffen liegt in der Vergangenheit. Eine Anmeldung ist nicht mehr möglich.</p>
           <p class="text-[var(--fg-muted)]">Möchtest du beim nächsten Männerkreis dabei sein? Dann trag dich in unseren Newsletter ein.</p>
@@ -210,7 +232,13 @@
     </div>
   </section>
   {{-- Event info cards --}}
-  <section class="section-y">
+  <section class="section-y relative isolate overflow-hidden">
+    <span
+      class="pointer-events-none absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 select-none text-center font-display text-[clamp(7rem,18vw,16rem)] font-medium tracking-tight text-[var(--fg)]/[0.04]"
+      aria-hidden="true"
+      >TERMIN</span
+    >
+
     <div class="container-page">
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         @foreach ([
@@ -221,15 +249,19 @@
         ] as $card)
           <div
             x-reveal
-            class="rounded-2xl border border-[var(--border)] bg-[var(--bg-alt)] p-6"
+            class="group relative isolate overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg)] p-7 shadow-[0_2px_4px_color-mix(in_oklch,var(--color-ink)_4%,transparent),0_12px_24px_-6px_color-mix(in_oklch,var(--color-ink)_8%,transparent)] transition-transform duration-500 hover:-translate-y-1"
           >
+            <span
+              class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-[var(--accent)]/15 to-transparent blur-xl transition-opacity duration-500 group-hover:opacity-100"
+              aria-hidden="true"
+            ></span>
             <h3
-              class="text-xs font-medium uppercase tracking-widest text-[var(--accent)]"
+              class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]"
             >
               {{ $card[0] }}
             </h3>
-            <p class="mt-3 font-display text-xl font-semibold">{{ $card[1] }}</p>
-            <p class="mt-1 text-sm text-[var(--fg-muted)]">{{ $card[2] }}</p>
+            <p class="mt-4 font-display text-2xl font-medium leading-tight">{{ $card[1] }}</p>
+            <p class="mt-2 text-sm text-[var(--fg-muted)]">{{ $card[2] }}</p>
           </div>
         @endforeach
       </div>

@@ -24,22 +24,29 @@
 @section ('content')
   <section
     data-hero
-    class="relative isolate overflow-hidden bg-[var(--bg-deep)] text-[var(--color-parchment)]"
+    class="relative isolate flex min-h-[80svh] items-end overflow-hidden bg-gradient-to-b from-[var(--color-earth-deep)] to-[var(--color-earth-dark)] pb-20 text-[var(--color-parchment)]"
+    style="min-block-size: min(720px, 80svh)"
   >
     <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
       <div
-        class="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[var(--color-terracotta)]/30 blur-3xl animate-breathe"
+        class="absolute inset-0 [background:radial-gradient(ellipse_80%_60%_at_70%_30%,color-mix(in_oklch,var(--accent)_22%,transparent)_0%,transparent_50%)]"
       ></div>
     </div>
-    <div class="container-page flex min-h-[50vh] flex-col justify-center py-20">
+    <div class="hero-decor" aria-hidden="true">
+      <span
+        class="-top-[15vw] -right-[25vw] h-[70vw] w-[70vw] animate-breathe [animation-duration:18s]"
+      ></span>
+      <span
+        class="-bottom-[40vw] -left-[40vw] h-[80vw] w-[80vw] animate-breathe [animation-delay:-3s] [animation-duration:30s]"
+      ></span>
+    </div>
+
+    <div class="container-page relative z-10 w-full">
       <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">Community Stimmen</p>
-      <h1
-        x-reveal
-        class="font-display text-4xl font-semibold leading-tight md:text-6xl"
-      >
+      <h1 x-reveal class="hero-title">
         Teile deine <span class="text-italic">Erfahrung</span>
       </h1>
-      <p x-reveal class="mt-4 max-w-xl text-lg text-[var(--color-sand)]">Deine Geschichte kann anderen Männern Mut machen, den ersten Schritt zu wagen.</p>
+      <p x-reveal class="mt-8 max-w-[520px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">Deine Geschichte kann anderen Männern Mut machen, den ersten Schritt zu wagen.</p>
     </div>
   </section>
   <section class="section-y">

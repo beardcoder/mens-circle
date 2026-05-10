@@ -24,22 +24,29 @@
 @section ('content')
   <section
     data-hero
-    class="relative isolate overflow-hidden bg-[var(--bg-deep)] text-[var(--color-parchment)]"
+    class="relative isolate flex min-h-[80svh] items-end overflow-hidden bg-gradient-to-b from-[var(--color-earth-deep)] to-[var(--color-earth-dark)] pb-20 text-[var(--color-parchment)]"
+    style="min-block-size: min(720px, 80svh)"
   >
     <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
       <div
-        class="absolute -top-20 -right-20 h-96 w-96 rounded-full bg-[var(--color-sage)]/30 blur-3xl animate-breathe"
+        class="absolute inset-0 [background:radial-gradient(ellipse_60%_50%_at_30%_40%,color-mix(in_oklch,var(--color-sage)_25%,transparent)_0%,transparent_50%),radial-gradient(ellipse_60%_50%_at_70%_70%,color-mix(in_oklch,var(--accent)_15%,transparent)_0%,transparent_45%)]"
       ></div>
     </div>
-    <div class="container-page flex min-h-[50vh] flex-col justify-center py-20">
+    <div class="hero-decor" aria-hidden="true">
+      <span
+        class="-top-[10vw] -left-[20vw] h-[60vw] w-[60vw] animate-breathe [animation-duration:20s]"
+      ></span>
+      <span
+        class="-bottom-[40vw] -right-[40vw] h-[80vw] w-[80vw] animate-breathe [animation-delay:-5s] [animation-duration:28s]"
+      ></span>
+    </div>
+
+    <div class="container-page relative z-10 w-full">
       <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">Bewusster Atem</p>
-      <h1
-        x-reveal
-        class="font-display text-5xl font-semibold leading-tight md:text-7xl"
-      >
+      <h1 x-reveal class="hero-title">
         Atem<span class="text-italic">übung</span>
       </h1>
-      <p x-reveal class="mt-4 max-w-xl text-lg text-[var(--color-sand)]">Drei Runden bewusster Atem im Stil der Wim-Hof-Methode. Für Klarheit, Energie und innere Ruhe.</p>
+      <p x-reveal class="mt-8 max-w-[520px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">Drei Runden bewusster Atem im Stil der Wim-Hof-Methode. Für Klarheit, Energie und innere Ruhe.</p>
     </div>
   </section>
   <section class="section-y">

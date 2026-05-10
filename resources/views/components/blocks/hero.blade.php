@@ -18,68 +18,75 @@
 
 <section
   data-hero
-  class="relative isolate overflow-hidden bg-[var(--bg-deep)] text-[var(--color-parchment)]"
   role="banner"
+  class="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-gradient-to-b from-[var(--color-earth-deep)] to-[var(--color-earth-dark)] pb-24 text-[var(--color-parchment)]"
+  style="min-block-size: min(880px, 100svh)"
 >
+  {{-- Bg image --}}
   @if ($media)
     {{ $media->img()->attributes([
-        'class' => 'absolute inset-0 -z-10 h-full w-full object-cover opacity-40',
+        'class' => 'absolute inset-0 -z-10 h-full w-full object-cover opacity-30 mix-blend-luminosity',
         'loading' => 'eager',
         'fetchpriority' => 'high',
         'aria-hidden' => 'true',
     ]) }}
   @endif
 
-  {{-- Ambient breathing circles --}}
+  {{-- Warm radial glow --}}
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
     <div
-      class="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[var(--color-terracotta)]/30 blur-3xl animate-breathe"
-    ></div>
-    <div
-      class="absolute top-1/3 right-0 h-72 w-72 rounded-full bg-[var(--color-sage)]/20 blur-3xl animate-breathe [animation-delay:2s]"
-    ></div>
-    <div
-      class="absolute bottom-0 left-1/4 h-96 w-96 rounded-full bg-[var(--color-earth-warm)]/20 blur-3xl animate-breathe [animation-delay:4s]"
+      class="absolute inset-0 [background:radial-gradient(ellipse_80%_60%_at_70%_30%,color-mix(in_oklch,var(--accent)_22%,transparent)_0%,transparent_50%),radial-gradient(ellipse_60%_50%_at_20%_80%,color-mix(in_oklch,var(--accent)_12%,transparent)_0%,transparent_40%)]"
     ></div>
   </div>
 
-  <div class="container-page flex min-h-[80vh] items-center py-24">
-    <div class="max-w-3xl">
-      @if (!empty($data['label']))
-        <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['label'] }}</p>
+  {{-- Decorative circles --}}
+  <div class="hero-decor" aria-hidden="true">
+    <span
+      class="-top-[15vw] -right-[25vw] h-[70vw] w-[70vw] animate-breathe [animation-duration:18s]"
+    ></span>
+    <span
+      class="-top-[5vw] -right-[15vw] h-[50vw] w-[50vw] animate-breathe [animation-delay:-5s] [animation-duration:22s]"
+    ></span>
+    <span
+      class="top-[2vw] -right-[8vw] h-[35vw] w-[35vw] animate-breathe [animation-delay:-10s] [animation-duration:25s]"
+    ></span>
+    <span
+      class="-bottom-[45vw] -left-[45vw] h-[90vw] w-[90vw] animate-breathe [animation-delay:-3s] [animation-duration:30s]"
+    ></span>
+  </div>
+
+  <div class="container-page relative z-10 w-full">
+    @if (!empty($data['label']))
+      <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">{{ $data['label'] }}</p>
+    @endif
+
+    @if (!empty($data['title']))
+      <h1 x-reveal class="hero-title">{!! $data['title'] !!}</h1>
+    @endif
+
+    <div
+      class="mt-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
+    >
+      @if (!empty($data['description']))
+        <p x-reveal class="max-w-[480px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">{{ $data['description'] }}</p>
       @endif
 
-      @if (!empty($data['title']))
-        <h1
-          x-reveal
-          class="font-display text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl lg:text-[clamp(3rem,7vw,8rem)]"
-        >
-          {!! $data['title'] !!}
-        </h1>
+      @if ($shouldShowButton)
+        <div x-reveal class="flex flex-col items-start gap-3 md:items-end">
+          <a
+            href="{{ $resolvedButtonLink }}"
+            class="btn btn-primary btn-large"
+            >{{ $data['button_text'] }}</a
+          >
+          <span
+            class="inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-[var(--color-sand)]/60"
+            aria-hidden="true"
+          >
+            <span class="h-px w-8 bg-[var(--color-sand)]/40"></span>
+            Entdecken
+          </span>
+        </div>
       @endif
-
-      <div
-        class="mt-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-12"
-      >
-        @if (!empty($data['description']))
-          <p x-reveal class="max-w-xl text-lg text-[var(--color-sand)] leading-relaxed">{{ $data['description'] }}</p>
-        @endif
-
-        @if ($shouldShowButton)
-          <div x-reveal class="flex flex-col items-start gap-2">
-            <a
-              href="{{ $resolvedButtonLink }}"
-              class="btn btn-primary btn-large"
-              >{{ $data['button_text'] }}</a
-            >
-            <span
-              class="text-xs uppercase tracking-widest text-[var(--color-sand)]/70"
-              aria-hidden="true"
-              >Entdecken ↓</span
-            >
-          </div>
-        @endif
-      </div>
     </div>
   </div>
 </section>

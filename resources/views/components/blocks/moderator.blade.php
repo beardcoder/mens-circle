@@ -11,14 +11,21 @@
     }
 @endphp
 
-<section class="section-y" id="moderator">
-  <div class="container-page grid gap-12 md:grid-cols-2 md:items-center">
+<section class="section-y-lg" id="moderator">
+  <div
+    class="container-page grid gap-16 md:grid-cols-[1fr_1.2fr] md:items-center"
+  >
     <div x-reveal class="relative aspect-[4/5] w-full max-w-md mx-auto md:mx-0">
+      <span
+        class="absolute -inset-6 rounded-3xl bg-gradient-to-br from-[var(--accent)]/25 via-transparent to-[var(--color-earth-warm)]/15 blur-2xl"
+        aria-hidden="true"
+      ></span>
+      <span
+        class="absolute -bottom-6 -right-6 h-32 w-32 rounded-full border-2 border-[var(--accent)]/30 animate-breathe"
+        aria-hidden="true"
+      ></span>
       <div
-        class="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent)]/20 to-transparent blur-xl"
-      ></div>
-      <div
-        class="relative h-full w-full overflow-hidden rounded-2xl bg-[var(--bg-alt)]"
+        class="relative h-full w-full overflow-hidden rounded-2xl bg-[var(--bg-alt)] shadow-[0_20px_40px_-10px_color-mix(in_oklch,var(--color-ink)_15%,transparent)]"
       >
         @if ($media)
           {{ $media->img()->attributes([
@@ -47,15 +54,17 @@
         <h2 class="section-title-lg">{!! $data['name'] !!}</h2>
       @endif
       @if (!empty($data['bio']))
-        <div class="prose-block mt-6 text-[var(--fg-muted)]">
+        <div
+          class="prose-block mt-8 text-lg leading-[1.85] text-[var(--fg-muted)]"
+        >
           {!! $data['bio'] !!}
         </div>
       @endif
       @if (!empty($data['quote']))
         <blockquote
-          class="mt-8 border-l-2 border-[var(--accent)] pl-6 font-display text-xl italic text-[var(--fg)]"
+          class="mt-10 border-l-2 border-[var(--accent)] pl-8 font-display text-2xl italic leading-snug text-[var(--fg)]"
         >
-          <p>{{ $data['quote'] }}</p>
+          <p>»{{ $data['quote'] }}«</p>
         </blockquote>
       @endif
     </div>

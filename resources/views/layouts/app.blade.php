@@ -22,19 +22,28 @@
     aria-hidden="true"
   ></div>
 
-  {{-- Header --}}
+  {{-- Header — transparent over hero, frosted on scroll/off-hero --}}
   <header
     x-data="siteHeader"
     :class="{
-      'bg-[var(--bg)]/90 backdrop-blur-md shadow-sm': scrolled,
-      'bg-transparent': !scrolled && onHero,
+      'text-[var(--color-parchment)]': onHero && !scrolled,
+      'text-[var(--fg)]': !(onHero && !scrolled),
     }"
-    class="fixed inset-x-0 top-0 z-[999] transition-colors duration-300"
+    class="fixed inset-x-0 top-0 z-[999] transition-colors duration-500"
   >
-    <div class="container-page flex items-center justify-between gap-4 py-4">
+    <div
+      :class="scrolled ? 'opacity-100' : 'opacity-0'"
+      class="pointer-events-none absolute inset-0 -z-10 border-b border-[color-mix(in_oklch,var(--border)_45%,transparent)] bg-[color-mix(in_oklch,var(--bg)_55%,transparent)] shadow-[0_10px_24px_-10px_color-mix(in_oklch,var(--color-ink)_8%,transparent)] backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-300"
+      aria-hidden="true"
+    ></div>
+
+    <div
+      :class="scrolled ? 'py-3' : 'py-5'"
+      class="container-page flex items-center justify-between gap-4 transition-[padding] duration-300"
+    >
       <a
         href="{{ route('home') }}"
-        class="flex items-center gap-3 font-display text-xl font-semibold text-[var(--fg)]"
+        class="relative z-[1001] flex items-center gap-3 font-display text-xl tracking-[-0.02em] transition-opacity hover:opacity-90"
         aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite"
       >
         {!! $logoSvg !!}
@@ -43,7 +52,7 @@
 
       <nav
         :class="navOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'"
-        class="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col items-center justify-center gap-8 bg-[var(--bg)] p-8 transition-transform duration-300 ease-[var(--ease-precise)] md:static md:flex md:w-auto md:max-w-none md:flex-row md:gap-6 md:bg-transparent md:p-0"
+        class="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col items-center justify-center gap-8 bg-[var(--bg)] p-8 text-[var(--fg)] transition-transform duration-300 ease-[var(--ease-precise)] md:static md:flex md:w-auto md:max-w-none md:flex-row md:items-center md:gap-8 md:bg-transparent md:p-0 md:text-inherit"
       >
         @foreach ([
             ['#ueber', 'Über'],
@@ -52,7 +61,7 @@
         ] as $link)
           <a
             href="{{ route('home') . $link[0] }}"
-            class="text-base font-medium text-[var(--fg)] transition-colors hover:text-[var(--accent)]"
+            class="text-[0.78rem] font-semibold uppercase tracking-[0.18em] transition-colors hover:text-[var(--accent)]"
             data-umami-event="nav-click"
             data-umami-event-target="{{ ltrim($link[0], '#') }}"
             @click="onLinkClick"
@@ -61,7 +70,7 @@
         @endforeach
         <a
           href="{{ route('breathing.show') }}"
-          class="text-base font-medium text-[var(--fg)] transition-colors hover:text-[var(--accent)]"
+          class="text-[0.78rem] font-semibold uppercase tracking-[0.18em] transition-colors hover:text-[var(--accent)]"
           data-umami-event="nav-click"
           data-umami-event-target="atemuebung"
           @click="onLinkClick"
@@ -70,7 +79,7 @@
         @if ($hasNextEvent)
           <a
             href="{{ $nextEventUrl }}"
-            class="btn btn-primary btn-large"
+            class="btn btn-primary"
             data-umami-event="cta-click"
             data-umami-event-location="header"
             data-umami-event-action="go-to-event"
@@ -82,7 +91,7 @@
         <button
           type="button"
           @click="toggleNav"
-          class="absolute top-4 right-4 grid h-10 w-10 place-items-center rounded-full border border-[var(--border)] md:hidden"
+          class="absolute top-5 right-5 grid h-10 w-10 place-items-center rounded-full border border-[var(--border)] md:hidden"
           aria-label="Menü schließen"
           x-show="navOpen"
         >
@@ -97,7 +106,7 @@
         type="button"
         @click="toggleNav"
         x-show="!navOpen"
-        class="grid h-10 w-10 place-items-center rounded-full border border-[var(--border)] md:hidden"
+        class="relative z-[1001] grid h-10 w-10 place-items-center rounded-full border border-current/30 md:hidden"
         aria-label="Menü öffnen"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5" aria-hidden="true">
@@ -109,7 +118,7 @@
     </div>
   </header>
 
-  <main id="main" class="pt-20">
+  <main id="main" class="has-[[data-hero]:first-child]:pt-0 pt-20">
     @yield ('content')
   </main>
 

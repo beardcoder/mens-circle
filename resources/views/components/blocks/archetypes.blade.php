@@ -18,12 +18,12 @@
 
 @if (!empty($items) && is_array($items))
   <section
-    class="section-y-lg"
+    class="section-y-lg bg-[var(--bg-alt)]"
     id="archetypen"
     aria-labelledby="archetypes-title"
   >
     <div class="container-page">
-      <div x-reveal class="mb-12 max-w-3xl">
+      <div x-reveal class="mb-16 max-w-3xl">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow">{{ $data['eyebrow'] }}</p>
         @endif
@@ -33,7 +33,7 @@
           </h2>
         @endif
         @if (!empty($data['intro']))
-          <p class="mt-4 text-lg text-[var(--fg-muted)]">{{ $data['intro'] }}</p>
+          <p class="mt-6 text-lg leading-[1.85] text-[var(--fg-muted)]">{{ $data['intro'] }}</p>
         @endif
       </div>
 
@@ -45,24 +45,28 @@
           @endphp
           <article
             x-reveal
-            class="group relative isolate overflow-hidden rounded-2xl bg-[var(--color-earth-deep)] p-8 text-[var(--color-parchment)] transition-transform hover:-translate-y-1"
+            class="group relative isolate flex min-h-[420px] flex-col justify-end overflow-hidden rounded-3xl bg-gradient-to-br from-[var(--color-earth-deep)] via-[var(--color-earth-dark)] to-[var(--color-earth-deep)] p-10 text-[var(--color-parchment)] shadow-[0_8px_32px_color-mix(in_oklch,var(--color-ink)_18%,transparent)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-10px_color-mix(in_oklch,var(--color-ink)_25%,transparent)]"
           >
-            <div
-              class="pointer-events-none absolute -right-6 -bottom-6 h-48 w-48 text-[var(--color-terracotta)]/15 transition-transform duration-500 group-hover:scale-110"
+            <span
+              class="pointer-events-none absolute -right-12 -bottom-12 block h-72 w-72 text-[var(--color-terracotta)]/15 transition-all duration-700 group-hover:scale-110 group-hover:text-[var(--color-terracotta)]/25"
               aria-hidden="true"
             >
               @if (file_exists($svgPath))
                 {!! file_get_contents($svgPath) !!}
               @endif
-            </div>
+            </span>
+            <span
+              class="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(circle_at_30%_30%,color-mix(in_oklch,var(--accent)_20%,transparent)_0%,transparent_60%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+              aria-hidden="true"
+            ></span>
             <div class="relative">
               @if (!empty($item['title']))
-                <h3 class="font-display text-2xl font-medium">
+                <h3 class="font-display text-3xl font-medium leading-tight">
                   {{ $item['title'] }}
                 </h3>
               @endif
               @if (!empty($item['description']))
-                <p class="mt-3 text-sm text-[var(--color-sand)] leading-relaxed">{{ $item['description'] }}</p>
+                <p class="mt-4 text-sm leading-[1.85] text-[var(--color-sand)]">{{ $item['description'] }}</p>
               @endif
             </div>
           </article>

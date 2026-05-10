@@ -25,27 +25,39 @@
 @section ('content')
   <section
     data-hero
-    class="relative isolate overflow-hidden bg-[var(--bg-deep)] text-[var(--color-parchment)]"
+    class="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-gradient-to-b from-[var(--color-earth-deep)] to-[var(--color-earth-dark)] pb-24 text-[var(--color-parchment)]"
+    style="min-block-size: min(880px, 100svh)"
   >
     <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
       <div
-        class="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-[var(--color-terracotta)]/30 blur-3xl animate-breathe"
-      ></div>
-      <div
-        class="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[var(--color-earth-warm)]/20 blur-3xl animate-breathe [animation-delay:3s]"
+        class="absolute inset-0 [background:radial-gradient(ellipse_80%_60%_at_70%_30%,color-mix(in_oklch,var(--accent)_22%,transparent)_0%,transparent_50%),radial-gradient(ellipse_60%_50%_at_20%_80%,color-mix(in_oklch,var(--accent)_12%,transparent)_0%,transparent_40%)]"
       ></div>
     </div>
-    <div class="container-page flex min-h-[70vh] flex-col justify-center py-24">
+    <div class="hero-decor" aria-hidden="true">
+      <span
+        class="-top-[15vw] -right-[25vw] h-[70vw] w-[70vw] animate-breathe [animation-duration:18s]"
+      ></span>
+      <span
+        class="-top-[5vw] -right-[15vw] h-[50vw] w-[50vw] animate-breathe [animation-delay:-5s] [animation-duration:22s]"
+      ></span>
+      <span
+        class="-bottom-[45vw] -left-[45vw] h-[90vw] w-[90vw] animate-breathe [animation-delay:-3s] [animation-duration:30s]"
+      ></span>
+    </div>
+
+    <div class="container-page relative z-10 w-full">
       <p x-reveal class="eyebrow text-[var(--color-terracotta-light)]">Männerkreis Niederbayern/ Straubing</p>
-      <h1
-        x-reveal
-        class="font-display text-4xl font-semibold leading-[1.05] md:text-6xl"
-      >
-        Aktuell ist kein<br /><span class="text-italic">Termin</span> geplant
+      <h1 x-reveal class="hero-title">
+        <span class="hero-title-line">Aktuell ist kein</span>
+        <span class="hero-title-line"
+          ><span class="text-italic">Termin</span> geplant</span
+        >
       </h1>
-      <p x-reveal class="mt-6 max-w-xl text-lg text-[var(--color-sand)] leading-relaxed">Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.</p>
-      <div x-reveal class="mt-8">
-        <a href="#newsletter" class="btn btn-primary btn-large"
+      <div
+        class="mt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+      >
+        <p x-reveal class="max-w-[480px] text-base leading-[1.9] text-[var(--color-sand)] md:text-lg">Wir planen gerade unser nächstes Treffen. Melde dich für unseren Newsletter an oder tritt unserer WhatsApp-Community bei, um als Erster zu erfahren, wann es weitergeht.</p>
+        <a x-reveal href="#newsletter" class="btn btn-primary btn-large"
           >Zum Newsletter</a
         >
       </div>
