@@ -73,7 +73,7 @@
     color-mix(in oklch, var(--color-sand) 25%, transparent) 0 12px,
     transparent 12px 24px
   );
-  animation: event-map-skeleton 2s ease-in-out infinite;
+  animation: event-map-skeleton 2s var(--ease-ambient) infinite;
 }
 
 .event-map__canvas:has(.leaflet-container)::before {
