@@ -15,7 +15,6 @@ h6 {
   font-family: var(--font-display);
   font-weight: 400;
   line-height: 1;
-  color: var(--text-primary);
   letter-spacing: -0.05em;
 }
 
