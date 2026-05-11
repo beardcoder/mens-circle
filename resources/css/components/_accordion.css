@@ -191,7 +191,7 @@
     color: var(--_accent);
     text-decoration: underline;
     text-underline-offset: 3px;
-    transition: color var(--transition-fast);
+    transition: color var(--motion-quick);
 
     &:hover {
       color: var(--color-earth-warm);

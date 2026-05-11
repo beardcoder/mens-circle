@@ -24,8 +24,8 @@
   padding-block: var(--space-md);
   color: var(--text-primary);
   transition:
-    padding-block var(--transition-medium),
-    color var(--transition-medium);
+    padding-block var(--motion-standard),
+    color var(--motion-standard);
 }
 
 /* Scrolled-state overlay (rendered via ::before so we can fade it
@@ -48,7 +48,7 @@
     0 10px 24px -10px color-mix(in oklch, var(--color-ink) 8%, transparent);
   opacity: 0;
   backdrop-filter: blur(24px) saturate(150%);
-  transition: opacity var(--transition-medium);
+  transition: opacity var(--motion-standard);
 }
 
 .header__inner {
@@ -159,8 +159,8 @@
   background: currentcolor;
   transform-origin: center;
   transition:
-    transform var(--transition-medium),
-    opacity var(--transition-medium);
+    transform var(--motion-standard),
+    opacity var(--motion-standard);
 }
 
 /* ============================================
@@ -268,9 +268,9 @@ body:not(:has(.hero)) .header::before {
     backdrop-filter: blur(0);
     transform: translateY(-12px) scale(0.98);
     transition:
-      opacity var(--transition-slow),
-      transform var(--transition-slow),
-      backdrop-filter var(--transition-slow);
+      opacity var(--motion-slow),
+      transform var(--motion-slow),
+      backdrop-filter var(--motion-slow);
   }
 
   /* Gradient background */
@@ -288,8 +288,8 @@ body:not(:has(.hero)) .header::before {
     opacity: 0;
     transform: scale(0.95);
     transition:
-      opacity var(--transition-medium),
-      transform var(--transition-slow);
+      opacity var(--motion-standard),
+      transform var(--motion-slow);
   }
 
   /* Decorative circle */
@@ -306,8 +306,8 @@ body:not(:has(.hero)) .header::before {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.6);
     transition:
-      transform var(--transition-slow),
-      opacity var(--transition-medium);
+      transform var(--motion-slow),
+      opacity var(--motion-standard);
   }
 
   .nav.open {
@@ -338,9 +338,9 @@ body:not(:has(.hero)) .header::before {
     filter: blur(2px);
     transform: translateY(24px) scale(0.98);
     transition:
-      opacity var(--transition-slow),
-      transform var(--transition-slow),
-      filter var(--transition-medium);
+      opacity var(--motion-slow),
+      transform var(--motion-slow),
+      filter var(--motion-standard);
     will-change: opacity, transform, filter;
   }
 
@@ -362,8 +362,8 @@ body:not(:has(.hero)) .header::before {
     opacity: 0;
     transform: translateY(32px) scale(0.96);
     transition:
-      opacity var(--transition-slow),
-      transform var(--transition-slow);
+      opacity var(--motion-slow),
+      transform var(--motion-slow);
   }
 
   /* Staggered animation for links */

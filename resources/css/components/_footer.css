@@ -85,9 +85,9 @@
   color: var(--color-sand);
   opacity: 0.85;
   transition:
-    color var(--transition-fast),
-    opacity var(--transition-fast),
-    transform var(--transition-fast);
+    color var(--motion-quick),
+    opacity var(--motion-quick),
+    transform var(--motion-quick);
 }
 
 .social-link:hover {
@@ -139,9 +139,9 @@
   color: var(--color-sand);
   opacity: 0.85;
   transition:
-    color var(--transition-fast),
-    opacity var(--transition-fast),
-    transform var(--transition-fast);
+    color var(--motion-quick),
+    opacity var(--motion-quick),
+    transform var(--motion-quick);
 }
 
 .footer__legal a {
@@ -149,8 +149,8 @@
   color: var(--color-sand);
   opacity: 0.9;
   transition:
-    color var(--transition-fast),
-    opacity var(--transition-fast);
+    color var(--motion-quick),
+    opacity var(--motion-quick);
 }
 
 .footer__links a:hover {

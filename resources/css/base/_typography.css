@@ -179,7 +179,7 @@ p:last-child {
   color: var(--accent-primary);
   text-decoration: underline;
   text-underline-offset: 3px;
-  transition: color var(--transition-fast);
+  transition: color var(--motion-quick);
 }
 
 .link:hover {

@@ -68,7 +68,7 @@
   background: var(--bg-section-alt);
   border-radius: var(--radius-full);
   transform: translateX(-50%);
-  transition: inset-block-start var(--transition-fast);
+  transition: inset-block-start var(--motion-quick);
 }
 
 .skip-link:focus {

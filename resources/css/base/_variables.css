@@ -197,12 +197,6 @@
     0.96
   ); /* Ambient motion: breathing circles only */
 
-  /* Legacy aliases — internal use, prefer canonical names above */
-  --ease-out: var(--ease-settle);
-  --ease-in-out: var(--ease-precise);
-  --ease-spring: var(--ease-settle); /* Bounce removed — aliased to settle */
-  --ease-organic: var(--ease-ambient);
-  --ease-smooth: var(--ease-settle);
 
   /* Duration scale */
   --duration-fast: 150ms;
@@ -214,11 +208,7 @@
   --motion-quick: var(--duration-fast) var(--ease-precise);
   --motion-standard: var(--duration-normal) var(--ease-precise);
   --motion-enter: var(--duration-slow) var(--ease-settle);
-
-  /* Legacy shorthands — mapped to composites */
-  --transition-fast: var(--motion-quick);
-  --transition-medium: var(--motion-standard);
-  --transition-slow: var(--duration-slower) var(--ease-settle);
+  --motion-slow: var(--duration-slower) var(--ease-settle);
 
   /* ============================================
      Layout

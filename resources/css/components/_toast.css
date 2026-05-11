@@ -19,9 +19,9 @@
   backdrop-filter: blur(12px);
   transform: translateY(-12px) scale(0.98);
   transition:
-    opacity var(--transition-fast),
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+    opacity var(--motion-quick),
+    transform var(--motion-quick),
+    box-shadow var(--motion-quick);
 }
 
 .toast--visible {
@@ -86,7 +86,7 @@
 }
 
 .toast--success .toast__icon {
-  color: white;
+  color: var(--color-bone);
   background: var(--color-success);
 }
 
@@ -102,7 +102,7 @@
 }
 
 .toast--error .toast__icon {
-  color: white;
+  color: var(--color-bone);
   background: var(--color-error);
 }
 
@@ -118,7 +118,7 @@
 }
 
 .toast--info .toast__icon {
-  color: white;
+  color: var(--color-bone);
   background: var(--color-terracotta);
 }
 
@@ -139,7 +139,7 @@
 }
 
 .toast--warning .toast__title {
-  color: oklch(60% 0.14 75deg);
+  color: color-mix(in oklch, var(--color-warning) 85%, var(--color-ink));
 }
 
 /* Dark mode adjustments */
@@ -166,7 +166,7 @@
   }
 
   .toast--error .toast__title {
-    color: oklch(65% 0.15 25deg);
+    color: color-mix(in oklch, var(--color-error) 80%, var(--color-bone));
   }
 
   .toast--info {

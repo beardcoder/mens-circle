@@ -124,10 +124,10 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   transition:
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    background-color var(--transition-fast),
-    transform var(--transition-fast);
+    border-color var(--motion-quick),
+    box-shadow var(--motion-quick),
+    background-color var(--motion-quick),
+    transform var(--motion-quick);
 }
 
 .form__input::placeholder,
@@ -216,7 +216,7 @@
 .form__checkbox-text .link {
   color: var(--accent-primary);
   text-decoration: underline;
-  transition: opacity var(--transition-fast);
+  transition: opacity var(--motion-quick);
 }
 
 .form__checkbox-text .link:hover {
