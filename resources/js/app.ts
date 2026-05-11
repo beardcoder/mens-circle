@@ -18,8 +18,8 @@ import {
 import { calendarIntegration } from '@/components/calendar';
 import { eventMap } from '@/components/event-map';
 import { breathingApp } from '@/components/breathing';
+import { initNativePageTransitions } from '@/utils/native-page-transitions';
 import { initUmamiKit } from '@/utils/umami-kit';
-import { initSwup } from '@/components/swup-init';
 
 // Install plugins
 Alpine.plugin(collapse);
@@ -38,8 +38,8 @@ Alpine.data('breathingApp', breathingApp);
 // Start Alpine
 Alpine.start();
 
-// AJAX page transitions (Swup 4) — replaces #main on link clicks.
-initSwup();
+// Native cross-document page transitions.
+initNativePageTransitions();
 
 // Analytics tracking
 if (document.readyState === 'loading') {
