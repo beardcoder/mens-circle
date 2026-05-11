@@ -44,6 +44,6 @@
     "dependencies": {
         "@beardcoder/stitch-js": "^1.0.4",
         "leaflet": "^1.9.4",
-        "swup": "^4.8.3"
+        "swup": "^4.9.0"
     }
 }
