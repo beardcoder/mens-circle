@@ -42,12 +42,8 @@ Alpine.start();
 // AJAX page transitions (Swup 4) — replaces #main on link clicks.
 const swup = initSwup();
 
-const initializeScrollAnimations = (): void => {
-  initScrollAnimations();
-};
-
 swup.hooks.on('page:view', () => {
-  initializeScrollAnimations();
+  initScrollAnimations();
 });
 
 // Analytics tracking
@@ -56,7 +52,7 @@ if (document.readyState === 'loading') {
     'DOMContentLoaded',
     () => {
       initUmamiKit();
-      initializeScrollAnimations();
+      initScrollAnimations();
     },
     {
       once: true,
@@ -64,7 +60,7 @@ if (document.readyState === 'loading') {
   );
 } else {
   initUmamiKit();
-  initializeScrollAnimations();
+  initScrollAnimations();
 }
 
 // LCP monitoring in development

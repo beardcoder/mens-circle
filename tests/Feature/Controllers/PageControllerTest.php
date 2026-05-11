@@ -71,7 +71,7 @@ test('home page renders micro animation hooks for prominent sections', function 
 
     expect($content)->not->toBeFalse();
 
-    $crawler = new Crawler($content ?: '');
+    $crawler = new Crawler($content);
 
     expect($crawler->filter('.hero__label.animate-on-scroll')->count())->toBe(1)
         ->and($crawler->filter('.hero__title.animate-on-scroll')->count())->toBe(1)

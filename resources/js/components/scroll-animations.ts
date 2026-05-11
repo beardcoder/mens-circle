@@ -18,13 +18,13 @@ function normalizeDelayValue(rawDelay: string | null): string | null {
     return null;
   }
 
-  if (/^-?\d+(\.\d+)?m?s$/.test(trimmedDelay)) {
+  if (/^\d+(\.\d+)?m?s$/.test(trimmedDelay)) {
     return trimmedDelay;
   }
 
   const numericDelay = Number(trimmedDelay);
 
-  if (Number.isFinite(numericDelay)) {
+  if (Number.isFinite(numericDelay) && numericDelay >= 0) {
     return `${numericDelay}ms`;
   }
 
