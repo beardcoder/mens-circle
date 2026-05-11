@@ -17,12 +17,12 @@
     </div>
 
     @if (!empty($data['items']) && is_array($data['items']))
-      <div class="intro__values">
+      <div
+        class="intro__values animate-on-scroll"
+        style="--animate-delay: 120ms"
+      >
         @foreach ($data['items'] as $item)
-          <div
-            class="value-item animate-on-scroll"
-            data-delay="{{ 120 + ($loop->index * 80) }}"
-          >
+          <div class="value-item">
             @if (!empty($item['number']))
               <span class="value-item__number">{{ $item['number'] }}</span>
             @endif
