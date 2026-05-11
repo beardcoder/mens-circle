@@ -6,6 +6,10 @@ let scrollAnimationObserver: IntersectionObserver | null = null;
 
 const revealThreshold = 0.12;
 const revealRootMargin = '0px 0px -10% 0px';
+const reducedMotionQuery =
+  'matchMedia' in globalThis
+    ? globalThis.matchMedia('(prefers-reduced-motion: reduce)')
+    : null;
 
 /**
  * Normalize a raw delay value from markup into a CSS time string.
@@ -79,9 +83,7 @@ export function initScrollAnimations(root: ParentNode = document): void {
 
   elements.forEach(applyAnimationDelay);
 
-  const prefersReducedMotion =
-    'matchMedia' in globalThis &&
-    globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = reducedMotionQuery?.matches ?? false;
 
   if (!('IntersectionObserver' in globalThis) || prefersReducedMotion) {
     elements.forEach(revealElement);
