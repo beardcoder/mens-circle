@@ -38,14 +38,19 @@
       @endif
 
       @if (!empty($data['title']))
-        <h1 class="hero__title animate-on-scroll" data-delay="120">
+        <h1
+          class="hero__title animate-on-scroll"
+          style="--animate-delay: 120ms"
+        >
           {!! $data['title'] !!}
         </h1>
       @endif
 
       <div class="hero__bottom">
         @if (!empty($data['description']))
-          <p class="hero__description animate-on-scroll" data-delay="220">{{ $data['description'] }}</p>
+          <p class="hero__description animate-on-scroll" style="
+              --animate-delay: 220ms;
+            ">{{ $data['description'] }}</p>
         @endif
 
         @if (!empty($data['button_text']) && !empty($data['button_link']))
@@ -56,11 +61,13 @@
                         $resolvedButtonLink = $isEventLink ? $nextEventUrl : $data['button_link'];
                     @endphp
           @if ($shouldShowButton)
-            <div class="hero__cta">
+            <div
+              class="hero__cta animate-on-scroll"
+              style="--animate-delay: 320ms"
+            >
               <a
                 href="{{ $resolvedButtonLink }}"
-                class="btn btn--primary btn--large hover-lift animate-on-scroll"
-                data-delay="320"
+                class="btn btn--primary btn--large hover-lift"
               >
                 {{ $data['button_text'] }}
               </a>

@@ -1,27 +1,32 @@
 /**
  * Micro animations
- * IntersectionObserver + CSS variable driven reveal and hover states.
+ * CSS-only scroll-driven reveals using native view timelines.
  */
 
 .animate-on-scroll {
   /* Keep the default reveal offset subtle for text-heavy sections. */
   --animate-y: 20px;
   --animate-scale: 1;
-  --animate-duration: var(--duration-slow);
-  --animate-easing: var(--ease-settle);
   --animate-delay: 0ms;
-
-  opacity: 0;
-  transform: translateY(var(--animate-y)) scale(var(--animate-scale));
-  transition:
-    opacity var(--animate-duration) var(--animate-easing),
-    transform var(--animate-duration) var(--animate-easing);
-  transition-delay: var(--animate-delay);
+  --animate-range: entry 0% cover 30%;
 }
 
 .animate-on-scroll.is-in-view {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: none;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(var(--animate-y)) scale(var(--animate-scale));
+      animation: micro-reveal 1ms linear both;
+      animation-delay: var(--animate-delay);
+      animation-timeline: view();
+      animation-range: var(--animate-range);
+    }
+  }
 }
 
 .hover-lift {
@@ -50,8 +55,7 @@
   .animate-on-scroll.is-in-view {
     opacity: 1;
     transform: none;
-    transition-delay: 0ms;
-    transition-duration: 0.01ms;
+    animation: none;
   }
 
   .hover-lift {
@@ -64,5 +68,12 @@
   .hover-lift:hover,
   .hover-lift:active {
     translate: 0;
+  }
+}
+
+@keyframes micro-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

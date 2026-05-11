@@ -40,13 +40,13 @@
         @endif
       </div>
 
-      <div class="archetypes__grid">
+      <div
+        class="archetypes__grid animate-on-scroll"
+        style="--animate-delay: 120ms"
+      >
         @foreach ($items as $item)
           @php $icon = $detectIcon($item); @endphp
-          <article
-            class="archetype-card archetype-card--{{ $icon }} animate-on-scroll"
-            data-delay="{{ 120 + ($loop->index * 90) }}"
-          >
+          <article class="archetype-card archetype-card--{{ $icon }}">
             <div class="archetype-card__background-icon" aria-hidden="true">
               @php $svgPath = public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg'); @endphp
               @if (file_exists($svgPath))
