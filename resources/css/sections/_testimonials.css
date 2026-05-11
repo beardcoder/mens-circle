@@ -59,18 +59,6 @@
     transform var(--motion-standard);
 }
 
-.testimonial-item:hover {
-  z-index: 1;
-  background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
-  box-shadow: 0 8px 28px
-    color-mix(in oklch, var(--accent-primary) 10%, transparent);
-  transform: translateY(-0.3rem) scale(1.01);
-}
-
-.testimonial-item:hover .testimonial-item__quote::before {
-  color: var(--accent-primary);
-  transform: scale(1.15) translateY(-0.05em);
-}
 
 .testimonial-item__quote {
   position: relative;

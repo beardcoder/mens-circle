@@ -51,7 +51,6 @@
     transform: scaleY(1);
   }
 
-  &:has(.accordion-item__trigger:hover),
   &.open {
     background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
   }
@@ -79,14 +78,6 @@
   border: none;
   transition: color var(--motion-quick);
 
-  &:hover {
-    color: var(--_accent);
-
-    .accordion-item__icon {
-      background: color-mix(in oklch, var(--_accent) 14%, transparent);
-      border-color: var(--_accent);
-    }
-  }
 
   &:focus-visible {
     outline: 2px solid var(--_accent);
@@ -192,8 +183,5 @@
     text-underline-offset: 3px;
     transition: color var(--motion-quick);
 
-    &:hover {
-      color: var(--color-earth-warm);
-    }
   }
 }

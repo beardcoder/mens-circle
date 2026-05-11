@@ -40,23 +40,6 @@
     transform var(--motion-standard);
 }
 
-.archetype-card:hover {
-  background: color-mix(in oklch, var(--accent-primary) 5%, transparent);
-  border-color: color-mix(
-    in oklch,
-    var(--accent-primary) 28%,
-    var(--border-light)
-  );
-  box-shadow: 0 8px 32px
-    color-mix(in oklch, var(--accent-primary) 10%, transparent);
-  transform: translate3d(0, -0.5rem, 0) scale(1.01);
-}
-
-.archetype-card:hover::before {
-  opacity: 1;
-  transform: scaleY(1);
-}
-
 .archetype-card__content {
   position: relative;
   z-index: 2;
@@ -72,27 +55,12 @@
   z-index: 1;
   pointer-events: none;
   opacity: 0.16;
-  transition:
-    opacity var(--motion-standard),
-    transform var(--motion-standard);
 }
 
 .archetype-card__background-icon svg {
   inline-size: clamp(16rem, 32vw, 22rem);
   block-size: clamp(16rem, 32vw, 22rem);
   transform: translateY(-50%) rotate(-8deg);
-  transition: transform var(--duration-slow) var(--ease-settle);
-}
-
-.archetype-card:hover .archetype-card__background-icon {
-  opacity: 0.28;
-}
-
-.archetype-card:hover .archetype-card__background-icon svg {
-  filter: drop-shadow(
-    0 0 16px color-mix(in oklch, var(--accent-primary) 35%, transparent)
-  );
-  transform: translateY(-50%) rotate(-3deg) scale(1.1);
 }
 
 .archetype-card__title {
