@@ -49,9 +49,7 @@
 
       <div class="hero__bottom">
         @if (!empty($data['description']))
-          <p class="hero__description" data-animate="scroll" style="
-              --animate-delay: 220ms;
-            ">{{ $data['description'] }}</p>
+          <p class="hero__description" data-animate="scroll" style="--animate-delay: 220ms">{{ $data['description'] }}</p>
         @endif
 
         @if (!empty($data['button_text']) && !empty($data['button_link']))
