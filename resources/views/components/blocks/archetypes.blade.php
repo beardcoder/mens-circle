@@ -24,7 +24,7 @@
     aria-labelledby="archetypes-title"
   >
     <div class="container">
-      <div class="section-header">
+      <div class="section-header animate-on-scroll">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow">{{ $data['eyebrow'] }}</p>
         @endif
@@ -43,7 +43,10 @@
       <div class="archetypes__grid">
         @foreach ($items as $item)
           @php $icon = $detectIcon($item); @endphp
-          <article class="archetype-card archetype-card--{{ $icon }}">
+          <article
+            class="archetype-card archetype-card--{{ $icon }} animate-on-scroll"
+            data-delay="{{ 120 + ($loop->index * 90) }}"
+          >
             <div class="archetype-card__background-icon" aria-hidden="true">
               @php $svgPath = public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg'); @endphp
               @if (file_exists($svgPath))

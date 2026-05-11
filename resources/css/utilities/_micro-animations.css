@@ -1,0 +1,69 @@
+/**
+ * Micro animations
+ * IntersectionObserver + CSS variable driven reveal and hover states.
+ */
+
+.animate-on-scroll {
+  --animate-y: 20px;
+  --animate-scale: 1;
+  --animate-duration: var(--duration-slow);
+  --animate-easing: var(--ease-settle);
+  --animate-delay: 0ms;
+
+  opacity: 0;
+  transform: translateY(var(--animate-y)) scale(var(--animate-scale));
+  transition:
+    opacity var(--animate-duration) var(--animate-easing),
+    transform var(--animate-duration) var(--animate-easing);
+  transition-delay: var(--animate-delay);
+  will-change: opacity, transform;
+}
+
+.animate-on-scroll.is-in-view {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  will-change: auto;
+}
+
+.hover-lift {
+  --hover-lift-y: -4px;
+  --hover-lift-shadow: var(--shadow-lg);
+
+  transition:
+    translate var(--motion-standard),
+    box-shadow var(--motion-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    box-shadow: var(--hover-lift-shadow);
+    translate: 0 var(--hover-lift-y);
+  }
+
+  .hover-lift:active {
+    translate: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll,
+  .animate-on-scroll.is-in-view {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0ms;
+    transition-duration: 0.01ms;
+    will-change: auto;
+  }
+
+  .hover-lift {
+    transition:
+      box-shadow var(--motion-standard),
+      background-color var(--motion-standard),
+      color var(--motion-standard);
+  }
+
+  .hover-lift:hover,
+  .hover-lift:active {
+    translate: 0;
+  }
+}

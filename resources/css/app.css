@@ -65,6 +65,7 @@
 @import url('sections/_surfaces.css') layer(sections);
 @import url('sections/_ornaments.css') layer(sections);
 @import url('utilities/_animations.css') layer(utilities);
+@import url('utilities/_micro-animations.css') layer(utilities);
 @import url('utilities/_scroll-animations.css') layer(utilities);
 @import url('utilities/_parallax.css') layer(utilities);
 @import url('utilities/_visual.css') layer(utilities);
