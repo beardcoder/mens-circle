@@ -126,6 +126,10 @@
   --text-section-body: 1.0625rem;
   --text-section-body-lg: 1.125rem;
 
+  /* Compact sizes — fill the gap between --text-sm and --text-base */
+  --text-body-compact: 0.9375rem; /* author names, compact list items */
+  --text-caption: 0.8125rem;      /* captions, meta labels, roles */
+
   /* Line height scale */
   --leading-tight: 1.5;
   --leading-normal: 1.7;

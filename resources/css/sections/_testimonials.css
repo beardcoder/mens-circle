@@ -94,7 +94,7 @@
 .testimonial-item__quote {
   position: relative;
   flex-grow: 1;
-  padding-inline-start: 1.8rem;
+  padding-inline-start: var(--space-md);
   margin: 0;
   margin-block-end: var(--space-lg);
   font-style: italic;
@@ -126,14 +126,14 @@
 }
 
 .testimonial-item__name {
-  font-size: 0.9375rem;
+  font-size: var(--text-body-compact);
   font-style: normal;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .testimonial-item__role {
-  font-size: 0.8125rem;
+  font-size: var(--text-caption);
   color: var(--text-muted);
 }
 

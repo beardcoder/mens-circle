@@ -17,7 +17,7 @@
     gap: var(--space-xl);
     align-items: start;
 
-    @media (width < 900px) {
+    @media (width <= 900px) {
       grid-template-columns: 1fr;
       gap: var(--space-lg);
     }
@@ -29,12 +29,15 @@
    typography rhythm; FAQ adds the sticky behavior on top.
    ============================================ */
 .faq__header {
+  /* Sticky offset = fixed header height + generous breathing room */
+  --_sticky-top: 140px;
+
   position: sticky;
-  inset-block-start: 140px;
+  inset-block-start: var(--_sticky-top);
   margin-block-end: 0; /* sidebar layout owns spacing, not the header */
   text-align: start;
 
-  @media (width < 900px) {
+  @media (width <= 900px) {
     position: relative;
     inset-block-start: 0;
     margin-block-end: var(--rhythm-block);

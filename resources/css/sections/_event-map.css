@@ -39,8 +39,8 @@
     color-mix(in oklch, var(--color-parchment) 60%, transparent)
   );
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg, 18px);
-  box-shadow: 0 12px 40px -20px oklch(20% 0.04 68deg / 30%);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 40px -20px color-mix(in oklch, var(--color-ink) 30%, transparent);
   isolation: isolate;
 }
 
@@ -94,7 +94,7 @@
 .event-map__marker {
   background: none;
   border: 0;
-  filter: drop-shadow(0 4px 6px oklch(20% 0.04 68deg / 40%));
+  filter: drop-shadow(0 4px 6px color-mix(in oklch, var(--color-ink) 40%, transparent));
 }
 
 .event-map__marker svg {
@@ -109,21 +109,21 @@
   font-family: var(--font-body);
   color: var(--text-primary);
   background: var(--bg-elevated);
-  border-radius: var(--radius-md, 12px);
-  box-shadow: 0 8px 24px -10px oklch(20% 0.04 68deg / 40%);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px -10px color-mix(in oklch, var(--color-ink) 40%, transparent);
 }
 
 .event-map .leaflet-popup-content {
   margin: var(--space-sm) var(--space-md);
-  font-size: 0.95rem;
+  font-size: var(--text-body-compact);
   line-height: 1.5;
 }
 
 .event-map .leaflet-popup-content strong {
   display: inline-block;
-  margin-block-end: 0.25rem;
+  margin-block-end: var(--space-3xs);
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: var(--text-section-body);
   font-weight: 600;
 }
 
@@ -156,7 +156,7 @@
 
 .event-map__attribution {
   margin-block-start: var(--space-xs);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: var(--text-muted);
   text-align: center;
 }
@@ -191,6 +191,6 @@
 }
 
 .event-map .leaflet-control-attribution {
-  font-size: 0.7rem;
+  font-size: var(--text-caption);
   background: color-mix(in oklch, var(--color-bone) 80%, transparent);
 }
