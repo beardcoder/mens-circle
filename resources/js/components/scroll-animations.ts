@@ -7,6 +7,13 @@ let scrollAnimationObserver: IntersectionObserver | null = null;
 const revealThreshold = 0.12;
 const revealRootMargin = '0px 0px -10% 0px';
 
+/**
+ * Normalize a raw delay value from markup into a CSS time string.
+ *
+ * @param rawDelay The raw `data-delay` attribute value.
+ *
+ * @returns A normalized CSS time value or `null` when the input is invalid.
+ */
 function normalizeDelayValue(rawDelay: string | null): string | null {
   if (rawDelay === null) {
     return null;
@@ -31,6 +38,11 @@ function normalizeDelayValue(rawDelay: string | null): string | null {
   return null;
 }
 
+/**
+ * Read an element's `data-delay` attribute and expose it as `--animate-delay`.
+ *
+ * @param element The element that may define a stagger delay.
+ */
 function applyAnimationDelay(element: HTMLElement): void {
   const delay = normalizeDelayValue(element.dataset.delay ?? null);
 
@@ -43,6 +55,11 @@ function applyAnimationDelay(element: HTMLElement): void {
   element.style.removeProperty('--animate-delay');
 }
 
+/**
+ * Trigger the reveal transition for a single observed element.
+ *
+ * @param element The element entering the viewport.
+ */
 function revealElement(element: HTMLElement): void {
   element.classList.add('is-in-view');
 }
