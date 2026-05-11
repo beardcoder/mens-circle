@@ -2,7 +2,29 @@
 
 ARG FRANKENPHP_IMAGE=dunglas/frankenphp:1-php8.5-alpine
 
+# ----------------------------
+# 1) Frontend build (Vite) with Bun
+# ----------------------------
+FROM oven/bun:1-slim AS assets
+WORKDIR /app
 
+COPY package.json bun.lock* ./
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install --frozen-lockfile
+
+COPY resources/ resources/
+COPY vite.config.ts ./
+COPY public/ public/
+RUN bun run build
+
+
+# ----------------------------
+# 2) PHP dependencies (Composer)
+# ----------------------------
+# Using composer:2 (Alpine-based) which ships with git + unzip pre-installed,
+# so we don't need `apk add` here. --ignore-platform-reqs makes the resolver
+# independent of this image's PHP version; the autoload classmap is plain
+# PHP and runs fine under the production PHP 8.5 image.
 FROM composer:2 AS vendor
 WORKDIR /app
 
@@ -76,6 +98,9 @@ COPY --chmod=644 docker/php/app.ini /usr/local/etc/php/conf.d/zz-app.ini
 
 # App + vendor from vendor stage (already contains vendor/)
 COPY --from=vendor --chown=root:root /app /app
+
+# Built frontend assets
+COPY --from=assets --chown=root:root /app/public/build /app/public/build
 
 # Startup hooks (clear response cache, sitemap, etc.) + entrypoint
 COPY --chmod=755 docker/entrypoint.d/ /docker-entrypoint.d/
