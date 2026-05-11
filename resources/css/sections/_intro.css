@@ -46,7 +46,7 @@
 /* Uses .eyebrow from typography.css */
 
 .intro__title {
-  max-inline-size: 700px;
+  max-inline-size: var(--content-max-wide);
 }
 
 /* Uses .section-title .text-italic from typography.css */

@@ -8,7 +8,7 @@
    ============================================ */
 .legal-page {
   min-block-size: 100vh;
-  padding-block-start: 140px;
+  padding-block-start: var(--header-clearance);
   background: var(--bg-primary);
 }
 

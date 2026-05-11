@@ -136,7 +136,9 @@
   --leading-relaxed: 1.8;
 
   /* Content max widths */
-  --content-max-text: 540px;
+  --content-max-text: 540px;   /* paragraph / intro body copy */
+  --content-max-form: 480px;   /* form wrappers, compact descriptions */
+  --content-max-wide: 700px;   /* section titles, wide prose blocks */
 
   /* ============================================
      Spacing Scale - Fluid with clamp()
@@ -217,6 +219,9 @@
   --container-narrow: 900px;
   --container-wide: 1800px;
   --container-prose: 760px; /* centered text blocks (section headers, intros) */
+
+  /* Fixed header height + breathing room — used for sticky/offset calculations */
+  --header-clearance: 140px;
 
   /* Safe area insets for mobile */
   --safe-area-inset-top: env(safe-area-inset-top, 0px);

@@ -36,7 +36,7 @@
 }
 
 .testimonial-form__wrapper {
-  max-inline-size: 700px;
+  max-inline-size: var(--content-max-wide);
   margin-inline: auto;
 }
 

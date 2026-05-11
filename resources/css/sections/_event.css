@@ -159,7 +159,7 @@
 
 .event-register__form {
   inline-size: 100%;
-  max-inline-size: 480px;
+  max-inline-size: var(--content-max-form);
 }
 
 .event-register__submit {
@@ -175,7 +175,7 @@
 /* Past Event Info */
 .event-register__past-info {
   inline-size: 100%;
-  max-inline-size: 480px;
+  max-inline-size: var(--content-max-form);
   text-align: center;
 }
 
@@ -364,7 +364,7 @@
 /* Uses .eyebrow from typography.css */
 
 .event-about__title {
-  max-inline-size: 700px;
+  max-inline-size: var(--content-max-wide);
 }
 
 /* Uses .section-title--lg and .section-title .text-italic */

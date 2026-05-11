@@ -46,7 +46,7 @@
 .cta__content {
   position: relative;
   z-index: 1;
-  max-inline-size: 700px;
+  max-inline-size: var(--content-max-wide);
   margin-inline: auto;
 }
 

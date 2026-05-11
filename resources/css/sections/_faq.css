@@ -29,11 +29,8 @@
    typography rhythm; FAQ adds the sticky behavior on top.
    ============================================ */
 .faq__header {
-  /* Sticky offset = fixed header height + generous breathing room */
-  --_sticky-top: 140px;
-
   position: sticky;
-  inset-block-start: var(--_sticky-top);
+  inset-block-start: var(--header-clearance);
   margin-block-end: 0; /* sidebar layout owns spacing, not the header */
   text-align: start;
 
