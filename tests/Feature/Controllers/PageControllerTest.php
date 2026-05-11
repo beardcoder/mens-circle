@@ -72,15 +72,16 @@ test('home page renders micro animation hooks for prominent sections', function 
     expect($content)->not->toBeFalse();
 
     $crawler = new Crawler($content);
-    $introValues = $crawler->filter('.intro__values.animate-on-scroll')->first();
+    $introValues = $crawler->filter('.intro-section .intro__values.animate-on-scroll')->first();
+    $heroTitle = $crawler->filter('.hero__title.animate-on-scroll')->first();
 
     expect($crawler->filter('.hero__label.animate-on-scroll')->count())->toBe(1);
     expect($crawler->filter('.hero__title.animate-on-scroll')->count())->toBe(1);
     expect($crawler->filter('.hero__cta.animate-on-scroll')->count())->toBe(1);
     expect($crawler->filter('.btn.hover-lift')->count())->toBe(1);
     expect($crawler->filter('.intro__text.animate-on-scroll')->count())->toBe(1);
-    expect($crawler->filter('.intro__values.animate-on-scroll')->count())->toBeGreaterThan(0);
+    expect($crawler->filter('.intro-section .intro__values.animate-on-scroll')->count())->toBe(1);
     expect($introValues->attr('style'))->toContain('--animate-delay: 220ms');
     expect($crawler->filter('.section-header.animate-on-scroll')->count())->toBeGreaterThan(0);
-    expect($crawler->filter('[style*="--animate-delay: 120ms"]')->count())->toBeGreaterThan(0);
+    expect($heroTitle->attr('style'))->toContain('--animate-delay: 120ms');
 });
