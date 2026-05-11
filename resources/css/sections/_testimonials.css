@@ -42,13 +42,6 @@
 /* ============================================
    Testimonials Divider Grid
    ============================================ */
-.testimonials__grid {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-block: 1px solid var(--border-light);
-}
 
 /* ============================================
    Testimonial Item
@@ -77,18 +70,6 @@
 .testimonial-item:hover .testimonial-item__quote::before {
   color: var(--accent-primary);
   transform: scale(1.15) translateY(-0.05em);
-}
-
-.testimonial-item:nth-child(odd) {
-  border-inline-start: none;
-}
-
-.testimonial-item:nth-child(n + 3) {
-  border-block-start: 1px solid var(--border-light);
-}
-
-.testimonial-item:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
 }
 
 .testimonial-item__quote {
@@ -135,24 +116,4 @@
 .testimonial-item__role {
   font-size: var(--text-caption);
   color: var(--text-muted);
-}
-
-@media (width <= 900px) {
-  .testimonials__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .testimonial-item {
-    min-block-size: auto;
-    border-block-start: 1px solid var(--border-light);
-    border-inline-start: none;
-  }
-
-  .testimonial-item:first-child {
-    border-block-start: none;
-  }
-
-  .testimonial-item:last-child:nth-child(odd) {
-    grid-column: auto;
-  }
 }

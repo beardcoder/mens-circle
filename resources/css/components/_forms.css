@@ -1,17 +1,26 @@
 /**
- * Form Components
- * Modern form styling
+ * Form components
+ *
+ * One control system for event registration, newsletter, and testimonial forms.
  */
 
-/* ============================================
-   Form Group
-   ============================================ */
-.form-group {
+.form-group,
+.form-field {
   position: relative;
   margin-block-end: var(--space-sm);
   transition: transform var(--motion-quick);
 }
 
+.form-field--spaced {
+  margin-block-end: var(--space-lg);
+}
+
+.form-group:focus-within,
+.form-field:focus-within {
+  transform: translate3d(0, -0.125rem, 0);
+}
+
+.form-label,
 .form-group label {
   display: block;
   margin-block-end: var(--space-3xs);
@@ -23,55 +32,149 @@
   transition: color var(--motion-standard);
 }
 
-.form-group:focus-within {
-  transform: translate3d(0, -0.125rem, 0);
-}
-
+.form-field:focus-within .form-label,
 .form-group:focus-within label {
   color: var(--accent-primary);
 }
 
-/* ============================================
-   Text Inputs
-   ============================================ */
-.form-group input[type='text'],
-.form-group input[type='email'],
-.form-group input[type='tel'],
-.form-group input[type='password'],
-.form-group input[type='number'],
-.form-group input[type='url'],
-.form-group textarea {
-  --input-padding-block: var(--space-sm);
-  --input-padding-inline: 1.125rem;
+.form-label--plain {
+  margin-block-end: var(--space-xs);
+  font-size: var(--text-body-compact);
+  color: var(--text-primary);
+  text-transform: none;
+  letter-spacing: 0;
+}
 
+.form-control,
+.newsletter__input,
+.form-group
+  :where(
+    input[type='text'],
+    input[type='email'],
+    input[type='tel'],
+    input[type='password'],
+    input[type='number'],
+    input[type='url'],
+    textarea
+  ) {
   inline-size: 100%;
-  padding: var(--input-padding-block) var(--input-padding-inline);
+  padding-block: var(--control-padding-block);
+  padding-inline: var(--control-padding-inline);
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.5;
-  color: var(--text-on-dark);
-  background: var(--bg-input);
-  border: 1px solid var(--border-medium);
-  border-radius: var(--radius-md);
+  color: var(--control-color);
+  background: var(--control-bg);
+  border: var(--control-border-width) solid var(--control-border-color);
+  border-radius: var(--control-radius);
   transition:
     border-color var(--motion-standard),
     background-color var(--motion-standard),
-    box-shadow var(--motion-standard);
+    box-shadow var(--motion-standard),
+    transform var(--motion-quick);
 }
 
+.form-control--light {
+  --control-bg: var(--control-bg-light);
+  --control-bg-hover: var(--control-bg-light);
+  --control-color: var(--text-primary);
+  --control-border-width: 2px;
+
+  box-shadow: var(--shadow-sm);
+}
+
+textarea.form-control {
+  min-block-size: 9.375rem;
+  resize: vertical;
+}
+
+.form-control::placeholder,
+.newsletter__input::placeholder,
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--control-placeholder);
+}
+
+.form-control:hover:not(:focus, :disabled),
+.newsletter__input:hover:not(:focus, :disabled),
 .form-group input:hover:not(:focus, :disabled),
 .form-group textarea:hover:not(:focus, :disabled) {
-  background: var(--bg-input-focus);
+  background: var(--control-bg-hover);
   border-color: color-mix(in oklch, var(--accent-primary) 40%, transparent);
 }
 
-.form-group input::placeholder {
-  color: var(--color-sand);
+.form-control--light:hover:not(:focus, :disabled) {
+  border-color: var(--border-dark);
+}
+
+.form-control:focus-visible,
+.newsletter__input:focus-visible,
+.form-group input:focus-visible,
+.form-group textarea:focus-visible {
+  outline: none;
+  background: var(--control-bg-hover);
+  border-color: var(--accent-primary);
+  box-shadow:
+    var(--focus-ring),
+    0 6px 16px -4px color-mix(in oklch, var(--accent-primary) 20%, transparent),
+    0 16px 32px -8px color-mix(in oklch, var(--accent-primary) 12%, transparent);
+}
+
+.form-control--light:focus-visible {
+  background: var(--control-bg-light);
+  box-shadow: var(--focus-ring);
+  transform: translate3d(0, -0.0625rem, 0);
+}
+
+.form-control:disabled,
+.newsletter__input:disabled,
+.form-group input:disabled {
+  cursor: not-allowed;
   opacity: 0.5;
 }
 
-/* Checkbox inputs */
-.form-checkbox input {
+.form-helper,
+.form-hint {
+  display: block;
+  margin-block-start: var(--space-3xs);
+  font-size: var(--text-caption);
+  color: var(--text-secondary);
+}
+
+.form-hint {
+  margin-block-start: var(--space-xs);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.form-required {
+  color: var(--accent-primary);
+}
+
+.form-optional,
+.form-label-optional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.form-checkbox,
+.form-checkbox-label {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.form-checkbox {
+  margin-block-start: var(--space-md);
+}
+
+.form-field--checkbox {
+  margin-block-start: var(--space-xl);
+}
+
+.form-checkbox input,
+.form-checkbox-control {
   flex-shrink: 0;
   inline-size: 1.125rem;
   block-size: 1.125rem;
@@ -83,47 +186,34 @@
     transform var(--motion-quick);
 }
 
-.form-checkbox input:focus-visible {
+.form-checkbox-control {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.form-checkbox input:focus-visible,
+.form-checkbox-control:focus-visible {
   outline: none;
   box-shadow: 0 0 0 4px
     color-mix(in oklch, var(--accent-primary) 22%, transparent);
 }
 
-.form-checkbox input:active {
+.form-checkbox input:active,
+.form-checkbox-control:active {
   transform: scale(0.94);
 }
 
-.form-group input:focus-visible,
-.form-group textarea:focus-visible {
-  outline: none;
-  background: var(--bg-input-focus);
-  border-color: var(--accent-primary);
-  box-shadow:
-    0 0 0 3px color-mix(in oklch, var(--accent-primary) 22%, transparent),
-    0 6px 16px -4px color-mix(in oklch, var(--accent-primary) 20%, transparent),
-    0 16px 32px -8px color-mix(in oklch, var(--accent-primary) 12%, transparent);
-}
-
-.form-group input:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-/* ============================================
-   Checkbox
-   ============================================ */
-.form-checkbox {
-  display: flex;
-  gap: 0.75rem;
-  align-items: flex-start;
-  margin-block-start: var(--space-md);
-  cursor: pointer;
-}
-
+.form-checkbox-text,
 .form-checkbox span {
   font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--color-sand);
+}
+
+.form-checkbox-text {
+  font-size: var(--text-body-compact);
+  line-height: 1.6;
+  color: var(--text-primary);
 }
 
 .form-checkbox a {
@@ -136,9 +226,6 @@
   color: var(--accent-primary);
 }
 
-/* ============================================
-   Form Row (side-by-side fields)
-   ============================================ */
 .form-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -151,18 +238,12 @@
   }
 }
 
-/* ============================================
-   Helper Text
-   ============================================ */
-.form-helper {
-  margin-block-start: var(--space-3xs);
-  font-size: var(--text-caption);
-  color: var(--text-secondary);
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-block-end: var(--space-md);
 }
 
-/* ============================================
-   Newsletter Form
-   ============================================ */
 .newsletter__form {
   display: flex;
   gap: var(--space-sm);
@@ -175,34 +256,7 @@
 }
 
 .newsletter__input {
+  --control-radius: var(--radius-full);
+
   flex: 1;
-  padding: var(--space-sm) var(--space-md);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  color: var(--text-on-dark);
-  background: var(--bg-input);
-  border: 1px solid var(--border-medium);
-  border-radius: var(--radius-full);
-  transition:
-    border-color var(--motion-standard),
-    background-color var(--motion-standard),
-    box-shadow var(--motion-standard);
-}
-
-.newsletter__input:hover:not(:focus) {
-  border-color: color-mix(in oklch, var(--accent-primary) 45%, transparent);
-}
-
-.newsletter__input:focus-visible {
-  outline: none;
-  background: var(--bg-input-focus);
-  border-color: var(--accent-primary);
-  box-shadow:
-    0 0 0 3px color-mix(in oklch, var(--accent-primary) 18%, transparent),
-    0 8px 24px -6px color-mix(in oklch, var(--accent-primary) 22%, transparent);
-}
-
-.newsletter__input::placeholder {
-  color: var(--color-sand);
-  opacity: 0.6;
 }

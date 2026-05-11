@@ -11,13 +11,6 @@
 /* Header uses shared `.section-header` + `.section-title` + `.section-intro`
    from typography.css — no per-section overrides. */
 
-.archetypes__grid {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-block: 1px solid var(--border-light);
-}
-
 .archetype-card {
   position: relative;
   min-block-size: 15rem;
@@ -62,18 +55,6 @@
 .archetype-card:hover::before {
   opacity: 1;
   transform: scaleY(1);
-}
-
-.archetype-card:nth-child(odd) {
-  border-inline-start: none;
-}
-
-.archetype-card:nth-child(n + 3) {
-  border-block-start: 1px solid var(--border-light);
-}
-
-.archetype-card:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
 }
 
 .archetype-card__content {
@@ -149,26 +130,6 @@
 
 .archetype-card--father .archetype-card__background-icon svg {
   transform: translateY(-50%) rotate(-4deg);
-}
-
-@media (width <= 900px) {
-  .archetypes__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .archetype-card {
-    min-block-size: auto;
-    border-block-start: 1px solid var(--border-light);
-    border-inline-start: none;
-  }
-
-  .archetype-card:first-child {
-    border-block-start: none;
-  }
-
-  .archetype-card:last-child:nth-child(odd) {
-    grid-column: auto;
-  }
 }
 
 @media (width <= 600px) {

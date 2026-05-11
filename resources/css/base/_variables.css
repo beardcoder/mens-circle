@@ -70,6 +70,9 @@
   --bg-input: color-mix(in oklch, var(--color-bone) 8%, transparent);
   --bg-input-focus: color-mix(in oklch, var(--color-bone) 12%, transparent);
   --bg-overlay: color-mix(in oklch, var(--color-ink) 70%, transparent);
+  --surface-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  --surface-noise-opacity: 0.035;
+  --surface-glow-strength: 16%;
 
   /* Text */
   --text-primary: var(--color-ink);
@@ -99,6 +102,8 @@
   --border-medium: color-mix(in oklch, var(--color-sand) 30%, transparent);
   --border-dark: var(--color-earth-mid);
   --border-on-dark: color-mix(in oklch, var(--color-sand) 15%, transparent);
+  --focus-ring: 0 0 0 3px
+    color-mix(in oklch, var(--accent-primary) 22%, transparent);
 
   /* ============================================
      Typography Scale
@@ -128,7 +133,7 @@
 
   /* Compact sizes — fill the gap between --text-sm and --text-base */
   --text-body-compact: 0.9375rem; /* author names, compact list items */
-  --text-caption: 0.8125rem;      /* captions, meta labels, roles */
+  --text-caption: 0.8125rem; /* captions, meta labels, roles */
 
   /* Line height scale */
   --leading-tight: 1.5;
@@ -136,10 +141,26 @@
   --leading-relaxed: 1.8;
 
   /* Content max widths — 4-tier scale in 60px increments */
-  --content-max-form: 480px;        /* form wrappers, compact layout areas */
-  --content-max-text: 540px;        /* paragraph / intro body copy */
+  --content-max-form: 480px; /* form wrappers, compact layout areas */
+  --content-max-text: 540px; /* paragraph / intro body copy */
   --content-max-description: 600px; /* section descriptions, error/hero text */
-  --content-max-wide: 700px;        /* section titles, wide prose blocks */
+  --content-max-wide: 700px; /* section titles, wide prose blocks */
+
+  /* Form controls */
+  --control-padding-block: var(--space-sm);
+  --control-padding-inline: 1.125rem;
+  --control-radius: var(--radius-md);
+  --control-border-width: 1px;
+  --control-border-color: var(--border-medium);
+  --control-bg: var(--bg-input);
+  --control-bg-hover: var(--bg-input-focus);
+  --control-bg-light: var(--bg-primary);
+  --control-color: var(--text-on-dark);
+  --control-placeholder: color-mix(
+    in oklch,
+    var(--color-sand) 60%,
+    transparent
+  );
 
   /* ============================================
      Spacing Scale - Fluid with clamp()
@@ -199,7 +220,6 @@
     0.23,
     0.96
   ); /* Ambient motion: breathing circles only */
-
 
   /* Duration scale */
   --duration-fast: 150ms;

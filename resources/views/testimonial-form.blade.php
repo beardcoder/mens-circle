@@ -53,117 +53,106 @@
         >
           @csrf
 
-          <div class="form__group">
-            <label for="quote" class="form__label">
-              Deine Erfahrung <span class="required">*</span>
+          <div class="form-field form-field--spaced">
+            <label for="quote" class="form-label form-label--plain">
+              Deine Erfahrung <span class="form-required">*</span>
             </label>
             <textarea
               id="quote"
               name="quote"
-              class="form__textarea"
+              class="form-control form-control--light"
               rows="6"
               placeholder='z.B. "Hier kann ich endlich ich selbst sein, ohne Maske und ohne Leistungsdruck..."'
               required
               minlength="10"
               maxlength="1000"
             ></textarea>
-            <span class="form__hint"
+            <span class="form-hint"
               >Mindestens 10 Zeichen, maximal 1000 Zeichen</span
             >
-            <span class="form__counter">
+            <span class="testimonial-form__counter">
               <span id="charCount" x-text="charCount">0</span>/1000
             </span>
           </div>
 
-          <div class="form__group">
-            <label for="author_name" class="form__label">
-              Dein Name <span class="optional">(optional)</span>
+          <div class="form-field form-field--spaced">
+            <label for="author_name" class="form-label form-label--plain">
+              Dein Name <span class="form-optional">(optional)</span>
             </label>
             <input
               type="text"
               id="author_name"
               name="author_name"
-              class="form__input"
+              class="form-control form-control--light"
               placeholder="z.B. Michael oder anonym lassen"
               maxlength="255"
             />
-            <span class="form__hint">
+            <span class="form-hint">
               Leer lassen für ein anonymes Testimonial
             </span>
           </div>
 
-          <div class="form__group">
-            <label for="role" class="form__label">
-              Rolle/Beschreibung <span class="optional">(optional)</span>
+          <div class="form-field form-field--spaced">
+            <label for="role" class="form-label form-label--plain">
+              Rolle/Beschreibung <span class="form-optional">(optional)</span>
             </label>
             <input
               type="text"
               id="role"
               name="role"
-              class="form__input"
+              class="form-control form-control--light"
               placeholder="z.B. Teilnehmer seit 2023"
               maxlength="255"
             />
           </div>
 
-          <div class="form__group">
-            <label for="email" class="form__label">
-              E-Mail-Adresse <span class="required">*</span>
+          <div class="form-field form-field--spaced">
+            <label for="email" class="form-label form-label--plain">
+              E-Mail-Adresse <span class="form-required">*</span>
             </label>
             <input
               type="email"
               id="email"
               name="email"
-              class="form__input"
+              class="form-control form-control--light"
               placeholder="deine@email.de"
               required
               maxlength="255"
             />
-            <span class="form__hint">
+            <span class="form-hint">
               Wird nicht veröffentlicht. Nur für Rückfragen.
             </span>
           </div>
 
-          <div class="form__group form__group--checkbox">
-            <label class="form__checkbox-label">
+          <div class="form-field form-field--checkbox">
+            <label class="form-checkbox-label">
               <input
                 type="checkbox"
                 name="privacy"
-                class="form__checkbox"
+                class="form-checkbox-control"
                 required
               />
-              <span class="form__checkbox-text">
+              <span class="form-checkbox-text">
                 Ich habe die
                 <a href="/datenschutz" target="_blank" class="link"
                   >Datenschutzerklärung</a
                 >
                 zur Kenntnis genommen und bin damit einverstanden, dass meine
                 Daten zum Zwecke der Veröffentlichung gespeichert werden.
-                <span class="required">*</span>
+                <span class="form-required">*</span>
               </span>
             </label>
           </div>
 
-          <div
-            id="formMessage"
-            class="form__message"
-            style="display: none"
-          ></div>
-
-          <div class="form__actions">
-            <button type="submit" class="btn btn--primary" id="submitBtn">
-              <span class="btn__text">Erfahrung teilen</span>
-              <span class="btn__loader" style="display: none">
-                <svg class="spinner" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <circle class="spinner__path" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" cx="10" cy="10" r="8" />
-                </svg>
-              </span>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary">
+              Erfahrung teilen
             </button>
           </div>
 
-          <p class="form__note">
+          <p class="testimonial-form__note">
             <small>
-              Alle Felder mit <span class="required">*</span> sind
+              Alle Felder mit <span class="form-required">*</span> sind
               Pflichtfelder.<br />
               Dein Testimonial wird nach Prüfung durch uns veröffentlicht.
             </small>

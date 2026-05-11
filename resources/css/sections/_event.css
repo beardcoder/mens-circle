@@ -7,20 +7,12 @@
    Event Register Section (Full-Width Split)
    ============================================ */
 .event-register-section {
+  --_surface-noise-opacity: 0.03;
+
   position: relative;
   overflow: hidden;
   color: var(--text-on-dark);
   background: var(--bg-dark);
-}
-
-/* Noise texture */
-.event-register-section::before {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  content: '';
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.03;
 }
 
 .event-register__layout {
@@ -52,18 +44,8 @@
   }
 }
 
-/* Decorative circles */
 .event-register__circles {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
   opacity: 0.15;
-}
-
-.event-register__circle {
-  position: absolute;
-  border: 1px solid var(--color-sand);
-  border-radius: 50%;
 }
 
 .event-register__circle--1 {
@@ -398,6 +380,8 @@
 }
 
 .event-about__quote-area {
+  --_surface-noise-opacity: 0.05;
+
   position: absolute;
   inset: 0;
   display: flex;
@@ -406,27 +390,8 @@
   overflow: hidden;
 }
 
-/* Noise texture */
-.event-about__quote-area::before {
-  position: absolute;
-  inset: 0;
-  content: '';
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.05;
-}
-
-/* Decorative circles */
 .event-about__circles {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
   opacity: 0.2;
-}
-
-.event-about__circle {
-  position: absolute;
-  border: 1px solid var(--color-sand);
-  border-radius: 50%;
 }
 
 .event-about__circle--1 {
@@ -475,6 +440,8 @@
    Event CTA Section (Final Call)
    ============================================ */
 .event-cta-section {
+  --_surface-noise-opacity: 0.03;
+
   position: relative;
   padding: var(--space-2xl) 0;
   overflow: hidden;
@@ -483,28 +450,8 @@
   background: var(--bg-dark);
 }
 
-/* Noise texture */
-.event-cta-section::before {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  content: '';
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.03;
-}
-
-/* Decorative circles */
 .event-cta__circles {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
   opacity: 0.15;
-}
-
-.event-cta__circle {
-  position: absolute;
-  border: 1px solid var(--color-sand);
-  border-radius: 50%;
 }
 
 .event-cta__circle--1 {
@@ -543,16 +490,8 @@
 
 /* Uses .section-title--lg and .section-title--light .text-italic */
 
-/* ============================================
-   Form Enhancements for Event Registration
-   ============================================ */
-.form-label-optional {
-  font-weight: 400;
-  color: var(--color-sand);
-  opacity: 0.7;
-}
-
 /* Muted helper / checkbox text on the always-dark register panel */
+.event-register__form .form-label-optional,
 .event-register__form .form-helper,
 .event-register__form .form-checkbox span {
   color: var(--color-sand);

@@ -40,7 +40,8 @@
   );
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
-  box-shadow: 0 12px 40px -20px color-mix(in oklch, var(--color-ink) 30%, transparent);
+  box-shadow: 0 12px 40px -20px
+    color-mix(in oklch, var(--color-ink) 30%, transparent);
   isolation: isolate;
 }
 
@@ -94,7 +95,9 @@
 .event-map__marker {
   background: none;
   border: 0;
-  filter: drop-shadow(0 4px 6px color-mix(in oklch, var(--color-ink) 40%, transparent));
+  filter: drop-shadow(
+    0 4px 6px color-mix(in oklch, var(--color-ink) 40%, transparent)
+  );
 }
 
 .event-map__marker svg {
@@ -110,7 +113,8 @@
   color: var(--text-primary);
   background: var(--bg-elevated);
   border-radius: var(--radius-md);
-  box-shadow: 0 8px 24px -10px color-mix(in oklch, var(--color-ink) 40%, transparent);
+  box-shadow: 0 8px 24px -10px
+    color-mix(in oklch, var(--color-ink) 40%, transparent);
 }
 
 .event-map .leaflet-popup-content {

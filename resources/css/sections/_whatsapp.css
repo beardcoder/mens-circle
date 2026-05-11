@@ -18,38 +18,20 @@
   --wa-btn-bg: oklch(60% 0.15 145deg);
   --wa-btn-hover: oklch(55% 0.16 145deg);
   --wa-btn-shadow-base: oklch(40% 0.1 145deg);
+  --_surface-noise-opacity: 0.03;
+  --_surface-glow-color: var(--wa-glow);
+  --_surface-glow-strength: 20%;
+  --_surface-glow-duration: 22s;
+  --_surface-glow-delay: -4s;
 
   position: relative;
   overflow: hidden;
   color: var(--text-on-dark);
-  background: linear-gradient(135deg, var(--wa-bg-start) 0%, var(--wa-bg-end) 100%);
-}
-
-/* Noise texture */
-.whatsapp-section::before {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  content: '';
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.03;
-}
-
-/* Gradient glow */
-.whatsapp-section::after {
-  position: absolute;
-  inset-block-start: -30%;
-  inset-inline-start: -20%;
-  inline-size: 70%;
-  block-size: 160%;
-  pointer-events: none;
-  content: '';
-  background: radial-gradient(
-    ellipse at center,
-    color-mix(in oklch, var(--wa-glow) 20%, transparent) 0%,
-    transparent 50%
+  background: linear-gradient(
+    135deg,
+    var(--wa-bg-start) 0%,
+    var(--wa-bg-end) 100%
   );
-  animation: breathe-slow 22s ease-in-out infinite -4s;
 }
 
 /* ============================================
