@@ -8,23 +8,30 @@
   <div class="intro__layout">
     <div class="intro__left">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow animate-on-scroll">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title intro__title" id="intro-title">
+        <h2
+          class="section-title intro__title animate-on-scroll"
+          id="intro-title"
+          data-delay="100"
+        >
           {!! $data['title'] !!}
         </h2>
       @endif
 
       @if (!empty($data['text']))
-        <p class="intro__text">{{ $data['text'] }}</p>
+        <p class="intro__text animate-on-scroll" data-delay="180">{{ $data['text'] }}</p>
       @endif
 
       @if (!empty($data['values']) && is_array($data['values']))
         <div class="intro__values">
           @foreach ($data['values'] as $value)
-            <div class="value-item">
+            <div
+              class="value-item animate-on-scroll"
+              data-delay="{{ 220 + ($loop->index * 80) }}"
+            >
               @if (!empty($value['number']))
                 <span class="value-item__number">{{ $value['number'] }}</span>
               @endif
@@ -43,7 +50,7 @@
     <div class="intro__image-area">
       <div class="intro__image-circles" aria-hidden="true"></div>
       @if (!empty($data['quote']))
-        <p class="intro__image-text">{!! $data['quote'] !!}</p>
+        <p class="intro__image-text animate-on-scroll" data-delay="260">{!! $data['quote'] !!}</p>
       @endif
     </div>
   </div>

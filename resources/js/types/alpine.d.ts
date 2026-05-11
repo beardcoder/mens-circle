@@ -2,13 +2,6 @@
  * Alpine.js magic property types for component `this` context.
  */
 
-declare module 'alpinejs' {
-  interface Alpine {
-    initTree(el: Element): void;
-    destroyTree(el: Element): void;
-  }
-}
-
 /** Magic properties injected by Alpine into data component context. */
 export interface AlpineMagics {
   $el: HTMLElement;

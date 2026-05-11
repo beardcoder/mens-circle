@@ -29,7 +29,8 @@
         @if ($shouldShowButton)
           <a
             href="{{ $resolvedButtonLink }}"
-            class="btn btn--primary btn--large"
+            class="btn btn--primary btn--large hover-lift animate-on-scroll"
+            data-delay="180"
             data-umami-event="cta-click"
             data-umami-event-location="cta-block"
             data-umami-event-text="{{ $data['button_text'] }}"

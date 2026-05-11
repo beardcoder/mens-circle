@@ -18,6 +18,7 @@ import {
 import { calendarIntegration } from '@/components/calendar';
 import { eventMap } from '@/components/event-map';
 import { breathingApp } from '@/components/breathing';
+import { initScrollAnimations } from '@/components/scroll-animations';
 import { initUmamiKit } from '@/utils/umami-kit';
 import { initSwup } from '@/components/swup-init';
 
@@ -39,15 +40,31 @@ Alpine.data('breathingApp', breathingApp);
 Alpine.start();
 
 // AJAX page transitions (Swup 4) — replaces #main on link clicks.
-initSwup();
+const swup = initSwup();
+
+const initializeScrollAnimations = (): void => {
+  initScrollAnimations();
+};
+
+swup.hooks.on('page:view', () => {
+  initializeScrollAnimations();
+});
 
 // Analytics tracking
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => initUmamiKit(), {
-    once: true,
-  });
+  document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+      initUmamiKit();
+      initializeScrollAnimations();
+    },
+    {
+      once: true,
+    }
+  );
 } else {
   initUmamiKit();
+  initializeScrollAnimations();
 }
 
 // LCP monitoring in development

@@ -6,7 +6,7 @@
 
 <section class="section values-section">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header animate-on-scroll">
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -19,7 +19,10 @@
     @if (!empty($data['items']) && is_array($data['items']))
       <div class="intro__values">
         @foreach ($data['items'] as $item)
-          <div class="value-item">
+          <div
+            class="value-item animate-on-scroll"
+            data-delay="{{ 120 + ($loop->index * 80) }}"
+          >
             @if (!empty($item['number']))
               <span class="value-item__number">{{ $item['number'] }}</span>
             @endif
