@@ -52,9 +52,10 @@
     <div class="intro__image-area">
       <div class="intro__image-circles" aria-hidden="true"></div>
       @if (!empty($data['quote']))
-        <p class="intro__image-text animate-on-scroll" style="
-            --animate-delay: 260ms;
-          ">{!! $data['quote'] !!}</p>
+        <p
+          class="intro__image-text animate-on-scroll"
+          style="--animate-delay: 260ms"
+        >{!! $data['quote'] !!}</p>
       @endif
     </div>
   </div>
