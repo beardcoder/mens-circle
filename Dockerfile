@@ -77,9 +77,6 @@ COPY --chmod=644 docker/php/app.ini /usr/local/etc/php/conf.d/zz-app.ini
 # App + vendor from vendor stage (already contains vendor/)
 COPY --from=vendor --chown=root:root /app /app
 
-# Built frontend assets
-COPY --from=assets --chown=root:root /app/public/build /app/public/build
-
 # Startup hooks (clear response cache, sitemap, etc.) + entrypoint
 COPY --chmod=755 docker/entrypoint.d/ /docker-entrypoint.d/
 COPY --chmod=755 docker/entrypoint.sh /usr/local/bin/docker-entrypoint
