@@ -6,7 +6,11 @@
 
 <section class="section section--large cta-section">
   <div class="container">
-    <div class="cta__content animate-on-scroll" style="--animate-delay: 180ms">
+    <div
+      class="cta__content"
+      data-animate="scroll"
+      style="--animate-delay: 180ms"
+    >
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -29,7 +33,8 @@
         @if ($shouldShowButton)
           <a
             href="{{ $resolvedButtonLink }}"
-            class="btn btn--primary btn--large hover-lift"
+            class="btn btn--primary btn--large"
+            data-hover="lift"
             data-umami-event="cta-click"
             data-umami-event-location="cta-block"
             data-umami-event-text="{{ $data['button_text'] }}"

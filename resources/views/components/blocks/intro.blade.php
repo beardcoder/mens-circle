@@ -8,12 +8,13 @@
   <div class="intro__layout">
     <div class="intro__left">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow animate-on-scroll">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-animate="scroll">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
         <h2
-          class="section-title intro__title animate-on-scroll"
+          class="section-title intro__title"
+          data-animate="scroll"
           id="intro-title"
           style="--animate-delay: 100ms"
         >
@@ -22,12 +23,15 @@
       @endif
 
       @if (!empty($data['text']))
-        <p class="intro__text animate-on-scroll" style="--animate-delay: 180ms">{{ $data['text'] }}</p>
+        <p class="intro__text" data-animate="scroll" style="
+            --animate-delay: 180ms;
+          ">{{ $data['text'] }}</p>
       @endif
 
       @if (!empty($data['values']) && is_array($data['values']))
         <div
-          class="intro__values animate-on-scroll"
+          class="intro__values"
+          data-animate="scroll"
           style="--animate-delay: 220ms"
         >
           @foreach ($data['values'] as $value)
@@ -51,7 +55,8 @@
       <div class="intro__image-circles" aria-hidden="true"></div>
       @if (!empty($data['quote']))
         <p
-          class="intro__image-text animate-on-scroll"
+          class="intro__image-text"
+          data-animate="scroll"
           style="--animate-delay: 260ms"
         >{!! $data['quote'] !!}</p>
       @endif

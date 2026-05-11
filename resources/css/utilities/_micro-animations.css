@@ -3,7 +3,7 @@
  * CSS-only scroll-driven reveals using native view timelines.
  */
 
-.animate-on-scroll {
+[data-animate='scroll'] {
   /* Keep the default reveal offset subtle for text-heavy sections. */
   --animate-y: 20px;
   --animate-scale: 1;
@@ -11,14 +11,9 @@
   --animate-range: entry 0% cover 30%;
 }
 
-.animate-on-scroll.is-in-view {
-  opacity: 1;
-  transform: none;
-}
-
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .animate-on-scroll {
+    [data-animate='scroll'] {
       opacity: 0;
       transform: translateY(var(--animate-y)) scale(var(--animate-scale));
 
@@ -32,7 +27,7 @@
   }
 }
 
-.hover-lift {
+[data-hover='lift'] {
   --hover-lift-y: -4px;
   --hover-lift-shadow: var(--shadow-lg);
 
@@ -45,33 +40,32 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .hover-lift:hover {
+  [data-hover='lift']:hover {
     box-shadow: var(--hover-lift-shadow);
     translate: 0 var(--hover-lift-y);
   }
 
-  .hover-lift:active {
+  [data-hover='lift']:active {
     translate: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-on-scroll,
-  .animate-on-scroll.is-in-view {
+  [data-animate='scroll'] {
     opacity: 1;
     transform: none;
     animation: none;
   }
 
-  .hover-lift {
+  [data-hover='lift'] {
     transition:
       box-shadow var(--motion-standard),
       background-color var(--motion-standard),
       color var(--motion-standard);
   }
 
-  .hover-lift:hover,
-  .hover-lift:active {
+  [data-hover='lift']:hover,
+  [data-hover='lift']:active {
     translate: 0;
   }
 }

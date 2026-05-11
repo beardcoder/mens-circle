@@ -34,12 +34,13 @@
   <div class="container">
     <div class="hero__content">
       @if (!empty($data['label']))
-        <p class="hero__label animate-on-scroll">{{ $data['label'] }}</p>
+        <p class="hero__label" data-animate="scroll">{{ $data['label'] }}</p>
       @endif
 
       @if (!empty($data['title']))
         <h1
-          class="hero__title animate-on-scroll"
+          class="hero__title"
+          data-animate="scroll"
           style="--animate-delay: 120ms"
         >
           {!! $data['title'] !!}
@@ -48,7 +49,9 @@
 
       <div class="hero__bottom">
         @if (!empty($data['description']))
-          <p class="hero__description animate-on-scroll" style="--animate-delay: 220ms">{{ $data['description'] }}</p>
+          <p class="hero__description" data-animate="scroll" style="
+              --animate-delay: 220ms;
+            ">{{ $data['description'] }}</p>
         @endif
 
         @if (!empty($data['button_text']) && !empty($data['button_link']))
@@ -60,12 +63,14 @@
                     @endphp
           @if ($shouldShowButton)
             <div
-              class="hero__cta animate-on-scroll"
+              class="hero__cta"
+              data-animate="scroll"
               style="--animate-delay: 320ms"
             >
               <a
                 href="{{ $resolvedButtonLink }}"
-                class="btn btn--primary btn--large hover-lift"
+                class="btn btn--primary btn--large"
+                data-hover="lift"
               >
                 {{ $data['button_text'] }}
               </a>
