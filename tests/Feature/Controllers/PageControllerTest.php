@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\ContentBlock;
 use App\Models\Page;
+use Symfony\Component\DomCrawler\Crawler;
 
 test('home page renders micro animation hooks for prominent sections', function (): void {
     $page = Page::factory()->published()->create([
@@ -64,13 +65,19 @@ test('home page renders micro animation hooks for prominent sections', function 
 
     $response = $this->get(route('home'));
 
-    $response
-        ->assertOk()
-        ->assertSee('class="hero__label animate-on-scroll"', false)
-        ->assertSee('class="hero__title animate-on-scroll"', false)
-        ->assertSee('class="btn btn--primary btn--large hover-lift animate-on-scroll"', false)
-        ->assertSee('class="intro__text animate-on-scroll"', false)
-        ->assertSee('class="section-header animate-on-scroll"', false)
-        ->assertSee('class="value-item animate-on-scroll"', false)
-        ->assertSee('data-delay="120"', false);
+    $response->assertOk();
+
+    $content = $response->getContent();
+
+    expect($content)->not->toBeFalse();
+
+    $crawler = new Crawler($content ?: '');
+
+    expect($crawler->filter('.hero__label.animate-on-scroll')->count())->toBe(1)
+        ->and($crawler->filter('.hero__title.animate-on-scroll')->count())->toBe(1)
+        ->and($crawler->filter('.btn.hover-lift.animate-on-scroll')->count())->toBe(1)
+        ->and($crawler->filter('.intro__text.animate-on-scroll')->count())->toBe(1)
+        ->and($crawler->filter('.section-header.animate-on-scroll')->count())->toBeGreaterThan(0)
+        ->and($crawler->filter('.value-item.animate-on-scroll')->count())->toBeGreaterThan(0)
+        ->and($crawler->filter('[data-delay="120"]')->count())->toBeGreaterThan(0);
 });

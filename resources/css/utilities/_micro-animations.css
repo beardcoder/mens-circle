@@ -4,6 +4,7 @@
  */
 
 .animate-on-scroll {
+  /* Keep the default reveal offset subtle for text-heavy sections. */
   --animate-y: 20px;
   --animate-scale: 1;
   --animate-duration: var(--duration-slow);

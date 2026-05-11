@@ -4,6 +4,9 @@
 
 let scrollAnimationObserver: IntersectionObserver | null = null;
 
+const revealThreshold = 0.12;
+const revealRootMargin = '0px 0px -10% 0px';
+
 function normalizeDelayValue(rawDelay: string | null): string | null {
   if (rawDelay === null) {
     return null;
@@ -82,8 +85,8 @@ export function initScrollAnimations(root: ParentNode = document): void {
       });
     },
     {
-      threshold: 0.12,
-      rootMargin: '0px 0px -10% 0px',
+      threshold: revealThreshold,
+      rootMargin: revealRootMargin,
     }
   );
 
