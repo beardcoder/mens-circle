@@ -23,9 +23,7 @@
       @endif
 
       @if (!empty($data['text']))
-        <p class="intro__text" data-animate="scroll" style="
-            --animate-delay: 180ms;
-          ">{{ $data['text'] }}</p>
+        <p class="intro__text" data-animate="scroll" style="--animate-delay: 180ms">{{ $data['text'] }}</p>
       @endif
 
       @if (!empty($data['values']) && is_array($data['values']))
