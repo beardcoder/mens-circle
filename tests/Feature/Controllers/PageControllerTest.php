@@ -79,6 +79,7 @@ test('home page renders micro animation hooks for prominent sections', function 
     expect($crawler->filter('.btn.hover-lift')->count())->toBe(1);
     expect($crawler->filter('.intro__text.animate-on-scroll')->count())->toBe(1);
     expect($crawler->filter('.intro__values.animate-on-scroll')->count())->toBeGreaterThan(0);
+    expect($crawler->filter('.intro__values.animate-on-scroll[style*="--animate-delay: 220ms"]')->count())->toBe(1);
     expect($crawler->filter('.section-header.animate-on-scroll')->count())->toBeGreaterThan(0);
     expect($crawler->filter('[style*="--animate-delay: 120ms"]')->count())->toBeGreaterThan(0);
 });
