@@ -17,13 +17,11 @@
     opacity var(--animate-duration) var(--animate-easing),
     transform var(--animate-duration) var(--animate-easing);
   transition-delay: var(--animate-delay);
-  will-change: opacity, transform;
 }
 
 .animate-on-scroll.is-in-view {
   opacity: 1;
   transform: translateY(0) scale(1);
-  will-change: auto;
 }
 
 .hover-lift {
@@ -53,7 +51,6 @@
     transform: none;
     transition-delay: 0ms;
     transition-duration: 0.01ms;
-    will-change: auto;
   }
 
   .hover-lift {
