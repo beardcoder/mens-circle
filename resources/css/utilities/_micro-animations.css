@@ -28,6 +28,7 @@
   --hover-lift-y: -4px;
   --hover-lift-shadow: var(--shadow-lg);
 
+  /* `--motion-standard` is defined in `base/_variables.css`. */
   transition:
     translate var(--motion-standard),
     box-shadow var(--motion-standard);
