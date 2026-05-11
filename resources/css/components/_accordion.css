@@ -149,7 +149,6 @@
   );
 
   .accordion-item__trigger {
-    padding-inline-start: var(--space-md);
     color: var(--_accent);
   }
 
