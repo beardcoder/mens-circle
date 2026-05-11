@@ -18,7 +18,6 @@ import {
 import { calendarIntegration } from '@/components/calendar';
 import { eventMap } from '@/components/event-map';
 import { breathingApp } from '@/components/breathing';
-import { initNativePageTransitions } from '@/utils/native-page-transitions';
 import { initUmamiKit } from '@/utils/umami-kit';
 
 // Install plugins
@@ -37,9 +36,6 @@ Alpine.data('breathingApp', breathingApp);
 
 // Start Alpine
 Alpine.start();
-
-// Native cross-document page transitions.
-initNativePageTransitions();
 
 // Analytics tracking
 if (document.readyState === 'loading') {
