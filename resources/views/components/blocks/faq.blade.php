@@ -22,7 +22,7 @@
   @endpush
 @endif
 
-<section class="section section--large faq-section" id="faq">
+<section class="section section--large faq-section" id="faq" data-block-reveal>
   <div class="container">
     <div class="section-header section-header--start faq__header">
       @if (!empty($data['eyebrow']))
@@ -45,6 +45,7 @@
             <div
               class="accordion-item"
               :class="{ 'open': activeId === {{ $index }} }"
+              data-reveal-item
             >
               <button
                 class="accordion-item__trigger"

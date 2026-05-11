@@ -32,6 +32,7 @@
   class="section section--large journey-section"
   id="reise"
   aria-labelledby="journey-title"
+  data-block-reveal
 >
   <div class="container">
     <div class="section-header section-header--on-dark">
@@ -51,7 +52,7 @@
     @if (!empty($steps) && is_array($steps))
       <div class="journey__steps">
         @foreach ($steps as $step)
-          <div class="journey__step">
+          <div class="journey__step" data-reveal-item>
             @if (!empty($step['number']))
               <div class="journey__step-number" aria-hidden="true">
                 {{ $step['number'] }}

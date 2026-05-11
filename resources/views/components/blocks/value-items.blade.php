@@ -4,9 +4,9 @@
     $data = $block->data;
 @endphp
 
-<section class="section values-section">
+<section class="section values-section" data-block-reveal>
   <div class="container">
-    <div class="section-header" data-animate="scroll">
+    <div class="section-header">
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -17,13 +17,9 @@
     </div>
 
     @if (!empty($data['items']) && is_array($data['items']))
-      <div
-        class="intro__values"
-        data-animate="scroll"
-        style="--animate-delay: 220ms"
-      >
+      <div class="intro__values">
         @foreach ($data['items'] as $item)
-          <div class="value-item">
+          <div class="value-item" data-reveal-item>
             @if (!empty($item['number']))
               <span class="value-item__number">{{ $item['number'] }}</span>
             @endif

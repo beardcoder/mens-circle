@@ -1,0 +1,124 @@
+/**
+ * Block Reveal Animations
+ * ======================
+ *
+ * Modern, app-like reveal system using native View Transitions API and
+ * CSS scroll-driven animations. Each content block fades in as it enters
+ * the viewport, creating a polished, progressive disclosure experience.
+ *
+ * Features:
+ * - Compositor-only properties (opacity, transform) for 60fps performance
+ * - Progressive enhancement: falls back gracefully where unsupported
+ * - Respects `prefers-reduced-motion`
+ * - Works with all block components
+ */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* ============================================
+       Block Reveal — fade in as blocks enter viewport
+       ============================================ */
+    [data-block-reveal] {
+      animation: block-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+      will-change: opacity, transform;
+    }
+
+    /* Stagger children within blocks — creates cascading effect */
+    [data-block-reveal] > [data-reveal-item] {
+      animation: block-reveal-item linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 45%;
+      will-change: opacity, transform;
+    }
+
+    /* Stagger direct children with index-based delays */
+    [data-block-reveal] > [data-reveal-item]:nth-child(1) {
+      animation-delay: calc(60ms * 0);
+    }
+
+    [data-block-reveal] > [data-reveal-item]:nth-child(2) {
+      animation-delay: calc(60ms * 1);
+    }
+
+    [data-block-reveal] > [data-reveal-item]:nth-child(3) {
+      animation-delay: calc(60ms * 2);
+    }
+
+    [data-block-reveal] > [data-reveal-item]:nth-child(4) {
+      animation-delay: calc(60ms * 3);
+    }
+
+    [data-block-reveal] > [data-reveal-item]:nth-child(5) {
+      animation-delay: calc(60ms * 4);
+    }
+
+    [data-block-reveal] > [data-reveal-item]:nth-child(6) {
+      animation-delay: calc(60ms * 5);
+    }
+
+    [data-block-reveal] > [data-reveal-item]:nth-child(7) {
+      animation-delay: calc(60ms * 6);
+    }
+
+    [data-block-reveal] > [data-reveal-item]:nth-child(8) {
+      animation-delay: calc(60ms * 7);
+    }
+
+    /* Section headers get a subtle lift */
+    [data-block-reveal] .section-header,
+    [data-block-reveal] .eyebrow {
+      animation: block-reveal-header linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+
+    /* Eyebrow underline draws in */
+    [data-block-reveal] .eyebrow::before {
+      transform: scaleX(0.3);
+      animation: eyebrow-trace linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/* ============================================
+   Keyframes
+   ============================================ */
+@keyframes block-reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 2rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes block-reveal-item {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes block-reveal-header {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}

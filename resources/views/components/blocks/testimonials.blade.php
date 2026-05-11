@@ -31,6 +31,7 @@
   class="section section--large testimonials-section"
   id="stimmen"
   aria-labelledby="testimonials-title"
+  data-block-reveal
 >
   <div class="container">
     <div class="section-header">
@@ -43,7 +44,7 @@
 
     <div class="testimonials__grid">
       @foreach ($testimonials as $testimonial)
-        <article class="testimonial-item">
+        <article class="testimonial-item" data-reveal-item>
           <blockquote class="testimonial-item__quote">
             {{ $testimonial->quote }}
           </blockquote>

@@ -4,13 +4,9 @@
     $data = $block->data;
 @endphp
 
-<section class="section section--large cta-section">
+<section class="section section--large cta-section" data-block-reveal>
   <div class="container">
-    <div
-      class="cta__content"
-      data-animate="scroll"
-      style="--animate-delay: 180ms"
-    >
+    <div class="cta__content">
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif

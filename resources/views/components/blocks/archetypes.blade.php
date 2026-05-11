@@ -22,9 +22,10 @@
     class="section section--large archetypes-section"
     id="archetypen"
     aria-labelledby="archetypes-title"
+    data-block-reveal
   >
     <div class="container">
-      <div class="section-header" data-animate="scroll">
+      <div class="section-header">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow">{{ $data['eyebrow'] }}</p>
         @endif
@@ -40,14 +41,10 @@
         @endif
       </div>
 
-      <div
-        class="archetypes__grid"
-        data-animate="scroll"
-        style="--animate-delay: 120ms"
-      >
+      <div class="archetypes__grid">
         @foreach ($items as $item)
           @php $icon = $detectIcon($item); @endphp
-          <article class="archetype-card archetype-card--{{ $icon }}">
+          <article class="archetype-card archetype-card--{{ $icon }}" data-reveal-item>
             <div class="archetype-card__background-icon" aria-hidden="true">
               @php $svgPath = public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg'); @endphp
               @if (file_exists($svgPath))

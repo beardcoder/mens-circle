@@ -8,6 +8,7 @@
   class="section newsletter-section"
   id="newsletter"
   aria-labelledby="newsletter-title"
+  data-block-reveal
 >
   <div class="container">
     <div class="newsletter__layout">

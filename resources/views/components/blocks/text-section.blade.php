@@ -4,7 +4,7 @@
     $data = $block->data;
 @endphp
 
-<section class="section" id="{{ Str::slug($data['title'] ?? '') }}">
+<section class="section" id="{{ Str::slug($data['title'] ?? '') }}" data-block-reveal>
   <div class="container--narrow container">
     <div class="section-header section-header--start">
       @if (!empty($data['eyebrow']))

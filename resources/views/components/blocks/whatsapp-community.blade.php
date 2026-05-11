@@ -1,4 +1,4 @@
-<section class="section whatsapp-section" id="whatsapp-community">
+<section class="section whatsapp-section" id="whatsapp-community" data-block-reveal>
   <div class="container">
     <div class="whatsapp__layout">
       <div class="whatsapp__content">

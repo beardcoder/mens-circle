@@ -12,7 +12,7 @@
     }
 @endphp
 
-<section class="section moderator-section" id="moderator">
+<section class="section moderator-section" id="moderator" data-block-reveal>
   <div class="container">
     <div class="moderator__layout">
       <div class="moderator__photo-wrapper">
