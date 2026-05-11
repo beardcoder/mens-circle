@@ -52,7 +52,7 @@
 /* Uses .eyebrow from typography.css */
 
 .no-event-info__title {
-  max-inline-size: 600px;
+  max-inline-size: var(--content-max-description);
 }
 
 @media (width <= 900px) {
@@ -123,7 +123,7 @@
 }
 
 .no-event-cta__content {
-  max-inline-size: 600px;
+  max-inline-size: var(--content-max-description);
   margin-inline: auto;
 }
 

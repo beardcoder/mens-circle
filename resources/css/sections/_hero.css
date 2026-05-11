@@ -280,8 +280,8 @@
 }
 
 .event-hero .hero__description {
-  max-inline-size: 600px;
-  font-size: 1.125rem;
+  max-inline-size: var(--content-max-description);
+  font-size: var(--text-section-body-lg);
 }
 
 /* Hero Background Image */

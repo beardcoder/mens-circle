@@ -14,7 +14,7 @@
 }
 
 .error-page__content {
-  max-inline-size: 600px;
+  max-inline-size: var(--content-max-description);
   margin-inline: auto;
 }
 

@@ -135,10 +135,11 @@
   --leading-normal: 1.7;
   --leading-relaxed: 1.8;
 
-  /* Content max widths */
-  --content-max-text: 540px;   /* paragraph / intro body copy */
-  --content-max-form: 480px;   /* form wrappers, compact descriptions */
-  --content-max-wide: 700px;   /* section titles, wide prose blocks */
+  /* Content max widths — 4-tier scale in 60px increments */
+  --content-max-form: 480px;        /* form wrappers, compact layout areas */
+  --content-max-text: 540px;        /* paragraph / intro body copy */
+  --content-max-description: 600px; /* section descriptions, error/hero text */
+  --content-max-wide: 700px;        /* section titles, wide prose blocks */
 
   /* ============================================
      Spacing Scale - Fluid with clamp()
