@@ -33,21 +33,33 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureHealth();
 
-        View::composer(['layouts.*', 'emails.*', 'filament.*'], static function (ViewContract $view): void {
+        View::composer(['*'], static function (ViewContract $view): void {
             try {
                 $settings = once(static fn(): GeneralSettings => app(GeneralSettings::class));
 
                 $view->with([
                     'settings' => $settings,
                     'socialLinks' => $settings->social_links ?? [],
+                ]);
+            } catch (Throwable) {
+                $view->with([
+                    'settings' => null,
+                    'socialLinks' => [],
+                ]);
+            }
+        });
+
+        View::composer(['layouts.*', 'emails.*', 'filament.*'], static function (ViewContract $view): void {
+            try {
+                $settings = once(static fn(): GeneralSettings => app(GeneralSettings::class));
+
+                $view->with([
                     'localBusinessSchema' => new LocalBusinessSchema($settings),
                     'organizationSchema' => new OrganizationSchema($settings),
                     'websiteSchema' => new WebSiteSchema($settings),
                 ]);
             } catch (Throwable) {
                 $view->with([
-                    'settings' => null,
-                    'socialLinks' => [],
                     'localBusinessSchema' => null,
                     'organizationSchema' => null,
                     'websiteSchema' => null,
