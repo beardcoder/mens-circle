@@ -19,7 +19,7 @@
     @if (!empty($data['items']) && is_array($data['items']))
       <div
         class="intro__values animate-on-scroll"
-        style="--animate-delay: 120ms"
+        style="--animate-delay: 220ms"
       >
         @foreach ($data['items'] as $item)
           <div class="value-item">
