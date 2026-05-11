@@ -21,6 +21,8 @@
     .animate-on-scroll {
       opacity: 0;
       transform: translateY(var(--animate-y)) scale(var(--animate-scale));
+
+      /* View timelines ignore elapsed time; 1ms is the minimal stable value. */
       animation: micro-reveal 1ms linear both;
       animation-delay: var(--animate-delay);
       animation-timeline: view();
