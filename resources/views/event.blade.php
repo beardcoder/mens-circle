@@ -144,6 +144,7 @@
             id="registrationForm"
             class="event-register__form"
             autocomplete="on"
+            x-data="registrationForm"
           >
             <input type="hidden" name="event_id" value="{{ $event->id }}" />
 
@@ -253,10 +254,7 @@
           </div>
         </div>
 
-        <div
-          class="event-info__card event-info__card--location"
-
-        >
+        <div class="event-info__card event-info__card--location">
           <div class="event-info__card-circle" aria-hidden="true"></div>
           <div class="event-info__card-content">
             <h3>Ort</h3>
@@ -265,10 +263,7 @@
           </div>
         </div>
 
-        <div
-          class="event-info__card event-info__card--participants"
-
-        >
+        <div class="event-info__card event-info__card--participants">
           <div class="event-info__card-circle" aria-hidden="true"></div>
           <div class="event-info__card-content">
             <h3>Teilnehmer</h3>
@@ -278,18 +273,22 @@
         </div>
       </div>
 
-      <div class="event-info__calendar">
+      <div
+        class="event-info__calendar"
+        x-data="calendarIntegration"
+        data-event-title="{{ $event->title }}"
+        data-event-description="{{ strip_tags($event->description) }}"
+        data-event-location="{{ $event->location }}"
+        data-event-start-date="{{ $event->event_date->format('Y-m-d') }}"
+        data-event-start-time="{{ $event->start_time->format('H:i') }}"
+        data-event-end-date="{{ $event->event_date->format('Y-m-d') }}"
+        data-event-end-time="{{ $event->end_time->format('H:i') }}"
+      >
         <button
           type="button"
           class="btn btn--secondary"
           id="addToCalendar"
-          data-event-title="{{ $event->title }}"
-          data-event-description="{{ strip_tags($event->description) }}"
-          data-event-location="{{ $event->location }}"
-          data-event-start-date="{{ $event->event_date->format('Y-m-d') }}"
-          data-event-start-time="{{ $event->start_time->format('H:i') }}"
-          data-event-end-date="{{ $event->event_date->format('Y-m-d') }}"
-          data-event-end-time="{{ $event->end_time->format('H:i') }}"
+          @click="openModal()"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -301,6 +300,42 @@
           </svg>
           In Kalender speichern
         </button>
+
+        <!-- Calendar Modal (inline with component) -->
+        <div
+          class="calendar-modal"
+          x-show="isOpen"
+          @click.self="closeModal()"
+          @keydown.escape.window="closeModal()"
+          style="display: none"
+          role="dialog"
+          aria-modal="true"
+          aria-label="In Kalender speichern"
+        >
+          <div class="calendar-modal__content">
+            <h3>In Kalender speichern</h3>
+            <p>Wähle deinen Kalender:</p>
+            <div class="calendar-modal__buttons">
+              <a
+                :href="googleUrl"
+                class="btn btn--secondary"
+                target="_blank"
+                rel="noopener"
+                @click="trackGoogle()"
+              >
+                Google Calendar
+              </a>
+              <a
+                :href="icsUrl"
+                class="btn btn--secondary"
+                download="maennerkreis-straubing.ics"
+                @click="trackICS()"
+              >
+                Apple/Outlook (.ics)
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -310,10 +345,7 @@
       <div class="container">
         <div class="event-map__header">
           <p class="eyebrow">Anfahrt</p>
-          <h2
-            class="section-title section-title--lg event-map__title"
-
-          >
+          <h2 class="section-title section-title--lg event-map__title">
             So findest du <span class="text-italic">zu uns</span>
           </h2>
           @if ($event->fullAddress)
@@ -325,7 +357,7 @@
 
         <div
           class="event-map"
-          data-event-map
+          x-data="eventMap"
           data-state="idle"
           data-lat="{{ $event->latitude }}"
           data-lng="{{ $event->longitude }}"
@@ -372,10 +404,7 @@
     <div class="event-about__layout">
       <div class="event-about__content">
         <p class="eyebrow">Über das Treffen</p>
-        <h2
-          class="section-title section-title--lg event-about__title"
-
-        >
+        <h2 class="section-title section-title--lg event-about__title">
           Ein Raum für <br /><span class="text-italic">echte Begegnung</span>
         </h2>
         <div class="event-about__text">
@@ -413,7 +442,6 @@
           <a
             href="{{ route('home') }}#newsletter"
             class="btn btn--primary btn--large"
-
             data-umami-event="cta-click"
             data-umami-event-location="event-cta-bottom"
             data-umami-event-action="go-to-newsletter"
@@ -427,7 +455,6 @@
           <a
             href="#anmeldung"
             class="btn btn--primary btn--large"
-
             data-umami-event="cta-click"
             data-umami-event-location="event-cta-bottom"
             data-umami-event-action="scroll-to-registration"

@@ -120,6 +120,7 @@ p:last-child {
   transform: scaleX(1);
   transform-origin: right;
 }
+
 .eyebrow--secondary {
   --eyebrow-line: color-mix(in oklch, var(--accent-secondary) 72%, transparent);
 

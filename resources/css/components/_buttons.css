@@ -10,7 +10,11 @@
   --btn-bg: var(--accent-primary);
   --btn-color: var(--color-bone);
   --btn-border: transparent;
-  --btn-hover-bg: color-mix(in oklch, var(--accent-primary) 78%, var(--color-ink));
+  --btn-hover-bg: color-mix(
+    in oklch,
+    var(--accent-primary) 78%,
+    var(--color-ink)
+  );
   --btn-hover-color: var(--color-bone);
   --btn-shadow: var(--shadow-md);
 
@@ -37,7 +41,7 @@
   box-shadow: var(--btn-shadow);
   isolation: isolate;
   transition:
-    background-color  var(--motion-standard),
+    background-color var(--motion-standard),
     color var(--motion-standard),
     border-color var(--motion-standard),
     filter var(--motion-quick),
@@ -73,13 +77,13 @@
   background-color: var(--btn-hover-bg);
   filter: saturate(1.05);
   transform: translateY(-2px) scale(1.015);
-    transition:
-        background-color  var(--motion-standard),
-        color var(--motion-standard),
-        border-color var(--motion-standard),
-        filter var(--motion-quick),
-        transform var(--motion-quick),
-        box-shadow var(--motion-standard);
+  transition:
+    background-color var(--motion-standard),
+    color var(--motion-standard),
+    border-color var(--motion-standard),
+    filter var(--motion-quick),
+    transform var(--motion-quick),
+    box-shadow var(--motion-standard);
 }
 
 .btn:hover::before {
@@ -120,7 +124,11 @@
 .btn--primary {
   --btn-bg: var(--accent-primary);
   --btn-color: var(--color-bone);
-  --btn-hover-bg: color-mix(in oklch, var(--accent-primary) 75%, var(--color-ink));
+  --btn-hover-bg: color-mix(
+    in oklch,
+    var(--accent-primary) 75%,
+    var(--color-ink)
+  );
   --btn-hover-color: var(--color-bone);
 }
 

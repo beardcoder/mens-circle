@@ -1,20 +1,16 @@
 /**
  * Accordion Component
  *
- * Uses the native <details>/<summary> pattern so the open/closed state is
- * owned by the browser. JS is not required — `interpolate-size: allow-keywords`
- * (enabled globally in _variables.css) animates height from 0 to auto.
- *
- * Markup:
- *   <details class="accordion-item">
- *     <summary class="accordion-item__trigger">
+ * Alpine.js + @alpinejs/collapse pattern:
+ *   <div class="accordion-item" :class="{ 'open': active }">
+ *     <button class="accordion-item__trigger" @click="...">
  *       <span>Question</span>
  *       <span class="accordion-item__icon" aria-hidden="true"></span>
- *     </summary>
- *     <div class="accordion-item__content">
+ *     </button>
+ *     <div class="accordion-item__content" x-show="active" x-collapse>
  *       <div class="accordion-item__body">Answer</div>
  *     </div>
- *   </details>
+ *   </div>
  */
 
 .accordion-item {
@@ -50,19 +46,19 @@
       transform var(--motion-standard);
   }
 
-  &[open]::before {
+  &.open::before {
     opacity: 1;
     transform: scaleY(1);
   }
 
   &:has(.accordion-item__trigger:hover),
-  &[open] {
+  &.open {
     background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
   }
 }
 
 /* ============================================
-   Trigger (summary)
+   Trigger (button)
    ============================================ */
 .accordion-item__trigger {
   display: flex;
@@ -78,14 +74,10 @@
   text-align: start;
   letter-spacing: -0.02em;
   cursor: pointer;
-  list-style: none;
+  outline: none;
+  background: none;
+  border: none;
   transition: color var(--motion-quick);
-
-  /* Strip the native disclosure marker across engines */
-  &::marker,
-  &::-webkit-details-marker {
-    display: none;
-  }
 
   &:hover {
     color: var(--_accent);
@@ -149,7 +141,7 @@
   }
 }
 
-.accordion-item[open] {
+.accordion-item.open {
   border-block-end-color: color-mix(
     in oklch,
     var(--accent-primary) 35%,
@@ -177,20 +169,10 @@
 }
 
 /* ============================================
-   Content — height animates via interpolate-size
+   Content — height managed by x-collapse
    ============================================ */
 .accordion-item__content {
-  block-size: 0;
   overflow: hidden;
-  opacity: 0;
-  transition:
-    block-size var(--duration-slow) var(--ease-settle),
-    opacity var(--duration-normal) var(--ease-settle);
-}
-
-.accordion-item[open] > .accordion-item__content {
-  block-size: auto;
-  opacity: 1;
 }
 
 .accordion-item__body {
@@ -200,10 +182,6 @@
   line-height: var(--leading-relaxed);
   color: var(--text-secondary);
   opacity: 0.82;
-  transform: translate3d(0, -0.25rem, 0);
-  transition:
-    opacity var(--duration-slow) var(--ease-settle),
-    transform var(--duration-slow) var(--ease-settle);
 
   p:last-child {
     margin-block-end: 0;
@@ -218,24 +196,5 @@
     &:hover {
       color: var(--color-earth-warm);
     }
-  }
-}
-
-.accordion-item[open] .accordion-item__body {
-  opacity: 1;
-  transform: none;
-}
-
-/* ============================================
-   No-JS fallback — content is visible; native <details> handles toggle
-   ============================================ */
-.no-js {
-  .accordion-item__content {
-    block-size: auto;
-    opacity: 1;
-  }
-
-  .accordion-item:not([open]) > .accordion-item__content {
-    display: none;
   }
 }

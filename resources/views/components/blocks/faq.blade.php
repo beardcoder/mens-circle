@@ -24,10 +24,7 @@
 
 <section class="section section--large faq-section" id="faq">
   <div class="container">
-    <div
-      class="section-header section-header--start faq__header"
-
-    >
+    <div class="section-header section-header--start faq__header">
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -42,27 +39,35 @@
     </div>
 
     @if (!empty($faqItems) && is_array($faqItems))
-      <div class="faq__list">
-        @foreach ($faqItems as $item)
+      <div class="faq__list" x-data="{ activeId: null }">
+        @foreach ($faqItems as $index => $item)
           @if (!empty($item['question']) && !empty($item['answer']))
-            <details
-
+            <div
               class="accordion-item"
-              name="faq-accordion"
-              data-m:toggle="action=faq_toggle;element=details;target=question;location=faq_section"
+              :class="{ 'open': activeId === {{ $index }} }"
             >
-              <summary
+              <button
                 class="accordion-item__trigger"
+                type="button"
+                @click="activeId = activeId === {{ $index }} ? null : {{ $index }}"
+                :aria-expanded="activeId === {{ $index }}"
+                aria-controls="faq-item-{{ $index }}"
                 data-umami-event="faq-expand"
                 data-umami-event-question="{{ Str::limit($item['question'], 50) }}"
               >
                 <span>{{ $item['question'] }}</span>
                 <span class="accordion-item__icon" aria-hidden="true"></span>
-              </summary>
-              <div class="accordion-item__content">
+              </button>
+
+              <div
+                id="faq-item-{{ $index }}"
+                class="accordion-item__content"
+                x-show="activeId === {{ $index }}"
+                x-collapse
+              >
                 <div class="accordion-item__body">{!! $item['answer'] !!}</div>
               </div>
-            </details>
+            </div>
           @endif
         @endforeach
       </div>

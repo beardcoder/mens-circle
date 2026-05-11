@@ -1,17 +1,9 @@
 /**
- * Calendar Integration Component
- * Handles ICS and Google Calendar export using stitch-js
+ * Calendar Integration Alpine Component
  */
 
-import { defineComponent } from '@beardcoder/stitch-js';
 import type { EventData } from '@/types';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
-
-interface CalendarOptions {
-  modalSelector: string;
-  icsSelector: string;
-  googleSelector: string;
-}
 
 function formatICSDate(date: string, time: string): string {
   const d = new Date(`${date}T${time}:00`);
@@ -64,111 +56,79 @@ function generateGoogleCalendarUrl(event: EventData): string {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
-/**
- * Calendar integration component
- * Attach to #addToCalendar — manages calendar export modal and download links
- */
-export const calendarIntegration = defineComponent<CalendarOptions>(
-  {
-    modalSelector: '#calendarModal',
-    icsSelector: '#calendarICS',
-    googleSelector: '#calendarGoogle',
-  },
-  (ctx) => {
-    const { options: o } = ctx;
-    const calendarModal = document.querySelector<HTMLElement>(o.modalSelector);
-    const calendarICS = document.querySelector<HTMLAnchorElement>(
-      o.icsSelector
-    );
-    const calendarGoogle = document.querySelector<HTMLAnchorElement>(
-      o.googleSelector
-    );
+const FALLBACK_EVENT: EventData = {
+  title: 'Männerkreis Niederbayern/ Straubing',
+  description:
+    'Treffen des Männerkreis Niederbayern/ Straubing. Ein Raum für echte Begegnung unter Männern.',
+  location: 'Straubing (genaue Adresse nach Anmeldung)',
+  startDate: '2025-01-24',
+  startTime: '19:00',
+  endDate: '2025-01-24',
+  endTime: '21:30',
+};
 
-    const fallback: EventData = {
-      title: 'Männerkreis Niederbayern/ Straubing',
-      description:
-        'Treffen des Männerkreis Niederbayern/ Straubing. Ein Raum für echte Begegnung unter Männern.',
-      location: 'Straubing (genaue Adresse nach Anmeldung)',
-      startDate: '2025-01-24',
-      startTime: '19:00',
-      endDate: '2025-01-24',
-      endTime: '21:30',
-    };
-    const ds = (ctx.el as HTMLElement).dataset;
-    const eventData: EventData = ds.eventTitle
-      ? {
-          title: ds.eventTitle,
-          description: ds.eventDescription ?? '',
-          location: ds.eventLocation ?? '',
-          startDate: ds.eventStartDate ?? '',
-          startTime: ds.eventStartTime ?? '',
-          endDate: ds.eventEndDate ?? '',
-          endTime: ds.eventEndTime ?? '',
-        }
-      : (window.eventData ?? fallback);
+export function calendarIntegration() {
+  return {
+    isOpen: false,
+    icsUrl: '',
+    googleUrl: '',
+    eventTitle: '',
+    _icsBlob: null as string | null,
 
-    if (calendarICS) {
+    init() {
+      const el = (this as unknown as { $el: HTMLElement }).$el;
+      const ds = el.dataset;
+
+      const eventData: EventData = ds.eventTitle
+        ? {
+            title: ds.eventTitle,
+            description: ds.eventDescription ?? '',
+            location: ds.eventLocation ?? '',
+            startDate: ds.eventStartDate ?? '',
+            startTime: ds.eventStartTime ?? '',
+            endDate: ds.eventEndDate ?? '',
+            endTime: ds.eventEndTime ?? '',
+          }
+        : (window.eventData ?? FALLBACK_EVENT);
+
+      this.eventTitle = eventData.title;
+
       const icsContent = generateICS(eventData);
       const blob = new Blob([icsContent], {
         type: 'text/calendar;charset=utf-8',
       });
-      const icsBlobUrl = URL.createObjectURL(blob);
 
-      calendarICS.href = icsBlobUrl;
-      ctx.onDestroy(() => URL.revokeObjectURL(icsBlobUrl));
-    }
+      this._icsBlob = URL.createObjectURL(blob);
+      this.icsUrl = this._icsBlob;
+      this.googleUrl = generateGoogleCalendarUrl(eventData);
+    },
 
-    if (calendarGoogle) {
-      calendarGoogle.href = generateGoogleCalendarUrl(eventData);
-    }
+    openModal(): void {
+      this.isOpen = true;
+      trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, { event: this.eventTitle });
+    },
 
-    ctx.on('click', () => {
-      if (!calendarModal) return;
+    closeModal(): void {
+      this.isOpen = false;
+    },
 
-      trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, {
-        event: eventData.title,
+    trackICS(): void {
+      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
+        event: this.eventTitle,
       });
+    },
 
-      calendarModal.classList.add('open');
-    });
+    trackGoogle(): void {
+      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
+        event: this.eventTitle,
+      });
+    },
 
-    if (calendarICS) {
-      const handleICSClick = (): void => {
-        trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
-          event: eventData.title,
-        });
-      };
-
-      calendarICS.addEventListener('click', handleICSClick);
-      ctx.onDestroy(() =>
-        calendarICS.removeEventListener('click', handleICSClick)
-      );
-    }
-
-    if (calendarGoogle) {
-      const handleGoogleClick = (): void => {
-        trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
-          event: eventData.title,
-        });
-      };
-
-      calendarGoogle.addEventListener('click', handleGoogleClick);
-      ctx.onDestroy(() =>
-        calendarGoogle.removeEventListener('click', handleGoogleClick)
-      );
-    }
-
-    if (calendarModal) {
-      const handleModalClick = (e: MouseEvent): void => {
-        if (e.target === calendarModal) {
-          calendarModal.classList.remove('open');
-        }
-      };
-
-      calendarModal.addEventListener('click', handleModalClick);
-      ctx.onDestroy(() =>
-        calendarModal.removeEventListener('click', handleModalClick)
-      );
-    }
-  }
-);
+    destroy(): void {
+      if (this._icsBlob) {
+        URL.revokeObjectURL(this._icsBlob);
+        this._icsBlob = null;
+      }
+    },
+  };
+}

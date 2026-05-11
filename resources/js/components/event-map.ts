@@ -1,21 +1,9 @@
 /**
- * Event Map Component
+ * Event Map Alpine Component
  *
- * Lazy-loaded Leaflet map for the event detail page. Leaflet (~150KB) is only
- * fetched when the user scrolls the map container into view, keeping the
- * initial bundle small. The component is a no-op if coordinates are missing.
- *
- * Renders OpenStreetMap tiles, a single marker for the event location, and a
- * popup with the address + a "Route planen" link that opens the user's default
- * maps app (uses geo: URI on mobile, OSM directions on desktop).
+ * Lazy-loaded Leaflet map. Only fetches Leaflet (~150KB) when the element
+ * scrolls into view. No-op if lat/lng data attributes are missing.
  */
-
-import { defineComponent } from '@beardcoder/stitch-js';
-
-interface EventMapOptions {
-  zoom: number;
-  rootMargin: string;
-}
 
 interface MapDataset {
   lat: number;
@@ -63,115 +51,117 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
-export const eventMap = defineComponent<EventMapOptions>(
-  {
-    zoom: 16,
-    rootMargin: '200px',
-  },
-  (ctx) => {
-    const el = ctx.el as HTMLElement;
-    const data = readDataset(el);
+export function eventMap() {
+  return {
+    _cleanup: [] as Array<() => void>,
 
-    if (!data) {
-      el.hidden = true;
+    init() {
+      const el = (this as unknown as { $el: HTMLElement }).$el;
+      const data = readDataset(el);
 
-      return;
-    }
+      if (!data) {
+        el.hidden = true;
 
-    let initialized = false;
+        return;
+      }
 
-    const init = async (): Promise<void> => {
-      if (initialized) return;
-      initialized = true;
+      let initialized = false;
 
-      el.dataset.state = 'loading';
+      const initMap = async (): Promise<void> => {
+        if (initialized) return;
 
-      const [{ default: L }] = await Promise.all([
-        import('leaflet'),
-        import('leaflet/dist/leaflet.css'),
-      ]);
+        initialized = true;
+        el.dataset.state = 'loading';
 
-      const container = el.querySelector<HTMLElement>('.event-map__canvas');
+        const [{ default: L }] = await Promise.all([
+          import('leaflet'),
+          import('leaflet/dist/leaflet.css'),
+        ]);
 
-      if (!container) return;
+        const container = el.querySelector<HTMLElement>('.event-map__canvas');
 
-      const map = L.map(container, {
-        scrollWheelZoom: false,
-        zoomControl: true,
-        attributionControl: true,
-      }).setView([data.lat, data.lng], ctx.options.zoom);
+        if (!container) return;
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }).addTo(map);
+        const map = L.map(container, {
+          scrollWheelZoom: false,
+          zoomControl: true,
+          attributionControl: true,
+        }).setView([data.lat, data.lng], 16);
 
-      // Custom marker — uses inline SVG so we don't ship Leaflet's PNG assets.
-      const icon = L.divIcon({
-        className: 'event-map__marker',
-        html:
-          '<svg viewBox="0 0 32 44" aria-hidden="true" focusable="false">' +
-          '<path d="M16 0C7.2 0 0 7 0 15.5 0 27 16 44 16 44s16-17 16-28.5C32 7 24.8 0 16 0z"/>' +
-          '<circle cx="16" cy="15.5" r="6" fill="#fff"/>' +
-          '</svg>',
-        iconSize: [32, 44],
-        iconAnchor: [16, 44],
-        popupAnchor: [0, -40],
-      });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        }).addTo(map);
 
-      const popup =
-        '<strong>' +
-        escapeHtml(data.title) +
-        '</strong>' +
-        (data.address ? '<br>' + escapeHtml(data.address) : '') +
-        '<br><a class="event-map__directions" href="' +
-        buildDirectionsUrl(data) +
-        '" target="_blank" rel="noopener">Route planen</a>';
+        const icon = L.divIcon({
+          className: 'event-map__marker',
+          html:
+            '<svg viewBox="0 0 32 44" aria-hidden="true" focusable="false">' +
+            '<path d="M16 0C7.2 0 0 7 0 15.5 0 27 16 44 16 44s16-17 16-28.5C32 7 24.8 0 16 0z"/>' +
+            '<circle cx="16" cy="15.5" r="6" fill="#fff"/>' +
+            '</svg>',
+          iconSize: [32, 44],
+          iconAnchor: [16, 44],
+          popupAnchor: [0, -40],
+        });
 
-      L.marker([data.lat, data.lng], { icon }).addTo(map).bindPopup(popup);
+        const popup =
+          '<strong>' +
+          escapeHtml(data.title) +
+          '</strong>' +
+          (data.address ? '<br>' + escapeHtml(data.address) : '') +
+          '<br><a class="event-map__directions" href="' +
+          buildDirectionsUrl(data) +
+          '" target="_blank" rel="noopener">Route planen</a>';
 
-      // Re-enable wheel zoom only after a click — prevents accidental scroll hijack.
-      const enableWheel = (): void => {
-        map.scrollWheelZoom.enable();
+        L.marker([data.lat, data.lng], { icon }).addTo(map).bindPopup(popup);
+
+        const enableWheel = (): void => {
+          map.scrollWheelZoom.enable();
+        };
+        const disableWheel = (): void => {
+          map.scrollWheelZoom.disable();
+        };
+
+        container.addEventListener('click', enableWheel);
+        container.addEventListener('mouseleave', disableWheel);
+
+        this._cleanup.push(() => {
+          container.removeEventListener('click', enableWheel);
+          container.removeEventListener('mouseleave', disableWheel);
+          map.remove();
+        });
+
+        el.dataset.state = 'ready';
       };
-      const disableWheel = (): void => {
-        map.scrollWheelZoom.disable();
-      };
 
-      container.addEventListener('click', enableWheel);
-      container.addEventListener('mouseleave', disableWheel);
+      if (typeof IntersectionObserver === 'undefined') {
+        void initMap();
 
-      ctx.onDestroy(() => {
-        container.removeEventListener('click', enableWheel);
-        container.removeEventListener('mouseleave', disableWheel);
-        map.remove();
-      });
+        return;
+      }
 
-      el.dataset.state = 'ready';
-    };
-
-    if (typeof IntersectionObserver === 'undefined') {
-      void init();
-
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            obs.disconnect();
-            void init();
-            break;
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              obs.disconnect();
+              void initMap();
+              break;
+            }
           }
-        }
-      },
-      { rootMargin: ctx.options.rootMargin }
-    );
+        },
+        { rootMargin: '200px' }
+      );
 
-    observer.observe(el);
+      observer.observe(el);
+      this._cleanup.push(() => observer.disconnect());
+    },
 
-    ctx.onDestroy(() => observer.disconnect());
-  }
-);
+    destroy(): void {
+      this._cleanup.forEach((fn) => fn());
+      this._cleanup = [];
+    },
+  };
+}

@@ -61,37 +61,78 @@
     /* Stagger direct children of grids — pure CSS, index-free.
        nth-child cadence keeps it simple and predictable. */
     :where(
-      .archetypes__grid,
-      .values__grid,
-      .testimonials__grid,
-      .event-info__grid,
-      .journey__steps
-    )
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .event-info__grid,
+        .journey__steps
+      )
       > * {
       animation-delay: calc(var(--rev-step, 80ms) * var(--rev-i, 0));
     }
 
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(1) {
       --rev-i: 0;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(2) {
       --rev-i: 1;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(3) {
       --rev-i: 2;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(4) {
       --rev-i: 3;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(5) {
       --rev-i: 4;
     }
-    :where(.event-info__grid, .archetypes__grid, .values__grid, .testimonials__grid, .journey__steps)
+
+    :where(
+        .event-info__grid,
+        .archetypes__grid,
+        .values__grid,
+        .testimonials__grid,
+        .journey__steps
+      )
       > :nth-child(6) {
       --rev-i: 5;
     }
@@ -109,11 +150,11 @@
 
     /* Hero background image — slow zoom-out as we scroll past */
     .hero__bg-image {
+      transform-origin: 50% 60%;
       animation: parallax-hero-zoom linear both;
+      will-change: transform;
       animation-timeline: scroll(root);
       animation-range: 0 110vh;
-      transform-origin: 50% 60%;
-      will-change: transform;
     }
 
     /* Section eyebrow underline — draw in as it enters view.
@@ -140,6 +181,7 @@
     opacity: 0;
     transform: translate3d(0, 1.5rem, 0);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -151,6 +193,7 @@
     opacity: 0;
     transform: translate3d(0, 1rem, 0) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -161,6 +204,7 @@
   from {
     transform: translate3d(0, -3%, 0) scale(1.08);
   }
+
   to {
     transform: translate3d(0, 3%, 0) scale(1.08);
   }
@@ -168,12 +212,12 @@
 
 @keyframes parallax-hero-zoom {
   from {
-    transform: scale(1) translate3d(0, 0, 0);
     filter: saturate(1);
+    transform: scale(1) translate3d(0, 0, 0);
   }
+
   to {
-    transform: scale(1.12) translate3d(0, -4%, 0);
     filter: saturate(1.05);
+    transform: scale(1.12) translate3d(0, -4%, 0);
   }
 }
-

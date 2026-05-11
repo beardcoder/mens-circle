@@ -1,13 +1,12 @@
 /**
- * Männerkreis Niederbayern / Straubing - Application Entry Point
- * Built with @beardcoder/stitch-js progressive enhancement framework
+ * Männerkreis Niederbayern / Straubing — Application Entry Point
  */
 
 import './types';
-import { register, autoInit } from '@beardcoder/stitch-js';
+import Alpine from 'alpinejs';
+import collapse from '@alpinejs/collapse';
 import {
-  navigation,
-  scrollHeader,
+  siteHeader,
   scrollProgress,
   scrollToTop,
 } from '@/components/navigation';
@@ -18,43 +17,31 @@ import {
 } from '@/components/forms';
 import { calendarIntegration } from '@/components/calendar';
 import { eventMap } from '@/components/event-map';
-import { nativeAccordion } from '@/components/accordion';
 import { breathingApp } from '@/components/breathing';
 import { initUmamiKit } from '@/utils/umami-kit';
 import { initSwup } from '@/components/swup-init';
 
-// Navigation and header
-register('#nav', navigation());
-register('#header', scrollHeader());
-register('#scrollToTop', scrollToTop());
-register('.scroll-progress', scrollProgress());
+// Install plugins
+Alpine.plugin(collapse);
 
-// Interactive forms
-register('#newsletterForm', newsletterForm());
-register('#registrationForm', registrationForm());
-register('#testimonialForm', testimonialForm());
+// Register all data components
+Alpine.data('siteHeader', siteHeader);
+Alpine.data('scrollProgress', scrollProgress);
+Alpine.data('scrollToTop', scrollToTop);
+Alpine.data('newsletterForm', newsletterForm);
+Alpine.data('registrationForm', registrationForm);
+Alpine.data('testimonialForm', testimonialForm);
+Alpine.data('calendarIntegration', calendarIntegration);
+Alpine.data('eventMap', eventMap);
+Alpine.data('breathingApp', breathingApp);
 
-// Calendar integration
-register('#addToCalendar', calendarIntegration());
+// Start Alpine
+Alpine.start();
 
-// Event location map (Leaflet, lazy-loaded on viewport intersection)
-register('[data-event-map]', eventMap());
-
-// Accordion (FAQ sections)
-register('.faq-section', nativeAccordion());
-
-// Breathing exercise
-register('#breathingApp', breathingApp());
-
-
-// Initialize all registered components
-autoInit();
-
-// AJAX page transitions (Swup 4) — owns native View Transitions for
-// supporting browsers and replaces #main on link clicks.
+// AJAX page transitions (Swup 4) — replaces #main on link clicks.
 initSwup();
 
-// Analytics tracking (standalone, not a stitch component)
+// Analytics tracking
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => initUmamiKit(), {
     once: true,
@@ -63,7 +50,7 @@ if (document.readyState === 'loading') {
   initUmamiKit();
 }
 
-// Performance monitoring (only in development)
+// LCP monitoring in development
 if (import.meta.env.DEV && 'PerformanceObserver' in globalThis) {
   const perfObserver = new PerformanceObserver((list) => {
     list.getEntries().forEach((entry) => {

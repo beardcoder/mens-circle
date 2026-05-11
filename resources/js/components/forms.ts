@@ -1,9 +1,7 @@
 /**
- * Form Components
- * Newsletter, registration, and testimonial forms using stitch-js
+ * Form Components — Alpine.js data factories
  */
 
-import { defineComponent } from '@beardcoder/stitch-js';
 import { validateEmail } from '@/utils/helpers';
 import { showToast } from '@/utils/toast';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
@@ -44,10 +42,6 @@ function isFieldFilled(field: FormFieldElement): boolean {
     return field.value.trim().length > 0;
   }
 
-  if (field instanceof HTMLSelectElement) {
-    return field.value.trim().length > 0;
-  }
-
   return field.value.trim().length > 0;
 }
 
@@ -62,26 +56,17 @@ function isRequiredFieldComplete(field: FormFieldElement): boolean {
     return field.value.trim().length > 0 && field.validity.valid;
   }
 
-  if (field instanceof HTMLSelectElement) {
-    return field.value.trim().length > 0 && field.validity.valid;
-  }
-
   return field.value.trim().length > 0 && field.validity.valid;
 }
 
 function getFormCompletionState(form: HTMLFormElement): FormCompletionState {
   const fields = getTrackableFields(form);
-  const requiredFields = fields.filter((field) => field.required);
-
-  const filledFields = fields.filter((field) => isFieldFilled(field)).length;
-  const requiredFilled = requiredFields.filter((field) =>
-    isRequiredFieldComplete(field)
-  ).length;
+  const requiredFields = fields.filter((f) => f.required);
 
   return {
-    requiredFilled,
+    requiredFilled: requiredFields.filter(isRequiredFieldComplete).length,
     requiredTotal: requiredFields.length,
-    filledFields,
+    filledFields: fields.filter(isFieldFilled).length,
     totalFields: fields.length,
   };
 }
@@ -90,7 +75,7 @@ function setupAbandonTracking(
   form: HTMLFormElement,
   eventName: string,
   formType: string,
-  onDestroy: (fn: () => void) => void
+  registerCleanup: (fn: () => void) => void
 ): { markSubmitted: () => void } {
   let hasSubmitted = false;
   let hasTracked = false;
@@ -120,21 +105,18 @@ function setupAbandonTracking(
 
     hasTracked = true;
 
-    const requiredCompletionPercent = Math.round(
-      (completion.requiredFilled / completion.requiredTotal) * 100
-    );
-    const secondsSinceFirstInput = Math.round(
-      (Date.now() - firstInteractionAt) / 1000
-    );
-
     trackEvent(eventName, {
       form: formType,
       required_filled: completion.requiredFilled,
       required_total: completion.requiredTotal,
-      required_completion_pct: requiredCompletionPercent,
+      required_completion_pct: Math.round(
+        (completion.requiredFilled / completion.requiredTotal) * 100
+      ),
       filled_fields: completion.filledFields,
       total_fields: completion.totalFields,
-      seconds_since_first_input: secondsSinceFirstInput,
+      seconds_since_first_input: Math.round(
+        (Date.now() - firstInteractionAt) / 1000
+      ),
       page: window.location.pathname,
     });
   };
@@ -147,7 +129,7 @@ function setupAbandonTracking(
     capture: true,
   });
 
-  onDestroy(() => {
+  registerCleanup(() => {
     form.removeEventListener('input', markInteraction);
     form.removeEventListener('change', markInteraction);
     form.removeEventListener('submit', markSubmitted);
@@ -204,233 +186,241 @@ async function submitFormRequest(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface NewsletterFormOptions {}
+export function newsletterForm() {
+  return {
+    _cleanup: [] as Array<() => void>,
 
-/**
- * Newsletter form component
- * Attach to #newsletterForm
- */
-export const newsletterForm = defineComponent<NewsletterFormOptions>(
-  {},
-  (ctx) => {
-    const form = ctx.el as HTMLFormElement;
+    init() {
+      const form = (this as unknown as { $el: HTMLFormElement }).$el;
 
-    if (form.tagName !== 'FORM') return;
+      if (form.tagName !== 'FORM') return;
 
-    setupAbandonTracking(
-      form,
-      TRACKING_EVENTS.NEWSLETTER_ABANDON_FILLED,
-      'newsletter',
-      (fn) => ctx.onDestroy(fn)
-    );
-
-    ctx.on('submit', (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-      const email = formData.get('email') as string;
-
-      if (!validateEmail(email)) {
-        showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
-
-        return;
-      }
-
-      trackEvent(TRACKING_EVENTS.NEWSLETTER_SUBMIT);
-
-      submitFormRequest(
+      setupAbandonTracking(
         form,
-        window.routes.newsletter,
-        { email },
-        () => trackEvent(TRACKING_EVENTS.NEWSLETTER_SUCCESS),
-        (error) =>
-          trackEvent(TRACKING_EVENTS.NEWSLETTER_ERROR, {
-            error: error.message,
-          })
+        TRACKING_EVENTS.NEWSLETTER_ABANDON_FILLED,
+        'newsletter',
+        (fn) => this._cleanup.push(fn)
       );
-    });
-  }
-);
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface RegistrationFormOptions {}
+      const onSubmit = (e: Event): void => {
+        e.preventDefault();
 
-/**
- * Event registration form component
- * Attach to #registrationForm
- */
-export const registrationForm = defineComponent<RegistrationFormOptions>(
-  {},
-  (ctx) => {
-    const form = ctx.el as HTMLFormElement;
+        const formData = new FormData(form);
+        const email = formData.get('email') as string;
 
-    if (form.tagName !== 'FORM') return;
+        if (!validateEmail(email)) {
+          showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
 
-    setupAbandonTracking(
-      form,
-      TRACKING_EVENTS.EVENT_REGISTRATION_ABANDON_FILLED,
-      'event-registration',
-      (fn) => ctx.onDestroy(fn)
-    );
+          return;
+        }
 
-    ctx.on('submit', (e) => {
-      e.preventDefault();
+        trackEvent(TRACKING_EVENTS.NEWSLETTER_SUBMIT);
 
-      const formData = new FormData(form);
-      const firstName = (formData.get('first_name') as string)?.trim();
-      const lastName = (formData.get('last_name') as string)?.trim();
-      const email = (formData.get('email') as string)?.trim();
-      const phoneNumber =
-        (formData.get('phone_number') as string)?.trim() || null;
-      const privacy = form.querySelector<HTMLInputElement>(
-        'input[name="privacy"]'
-      )?.checked;
-      const eventId = formData.get('event_id') as string;
-
-      if (!firstName || !lastName) {
-        showToast('error', 'Bitte fülle alle Pflichtfelder aus.');
-
-        return;
-      }
-
-      if (!validateEmail(email)) {
-        showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
-
-        return;
-      }
-
-      if (!privacy) {
-        showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
-
-        return;
-      }
-
-      trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUBMIT, {
-        event_id: eventId,
-        has_phone: phoneNumber ? 'yes' : 'no',
-      });
-
-      submitFormRequest(
-        form,
-        window.routes.eventRegister,
-        {
-          event_id: eventId,
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          phone_number: phoneNumber,
-          privacy: privacy ? 1 : 0,
-        },
-        () => trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUCCESS),
-        (error) =>
-          trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_ERROR, {
-            error: error.message,
-          })
-      );
-    });
-  }
-);
-
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface TestimonialFormOptions {}
-
-/**
- * Testimonial form component
- * Attach to #testimonialForm
- */
-export const testimonialForm = defineComponent<TestimonialFormOptions>(
-  {},
-  (ctx) => {
-    const form = ctx.el as HTMLFormElement;
-
-    if (form.tagName !== 'FORM') return;
-
-    setupAbandonTracking(
-      form,
-      TRACKING_EVENTS.TESTIMONIAL_ABANDON_FILLED,
-      'testimonial',
-      (fn) => ctx.onDestroy(fn)
-    );
-
-    const quoteTextarea = ctx.query<HTMLTextAreaElement>('#quote');
-    const charCount = document.getElementById('charCount');
-
-    if (quoteTextarea && charCount) {
-      const handleInput = (): void => {
-        charCount.textContent = String(quoteTextarea.value.length);
+        void submitFormRequest(
+          form,
+          window.routes.newsletter,
+          { email },
+          () => trackEvent(TRACKING_EVENTS.NEWSLETTER_SUCCESS),
+          (err) =>
+            trackEvent(TRACKING_EVENTS.NEWSLETTER_ERROR, { error: err.message })
+        );
       };
 
-      quoteTextarea.addEventListener('input', handleInput);
-      ctx.onDestroy(() =>
-        quoteTextarea.removeEventListener('input', handleInput)
-      );
-    }
+      form.addEventListener('submit', onSubmit);
+      this._cleanup.push(() => form.removeEventListener('submit', onSubmit));
+    },
 
-    const submitUrl = ctx.el.dataset.submitUrl ?? '';
+    destroy(): void {
+      this._cleanup.forEach((fn) => fn());
+      this._cleanup = [];
+    },
+  };
+}
 
-    ctx.on('submit', (e) => {
-      e.preventDefault();
+export function registrationForm() {
+  return {
+    _cleanup: [] as Array<() => void>,
 
-      const formData = new FormData(form);
-      const quote = (formData.get('quote') as string)?.trim();
-      const authorName =
-        (formData.get('author_name') as string)?.trim() || null;
-      const role = (formData.get('role') as string)?.trim() || null;
-      const email = (formData.get('email') as string)?.trim();
-      const privacy = form.querySelector<HTMLInputElement>(
-        'input[name="privacy"]'
-      )?.checked;
+    init() {
+      const form = (this as unknown as { $el: HTMLFormElement }).$el;
 
-      if (!quote || quote.length < 10) {
-        showToast(
-          'error',
-          'Bitte teile deine Erfahrung mit uns (mindestens 10 Zeichen).'
-        );
+      if (form.tagName !== 'FORM') return;
 
-        return;
-      }
-
-      if (!validateEmail(email)) {
-        showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
-
-        return;
-      }
-
-      if (!privacy) {
-        showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
-
-        return;
-      }
-
-      trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUBMIT, {
-        has_name: authorName ? 'yes' : 'no',
-        has_role: role ? 'yes' : 'no',
-        char_count: quote.length,
-      });
-
-      submitFormRequest(
+      setupAbandonTracking(
         form,
-        submitUrl,
-        {
-          quote,
-          author_name: authorName,
-          role,
-          email,
-          privacy: privacy ? 1 : 0,
-        },
-        () => {
-          if (charCount) {
-            charCount.textContent = '0';
-          }
-
-          trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUCCESS);
-        },
-        (error) =>
-          trackEvent(TRACKING_EVENTS.TESTIMONIAL_ERROR, {
-            error: error.message,
-          })
+        TRACKING_EVENTS.EVENT_REGISTRATION_ABANDON_FILLED,
+        'event-registration',
+        (fn) => this._cleanup.push(fn)
       );
-    });
-  }
-);
+
+      const onSubmit = (e: Event): void => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const firstName = (formData.get('first_name') as string)?.trim();
+        const lastName = (formData.get('last_name') as string)?.trim();
+        const email = (formData.get('email') as string)?.trim();
+        const phoneNumber =
+          (formData.get('phone_number') as string)?.trim() || null;
+        const privacy = form.querySelector<HTMLInputElement>(
+          'input[name="privacy"]'
+        )?.checked;
+        const eventId = formData.get('event_id') as string;
+
+        if (!firstName || !lastName) {
+          showToast('error', 'Bitte fülle alle Pflichtfelder aus.');
+
+          return;
+        }
+
+        if (!validateEmail(email)) {
+          showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
+
+          return;
+        }
+
+        if (!privacy) {
+          showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
+
+          return;
+        }
+
+        trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUBMIT, {
+          event_id: eventId,
+          has_phone: phoneNumber ? 'yes' : 'no',
+        });
+
+        void submitFormRequest(
+          form,
+          window.routes.eventRegister,
+          {
+            event_id: eventId,
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            phone_number: phoneNumber,
+            privacy: privacy ? 1 : 0,
+          },
+          () => trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_SUCCESS),
+          (err) =>
+            trackEvent(TRACKING_EVENTS.EVENT_REGISTRATION_ERROR, {
+              error: err.message,
+            })
+        );
+      };
+
+      form.addEventListener('submit', onSubmit);
+      this._cleanup.push(() => form.removeEventListener('submit', onSubmit));
+    },
+
+    destroy(): void {
+      this._cleanup.forEach((fn) => fn());
+      this._cleanup = [];
+    },
+  };
+}
+
+export function testimonialForm() {
+  return {
+    charCount: 0,
+    _cleanup: [] as Array<() => void>,
+
+    init() {
+      const form = (this as unknown as { $el: HTMLFormElement }).$el;
+
+      if (form.tagName !== 'FORM') return;
+
+      setupAbandonTracking(
+        form,
+        TRACKING_EVENTS.TESTIMONIAL_ABANDON_FILLED,
+        'testimonial',
+        (fn) => this._cleanup.push(fn)
+      );
+
+      const quoteTextarea = form.querySelector<HTMLTextAreaElement>('#quote');
+
+      if (quoteTextarea) {
+        const handleInput = (): void => {
+          this.charCount = quoteTextarea.value.length;
+        };
+
+        quoteTextarea.addEventListener('input', handleInput);
+        this._cleanup.push(() =>
+          quoteTextarea.removeEventListener('input', handleInput)
+        );
+      }
+
+      const submitUrl =
+        (this as unknown as { $el: HTMLElement }).$el.dataset.submitUrl ?? '';
+
+      const onSubmit = (e: Event): void => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const quote = (formData.get('quote') as string)?.trim();
+        const authorName =
+          (formData.get('author_name') as string)?.trim() || null;
+        const role = (formData.get('role') as string)?.trim() || null;
+        const email = (formData.get('email') as string)?.trim();
+        const privacy = form.querySelector<HTMLInputElement>(
+          'input[name="privacy"]'
+        )?.checked;
+
+        if (!quote || quote.length < 10) {
+          showToast(
+            'error',
+            'Bitte teile deine Erfahrung mit uns (mindestens 10 Zeichen).'
+          );
+
+          return;
+        }
+
+        if (!validateEmail(email)) {
+          showToast('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
+
+          return;
+        }
+
+        if (!privacy) {
+          showToast('error', 'Bitte bestätige die Datenschutzerklärung.');
+
+          return;
+        }
+
+        trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUBMIT, {
+          has_name: authorName ? 'yes' : 'no',
+          has_role: role ? 'yes' : 'no',
+          char_count: quote.length,
+        });
+
+        void submitFormRequest(
+          form,
+          submitUrl,
+          {
+            quote,
+            author_name: authorName,
+            role,
+            email,
+            privacy: privacy ? 1 : 0,
+          },
+          () => {
+            this.charCount = 0;
+            trackEvent(TRACKING_EVENTS.TESTIMONIAL_SUCCESS);
+          },
+          (err) =>
+            trackEvent(TRACKING_EVENTS.TESTIMONIAL_ERROR, {
+              error: err.message,
+            })
+        );
+      };
+
+      form.addEventListener('submit', onSubmit);
+      this._cleanup.push(() => form.removeEventListener('submit', onSubmit));
+    },
+
+    destroy(): void {
+      this._cleanup.forEach((fn) => fn());
+      this._cleanup = [];
+    },
+  };
+}

@@ -17,11 +17,7 @@
         @endif
 
         @if (!empty($data['title']))
-          <h2
-            class="section-title newsletter__title"
-            id="newsletter-title"
-
-          >
+          <h2 class="section-title newsletter__title" id="newsletter-title">
             {!! $data['title'] !!}
           </h2>
         @endif
@@ -36,6 +32,7 @@
           id="newsletterForm"
           class="newsletter__form"
           aria-label="Newsletter-Anmeldung"
+          x-data="newsletterForm"
         >
           <label for="newsletter-email" class="sr-only">E-Mail-Adresse</label>
           <input

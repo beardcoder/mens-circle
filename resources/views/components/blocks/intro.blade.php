@@ -12,11 +12,7 @@
       @endif
 
       @if (!empty($data['title']))
-        <h2
-          class="section-title intro__title"
-          id="intro-title"
-
-        >
+        <h2 class="section-title intro__title" id="intro-title">
           {!! $data['title'] !!}
         </h2>
       @endif

@@ -1,299 +1,226 @@
 /**
- * Navigation Components
- * Mobile navigation, scroll header, and scroll-to-top using stitch-js
+ * Site Header Alpine Component
+ * Manages mobile navigation and scroll-based header state.
  */
 
-import { defineComponent } from '@beardcoder/stitch-js';
+export function siteHeader() {
+  return {
+    isNavOpen: false,
+    isScrolled: false,
+    isOnHero: false,
+    scrollPosition: 0,
+    _cleanup: [] as Array<() => void>,
 
-interface NavigationOptions {
-  toggleSelector: string;
-  linkSelector: string;
-}
+    init() {
+      const scrollThreshold = 50;
+      const heroEl = document.querySelector<HTMLElement>('.hero');
 
-interface NavigationState {
-  isOpen: boolean;
-  scrollPosition: number;
-}
+      document.body.classList.toggle('has-hero', !!heroEl);
+      document.body.classList.toggle('no-hero', !heroEl);
 
-/**
- * Mobile navigation component
- * Attach to #nav — manages mobile menu with accessibility
- */
-export const navigation = defineComponent<NavigationOptions>(
-  {
-    toggleSelector: '#navToggle',
-    linkSelector: '.nav__link, .nav__cta',
-  },
-  (ctx) => {
-    const { options: o } = ctx;
-    const navToggle = document.getElementById(
-      o.toggleSelector.replace('#', '')
-    );
+      const updateScroll = (): void => {
+        this.isScrolled = window.scrollY > scrollThreshold || !heroEl;
+      };
 
-    if (!navToggle) return;
-
-    const state: NavigationState = {
-      isOpen: false,
-      scrollPosition: 0,
-    };
-
-    const updateAriaAttributes = (isOpen: boolean): void => {
-      navToggle.setAttribute('aria-expanded', String(isOpen));
-      navToggle.setAttribute(
-        'aria-label',
-        isOpen ? 'Menü schließen' : 'Menü öffnen'
+      updateScroll();
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      this._cleanup.push(() =>
+        window.removeEventListener('scroll', updateScroll)
       );
-    };
 
-    const open = (): void => {
-      state.scrollPosition = window.scrollY;
-      state.isOpen = true;
+      if (heroEl) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              this.isOnHero =
+                entry.isIntersecting && entry.intersectionRatio > 0.15;
+            });
+          },
+          { threshold: [0, 0.15, 0.35, 0.5], rootMargin: '-10% 0px 0px 0px' }
+        );
 
-      ctx.el.classList.add('open');
-      navToggle.classList.add('active');
+        observer.observe(heroEl);
+        this._cleanup.push(() => observer.disconnect());
+      }
+
+      const handleOutsideClick = (e: MouseEvent): void => {
+        if (
+          this.isNavOpen &&
+          !(this as unknown as { $el: HTMLElement }).$el.contains(
+            e.target as Node
+          )
+        ) {
+          this.closeNav();
+        }
+      };
+
+      const handleEscape = (e: KeyboardEvent): void => {
+        if (e.key === 'Escape' && this.isNavOpen) {
+          this.closeNav();
+        }
+      };
+
+      document.addEventListener('click', handleOutsideClick);
+      document.addEventListener('keydown', handleEscape);
+
+      this._cleanup.push(() => {
+        document.removeEventListener('click', handleOutsideClick);
+        document.removeEventListener('keydown', handleEscape);
+      });
+    },
+
+    openNav(): void {
+      this.scrollPosition = window.scrollY;
+      this.isNavOpen = true;
       document.body.classList.add('nav-open');
-      document.body.style.top = `-${state.scrollPosition}px`;
+      document.body.style.top = `-${this.scrollPosition}px`;
+    },
 
-      updateAriaAttributes(true);
-    };
+    closeNav(): void {
+      if (!this.isNavOpen) return;
 
-    const close = (options: { restoreScroll?: boolean } = {}): void => {
-      if (!state.isOpen) return;
-
-      state.isOpen = false;
-
-      ctx.el.classList.remove('open');
-      navToggle.classList.remove('active');
+      this.isNavOpen = false;
       document.body.classList.remove('nav-open');
       document.body.style.top = '';
 
-      if (options.restoreScroll ?? true) {
-        window.scrollTo({
-          top: state.scrollPosition,
-          left: 0,
-          behavior: 'instant',
-        });
-      }
+      window.scrollTo({
+        top: this.scrollPosition,
+        left: 0,
+        behavior: 'instant',
+      });
+    },
 
-      updateAriaAttributes(false);
-    };
+    closeNavImmediate(): void {
+      if (!this.isNavOpen) return;
 
-    const toggle = (): void => {
-      if (state.isOpen) {
-        close();
+      this.isNavOpen = false;
+      document.body.classList.remove('nav-open');
+      document.body.style.top = '';
+    },
+
+    toggleNav(): void {
+      if (this.isNavOpen) {
+        this.closeNav();
       } else {
-        open();
+        this.openNav();
       }
-    };
+    },
 
-    navToggle.addEventListener('click', toggle);
-    ctx.onDestroy(() => navToggle.removeEventListener('click', toggle));
-
-    ctx.on('click', o.linkSelector, () => {
-      if (!state.isOpen) return;
-
-      close({ restoreScroll: false });
-    });
-
-    const handleOutsideClick = (e: MouseEvent): void => {
-      if (
-        state.isOpen &&
-        !ctx.el.contains(e.target as Node) &&
-        !navToggle.contains(e.target as Node)
-      ) {
-        close();
-      }
-    };
-
-    const handleEscape = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape' && state.isOpen) {
-        close();
-      }
-    };
-
-    document.addEventListener('click', handleOutsideClick);
-    document.addEventListener('keydown', handleEscape);
-    ctx.onDestroy(() => {
-      document.removeEventListener('click', handleOutsideClick);
-      document.removeEventListener('keydown', handleEscape);
-    });
-  }
-);
-
-interface ScrollHeaderOptions {
-  scrollThreshold: number;
-  heroSelector: string;
+    destroy(): void {
+      this._cleanup.forEach((fn) => fn());
+      this._cleanup = [];
+    },
+  };
 }
 
 /**
- * Scroll header component
- * Attach to #header — updates appearance based on scroll position and hero presence
+ * Scroll progress bar Alpine component.
+ *
+ * Uses JS lerp instead of animation-timeline: scroll(root) to prevent the bar
+ * from "jumping" when scrollHeight changes (lazy images, accordions, Swup swaps).
  */
-export const scrollHeader = defineComponent<ScrollHeaderOptions>(
-  {
-    scrollThreshold: 50,
-    heroSelector: '.hero',
-  },
-  (ctx) => {
-    const { options: o } = ctx;
-    const hasHero = Boolean(document.querySelector(o.heroSelector));
+export function scrollProgress() {
+  return {
+    _cleanup: [] as Array<() => void>,
 
-    document.body.classList.toggle('has-hero', hasHero);
-    document.body.classList.toggle('no-hero', !hasHero);
+    init() {
+      const bar = (this as unknown as { $el: HTMLElement }).$el;
+      const smoothing = 0.18;
+      const root = document.documentElement;
 
-    const updateScrollState = (): void => {
-      const scrolled = window.scrollY > o.scrollThreshold || !hasHero;
+      let target = 0;
+      let current = 0;
+      let raf = 0;
+      let running = false;
 
-      ctx.el.classList.toggle('scrolled', scrolled);
-    };
+      const computeTarget = (): void => {
+        const max = root.scrollHeight - globalThis.innerHeight;
 
-    updateScrollState();
-    window.addEventListener('scroll', updateScrollState, { passive: true });
-    ctx.onDestroy(() =>
-      window.removeEventListener('scroll', updateScrollState)
-    );
+        target = max > 0 ? Math.min(1, Math.max(0, root.scrollTop / max)) : 0;
+      };
 
-    if (hasHero) {
-      const hero = document.querySelector<HTMLElement>(o.heroSelector);
+      const tick = (): void => {
+        const delta = target - current;
 
-      if (!hero) return;
+        if (Math.abs(delta) < 0.0005) {
+          current = target;
+          bar.style.transform = `scaleX(${current})`;
+          running = false;
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            ctx.el.classList.toggle(
-              'header--on-hero',
-              entry.isIntersecting && entry.intersectionRatio > 0.15
-            );
-          });
-        },
-        {
-          threshold: [0, 0.15, 0.35, 0.5],
-          rootMargin: '-10% 0px 0px 0px',
+          return;
         }
-      );
 
-      observer.observe(hero);
-      ctx.onDestroy(() => observer.disconnect());
-    }
-  }
-);
-
-interface ScrollToTopOptions {
-  scrollThreshold: number;
-  visibleClass: string;
-}
-
-/**
- * Scroll-to-top button component
- * Attach to #scrollToTop — shows/hides based on scroll position
- */
-export const scrollToTop = defineComponent<ScrollToTopOptions>(
-  {
-    scrollThreshold: 400,
-    visibleClass: 'visible',
-  },
-  (ctx) => {
-    const { options: o } = ctx;
-
-    const updateVisibility = (): void => {
-      ctx.el.classList.toggle(
-        o.visibleClass,
-        window.scrollY > o.scrollThreshold
-      );
-    };
-
-    updateVisibility();
-    window.addEventListener('scroll', updateVisibility, { passive: true });
-    ctx.onDestroy(() => window.removeEventListener('scroll', updateVisibility));
-
-    ctx.on('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
-);
-
-interface ScrollProgressOptions {
-  smoothing: number;
-}
-
-/**
- * Scroll progress indicator
- *
- * Drives the top progress bar via inline `transform: scaleX(...)`. We do this
- * in JS instead of `animation-timeline: scroll(root)` because the native
- * timeline remaps to a new percentage the instant `scrollHeight` changes
- * (lazy images settling, fonts loading, accordions opening, Swup container
- * swaps), which the user perceives as the bar "jumping" while scrolling.
- *
- * A small lerp toward the target value smooths those height-change jumps
- * into a glide while still only animating `transform` on the compositor.
- */
-export const scrollProgress = defineComponent<ScrollProgressOptions>(
-  {
-    smoothing: 0.18,
-  },
-  (ctx) => {
-    const bar = ctx.el;
-    const { smoothing } = ctx.options;
-
-    const root = document.documentElement;
-    let target = 0;
-    let current = 0;
-    let raf = 0;
-    let running = false;
-
-    const computeTarget = (): void => {
-      const max = root.scrollHeight - globalThis.innerHeight;
-
-      target = max > 0 ? Math.min(1, Math.max(0, root.scrollTop / max)) : 0;
-    };
-
-    const tick = (): void => {
-      const delta = target - current;
-
-      if (Math.abs(delta) < 0.0005) {
-        current = target;
+        current += delta * smoothing;
         bar.style.transform = `scaleX(${current})`;
-        running = false;
+        raf = requestAnimationFrame(tick);
+      };
 
-        return;
-      }
+      const schedule = (): void => {
+        computeTarget();
 
-      current += delta * smoothing;
-      bar.style.transform = `scaleX(${current})`;
-      raf = requestAnimationFrame(tick);
-    };
+        if (running) return;
 
-    const schedule = (): void => {
+        running = true;
+        raf = requestAnimationFrame(tick);
+      };
+
       computeTarget();
+      current = target;
+      bar.style.transform = `scaleX(${current})`;
 
-      if (running) return;
+      globalThis.addEventListener('scroll', schedule, { passive: true });
+      globalThis.addEventListener('resize', schedule);
 
-      running = true;
-      raf = requestAnimationFrame(tick);
-    };
+      const resizeObserver =
+        typeof ResizeObserver === 'function'
+          ? new ResizeObserver(schedule)
+          : null;
 
-    computeTarget();
-    current = target;
-    bar.style.transform = `scaleX(${current})`;
+      resizeObserver?.observe(root);
+      if (document.body) resizeObserver?.observe(document.body);
 
-    globalThis.addEventListener('scroll', schedule, { passive: true });
-    globalThis.addEventListener('resize', schedule);
+      this._cleanup.push(() => {
+        cancelAnimationFrame(raf);
+        globalThis.removeEventListener('scroll', schedule);
+        globalThis.removeEventListener('resize', schedule);
+        resizeObserver?.disconnect();
+      });
+    },
 
-    const resizeObserver =
-      typeof ResizeObserver === 'function'
-        ? new ResizeObserver(schedule)
-        : null;
+    destroy(): void {
+      this._cleanup.forEach((fn) => fn());
+      this._cleanup = [];
+    },
+  };
+}
 
-    resizeObserver?.observe(root);
-    if (document.body) resizeObserver?.observe(document.body);
+/**
+ * Scroll-to-top button Alpine component.
+ */
+export function scrollToTop() {
+  return {
+    isVisible: false,
+    _cleanup: [] as Array<() => void>,
 
-    ctx.onDestroy(() => {
-      cancelAnimationFrame(raf);
-      globalThis.removeEventListener('scroll', schedule);
-      globalThis.removeEventListener('resize', schedule);
-      resizeObserver?.disconnect();
-    });
-  }
-);
+    init() {
+      const threshold = 400;
+
+      const update = (): void => {
+        this.isVisible = window.scrollY > threshold;
+      };
+
+      update();
+      window.addEventListener('scroll', update, { passive: true });
+      this._cleanup.push(() => window.removeEventListener('scroll', update));
+    },
+
+    scrollUp(): void {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    destroy(): void {
+      this._cleanup.forEach((fn) => fn());
+      this._cleanup = [];
+    },
+  };
+}

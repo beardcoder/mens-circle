@@ -1,15 +1,13 @@
 /**
- * Swup 4 — AJAX page transitions for the public site.
+ * Swup 4 — AJAX page transitions.
  *
- * - Replaces the `<main id="main">` container without a full reload.
- * - Re-runs stitch component initialization on the new DOM (idempotent).
- * - Resets the Umami tracker on every page view so per-page metrics
- *   (scroll depth, time on page, etc.) start fresh.
- * - Uses native View Transitions where supported via `native: true`.
+ * Replaces `<main id="main">` without a full reload. Re-initialises Alpine
+ * on the new DOM subtree so x-data components in #main come alive, and
+ * resets the Umami tracker on each page view.
  */
 
 import Swup from 'swup';
-import { init as initStitch, destroyAll } from '@beardcoder/stitch-js';
+import Alpine from 'alpinejs';
 import { initUmamiKit } from '@/utils/umami-kit';
 
 export function initSwup(): Swup {
@@ -22,8 +20,11 @@ export function initSwup(): Swup {
   });
 
   swup.hooks.on('content:replace', () => {
-    destroyAll('body');
-    initStitch();
+    const main = document.getElementById('main');
+
+    if (main) {
+      Alpine.initTree(main);
+    }
   });
 
   swup.hooks.on('page:view', () => {

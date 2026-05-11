@@ -8,10 +8,15 @@
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
   <!-- Scroll progress indicator -->
-  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="scroll-progress" x-data="scrollProgress" aria-hidden="true"></div>
 
   <!-- Header -->
-  <header class="header" id="header">
+  <header
+    class="header"
+    id="header"
+    x-data="siteHeader"
+    :class="{ scrolled: isScrolled, 'header--on-hero': isOnHero }"
+  >
     <div class="container">
       <div class="header__inner">
         <a
@@ -48,10 +53,16 @@
           <span class="logo__text">Männerkreis</span>
         </a>
 
-        <nav class="nav" id="nav">
+        <nav
+          class="nav"
+          id="nav"
+          :class="{ open: isNavOpen }"
+          :aria-expanded="isNavOpen"
+        >
           <a
             href="{{ route('home') }}#ueber"
             class="nav__link"
+            @click="closeNavImmediate()"
             data-umami-event="nav-click"
             data-umami-event-target="ueber"
             >Über</a
@@ -59,6 +70,7 @@
           <a
             href="{{ route('home') }}#reise"
             class="nav__link"
+            @click="closeNavImmediate()"
             data-umami-event="nav-click"
             data-umami-event-target="reise"
             >Die Reise</a
@@ -66,6 +78,7 @@
           <a
             href="{{ route('home') }}#faq"
             class="nav__link"
+            @click="closeNavImmediate()"
             data-umami-event="nav-click"
             data-umami-event-target="faq"
             >Fragen</a
@@ -73,6 +86,7 @@
           <a
             href="{{ route('breathing.show') }}"
             class="nav__link"
+            @click="closeNavImmediate()"
             data-umami-event="nav-click"
             data-umami-event-target="atemuebung"
             >Atemübung</a
@@ -81,6 +95,7 @@
             <a
               href="{{ $nextEventUrl }}"
               class="btn btn--primary btn--large nav__cta"
+              @click="closeNavImmediate()"
               data-umami-event="cta-click"
               data-umami-event-location="header"
               data-umami-event-action="go-to-event"
@@ -89,7 +104,15 @@
           @endif
         </nav>
 
-        <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          @click="toggleNav()"
+          :class="{ active: isNavOpen }"
+          :aria-expanded="isNavOpen"
+          :aria-label="isNavOpen ? 'Menü schließen' : 'Menü öffnen'"
+          type="button"
+        >
           <span></span>
           <span></span>
           <span></span>
@@ -265,8 +288,12 @@
   <button
     class="scroll-to-top"
     id="scrollToTop"
+    x-data="scrollToTop"
+    x-show="isVisible"
+    @click="scrollUp()"
     aria-label="Nach oben scrollen"
     title="Nach oben"
+    style="display: none"
   >
     <svg
       viewBox="0 0 24 24"
@@ -280,33 +307,6 @@
       <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
   </button>
-
-  <!-- Calendar Modal -->
-  <div class="calendar-modal" id="calendarModal">
-    <div class="calendar-modal__content">
-      <h3>In Kalender speichern</h3>
-      <p>Wähle deinen Kalender:</p>
-      <div class="calendar-modal__buttons">
-        <a
-          href="#"
-          id="calendarGoogle"
-          class="btn btn--secondary"
-          target="_blank"
-          rel="noopener"
-        >
-          Google Calendar
-        </a>
-        <a
-          href="#"
-          id="calendarICS"
-          class="btn btn--secondary"
-          download="maennerkreis-straubing.ics"
-        >
-          Apple/Outlook (.ics)
-        </a>
-      </div>
-    </div>
-  </div>
 
   <!-- JavaScript -->
   <script>

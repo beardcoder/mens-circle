@@ -8,11 +8,6 @@ export default defineConfig({
       refresh: true,
     }),
   ],
-  resolve: {
-    alias: {
-      '@stitch': '@beardcoder/stitch-js',
-    },
-  },
   server: {
     watch: {
       ignored: ['**/storage/framework/views/**'],

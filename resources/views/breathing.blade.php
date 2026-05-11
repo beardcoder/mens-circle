@@ -62,6 +62,7 @@
         <div
           id="breathingApp"
           class="breathing-app"
+          x-data="breathingApp"
           data-breaths="35"
           data-rounds="3"
           data-recovery-hold="15"

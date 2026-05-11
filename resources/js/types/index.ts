@@ -2,6 +2,8 @@
  * Global type definitions for the Männerkreis application
  */
 
+import type { UmamiKit } from '@/utils/umami-kit';
+
 export interface EventData {
   title: string;
   description: string;
@@ -26,5 +28,6 @@ declare global {
   interface Window {
     eventData?: EventData;
     routes: Routes;
+    umamiTracker?: UmamiKit;
   }
 }
