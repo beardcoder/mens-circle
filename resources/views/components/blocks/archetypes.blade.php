@@ -24,7 +24,7 @@
     aria-labelledby="archetypes-title"
   >
     <div class="container">
-      <div class="section-header animate-on-scroll">
+      <div class="section-header" data-animate="scroll">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow">{{ $data['eyebrow'] }}</p>
         @endif
@@ -41,7 +41,8 @@
       </div>
 
       <div
-        class="archetypes__grid animate-on-scroll"
+        class="archetypes__grid"
+        data-animate="scroll"
         style="--animate-delay: 120ms"
       >
         @foreach ($items as $item)
