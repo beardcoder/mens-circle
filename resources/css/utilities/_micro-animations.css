@@ -22,7 +22,8 @@
       opacity: 0;
       transform: translateY(var(--animate-y)) scale(var(--animate-scale));
 
-      /* View timelines ignore elapsed time; 1ms is the minimal stable value. */
+      /* View timelines drive progress from scroll position, so 1ms is only a
+         placeholder duration while `animation-range` defines the reveal span. */
       animation: micro-reveal 1ms linear both;
       animation-delay: var(--animate-delay);
       animation-timeline: view();
@@ -34,6 +35,8 @@
 .hover-lift {
   --hover-lift-y: -4px;
   --hover-lift-shadow: var(--shadow-lg);
+
+  /* Keep reveal motion on a parent wrapper when hover-lift is also used. */
 
   /* `--motion-standard` is defined in `base/_variables.css`. */
   transition:
