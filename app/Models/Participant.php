@@ -1,0 +1,84 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use App\Traits\ClearsResponseCache;
+use Database\Factories\ParticipantFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
+
+/**
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property ?string $phone
+ * @property string $fullName
+ */
+#[Fillable(['first_name', 'last_name', 'email', 'phone'])]
+#[UseFactory(ParticipantFactory::class)]
+class Participant extends Model
+{
+    use ClearsResponseCache;
+
+    /** @use HasFactory<ParticipantFactory> */
+    use HasFactory;
+    use Notifiable;
+
+    /**
+     * @return HasMany<Registration, $this>
+     */
+    public function registrations(): HasMany
+    {
+        return $this->hasMany(Registration::class);
+    }
+
+    /**
+     * @return HasOne<NewsletterSubscription, $this>
+     */
+    public function newsletterSubscription(): HasOne
+    {
+        return $this->hasOne(NewsletterSubscription::class);
+    }
+
+    /**
+     * @return Attribute<string, never>
+     */
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(get: fn(): string => trim("{$this->first_name} {$this->last_name}"));
+    }
+
+    public function routeNotificationForMail(Notification $notification): string
+    {
+        return $this->email;
+    }
+
+    public function routeNotificationForSevenIo(Notification $notification): ?string
+    {
+        return $this->phone;
+    }
+
+    public function isSubscribedToNewsletter(): bool
+    {
+        return $this->newsletterSubscription?->isActive() ?? false;
+    }
+
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    public static function findOrCreateByEmail(string $email, array $attributes = []): self
+    {
+        return static::firstOrCreate([
+            'email' => $email,
+        ], $attributes);
+    }
+}

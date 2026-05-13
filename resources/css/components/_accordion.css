@@ -1,0 +1,187 @@
+/**
+ * Accordion Component
+ *
+ * Alpine.js + @alpinejs/collapse pattern:
+ *   <div class="accordion-item" :class="{ 'open': active }">
+ *     <button class="accordion-item__trigger" @click="...">
+ *       <span>Question</span>
+ *       <span class="accordion-item__icon" aria-hidden="true"></span>
+ *     </button>
+ *     <div class="accordion-item__content" x-show="active" x-collapse>
+ *       <div class="accordion-item__body">Answer</div>
+ *     </div>
+ *   </div>
+ */
+
+.accordion-item {
+  --_accent: var(--accent-primary);
+  --_icon-size: 1.75rem;
+  --_icon-mark: 0.625rem;
+  --_icon-stroke: 1.5px;
+
+  position: relative;
+  border-block-end: 1px solid var(--border-light);
+  transition:
+    background-color var(--motion-standard),
+    border-color var(--motion-standard);
+
+  &:first-child {
+    border-block-start: 1px solid var(--border-light);
+  }
+
+  /* Accent bar — marks the open item from the inline-start edge */
+  &::before {
+    position: absolute;
+    inset-block: var(--space-sm);
+    inset-inline-start: 0;
+    inline-size: 2px;
+    pointer-events: none;
+    content: '';
+    background: var(--_accent);
+    border-radius: var(--radius-full);
+    opacity: 0;
+    transform: scaleY(0.4);
+    transition:
+      opacity var(--motion-standard),
+      transform var(--motion-standard);
+  }
+
+  &.open::before {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  &.open {
+    background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
+  }
+}
+
+/* ============================================
+   Trigger (button)
+   ============================================ */
+.accordion-item__trigger {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 100%;
+  padding-block: var(--space-md);
+  padding-inline: var(--space-sm);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  text-align: start;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  outline: none;
+  background: none;
+  border: none;
+  transition: color var(--motion-quick);
+
+
+  &:focus-visible {
+    outline: 2px solid var(--_accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* ============================================
+   Icon (plus → minus by rotating the vertical stroke)
+   ============================================ */
+.accordion-item__icon {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--_icon-size);
+  block-size: var(--_icon-size);
+  background: color-mix(in oklch, var(--color-earth-warm) 12%, transparent);
+  border: 1px solid var(--color-earth-warm);
+  border-radius: var(--radius-full);
+  transition:
+    padding-inline var(--motion-standard),
+    background-color var(--motion-standard),
+    border-color var(--motion-standard);
+
+  &::before,
+  &::after {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    content: '';
+    background: var(--color-earth-warm);
+    border-radius: var(--radius-full);
+    transform: translate(-50%, -50%);
+    transition:
+      background-color var(--motion-standard),
+      transform var(--motion-standard);
+  }
+
+  /* horizontal stroke */
+  &::before {
+    inline-size: var(--_icon-mark);
+    block-size: var(--_icon-stroke);
+  }
+
+  /* vertical stroke — rotates flat on open */
+  &::after {
+    inline-size: var(--_icon-stroke);
+    block-size: var(--_icon-mark);
+  }
+}
+
+.accordion-item.open {
+  border-block-end-color: color-mix(
+    in oklch,
+    var(--accent-primary) 35%,
+    var(--border-light)
+  );
+
+  .accordion-item__trigger {
+    color: var(--_accent);
+  }
+
+  .accordion-item__icon {
+    background: var(--_accent);
+    border-color: var(--_accent);
+
+    &::before,
+    &::after {
+      background: var(--color-bone);
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+  }
+}
+
+/* ============================================
+   Content — height managed by x-collapse
+   ============================================ */
+.accordion-item__content {
+  overflow: hidden;
+}
+
+.accordion-item__body {
+  padding-block: var(--space-md);
+  padding-inline: var(--space-md);
+  font-size: 1rem;
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+  opacity: 0.82;
+
+  p:last-child {
+    margin-block-end: 0;
+  }
+
+  a {
+    color: var(--_accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--motion-quick);
+
+  }
+}

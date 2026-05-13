@@ -1,0 +1,37 @@
+/* ============================================
+   NATIVE PAGE TRANSITIONS
+
+   Enables a simple cross-document fade using the View Transitions API.
+   Requires Chrome 126+ / Edge 126+ / Safari 18.2+; gracefully ignored
+   elsewhere.
+   ============================================ */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Funktionale Overlays dürfen nicht erfasst werden */
+.scroll-progress,
+.scroll-to-top,
+.calendar-modal {
+  view-transition-name: none;
+}
+
+::view-transition-group(root) {
+  animation-duration: 520ms;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: plus-lighter;
+  animation-duration: 520ms;
+  animation-timing-function: var(--ease-settle, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+::view-transition-old(root) {
+  animation-name: vt-fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: vt-fade-in;
+}

@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Mail;
+
+use App\Models\Event;
+use App\Models\Registration;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+
+final class WaitlistConfirmation extends Mailable
+{
+    use Queueable;
+    use SerializesModels;
+
+    public function __construct(
+        public readonly Registration $registration,
+        public readonly Event $event,
+    ) {}
+
+    public function envelope(): Envelope
+    {
+        return new Envelope(subject: 'Warteliste: ' . $this->event->title);
+    }
+
+    public function content(): Content
+    {
+        return new Content(markdown: 'emails.waitlist-confirmation');
+    }
+}

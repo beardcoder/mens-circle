@@ -1,0 +1,98 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use Carbon\CarbonImmutable;
+use Database\Factories\NewsletterSubscriptionFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+use Override;
+
+/**
+ * @property int $participant_id
+ * @property string $token
+ * @property CarbonImmutable $subscribed_at
+ * @property ?CarbonImmutable $confirmed_at
+ * @property ?CarbonImmutable $unsubscribed_at
+ * @property Participant $participant
+ */
+#[Fillable(['participant_id', 'token', 'subscribed_at', 'confirmed_at', 'unsubscribed_at'])]
+#[UseFactory(NewsletterSubscriptionFactory::class)]
+class NewsletterSubscription extends Model
+{
+    /** @use HasFactory<NewsletterSubscriptionFactory> */
+    use HasFactory;
+    use SoftDeletes;
+
+    #[Override]
+    protected static function booted(): void
+    {
+        static::creating(static function (self $subscription): void {
+            $subscription->token ??= Str::random(64);
+            $subscription->subscribed_at ??= now();
+        });
+    }
+
+    /**
+     * @return BelongsTo<Participant, $this>
+     */
+    public function participant(): BelongsTo
+    {
+        return $this->belongsTo(Participant::class);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->unsubscribed_at === null;
+    }
+
+    public function unsubscribe(): void
+    {
+        $this->update([
+            'unsubscribed_at' => now(),
+        ]);
+    }
+
+    public function resubscribe(): void
+    {
+        $this->update([
+            'subscribed_at' => now(),
+            'unsubscribed_at' => null,
+        ]);
+    }
+
+    /**
+     * @param Builder<NewsletterSubscription> $query
+     *
+     * @return Builder<NewsletterSubscription>
+     */
+    #[Scope]
+    protected function active(Builder $query): Builder
+    {
+        return $query->whereNull('unsubscribed_at');
+    }
+
+    public static function activeCount(): int
+    {
+        return static::query()->active()->count();
+    }
+
+    #[Override]
+    protected function casts(): array
+    {
+        return [
+            'subscribed_at' => 'datetime',
+            'confirmed_at' => 'datetime',
+            'unsubscribed_at' => 'datetime',
+        ];
+    }
+}

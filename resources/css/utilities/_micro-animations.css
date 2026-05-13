@@ -1,0 +1,40 @@
+/**
+ * Micro interactions
+ * Hover utilities. Scroll reveal animations were removed and will be
+ * rebuilt separately.
+ */
+
+[data-hover='lift'] {
+  --hover-lift-y: -4px;
+  --hover-lift-shadow: var(--shadow-lg);
+
+  /* `--motion-standard` is defined in `base/_variables.css`. */
+  transition:
+    translate var(--motion-standard),
+    box-shadow var(--motion-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-hover='lift']:hover {
+    box-shadow: var(--hover-lift-shadow);
+    translate: 0 var(--hover-lift-y);
+  }
+
+  [data-hover='lift']:active {
+    translate: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hover='lift'] {
+    transition:
+      box-shadow var(--motion-standard),
+      background-color var(--motion-standard),
+      color var(--motion-standard);
+  }
+
+  [data-hover='lift']:hover,
+  [data-hover='lift']:active {
+    translate: 0;
+  }
+}

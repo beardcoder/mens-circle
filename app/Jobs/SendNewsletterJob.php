@@ -1,0 +1,95 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Jobs;
+
+use App\Enums\NewsletterStatus;
+use App\Mail\NewsletterMail;
+use App\Models\Newsletter;
+use App\Models\NewsletterSubscription;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Attributes\Backoff;
+use Illuminate\Queue\Attributes\Timeout;
+use Illuminate\Queue\Attributes\Tries;
+use Illuminate\Queue\Attributes\WithoutRelations;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Sleep;
+use Throwable;
+
+#[Tries(3)]
+#[Backoff(60)]
+#[Timeout(3600)]
+class SendNewsletterJob implements ShouldBeUnique, ShouldQueue
+{
+    use Queueable;
+
+    public function __construct(
+        #[WithoutRelations]
+        public readonly Newsletter $newsletter,
+    ) {}
+
+    public function uniqueId(): int
+    {
+        return $this->newsletter->id;
+    }
+
+    public function handle(): void
+    {
+        $this->newsletter->update(['status' => NewsletterStatus::Sending]);
+
+        $recipientCount = 0;
+        $failedCount = 0;
+
+        NewsletterSubscription::query()
+            ->active()
+            ->with('participant')
+            ->chunk(100, function (Collection $subscriptions) use (&$recipientCount, &$failedCount): void {
+                /** @var NewsletterSubscription $subscription */
+                foreach ($subscriptions as $subscription) {
+                    try {
+                        Mail::to($subscription->participant->email)
+                            ->send(new NewsletterMail($this->newsletter, $subscription));
+                        $recipientCount++;
+                    } catch (Throwable $e) {
+                        $failedCount++;
+                        Log::error('Failed to send newsletter to subscriber', [
+                            'newsletter_id' => $this->newsletter->id,
+                            'subscription_id' => $subscription->id,
+                            'error' => $e->getMessage(),
+                        ]);
+                    }
+                }
+
+                Sleep::for(100)->milliseconds();
+            });
+
+        $this->newsletter->update([
+            'status' => NewsletterStatus::Sent,
+            'sent_at' => now(),
+            'recipient_count' => $recipientCount,
+        ]);
+
+        if ($failedCount > 0) {
+            Log::warning('Newsletter sending completed with failures', [
+                'newsletter_id' => $this->newsletter->id,
+                'successful' => $recipientCount,
+                'failed' => $failedCount,
+            ]);
+        }
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        Log::error('Newsletter job failed completely', [
+            'newsletter_id' => $this->newsletter->id,
+            'error' => $exception->getMessage(),
+        ]);
+
+        $this->newsletter->update(['status' => NewsletterStatus::Draft]);
+    }
+}

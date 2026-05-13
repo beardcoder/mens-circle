@@ -1,0 +1,80 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Widgets;
+
+use App\Enums\RegistrationStatus;
+use App\Models\Event;
+use App\Models\Registration;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Filament\Widgets\TableWidget;
+
+class UpcomingEventRegistrations extends TableWidget
+{
+    protected static ?int $sort = 3;
+
+    protected int|string|array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        return Event::published()->upcoming()->has('activeRegistrations')->exists();
+    }
+
+    public function table(Table $table): Table
+    {
+        $nextEvent = Event::nextEvent();
+
+        if (!$nextEvent instanceof Event) {
+            return $table->query(Registration::query()->whereRaw('1 = 0'))->columns([]);
+        }
+
+        return $table
+            ->query(
+                Registration::query()
+                    ->with('participant')
+                    ->whereBelongsTo($nextEvent)
+                    ->active()
+                    ->latest('registered_at'),
+            )
+            ->columns([
+                TextColumn::make('participant.first_name')
+                    ->label('Vorname')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('participant.last_name')
+                    ->label('Nachname')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('participant.email')
+                    ->label('E-Mail')
+                    ->searchable()
+                    ->sortable()
+                    ->copyable(),
+
+                TextColumn::make('participant.phone')
+                    ->label('Telefon')
+                    ->searchable()
+                    ->sortable()
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(static fn(RegistrationStatus $state): string => $state->getColor())
+                    ->formatStateUsing(static fn(RegistrationStatus $state): string => $state->getLabel())
+                    ->sortable(),
+
+                TextColumn::make('registered_at')
+                    ->label('Angemeldet am')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable(),
+            ])
+            ->heading("Anmeldungen für nächstes Event: {$nextEvent->title} ({$nextEvent->event_date->format('d.m.Y')})")
+            ->defaultSort('registered_at', 'desc');
+    }
+}

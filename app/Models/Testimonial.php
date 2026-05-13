@@ -1,0 +1,64 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use App\Traits\ClearsResponseCache;
+use Database\Factories\TestimonialFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\CarbonImmutable;
+use Override;
+
+/**
+ * @property string $quote
+ * @property ?string $author_name
+ * @property ?string $email
+ * @property ?string $role
+ * @property bool $is_published
+ * @property ?CarbonImmutable $published_at
+ * @property int $sort_order
+ */
+#[Fillable(['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order'])]
+#[UseFactory(TestimonialFactory::class)]
+class Testimonial extends Model
+{
+    /** @use HasFactory<TestimonialFactory> */
+    use HasFactory;
+    use ClearsResponseCache;
+    use SoftDeletes;
+
+    #[Override]
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+            'published_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * @param Builder<Testimonial> $query
+     *
+     * @return Builder<Testimonial>
+     */
+    #[Scope]
+    protected function published(Builder $query): Builder
+    {
+        return $query->where('is_published', true);
+    }
+
+    #[Override]
+    protected static function booted(): void
+    {
+        static::addGlobalScope('order', static function (Builder $builder): void {
+            $builder->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
+        });
+    }
+}

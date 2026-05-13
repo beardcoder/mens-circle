@@ -1,0 +1,76 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Providers\Filament;
+
+use AchyutN\FilamentLogViewer\FilamentLogViewer;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\AuthenticateSession;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Pages\Dashboard;
+use Filament\Pages\Enums\SubNavigationPosition;
+use Filament\Panel;
+use Filament\PanelProvider;
+use Filament\Support\Enums\Platform;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Openplain\FilamentShadcnTheme\Color;
+use ShuvroRoy\FilamentSpatieLaravelHealth\FilamentSpatieLaravelHealthPlugin;
+
+class AdminPanelProvider extends PanelProvider
+{
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->default()
+            ->id('admin')
+            ->path('admin')
+            ->login()
+            ->spa()
+            ->databaseTransactions()
+            ->sidebarCollapsibleOnDesktop()
+            ->unsavedChangesAlerts()
+            ->globalSearchFieldSuffix(fn(): string => match (Platform::detect()) {
+                Platform::Mac => '⌘K',
+                default => 'Ctrl+K',
+            })
+            ->profile(isSimple: false)
+            ->favicon(asset('favicon.svg'))
+            ->brandName('Männerkreis Niederbayern')
+            ->brandLogoHeight('40px')
+            ->renderHook('panels::auth.login.form.after', static fn(): Factory|View => view('filament.components.auth.socialite.github'))
+            ->colors([
+                'primary' => Color::Orange,
+            ])
+            ->renderHook(PanelsRenderHook::TOPBAR_END, static fn(): Factory|View => view('filament.components.go-to-website'))
+            ->renderHook(PanelsRenderHook::HEAD_END, static fn(): Factory|View => view('filament.components.apple-touch-icons'))
+            ->plugins([FilamentLogViewer::make(), FilamentSpatieLaravelHealthPlugin::make()])
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
+            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
+            ->pages([Dashboard::class])
+            ->broadcasting(false)
+            ->subNavigationPosition(SubNavigationPosition::Top)
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->middleware([
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                AuthenticateSession::class,
+                ShareErrorsFromSession::class,
+                PreventRequestForgery::class,
+                SubstituteBindings::class,
+                DisableBladeIconComponents::class,
+                DispatchServingFilamentEvent::class,
+            ])
+            ->authMiddleware([Authenticate::class]);
+    }
+}

@@ -1,0 +1,149 @@
+/**
+ * Button Components
+ * Modern, accessible buttons
+ */
+
+/* ============================================
+   Base Button Styles
+   ============================================ */
+.btn {
+  --btn-bg: var(--accent-primary);
+  --btn-color: var(--color-bone);
+  --btn-border: transparent;
+  --btn-hover-bg: color-mix(
+    in oklch,
+    var(--accent-primary) 78%,
+    var(--color-ink)
+  );
+  --btn-hover-color: var(--color-bone);
+  --btn-shadow: var(--shadow-md);
+  --btn-padding-block: 1.1rem;
+  --btn-padding-inline: 2.25rem;
+  --btn-gap: var(--space-xs);
+
+  position: relative;
+  display: inline-flex;
+  gap: var(--btn-gap);
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--btn-padding-block);
+  padding-inline: var(--btn-padding-inline);
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--btn-color);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: var(--btn-bg);
+  border: 1.5px solid var(--btn-border);
+  border-radius: var(--radius-full);
+  box-shadow: var(--btn-shadow);
+  isolation: isolate;
+  transition:
+    background-color var(--motion-standard),
+    color var(--motion-standard),
+    border-color var(--motion-standard),
+    filter var(--motion-quick),
+    transform var(--motion-quick),
+    box-shadow var(--motion-standard);
+}
+
+
+.btn:active {
+  box-shadow: var(--shadow-sm);
+  filter: saturate(0.98);
+  transform: translateY(0) scale(0.975);
+  transition-duration: var(--duration-fast);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn svg {
+  flex-shrink: 0;
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+/* ============================================
+   Button Variants
+   ============================================ */
+
+/* Primary (default) */
+.btn--primary {
+  --btn-bg: var(--accent-primary);
+  --btn-color: var(--color-bone);
+  --btn-hover-bg: color-mix(
+    in oklch,
+    var(--accent-primary) 75%,
+    var(--color-ink)
+  );
+  --btn-hover-color: var(--color-bone);
+}
+
+/* Secondary (outlined) */
+.btn--secondary {
+  --btn-bg: transparent;
+  --btn-color: var(--text-primary);
+  --btn-border: var(--text-primary);
+  --btn-hover-bg: var(--text-primary);
+  --btn-hover-color: var(--bg-primary);
+  --btn-shadow: none;
+}
+
+/* ============================================
+   Button Sizes
+   ============================================ */
+.btn--large {
+  --btn-padding-block: 1.375rem;
+  --btn-padding-inline: 2.75rem;
+
+  font-size: var(--text-sm);
+}
+
+/* ============================================
+   Social / Icon Buttons
+   ============================================ */
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 40px;
+  block-size: 40px;
+  color: var(--color-sand);
+  background: color-mix(in oklch, var(--color-sand) 10%, transparent);
+  border-radius: var(--radius-full);
+  transition:
+    background-color var(--motion-quick),
+    color var(--motion-quick),
+    transform var(--motion-quick),
+    box-shadow var(--motion-quick);
+}
+
+
+.social-icon:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+.social-icon:active {
+  transform: translateY(0) scale(1);
+}
+
+.social-icon svg {
+  inline-size: 20px;
+  block-size: 20px;
+}

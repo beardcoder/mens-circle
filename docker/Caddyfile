@@ -1,0 +1,101 @@
+{
+	{$CADDY_GLOBAL_OPTIONS}
+
+	admin {$CADDY_SERVER_ADMIN_HOST}:{$CADDY_SERVER_ADMIN_PORT}
+
+	frankenphp {
+		worker {
+			file "{$APP_PUBLIC_PATH}/frankenphp-worker.php"
+			{$CADDY_SERVER_WORKER_DIRECTIVE}
+			{$CADDY_SERVER_WATCH_DIRECTIVES}
+		}
+	}
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+{$CADDY_SERVER_SERVER_NAME} {
+	log {
+		level {$CADDY_SERVER_LOG_LEVEL}
+
+		format filter {
+			wrap {$CADDY_SERVER_LOGGER}
+			fields {
+				uri query {
+					replace authorization REDACTED
+				}
+			}
+		}
+	}
+
+	route {
+		root * "{$APP_PUBLIC_PATH}"
+		encode zstd br gzip
+
+		# ============================================================
+		# Cache-Control for static assets
+		#
+		# Ordered from least to most specific — later `header` rules
+		# override earlier ones for paths that match more than one
+		# matcher. Lighthouse's "efficient cache policy" audit expects
+		# at least ~30 days (2592000s) on every static resource.
+		# ============================================================
+
+		# Raster images, vector images, and favicons at any depth.
+		@images path *.png *.jpg *.jpeg *.webp *.avif *.gif *.svg *.ico
+		header @images Cache-Control "public, max-age=2592000, stale-while-revalidate=86400"
+
+		# Fonts — by convention immutable for a year.
+		@fonts path *.woff *.woff2 *.ttf *.otf *.eot
+		header @fonts Cache-Control "public, max-age=31536000, immutable"
+
+		# Video / audio served from /public (rare, but covered).
+		@media_files path *.mp4 *.webm *.mp3 *.ogg
+		header @media_files Cache-Control "public, max-age=2592000"
+
+		# Published vendor CSS/JS (Filament, Spatie Health, etc.) —
+		# path is stable per release; rebuilt on deploy. stale-while-
+		# revalidate keeps repeat visits fast during a rollout.
+		@vendor_assets path /css/* /js/*
+		header @vendor_assets Cache-Control "public, max-age=2592000, stale-while-revalidate=604800"
+
+		# User-uploaded media (Spatie Media Library). Paths are
+		# content-addressed by media id, but conversions can be
+		# regenerated, so prefer stale-while-revalidate over immutable.
+		@user_media path /storage/*
+		header @user_media Cache-Control "public, max-age=2592000, stale-while-revalidate=604800"
+
+		# Short-TTL metadata — site-wide files that should propagate
+		# quickly on deploy.
+		@meta path /robots.txt /sitemap.xml /manifest.json /browserconfig.xml /admin-manifest.json /llms.txt
+		header @meta Cache-Control "public, max-age=3600"
+
+		# Fingerprinted build output (Vite, Laravel Mix-style). This
+		# matcher is intentionally last so that any png/woff living
+		# under /build or /_assets gets the immutable treatment
+		# instead of the generic image/font rule above.
+		@fingerprinted path /build/* /_assets/*
+		header @fingerprinted Cache-Control "public, max-age=31536000, immutable"
+
+		# ============================================================
+		# Security headers applied to every response.
+		# HTML/PHP responses keep whatever Cache-Control the app sets
+		# (Laravel response cache / route-level directives) — we do
+		# not override dynamic responses here.
+		# ============================================================
+		header {
+			X-Content-Type-Options nosniff
+			Referrer-Policy strict-origin-when-cross-origin
+			X-Frame-Options SAMEORIGIN
+			-Server
+		}
+
+		{$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+		php_server {
+			index frankenphp-worker.php
+			try_files {path} frankenphp-worker.php
+			resolve_root_symlink
+		}
+	}
+}

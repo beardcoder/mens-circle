@@ -1,0 +1,104 @@
+/**
+ * Animation Utilities
+ *
+ * Scroll-to-top button + the CSS-only scroll progress bar.
+ * Shared `@keyframes` live in base/_keyframes.css (unlayered) so the
+ * animation lookup never has to cross cascade layer boundaries.
+ */
+
+/* ============================================
+   Scroll Progress Bar — driven by the root scroll timeline. Zero JS,
+   no rAF lerp, no layout reads. The bar uses `scaleX` so the GPU can
+   composite progress without paint. Falls back to `scaleX(0)` (i.e.
+   invisible) in browsers without scroll-timeline support — that's
+   accepted, the bar is purely decorative.
+   ============================================ */
+.scroll-progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--z-sticky);
+  block-size: 3px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    var(--accent-secondary)
+  );
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  will-change: transform;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: scroll-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes scroll-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress {
+    display: none;
+  }
+}
+
+
+/* ============================================
+   Scroll-to-Top Button
+   ============================================ */
+.scroll-to-top {
+  position: fixed;
+  inset-block-end: var(--space-md);
+  inset-inline-end: var(--space-md);
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 48px;
+  block-size: 48px;
+  color: var(--text-on-dark);
+  pointer-events: none;
+  cursor: pointer;
+  background: var(--accent-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 0 1px color-mix(in oklch, var(--color-bone) 10%, transparent) inset;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--motion-standard),
+    transform var(--motion-standard),
+    background-color var(--motion-quick);
+}
+
+.scroll-to-top.visible {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+  background: var(--bg-dark);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 0 1px color-mix(in oklch, var(--color-bone) 12%, transparent) inset;
+  transform: translateY(-1px);
+}
+
+.scroll-to-top:active {
+  transform: translateY(0);
+}
+
+.scroll-to-top svg {
+  inline-size: 20px;
+  block-size: 20px;
+}

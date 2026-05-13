@@ -1,0 +1,29 @@
+{
+    "agents": [
+        "claude_code",
+        "codex",
+        "copilot"
+    ],
+    "cloud": false,
+    "guidelines": true,
+    "herd_mcp": false,
+    "mcp": true,
+    "nightwatch_mcp": false,
+    "packages": [
+        "filament/filament",
+        "spatie/laravel-medialibrary",
+        "spatie/laravel-responsecache",
+        "barryvdh/laravel-debugbar"
+    ],
+    "sail": false,
+    "skills": [
+        "laravel-best-practices",
+        "socialite-development",
+        "pest-testing",
+        "medialibrary-development",
+        "responsecache-development",
+        "debug-using-debugbar",
+        "laravel-specialist",
+        "php-best-practices"
+    ]
+}
