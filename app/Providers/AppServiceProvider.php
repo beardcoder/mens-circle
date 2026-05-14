@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Checks\MailHealthCheck;
-use App\Checks\QueueHealthCheck;
-use App\Checks\SevenIoHealthCheck;
+
 use App\Models\Event;
 use App\Seo\Schemas\LocalBusinessSchema;
 use App\Seo\Schemas\OrganizationSchema;
 use App\Seo\Schemas\WebSiteSchema;
 use App\Settings\GeneralSettings;
 use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Support\Facades\Config;
+
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Health\Checks\Checks\CacheCheck;
@@ -24,14 +22,13 @@ use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 use Spatie\Health\Checks\Checks\PingCheck;
 use Spatie\Health\Checks\Checks\ScheduleCheck;
 use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
-use Spatie\Health\Facades\Health;
+
 use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->configureHealth();
 
         View::composer(['*'], static function (ViewContract $view): void {
             try {
@@ -92,9 +89,8 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    private function configureHealth(): void
-    {
-        Health::checks([
+
+
             // Infrastructure Checks
             UsedDiskSpaceCheck::new()->warnWhenUsedSpaceIsAbovePercentage(70)->failWhenUsedSpaceIsAbovePercentage(90),
             DatabaseCheck::new(),
@@ -107,7 +103,7 @@ class AppServiceProvider extends ServiceProvider
             ))->heartbeatMaxAgeInMinutes(Config::integer('health.schedule.heartbeat_max_age_in_minutes', 10)),
 
             // Queue Check - wichtig für asynchrone Jobs
-            QueueHealthCheck::new()->name('Queue System'),
+    ->name('Queue System'),
 
             // Application Checks
             OptimizedAppCheck::new(),
@@ -122,10 +118,9 @@ class AppServiceProvider extends ServiceProvider
                 ->retryTimes(2),
 
             // Mail System Check
-            MailHealthCheck::new()->name('SMTP Mail'),
+    ->name('SMTP Mail'),
 
             // SMS Service Check (Seven.io)
-            SevenIoHealthCheck::new()->name('Seven.io SMS'),
-        ]);
-    }
+    ->name('Seven.io SMS'),
+    
 }
