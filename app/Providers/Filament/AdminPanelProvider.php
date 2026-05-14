@@ -24,7 +24,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Openplain\FilamentShadcnTheme\Color;
-use ShuvroRoy\FilamentSpatieLaravelHealth\FilamentSpatieLaravelHealthPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -53,7 +52,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(PanelsRenderHook::TOPBAR_END, static fn(): Factory|View => view('filament.components.go-to-website'))
             ->renderHook(PanelsRenderHook::HEAD_END, static fn(): Factory|View => view('filament.components.apple-touch-icons'))
-            ->plugins([FilamentLogViewer::make(), FilamentSpatieLaravelHealthPlugin::make()])
+            ->plugins([FilamentLogViewer::make()])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([Dashboard::class])

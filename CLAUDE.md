@@ -20,7 +20,6 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 
 ```
 app/
-├── Checks/                  # Spatie Health checks (Mail, Queue, SevenIo SMS)
 ├── Console/Commands/        # SendEventReminders, GenerateSitemap
 ├── Enums/                   # RegistrationStatus, NewsletterStatus, SocialLinkType, Heroicon
 ├── Filament/
@@ -39,7 +38,7 @@ app/
 │                            #   AdminEventRegistrationNotification, NewsletterMail, NewsletterWelcome
 ├── Models/                  # User, Event, Registration, Participant, Newsletter,
 │                            #   NewsletterSubscription, Testimonial, Page, ContentBlock
-├── Notifications/           # HealthCheckFailedNotification (throttled)
+├── Notifications/           # EventRegistrationConfirmed, EventReminderNotification, etc.
 ├── Observers/               # RegistrationObserver
 ├── Providers/               # AppServiceProvider, AdminPanelProvider
 ├── Services/                # EventNotificationService (email + SMS via Seven.io)
@@ -95,7 +94,6 @@ Scheduled commands in `routes/console.php`:
 
 - `events:send-reminders` — daily at 10:00
 - `sitemap:generate` — daily at 02:00
-- Health checks — every minute
 
 ## Testing
 
@@ -127,10 +125,7 @@ tests/
 │   ├── Mail/                # AdminEventRegistrationNotification, EventParticipantMessage
 │   ├── Middleware/           # CompressHtml
 │   ├── ClearsResponseCacheTest.php
-│   ├── HealthCheckNotificationThrottleTest.php
 │   ├── LlmControllerArchetypesTest.php
-│   ├── QueueHealthCheckTest.php
-│   ├── ScheduleHealthCheckIntegrationTest.php
 │   └── SeoIndexingSignalsTest.php
 └── Unit/
     ├── Enums/               # EmailTemplate
@@ -226,7 +221,6 @@ Each block has a corresponding Blade component in `resources/views/components/bl
 | -------------------------- | ------------------------------------- |
 | `config/sevenio.php`       | Seven.io SMS API settings             |
 | `config/analytics.php`     | Umami analytics (disabled by default) |
-| `config/health.php`        | Spatie Health email notifications     |
 | `config/responsecache.php` | Response cache (7-day TTL)            |
 
 ### Environment
@@ -255,7 +249,6 @@ Configured in `bootstrap/app.php`:
 | `spatie/laravel-medialibrary`  | Event images, content block media                          |
 | `spatie/laravel-settings`      | Persistent `GeneralSettings` (site name, contact, socials) |
 | `spatie/laravel-sluggable`     | Auto-slug for Events and Pages                             |
-| `spatie/laravel-health`        | Health checks (mail, queue, SMS, disk, DB)                 |
 | `spatie/laravel-sitemap`       | Sitemap generation                                         |
 | `seven.io/api`                 | SMS notifications for event reminders                      |
 | `sentry/sentry-laravel`        | Error tracking                                             |

@@ -8,12 +8,6 @@ return [
     'default' => env('CACHE_STORE', 'database'),
 
     'stores' => [
-        'health' => [
-            'driver' => 'file',
-            'path' => storage_path('framework/cache/health'),
-            'lock_path' => storage_path('framework/cache/health'),
-        ],
-
         'failover' => [
             'driver' => 'failover',
             'stores' => ['database', 'file'],
