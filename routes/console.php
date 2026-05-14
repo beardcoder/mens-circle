@@ -7,12 +7,10 @@ use App\Console\Commands\SendEventReminders;
 use Illuminate\Support\Facades\Schedule;
 
 // Event Management
-Schedule::command(SendEventReminders::class)->everyFifteenMinutes()->withoutOverlapping()->onOneServer();
+Schedule::command(SendEventReminders::class)->dailyAt('10:00');->everyFifteenMinutes()->withoutOverlapping()->onOneServer();
 
 // SEO
-Schedule::command(GenerateSitemap::class)->daily()->at('02:00')->withoutOverlapping()->onOneServer()->runInBackground();
+Schedule::command(GenerateSitemap::class)->dailyAt('02:00');->daily()->at('02:00')->withoutOverlapping()->onOneServer()->runInBackground();
 
-// Health checks Checks
-Schedule::command(::class)->everyMinute()->runInBackground();
-Schedule::command(::class)->everyMinute()->runInBackground();
-Schedule::command(::class)->everyMinute()->runInBackground();
+ Checks
+
