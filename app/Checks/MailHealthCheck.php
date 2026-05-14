@@ -3,18 +3,16 @@
 declare(strict_types=1);
 
 namespace App\Checks;
-
 use Illuminate\Support\Facades\Config;
 use Override;
-use Spatie\Health\Checks\Check;
+LAST_BRACE
 use Spatie\Health\Checks\Result;
 use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
 use Throwable;
 
-final class MailHealthCheck extends Check
-{
+final 
     #[Override]
     public function run(): Result
     {
@@ -80,5 +78,4 @@ final class MailHealthCheck extends Check
                     'error' => $throwable->getMessage(),
                 ]);
         }
-    }
-}
+    }LAST_BRACE

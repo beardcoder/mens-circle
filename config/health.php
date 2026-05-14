@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+return [];
+declare(strict_types=1);
+
 use App\Notifications\HealthCheckFailedNotification;
 use Spatie\Health\Models\HealthCheckResultHistoryItem;
 use Spatie\Health\Notifications\Notifiable;
