@@ -98,16 +98,12 @@
       will-change: opacity, transform;
     }
 
-    /* Hero title: clip-wipe from bottom — consistent with section titles,
-       but one-shot timed rather than scroll-driven. The h1 is the centrepiece,
-       so it gets slightly longer duration and a dedicated delay. */
+    /* Hero title: longer fade-up — clip-wipe can't be used here because
+       animation-fill-mode:both + clip-path initial state + 250ms delay
+       would hide the title on load. Fade-up with opacity:0 is safe. */
     .hero__content > .hero__title {
-      opacity: 1;
-      clip-path: inset(0 0 110% 0);
-      transform: none;
-      animation: reveal-clip-wipe 850ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-duration: 900ms;
       animation-delay: 250ms;
-      will-change: clip-path;
     }
 
     /* Hero bottom (description + CTA): enters after title animation finishes */
