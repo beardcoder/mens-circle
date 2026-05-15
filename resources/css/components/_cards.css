@@ -32,6 +32,21 @@
   border-block-end: 1px solid var(--border-light);
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .value-item:hover {
+    background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
+    border-color: color-mix(in oklch, var(--accent-primary) 35%, transparent);
+    box-shadow: var(--shadow-sm);
+    transform: translateX(3px);
+  }
+
+  .value-item:hover .value-item__number {
+    color: var(--accent-primary);
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
 .value-item__number {
   grid-row: 1 / span 2;
   grid-column: 1;

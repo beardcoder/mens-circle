@@ -194,6 +194,12 @@
   background: linear-gradient(to bottom, var(--accent-primary), transparent);
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .hero__scroll::after {
+    animation: scroll-line-sweep 2s var(--ease-settle) infinite;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero__scroll::after {
     animation: none;

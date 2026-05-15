@@ -14,11 +14,18 @@
 
 /* Prevent font size inflation */
 html {
-  scroll-behavior: smooth;
-
   /* Base font size for rem calculations */
   font-size: 16px;
   text-size-adjust: none;
+}
+
+/* Smooth scroll only for users who haven't requested reduced motion.
+   Setting this unconditionally breaks keyboard navigation for vestibular
+   disorder users and prevents instant-scroll behaviour when needed. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @media (width >= 1600px) {

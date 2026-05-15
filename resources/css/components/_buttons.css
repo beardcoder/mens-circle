@@ -53,6 +53,52 @@
 }
 
 
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    color: var(--btn-hover-color);
+    background-color: var(--btn-hover-bg);
+    border-color: var(--btn-hover-bg);
+    box-shadow: var(--shadow-lg), var(--shadow-glow-accent);
+    transform: translateY(-2px);
+  }
+}
+
+/* Shimmer — diagonal glare sweeps left-to-right on hover.
+   opacity:0 in base state so a mid-animation snap-back is invisible.
+   On hover-exit: opacity fades to 0 (150ms), transform jumps to start
+   position — the jump is hidden because the element is already transparent. */
+.btn::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    color-mix(in oklch, white 18%, transparent) 50%,
+    transparent 70%
+  );
+  opacity: 0;
+  transform: translateX(-120%) skewX(-20deg);
+  transition: opacity 150ms ease-in;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover::before {
+    opacity: 1;
+    transform: translateX(220%) skewX(-20deg);
+
+    /* opacity snaps to 1 instantly; transform sweeps over 500ms */
+    transition: transform 500ms var(--ease-settle);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn::before {
+    display: none;
+  }
+}
+
 .btn:active {
   box-shadow: var(--shadow-sm);
   filter: saturate(0.98);
@@ -133,6 +179,14 @@
     box-shadow var(--motion-quick);
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .social-icon:hover {
+    color: var(--color-bone);
+    background: color-mix(in oklch, var(--color-sand) 25%, transparent);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+  }
+}
 
 .social-icon:focus-visible {
   outline: 2px solid var(--accent-primary);

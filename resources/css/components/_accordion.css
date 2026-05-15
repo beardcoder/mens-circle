@@ -50,10 +50,6 @@
     opacity: 1;
     transform: scaleY(1);
   }
-
-  &.open {
-    background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
-  }
 }
 
 /* ============================================
@@ -78,6 +74,12 @@
   border: none;
   transition: color var(--motion-quick);
 
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: var(--_accent);
+    }
+  }
 
   &:focus-visible {
     outline: 2px solid var(--_accent);
@@ -133,6 +135,7 @@
 }
 
 .accordion-item.open {
+  background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
   border-block-end-color: color-mix(
     in oklch,
     var(--accent-primary) 35%,

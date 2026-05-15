@@ -1,14 +1,15 @@
 /**
  * Micro interactions
- * Hover utilities. Scroll reveal animations were removed and will be
- * rebuilt separately.
+ * data-hover attribute variants for interactive elements.
+ * All transitions use compositor-only properties (transform, opacity,
+ * box-shadow) — no layout-triggering changes.
  */
 
+/* ── Lift: subtle vertical rise with shadow depth ── */
 [data-hover='lift'] {
   --hover-lift-y: -4px;
   --hover-lift-shadow: var(--shadow-lg);
 
-  /* `--motion-standard` is defined in `base/_variables.css`. */
   transition:
     translate var(--motion-standard),
     box-shadow var(--motion-standard);
@@ -37,4 +38,65 @@
   [data-hover='lift']:active {
     translate: 0;
   }
+}
+
+/* ── Glow: accent radial glow emanates on hover ── */
+[data-hover='glow'] {
+  --hover-glow-color: var(--accent-primary);
+
+  transition:
+    box-shadow var(--motion-standard),
+    transform var(--motion-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-hover='glow']:hover {
+    box-shadow:
+      0 0 0 3px color-mix(in oklch, var(--hover-glow-color) 25%, transparent),
+      0 8px 24px -8px color-mix(in oklch, var(--hover-glow-color) 45%, transparent);
+    transform: translateY(-2px);
+  }
+
+  [data-hover='glow']:active {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hover='glow']:hover {
+    box-shadow: 0 0 0 3px
+      color-mix(in oklch, var(--hover-glow-color) 25%, transparent);
+    transform: none;
+  }
+}
+
+/* ── Scale: gentle scale pulse for icon buttons and badges ── */
+[data-hover='scale'] {
+  transition: transform var(--motion-standard) var(--ease-settle);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-hover='scale']:hover {
+    transform: scale(1.06);
+  }
+
+  [data-hover='scale']:active {
+    transform: scale(0.96);
+  }
+}
+
+/* ── Press: satisfying scale-down press feel for interactive tiles ── */
+[data-hover='press'] {
+  transition: transform var(--motion-quick) var(--ease-precise);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-hover='press']:hover {
+    transform: scale(0.98);
+  }
+}
+
+[data-hover='press']:active {
+  transform: scale(0.95);
+  transition-duration: var(--duration-fast);
 }

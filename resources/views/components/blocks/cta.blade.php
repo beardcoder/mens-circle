@@ -32,11 +32,9 @@
           <a
             href="{{ $resolvedButtonLink }}"
             class="btn btn--primary btn--large"
-            data-hover="lift"
             data-umami-event="cta-click"
             data-umami-event-location="cta-block"
             data-umami-event-text="{{ $data['button_text'] }}"
-            data-reveal
           >
             {{ $data['button_text'] }}
           </a>

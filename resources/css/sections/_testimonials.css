@@ -63,6 +63,18 @@
 }
 
 
+@media (hover: hover) and (pointer: fine) {
+  .testimonial-item:hover {
+    background: color-mix(in oklch, var(--accent-primary) 3%, transparent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .testimonial-item:hover .testimonial-item__quote::before {
+    color: var(--accent-primary);
+    transform: scale(1.15) translateY(-0.1rem);
+  }
+}
+
 .testimonial-item__quote {
   position: relative;
   flex-grow: 1;

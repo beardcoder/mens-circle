@@ -58,7 +58,6 @@
               <a
                 href="{{ $resolvedButtonLink }}"
                 class="btn btn--primary btn--large"
-                data-hover="lift"
               >
                 {{ $data['button_text'] }}
               </a>

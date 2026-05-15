@@ -103,11 +103,15 @@
   font-weight: 500;
   color: inherit;
   letter-spacing: 0.02em;
-  transition: opacity var(--motion-standard);
+  transition:
+    opacity var(--motion-standard),
+    color var(--motion-standard);
 }
 
-.nav__link:hover {
-  opacity: 0.8;
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:hover {
+    opacity: 0.85;
+  }
 }
 
 .nav__link:focus-visible {
@@ -116,20 +120,24 @@
   border-radius: var(--radius-sm);
 }
 
-/* Underline effect */
+/* Underline effect — clip-path is compositor-only (no layout recalc),
+   `inline-size: 0 → 100%` triggers layout on every frame so it's avoided. */
 .nav__link::after {
   position: absolute;
   inset-block-end: -4px;
   inset-inline-start: 0;
-  inline-size: 0;
+  inline-size: 100%;
   block-size: 1px;
   content: '';
   background: var(--accent-primary);
-  transition: inline-size var(--motion-standard);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 350ms var(--ease-settle);
 }
 
-.nav__link:hover::after {
-  inline-size: 100%;
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:hover::after {
+    clip-path: inset(0 0% 0 0);
+  }
 }
 
 /* ============================================
