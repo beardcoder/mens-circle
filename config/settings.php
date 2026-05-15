@@ -7,7 +7,6 @@ use Spatie\LaravelSettings\SettingsCasts\DataCast;
 use Spatie\LaravelSettings\SettingsCasts\DateTimeInterfaceCast;
 use Spatie\LaravelSettings\SettingsCasts\DateTimeZoneCast;
 use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository;
-use Spatie\LaravelSettings\SettingsRepositories\RedisSettingsRepository;
 
 return [
     /*
@@ -43,11 +42,6 @@ return [
             'model' => null,
             'table' => null,
             'connection' => null,
-        ],
-        'redis' => [
-            'type' => RedisSettingsRepository::class,
-            'connection' => null,
-            'prefix' => null,
         ],
     ],
 

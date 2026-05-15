@@ -23,9 +23,9 @@ use Spatie\ResponseCache\Middlewares\DoNotCacheResponse;
 |--------------------------------------------------------------------------
 |
 | These routes serve public, anonymous content cached by Spatie Response
-| Cache. Stripping session and cookie middleware eliminates ~150ms of
-| unnecessary Redis round-trips on every cache hit. None of these
-| controllers use sessions, flash data, or CSRF tokens.
+| Cache. Stripping session and cookie middleware eliminates unnecessary
+| overhead on every cache hit. None of these controllers use sessions,
+| flash data, or CSRF tokens.
 |
 */
 Route::withoutMiddleware([
