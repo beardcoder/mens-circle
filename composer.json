@@ -32,20 +32,15 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.2.7",
         "barryvdh/laravel-ide-helper": "^3.6.1",
+        "carthage-software/mago": "^1.27",
         "driftingly/rector-laravel": "^2.2.0",
         "fakerphp/faker": "^1.24.1",
         "filament/upgrade": "^5.6.0",
-        "friendsofphp/php-cs-fixer": "^3.94.2",
         "kitloong/laravel-migrations-generator": "^7.3",
-        "larastan/larastan": "^3.9.3",
         "laravel/boost": "^2.4.0",
         "laravel/pail": "^1.2.6",
         "laravel/sail": "^1.55",
-        "php-static-analysis/rector-rule": "^0.5.0",
-        "phpstan/extension-installer": "^1.4.3",
-        "phpstan/phpstan-deprecation-rules": "^2.0.4",
-        "symplify/coding-standard": "^13.0",
-        "symplify/easy-coding-standard": "^13.0.4"
+        "php-static-analysis/rector-rule": "^0.5.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
@@ -58,8 +53,7 @@
     },
     "config": {
         "allow-plugins": {
-            "php-http/discovery": true,
-            "phpstan/extension-installer": true
+            "php-http/discovery": true
         },
         "optimize-autoloader": true,
         "preferred-install": "dist",
@@ -99,10 +93,10 @@
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74,#fbbf24\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan schedule:work\" \"bun run dev\" --names=server,queue,logs,scheduler,vite --kill-others"
         ],
         "format": [
-            "php-cs-fixer fix"
+            "mago fmt"
         ],
         "format:check": [
-            "php-cs-fixer fix --dry-run --diff"
+            "mago fmt --dry-run"
         ],
         "rector": [
             "rector process"
@@ -111,7 +105,10 @@
             "rector process --dry-run"
         ],
         "lint": [
-            "phpstan analyse --memory-limit=512M"
+            "mago lint"
+        ],
+        "lint:fix": [
+            "mago lint --fix"
         ],
         "qa": [
             "@format:check",
@@ -120,6 +117,7 @@
         ],
         "qa:fix": [
             "@format",
+            "@lint:fix",
             "@rector"
         ],
         "review": [

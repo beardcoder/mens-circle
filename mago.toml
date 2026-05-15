@@ -1,0 +1,30 @@
+version = "1"
+php-version = "8.5"
+
+[source]
+paths = ["app", "config", "database", "routes", "tests"]
+excludes = ["vendor", "storage", "bootstrap/cache"]
+
+[linter.rules]
+# Enforce strict types declaration in all PHP files
+missing-strict-types = { enabled = true, level = "error" }
+# Enforce return types
+missing-return-type-hint = { enabled = true, level = "error" }
+# Enforce parameter types
+missing-param-type-hint = { enabled = true, level = "warning" }
+# Security rules
+no-eval = { enabled = true, level = "error" }
+no-variable-variable = { enabled = true, level = "error" }
+sensitive-parameter = { enabled = true, level = "warning" }
+# Code quality
+no-unused-variable = { enabled = true, level = "warning" }
+no-redundant-use = { enabled = true, level = "warning" }
+no-redundant-readonly = { enabled = true, level = "warning" }
+cyclomatic-complexity = { threshold = 10 }
+
+[formatter]
+print-width = 120
+indent-width = 4
+indent-style = "space"
+single-quote = true
+trailing-comma = true
