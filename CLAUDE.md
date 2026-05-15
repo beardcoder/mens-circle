@@ -11,8 +11,8 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 | Frontend    | Blade templates, vanilla TypeScript, Vite 7              |
 | Styling     | Custom CSS (OKLCH color system) + Tailwind CSS v4        |
 | Database    | SQLite (local/production), migrations via Eloquent       |
-| Testing     | Pest v4, PHPStan level 9, Rector (PHP 8.5 target)       |
-| Formatting  | php-cs-fixer (PHP), ESLint + Prettier (TS/Blade), Stylelint (CSS) |
+| Testing     | Pest v4                                                  |
+| QA          | Mago (format, lint, analyze) for PHP; ESLint + Prettier (TS/Blade), Stylelint (CSS) |
 | Auth        | Laravel Socialite (GitHub OAuth for admin)               |
 | Deployment  | Docker with FrankenPHP, `serversideup/php:8.5-frankenphp` |
 
@@ -113,10 +113,6 @@ php artisan test --compact --filter="can register for event"
 
 ```
 tests/
-├── Architecture/            # PHPat layer dependency tests
-│   ├── LayerTest.php        # Models, Services, Enums, Actions, Mail isolation
-│   ├── CodeQualityTest.php  # Settings final, Models independent of Filament
-│   └── NamingTest.php       # Service naming conventions
 ├── Feature/
 │   ├── Api/                 # API route tests
 │   ├── Commands/            # SendEventReminders
@@ -147,23 +143,28 @@ tests/
 
 ## Code Quality Commands
 
+PHP QA is handled by [Mago](https://github.com/carthage-software/mago). Install via `brew install carthage-software/tap/mago`, `cargo install mago`, or the install script from the project README. Config lives in `mago.toml`.
+
 ```bash
-# Format PHP code (php-cs-fixer, NOT Pint)
+# Format PHP code (Mago)
 composer run format
 
 # Check formatting without fixing
 composer run format:check
 
-# Static analysis (level 9)
+# Lint PHP code
 composer run lint
 
-# Rector dry-run (PHP 8.5 modernization)
-composer run rector:check
+# Apply lint auto-fixes
+composer run lint:fix
 
-# Run all QA checks
+# Static analysis
+composer run analyze
+
+# Run all QA checks (format check + lint + analyze)
 composer run qa
 
-# Fix all QA issues
+# Fix all auto-fixable QA issues
 composer run qa:fix
 
 # Full review (QA + tests)
@@ -262,7 +263,7 @@ Configured in `bootstrap/app.php`:
 - Form validation uses dedicated `FormRequest` classes with German error messages
 - Soft deletes on: Event, Registration, NewsletterSubscription, Testimonial, Page, ContentBlock
 - View composers inject `$settings` (GeneralSettings) and `$hasNextEvent` to all views
-- PHP formatting uses php-cs-fixer (not Pint); config in `.php-cs-fixer.dist.php`
+- PHP formatting, linting, and static analysis use Mago; config in `mago.toml`
 - `nunomaduro/essentials` makes `now()` return `CarbonImmutable` — use `DateTimeInterface` for type hints
 
 ===
@@ -285,14 +286,12 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - laravel/prompts (PROMPTS) - v0
 - laravel/socialite (SOCIALITE) - v5
 - livewire/livewire (LIVEWIRE) - v4
-- larastan/larastan (LARASTAN) - v3
 - laravel/boost (BOOST) - v2
 - laravel/mcp (MCP) - v0
 - laravel/pail (PAIL) - v1
 - laravel/sail (SAIL) - v1
-- pestphp/pest (PEST) - v4
-- phpunit/phpunit (PHPUNIT) - v12
 - rector/rector (RECTOR) - v2
+- alpinejs (ALPINEJS) - v3
 - eslint (ESLINT) - v10
 - prettier (PRETTIER) - v3
 
@@ -383,13 +382,6 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 - Laravel can be deployed using [Laravel Cloud](https://cloud.laravel.com/), which is the fastest way to deploy and scale production Laravel applications.
 
-=== tests rules ===
-
-# Test Enforcement
-
-- Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
-- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
-
 === laravel/core rules ===
 
 # Do Things the Laravel Way
@@ -437,15 +429,6 @@ $this->app->singleton(Service::class, fn () => new Service(fn () => request()));
 ```
 
 - Never append to static properties, as they accumulate in memory across requests.
-
-=== pest/core rules ===
-
-## Pest
-
-- This project uses Pest for testing. Create tests: `php artisan make:test --pest {name}`.
-- The `{name}` argument should not include the test suite directory. Use `php artisan make:test --pest SomeFeatureTest` instead of `php artisan make:test --pest Feature/SomeFeatureTest`.
-- Run tests: `php artisan test --compact` or filter: `php artisan test --compact --filter=testName`.
-- Do NOT delete tests without approval.
 
 === filament/filament rules ===
 
