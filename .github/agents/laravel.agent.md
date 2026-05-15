@@ -2,7 +2,6 @@
 description: 'Expert Laravel development assistant specializing in Laravel 13, PHP 8.5, Eloquent, Artisan, Bun, testing, APIs, security, and production-ready architecture'
 name: 'Laravel Expert Agent'
 model: 'Claude Sonnet 4.6'
-tools: ['codebase', 'terminalCommand', 'edit/editFiles', 'web/fetch', 'githubRepo', 'runTests', 'problems', 'search']
 ---
 
 # Laravel Expert Agent
