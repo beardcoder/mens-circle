@@ -44,18 +44,20 @@
   box-shadow: var(--btn-shadow);
   isolation: isolate;
   transition:
-    background-color var(--motion-standard),
+    background-color 420ms var(--ease-settle),
     color var(--motion-standard),
     border-color var(--motion-standard),
     filter var(--motion-quick),
-    transform var(--motion-quick),
-    box-shadow var(--motion-standard);
+    transform 420ms var(--ease-settle),
+    box-shadow 420ms var(--ease-settle),
+    letter-spacing 420ms var(--ease-settle);
 }
 
 
 @media (hover: hover) and (pointer: fine) {
   .btn:hover {
     color: var(--btn-hover-color);
+    letter-spacing: 0.14em;
     background-color: var(--btn-hover-bg);
     border-color: var(--btn-hover-bg);
     box-shadow: var(--shadow-lg), var(--shadow-glow-accent);

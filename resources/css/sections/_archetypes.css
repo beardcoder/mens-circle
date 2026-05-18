@@ -20,10 +20,10 @@
   overflow: hidden;
   border-inline-start: 1px solid var(--border-light);
   transition:
-    background-color var(--motion-standard),
-    border-color var(--motion-standard),
-    box-shadow var(--motion-standard),
-    transform var(--motion-standard);
+    background-color 460ms var(--ease-settle),
+    border-color 460ms var(--ease-settle),
+    box-shadow 460ms var(--ease-settle),
+    transform 520ms var(--ease-settle);
 }
 
 .archetype-card::before {
@@ -38,14 +38,15 @@
   transform: scaleY(0.35);
   transform-origin: center;
   transition:
-    opacity var(--motion-standard),
-    transform var(--motion-standard);
+    opacity 460ms var(--ease-settle),
+    transform 540ms var(--ease-settle);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .archetype-card:hover {
     background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
     box-shadow: var(--shadow-md);
+    transform: translate3d(2px, -2px, 0);
   }
 
   .archetype-card:hover::before {
@@ -55,6 +56,14 @@
 
   .archetype-card:hover .archetype-card__title {
     color: var(--accent-primary);
+  }
+
+  .archetype-card:hover .archetype-card__background-icon {
+    opacity: 0.24;
+  }
+
+  .archetype-card:hover .archetype-card__background-icon svg {
+    transform: translateY(-50%) rotate(-2deg) scale(1.04);
   }
 }
 
@@ -73,12 +82,14 @@
   z-index: 1;
   pointer-events: none;
   opacity: 0.16;
+  transition: opacity 600ms var(--ease-settle);
 }
 
 .archetype-card__background-icon svg {
   inline-size: clamp(16rem, 32vw, 22rem);
   block-size: clamp(16rem, 32vw, 22rem);
   transform: translateY(-50%) rotate(-8deg);
+  transition: transform 800ms var(--ease-settle);
 }
 
 .archetype-card__title {
@@ -88,6 +99,7 @@
   line-height: 1.1;
   color: var(--text-primary);
   letter-spacing: -0.025em;
+  transition: color 380ms var(--ease-settle);
 }
 
 .archetype-card__description {

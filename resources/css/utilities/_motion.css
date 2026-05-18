@@ -1,0 +1,250 @@
+/**
+ * Motion System
+ * ─────────────────────────────────────────────────────────────
+ *
+ * The site's central motion vocabulary. Three concerns live here:
+ *
+ *   1. Hero page-load entrance — one signature moment, then silence.
+ *   2. Scroll-anchored ornament motion — eyebrow lines, ambient drift.
+ *   3. Section background depth — slow parallax on decorative layers.
+ *
+ * Deliberate omission: there is no generic "fade-in on scroll" pattern.
+ * Body content is visible at rest. Motion is reserved for ornament and
+ * interaction — never to gate readability.
+ *
+ * All motion is wrapped in `@media (prefers-reduced-motion: no-preference)`
+ * and composited via `opacity`, `transform`, `filter`, or `clip-path`.
+ */
+
+/* ============================================
+   Hero entrance — page-load only
+   ============================================
+   The hero is the only above-the-fold animated entry. Children rise
+   in sequence on initial load (no scroll trigger, no IntersectionObserver).
+   A subtle blur burn-off carries the eye into the title. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__label,
+  .hero__title,
+  .hero__bottom,
+  .hero__scroll {
+    animation: hero-rise var(--duration-cinematic) var(--ease-emphasised) both;
+  }
+
+  .hero__label {
+    animation-duration: 800ms;
+    animation-delay: var(--stagger-1);
+  }
+
+  .hero__title {
+    animation-duration: 1200ms;
+    animation-delay: var(--stagger-2);
+  }
+
+  .hero__bottom {
+    animation-delay: var(--stagger-3);
+  }
+
+  .hero__scroll {
+    animation-duration: 900ms;
+    animation-delay: var(--stagger-4);
+  }
+}
+
+/* ============================================
+   Eyebrow lines — scroll-anchored draw-in
+   ============================================
+   The `.eyebrow::before` rule is a 1.5px line. It draws from right
+   on first scroll into view — a quiet typographic gesture, no fades,
+   no content reveal. Title and body stay readable at rest. */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .eyebrow::before {
+      opacity: 0.55;
+      transform: scaleX(0.3);
+      transform-origin: right;
+      animation: eyebrow-line-grow linear both;
+      will-change: transform, opacity;
+      animation-timeline: view();
+      animation-range: entry 10% cover 30%;
+    }
+  }
+}
+
+/* ============================================
+   Section title — scroll-driven micro-rise
+   ============================================
+   A 4px translate that resolves over the first third of viewport
+   entry. Compositor-only, never causes the title to disappear:
+   it starts visible-and-slightly-low, settles to rest. Tight range
+   prevents the "flying letters" feel. */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section-title {
+      animation: title-settle linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+      will-change: transform, letter-spacing;
+    }
+  }
+}
+
+@keyframes title-settle {
+  from {
+    letter-spacing: -0.035em;
+    transform: translate3d(0, 6px, 0);
+  }
+
+  to {
+    letter-spacing: -0.05em;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ============================================
+   Section depth — slow parallax on dark/colored sections
+   ============================================
+   Decorative ::after gradients drift up as the section enters view.
+   Adds atmosphere without disturbing content. Limited to sections
+   that already paint a radial glow. */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .journey-section::after,
+    .moderator-section::before,
+    .testimonials-section::before {
+      animation: section-depth linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+      will-change: transform, opacity;
+    }
+  }
+}
+
+@keyframes section-depth {
+  0% {
+    opacity: 0.55;
+    transform: translate3d(0, 4%, 0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    opacity: 0.7;
+    transform: translate3d(0, -3%, 0);
+  }
+}
+
+/* ============================================
+   Image surfaces — calm scale-on-hover
+   ============================================
+   Reusable utility for any image that lives inside a clipped frame:
+   moderator photo, hero background fragment, future event cards. */
+
+[data-motion='image'] {
+  overflow: clip;
+}
+
+[data-motion='image'] > img,
+[data-motion='image'] > picture > img {
+  transition:
+    transform var(--motion-cinematic),
+    filter var(--motion-slow);
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-motion='image']:hover > img,
+  [data-motion='image']:hover > picture > img {
+    filter: saturate(1.08);
+    transform: scale(1.04);
+  }
+}
+
+/* ============================================
+   Magnetic link — subtle accent shift on hover
+   ============================================
+   Designed for footer links and prose `<a>`. The underline grows
+   from inline-start instead of fading in — feels intentional. */
+
+[data-motion='link'] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  transition: color var(--motion-quick);
+}
+
+[data-motion='link']::after {
+  position: absolute;
+  inset-block-end: -2px;
+  inset-inline: 0;
+  block-size: 1px;
+  pointer-events: none;
+  content: '';
+  background: currentcolor;
+  opacity: 0.45;
+  transform: scaleX(0.2);
+  transform-origin: left;
+  transition:
+    transform 380ms var(--ease-settle),
+    opacity var(--motion-quick);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-motion='link']:hover::after,
+  [data-motion='link']:focus-visible::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================
+   Soft-rise — for state-triggered surface entry
+   ============================================
+   Drop-in for elements that appear via Alpine state (`x-show`,
+   `x-transition`, modal mounting). Not for scroll. */
+
+[data-motion='rise'] {
+  animation: surface-rise var(--motion-enter) both;
+}
+
+@keyframes surface-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ============================================
+   Reduced motion — kill anything decorative
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__label,
+  .hero__title,
+  .hero__bottom,
+  .hero__scroll,
+  .eyebrow::before,
+  .section-title,
+  .journey-section::after,
+  .moderator-section::before,
+  .testimonials-section::before,
+  [data-motion='rise'] {
+    animation: none;
+  }
+
+  [data-motion='image'] > img,
+  [data-motion='image'] > picture > img {
+    transition: none;
+  }
+}

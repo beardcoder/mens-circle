@@ -8,17 +8,17 @@
   <div class="intro__layout">
     <div class="intro__left">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow" data-reveal>{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title intro__title" id="intro-title" data-reveal>
+        <h2 class="section-title intro__title" id="intro-title">
           {!! $data['title'] !!}
         </h2>
       @endif
 
       @if (!empty($data['text']))
-        <p class="intro__text" data-reveal>{{ $data['text'] }}</p>
+        <p class="intro__text">{{ $data['text'] }}</p>
       @endif
 
       @if (!empty($data['values']) && is_array($data['values']))
@@ -28,17 +28,16 @@
               @if (!empty($value['number']))
                 <span
                   class="value-item__number"
-                  data-reveal
                   >{{ $value['number'] }}</span
                 >
               @endif
               @if (!empty($value['title']))
-                <h3 class="value-item__title" data-reveal>
+                <h3 class="value-item__title">
                   {{ $value['title'] }}
                 </h3>
               @endif
               @if (!empty($value['description']))
-                <p class="value-item__description" data-reveal>{{ $value['description'] }}</p>
+                <p class="value-item__description">{{ $value['description'] }}</p>
               @endif
             </div>
           @endforeach
@@ -49,7 +48,7 @@
     <div class="intro__image-area">
       <div class="intro__image-circles" aria-hidden="true"></div>
       @if (!empty($data['quote']))
-        <p class="intro__image-text" data-reveal>{!! $data['quote'] !!}</p>
+        <p class="intro__image-text">{!! $data['quote'] !!}</p>
       @endif
     </div>
   </div>

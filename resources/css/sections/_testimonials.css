@@ -57,21 +57,43 @@
   padding: var(--space-lg) var(--space-md);
   border-inline-start: 1px solid var(--border-light);
   transition:
-    background-color var(--motion-standard),
-    box-shadow var(--motion-standard),
-    transform var(--motion-standard);
+    background-color 460ms var(--ease-settle),
+    border-color 460ms var(--ease-settle),
+    box-shadow 460ms var(--ease-settle),
+    transform 520ms var(--ease-settle);
 }
 
+.testimonial-item::after {
+  position: absolute;
+  inset-block: var(--space-md);
+  inset-inline-start: 0;
+  inline-size: 2px;
+  pointer-events: none;
+  content: '';
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transform: scaleY(0.35);
+  transition:
+    opacity 460ms var(--ease-settle),
+    transform 540ms var(--ease-settle);
+}
 
 @media (hover: hover) and (pointer: fine) {
   .testimonial-item:hover {
     background: color-mix(in oklch, var(--accent-primary) 3%, transparent);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
+    transform: translate3d(2px, -2px, 0);
+  }
+
+  .testimonial-item:hover::after {
+    opacity: 1;
+    transform: scaleY(1);
   }
 
   .testimonial-item:hover .testimonial-item__quote::before {
     color: var(--accent-primary);
-    transform: scale(1.15) translateY(-0.1rem);
+    transform: scale(1.18) translateY(-0.15rem);
   }
 }
 

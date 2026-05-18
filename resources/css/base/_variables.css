@@ -23,6 +23,20 @@
   inherits: false;
 }
 
+/* Hero radial glow position — drifts as the user scrolls.
+   Drives `.hero__bg::after` via animation-timeline: scroll(root). */
+@property --hero-glow-x {
+  syntax: '<percentage>';
+  initial-value: 70%;
+  inherits: false;
+}
+
+@property --hero-glow-y {
+  syntax: '<percentage>';
+  initial-value: 30%;
+  inherits: false;
+}
+
 :root {
   /* ============================================
      Color Palette - Using OKLCH for 2025
@@ -198,7 +212,7 @@
     1,
     0.36,
     1
-  ); /* Content arriving: scroll reveals, overlays */
+  ); /* Content arriving: page-load entrance, overlays */
 
   --ease-precise: cubic-bezier(
     0.4,
@@ -221,17 +235,34 @@
     0.96
   ); /* Ambient motion: breathing circles only */
 
+  --ease-emphasised: cubic-bezier(
+    0.16,
+    1,
+    0.3,
+    1
+  ); /* Signature hero entrance: long, deep, confident */
+
   /* Duration scale */
+  --duration-instant: 90ms;
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 500ms;
   --duration-slower: 700ms;
+  --duration-cinematic: 1100ms;
 
   /* Composite shorthands */
   --motion-quick: var(--duration-fast) var(--ease-precise);
   --motion-standard: var(--duration-normal) var(--ease-precise);
   --motion-enter: var(--duration-slow) var(--ease-settle);
   --motion-slow: var(--duration-slower) var(--ease-settle);
+  --motion-cinematic: var(--duration-cinematic) var(--ease-emphasised);
+
+  /* ─── Stagger scale — used for hero entrance + mobile nav cascade ─── */
+  --stagger-1: 80ms;
+  --stagger-2: 160ms;
+  --stagger-3: 280ms;
+  --stagger-4: 420ms;
+  --stagger-5: 560ms;
 
   /* ============================================
      Layout
