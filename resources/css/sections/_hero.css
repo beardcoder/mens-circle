@@ -84,7 +84,6 @@
   inset-inline-end: -25vw;
   inline-size: 70vw;
   block-size: 70vw;
-  animation: breathe 18s var(--ease-ambient) infinite;
 }
 
 .hero__circle--2 {
@@ -92,7 +91,6 @@
   inset-inline-end: -15vw;
   inline-size: 50vw;
   block-size: 50vw;
-  animation: breathe-slow 22s var(--ease-ambient) infinite -5s;
 }
 
 .hero__circle--3 {
@@ -100,7 +98,6 @@
   inset-inline-end: -8vw;
   inline-size: 35vw;
   block-size: 35vw;
-  animation: breathe 25s var(--ease-ambient) infinite -10s;
 }
 
 .hero__circle--4 {
@@ -108,7 +105,24 @@
   inset-inline-start: -45vw;
   inline-size: 90vw;
   block-size: 90vw;
-  animation: breathe-slow 30s var(--ease-ambient) infinite -3s;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__circle--1 {
+    animation: breathe 18s var(--ease-ambient) infinite;
+  }
+
+  .hero__circle--2 {
+    animation: breathe-slow 22s var(--ease-ambient) infinite -5s;
+  }
+
+  .hero__circle--3 {
+    animation: breathe 25s var(--ease-ambient) infinite -10s;
+  }
+
+  .hero__circle--4 {
+    animation: breathe-slow 30s var(--ease-ambient) infinite -3s;
+  }
 }
 
 /* ============================================

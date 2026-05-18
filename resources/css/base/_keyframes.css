@@ -230,25 +230,6 @@
 }
 
 /* ============================================
-   Glow pulse — accent glow radiating outward. Used on the
-   journey step marker dot (::before) to add a living quality.
-   ============================================ */
-@keyframes dot-glow {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 0 color-mix(in oklch, var(--accent-secondary) 40%, transparent),
-      0 0 0 4px color-mix(in oklch, var(--accent-secondary) 10%, transparent);
-  }
-
-  50% {
-    box-shadow:
-      0 0 0 6px color-mix(in oklch, var(--accent-secondary) 0%, transparent),
-      0 0 0 12px color-mix(in oklch, var(--accent-secondary) 0%, transparent);
-  }
-}
-
-/* ============================================
    Hero entrance — one-shot page-load sequence for above-the-fold
    content. Children opt-in by setting `animation-name: hero-rise`
    and a stagger delay; see utilities/_motion.css.
@@ -298,30 +279,3 @@
   }
 }
 
-@keyframes vt-crossfade-out-left {
-  to {
-    opacity: 0;
-    translate: -1.5% 0;
-  }
-}
-
-@keyframes vt-crossfade-in-right {
-  from {
-    opacity: 0;
-    translate: 1.5% 0;
-  }
-}
-
-@keyframes vt-crossfade-out-right {
-  to {
-    opacity: 0;
-    translate: 1.5% 0;
-  }
-}
-
-@keyframes vt-crossfade-in-left {
-  from {
-    opacity: 0;
-    translate: -1.5% 0;
-  }
-}

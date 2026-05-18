@@ -62,6 +62,7 @@
         <div
           id="breathingApp"
           class="breathing-app"
+          data-motion-essential
           x-data="breathingApp"
           data-breaths="35"
           data-rounds="3"

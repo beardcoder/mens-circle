@@ -54,9 +54,11 @@
 /* ============================================
    Eyebrow lines — scroll-anchored draw-in
    ============================================
-   The `.eyebrow::before` rule is a 1.5px line. It draws from right
-   on first scroll into view — a quiet typographic gesture, no fades,
-   no content reveal. Title and body stay readable at rest. */
+   The `.eyebrow::before` rule is a 1.5px line. It draws while the
+   element travels through the lower half of the viewport — a quiet
+   typographic gesture timed to where the user is actually reading.
+   Range uses the `cover` phase so it scales with viewport height
+   on mobile (where `entry` is too short to be perceptible). */
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -67,7 +69,7 @@
       animation: eyebrow-line-grow linear both;
       will-change: transform, opacity;
       animation-timeline: view();
-      animation-range: entry 10% cover 30%;
+      animation-range: cover 5% cover 45%;
     }
   }
 }
@@ -75,17 +77,18 @@
 /* ============================================
    Section title — scroll-driven micro-rise
    ============================================
-   A 4px translate that resolves over the first third of viewport
-   entry. Compositor-only, never causes the title to disappear:
-   it starts visible-and-slightly-low, settles to rest. Tight range
-   prevents the "flying letters" feel. */
+   A 6px translate + letter-spacing condensation that resolves as
+   the title moves through the lower-to-middle of the viewport.
+   Compositor-only, never disappears: starts visible-and-slightly-low,
+   settles to rest. Using `cover` keeps the perceived timing identical
+   on mobile and desktop. */
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .section-title {
       animation: title-settle linear both;
       animation-timeline: view();
-      animation-range: entry 0% cover 22%;
+      animation-range: cover 0% cover 40%;
       will-change: transform, letter-spacing;
     }
   }
@@ -227,7 +230,12 @@
 
 /* ============================================
    Reduced motion — kill anything decorative
-   ============================================ */
+   ============================================
+   The component-scoped overrides below disable motion that gates
+   readability or atmosphere. The global rule at the end is a safety net
+   for any ambient `infinite` keyframe the codebase forgot to gate.
+   Elements with `data-motion-essential` (e.g. the breathing meditation
+   app, where motion *is* the feature) are exempt. */
 
 @media (prefers-reduced-motion: reduce) {
   .hero__label,
@@ -246,5 +254,13 @@
   [data-motion='image'] > img,
   [data-motion='image'] > picture > img {
     transition: none;
+  }
+
+  /* Defensive global cap for ambient infinite loops. Anything tagged
+     `data-motion-essential` (or living under one) opts out. */
+  *:not([data-motion-essential], [data-motion-essential] *),
+  *:not([data-motion-essential], [data-motion-essential] *)::before,
+  *:not([data-motion-essential], [data-motion-essential] *)::after {
+    animation-iteration-count: 1 !important;
   }
 }
