@@ -12,4 +12,9 @@ final class BreathingController
     {
         return view('breathing');
     }
+
+    public function app(): View
+    {
+        return view('breathing-pwa');
+    }
 }

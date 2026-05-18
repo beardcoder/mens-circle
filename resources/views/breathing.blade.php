@@ -30,6 +30,17 @@
         <p class="hero__label">Bewusster Atem</p>
         <h1 class="hero__title">Atem<span class="highlight">übung</span></h1>
         <p class="hero__subtitle">Drei Runden bewusster Atem im Stil der Wim-Hof-Methode. Für Klarheit, Energie und innere Ruhe.</p>
+        <a
+          href="{{ route('breathing.app') }}"
+          class="btn btn--ghost"
+          style="margin-block-start:var(--space-sm);font-size:0.8125rem;opacity:0.7;"
+          data-umami-event="breathing-open-app"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="inline-size:14px;block-size:14px;margin-inline-end:0.35em">
+            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+          Als App öffnen
+        </a>
       </div>
     </div>
   </section>

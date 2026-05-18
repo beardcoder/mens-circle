@@ -48,6 +48,7 @@ Route::withoutMiddleware([
     Route::get('/teile-deine-erfahrung', [TestimonialSubmissionController::class, 'show'])->name('testimonial.form');
 
     Route::get('/atemuebung', [BreathingController::class, 'show'])->name('breathing.show');
+    Route::get('/atemuebung/app', [BreathingController::class, 'app'])->name('breathing.app');
 
     // Dynamic CMS pages (must be last to avoid conflicts)
     Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
