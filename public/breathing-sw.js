@@ -35,7 +35,7 @@ self.addEventListener('fetch', (event) => {
     const isHtml = event.request.headers.get('accept')?.includes('text/html');
 
     if (isHtml) {
-        // Network-first for HTML: try live, fall back to cache
+        // Network-first for HTML: try live, fall back to cache, then 503
         event.respondWith(
             fetch(event.request)
                 .then((response) => {
@@ -43,7 +43,16 @@ self.addEventListener('fetch', (event) => {
                     caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
                     return response;
                 })
-                .catch(() => caches.match(event.request))
+                .catch(() =>
+                    caches.match(event.request).then(
+                        (cached) =>
+                            cached ??
+                            new Response('Offline – bitte prüfe deine Internetverbindung.', {
+                                status: 503,
+                                headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+                            })
+                    )
+                )
         );
     } else {
         // Cache-first for static assets (CSS, JS, fonts, images)

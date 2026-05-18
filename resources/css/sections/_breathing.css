@@ -64,6 +64,29 @@
 }
 
 /* ============================================
+   Hero app link — "Als App öffnen" CTA
+   ============================================ */
+.breathing-hero__app-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin-block-start: var(--space-sm);
+  font-size: 0.8125rem;
+  opacity: 0.7;
+  transition: opacity var(--motion-quick);
+}
+
+.breathing-hero__app-link:hover {
+  opacity: 1;
+}
+
+.breathing-hero__app-link-icon {
+  inline-size: 14px;
+  block-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ============================================
    Section
    ============================================ */
 .breathing-section {
@@ -504,7 +527,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-xs);
   min-inline-size: 180px;
   padding: var(--space-3xs);
   background: color-mix(in oklch, var(--color-sand) 6%, transparent);
@@ -556,6 +578,7 @@
 }
 
 .breathing-stepper__value {
+  flex: 1;
   min-inline-size: 2.5ch;
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -776,6 +799,11 @@
   inline-size: 28px;
   block-size: 28px;
   opacity: 0.7;
+}
+
+.breathing-pwa-header__install .breathing-hero__app-link-icon {
+  inline-size: 14px;
+  block-size: 14px;
 }
 
 .breathing-pwa-header__install {
