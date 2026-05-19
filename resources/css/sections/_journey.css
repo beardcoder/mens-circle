@@ -74,12 +74,7 @@
   );
   opacity: 0.7;
   transform-origin: left;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .journey__steps::before {
-    animation: thread-drift 7s var(--ease-ambient) infinite;
-  }
+  animation: thread-drift 7s var(--ease-ambient) infinite;
 }
 
 @media (width <= 1000px) {
