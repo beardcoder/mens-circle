@@ -30,6 +30,10 @@ class GetPageTool extends Tool
         $id = $request->get('id');
         $slug = $request->get('slug');
 
+        if ($id === null && $slug === null) {
+            return Response::error('Provide either "id" or "slug".');
+        }
+
         $query = Page::query()->with('contentBlocks');
 
         $page = $id !== null

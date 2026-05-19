@@ -6,7 +6,6 @@ namespace App\Mcp\Tools;
 
 use App\Models\Page;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Illuminate\Support\Carbon;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Tool;
@@ -43,14 +42,15 @@ class UpdatePageTool extends Tool
             return Response::error("Page [{$data['id']}] not found.");
         }
 
-        $updates = array_filter([
-            'title' => $data['title'] ?? null,
-            'is_published' => $data['is_published'] ?? null,
-            'meta' => $data['meta'] ?? null,
-        ], static fn($v): bool => $v !== null);
+        $fields = ['title', 'is_published', 'meta'];
+
+        $updates = array_filter(
+            array_intersect_key($data, array_flip($fields)),
+            static fn($v): bool => $v !== null,
+        );
 
         if (isset($updates['is_published']) && $updates['is_published'] && $page->published_at === null) {
-            $updates['published_at'] = Carbon::now();
+            $updates['published_at'] = now();
         }
 
         $page->update($updates);

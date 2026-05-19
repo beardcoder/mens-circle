@@ -60,8 +60,11 @@ class UpdateEventTool extends Tool
             return Response::error("Event [{$data['id']}] not found.");
         }
 
-        $fields = ['title', 'description', 'event_date', 'start_time', 'end_time', 'location',
-            'street', 'postal_code', 'city', 'max_participants', 'cost_basis', 'is_published'];
+        $fields = [
+            'title', 'description', 'event_date', 'start_time', 'end_time',
+            'location', 'street', 'postal_code', 'city', 'max_participants',
+            'cost_basis', 'is_published',
+        ];
 
         $updates = array_filter(
             array_intersect_key($data, array_flip($fields)),

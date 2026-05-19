@@ -30,6 +30,10 @@ class GetEventTool extends Tool
         $id = $request->get('id');
         $slug = $request->get('slug');
 
+        if ($id === null && $slug === null) {
+            return Response::error('Provide either "id" or "slug".');
+        }
+
         $query = Event::query()->withCount('activeRegistrations');
 
         $event = $id !== null

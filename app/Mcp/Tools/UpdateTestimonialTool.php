@@ -6,7 +6,6 @@ namespace App\Mcp\Tools;
 
 use App\Models\Testimonial;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Illuminate\Support\Carbon;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Tool;
@@ -55,7 +54,7 @@ class UpdateTestimonialTool extends Tool
         );
 
         if (isset($updates['is_published']) && $updates['is_published'] && $testimonial->published_at === null) {
-            $updates['published_at'] = Carbon::now();
+            $updates['published_at'] = now();
         }
 
         $testimonial->update($updates);
