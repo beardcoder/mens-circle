@@ -1,3 +1,5 @@
+@props (['testimonials'])
+
 @push ('structured_data')
   <script type="application/ld+json">
     {

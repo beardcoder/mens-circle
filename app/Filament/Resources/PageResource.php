@@ -191,10 +191,9 @@ class PageResource extends Resource
             ->schema([
                 self::blockIdField(),
                 TextInput::make('label')->label('Label (klein)'),
-                Textarea::make('title')->label('Titel (HTML erlaubt)')->required()->rows(2),
+                self::titleTextarea(),
                 Textarea::make('description')->label('Beschreibung')->rows(3),
-                TextInput::make('button_text')->label('Button Text'),
-                TextInput::make('button_link')->label('Button Link'),
+                ...self::buttonFields(),
                 self::blockImageUpload('background_image', 'Hintergrundbild'),
             ]);
     }
@@ -206,19 +205,11 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedInformationCircle)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')->label('Überschrift (klein)'),
-                Textarea::make('title')->label('Titel (HTML erlaubt)')->required()->rows(2),
+                self::eyebrowField(),
+                self::titleTextarea(),
                 Textarea::make('text')->label('Text')->rows(3),
                 Textarea::make('quote')->label('Zitat (HTML erlaubt)')->rows(2),
-                Repeater::make('values')
-                    ->label('Werte')
-                    ->schema([
-                        TextInput::make('number')->label('Nummer'),
-                        TextInput::make('title')->label('Titel')->required(),
-                        Textarea::make('description')->label('Beschreibung')->rows(2),
-                    ])
-                    ->collapsible()
-                    ->itemLabel(static fn(array $state): ?string => $state['title'] ?? null),
+                self::numberTitleDescriptionRepeater('values', 'Werte', numeric: false),
             ]);
     }
 
@@ -229,7 +220,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedDocumentText)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')->label('Überschrift (klein)'),
+                self::eyebrowField(),
                 TextInput::make('title')->label('Titel')->required(),
                 RichEditor::make('content')->label('Inhalt')->required(),
             ]);
@@ -242,17 +233,9 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedRectangleStack)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')->label('Überschrift (klein)'),
+                self::eyebrowField(),
                 TextInput::make('title')->label('Titel'),
-                Repeater::make('items')
-                    ->label('Werte')
-                    ->schema([
-                        TextInput::make('number')->label('Nummer')->numeric(),
-                        TextInput::make('title')->label('Titel')->required(),
-                        Textarea::make('description')->label('Beschreibung')->rows(2),
-                    ])
-                    ->collapsible()
-                    ->itemLabel(static fn(array $state): ?string => $state['title'] ?? null),
+                self::numberTitleDescriptionRepeater('items', 'Werte'),
             ]);
     }
 
@@ -263,19 +246,10 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedRectangleStack)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')->label('Überschrift (klein)'),
+                self::eyebrowField(),
                 TextInput::make('title')->label('Titel')->required(),
                 Textarea::make('intro')->label('Intro Text')->rows(2),
-                Repeater::make('items')
-                    ->label('Archetypen')
-                    ->schema([
-                        TextInput::make('number')->label('Nummer')->numeric(),
-                        TextInput::make('title')->label('Titel')->required(),
-                        Textarea::make('description')->label('Beschreibung')->rows(2),
-                    ])
-                    ->defaultItems(5)
-                    ->collapsible()
-                    ->itemLabel(static fn(array $state): ?string => $state['title'] ?? null),
+                self::numberTitleDescriptionRepeater('items', 'Archetypen', defaultItems: 5),
             ]);
     }
 
@@ -286,7 +260,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedUserCircle)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')->label('Überschrift (klein)'),
+                self::eyebrowField(),
                 Textarea::make('name')->label('Name (HTML erlaubt für <span class="light">)')->required()->rows(2),
                 RichEditor::make('bio')->label('Biografie')->required(),
                 Textarea::make('quote')->label('Zitat')->rows(3),
@@ -301,18 +275,10 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedMap)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')->label('Überschrift (klein)'),
-                Textarea::make('title')->label('Titel (HTML erlaubt)')->rows(2),
+                self::eyebrowField(),
+                self::titleTextarea(required: false),
                 Textarea::make('subtitle')->label('Untertitel')->rows(2),
-                Repeater::make('steps')
-                    ->label('Schritte')
-                    ->schema([
-                        TextInput::make('number')->label('Nummer')->numeric(),
-                        TextInput::make('title')->label('Titel')->required(),
-                        Textarea::make('description')->label('Beschreibung')->rows(2),
-                    ])
-                    ->collapsible()
-                    ->itemLabel(static fn(array $state): ?string => $state['title'] ?? null),
+                self::numberTitleDescriptionRepeater('steps', 'Schritte'),
             ]);
     }
 
@@ -338,8 +304,8 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedQuestionMarkCircle)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')->label('Überschrift (klein)'),
-                Textarea::make('title')->label('Titel (HTML erlaubt)')->rows(2),
+                self::eyebrowField(),
+                self::titleTextarea(required: false),
                 Textarea::make('intro')->label('Intro Text')->rows(2),
                 Repeater::make('items')
                     ->label('Fragen & Antworten')
@@ -359,8 +325,8 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedEnvelope)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')->label('Überschrift (klein)'),
-                Textarea::make('title')->label('Titel (HTML erlaubt)')->required()->rows(2),
+                self::eyebrowField(),
+                self::titleTextarea(),
                 Textarea::make('text')->label('Text')->rows(2),
             ]);
     }
@@ -372,11 +338,10 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedCursorArrowRipple)
             ->schema([
                 self::blockIdField(),
-                TextInput::make('eyebrow')->label('Überschrift (klein)'),
-                Textarea::make('title')->label('Titel (HTML erlaubt)')->required()->rows(2),
+                self::eyebrowField(),
+                self::titleTextarea(),
                 Textarea::make('text')->label('Text')->rows(2),
-                TextInput::make('button_text')->label('Button Text'),
-                TextInput::make('button_link')->label('Button Link'),
+                ...self::buttonFields(),
             ]);
     }
 
@@ -398,6 +363,50 @@ class PageResource extends Resource
     private static function blockIdField(): Hidden
     {
         return Hidden::make('block_id')->default(static fn(): string => (string) Str::uuid());
+    }
+
+    private static function eyebrowField(): TextInput
+    {
+        return TextInput::make('eyebrow')->label('Überschrift (klein)');
+    }
+
+    private static function titleTextarea(bool $required = true): Textarea
+    {
+        $field = Textarea::make('title')->label('Titel (HTML erlaubt)')->rows(2);
+
+        return $required ? $field->required() : $field;
+    }
+
+    /**
+     * @return list<TextInput>
+     */
+    private static function buttonFields(): array
+    {
+        return [
+            TextInput::make('button_text')->label('Button Text'),
+            TextInput::make('button_link')->label('Button Link'),
+        ];
+    }
+
+    private static function numberTitleDescriptionRepeater(
+        string $name,
+        string $label,
+        bool $numeric = true,
+        ?int $defaultItems = null,
+    ): Repeater {
+        $number = TextInput::make('number')->label('Nummer');
+
+        $repeater = Repeater::make($name)
+            ->label($label)
+            ->schema([
+                $numeric ? $number->numeric() : $number,
+                TextInput::make('title')->label('Titel')->required(),
+                Textarea::make('description')->label('Beschreibung')->rows(2),
+            ])
+            ->collapsible()
+            ->itemLabel(static fn(array $state): ?string => $state['title'] ?? null);
+
+        return $defaultItems !== null ? $repeater->defaultItems($defaultItems) : $repeater;
     }
 
     private static function blockImageUpload(string $name, string $label): SpatieMediaLibraryFileUpload

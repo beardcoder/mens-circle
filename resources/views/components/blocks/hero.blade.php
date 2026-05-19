@@ -48,15 +48,12 @@
 
         @if (!empty($data['button_text']) && !empty($data['button_link']))
           @php
-                        $isEventLink = str_contains($data['button_link'], route('event.show')) ||
-                                       str_contains($data['button_link'], '/event');
-                        $shouldShowButton = !$isEventLink || $hasNextEvent;
-                        $resolvedButtonLink = $isEventLink ? $nextEventUrl : $data['button_link'];
-                    @endphp
-          @if ($shouldShowButton)
+              $button = App\Support\CmsButtonLink::resolve($data['button_link'], $hasNextEvent, $nextEventUrl);
+          @endphp
+          @if ($button->shouldShow)
             <div class="hero__cta">
               <a
-                href="{{ $resolvedButtonLink }}"
+                href="{{ $button->href }}"
                 class="btn btn--primary btn--large"
               >
                 {{ $data['button_text'] }}
