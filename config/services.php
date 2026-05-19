@@ -46,4 +46,8 @@ return [
         'token' => env('PUSHOVER_TOKEN'),
         'user_key' => env('PUSHOVER_USER_KEY'),
     ],
+
+    'mcp' => [
+        'secret' => env('MCP_SECRET'),
+    ],
 ];
