@@ -29,7 +29,6 @@ final class NewsletterSubscribed extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): Mailable
     {
-        return (new NewsletterWelcomeMail($this->subscription))
-            ->to($notifiable->routeNotificationFor('mail', $this)); // @phpstan-ignore method.notFound
+        return new NewsletterWelcomeMail($this->subscription)->to($notifiable->routeNotificationFor('mail', $this)); // @phpstan-ignore method.notFound
     }
 }

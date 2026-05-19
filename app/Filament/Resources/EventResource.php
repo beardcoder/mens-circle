@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Schemas\Components\Utilities\Get;
 use App\Enums\RegistrationStatus;
 use App\Filament\Resources\EventResource\Pages\CreateEvent;
 use App\Filament\Resources\EventResource\Pages\EditEvent;
@@ -31,6 +29,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -99,16 +99,8 @@ class EventResource extends Resource
                         ->native(false)
                         ->displayFormat('d.m.Y')
                         ->minDate(now()),
-                    TimePicker::make('start_time')
-                        ->label('Startzeit')
-                        ->required()
-                        ->seconds(false)
-                        ->displayFormat('H:i'),
-                    TimePicker::make('end_time')
-                        ->label('Endzeit')
-                        ->required()
-                        ->seconds(false)
-                        ->displayFormat('H:i'),
+                    TimePicker::make('start_time')->label('Startzeit')->required()->seconds(false)->displayFormat('H:i'),
+                    TimePicker::make('end_time')->label('Endzeit')->required()->seconds(false)->displayFormat('H:i'),
                 ]),
 
             Section::make('Ort')
@@ -127,11 +119,7 @@ class EventResource extends Resource
                         ->maxLength(255)
                         ->placeholder('z.B. Hauptstraße 1')
                         ->columnSpan(2),
-                    TextInput::make('postal_code')
-                        ->label('PLZ')
-                        ->maxLength(10)
-                        ->placeholder('z.B. 94315')
-                        ->columnSpan(1),
+                    TextInput::make('postal_code')->label('PLZ')->maxLength(10)->placeholder('z.B. 94315')->columnSpan(1),
                     TextInput::make('city')
                         ->label('Stadt')
                         ->maxLength(255)
@@ -141,7 +129,7 @@ class EventResource extends Resource
                     TextInput::make('latitude')
                         ->label('Breitengrad (Latitude)')
                         ->numeric()
-                        ->step(0.0000001)
+                        ->step(0.000_000_1)
                         ->minValue(-90)
                         ->maxValue(90)
                         ->placeholder('z.B. 48.8767')
@@ -149,62 +137,63 @@ class EventResource extends Resource
                     TextInput::make('longitude')
                         ->label('Längengrad (Longitude)')
                         ->numeric()
-                        ->step(0.0000001)
+                        ->step(0.000_000_1)
                         ->minValue(-180)
                         ->maxValue(180)
                         ->placeholder('z.B. 12.5719')
-                        ->suffixAction(
-                            Action::make('geocode')
-                                ->label('Adresse zu Koordinaten umwandeln')
-                                ->icon(Heroicon::OutlinedMapPin)
-                                ->color('primary')
-                                ->action(static function (Get $get, Set $set, GeocodingService $geocoder): void {
-                                    $toString = static fn(mixed $value): string => is_string($value) ? $value : '';
+                        ->suffixAction(Action::make('geocode')
+                            ->label('Adresse zu Koordinaten umwandeln')
+                            ->icon(Heroicon::OutlinedMapPin)
+                            ->color('primary')
+                            ->action(static function (Get $get, Set $set, GeocodingService $geocoder): void {
+                                $toString = static fn(mixed $value): string => is_string($value) ? $value : '';
 
-                                    $street = $toString($get('street'));
-                                    $postalCode = $toString($get('postal_code'));
-                                    $city = $toString($get('city'));
+                                $street = $toString($get('street'));
+                                $postalCode = $toString($get('postal_code'));
+                                $city = $toString($get('city'));
 
-                                    $parts = array_filter([
+                                $parts = array_filter(
+                                    [
                                         $street,
                                         trim($postalCode . ' ' . $city),
                                         'Deutschland',
-                                    ], static fn(string $part): bool => trim($part) !== '');
+                                    ],
+                                    static fn(string $part): bool => trim($part) !== '',
+                                );
 
-                                    $address = trim(implode(', ', $parts));
+                                $address = trim(implode(', ', $parts));
 
-                                    if ($address === '' || $address === 'Deutschland') {
-                                        Notification::make()
-                                            ->title('Keine Adresse vorhanden')
-                                            ->body('Bitte trage zuerst eine Straße, PLZ oder Stadt ein.')
-                                            ->warning()
-                                            ->send();
-
-                                        return;
-                                    }
-
-                                    $coords = $geocoder->geocode($address);
-
-                                    if ($coords === null) {
-                                        Notification::make()
-                                            ->title('Adresse nicht gefunden')
-                                            ->body('Die Adresse konnte nicht in Koordinaten umgewandelt werden. Bitte manuell eintragen.')
-                                            ->danger()
-                                            ->send();
-
-                                        return;
-                                    }
-
-                                    $set('latitude', $coords['latitude']);
-                                    $set('longitude', $coords['longitude']);
-
+                                if ($address === '' || $address === 'Deutschland') {
                                     Notification::make()
-                                        ->title('Koordinaten gefunden')
-                                        ->body('Die Adresse wurde erfolgreich umgewandelt.')
-                                        ->success()
+                                        ->title('Keine Adresse vorhanden')
+                                        ->body('Bitte trage zuerst eine Straße, PLZ oder Stadt ein.')
+                                        ->warning()
                                         ->send();
-                                }),
-                        ),
+
+                                    return;
+                                }
+
+                                $coords = $geocoder->geocode($address);
+
+                                if ($coords === null) {
+                                    Notification::make()
+                                        ->title('Adresse nicht gefunden')
+                                        ->body('Die Adresse konnte nicht in Koordinaten umgewandelt werden. Bitte manuell eintragen.')
+                                        ->danger()
+                                        ->send();
+
+                                    return;
+                                }
+
+                                $set('latitude', $coords['latitude']);
+                                $set('longitude', $coords['longitude']);
+
+                                Notification::make()
+                                    ->title('Koordinaten gefunden')
+                                    ->body('Die Adresse wurde erfolgreich umgewandelt.')
+                                    ->success()
+                                    ->send();
+                            })),
                     Textarea::make('location_details')
                         ->label('Ortsdetails für Teilnehmer')
                         ->rows(3)
@@ -265,28 +254,23 @@ class EventResource extends Resource
                     ->description(
                         static fn($record): string => $record->start_time->format('H:i') . ' - ' . $record->end_time->format('H:i'),
                     )
-                    ->color(static fn($record): string => (
-                        $record->isPast ? 'gray' : ($record->event_date->isToday() ? 'warning' : 'primary')
-                    )),
-                TextColumn::make('location')
-                    ->label('Ort')
-                    ->searchable()
-                    ->toggleable(),
+                    ->color(static fn($record): string => match (true) {
+                        $record->isPast => 'gray',
+                        $record->event_date->isToday() => 'warning',
+                        default => 'primary',
+                    }),
+                TextColumn::make('location')->label('Ort')->searchable()->toggleable(),
                 TextColumn::make('active_registrations_count')
                     ->label('Anmeldungen')
                     ->formatStateUsing(static fn($record): string => "{$record->active_registrations_count} / {$record->max_participants}")
                     ->badge()
-                    ->color(static fn($record): string => (
-                        $record->isFull
-                            ? 'danger'
-                            : ($record->active_registrations_count > ($record->max_participants * 0.8) ? 'warning' : 'success')
-                    ))
+                    ->color(static fn($record): string => match (true) {
+                        $record->isFull => 'danger',
+                        $record->active_registrations_count > ($record->max_participants * 0.8) => 'warning',
+                        default => 'success',
+                    })
                     ->sortable(),
-                IconColumn::make('is_published')
-                    ->label('Veröffentlicht')
-                    ->boolean()
-                    ->sortable()
-                    ->toggleable(),
+                IconColumn::make('is_published')->label('Veröffentlicht')->boolean()->sortable()->toggleable(),
                 TextColumn::make('updated_at')
                     ->label('Aktualisiert')
                     ->dateTime('d.m.Y H:i')

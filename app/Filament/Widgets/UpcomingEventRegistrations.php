@@ -31,29 +31,13 @@ class UpcomingEventRegistrations extends TableWidget
         }
 
         return $table
-            ->query(
-                Registration::query()
-                    ->with('participant')
-                    ->whereBelongsTo($nextEvent)
-                    ->active()
-                    ->latest('registered_at'),
-            )
+            ->query(Registration::query()->with('participant')->whereBelongsTo($nextEvent)->active()->latest('registered_at'))
             ->columns([
-                TextColumn::make('participant.first_name')
-                    ->label('Vorname')
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('participant.first_name')->label('Vorname')->searchable()->sortable(),
 
-                TextColumn::make('participant.last_name')
-                    ->label('Nachname')
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('participant.last_name')->label('Nachname')->searchable()->sortable(),
 
-                TextColumn::make('participant.email')
-                    ->label('E-Mail')
-                    ->searchable()
-                    ->sortable()
-                    ->copyable(),
+                TextColumn::make('participant.email')->label('E-Mail')->searchable()->sortable()->copyable(),
 
                 TextColumn::make('participant.phone')
                     ->label('Telefon')
@@ -69,10 +53,7 @@ class UpcomingEventRegistrations extends TableWidget
                     ->formatStateUsing(static fn(RegistrationStatus $state): string => $state->getLabel())
                     ->sortable(),
 
-                TextColumn::make('registered_at')
-                    ->label('Angemeldet am')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable(),
+                TextColumn::make('registered_at')->label('Angemeldet am')->dateTime('d.m.Y H:i')->sortable(),
             ])
             ->heading("Anmeldungen für nächstes Event: {$nextEvent->title} ({$nextEvent->event_date->format('d.m.Y')})")
             ->defaultSort('registered_at', 'desc');

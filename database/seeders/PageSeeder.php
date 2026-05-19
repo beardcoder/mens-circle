@@ -46,8 +46,8 @@ class PageSeeder extends Seeder
                 'type' => 'text_section',
                 'data' => [
                     'title' => 'Impressum',
-                    'content'
-                        => '<p><strong>Angaben gemäß § 5 TMG:</strong></p>'
+                    'content' =>
+                        '<p><strong>Angaben gemäß § 5 TMG:</strong></p>'
                             . '<p>Markus Sommer<br>Männerkreis Niederbayern/ Straubing<br>Musterstraße 1<br>94315 Straubing</p>'
                             . '<p><strong>Kontakt:</strong><br>E-Mail: hallo@mens-circle.de</p>'
                             . '<p><strong>Hinweis:</strong> Bitte vervollständigen Sie diese Angaben vor Go-Live gemäß Ihren rechtlichen Anforderungen.</p>',
@@ -74,8 +74,8 @@ class PageSeeder extends Seeder
                 'type' => 'text_section',
                 'data' => [
                     'title' => 'Datenschutzerklärung',
-                    'content'
-                        => '<h3>1. Datenschutz auf einen Blick</h3>'
+                    'content' =>
+                        '<h3>1. Datenschutz auf einen Blick</h3>'
                             . '<p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen.</p>'
                             . '<h3>2. Allgemeine Hinweise und Pflichtinformationen</h3>'
                             . '<p>Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>'

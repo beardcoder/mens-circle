@@ -24,22 +24,14 @@ final class EventController
 
     public function showNext(): View|RedirectResponse
     {
-        $event = Event::published()
-            ->upcoming()
-            ->select('id', 'slug', 'event_date')
-            ->orderBy('event_date')
-            ->first();
+        $event = Event::published()->upcoming()->select('id', 'slug', 'event_date')->orderBy('event_date')->first();
 
         return $event ? redirect()->route('event.show.slug', ['slug' => $event->slug]) : view('no-event');
     }
 
     public function show(string $slug): View
     {
-        $event = Event::published()
-            ->where('slug', $slug)
-            ->with(['media'])
-            ->withCount('activeRegistrations')
-            ->firstOrFail();
+        $event = Event::published()->where('slug', $slug)->with(['media'])->withCount('activeRegistrations')->firstOrFail();
 
         return view('event', [
             'event' => $event,

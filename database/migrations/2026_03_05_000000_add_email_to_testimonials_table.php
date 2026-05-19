@@ -16,7 +16,7 @@ return new class extends Migration {
             return;
         }
 
-        Schema::table('testimonials', function (Blueprint $table): void {
+        Schema::table('testimonials', static function (Blueprint $table): void {
             $table->string('email')->nullable()->after('author_name');
         });
     }
@@ -26,7 +26,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('testimonials', function (Blueprint $table): void {
+        Schema::table('testimonials', static function (Blueprint $table): void {
             $table->dropColumn('email');
         });
     }

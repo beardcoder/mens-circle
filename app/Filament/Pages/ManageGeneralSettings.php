@@ -41,10 +41,7 @@ class ManageGeneralSettings extends SettingsPage
                         ->maxLength(255)
                         ->helperText('Der Name der Website (z.B. "Männerkreis Niederbayern")'),
 
-                    TextInput::make('site_tagline')
-                        ->label('Tagline')
-                        ->maxLength(255)
-                        ->helperText('Kurze Beschreibung der Website'),
+                    TextInput::make('site_tagline')->label('Tagline')->maxLength(255)->helperText('Kurze Beschreibung der Website'),
 
                     Textarea::make('site_description')
                         ->label('Seitenbeschreibung')
@@ -63,10 +60,7 @@ class ManageGeneralSettings extends SettingsPage
                         ->required()
                         ->helperText('Hauptkontakt-E-Mail-Adresse'),
 
-                    TextInput::make('contact_phone')
-                        ->label('Telefonnummer')
-                        ->tel()
-                        ->helperText('Optional: Telefonnummer für Kontakt'),
+                    TextInput::make('contact_phone')->label('Telefonnummer')->tel()->helperText('Optional: Telefonnummer für Kontakt'),
 
                     TextInput::make('location')
                         ->label('Standort')
@@ -118,10 +112,7 @@ class ManageGeneralSettings extends SettingsPage
             Section::make('Footer & Events')
                 ->description('Footer-Text und Event-Einstellungen')
                 ->schema([
-                    Textarea::make('footer_text')
-                        ->label('Footer Text')
-                        ->rows(2)
-                        ->helperText('Copyright-Text im Footer'),
+                    Textarea::make('footer_text')->label('Footer Text')->rows(2)->helperText('Copyright-Text im Footer'),
 
                     TextInput::make('event_default_max_participants')
                         ->label('Standard Teilnehmerzahl bei Events')
@@ -155,8 +146,10 @@ class ManageGeneralSettings extends SettingsPage
      */
     private function getIconLabel(array $state): ?string
     {
-        if (isset($state['type']) && \is_string($state['type']) && $state['type'] !== '') {
-            return SocialLinkType::tryFrom($state['type'])?->getLabel();
+        $type = $state['type'] ?? null;
+
+        if (\is_string($type) && $type !== '') {
+            return SocialLinkType::tryFrom($type)?->getLabel();
         }
 
         return null;

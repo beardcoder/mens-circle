@@ -55,11 +55,7 @@ class ParticipantResource extends Resource
                         ->unique(ignoreRecord: true)
                         ->maxLength(255)
                         ->columnSpanFull(),
-                    TextInput::make('phone')
-                        ->label('Telefonnummer')
-                        ->tel()
-                        ->maxLength(30)
-                        ->columnSpanFull(),
+                    TextInput::make('phone')->label('Telefonnummer')->tel()->maxLength(30)->columnSpanFull(),
                 ]),
             Section::make('Newsletter')->schema([
                 Toggle::make('is_subscribed_to_newsletter')
@@ -90,29 +86,13 @@ class ParticipantResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->with('newsletterSubscription'))
+            ->modifyQueryUsing(static fn(Builder $query) => $query->with('newsletterSubscription'))
             ->columns([
-                TextColumn::make('first_name')
-                    ->label('Vorname')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('last_name')
-                    ->label('Nachname')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('email')
-                    ->label('E-Mail')
-                    ->searchable()
-                    ->sortable()
-                    ->copyable(),
-                TextColumn::make('phone')
-                    ->label('Telefon')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('registrations_count')
-                    ->label('Anmeldungen')
-                    ->counts('registrations')
-                    ->sortable(),
+                TextColumn::make('first_name')->label('Vorname')->searchable()->sortable(),
+                TextColumn::make('last_name')->label('Nachname')->searchable()->sortable(),
+                TextColumn::make('email')->label('E-Mail')->searchable()->sortable()->copyable(),
+                TextColumn::make('phone')->label('Telefon')->searchable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('registrations_count')->label('Anmeldungen')->counts('registrations')->sortable(),
                 IconColumn::make('newsletter_subscription')
                     ->label('Newsletter')
                     ->boolean()
@@ -129,7 +109,9 @@ class ParticipantResource extends Resource
                     ->query(static fn(Builder $query): Builder => $query->has('registrations')),
                 Filter::make('newsletter_subscriber')
                     ->label('Newsletter-Abonnent')
-                    ->query(static fn(Builder $query): Builder => $query->whereHas('newsletterSubscription', static fn(Builder $q): Builder => $q->whereNull('unsubscribed_at'))),
+                    ->query(static fn(Builder $query): Builder => $query->whereHas('newsletterSubscription', static fn(Builder $q): Builder => $q->whereNull(
+                        'unsubscribed_at',
+                    ))),
             ])
             ->recordActions([EditAction::make(), DeleteAction::make()])
             ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])])

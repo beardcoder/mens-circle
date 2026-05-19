@@ -31,7 +31,6 @@ final class WaitlistParticipantPromoted extends Notification implements ShouldQu
 
     public function toMail(object $notifiable): Mailable
     {
-        return (new WaitlistPromotionMail($this->registration, $this->event))
-            ->to($notifiable->routeNotificationFor('mail', $this)); // @phpstan-ignore method.notFound
+        return new WaitlistPromotionMail($this->registration, $this->event)->to($notifiable->routeNotificationFor('mail', $this)); // @phpstan-ignore method.notFound
     }
 }

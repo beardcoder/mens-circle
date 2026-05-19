@@ -88,11 +88,7 @@ enum EmailTemplate: string
      */
     private static function templatesForCategory(string $category): array
     {
-        return array_column(
-            array_filter(self::cases(), static fn(self $case): bool => $case->getCategory() === $category),
-            null,
-            'value',
-        );
+        return array_column(array_filter(self::cases(), static fn(self $case): bool => $case->getCategory() === $category), null, 'value');
     }
 
     private function newsletterNewEventContent(): string

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('events', function (Blueprint $table): void {
+        Schema::table('events', static function (Blueprint $table): void {
             $table->decimal('latitude', 10, 7)->nullable()->after('city');
             $table->decimal('longitude', 10, 7)->nullable()->after('latitude');
         });
@@ -17,7 +17,7 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::table('events', function (Blueprint $table): void {
+        Schema::table('events', static function (Blueprint $table): void {
             $table->dropColumn(['latitude', 'longitude']);
         });
     }

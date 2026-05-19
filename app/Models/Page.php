@@ -67,10 +67,7 @@ class Page extends Model implements HasMedia
     #[Override]
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion('webp')
-            ->performOnCollections('page_blocks')
-            ->format('webp')
-            ->quality(85);
+        $this->addMediaConversion('webp')->performOnCollections('page_blocks')->format('webp')->quality(85);
     }
 
     #[Override]

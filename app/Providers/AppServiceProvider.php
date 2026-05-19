@@ -59,10 +59,7 @@ class AppServiceProvider extends ServiceProvider
             'components.blocks.hero',
         ], static function (ViewContract $view): void {
             try {
-                $nextEvent = Event::published()
-                    ->upcoming()
-                    ->orderBy('event_date')
-                    ->first(['slug']);
+                $nextEvent = Event::published()->upcoming()->orderBy('event_date')->first(['slug']);
 
                 $view->with([
                     'hasNextEvent' => $nextEvent !== null,

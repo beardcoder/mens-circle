@@ -39,7 +39,7 @@ class ContentBlockFactory extends Factory
 
     public function forPage(Page $page): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'page_id' => $page->id,
         ]);
     }
@@ -48,7 +48,7 @@ class ContentBlockFactory extends Factory
     {
         $faker = FakerFactory::create();
 
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'type' => 'hero',
             'data' => [
                 'title' => $faker->sentence(),
@@ -61,7 +61,7 @@ class ContentBlockFactory extends Factory
     {
         $faker = FakerFactory::create();
 
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'type' => 'text',
             'data' => [
                 'content' => $faker->paragraphs(3, true),

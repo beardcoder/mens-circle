@@ -65,11 +65,7 @@ class PageResource extends Resource
 
             self::contentBlocksBuilder(),
 
-            KeyValue::make('meta')
-                ->label('SEO Meta Tags')
-                ->keyLabel('Schlüssel')
-                ->valueLabel('Wert')
-                ->columnSpanFull(),
+            KeyValue::make('meta')->label('SEO Meta Tags')->keyLabel('Schlüssel')->valueLabel('Wert')->columnSpanFull(),
         ]);
     }
 
@@ -77,19 +73,10 @@ class PageResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title')
-                    ->label('Titel')
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('title')->label('Titel')->searchable()->sortable(),
                 TextColumn::make('slug')->label('Slug')->searchable(),
-                IconColumn::make('is_published')
-                    ->label('Veröffentlicht')
-                    ->boolean()
-                    ->sortable(),
-                TextColumn::make('published_at')
-                    ->label('Veröffentlicht am')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable(),
+                IconColumn::make('is_published')->label('Veröffentlicht')->boolean()->sortable(),
+                TextColumn::make('published_at')->label('Veröffentlicht am')->dateTime('d.m.Y H:i')->sortable(),
                 TextColumn::make('updated_at')
                     ->label('Aktualisiert am')
                     ->dateTime('d.m.Y H:i')
@@ -204,10 +191,7 @@ class PageResource extends Resource
             ->schema([
                 self::blockIdField(),
                 TextInput::make('label')->label('Label (klein)'),
-                Textarea::make('title')
-                    ->label('Titel (HTML erlaubt)')
-                    ->required()
-                    ->rows(2),
+                Textarea::make('title')->label('Titel (HTML erlaubt)')->required()->rows(2),
                 Textarea::make('description')->label('Beschreibung')->rows(3),
                 TextInput::make('button_text')->label('Button Text'),
                 TextInput::make('button_link')->label('Button Link'),
@@ -223,10 +207,7 @@ class PageResource extends Resource
             ->schema([
                 self::blockIdField(),
                 TextInput::make('eyebrow')->label('Überschrift (klein)'),
-                Textarea::make('title')
-                    ->label('Titel (HTML erlaubt)')
-                    ->required()
-                    ->rows(2),
+                Textarea::make('title')->label('Titel (HTML erlaubt)')->required()->rows(2),
                 Textarea::make('text')->label('Text')->rows(3),
                 Textarea::make('quote')->label('Zitat (HTML erlaubt)')->rows(2),
                 Repeater::make('values')
@@ -306,10 +287,7 @@ class PageResource extends Resource
             ->schema([
                 self::blockIdField(),
                 TextInput::make('eyebrow')->label('Überschrift (klein)'),
-                Textarea::make('name')
-                    ->label('Name (HTML erlaubt für <span class="light">)')
-                    ->required()
-                    ->rows(2),
+                Textarea::make('name')->label('Name (HTML erlaubt für <span class="light">)')->required()->rows(2),
                 RichEditor::make('bio')->label('Biografie')->required(),
                 Textarea::make('quote')->label('Zitat')->rows(3),
                 self::blockImageUpload('photo', 'Foto'),
@@ -367,10 +345,7 @@ class PageResource extends Resource
                     ->label('Fragen & Antworten')
                     ->schema([
                         TextInput::make('question')->label('Frage')->required(),
-                        Textarea::make('answer')
-                            ->label('Antwort')
-                            ->required()
-                            ->rows(3),
+                        Textarea::make('answer')->label('Antwort')->required()->rows(3),
                     ])
                     ->collapsible()
                     ->itemLabel(static fn(array $state): ?string => $state['question'] ?? null),
@@ -385,10 +360,7 @@ class PageResource extends Resource
             ->schema([
                 self::blockIdField(),
                 TextInput::make('eyebrow')->label('Überschrift (klein)'),
-                Textarea::make('title')
-                    ->label('Titel (HTML erlaubt)')
-                    ->required()
-                    ->rows(2),
+                Textarea::make('title')->label('Titel (HTML erlaubt)')->required()->rows(2),
                 Textarea::make('text')->label('Text')->rows(2),
             ]);
     }
@@ -401,10 +373,7 @@ class PageResource extends Resource
             ->schema([
                 self::blockIdField(),
                 TextInput::make('eyebrow')->label('Überschrift (klein)'),
-                Textarea::make('title')
-                    ->label('Titel (HTML erlaubt)')
-                    ->required()
-                    ->rows(2),
+                Textarea::make('title')->label('Titel (HTML erlaubt)')->required()->rows(2),
                 Textarea::make('text')->label('Text')->rows(2),
                 TextInput::make('button_text')->label('Button Text'),
                 TextInput::make('button_link')->label('Button Link'),

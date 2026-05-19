@@ -42,34 +42,12 @@ class NewsletterResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            TextInput::make('subject')
-                ->label('Betreff')
-                ->disabled()
-                ->dehydrated(false),
-            RichEditor::make('content')
-                ->label('Inhalt')
-                ->disabled()
-                ->dehydrated(false)
-                ->toolbarButtons([]),
-            TextInput::make('status')
-                ->label('Status')
-                ->disabled()
-                ->dehydrated(false),
-            TextInput::make('recipient_count')
-                ->label('Anzahl Empfänger')
-                ->disabled()
-                ->dehydrated(false)
-                ->numeric(),
-            DateTimePicker::make('sent_at')
-                ->label('Versendet am')
-                ->disabled()
-                ->dehydrated(false)
-                ->displayFormat('d.m.Y H:i'),
-            DateTimePicker::make('created_at')
-                ->label('Erstellt am')
-                ->disabled()
-                ->dehydrated(false)
-                ->displayFormat('d.m.Y H:i'),
+            TextInput::make('subject')->label('Betreff')->disabled()->dehydrated(false),
+            RichEditor::make('content')->label('Inhalt')->disabled()->dehydrated(false)->toolbarButtons([]),
+            TextInput::make('status')->label('Status')->disabled()->dehydrated(false),
+            TextInput::make('recipient_count')->label('Anzahl Empfänger')->disabled()->dehydrated(false)->numeric(),
+            DateTimePicker::make('sent_at')->label('Versendet am')->disabled()->dehydrated(false)->displayFormat('d.m.Y H:i'),
+            DateTimePicker::make('created_at')->label('Erstellt am')->disabled()->dehydrated(false)->displayFormat('d.m.Y H:i'),
         ]);
     }
 
@@ -77,25 +55,15 @@ class NewsletterResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('subject')
-                    ->label('Betreff')
-                    ->searchable()
-                    ->sortable()
-                    ->limit(50),
+                TextColumn::make('subject')->label('Betreff')->searchable()->sortable()->limit(50),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
                     ->color(static fn(NewsletterStatus $state): string => $state->getColor())
                     ->formatStateUsing(static fn(NewsletterStatus $state): string => $state->getLabel())
                     ->sortable(),
-                TextColumn::make('recipient_count')
-                    ->label('Empfänger')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('sent_at')
-                    ->label('Versendet am')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable(),
+                TextColumn::make('recipient_count')->label('Empfänger')->numeric()->sortable(),
+                TextColumn::make('sent_at')->label('Versendet am')->dateTime('d.m.Y H:i')->sortable(),
                 TextColumn::make('created_at')
                     ->label('Erstellt am')
                     ->dateTime('d.m.Y H:i')

@@ -116,11 +116,7 @@ class EditEvent extends EditRecord
                     ])
                     ->collapsible(),
 
-                TextInput::make('subject')
-                    ->label('Betreff')
-                    ->required()
-                    ->maxLength(255)
-                    ->placeholder('Betreff der Nachricht'),
+                TextInput::make('subject')->label('Betreff')->required()->maxLength(255)->placeholder('Betreff der Nachricht'),
 
                 RichEditor::make('content')
                     ->label('Nachricht')
@@ -187,11 +183,7 @@ class EditEvent extends EditRecord
                     $body .= " {$failedCount} Zustellungen fehlgeschlagen.";
                 }
 
-                Notification::make()
-                    ->title('Nachricht versendet')
-                    ->body($body)
-                    ->success()
-                    ->send();
+                Notification::make()->title('Nachricht versendet')->body($body)->success()->send();
             });
     }
 }

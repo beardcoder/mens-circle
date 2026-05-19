@@ -18,17 +18,21 @@ final readonly class EventSchema
 
     public function toScript(): string
     {
-        $startDate = $this->event->event_date->format('Y-m-d')
-            . 'T' . $this->event->start_time->format('H:i')
-            . ':00' . $this->event->event_date->format('P');
+        $startDate =
+            $this->event->event_date->format('Y-m-d')
+            . 'T'
+            . $this->event->start_time->format('H:i')
+            . ':00'
+            . $this->event->event_date->format('P');
 
-        $endDate = $this->event->event_date->format('Y-m-d')
-            . 'T' . $this->event->end_time->format('H:i')
-            . ':00' . $this->event->event_date->format('P');
+        $endDate =
+            $this->event->event_date->format('Y-m-d')
+            . 'T'
+            . $this->event->end_time->format('H:i')
+            . ':00'
+            . $this->event->event_date->format('P');
 
-        $availability = ($this->event->isPast || $this->event->isFull)
-            ? 'https://schema.org/SoldOut'
-            : 'https://schema.org/InStock';
+        $availability = $this->event->isPast || $this->event->isFull ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock';
 
         $address = Schema::postalAddress()
             ->addressLocality($this->event->city ?? 'Straubing')
@@ -63,21 +67,14 @@ final readonly class EventSchema
         return Schema::event()
             ->name($this->event->title)
             ->description(strip_tags($this->event->description ?? ''))
-            ->image(
-                Schema::imageObject()
-                    ->url(asset('images/logo-color.png'))
-                    ->setProperty('width', 512)
-                    ->setProperty('height', 512),
-            )
+            ->image(Schema::imageObject()->url(asset('images/logo-color.png'))->setProperty('width', 512)->setProperty('height', 512))
             ->setProperty('startDate', $startDate)
             ->setProperty('endDate', $endDate)
             ->setProperty('eventStatus', 'https://schema.org/EventScheduled')
             ->setProperty('eventAttendanceMode', 'https://schema.org/OfflineEventAttendanceMode')
             ->location($place)
             ->organizer($organizer)
-            ->performer(
-                Schema::organization()->setProperty('@id', (string) Uri::of(url('/'))->withFragment('organization')),
-            )
+            ->performer(Schema::organization()->setProperty('@id', (string) Uri::of(url('/'))->withFragment('organization')))
             ->offers(
                 Schema::offer()
                     ->url(route('event.show.slug', $this->event->slug))

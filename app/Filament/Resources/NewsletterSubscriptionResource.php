@@ -67,10 +67,7 @@ class NewsletterSubscriptionResource extends Resource
                                 ->required()
                                 ->unique()
                                 ->maxLength(255),
-                            TextInput::make('phone')
-                                ->label('Telefonnummer')
-                                ->tel()
-                                ->maxLength(30),
+                            TextInput::make('phone')->label('Telefonnummer')->tel()->maxLength(30),
                         ])
                         ->native(false),
                 ]),
@@ -106,29 +103,14 @@ class NewsletterSubscriptionResource extends Resource
         return $table
             ->modifyQueryUsing(static fn(Builder $query) => $query->with('participant'))
             ->columns([
-                TextColumn::make('participant.first_name')
-                    ->label('Vorname')
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('-'),
-                TextColumn::make('participant.last_name')
-                    ->label('Nachname')
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('-'),
-                TextColumn::make('participant.email')
-                    ->label('E-Mail')
-                    ->searchable()
-                    ->sortable()
-                    ->copyable(),
+                TextColumn::make('participant.first_name')->label('Vorname')->searchable()->sortable()->placeholder('-'),
+                TextColumn::make('participant.last_name')->label('Nachname')->searchable()->sortable()->placeholder('-'),
+                TextColumn::make('participant.email')->label('E-Mail')->searchable()->sortable()->copyable(),
                 IconColumn::make('is_active')
                     ->label('Aktiv')
                     ->boolean()
                     ->state(static fn($record): bool => $record->isActive()),
-                TextColumn::make('subscribed_at')
-                    ->label('Angemeldet am')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable(),
+                TextColumn::make('subscribed_at')->label('Angemeldet am')->dateTime('d.m.Y H:i')->sortable(),
                 TextColumn::make('unsubscribed_at')
                     ->label('Abgemeldet am')
                     ->dateTime('d.m.Y H:i')

@@ -59,12 +59,12 @@ class GeocodingService
 
         $first = $results[0] ?? null;
 
-        if (!is_array($first) || !isset($first['lat'], $first['lon'])) {
+        if (!is_array($first)) {
             return null;
         }
 
-        $lat = $first['lat'];
-        $lon = $first['lon'];
+        $lat = $first['lat'] ?? null;
+        $lon = $first['lon'] ?? null;
 
         if (!is_numeric($lat) || !is_numeric($lon)) {
             return null;

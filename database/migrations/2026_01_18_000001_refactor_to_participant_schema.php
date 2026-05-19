@@ -11,8 +11,8 @@ return new class extends Migration {
     public function up(): void
     {
         // Step 1: Create participants table (if not exists)
-        if (! Schema::hasTable('participants')) {
-            Schema::create('participants', function (Blueprint $table): void {
+        if (!Schema::hasTable('participants')) {
+            Schema::create('participants', static function (Blueprint $table): void {
                 $table->id();
                 $table->string('first_name');
                 $table->string('last_name');
@@ -67,20 +67,20 @@ return new class extends Migration {
         }
 
         // Step 4: Add participant_id to event_registrations/registrations (if not exists)
-        if (! Schema::hasColumn($sourceTable, 'participant_id')) {
-            Schema::table($sourceTable, function (Blueprint $table): void {
+        if (!Schema::hasColumn($sourceTable, 'participant_id')) {
+            Schema::table($sourceTable, static function (Blueprint $table): void {
                 $table->unsignedBigInteger('participant_id')->nullable()->after('id');
             });
         }
 
-        if (! Schema::hasColumn($sourceTable, 'registered_at')) {
-            Schema::table($sourceTable, function (Blueprint $table): void {
+        if (!Schema::hasColumn($sourceTable, 'registered_at')) {
+            Schema::table($sourceTable, static function (Blueprint $table): void {
                 $table->timestamp('registered_at')->nullable()->after('status');
             });
         }
 
-        if (! Schema::hasColumn($sourceTable, 'cancelled_at')) {
-            Schema::table($sourceTable, function (Blueprint $table): void {
+        if (!Schema::hasColumn($sourceTable, 'cancelled_at')) {
+            Schema::table($sourceTable, static function (Blueprint $table): void {
                 $table->timestamp('cancelled_at')->nullable()->after('registered_at');
             });
         }
@@ -111,7 +111,7 @@ return new class extends Migration {
 
             // Step 8: Drop old indexes (check if they exist first)
             try {
-                Schema::table($sourceTable, function (Blueprint $table): void {
+                Schema::table($sourceTable, static function (Blueprint $table): void {
                     $table->dropIndex('event_registrations_event_status_index');
                 });
             } catch (Exception $e) {
@@ -119,7 +119,7 @@ return new class extends Migration {
             }
 
             try {
-                Schema::table($sourceTable, function (Blueprint $table): void {
+                Schema::table($sourceTable, static function (Blueprint $table): void {
                     $table->dropUnique(['event_id', 'email']);
                 });
             } catch (Exception $e) {
@@ -129,11 +129,11 @@ return new class extends Migration {
             // Step 9: Drop old columns
             $columnsToDrop = array_filter(
                 ['first_name', 'last_name', 'email', 'phone_number', 'privacy_accepted', 'confirmed_at'],
-                fn(string $col) => Schema::hasColumn($sourceTable, $col),
+                static fn(string $col) => Schema::hasColumn($sourceTable, $col),
             );
 
             if ($columnsToDrop !== []) {
-                Schema::table($sourceTable, function (Blueprint $table) use ($columnsToDrop): void {
+                Schema::table($sourceTable, static function (Blueprint $table) use ($columnsToDrop): void {
                     $table->dropColumn($columnsToDrop);
                 });
             }
@@ -142,7 +142,7 @@ return new class extends Migration {
         // Step 10: Add foreign key and new indexes (if not exists)
         // Skip FK check for SQLite as it doesn't have information_schema
         try {
-            Schema::table($sourceTable, function (Blueprint $table): void {
+            Schema::table($sourceTable, static function (Blueprint $table): void {
                 $table->foreign('participant_id')->references('id')->on('participants')->cascadeOnDelete();
             });
         } catch (Exception $exception) {
@@ -151,7 +151,7 @@ return new class extends Migration {
 
         // Add unique constraint if it doesn't exist
         try {
-            Schema::table($sourceTable, function (Blueprint $table): void {
+            Schema::table($sourceTable, static function (Blueprint $table): void {
                 $table->unique(['participant_id', 'event_id']);
             });
         } catch (Exception $exception) {
@@ -160,7 +160,7 @@ return new class extends Migration {
 
         // Add new index if it doesn't exist
         try {
-            Schema::table($sourceTable, function (Blueprint $table): void {
+            Schema::table($sourceTable, static function (Blueprint $table): void {
                 $table->index(['event_id', 'status'], 'registrations_event_status_index');
             });
         } catch (Exception $exception) {
@@ -173,14 +173,14 @@ return new class extends Migration {
         }
 
         // Step 12: Add participant_id and confirmed_at to newsletter_subscriptions
-        if (! Schema::hasColumn('newsletter_subscriptions', 'participant_id')) {
-            Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
+        if (!Schema::hasColumn('newsletter_subscriptions', 'participant_id')) {
+            Schema::table('newsletter_subscriptions', static function (Blueprint $table): void {
                 $table->unsignedBigInteger('participant_id')->nullable()->after('id');
             });
         }
 
-        if (! Schema::hasColumn('newsletter_subscriptions', 'confirmed_at')) {
-            Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
+        if (!Schema::hasColumn('newsletter_subscriptions', 'confirmed_at')) {
+            Schema::table('newsletter_subscriptions', static function (Blueprint $table): void {
                 $table->timestamp('confirmed_at')->nullable()->after('subscribed_at');
             });
         }
@@ -197,20 +197,20 @@ return new class extends Migration {
 
             // Step 14: Drop old indexes and columns from newsletter_subscriptions
             try {
-                Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
+                Schema::table('newsletter_subscriptions', static function (Blueprint $table): void {
                     $table->dropUnique(['email']);
                 });
             } catch (Exception $e) {
                 // Unique constraint doesn't exist
             }
 
-            $columnsToDrop = array_filter(
-                ['email', 'status'],
-                fn(string $col) => Schema::hasColumn('newsletter_subscriptions', $col),
-            );
+            $columnsToDrop = array_filter(['email', 'status'], static fn(string $col) => Schema::hasColumn(
+                'newsletter_subscriptions',
+                $col,
+            ));
 
             if ($columnsToDrop !== []) {
-                Schema::table('newsletter_subscriptions', function (Blueprint $table) use ($columnsToDrop): void {
+                Schema::table('newsletter_subscriptions', static function (Blueprint $table) use ($columnsToDrop): void {
                     $table->dropColumn($columnsToDrop);
                 });
             }
@@ -218,7 +218,7 @@ return new class extends Migration {
 
         // Step 15: Add foreign key and unique constraint
         try {
-            Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
+            Schema::table('newsletter_subscriptions', static function (Blueprint $table): void {
                 $table->foreign('participant_id')->references('id')->on('participants')->cascadeOnDelete();
             });
         } catch (Exception $exception) {
@@ -226,7 +226,7 @@ return new class extends Migration {
         }
 
         try {
-            Schema::table('newsletter_subscriptions', function (Blueprint $table): void {
+            Schema::table('newsletter_subscriptions', static function (Blueprint $table): void {
                 $table->unique('participant_id');
             });
         } catch (Exception $exception) {

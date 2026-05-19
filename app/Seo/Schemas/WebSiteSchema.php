@@ -9,7 +9,9 @@ use Spatie\SchemaOrg\Schema;
 
 final readonly class WebSiteSchema
 {
-    public function __construct(private GeneralSettings $settings) {}
+    public function __construct(
+        private GeneralSettings $settings,
+    ) {}
 
     public function toScript(): string
     {
@@ -19,9 +21,7 @@ final readonly class WebSiteSchema
             ->url(url('/'))
             ->description($this->settings->site_description)
             ->inLanguage('de-DE')
-            ->publisher(
-                Schema::organization()->setProperty('@id', url('/') . '#organization'),
-            )
+            ->publisher(Schema::organization()->setProperty('@id', url('/') . '#organization'))
             ->potentialAction(
                 Schema::searchAction()
                     ->target(url('/') . '?s={search_term_string}')

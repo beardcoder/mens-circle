@@ -40,8 +40,6 @@ final class RegistrationObserver
 
         $nextWaitlisted->promote();
 
-        $nextWaitlisted->participant->notify(
-            new WaitlistParticipantPromoted($nextWaitlisted, $nextWaitlisted->event),
-        );
+        $nextWaitlisted->participant->notify(new WaitlistParticipantPromoted($nextWaitlisted, $nextWaitlisted->event));
     }
 }

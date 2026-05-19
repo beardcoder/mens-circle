@@ -27,14 +27,11 @@ final readonly class RegisterForEvent
     {
         $isWaitlist = $event->isFull;
 
-        $participant = Participant::updateOrCreate(
-            ['email' => $data['email']],
-            [
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
-                'phone' => $data['phone_number'] ?? null,
-            ],
-        );
+        $participant = Participant::updateOrCreate(['email' => $data['email']], [
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'phone' => $data['phone_number'] ?? null,
+        ]);
 
         $registration = $this->createOrRestoreRegistration($event, $participant, $isWaitlist);
         $registration->setRelation('participant', $participant);
@@ -46,10 +43,7 @@ final readonly class RegisterForEvent
 
     private function createOrRestoreRegistration(Event $event, Participant $participant, bool $isWaitlist): Registration
     {
-        $existing = Registration::withTrashed()
-            ->where('event_id', $event->id)
-            ->where('participant_id', $participant->id)
-            ->first();
+        $existing = Registration::withTrashed()->where('event_id', $event->id)->where('participant_id', $participant->id)->first();
 
         if ($existing && !$existing->trashed()) {
             throw new RuntimeException(

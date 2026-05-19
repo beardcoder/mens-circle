@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('participants', function (Blueprint $table): void {
+        Schema::table('participants', static function (Blueprint $table): void {
             $table->string('first_name')->nullable()->change();
             $table->string('last_name')->nullable()->change();
         });
@@ -17,7 +17,7 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::table('participants', function (Blueprint $table): void {
+        Schema::table('participants', static function (Blueprint $table): void {
             $table->string('first_name')->nullable(false)->change();
             $table->string('last_name')->nullable(false)->change();
         });

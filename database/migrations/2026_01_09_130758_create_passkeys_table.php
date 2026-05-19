@@ -12,7 +12,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('passkeys', function (Blueprint $table): void {
+        Schema::create('passkeys', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('authenticatable_id')->constrained('users', 'id', 'passkeys_authenticatable_fk')->cascadeOnDelete();
             $table->text('name');

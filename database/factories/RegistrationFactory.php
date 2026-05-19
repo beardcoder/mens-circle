@@ -35,7 +35,7 @@ class RegistrationFactory extends Factory
 
     public function registered(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'status' => RegistrationStatus::Registered->value,
             'registered_at' => now(),
             'cancelled_at' => null,
@@ -44,7 +44,7 @@ class RegistrationFactory extends Factory
 
     public function waitlist(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'status' => RegistrationStatus::Waitlist->value,
             'registered_at' => now(),
             'cancelled_at' => null,
@@ -53,7 +53,7 @@ class RegistrationFactory extends Factory
 
     public function cancelled(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'status' => RegistrationStatus::Cancelled->value,
             'cancelled_at' => now(),
         ]);
@@ -61,7 +61,7 @@ class RegistrationFactory extends Factory
 
     public function attended(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'status' => RegistrationStatus::Attended->value,
             'registered_at' => now(),
             'cancelled_at' => null,
@@ -70,14 +70,14 @@ class RegistrationFactory extends Factory
 
     public function forEvent(Event $event): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'event_id' => $event->id,
         ]);
     }
 
     public function forParticipant(Participant $participant): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'participant_id' => $participant->id,
         ]);
     }

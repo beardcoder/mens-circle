@@ -9,38 +9,35 @@ use Spatie\SchemaOrg\Schema;
 
 final readonly class OrganizationSchema
 {
-    public function __construct(private GeneralSettings $settings) {}
+    public function __construct(
+        private GeneralSettings $settings,
+    ) {}
 
     public function toScript(): string
     {
         $sameAs = [];
         foreach ($this->settings->social_links ?? [] as $link) {
-            if (is_array($link) && isset($link['value']) && is_string($link['value'])) {
-                $sameAs[] = $link['value'];
+            if (!is_array($link)) {
+                continue;
             }
+
+            $value = $link['value'] ?? null;
+            if (!is_string($value)) {
+                continue;
+            }
+
+            $sameAs[] = $value;
         }
 
         $schema = Schema::organization()
             ->setProperty('@id', url('/') . '#organization')
             ->name($this->settings->site_name)
             ->url(url('/'))
-            ->logo(
-                Schema::imageObject()
-                    ->url(asset('images/logo-color.png'))
-                    ->setProperty('width', 512)
-                    ->setProperty('height', 512),
-            )
+            ->logo(Schema::imageObject()->url(asset('images/logo-color.png'))->setProperty('width', 512)->setProperty('height', 512))
             ->description($this->settings->site_description)
             ->email($this->settings->contact_email)
-            ->address(
-                Schema::postalAddress()
-                    ->addressLocality('Straubing')
-                    ->addressRegion('Bayern')
-                    ->addressCountry('DE'),
-            )
-            ->areaServed(
-                Schema::place()->name('Niederbayern'),
-            );
+            ->address(Schema::postalAddress()->addressLocality('Straubing')->addressRegion('Bayern')->addressCountry('DE'))
+            ->areaServed(Schema::place()->name('Niederbayern'));
 
         if ($sameAs !== []) {
             $schema->sameAs($sameAs);

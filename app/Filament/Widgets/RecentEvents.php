@@ -18,22 +18,11 @@ class RecentEvents extends TableWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(
-                Event::query()
-                    ->upcoming()
-                    ->oldest('event_date')
-                    ->limit(5),
-            )
+            ->query(Event::query()->upcoming()->oldest('event_date')->limit(5))
             ->columns([
-                TextColumn::make('title')
-                    ->label('Event')
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('title')->label('Event')->searchable()->sortable(),
 
-                TextColumn::make('event_date')
-                    ->label('Datum')
-                    ->date('d.m.Y')
-                    ->sortable(),
+                TextColumn::make('event_date')->label('Datum')->date('d.m.Y')->sortable(),
 
                 TextColumn::make('active_registrations_count')
                     ->label('Anmeldungen')

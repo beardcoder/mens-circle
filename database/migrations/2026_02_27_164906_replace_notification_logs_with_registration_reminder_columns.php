@@ -11,7 +11,7 @@ return new class extends Migration {
     {
         Schema::dropIfExists('event_notification_logs');
 
-        Schema::table('registrations', function (Blueprint $table): void {
+        Schema::table('registrations', static function (Blueprint $table): void {
             $table->timestamp('reminder_sent_at')->nullable()->after('cancelled_at');
             $table->timestamp('sms_reminder_sent_at')->nullable()->after('reminder_sent_at');
         });
@@ -19,11 +19,11 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::table('registrations', function (Blueprint $table): void {
+        Schema::table('registrations', static function (Blueprint $table): void {
             $table->dropColumn(['reminder_sent_at', 'sms_reminder_sent_at']);
         });
 
-        Schema::create('event_notification_logs', function (Blueprint $table): void {
+        Schema::create('event_notification_logs', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('registration_id')->constrained()->cascadeOnDelete();
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();

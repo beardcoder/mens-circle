@@ -13,7 +13,9 @@ final class SevenIoMessage
         return new self($content);
     }
 
-    public function __construct(public string $content = '') {}
+    public function __construct(
+        public string $content = '',
+    ) {}
 
     public function content(string $content): self
     {

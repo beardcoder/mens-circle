@@ -39,8 +39,10 @@ final class EventRegistrationConfirmed extends Notification implements ShouldQue
 
     public function toMail(object $notifiable): Mailable
     {
-        return (new EventRegistrationConfirmationMail($this->registration, $this->event))
-            ->to($notifiable->routeNotificationFor('mail', $this)); // @phpstan-ignore method.notFound
+        return new EventRegistrationConfirmationMail($this->registration, $this->event)->to($notifiable->routeNotificationFor(
+            'mail',
+            $this,
+        )); // @phpstan-ignore method.notFound
     }
 
     public function toSevenIo(object $notifiable): SevenIoMessage

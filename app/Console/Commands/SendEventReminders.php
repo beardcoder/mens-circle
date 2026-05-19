@@ -21,9 +21,10 @@ class SendEventReminders extends Command
         $registrations = Registration::query()
             ->active()
             ->whereNull('reminder_sent_at')
-            ->whereRelation('event', static fn($query) => $query
-                ->where('is_published', true)
-                ->whereBetween('event_date', [now()->startOfDay(), now()->addDay()->endOfDay()]))
+            ->whereRelation('event', static fn($query) => $query->where('is_published', true)->whereBetween('event_date', [
+                now()->startOfDay(),
+                now()->addDay()->endOfDay(),
+            ]))
             ->with(['event', 'participant'])
             ->get();
 

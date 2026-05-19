@@ -32,5 +32,4 @@ final class NewsletterSubscriptionRequest extends JsonFormRequest
             'email.email' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
         ];
     }
-
 }

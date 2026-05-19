@@ -41,5 +41,4 @@ final class TestimonialSubmissionRequest extends JsonFormRequest
             'privacy.accepted' => 'Bitte bestätige die Datenschutzerklärung.',
         ];
     }
-
 }

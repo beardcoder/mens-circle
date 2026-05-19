@@ -18,16 +18,16 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Spatie\ResponseCache\Middlewares\DoNotCacheResponse;
 
 /*
-|--------------------------------------------------------------------------
-| Public cached routes (no session/cookie/CSRF overhead)
-|--------------------------------------------------------------------------
-|
-| These routes serve public, anonymous content cached by Spatie Response
-| Cache. Stripping session and cookie middleware eliminates unnecessary
-| overhead on every cache hit. None of these controllers use sessions,
-| flash data, or CSRF tokens.
-|
-*/
+ |--------------------------------------------------------------------------
+ | Public cached routes (no session/cookie/CSRF overhead)
+ |--------------------------------------------------------------------------
+ |
+ | These routes serve public, anonymous content cached by Spatie Response
+ | Cache. Stripping session and cookie middleware eliminates unnecessary
+ | overhead on every cache hit. None of these controllers use sessions,
+ | flash data, or CSRF tokens.
+ |
+ */
 Route::withoutMiddleware([
     EncryptCookies::class,
     AddQueuedCookiesToResponse::class,
@@ -54,17 +54,15 @@ Route::withoutMiddleware([
 });
 
 /*
-|--------------------------------------------------------------------------
-| Routes requiring sessions (auth, newsletter)
-|--------------------------------------------------------------------------
-*/
-Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])
-    ->middleware(DoNotCacheResponse::class)
-    ->name('newsletter.unsubscribe');
+ |--------------------------------------------------------------------------
+ | Routes requiring sessions (auth, newsletter)
+ |--------------------------------------------------------------------------
+ */
+Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->middleware(DoNotCacheResponse::class)->name(
+    'newsletter.unsubscribe',
+);
 
 Route::middleware(DoNotCacheResponse::class)->group(function (): void {
-    Route::get('/auth/{provider}/redirect', [SocialiteController::class, 'redirect'])
-        ->name('socialite.redirect');
-    Route::get('/auth/{provider}/callback', [SocialiteController::class, 'callback'])
-        ->name('socialite.callback');
+    Route::get('/auth/{provider}/redirect', [SocialiteController::class, 'redirect'])->name('socialite.redirect');
+    Route::get('/auth/{provider}/callback', [SocialiteController::class, 'callback'])->name('socialite.callback');
 });

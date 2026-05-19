@@ -12,7 +12,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('newsletters', function (Blueprint $table): void {
+        Schema::create('newsletters', static function (Blueprint $table): void {
             $table->id();
             $table->string('subject');
             $table->text('content');

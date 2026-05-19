@@ -51,10 +51,9 @@ enum MessengerTemplate: string
      */
     public static function availableForSpots(int $availableSpots): array
     {
-        return array_values(array_filter(
-            self::cases(),
-            static fn(self $template): bool => $template->isAvailableForSpots($availableSpots),
-        ));
+        return array_values(array_filter(self::cases(), static fn(self $template): bool => $template->isAvailableForSpots(
+            $availableSpots,
+        )));
     }
 
     private function shortContent(): string

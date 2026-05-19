@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\ClearsResponseCache;
+use Carbon\CarbonImmutable;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\CarbonImmutable;
 use Override;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -81,7 +81,9 @@ class Event extends Model implements HasMedia
     #[Override]
     public function getSlugOptions(): SlugOptions
     {
-        return SlugOptions::create()->generateSlugsFrom(static fn($model) => $model->event_date->format('Y-m-d'))->saveSlugsTo('slug');
+        return SlugOptions::create()
+            ->generateSlugsFrom(static fn($model) => $model->event_date->format('Y-m-d'))
+            ->saveSlugsTo('slug');
     }
 
     #[Override]
@@ -93,10 +95,7 @@ class Event extends Model implements HasMedia
     #[Override]
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion('webp')
-            ->performOnCollections('event_image')
-            ->format('webp')
-            ->quality(85);
+        $this->addMediaConversion('webp')->performOnCollections('event_image')->format('webp')->quality(85);
     }
 
     /**
@@ -179,19 +178,16 @@ class Event extends Model implements HasMedia
         // Read raw attributes so the accessor survives a deploy where the
         // latitude/longitude migration hasn't run yet — under strict models
         // ($model->latitude) would throw MissingAttributeException.
-        return Attribute::make(get: fn(): bool => ($this->attributes['latitude'] ?? null) !== null
-            && ($this->attributes['longitude'] ?? null) !== null);
+        return Attribute::make(
+            get: fn(): bool => ($this->attributes['latitude'] ?? null) !== null && ($this->attributes['longitude'] ?? null) !== null,
+        );
     }
 
     public function generateICalContent(): string
     {
-        $startDateTime = $this->event_date
-            ->setTimeFrom($this->start_time)
-            ->format('Ymd\THis');
+        $startDateTime = $this->event_date->setTimeFrom($this->start_time)->format('Ymd\THis');
 
-        $endDateTime = $this->event_date
-            ->setTimeFrom($this->end_time)
-            ->format('Ymd\THis');
+        $endDateTime = $this->event_date->setTimeFrom($this->end_time)->format('Ymd\THis');
 
         $now = now()->utc()->format('Ymd\THis\Z');
         $location = $this->fullAddress ?? $this->location;
@@ -232,10 +228,7 @@ class Event extends Model implements HasMedia
 
     public static function upcomingCount(): int
     {
-        return static::query()
-            ->published()
-            ->upcoming()
-            ->count();
+        return static::query()->published()->upcoming()->count();
     }
 
     public static function nextEvent(): ?self

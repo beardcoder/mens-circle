@@ -23,9 +23,7 @@ final readonly class WebPageSchema
             ->description($this->description)
             ->url($this->url ?? url()->current())
             ->inLanguage('de-DE')
-            ->publisher(
-                Schema::organization()->setProperty('@id', url('/') . '#organization'),
-            );
+            ->publisher(Schema::organization()->setProperty('@id', url('/') . '#organization'));
 
         if ($this->settings instanceof GeneralSettings) {
             $schema->isPartOf(

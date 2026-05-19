@@ -12,7 +12,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('content_blocks', function (Blueprint $table): void {
+        Schema::create('content_blocks', static function (Blueprint $table): void {
             $table->id();
             $table->string('type');
             $table->jsonb('data');

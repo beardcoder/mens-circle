@@ -46,7 +46,7 @@ class EventFactory extends Factory
      */
     public function published(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'is_published' => true,
         ]);
     }
@@ -56,7 +56,7 @@ class EventFactory extends Factory
      */
     public function unpublished(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'is_published' => false,
         ]);
     }
@@ -68,7 +68,7 @@ class EventFactory extends Factory
     {
         $tomorrow = now()->addDay();
 
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'event_date' => $tomorrow,
             'start_time' => $tomorrow->copy()->setTime(19, 0),
             'end_time' => $tomorrow->copy()->setTime(21, 0),
@@ -80,7 +80,7 @@ class EventFactory extends Factory
      */
     public function onDate(DateTime|DateTimeInterface $date): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'event_date' => $date,
         ]);
     }
@@ -92,7 +92,7 @@ class EventFactory extends Factory
     {
         $yesterday = now()->subDay();
 
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'event_date' => $yesterday,
             'start_time' => $yesterday->copy()->setTime(19, 0),
             'end_time' => $yesterday->copy()->setTime(21, 0),
@@ -104,7 +104,7 @@ class EventFactory extends Factory
      */
     public function withCoordinates(float $latitude = 48.8767, float $longitude = 12.5719): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $attributes): array => [
             'latitude' => $latitude,
             'longitude' => $longitude,
         ]);

@@ -42,10 +42,7 @@ class UserResource extends Resource
             Section::make('Benutzerdaten')
                 ->columns(2)
                 ->schema([
-                    TextInput::make('name')
-                        ->label('Name')
-                        ->required()
-                        ->maxLength(255),
+                    TextInput::make('name')->label('Name')->required()->maxLength(255),
                     TextInput::make('email')
                         ->label('E-Mail-Adresse')
                         ->email()
@@ -60,7 +57,7 @@ class UserResource extends Resource
                         ->label('Passwort')
                         ->password()
                         ->revealable()
-                        ->dehydrateStateUsing(static fn(string $state): string => Hash::make($state))
+                        ->dehydrateStateUsing(Hash::make(...))
                         ->dehydrated(static fn(?string $state): bool => filled($state))
                         ->required(static fn(string $operation): bool => $operation === 'create')
                         ->rule(Password::default()),
@@ -78,15 +75,8 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
-            TextColumn::make('name')
-                ->label('Name')
-                ->searchable()
-                ->sortable(),
-            TextColumn::make('email')
-                ->label('E-Mail')
-                ->searchable()
-                ->sortable()
-                ->copyable(),
+            TextColumn::make('name')->label('Name')->searchable()->sortable(),
+            TextColumn::make('email')->label('E-Mail')->searchable()->sortable()->copyable(),
             TextColumn::make('email_verified_at')
                 ->label('E-Mail verifiziert')
                 ->dateTime('d.m.Y H:i')

@@ -117,16 +117,18 @@ class EmailTemplateService
      */
     private function stripEmptyPlaceholderLines(string $template, array $replacements): string
     {
-        $emptyPlaceholders = array_keys(array_filter(
-            $replacements,
-            static fn(string $value): bool => trim($value) === '',
-        ));
+        $emptyPlaceholders = array_keys(array_filter($replacements, static fn(string $value): bool => trim($value) === ''));
 
         if ($emptyPlaceholders === []) {
             return $template;
         }
 
-        $lines = preg_split('/\R/u', $template) ?: [];
+        $lines = preg_split('/\R/u', $template);
+
+        if ($lines === false) {
+            return $template;
+        }
+
         $kept = [];
 
         foreach ($lines as $line) {

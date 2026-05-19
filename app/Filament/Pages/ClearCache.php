@@ -33,7 +33,7 @@ class ClearCache extends Page
     public function getStatusItems(): array
     {
         $isResponseCacheEnabled = Config::boolean('responsecache.enabled', true);
-        $lifetimeSeconds = Config::integer('responsecache.cache.lifetime_in_seconds', 604800);
+        $lifetimeSeconds = Config::integer('responsecache.cache.lifetime_in_seconds', 604_800);
 
         return [
             [
@@ -74,7 +74,7 @@ class ClearCache extends Page
             modalDescription: 'Alle gecachten HTTP-Antworten werden verworfen. Seiten werden beim nächsten Aufruf neu generiert.',
             successTitle: 'Response-Cache geleert',
             successBody: 'Alle gecachten HTTP-Antworten wurden entfernt.',
-            action: static fn() => ResponseCache::clear(),
+            action: ResponseCache::clear(...),
         );
     }
 
@@ -225,17 +225,9 @@ class ClearCache extends Page
                 try {
                     $action();
 
-                    Notification::make()
-                        ->title($successTitle)
-                        ->body($successBody)
-                        ->success()
-                        ->send();
+                    Notification::make()->title($successTitle)->body($successBody)->success()->send();
                 } catch (Exception $exception) {
-                    Notification::make()
-                        ->title('Fehler beim Leeren des Caches')
-                        ->body($exception->getMessage())
-                        ->danger()
-                        ->send();
+                    Notification::make()->title('Fehler beim Leeren des Caches')->body($exception->getMessage())->danger()->send();
                 }
             });
     }
@@ -243,7 +235,7 @@ class ClearCache extends Page
     private function formatDuration(int $seconds): string
     {
         return match (true) {
-            $seconds >= 86400 => sprintf('%d Tage', (int) round($seconds / 86400)),
+            $seconds >= 86_400 => sprintf('%d Tage', (int) round($seconds / 86_400)),
             $seconds >= 3600 => sprintf('%d Std.', (int) round($seconds / 3600)),
             $seconds >= 60 => sprintf('%d Min.', (int) round($seconds / 60)),
             default => sprintf('%d Sek.', $seconds),

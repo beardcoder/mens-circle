@@ -27,16 +27,11 @@ final class EventReminder extends Mailable
     {
         $timeWord = $this->isToday ? 'heute' : 'morgen';
 
-        return new Envelope(
-            subject: "Erinnerung: {$this->event->title} ist {$timeWord}!",
-        );
+        return new Envelope(subject: "Erinnerung: {$this->event->title} ist {$timeWord}!");
     }
 
     public function content(): Content
     {
-        return new Content(
-            markdown: 'emails.event-reminder',
-            with: ['isToday' => $this->isToday],
-        );
+        return new Content(markdown: 'emails.event-reminder', with: ['isToday' => $this->isToday]);
     }
 }

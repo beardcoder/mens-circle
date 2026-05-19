@@ -71,24 +71,15 @@ class RegistrationResource extends Resource
                         ->searchable(['first_name', 'last_name', 'email'])
                         ->preload()
                         ->createOptionForm([
-                            TextInput::make('first_name')
-                                ->label('Vorname')
-                                ->required()
-                                ->maxLength(255),
-                            TextInput::make('last_name')
-                                ->label('Nachname')
-                                ->required()
-                                ->maxLength(255),
+                            TextInput::make('first_name')->label('Vorname')->required()->maxLength(255),
+                            TextInput::make('last_name')->label('Nachname')->required()->maxLength(255),
                             TextInput::make('email')
                                 ->label('E-Mail-Adresse')
                                 ->email()
                                 ->required()
                                 ->unique()
                                 ->maxLength(255),
-                            TextInput::make('phone')
-                                ->label('Telefonnummer')
-                                ->tel()
-                                ->maxLength(30),
+                            TextInput::make('phone')->label('Telefonnummer')->tel()->maxLength(30),
                         ])
                         ->native(false),
                 ]),
@@ -108,10 +99,7 @@ class RegistrationResource extends Resource
                         ->native(false)
                         ->default(now())
                         ->displayFormat('d.m.Y H:i'),
-                    DateTimePicker::make('cancelled_at')
-                        ->label('Abgesagt am')
-                        ->native(false)
-                        ->displayFormat('d.m.Y H:i'),
+                    DateTimePicker::make('cancelled_at')->label('Abgesagt am')->native(false)->displayFormat('d.m.Y H:i'),
                 ]),
         ]);
     }
@@ -121,27 +109,11 @@ class RegistrationResource extends Resource
         return $table
             ->modifyQueryUsing(static fn($query) => $query->with(['event', 'participant']))
             ->columns([
-                TextColumn::make('event.event_date')
-                    ->label('Event-Datum')
-                    ->dateTime('d.m.Y')
-                    ->sortable(),
-                TextColumn::make('event.title')
-                    ->label('Veranstaltung')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('participant.first_name')
-                    ->label('Vorname')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('participant.last_name')
-                    ->label('Nachname')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('participant.email')
-                    ->label('E-Mail')
-                    ->searchable()
-                    ->sortable()
-                    ->copyable(),
+                TextColumn::make('event.event_date')->label('Event-Datum')->dateTime('d.m.Y')->sortable(),
+                TextColumn::make('event.title')->label('Veranstaltung')->searchable()->sortable(),
+                TextColumn::make('participant.first_name')->label('Vorname')->searchable()->sortable(),
+                TextColumn::make('participant.last_name')->label('Nachname')->searchable()->sortable(),
+                TextColumn::make('participant.email')->label('E-Mail')->searchable()->sortable()->copyable(),
                 TextColumn::make('participant.phone')
                     ->label('Telefon')
                     ->searchable()
@@ -154,20 +126,13 @@ class RegistrationResource extends Resource
                     ->color(static fn(RegistrationStatus $state): string => $state->getColor())
                     ->formatStateUsing(static fn(RegistrationStatus $state): string => $state->getLabel())
                     ->sortable(),
-                TextColumn::make('registered_at')
-                    ->label('Angemeldet am')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable(),
+                TextColumn::make('registered_at')->label('Angemeldet am')->dateTime('d.m.Y H:i')->sortable(),
                 TextColumn::make('cancelled_at')
                     ->label('Abgesagt am')
                     ->dateTime('d.m.Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('reminder_sent_at')
-                    ->label('Erinnerung')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable()
-                    ->placeholder('Ausstehend'),
+                TextColumn::make('reminder_sent_at')->label('Erinnerung')->dateTime('d.m.Y H:i')->sortable()->placeholder('Ausstehend'),
                 TextColumn::make('sms_reminder_sent_at')
                     ->label('SMS')
                     ->dateTime('d.m.Y H:i')
@@ -183,11 +148,7 @@ class RegistrationResource extends Resource
             ->filters([
                 TrashedFilter::make()->label('Gelöschte Anmeldungen'),
                 SelectFilter::make('status')->label('Anmeldestatus')->options(RegistrationStatus::options()),
-                SelectFilter::make('event')
-                    ->label('Veranstaltung')
-                    ->relationship('event', 'title')
-                    ->searchable()
-                    ->preload(),
+                SelectFilter::make('event')->label('Veranstaltung')->relationship('event', 'title')->searchable()->preload(),
             ])
             ->recordActions([
                 EditAction::make(),

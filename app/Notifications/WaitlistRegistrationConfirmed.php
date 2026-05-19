@@ -31,7 +31,6 @@ final class WaitlistRegistrationConfirmed extends Notification implements Should
 
     public function toMail(object $notifiable): Mailable
     {
-        return (new WaitlistConfirmationMail($this->registration, $this->event))
-            ->to($notifiable->routeNotificationFor('mail', $this)); // @phpstan-ignore method.notFound
+        return new WaitlistConfirmationMail($this->registration, $this->event)->to($notifiable->routeNotificationFor('mail', $this)); // @phpstan-ignore method.notFound
     }
 }

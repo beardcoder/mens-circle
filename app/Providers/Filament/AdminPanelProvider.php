@@ -37,7 +37,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseTransactions()
             ->sidebarCollapsibleOnDesktop()
             ->unsavedChangesAlerts()
-            ->globalSearchFieldSuffix(fn(): string => match (Platform::detect()) {
+            ->globalSearchFieldSuffix(static fn(): string => match (Platform::detect()) {
                 Platform::Mac => '⌘K',
                 default => 'Ctrl+K',
             })

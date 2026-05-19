@@ -44,12 +44,12 @@ final class TestimonialSubmissionController
      */
     private function buildSuccessMessage(array $validated): string
     {
-        if (!isset($validated['author_name']) || $validated['author_name'] === '') {
+        $authorName = $validated['author_name'] ?? null;
+
+        if (!is_string($authorName) || $authorName === '') {
             return 'Vielen Dank! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.';
         }
 
-        /** @var string $authorName */
-        $authorName = $validated['author_name'];
         $firstName = Str::before($authorName, ' ');
 
         return "Vielen Dank, {$firstName}! Deine Erfahrung wurde erfolgreich eingereicht und wird nach Prüfung veröffentlicht.";

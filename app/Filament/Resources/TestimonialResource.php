@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use Filament\Schemas\Components\Utilities\Set;
 use App\Filament\Resources\TestimonialResource\Pages\CreateTestimonial;
 use App\Filament\Resources\TestimonialResource\Pages\EditTestimonial;
 use App\Filament\Resources\TestimonialResource\Pages\ListTestimonials;
@@ -21,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
@@ -119,38 +119,17 @@ class TestimonialResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('quote')
-                    ->label('Zitat')
-                    ->limit(60)
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('quote')->label('Zitat')->limit(60)->searchable()->sortable(),
 
-                TextColumn::make('author_name')
-                    ->label('Name')
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('Anonym'),
+                TextColumn::make('author_name')->label('Name')->searchable()->sortable()->placeholder('Anonym'),
 
-                TextColumn::make('role')
-                    ->label('Rolle')
-                    ->searchable()
-                    ->toggleable(),
+                TextColumn::make('role')->label('Rolle')->searchable()->toggleable(),
 
-                IconColumn::make('is_published')
-                    ->label('Veröffentlicht')
-                    ->boolean()
-                    ->sortable(),
+                IconColumn::make('is_published')->label('Veröffentlicht')->boolean()->sortable(),
 
-                TextColumn::make('sort_order')
-                    ->label('Sortierung')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('sort_order')->label('Sortierung')->numeric()->sortable(),
 
-                TextColumn::make('created_at')
-                    ->label('Erstellt am')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('created_at')->label('Erstellt am')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([TrashedFilter::make()])
             ->recordActions([EditAction::make()])

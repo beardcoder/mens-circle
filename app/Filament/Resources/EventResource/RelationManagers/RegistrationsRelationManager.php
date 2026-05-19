@@ -46,24 +46,15 @@ class RegistrationsRelationManager extends RelationManager
                         ->searchable(['first_name', 'last_name', 'email'])
                         ->preload()
                         ->createOptionForm([
-                            TextInput::make('first_name')
-                                ->label('Vorname')
-                                ->required()
-                                ->maxLength(255),
-                            TextInput::make('last_name')
-                                ->label('Nachname')
-                                ->required()
-                                ->maxLength(255),
+                            TextInput::make('first_name')->label('Vorname')->required()->maxLength(255),
+                            TextInput::make('last_name')->label('Nachname')->required()->maxLength(255),
                             TextInput::make('email')
                                 ->label('E-Mail-Adresse')
                                 ->email()
                                 ->required()
                                 ->unique()
                                 ->maxLength(255),
-                            TextInput::make('phone')
-                                ->label('Telefonnummer')
-                                ->tel()
-                                ->maxLength(30),
+                            TextInput::make('phone')->label('Telefonnummer')->tel()->maxLength(30),
                         ])
                         ->native(false),
                 ]),
@@ -83,10 +74,7 @@ class RegistrationsRelationManager extends RelationManager
                         ->native(false)
                         ->default(now())
                         ->displayFormat('d.m.Y H:i'),
-                    DateTimePicker::make('cancelled_at')
-                        ->label('Abgesagt am')
-                        ->native(false)
-                        ->displayFormat('d.m.Y H:i'),
+                    DateTimePicker::make('cancelled_at')->label('Abgesagt am')->native(false)->displayFormat('d.m.Y H:i'),
                 ]),
         ]);
     }
@@ -96,19 +84,9 @@ class RegistrationsRelationManager extends RelationManager
         return $table
             ->modifyQueryUsing(static fn($query) => $query->with('participant'))
             ->columns([
-                TextColumn::make('participant.first_name')
-                    ->label('Vorname')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('participant.last_name')
-                    ->label('Nachname')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('participant.email')
-                    ->label('E-Mail')
-                    ->searchable()
-                    ->sortable()
-                    ->copyable(),
+                TextColumn::make('participant.first_name')->label('Vorname')->searchable()->sortable(),
+                TextColumn::make('participant.last_name')->label('Nachname')->searchable()->sortable(),
+                TextColumn::make('participant.email')->label('E-Mail')->searchable()->sortable()->copyable(),
                 TextColumn::make('participant.phone')
                     ->label('Telefon')
                     ->searchable()
@@ -121,15 +99,8 @@ class RegistrationsRelationManager extends RelationManager
                     ->color(static fn(RegistrationStatus $state): string => $state->getColor())
                     ->formatStateUsing(static fn(RegistrationStatus $state): string => $state->getLabel())
                     ->sortable(),
-                TextColumn::make('registered_at')
-                    ->label('Angemeldet am')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable(),
-                TextColumn::make('reminder_sent_at')
-                    ->label('Erinnerung')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable()
-                    ->placeholder('Ausstehend'),
+                TextColumn::make('registered_at')->label('Angemeldet am')->dateTime('d.m.Y H:i')->sortable(),
+                TextColumn::make('reminder_sent_at')->label('Erinnerung')->dateTime('d.m.Y H:i')->sortable()->placeholder('Ausstehend'),
             ])
             ->filters([
                 SelectFilter::make('status')->label('Anmeldestatus')->options(RegistrationStatus::options()),
@@ -149,9 +120,7 @@ class RegistrationsRelationManager extends RelationManager
                         $record->promote();
                         $record->load(['participant', 'event']);
 
-                        $record->participant->notify(
-                            new WaitlistParticipantPromoted($record, $record->event),
-                        );
+                        $record->participant->notify(new WaitlistParticipantPromoted($record, $record->event));
 
                         Notification::make()
                             ->title('Teilnehmer befördert')

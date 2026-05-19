@@ -10,4 +10,9 @@ use Illuminate\Support\Facades\Schedule;
 Schedule::command(SendEventReminders::class)->everyFifteenMinutes()->withoutOverlapping()->onOneServer();
 
 // SEO
-Schedule::command(GenerateSitemap::class)->daily()->at('02:00')->withoutOverlapping()->onOneServer()->runInBackground();
+Schedule::command(GenerateSitemap::class)
+    ->daily()
+    ->at('02:00')
+    ->withoutOverlapping()
+    ->onOneServer()
+    ->runInBackground();

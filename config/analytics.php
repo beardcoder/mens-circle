@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 return [
     /*
-    |--------------------------------------------------------------------------
-    | Analytics Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Configure analytics tracking for the application.
-    |
-    */
+     |--------------------------------------------------------------------------
+     | Analytics Configuration
+     |--------------------------------------------------------------------------
+     |
+     | Configure analytics tracking for the application.
+     |
+     */
 
     'umami' => [
         'enabled' => env('UMAMI_ENABLED', false),

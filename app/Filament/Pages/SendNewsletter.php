@@ -88,8 +88,8 @@ class SendNewsletter extends Page implements HasActions, HasForms
                         ->helperText(
                             $nextEvent instanceof Event
                                 ? "Platzhalter werden mit Daten vom nächsten Event gefüllt: {$nextEvent->title} ({$nextEvent->event_date->translatedFormat(
-                                    'd. F Y',
-                                )})"
+     'd. F Y',
+ )})"
                                 : 'Kein kommendes Event vorhanden – Platzhalter werden mit „—" gefüllt',
                         ),
 

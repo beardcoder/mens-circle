@@ -40,8 +40,10 @@ final class EventReminderNotification extends Notification implements ShouldQueu
 
     public function toMail(object $notifiable): Mailable
     {
-        return (new EventReminderMail($this->registration, $this->event, $this->isToday))
-            ->to($notifiable->routeNotificationFor('mail', $this)); // @phpstan-ignore method.notFound
+        return new EventReminderMail($this->registration, $this->event, $this->isToday)->to($notifiable->routeNotificationFor(
+            'mail',
+            $this,
+        )); // @phpstan-ignore method.notFound
     }
 
     public function toSevenIo(object $notifiable): SevenIoMessage

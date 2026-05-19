@@ -10,7 +10,9 @@ use Spatie\SchemaOrg\Schema;
 final readonly class BreadcrumbSchema
 {
     /** @param list<BreadcrumbItem> $items */
-    public function __construct(private array $items) {}
+    public function __construct(
+        private array $items,
+    ) {}
 
     public function toScript(): string
     {
@@ -23,8 +25,6 @@ final readonly class BreadcrumbSchema
                 ->setProperty('item', $item->url);
         }
 
-        return Schema::breadcrumbList()
-            ->itemListElement($listItems)
-            ->toScript();
+        return Schema::breadcrumbList()->itemListElement($listItems)->toScript();
     }
 }

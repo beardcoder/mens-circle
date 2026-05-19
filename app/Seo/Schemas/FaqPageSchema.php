@@ -4,28 +4,23 @@ declare(strict_types=1);
 
 namespace App\Seo\Schemas;
 
-use Spatie\SchemaOrg\Question;
 use App\Seo\Data\FaqItem;
+use Spatie\SchemaOrg\Question;
 use Spatie\SchemaOrg\Schema;
 
 final readonly class FaqPageSchema
 {
     /** @param list<FaqItem> $items */
-    public function __construct(private array $items) {}
+    public function __construct(
+        private array $items,
+    ) {}
 
     public function toScript(): string
     {
-        $questions = array_map(
-            static fn(FaqItem $item): Question => Schema::question()
-                ->name($item->question)
-                ->acceptedAnswer(
-                    Schema::answer()->text(strip_tags($item->answer)),
-                ),
-            $this->items,
-        );
+        $questions = array_map(static fn(FaqItem $item): Question => Schema::question()
+            ->name($item->question)
+            ->acceptedAnswer(Schema::answer()->text(strip_tags($item->answer))), $this->items);
 
-        return Schema::fAQPage()
-            ->mainEntity($questions)
-            ->toScript();
+        return Schema::fAQPage()->mainEntity($questions)->toScript();
     }
 }
