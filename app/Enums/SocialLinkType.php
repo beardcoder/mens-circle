@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Traits\HasEnumOptions;
+use Filament\Support\Contracts\HasLabel;
 
-enum SocialLinkType: string
+enum SocialLinkType: string implements HasLabel
 {
-    use HasEnumOptions;
-
     case Email = 'email';
     case Phone = 'phone';
     case Instagram = 'instagram';

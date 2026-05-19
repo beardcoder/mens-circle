@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Traits\HasEnumOptions;
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
 
-enum NewsletterStatus: string
+enum NewsletterStatus: string implements HasColor, HasLabel
 {
-    use HasEnumOptions;
-
     case Draft = 'draft';
     case Sending = 'sending';
     case Sent = 'sent';

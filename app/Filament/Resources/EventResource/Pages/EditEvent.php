@@ -87,12 +87,7 @@ class EditEvent extends EditRecord
                     ->schema([
                         Select::make('template')
                             ->label('E-Mail-Vorlage')
-                            ->options(
-                                collect(EmailTemplate::participantTemplates())
-                                    ->mapWithKeys(static fn(EmailTemplate $template): array => [
-                                        $template->value => $template->getLabel(),
-                                    ])->all(),
-                            )
+                            ->options(EmailTemplate::participantTemplateOptions())
                             ->placeholder('Vorlage auswählen (optional)')
                             ->native(false)
                             ->live()

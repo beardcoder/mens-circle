@@ -56,12 +56,7 @@ class NewsletterResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('subject')->label('Betreff')->searchable()->sortable()->limit(50),
-                TextColumn::make('status')
-                    ->label('Status')
-                    ->badge()
-                    ->color(static fn(NewsletterStatus $state): string => $state->getColor())
-                    ->formatStateUsing(static fn(NewsletterStatus $state): string => $state->getLabel())
-                    ->sortable(),
+                TextColumn::make('status')->label('Status')->badge()->sortable(),
                 TextColumn::make('recipient_count')->label('Empfänger')->numeric()->sortable(),
                 TextColumn::make('sent_at')->label('Versendet am')->dateTime('d.m.Y H:i')->sortable(),
                 TextColumn::make('created_at')
@@ -70,7 +65,7 @@ class NewsletterResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([SelectFilter::make('status')->label('Status')->options(NewsletterStatus::options())])
+            ->filters([SelectFilter::make('status')->label('Status')->options(NewsletterStatus::class)])
             ->defaultSort('created_at', 'desc')
             ->recordActions([ViewAction::make()])
             ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);

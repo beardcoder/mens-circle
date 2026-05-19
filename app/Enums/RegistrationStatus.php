@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Traits\HasEnumOptions;
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
 
-enum RegistrationStatus: string
+enum RegistrationStatus: string implements HasColor, HasLabel
 {
-    use HasEnumOptions;
-
     case Registered = 'registered';
     case Waitlist = 'waitlist';
     case Cancelled = 'cancelled';
@@ -33,5 +32,13 @@ enum RegistrationStatus: string
             self::Cancelled => 'danger',
             self::Attended => 'success',
         };
+    }
+
+    /**
+     * @return array<int, self>
+     */
+    public static function activeStatuses(): array
+    {
+        return [self::Registered, self::Attended];
     }
 }

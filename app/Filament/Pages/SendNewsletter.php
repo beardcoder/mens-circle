@@ -65,12 +65,7 @@ class SendNewsletter extends Page implements HasActions, HasForms
                 ->schema([
                     Select::make('template')
                         ->label('E-Mail-Vorlage')
-                        ->options(
-                            collect(EmailTemplate::newsletterTemplates())
-                                ->mapWithKeys(static fn(EmailTemplate $template): array => [
-                                    $template->value => $template->getLabel(),
-                                ])->all(),
-                        )
+                        ->options(EmailTemplate::newsletterTemplateOptions())
                         ->placeholder('Vorlage auswählen (optional)')
                         ->native(false)
                         ->live()

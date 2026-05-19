@@ -84,7 +84,7 @@ class ManageGeneralSettings extends SettingsPage
                         ->schema([
                             Select::make('type')
                                 ->label('Typ')
-                                ->options(SocialLinkType::options())
+                                ->options(SocialLinkType::class)
                                 ->required()
                                 ->searchable()
                                 ->helperText('Wähle den Typ des Links.'),

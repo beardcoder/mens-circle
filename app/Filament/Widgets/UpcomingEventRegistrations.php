@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
-use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Registration;
 use Filament\Tables\Columns\TextColumn;
@@ -46,12 +45,7 @@ class UpcomingEventRegistrations extends TableWidget
                     ->copyable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('status')
-                    ->label('Status')
-                    ->badge()
-                    ->color(static fn(RegistrationStatus $state): string => $state->getColor())
-                    ->formatStateUsing(static fn(RegistrationStatus $state): string => $state->getLabel())
-                    ->sortable(),
+                TextColumn::make('status')->label('Status')->badge()->sortable(),
 
                 TextColumn::make('registered_at')->label('Angemeldet am')->dateTime('d.m.Y H:i')->sortable(),
             ])

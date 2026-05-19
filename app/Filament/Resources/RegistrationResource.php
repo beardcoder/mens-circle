@@ -90,7 +90,7 @@ class RegistrationResource extends Resource
                 ->schema([
                     Select::make('status')
                         ->label('Status')
-                        ->options(RegistrationStatus::options())
+                        ->options(RegistrationStatus::class)
                         ->required()
                         ->default(RegistrationStatus::Registered->value)
                         ->native(false),
@@ -120,12 +120,7 @@ class RegistrationResource extends Resource
                     ->sortable()
                     ->copyable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('status')
-                    ->label('Status')
-                    ->badge()
-                    ->color(static fn(RegistrationStatus $state): string => $state->getColor())
-                    ->formatStateUsing(static fn(RegistrationStatus $state): string => $state->getLabel())
-                    ->sortable(),
+                TextColumn::make('status')->label('Status')->badge()->sortable(),
                 TextColumn::make('registered_at')->label('Angemeldet am')->dateTime('d.m.Y H:i')->sortable(),
                 TextColumn::make('cancelled_at')
                     ->label('Abgesagt am')
@@ -147,7 +142,7 @@ class RegistrationResource extends Resource
             ])
             ->filters([
                 TrashedFilter::make()->label('Gelöschte Anmeldungen'),
-                SelectFilter::make('status')->label('Anmeldestatus')->options(RegistrationStatus::options()),
+                SelectFilter::make('status')->label('Anmeldestatus')->options(RegistrationStatus::class),
                 SelectFilter::make('event')->label('Veranstaltung')->relationship('event', 'title')->searchable()->preload(),
             ])
             ->recordActions([

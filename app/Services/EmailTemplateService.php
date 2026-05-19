@@ -26,7 +26,9 @@ class EmailTemplateService
      */
     public function replacePlaceholders(string $subject, string $content, ?Event $event = null): array
     {
-        $replacements = $this->buildReplacements($event ?? Event::nextEvent());
+        // Keep {first_name} literal — it is substituted per recipient downstream.
+        $replacements = $this->buildReplacements($event ?? Event::nextEvent(), missing: '—');
+        unset($replacements['{first_name}']);
 
         return [
             'subject' => strtr($subject, $replacements),
@@ -42,7 +44,8 @@ class EmailTemplateService
      */
     public function renderForMessenger(string $content, ?Event $event = null): string
     {
-        $replacements = $this->buildReplacementsForMessenger($event ?? Event::nextEvent());
+        $replacements = $this->buildReplacements($event ?? Event::nextEvent(), missing: '');
+        $replacements['{first_name}'] = '';
 
         $stripped = $this->stripEmptyPlaceholderLines($content, $replacements);
 
@@ -52,15 +55,10 @@ class EmailTemplateService
     /**
      * @return array<string, string>
      */
-    private function buildReplacements(?Event $event): array
+    private function buildReplacements(?Event $event, string $missing): array
     {
         if (!$event instanceof Event) {
-            $eventPlaceholders = array_values(array_filter(
-                EmailTemplate::placeholders(),
-                static fn(string $p): bool => $p !== '{first_name}',
-            ));
-
-            return array_fill_keys($eventPlaceholders, '—');
+            return array_fill_keys(EmailTemplate::placeholders(), $missing);
         }
 
         /** @var string $siteName */
@@ -70,35 +68,10 @@ class EmailTemplateService
             '{event_title}' => $event->title,
             '{event_date}' => $event->event_date->translatedFormat('l, d. F Y'),
             '{event_time}' => $event->start_time->format('H:i'),
-            '{event_location}' => $event->location ?? '—',
+            '{event_location}' => $event->location ?? $missing,
             '{event_url}' => route('event.show.slug', ['slug' => $event->slug]),
             '{available_spots}' => (string) $event->availableSpots,
-            '{cost_basis}' => $event->cost_basis ?? '—',
-            '{site_name}' => $siteName,
-        ];
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function buildReplacementsForMessenger(?Event $event): array
-    {
-        if (!$event instanceof Event) {
-            return array_fill_keys(EmailTemplate::placeholders(), '');
-        }
-
-        /** @var string $siteName */
-        $siteName = config('app.name', '');
-
-        return [
-            '{first_name}' => '',
-            '{event_title}' => $event->title,
-            '{event_date}' => $event->event_date->translatedFormat('l, d. F Y'),
-            '{event_time}' => $event->start_time->format('H:i'),
-            '{event_location}' => $event->location ?? '',
-            '{event_url}' => route('event.show.slug', ['slug' => $event->slug]),
-            '{available_spots}' => (string) $event->availableSpots,
-            '{cost_basis}' => $event->cost_basis ?? '',
+            '{cost_basis}' => $event->cost_basis ?? $missing,
             '{site_name}' => $siteName,
         ];
     }

@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Traits\HasEnumOptions;
+use Filament\Support\Contracts\HasLabel;
 
-enum EmailTemplate: string
+enum EmailTemplate: string implements HasLabel
 {
-    use HasEnumOptions;
-
     case NewsletterNewEvent = 'newsletter_new_event';
     case NewsletterEventReminder = 'newsletter_event_reminder';
     case ParticipantPreEvent = 'participant_pre_event';
@@ -68,27 +66,37 @@ enum EmailTemplate: string
     }
 
     /**
-     * @return array<string, EmailTemplate>
+     * @return array<string, string>
      */
-    public static function newsletterTemplates(): array
+    public static function newsletterTemplateOptions(): array
     {
-        return self::templatesForCategory('newsletter');
+        return self::optionsForCategory('newsletter');
     }
 
     /**
-     * @return array<string, EmailTemplate>
+     * @return array<string, string>
      */
-    public static function participantTemplates(): array
+    public static function participantTemplateOptions(): array
     {
-        return self::templatesForCategory('participant');
+        return self::optionsForCategory('participant');
     }
 
     /**
-     * @return array<string, EmailTemplate>
+     * @return array<string, string>
      */
-    private static function templatesForCategory(string $category): array
+    private static function optionsForCategory(string $category): array
     {
-        return array_column(array_filter(self::cases(), static fn(self $case): bool => $case->getCategory() === $category), null, 'value');
+        $options = [];
+
+        foreach (self::cases() as $case) {
+            if ($case->getCategory() !== $category) {
+                continue;
+            }
+
+            $options[$case->value] = $case->getLabel();
+        }
+
+        return $options;
     }
 
     private function newsletterNewEventContent(): string

@@ -65,7 +65,7 @@ class RegistrationsRelationManager extends RelationManager
                 ->schema([
                     Select::make('status')
                         ->label('Status')
-                        ->options(RegistrationStatus::options())
+                        ->options(RegistrationStatus::class)
                         ->default(RegistrationStatus::Registered->value)
                         ->required()
                         ->native(false),
@@ -93,17 +93,12 @@ class RegistrationsRelationManager extends RelationManager
                     ->sortable()
                     ->copyable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('status')
-                    ->label('Status')
-                    ->badge()
-                    ->color(static fn(RegistrationStatus $state): string => $state->getColor())
-                    ->formatStateUsing(static fn(RegistrationStatus $state): string => $state->getLabel())
-                    ->sortable(),
+                TextColumn::make('status')->label('Status')->badge()->sortable(),
                 TextColumn::make('registered_at')->label('Angemeldet am')->dateTime('d.m.Y H:i')->sortable(),
                 TextColumn::make('reminder_sent_at')->label('Erinnerung')->dateTime('d.m.Y H:i')->sortable()->placeholder('Ausstehend'),
             ])
             ->filters([
-                SelectFilter::make('status')->label('Anmeldestatus')->options(RegistrationStatus::options()),
+                SelectFilter::make('status')->label('Anmeldestatus')->options(RegistrationStatus::class),
             ])
             ->headerActions([CreateAction::make()])
             ->recordActions([
