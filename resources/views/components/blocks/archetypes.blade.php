@@ -26,17 +26,17 @@
     <div class="container">
       <div class="section-header">
         @if (!empty($data['eyebrow']))
-          <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+          <p class="eyebrow" data-reveal>{{ $data['eyebrow'] }}</p>
         @endif
 
         @if (!empty($data['title']))
-          <h2 class="section-title" id="archetypes-title">
+          <h2 class="section-title" id="archetypes-title" data-reveal>
             {{ $data['title'] }}
           </h2>
         @endif
 
         @if (!empty($data['intro']))
-          <p class="section-intro">{{ $data['intro'] }}</p>
+          <p class="section-intro" data-reveal>{{ $data['intro'] }}</p>
         @endif
       </div>
 
@@ -53,13 +53,13 @@
 
             <div class="archetype-card__content">
               @if (!empty($item['title']))
-                <h3 class="archetype-card__title">
+                <h3 class="archetype-card__title" data-reveal>
                   {{ $item['title'] }}
                 </h3>
               @endif
 
               @if (!empty($item['description']))
-                <p class="archetype-card__description">{{ $item['description'] }}</p>
+                <p class="archetype-card__description" data-reveal>{{ $item['description'] }}</p>
               @endif
             </div>
           </article>

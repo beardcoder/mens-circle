@@ -135,81 +135,33 @@
 }
 
 .footer__links a {
-  position: relative;
-  display: inline-block;
-  padding-inline-start: 0;
   font-size: 0.9375rem;
   color: var(--color-sand);
   opacity: 0.85;
   transition:
-    color 380ms var(--ease-settle),
-    opacity 380ms var(--ease-settle),
-    padding-inline-start 420ms var(--ease-settle);
-}
-
-.footer__links a::before {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 0;
-  inline-size: 0;
-  block-size: 1px;
-  pointer-events: none;
-  content: '';
-  background: var(--accent-secondary);
-  opacity: 0;
-  transform: translateY(-50%);
-  transition:
-    inline-size 420ms var(--ease-settle),
-    opacity 380ms var(--ease-settle);
+    color var(--motion-quick),
+    opacity var(--motion-quick),
+    transform var(--motion-quick);
 }
 
 .footer__legal a {
-  position: relative;
   font-size: 0.8125rem;
   color: var(--color-sand);
   opacity: 0.9;
   transition:
-    color 380ms var(--ease-settle),
+    color var(--motion-quick),
     opacity var(--motion-quick);
 }
 
-.footer__legal a::after {
-  position: absolute;
-  inset-block-end: -2px;
-  inset-inline: 0;
-  block-size: 1px;
-  pointer-events: none;
-  content: '';
-  background: var(--accent-secondary);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 380ms var(--ease-settle);
+.footer__links a:hover {
+  color: var(--accent-secondary);
+  opacity: 1;
+  transform: translateX(4px);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .footer__links a:hover,
-  .footer__links a:focus-visible {
-    padding-inline-start: 18px;
-    color: var(--accent-secondary);
-    opacity: 1;
-  }
-
-  .footer__links a:hover::before,
-  .footer__links a:focus-visible::before {
-    inline-size: 12px;
-    opacity: 1;
-  }
-
-  .footer__legal a:hover,
-  .footer__legal a:focus-visible {
-    color: var(--accent-secondary);
-    opacity: 1;
-  }
-
-  .footer__legal a:hover::after,
-  .footer__legal a:focus-visible::after {
-    transform: scaleX(1);
-  }
+.footer__legal a:hover {
+  color: var(--accent-secondary);
+  opacity: 1;
 }
 
 /* ============================================

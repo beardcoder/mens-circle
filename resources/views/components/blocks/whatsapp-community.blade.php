@@ -2,15 +2,15 @@
   <div class="container">
     <div class="whatsapp__layout">
       <div class="whatsapp__content">
-        <p class="eyebrow whatsapp__eyebrow">Community</p>
-        <h2 class="section-title whatsapp__title">
+        <p class="eyebrow whatsapp__eyebrow" data-reveal>Community</p>
+        <h2 class="section-title whatsapp__title" data-reveal>
           Tritt unserer
           <span class="text-italic">WhatsApp Community</span> bei
         </h2>
-        <p class="whatsapp__text">Bleibe mit anderen Männern in Verbindung, erhalte Erinnerungen zu unseren Treffen und tausche dich zwischen den Kreisen aus. Ein Raum für Austausch und gegenseitige Unterstützung.</p>
+        <p class="whatsapp__text" data-reveal>Bleibe mit anderen Männern in Verbindung, erhalte Erinnerungen zu unseren Treffen und tausche dich zwischen den Kreisen aus. Ein Raum für Austausch und gegenseitige Unterstützung.</p>
       </div>
 
-      <div class="whatsapp__action">
+      <div class="whatsapp__action" data-reveal>
         <a
           href="{{ $settings->whatsapp_community_link }}"
           target="_blank"

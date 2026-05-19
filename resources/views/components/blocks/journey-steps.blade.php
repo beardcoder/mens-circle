@@ -36,15 +36,15 @@
   <div class="container">
     <div class="section-header section-header--on-dark">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow eyebrow--secondary" data-reveal>{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title" id="journey-title">{!! $data['title'] !!}</h2>
+        <h2 class="section-title" id="journey-title" data-reveal>{!! $data['title'] !!}</h2>
       @endif
 
       @if (!empty($data['subtitle']))
-        <p class="journey__subtitle">{{ $data['subtitle'] }}</p>
+        <p class="journey__subtitle" data-reveal>{{ $data['subtitle'] }}</p>
       @endif
     </div>
 
@@ -53,19 +53,19 @@
         @foreach ($steps as $step)
           <div class="journey__step">
             @if (!empty($step['number']))
-              <div class="journey__step-number" aria-hidden="true">
+              <div class="journey__step-number" aria-hidden="true" data-reveal>
                 {{ $step['number'] }}
               </div>
             @endif
 
             @if (!empty($step['title']))
-              <h3 class="journey__step-title">
+              <h3 class="journey__step-title" data-reveal>
                 {{ $step['title'] }}
               </h3>
             @endif
 
             @if (!empty($step['description']))
-              <p class="journey__step-text">{{ $step['description'] }}</p>
+              <p class="journey__step-text" data-reveal>{{ $step['description'] }}</p>
             @endif
           </div>
         @endforeach

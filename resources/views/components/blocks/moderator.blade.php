@@ -15,8 +15,8 @@
 <section class="section moderator-section" id="moderator">
   <div class="container">
     <div class="moderator__layout">
-      <div class="moderator__photo-wrapper">
-        <div class="moderator__photo" data-motion="image">
+      <div class="moderator__photo-wrapper" data-reveal>
+        <div class="moderator__photo">
           @if ($media)
             {{ $media->img()->attributes([
                             'loading' => 'lazy',
@@ -37,19 +37,19 @@
 
       <div class="moderator__content">
         @if (!empty($data['eyebrow']))
-          <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+          <p class="eyebrow" data-reveal>{{ $data['eyebrow'] }}</p>
         @endif
 
         @if (!empty($data['name']))
-          <h2 class="moderator__name">{!! $data['name'] !!}</h2>
+          <h2 class="moderator__name" data-reveal>{!! $data['name'] !!}</h2>
         @endif
 
         @if (!empty($data['bio']))
-          <div class="moderator__bio">{!! $data['bio'] !!}</div>
+          <div class="moderator__bio" data-reveal>{!! $data['bio'] !!}</div>
         @endif
 
         @if (!empty($data['quote']))
-          <blockquote class="moderator__quote">
+          <blockquote class="moderator__quote" data-reveal>
             <p>{{ $data['quote'] }}</p>
           </blockquote>
         @endif

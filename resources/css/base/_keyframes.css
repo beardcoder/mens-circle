@@ -249,37 +249,50 @@
 }
 
 /* ============================================
-   Hero entrance — one-shot page-load sequence for above-the-fold
-   content. Children opt-in by setting `animation-name: hero-rise`
-   and a stagger delay; see utilities/_motion.css.
+   Content reveal — base fade-up for [data-reveal] elements.
    ============================================ */
-@keyframes hero-rise {
-  from {
-    opacity: 0;
-    filter: blur(6px);
-    transform: translate3d(0, 1.25rem, 0);
-  }
-
+@keyframes reveal-fade-up {
   to {
     opacity: 1;
-    filter: blur(0);
     transform: translate3d(0, 0, 0);
   }
 }
 
 /* ============================================
-   Section ornament drift — slow horizontal pulse for decorative
-   eyebrow lines on scroll. Driven by `animation-timeline: view()`.
+   Eyebrow line draw — the decorative rule before eyebrow text
+   draws in from left to right as the element enters the viewport.
    ============================================ */
-@keyframes eyebrow-line-grow {
+@keyframes eyebrow-line-draw {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================
+   Eyebrow text reveal — horizontal clip from left to right.
+   Matches the direction of the ::before line draw above.
+   ============================================ */
+@keyframes reveal-clip-horizontal {
   from {
-    opacity: 0.45;
-    transform: scaleX(0.35);
+    clip-path: inset(0 100% 0 0);
   }
 
   to {
-    opacity: 1;
-    transform: scaleX(1);
+    clip-path: inset(0 0% 0 0);
+  }
+}
+
+/* ============================================
+   Section title clip-path wipe — premium reveal where the title
+   slides up through an invisible threshold, compositor-only.
+   ============================================ */
+@keyframes reveal-clip-wipe {
+  from {
+    clip-path: inset(0 0 110% 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0% 0);
   }
 }
 

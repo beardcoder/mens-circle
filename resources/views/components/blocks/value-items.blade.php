@@ -8,18 +8,18 @@
   <div class="container">
     <div class="section-header">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-reveal>{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title">{{ $data['title'] }}</h2>
+        <h2 class="section-title" data-reveal>{{ $data['title'] }}</h2>
       @endif
     </div>
 
     @if (!empty($data['items']) && is_array($data['items']))
       <div class="intro__values">
         @foreach ($data['items'] as $item)
-          <div class="value-item">
+          <div class="value-item" data-reveal>
             @if (!empty($item['number']))
               <span class="value-item__number">{{ $item['number'] }}</span>
             @endif

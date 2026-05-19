@@ -26,15 +26,15 @@
   <div class="container">
     <div class="section-header section-header--start faq__header">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-reveal>{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title">{!! $data['title'] !!}</h2>
+        <h2 class="section-title" data-reveal>{!! $data['title'] !!}</h2>
       @endif
 
       @if (!empty($data['intro']))
-        <p class="section-intro">{{ $data['intro'] }}</p>
+        <p class="section-intro" data-reveal>{{ $data['intro'] }}</p>
       @endif
     </div>
 
