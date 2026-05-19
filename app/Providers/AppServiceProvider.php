@@ -12,12 +12,15 @@ use App\Settings\GeneralSettings;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
+        Passport::authorizationView(static fn(array $parameters) => view('mcp.authorize', $parameters));
+
         View::composer(['*'], static function (ViewContract $view): void {
             try {
                 $settings = once(static fn(): GeneralSettings => app(GeneralSettings::class));

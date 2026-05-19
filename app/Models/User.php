@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 use NotificationChannels\Pushover\PushoverReceiver;
 use Override;
 
@@ -32,6 +33,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
+    use HasApiTokens;
     use Notifiable;
 
     /**

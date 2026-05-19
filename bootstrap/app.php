@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
         $middleware->preventRequestForgery();
         $middleware->web(append: [CacheResponse::class, CompressHtml::class]);
+        $middleware->redirectGuestsTo(static fn() => route('filament.admin.auth.login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         Integration::handles($exceptions);
