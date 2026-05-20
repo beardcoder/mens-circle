@@ -1,27 +1,15 @@
 /**
- * Interactive breathing exercise (Wim Hof Method style)
+ * Interactive breathing exercise (Wim Hof Method style).
  * Three-phase guided breathing: power breaths → retention → recovery hold.
+ *
+ * Rebuilt with Alpine.js reactivity — all state is declared as top-level
+ * reactive properties; computed getters derive everything else; the template
+ * binds the UI with x-text / x-show / :data-* / @click throughout.
  */
 
+import type { AlpineMagics } from '@/types/alpine';
+
 type Phase = 'idle' | 'breathing' | 'retention' | 'recovery' | 'complete';
-
-interface BreathingConfig {
-  breaths: number;
-  rounds: number;
-  recoveryHold: number;
-  inhaleMs: number;
-  exhaleMs: number;
-}
-
-interface BreathingState {
-  phase: Phase;
-  round: number;
-  breath: number;
-  retentionStart: number;
-  timerHandle: number | null;
-  rafHandle: number | null;
-  breathHandle: number | null;
-}
 
 const PHASE_LABEL: Record<Phase, string> = {
   idle: 'Bereit',
@@ -34,10 +22,10 @@ const PHASE_LABEL: Record<Phase, string> = {
 const PICKER_ITEM_WIDTH = 72;
 
 function formatTime(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  const remainder = Math.floor(seconds % 60);
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
 
-  return `${minutes.toString().padStart(2, '0')}:${remainder.toString().padStart(2, '0')}`;
+  return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -46,604 +34,456 @@ function clamp(value: number, min: number, max: number): number {
 
 export function breathingApp() {
   return {
-    _cleanup: [] as Array<() => void>,
+    // ─── Reactive state ───────────────────────────────────────────────
+    phase: 'idle' as Phase,
+    round: 0,
+    breath: 0,
+    timerSeconds: 0,
 
-    init() {
-      const root = (this as unknown as { $el: HTMLElement }).$el;
+    // User-adjustable settings (live-synced with picker + steppers)
+    settingBreaths: 30,
+    settingRounds: 3,
+    settingRecovery: 15,
 
-      const config: BreathingConfig = {
-        breaths: 30,
-        rounds: 3,
-        recoveryHold: 15,
-        inhaleMs: 1800,
-        exhaleMs: 1800,
-      };
+    // ─── Fixed session config ──────────────────────────────────────────
+    inhaleMs: 1800,
+    exhaleMs: 1800,
 
-      const circle = root.querySelector<HTMLElement>('[data-element="circle"]');
-      const phaseEl = root.querySelector<HTMLElement>('[data-element="phase"]');
-      const counterEl = root.querySelector<HTMLElement>(
-        '[data-element="counter"]'
+    // ─── Scheduling handles ────────────────────────────────────────────
+    _timerHandle: null as number | null,
+    _breathHandle: null as number | null,
+    _rafHandle: null as number | null,
+    _retentionStart: 0,
+    _pickerCleanup: null as (() => void) | null,
+
+    // ─── Computed getters (Alpine-reactive) ────────────────────────────
+
+    get cycleMs(): number {
+      return this.inhaleMs + this.exhaleMs;
+    },
+
+    get phaseLabel(): string {
+      return PHASE_LABEL[this.phase];
+    },
+
+    /**
+     * Sub-label inside the circle. Re-evaluates automatically when any
+     * of phase / breath / timerSeconds / settingBreaths / settingRounds changes.
+     */
+    get counter(): string {
+      switch (this.phase) {
+        case 'idle':
+          return `${this.settingRounds} Runden · ${this.settingBreaths} Atemzüge`;
+        case 'breathing':
+          return `Atemzug ${this.breath}`;
+        case 'retention':
+          return `Halten · ${formatTime(this.timerSeconds)}`;
+        case 'recovery':
+          return `Halten · ${this.timerSeconds}s`;
+        case 'complete':
+          return 'Nimm dir einen Moment, spüre nach.';
+      }
+    },
+
+    get formattedTimer(): string {
+      return formatTime(this.timerSeconds);
+    },
+
+    get showStartButton(): boolean {
+      return this.phase === 'idle' || this.phase === 'complete';
+    },
+
+    get showHoldButton(): boolean {
+      return this.phase === 'retention' || this.phase === 'recovery';
+    },
+
+    get holdButtonText(): string {
+      return this.phase === 'recovery' ? 'Weiteratmen' : 'Atem freigeben';
+    },
+
+    get startButtonLabel(): string {
+      return this.phase === 'complete' ? 'Erneut starten' : 'Atemübung starten';
+    },
+
+    /** True while a session is running — locks all settings controls. */
+    get isActive(): boolean {
+      return (
+        this.phase === 'breathing' ||
+        this.phase === 'retention' ||
+        this.phase === 'recovery'
       );
-      const roundEl = root.querySelector<HTMLElement>('[data-element="round"]');
-      const breathEl = root.querySelector<HTMLElement>(
-        '[data-element="breath"]'
-      );
-      const timerEl = root.querySelector<HTMLElement>('[data-element="timer"]');
-      const startBtn = root.querySelector<HTMLButtonElement>(
-        '[data-element="start"]'
-      );
-      const holdBtn = root.querySelector<HTMLButtonElement>(
-        '[data-element="hold"]'
-      );
-      const resetBtn = root.querySelector<HTMLButtonElement>(
-        '[data-element="reset"]'
-      );
-      const settingBreaths = root.querySelector<HTMLElement>(
-        '[data-element="settingBreaths"]'
-      );
-      const settingBreathsTrack = root.querySelector<HTMLElement>(
-        '[data-element="settingBreathsTrack"]'
-      );
-      const settingRounds = root.querySelector<HTMLElement>(
-        '[data-element="settingRounds"]'
-      );
-      const settingRoundsMinus = root.querySelector<HTMLButtonElement>(
-        '[data-element="settingRoundsMinus"]'
-      );
-      const settingRoundsPlus = root.querySelector<HTMLButtonElement>(
-        '[data-element="settingRoundsPlus"]'
-      );
-      const settingRecovery = root.querySelector<HTMLElement>(
-        '[data-element="settingRecovery"]'
-      );
-      const settingRecoveryMinus = root.querySelector<HTMLButtonElement>(
-        '[data-element="settingRecoveryMinus"]'
-      );
-      const settingRecoveryPlus = root.querySelector<HTMLButtonElement>(
-        '[data-element="settingRecoveryPlus"]'
-      );
+    },
 
-      if (!circle || !phaseEl || !counterEl || !startBtn) return;
+    /**
+     * data-motion value bound to the circle element.
+     * Returns null during idle/complete so Alpine removes the attribute.
+     */
+    get circleMotion(): string | null {
+      if (this.phase === 'breathing') return 'wave';
+      if (this.phase === 'retention') return 'hold-high';
+      if (this.phase === 'recovery') return 'hold-low';
 
-      const cycleMs = config.inhaleMs + config.exhaleMs;
+      return null;
+    },
 
-      root.style.setProperty('--breathing-cycle-ms', `${cycleMs}ms`);
+    // ─── Lifecycle ─────────────────────────────────────────────────────
 
-      const state: BreathingState = {
-        phase: 'idle',
-        round: 0,
-        breath: 0,
-        retentionStart: 0,
-        timerHandle: null,
-        rafHandle: null,
-        breathHandle: null,
-      };
+    init(): void {
+      const { $el, $refs } = this as unknown as AlpineMagics;
 
-      const setPhaseClass = (phase: Phase): void => {
-        circle.dataset.phase = phase;
-        root.dataset.phase = phase;
+      $el.style.setProperty('--breathing-cycle-ms', `${this.cycleMs}ms`);
+      this._setupPicker($refs);
+    },
 
-        if (phase === 'breathing') {
-          circle.dataset.motion = 'wave';
-        } else if (phase === 'retention') {
-          circle.dataset.motion = 'hold-high';
-        } else if (phase === 'recovery') {
-          circle.dataset.motion = 'hold-low';
-        } else {
-          delete circle.dataset.motion;
-        }
-      };
+    destroy(): void {
+      this._clearScheduled();
+      this._pickerCleanup?.();
+    },
 
-      const updateMeta = (): void => {
-        if (roundEl) {
-          roundEl.innerHTML = `${state.round}&nbsp;/&nbsp;${config.rounds}`;
-        }
+    // ─── Public actions (bound in the template) ────────────────────────
 
-        if (breathEl) {
-          breathEl.innerHTML = `${state.breath}&nbsp;/&nbsp;${config.breaths}`;
-        }
-      };
+    handleCircleClick(): void {
+      if (this.phase === 'idle' || this.phase === 'complete') {
+        this._beginSession();
+      }
+    },
 
-      const setLabel = (label: string): void => {
-        phaseEl.textContent = label;
-      };
+    handleStart(): void {
+      this._beginSession();
+    },
 
-      const setCounter = (text: string): void => {
-        counterEl.textContent = text;
-      };
+    handleHold(): void {
+      if (this.phase === 'retention') {
+        this._startRecovery();
 
-      const setTimer = (seconds: number): void => {
-        if (timerEl) timerEl.textContent = formatTime(seconds);
-      };
+        return;
+      }
 
-      const clearScheduled = (): void => {
-        if (state.timerHandle !== null) {
-          window.clearTimeout(state.timerHandle);
-          state.timerHandle = null;
-        }
+      if (this.phase === 'recovery') {
+        this._clearScheduled();
 
-        if (state.rafHandle !== null) {
-          window.clearTimeout(state.rafHandle);
-          cancelAnimationFrame(state.rafHandle);
-          state.rafHandle = null;
-        }
-
-        if (state.breathHandle !== null) {
-          window.clearInterval(state.breathHandle);
-          state.breathHandle = null;
-        }
-      };
-
-      const setControls = (phase: Phase): void => {
-        const showStart = phase === 'idle' || phase === 'complete';
-
-        startBtn.hidden = !showStart;
-
-        const label =
-          phase === 'complete' ? 'Erneut starten' : 'Atemübung starten';
-
-        startBtn.setAttribute('aria-label', label);
-        startBtn.setAttribute('title', label);
-
-        if (holdBtn) {
-          holdBtn.hidden = !(phase === 'retention' || phase === 'recovery');
-          holdBtn.textContent =
-            phase === 'recovery' ? 'Weiteratmen' : 'Atem freigeben';
-        }
-      };
-
-      const enterIdle = (): void => {
-        clearScheduled();
-        state.phase = 'idle';
-        state.round = 0;
-        state.breath = 0;
-        setPhaseClass('idle');
-        setLabel(PHASE_LABEL.idle);
-        setCounter(`${config.rounds} Runden · ${config.breaths} Atemzüge`);
-        setTimer(0);
-        updateMeta();
-        setControls('idle');
-      };
-
-      const finish = (): void => {
-        clearScheduled();
-        state.phase = 'complete';
-        setPhaseClass('complete');
-        setLabel(PHASE_LABEL.complete);
-        setCounter('Nimm dir einen Moment, spüre nach.');
-        setControls('complete');
-      };
-
-      const startRecovery = (): void => {
-        state.phase = 'recovery';
-        setPhaseClass('recovery');
-        setLabel(PHASE_LABEL.recovery);
-        setControls('recovery');
-
-        let remaining = config.recoveryHold;
-
-        setCounter(`Halten · ${remaining}s`);
-        setTimer(remaining);
-
-        const tick = (): void => {
-          remaining -= 1;
-
-          if (remaining <= 0) {
-            if (state.round >= config.rounds) {
-              finish();
-
-              return;
-            }
-
-            startBreathing();
-
-            return;
-          }
-
-          setCounter(`Halten · ${remaining}s`);
-          setTimer(remaining);
-          state.timerHandle = window.setTimeout(tick, 1000);
-        };
-
-        state.timerHandle = window.setTimeout(tick, 1000);
-      };
-
-      const startRetention = (): void => {
-        state.phase = 'retention';
-        setPhaseClass('retention');
-        setLabel(PHASE_LABEL.retention);
-        setControls('retention');
-        state.retentionStart = performance.now();
-
-        const tick = (): void => {
-          const elapsed = Math.floor(
-            (performance.now() - state.retentionStart) / 1000
-          );
-
-          setCounter(`Halten · ${formatTime(elapsed)}`);
-          setTimer(elapsed);
-          state.rafHandle = requestAnimationFrame(tick);
-        };
-
-        state.rafHandle = requestAnimationFrame(tick);
-      };
-
-      const startBreathing = (): void => {
-        state.phase = 'breathing';
-        state.round += 1;
-        state.breath = 1;
-        setPhaseClass('breathing');
-        setLabel(PHASE_LABEL.breathing);
-        setControls('breathing');
-        setCounter(`Atemzug ${state.breath}`);
-        updateMeta();
-
-        const startedAt = performance.now();
-
-        const tickBreath = (): void => {
-          if (state.phase !== 'breathing') return;
-
-          state.breath += 1;
-
-          if (state.breath > config.breaths) {
-            startRetention();
-
-            return;
-          }
-
-          setCounter(`Atemzug ${state.breath}`);
-          updateMeta();
-        };
-
-        state.breathHandle = window.setInterval(tickBreath, cycleMs);
-
-        setTimer(0);
-
-        const timerTick = (): void => {
-          if (state.phase !== 'breathing') return;
-
-          const elapsed = Math.floor((performance.now() - startedAt) / 1000);
-
-          setTimer(elapsed);
-          state.rafHandle = window.setTimeout(
-            timerTick,
-            1000
-          ) as unknown as number;
-        };
-
-        state.rafHandle = window.setTimeout(
-          timerTick,
-          1000
-        ) as unknown as number;
-      };
-
-      // Settings: stepper + wheel picker
-      const readInt = (el: HTMLElement | null, fallback: number): number => {
-        if (!el) return fallback;
-
-        const value = Number.parseInt(el.dataset.value ?? '', 10);
-
-        return Number.isFinite(value) ? value : fallback;
-      };
-
-      const readSettings = (): void => {
-        config.breaths = readInt(settingBreaths, config.breaths);
-        config.rounds = readInt(settingRounds, config.rounds);
-        config.recoveryHold = readInt(settingRecovery, config.recoveryHold);
-      };
-
-      const updateStepper = (el: HTMLElement, value: number): void => {
-        el.dataset.value = String(value);
-        el.textContent = String(value);
-        el.setAttribute('aria-valuenow', String(value));
-      };
-
-      const bindStepper = (
-        valueEl: HTMLElement | null,
-        minus: HTMLButtonElement | null,
-        plus: HTMLButtonElement | null
-      ): void => {
-        if (!valueEl) return;
-
-        const min = Number.parseInt(valueEl.dataset.min ?? '0', 10);
-        const max = Number.parseInt(valueEl.dataset.max ?? '100', 10);
-
-        const step = (delta: number): void => {
-          if (valueEl.getAttribute('aria-disabled') === 'true') return;
-
-          const current = Number.parseInt(valueEl.dataset.value ?? '0', 10);
-          const next = clamp(current + delta, min, max);
-
-          if (next === current) return;
-
-          updateStepper(valueEl, next);
-        };
-
-        minus?.addEventListener('click', () => step(-1));
-        plus?.addEventListener('click', () => step(1));
-      };
-
-      bindStepper(settingRounds, settingRoundsMinus, settingRoundsPlus);
-      bindStepper(settingRecovery, settingRecoveryMinus, settingRecoveryPlus);
-
-      // iOS-style swipe picker for breaths
-      const setupPicker = (): (() => void) | undefined => {
-        if (!settingBreaths || !settingBreathsTrack) return;
-
-        const min = Number.parseInt(settingBreaths.dataset.min ?? '10', 10);
-        const max = Number.parseInt(settingBreaths.dataset.max ?? '60', 10);
-        const stepSize = Math.max(
-          1,
-          Number.parseInt(settingBreaths.dataset.step ?? '5', 10)
-        );
-        const initial = Number.parseInt(
-          settingBreaths.dataset.value ?? String(min),
-          10
-        );
-
-        const values: number[] = [];
-
-        for (let v = min; v <= max; v += stepSize) values.push(v);
-
-        settingBreathsTrack.textContent = '';
-        values.forEach((value) => {
-          const item = document.createElement('button');
-
-          item.type = 'button';
-          item.className = 'breathing-picker__item';
-          item.dataset.value = String(value);
-          item.textContent = String(value);
-          item.setAttribute('aria-label', `${value} Atemzüge`);
-          settingBreathsTrack.appendChild(item);
-        });
-
-        const items = Array.from(
-          settingBreathsTrack.querySelectorAll<HTMLElement>(
-            '.breathing-picker__item'
-          )
-        );
-
-        const indexOfValue = (value: number): number => {
-          const snapped = Math.round((value - min) / stepSize);
-
-          return clamp(snapped, 0, values.length - 1);
-        };
-
-        let currentIndex = indexOfValue(initial);
-        let dragOffset = 0;
-        let pointerId: number | null = null;
-        let dragStartX = 0;
-        let dragStartIndex = 0;
-        let dragged = false;
-
-        const applyTransform = (animated: boolean): void => {
-          settingBreathsTrack.style.transition = animated
-            ? 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1)'
-            : 'none';
-          settingBreathsTrack.style.transform = `translate3d(${-currentIndex * PICKER_ITEM_WIDTH + dragOffset}px, 0, 0)`;
-        };
-
-        const highlight = (index: number): void => {
-          items.forEach((item, i) => {
-            item.classList.toggle('is-active', i === index);
-            item.tabIndex = i === index ? 0 : -1;
-          });
-        };
-
-        const setIndex = (index: number, animated = true): void => {
-          currentIndex = clamp(index, 0, values.length - 1);
-
-          const value = values[currentIndex] ?? min;
-
-          settingBreaths.dataset.value = String(value);
-          settingBreaths.setAttribute('aria-valuenow', String(value));
-          highlight(currentIndex);
-          applyTransform(animated);
-        };
-
-        const onPointerDown = (event: PointerEvent): void => {
-          if (settingBreaths.getAttribute('aria-disabled') === 'true') return;
-          if (event.pointerType === 'mouse' && event.button !== 0) return;
-
-          pointerId = event.pointerId;
-          dragStartX = event.clientX;
-          dragStartIndex = currentIndex;
-          dragged = false;
-          settingBreathsTrack.setPointerCapture(event.pointerId);
-          settingBreaths.classList.add('is-dragging');
-        };
-
-        const onPointerMove = (event: PointerEvent): void => {
-          if (pointerId !== event.pointerId) return;
-
-          const delta = event.clientX - dragStartX;
-
-          if (!dragged && Math.abs(delta) > 4) dragged = true;
-
-          dragOffset = delta;
-          applyTransform(false);
-        };
-
-        const onPointerEnd = (event: PointerEvent): void => {
-          if (pointerId !== event.pointerId) return;
-
-          const delta = dragOffset;
-          const indexDelta = Math.round(-delta / PICKER_ITEM_WIDTH);
-
-          pointerId = null;
-          dragOffset = 0;
-          settingBreaths.classList.remove('is-dragging');
-
-          if (dragged) {
-            setIndex(dragStartIndex + indexDelta, true);
-          } else {
-            applyTransform(true);
-          }
-        };
-
-        settingBreathsTrack.addEventListener('pointerdown', onPointerDown);
-        settingBreathsTrack.addEventListener('pointermove', onPointerMove);
-        settingBreathsTrack.addEventListener('pointerup', onPointerEnd);
-        settingBreathsTrack.addEventListener('pointercancel', onPointerEnd);
-
-        settingBreathsTrack.addEventListener('click', (event) => {
-          if (dragged) {
-            event.preventDefault();
-            event.stopPropagation();
-            dragged = false;
-
-            return;
-          }
-
-          const target = (event.target as HTMLElement).closest<HTMLElement>(
-            '.breathing-picker__item'
-          );
-
-          if (!target?.dataset.value) return;
-
-          setIndex(
-            indexOfValue(Number.parseInt(target.dataset.value, 10)),
-            true
-          );
-        });
-
-        settingBreaths.addEventListener('keydown', (event) => {
-          if (settingBreaths.getAttribute('aria-disabled') === 'true') return;
-
-          if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
-            event.preventDefault();
-            setIndex(currentIndex - 1, true);
-          } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
-            event.preventDefault();
-            setIndex(currentIndex + 1, true);
-          } else if (event.key === 'Home') {
-            event.preventDefault();
-            setIndex(0, true);
-          } else if (event.key === 'End') {
-            event.preventDefault();
-            setIndex(values.length - 1, true);
-          }
-        });
-
-        settingBreaths.addEventListener(
-          'wheel',
-          (event) => {
-            if (settingBreaths.getAttribute('aria-disabled') === 'true') return;
-            if (Math.abs(event.deltaX) < Math.abs(event.deltaY)) return;
-
-            event.preventDefault();
-
-            if (event.deltaX > 10) setIndex(currentIndex + 1, true);
-            else if (event.deltaX < -10) setIndex(currentIndex - 1, true);
-          },
-          { passive: false }
-        );
-
-        setIndex(currentIndex, false);
-
-        return (): void => {
-          settingBreathsTrack.removeEventListener('pointerdown', onPointerDown);
-          settingBreathsTrack.removeEventListener('pointermove', onPointerMove);
-          settingBreathsTrack.removeEventListener('pointerup', onPointerEnd);
-          settingBreathsTrack.removeEventListener(
-            'pointercancel',
-            onPointerEnd
-          );
-        };
-      };
-
-      const cleanupPicker = setupPicker();
-
-      const lockSettings = (locked: boolean): void => {
-        [
-          settingBreaths,
-          settingRounds,
-          settingRecovery,
-          settingRoundsMinus,
-          settingRoundsPlus,
-          settingRecoveryMinus,
-          settingRecoveryPlus,
-        ].forEach((el) => {
-          if (!el) return;
-
-          if ('disabled' in el) {
-            (el as HTMLButtonElement).disabled = locked;
-          }
-
-          if (locked) {
-            el.setAttribute('aria-disabled', 'true');
-          } else {
-            el.removeAttribute('aria-disabled');
-          }
-        });
-      };
-
-      const handleStart = (): void => {
-        readSettings();
-
-        const nextCycle = config.inhaleMs + config.exhaleMs;
-
-        root.style.setProperty('--breathing-cycle-ms', `${nextCycle}ms`);
-        state.round = 0;
-        state.breath = 0;
-        setTimer(0);
-        startBreathing();
-      };
-
-      const handleHoldButton = (): void => {
-        if (state.phase === 'retention') {
-          startRecovery();
+        if (this.round >= this.settingRounds) {
+          this._finish();
 
           return;
         }
 
-        if (state.phase === 'recovery') {
-          clearScheduled();
+        this._startBreathing();
+      }
+    },
 
-          if (state.round >= config.rounds) {
-            finish();
+    handleReset(): void {
+      this._enterIdle();
+    },
+
+    adjustRounds(delta: number): void {
+      if (this.isActive) return;
+
+      this.settingRounds = clamp(this.settingRounds + delta, 1, 6);
+    },
+
+    adjustRecovery(delta: number): void {
+      if (this.isActive) return;
+
+      this.settingRecovery = clamp(this.settingRecovery + delta, 5, 30);
+    },
+
+    // ─── Phase transitions ─────────────────────────────────────────────
+
+    _beginSession(): void {
+      this.round = 0;
+      this.breath = 0;
+      this.timerSeconds = 0;
+      this._startBreathing();
+    },
+
+    _enterIdle(): void {
+      this._clearScheduled();
+      this.phase = 'idle';
+      this.round = 0;
+      this.breath = 0;
+      this.timerSeconds = 0;
+    },
+
+    _finish(): void {
+      this._clearScheduled();
+      this.phase = 'complete';
+    },
+
+    _startBreathing(): void {
+      this._clearScheduled();
+      this.phase = 'breathing';
+      this.round += 1;
+      this.breath = 1;
+      this.timerSeconds = 0;
+
+      const startedAt = performance.now();
+
+      // Breath counter — increments once per full inhale + exhale cycle.
+      this._breathHandle = window.setInterval(() => {
+        if (this.phase !== 'breathing') return;
+
+        this.breath += 1;
+
+        if (this.breath > this.settingBreaths) {
+          this._startRetention();
+        }
+      }, this.cycleMs);
+
+      // Elapsed timer — chain-scheduled every second using performance.now()
+      // so it stays accurate regardless of setTimeout drift.
+      const timerTick = (): void => {
+        if (this.phase !== 'breathing') return;
+
+        this.timerSeconds = Math.floor((performance.now() - startedAt) / 1000);
+        this._timerHandle = window.setTimeout(timerTick, 1000);
+      };
+
+      this._timerHandle = window.setTimeout(timerTick, 1000);
+    },
+
+    _startRetention(): void {
+      this._clearScheduled();
+      this.phase = 'retention';
+      this._retentionStart = performance.now();
+      this.timerSeconds = 0;
+
+      // RAF loop — runs every frame but only triggers a reactive write when
+      // the elapsed second actually changes, keeping updates to once per second.
+      let lastSecond = -1;
+
+      const tick = (): void => {
+        if (this.phase !== 'retention') return;
+
+        const elapsed = Math.floor(
+          (performance.now() - this._retentionStart) / 1000
+        );
+
+        if (elapsed !== lastSecond) {
+          lastSecond = elapsed;
+          this.timerSeconds = elapsed;
+        }
+
+        this._rafHandle = requestAnimationFrame(tick);
+      };
+
+      this._rafHandle = requestAnimationFrame(tick);
+    },
+
+    _startRecovery(): void {
+      this._clearScheduled();
+      this.phase = 'recovery';
+
+      let remaining = this.settingRecovery;
+
+      this.timerSeconds = remaining;
+
+      const tick = (): void => {
+        remaining -= 1;
+        this.timerSeconds = remaining;
+
+        if (remaining <= 0) {
+          if (this.round >= this.settingRounds) {
+            this._finish();
 
             return;
           }
 
-          startBreathing();
+          this._startBreathing();
+
+          return;
+        }
+
+        this._timerHandle = window.setTimeout(tick, 1000);
+      };
+
+      this._timerHandle = window.setTimeout(tick, 1000);
+    },
+
+    _clearScheduled(): void {
+      if (this._breathHandle !== null) {
+        window.clearInterval(this._breathHandle);
+        this._breathHandle = null;
+      }
+
+      if (this._timerHandle !== null) {
+        window.clearTimeout(this._timerHandle);
+        this._timerHandle = null;
+      }
+
+      if (this._rafHandle !== null) {
+        cancelAnimationFrame(this._rafHandle);
+        this._rafHandle = null;
+      }
+    },
+
+    // ─── iOS-style swipe picker for breaths ────────────────────────────
+
+    _setupPicker($refs: Record<string, HTMLElement>): void {
+      const pickerEl = $refs['breathsPicker'];
+      const trackEl = $refs['breathsTrack'];
+
+      if (!pickerEl || !trackEl) return;
+
+      const min = 10;
+      const max = 60;
+      const stepSize = 5;
+      const values: number[] = [];
+
+      for (let v = min; v <= max; v += stepSize) values.push(v);
+
+      // Build picker item buttons
+      trackEl.textContent = '';
+
+      for (const value of values) {
+        const item = document.createElement('button');
+
+        item.type = 'button';
+        item.className = 'breathing-picker__item';
+        item.dataset.value = String(value);
+        item.textContent = String(value);
+        item.setAttribute('aria-label', `${value} Atemzüge`);
+        trackEl.appendChild(item);
+      }
+
+      const items = Array.from(
+        trackEl.querySelectorAll<HTMLElement>('.breathing-picker__item')
+      );
+
+      const indexOfValue = (v: number): number =>
+        clamp(Math.round((v - min) / stepSize), 0, values.length - 1);
+
+      let currentIndex = indexOfValue(this.settingBreaths);
+      let dragOffset = 0;
+      let pointerId: number | null = null;
+      let dragStartX = 0;
+      let dragStartIndex = 0;
+      let dragged = false;
+
+      const applyTransform = (animated: boolean): void => {
+        trackEl.style.transition = animated
+          ? 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1)'
+          : 'none';
+        trackEl.style.transform = `translate3d(${-currentIndex * PICKER_ITEM_WIDTH + dragOffset}px, 0, 0)`;
+      };
+
+      const highlight = (index: number): void => {
+        items.forEach((item, i) => {
+          item.classList.toggle('is-active', i === index);
+          item.tabIndex = i === index ? 0 : -1;
+        });
+      };
+
+      const setIndex = (index: number, animated = true): void => {
+        currentIndex = clamp(index, 0, values.length - 1);
+        this.settingBreaths = values[currentIndex] ?? min; // ← reactive update drives template
+        highlight(currentIndex);
+        applyTransform(animated);
+      };
+
+      const onPointerDown = (e: PointerEvent): void => {
+        if (this.isActive) return;
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+        pointerId = e.pointerId;
+        dragStartX = e.clientX;
+        dragStartIndex = currentIndex;
+        dragged = false;
+        trackEl.setPointerCapture(e.pointerId);
+        pickerEl.classList.add('is-dragging');
+      };
+
+      const onPointerMove = (e: PointerEvent): void => {
+        if (pointerId !== e.pointerId) return;
+
+        const delta = e.clientX - dragStartX;
+
+        if (!dragged && Math.abs(delta) > 4) dragged = true;
+
+        dragOffset = delta;
+        applyTransform(false);
+      };
+
+      const onPointerEnd = (e: PointerEvent): void => {
+        if (pointerId !== e.pointerId) return;
+
+        const indexDelta = Math.round(-dragOffset / PICKER_ITEM_WIDTH);
+
+        pointerId = null;
+        dragOffset = 0;
+        pickerEl.classList.remove('is-dragging');
+
+        if (dragged) {
+          setIndex(dragStartIndex + indexDelta, true);
+        } else {
+          applyTransform(true);
         }
       };
 
-      startBtn.addEventListener('click', () => {
-        lockSettings(true);
-        handleStart();
+      trackEl.addEventListener('pointerdown', onPointerDown);
+      trackEl.addEventListener('pointermove', onPointerMove);
+      trackEl.addEventListener('pointerup', onPointerEnd);
+      trackEl.addEventListener('pointercancel', onPointerEnd);
+
+      trackEl.addEventListener('click', (e) => {
+        if (dragged) {
+          e.preventDefault();
+          e.stopPropagation();
+          dragged = false;
+
+          return;
+        }
+
+        const target = (e.target as HTMLElement).closest<HTMLElement>(
+          '.breathing-picker__item'
+        );
+
+        if (!target?.dataset.value) return;
+
+        setIndex(indexOfValue(Number.parseInt(target.dataset.value, 10)), true);
       });
 
-      circle.addEventListener('click', () => {
-        if (state.phase === 'idle' || state.phase === 'complete') {
-          lockSettings(true);
-          handleStart();
+      pickerEl.addEventListener('keydown', (e) => {
+        if (this.isActive) return;
+
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          setIndex(currentIndex - 1);
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          setIndex(currentIndex + 1);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          setIndex(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          setIndex(values.length - 1);
         }
       });
 
-      if (holdBtn) {
-        holdBtn.addEventListener('click', handleHoldButton);
-      }
+      pickerEl.addEventListener(
+        'wheel',
+        (e) => {
+          if (this.isActive) return;
+          if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
 
-      if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-          lockSettings(false);
-          enterIdle();
-        });
-      }
+          e.preventDefault();
 
-      enterIdle();
+          if (e.deltaX > 10) setIndex(currentIndex + 1);
+          else if (e.deltaX < -10) setIndex(currentIndex - 1);
+        },
+        { passive: false }
+      );
 
-      this._cleanup.push(() => {
-        clearScheduled();
-        cleanupPicker?.();
-      });
-    },
+      // Set initial position without animation
+      setIndex(currentIndex, false);
 
-    destroy(): void {
-      this._cleanup.forEach((fn) => fn());
-      this._cleanup = [];
+      this._pickerCleanup = (): void => {
+        trackEl.removeEventListener('pointerdown', onPointerDown);
+        trackEl.removeEventListener('pointermove', onPointerMove);
+        trackEl.removeEventListener('pointerup', onPointerEnd);
+        trackEl.removeEventListener('pointercancel', onPointerEnd);
+      };
     },
   };
 }
