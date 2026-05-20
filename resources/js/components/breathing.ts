@@ -2,14 +2,26 @@
  * Interactive breathing exercise (Wim Hof Method style).
  * Three-phase guided breathing: power breaths → retention → recovery hold.
  *
- * Rebuilt with Alpine.js reactivity — all state is declared as top-level
- * reactive properties; computed getters derive everything else; the template
- * binds the UI with x-text / x-show / :data-* / @click throughout.
+ * State machine:
+ *   idle → breathing → retention → recovery → [next breathing | complete]
+ *
+ * On session start the current UI settings are snapshotted into `_session`
+ * so that adjusting the picker / steppers mid-session has no effect on the
+ * running round.  All phase-transition closures read from `_session`.
+ *
+ * Template binds via x-text / x-show / :data-* / @click — no querySelector.
  */
 
 import type { AlpineMagics } from '@/types/alpine';
 
 type Phase = 'idle' | 'breathing' | 'retention' | 'recovery' | 'complete';
+
+/** Settings frozen at the moment a session begins. */
+type SessionConfig = {
+  breaths: number;
+  rounds: number;
+  recoveryHold: number;
+};
 
 const PHASE_LABEL: Record<Phase, string> = {
   idle: 'Bereit',
@@ -40,12 +52,18 @@ export function breathingApp() {
     breath: 0,
     timerSeconds: 0,
 
-    // User-adjustable settings (live-synced with picker + steppers)
-    settingBreaths: 30,
+    // User-adjustable settings (live-synced with picker + steppers).
+    // Changing these while a session is active has no effect on the
+    // running round because transitions read from `_session` instead.
+    settingBreaths: 35,
     settingRounds: 3,
     settingRecovery: 15,
 
-    // ─── Fixed session config ──────────────────────────────────────────
+    // ─── Session snapshot ──────────────────────────────────────────────
+    /** Frozen copy of settings taken at session start. Null when idle. */
+    _session: null as SessionConfig | null,
+
+    // ─── Fixed per-breath timing ───────────────────────────────────────
     inhaleMs: 1800,
     exhaleMs: 1800,
 
@@ -64,6 +82,22 @@ export function breathingApp() {
 
     get phaseLabel(): string {
       return PHASE_LABEL[this.phase];
+    },
+
+    /**
+     * Session-frozen round count — drives the meta row.
+     * Falls back to the live setting when idle / complete.
+     */
+    get sessionRounds(): number {
+      return this._session?.rounds ?? this.settingRounds;
+    },
+
+    /**
+     * Session-frozen breath count — drives the meta row.
+     * Falls back to the live setting when idle / complete.
+     */
+    get sessionBreaths(): number {
+      return this._session?.breaths ?? this.settingBreaths;
     },
 
     /**
@@ -160,9 +194,9 @@ export function breathingApp() {
       }
 
       if (this.phase === 'recovery') {
-        this._clearScheduled();
-
-        if (this.round >= this.settingRounds) {
+        // Both _finish() and _startBreathing() clear scheduled timers at
+        // their own start, so no need to call _clearScheduled() here.
+        if (this.round >= (this._session?.rounds ?? this.settingRounds)) {
           this._finish();
 
           return;
@@ -191,6 +225,13 @@ export function breathingApp() {
     // ─── Phase transitions ─────────────────────────────────────────────
 
     _beginSession(): void {
+      // Snapshot current UI settings so mid-session picker/stepper changes
+      // cannot affect the running round.
+      this._session = {
+        breaths: this.settingBreaths,
+        rounds: this.settingRounds,
+        recoveryHold: this.settingRecovery,
+      };
       this.round = 0;
       this.breath = 0;
       this.timerSeconds = 0;
@@ -203,6 +244,7 @@ export function breathingApp() {
       this.round = 0;
       this.breath = 0;
       this.timerSeconds = 0;
+      this._session = null;
     },
 
     _finish(): void {
@@ -218,6 +260,10 @@ export function breathingApp() {
       this.timerSeconds = 0;
 
       const startedAt = performance.now();
+      // Capture the session breath limit once — the interval closure must not
+      // read the live `settingBreaths` property, which the user could change
+      // while settings are unlocked between rounds.
+      const breathLimit = this._session?.breaths ?? this.settingBreaths;
 
       // Breath counter — increments once per full inhale + exhale cycle.
       this._breathHandle = window.setInterval(() => {
@@ -225,7 +271,7 @@ export function breathingApp() {
 
         this.breath += 1;
 
-        if (this.breath > this.settingBreaths) {
+        if (this.breath > breathLimit) {
           this._startRetention();
         }
       }, this.cycleMs);
@@ -274,7 +320,9 @@ export function breathingApp() {
       this._clearScheduled();
       this.phase = 'recovery';
 
-      let remaining = this.settingRecovery;
+      // Read from the session snapshot so the recovery duration cannot change
+      // if the user touches the stepper between rounds.
+      let remaining = this._session?.recoveryHold ?? this.settingRecovery;
 
       this.timerSeconds = remaining;
 
@@ -283,7 +331,7 @@ export function breathingApp() {
         this.timerSeconds = remaining;
 
         if (remaining <= 0) {
-          if (this.round >= this.settingRounds) {
+          if (this.round >= (this._session?.rounds ?? this.settingRounds)) {
             this._finish();
 
             return;
@@ -376,7 +424,7 @@ export function breathingApp() {
 
       const setIndex = (index: number, animated = true): void => {
         currentIndex = clamp(index, 0, values.length - 1);
-        this.settingBreaths = values[currentIndex] ?? min; // currentIndex is clamped, fallback is defensive
+        this.settingBreaths = values[currentIndex] as number;
         highlight(currentIndex);
         applyTransform(animated);
       };
@@ -426,6 +474,13 @@ export function breathingApp() {
       trackEl.addEventListener('pointercancel', onPointerEnd);
 
       trackEl.addEventListener('click', (e) => {
+        // Block item-click while a session is active.
+        if (this.isActive) {
+          e.preventDefault();
+
+          return;
+        }
+
         if (dragged) {
           e.preventDefault();
           e.stopPropagation();
