@@ -41,7 +41,7 @@
           <h2>So funktioniert es</h2>
           <ol class="breathing__steps">
             <li>
-              <strong>Tief atmen:</strong> 30 kräftige Atemzüge — vollständig
+              <strong>Tief atmen:</strong> 35 kräftige Atemzüge — vollständig
               einatmen, locker ausatmen.
             </li>
             <li>
@@ -91,7 +91,7 @@
                   >Bereit</span
                 >
                 <span class="breathing-app__counter" x-text="counter"
-                  >3 Runden · 30 Atemzüge</span
+                  >3 Runden · 35 Atemzüge</span
                 >
               </span>
             </div>
@@ -102,7 +102,7 @@
               <span class="breathing-app__meta-label">Runde</span>
               <span
                 class="breathing-app__meta-value"
-                x-text="round + '\u00a0/\u00a0' + settingRounds"
+                x-text="round + '\u00a0/\u00a0' + sessionRounds"
                 >0&nbsp;/&nbsp;3</span
               >
             </div>
@@ -110,8 +110,8 @@
               <span class="breathing-app__meta-label">Atemzug</span>
               <span
                 class="breathing-app__meta-value"
-                x-text="breath + '\u00a0/\u00a0' + settingBreaths"
-                >0&nbsp;/&nbsp;30</span
+                x-text="breath + '\u00a0/\u00a0' + sessionBreaths"
+                >0&nbsp;/&nbsp;35</span
               >
             </div>
             <div class="breathing-app__meta-item">
@@ -140,6 +140,7 @@
               type="button"
               class="btn btn--secondary"
               x-show="showHoldButton"
+              x-cloak
               x-text="holdButtonText"
               @click="handleHold"
               data-umami-event="breathing-resume"

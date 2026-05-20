@@ -168,3 +168,10 @@ table {
 [hidden] {
   display: none !important;
 }
+
+/* Alpine.js cloak — hides elements before Alpine initialises to prevent
+   a Flash Of Unstyled Alpine Content (FOUAC).
+   Use x-cloak alongside x-show on elements that should start hidden. */
+[x-cloak] {
+  display: none !important;
+}
