@@ -320,8 +320,8 @@ export function breathingApp() {
     // ─── iOS-style swipe picker for breaths ────────────────────────────
 
     _setupPicker($refs: Record<string, HTMLElement>): void {
-      const pickerEl = $refs['breathsPicker'];
-      const trackEl = $refs['breathsTrack'];
+      const pickerEl = $refs.breathsPicker;
+      const trackEl = $refs.breathsTrack;
 
       if (!pickerEl || !trackEl) return;
 
@@ -376,7 +376,7 @@ export function breathingApp() {
 
       const setIndex = (index: number, animated = true): void => {
         currentIndex = clamp(index, 0, values.length - 1);
-        this.settingBreaths = values[currentIndex] ?? min; // ← reactive update drives template
+        this.settingBreaths = values[currentIndex] ?? min; // currentIndex is clamped, fallback is defensive
         highlight(currentIndex);
         applyTransform(animated);
       };
