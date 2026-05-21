@@ -7,9 +7,6 @@
   <!-- Skip Link -->
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
-  <!-- Scroll progress indicator (CSS-only, driven by `scroll(root)`). -->
-  <div class="scroll-progress" aria-hidden="true"></div>
-
   <!-- Header -->
   <header
     class="header"
