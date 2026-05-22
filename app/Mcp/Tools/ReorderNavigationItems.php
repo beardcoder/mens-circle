@@ -8,67 +8,85 @@ use App\Enums\NavigationLocation;
 use App\Models\NavigationItem;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 use Override;
 
-#[Description('Reorder navigation items within one location. Pass the full ordered list of item ids that belong to that location; the sort field is rewritten as 10, 20, 30, ... to leave room for inserts. Items belonging to the location but missing from the list are pushed to the end.')]
+#[Description(
+    'Reorder navigation items within one location. Pass the full ordered list of item ids that belong to that location; the sort field is rewritten as 10, 20, 30, ... to leave room for inserts. All ids must exist and belong to the selected location, and duplicates are rejected. Items belonging to the location but missing from the list are pushed to the end with preserved relative order.',
+)]
 class ReorderNavigationItems extends Tool
 {
     public function handle(Request $request): Response
     {
-        /** @var string $location */
-        $location = $request->get('location');
+        $locationValues = array_column(NavigationLocation::cases(), 'value');
 
-        $locationEnum = NavigationLocation::tryFrom($location);
+        $validator = Validator::make($request->toArray(), [
+            'location' => ['required', 'string', 'in:' . implode(',', $locationValues)],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'min:1'],
+        ]);
 
-        if ($locationEnum === null) {
-            return Response::error("Unknown location \"{$location}\".");
+        if ($validator->fails()) {
+            return Response::error('Invalid input: ' . $validator->errors()->toJson());
         }
 
-        /** @var array<int, int|string> $ids */
-        $ids = $request->get('ids');
+        /** @var array{location: string, ids: array<int, int>} $data */
+        $data = $validator->validated();
+
+        $locationEnum = NavigationLocation::from($data['location']);
+
+        /** @var array<int, int> $ids */
+        $ids = array_map(static fn(int|string $id): int => (int) $id, $data['ids']);
+
+        if (\count($ids) !== \count(array_unique($ids))) {
+            return Response::error('Duplicate ids are not allowed.');
+        }
 
         $items = NavigationItem::query()->where('location', $locationEnum)->get()->keyBy('id');
+        $existingIds = $items->keys()->all();
+
+        $unknown = array_values(array_diff($ids, $existingIds));
+
+        if ($unknown !== []) {
+            return Response::error(\sprintf(
+                'These ids do not exist or do not belong to location "%s": %s.',
+                $locationEnum->value,
+                implode(', ', $unknown),
+            ));
+        }
 
         $sort = 10;
-        $seen = [];
+        $reordered = 0;
 
-        DB::transaction(static function () use ($ids, $items, &$sort, &$seen): void {
+        DB::transaction(static function () use ($ids, $items, &$sort, &$reordered): void {
             foreach ($ids as $id) {
-                $intId = (int) $id;
-
-                if (!$items->has($intId)) {
-                    continue;
-                }
-
                 /** @var NavigationItem $item */
-                $item = $items->get($intId);
+                $item = $items->get($id);
                 $item->sort = $sort;
                 $item->save();
-                $seen[$intId] = true;
                 $sort += 10;
+                ++$reordered;
             }
 
-            // Push any items missing from the list to the end.
-            foreach ($items as $item) {
-                if (isset($seen[$item->id])) {
-                    continue;
-                }
+            // Append items belonging to the location but missing from the
+            // request, preserving their existing relative order.
+            $remaining = $items
+                ->reject(static fn(NavigationItem $item): bool => \in_array($item->id, $ids, true))
+                ->sortBy(['sort', 'id'])
+                ->values();
 
+            foreach ($remaining as $item) {
                 $item->sort = $sort;
                 $item->save();
                 $sort += 10;
             }
         });
 
-        return Response::text(\sprintf(
-            'Reordered %d navigation items in location "%s".',
-            \count($seen),
-            $locationEnum->value,
-        ));
+        return Response::text(\sprintf('Reordered %d navigation items in location "%s".', $reordered, $locationEnum->value));
     }
 
     /**
@@ -84,7 +102,9 @@ class ReorderNavigationItems extends Tool
                 ->required(),
             'ids' => $schema
                 ->array()
-                ->description('Ordered list of navigation item ids belonging to that location.')
+                ->description(
+                    'Ordered list of navigation item ids belonging to that location. Must be unique and all ids must exist in the location.',
+                )
                 ->items($schema->integer())
                 ->required(),
         ];

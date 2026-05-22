@@ -25,6 +25,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Override;
 use UnitEnum;
 
 class NavigationItemResource extends Resource
@@ -45,6 +46,7 @@ class NavigationItemResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'label';
 
+    #[Override]
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -57,16 +59,15 @@ class NavigationItemResource extends Resource
                         ->native(false)
                         ->helperText('In welchem Navigationsbereich der Link erscheint.'),
 
-                    TextInput::make('label')
-                        ->label('Beschriftung')
-                        ->required()
-                        ->maxLength(255),
+                    TextInput::make('label')->label('Beschriftung')->required()->maxLength(255),
 
                     TextInput::make('url')
                         ->label('URL / Pfad / Anker')
                         ->maxLength(2048)
                         ->placeholder('/atemuebung, #ueber oder https://...')
-                        ->helperText('Beginnt mit "#": Anker auf der Startseite (z.B. "#ueber"). Beginnt mit "/": interner Pfad. Sonst absolute URL. Bei Bedingung "Nächster Termin" wird die URL automatisch gesetzt.'),
+                        ->helperText(
+                            'Beginnt mit "#": Anker auf der Startseite (z.B. "#ueber"). Beginnt mit "/": interner Pfad. Sonst absolute URL. Bei Bedingung "Nächster Termin" wird die URL automatisch gesetzt.',
+                        ),
 
                     Select::make('condition')
                         ->label('Bedingung')
@@ -98,6 +99,7 @@ class NavigationItemResource extends Resource
         ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
@@ -123,11 +125,13 @@ class NavigationItemResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

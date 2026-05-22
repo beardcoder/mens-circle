@@ -49,7 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook('panels::auth.login.form.after', static fn(): Factory|View => view('filament.components.auth.socialite.github'))
             ->colors([
                 'primary' => [
-                    50  => '#f8ece4',
+                    50 => '#f8ece4',
                     100 => '#f1dac8',
                     200 => '#e2b79b',
                     300 => '#d08f66',
@@ -62,7 +62,7 @@ class AdminPanelProvider extends PanelProvider
                     950 => '#301608',
                 ],
                 'gray' => [
-                    50  => '#faf9f7',
+                    50 => '#faf9f7',
                     100 => '#f4f2ee',
                     200 => '#e8e5de',
                     300 => '#d4d0c8',

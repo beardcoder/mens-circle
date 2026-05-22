@@ -13,7 +13,9 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 use Override;
 
-#[Description('List navigation items grouped by location (header, footer_primary, footer_contact, footer_legal). Optionally filter by location.')]
+#[Description(
+    'List navigation items grouped by location (header, footer_primary, footer_contact, footer_legal). Optionally filter by location.',
+)]
 class ListNavigationItems extends Tool
 {
     public function handle(Request $request): Response
@@ -62,9 +64,7 @@ class ListNavigationItems extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'location' => $schema
-                ->string()
-                ->description('Optional location filter: header, footer_primary, footer_contact, footer_legal.'),
+            'location' => $schema->string()->description('Optional location filter: header, footer_primary, footer_contact, footer_legal.'),
         ];
     }
 }

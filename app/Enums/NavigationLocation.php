@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
+use Override;
 
 enum NavigationLocation: string implements HasLabel
 {
@@ -13,6 +14,7 @@ enum NavigationLocation: string implements HasLabel
     case FooterContact = 'footer_contact';
     case FooterLegal = 'footer_legal';
 
+    #[Override]
     public function getLabel(): string
     {
         return match ($this) {

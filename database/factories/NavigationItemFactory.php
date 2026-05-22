@@ -9,6 +9,7 @@ use App\Models\NavigationItem;
 use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Override;
 
 /**
  * @extends Factory<NavigationItem>
@@ -19,6 +20,7 @@ class NavigationItemFactory extends Factory
     /**
      * @return array<string, mixed>
      */
+    #[Override]
     public function definition(): array
     {
         $faker = FakerFactory::create();
@@ -38,31 +40,31 @@ class NavigationItemFactory extends Factory
 
     public function header(): static
     {
-        return $this->state(static fn(array $attributes): array => ['location' => NavigationLocation::Header]);
+        return $this->state(fn(): array => ['location' => NavigationLocation::Header]);
     }
 
     public function footerPrimary(): static
     {
-        return $this->state(static fn(array $attributes): array => ['location' => NavigationLocation::FooterPrimary]);
+        return $this->state(fn(): array => ['location' => NavigationLocation::FooterPrimary]);
     }
 
     public function footerContact(): static
     {
-        return $this->state(static fn(array $attributes): array => ['location' => NavigationLocation::FooterContact]);
+        return $this->state(fn(): array => ['location' => NavigationLocation::FooterContact]);
     }
 
     public function footerLegal(): static
     {
-        return $this->state(static fn(array $attributes): array => ['location' => NavigationLocation::FooterLegal]);
+        return $this->state(fn(): array => ['location' => NavigationLocation::FooterLegal]);
     }
 
     public function cta(): static
     {
-        return $this->state(static fn(array $attributes): array => ['is_cta' => true]);
+        return $this->state(fn(): array => ['is_cta' => true]);
     }
 
     public function hidden(): static
     {
-        return $this->state(static fn(array $attributes): array => ['is_visible' => false]);
+        return $this->state(fn(): array => ['is_visible' => false]);
     }
 }
