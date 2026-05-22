@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -17,8 +18,12 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['type', 'deleted_at']);
+            $table->index(['type', 'is_active', 'deleted_at']);
         });
+
+        if (Schema::getConnection()->getDriverName() === 'sqlite') {
+            DB::statement('CREATE UNIQUE INDEX navigations_unique_active_type ON navigations (type) WHERE deleted_at IS NULL AND is_active = 1');
+        }
 
         Schema::create('navigation_items', static function (Blueprint $table): void {
             $table->uuid('id')->primary();

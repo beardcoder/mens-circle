@@ -187,7 +187,7 @@ test('can search navigations by name', function (): void {
 });
 
 test('cannot create duplicate active navigation of same type', function (): void {
-    $existing = Navigation::factory()->create([
+    Navigation::factory()->create([
         'name' => 'Existing Header',
         'type' => NavigationType::Header,
         'is_active' => true,
@@ -204,7 +204,7 @@ test('cannot create duplicate active navigation of same type', function (): void
 });
 
 test('can create navigation of same type if existing is inactive', function (): void {
-    $existing = Navigation::factory()->create([
+    Navigation::factory()->create([
         'name' => 'Inactive Header',
         'type' => NavigationType::Header,
         'is_active' => false,
@@ -271,7 +271,7 @@ test('can edit navigation to different type if no conflict', function (): void {
 });
 
 test('cannot edit navigation to type that already has active navigation', function (): void {
-    $footer = Navigation::factory()->create([
+    Navigation::factory()->create([
         'name' => 'Existing Footer',
         'type' => NavigationType::Footer,
         'is_active' => true,
@@ -289,4 +289,28 @@ test('cannot edit navigation to type that already has active navigation', functi
         ])
         ->call('save')
         ->assertHasFormErrors(['type']);
+});
+
+test('can create inactive navigation of same type when active one exists', function (): void {
+    Navigation::factory()->create([
+        'name' => 'Active Header',
+        'type' => NavigationType::Header,
+        'is_active' => true,
+    ]);
+
+    livewire(CreateNavigation::class)
+        ->fillForm([
+            'name' => 'Inactive Header',
+            'type' => NavigationType::Header->value,
+            'is_active' => false,
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors()
+        ->assertRedirect();
+
+    assertDatabaseHas(Navigation::class, [
+        'name' => 'Inactive Header',
+        'type' => NavigationType::Header->value,
+        'is_active' => false,
+    ]);
 });

@@ -7,21 +7,22 @@ namespace App\Filament\Resources;
 use App\Enums\NavigationType;
 use App\Filament\Resources\NavigationResource\Pages;
 use App\Models\Navigation;
+use BackedEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Validation\Rule;
+use UnitEnum;
 
 class NavigationResource extends Resource
 {
     protected static ?string $model = Navigation::class;
 
-    protected static string|Heroicon|null $navigationIcon = Heroicon::Bars3;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Bars3;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Inhalt';
+    protected static UnitEnum|string|null $navigationGroup = 'Inhalt';
 
     protected static ?string $modelLabel = 'Navigation';
 
@@ -49,6 +50,10 @@ class NavigationResource extends Resource
                                     ->required()
                                     ->rules([
                                         fn (Forms\Get $get, ?Navigation $record): \Closure => function (string $attribute, $value, \Closure $fail) use ($get, $record) {
+                                            if (! $get('is_active')) {
+                                                return;
+                                            }
+
                                             $existingNav = Navigation::where('type', $value)
                                                 ->where('is_active', true)
                                                 ->when($record, fn($query) => $query->where('id', '!=', $record->id))

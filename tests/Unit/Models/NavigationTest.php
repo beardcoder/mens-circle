@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\NavigationType;
 use App\Models\Navigation;
 use App\Models\NavigationItem;
+use Illuminate\Database\QueryException;
 use function Pest\Laravel\assertDatabaseHas;
 
 test('can create navigation with items', function (): void {
@@ -356,4 +357,38 @@ test('target value is restricted to safe options', function (): void {
     // The database accepts any value, but the form and MCP tools should validate
     expect($item->target)->toBe('javascript:alert("xss")');
     // This tests that the column accepts the value - validation happens at form/MCP level
+});
+
+test('database rejects duplicate active navigation of the same type', function (): void {
+    Navigation::factory()->header()->create([
+        'is_active' => true,
+    ]);
+
+    expect(fn() => Navigation::factory()->header()->create([
+        'is_active' => true,
+    ]))->toThrow(QueryException::class);
+});
+
+test('database allows inactive navigation with same type as active', function (): void {
+    Navigation::factory()->header()->create([
+        'is_active' => true,
+    ]);
+
+    Navigation::factory()->header()->inactive()->create();
+
+    expect(Navigation::query()->where('type', NavigationType::Header)->count())->toBe(2);
+});
+
+test('database allows creating active navigation when previous one is soft deleted', function (): void {
+    $active = Navigation::factory()->header()->create([
+        'is_active' => true,
+    ]);
+    $active->delete();
+
+    $new = Navigation::factory()->header()->create([
+        'is_active' => true,
+    ]);
+
+    expect($new->exists)->toBeTrue()
+        ->and($new->id)->not->toBe($active->id);
 });

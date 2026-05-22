@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Mcp\Tools;
 
 use App\Models\Navigation;
-use App\Models\NavigationItem;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Laravel\Mcp\Server\Tool;
 use Laravel\Mcp\Server\Attributes\CallableName;
 use Laravel\Mcp\Server\Attributes\Description;
@@ -24,44 +25,36 @@ class ReorderNavigationItems extends Tool implements HasInput
      */
     public function __invoke(array $input): array
     {
-        $navigation = Navigation::findOrFail($input['navigation_id']);
+        $validated = Validator::make($input, [
+            'navigation_id' => ['required', 'uuid', 'exists:navigations,id'],
+            'item_ids' => ['required', 'array', 'min:1'],
+            'item_ids.*' => ['required', 'uuid', 'distinct'],
+        ])->validate();
 
-        // Validate all item IDs exist and belong to this navigation
-        $itemIds = $input['item_ids'];
-        $items = NavigationItem::whereIn('id', $itemIds)->get();
+        $navigation = Navigation::findOrFail($validated['navigation_id']);
+        $itemIds = $validated['item_ids'];
 
-        if ($items->count() !== count($itemIds)) {
-            $foundIds = $items->pluck('id')->toArray();
-            $missingIds = array_diff($itemIds, $foundIds);
+        $validIds = $navigation->items()
+            ->whereIn('id', $itemIds)
+            ->pluck('id')
+            ->all();
+        $invalidIds = array_values(array_diff($itemIds, $validIds));
 
-            return [
-                'success' => false,
-                'error' => 'Some item IDs were not found: ' . implode(', ', $missingIds),
-            ];
+        if ($invalidIds !== []) {
+            throw ValidationException::withMessages([
+                'item_ids' => ['The following item IDs are missing or do not belong to the selected navigation: ' . implode(', ', $invalidIds)],
+            ]);
         }
 
-        // Check all items belong to the specified navigation
-        $foreignItems = $items->filter(fn($item) => $item->navigation_id !== $navigation->id);
-
-        if ($foreignItems->isNotEmpty()) {
-            $foreignIds = $foreignItems->pluck('id')->toArray();
-
-            return [
-                'success' => false,
-                'error' => 'Some items belong to a different navigation: ' . implode(', ', $foreignIds),
-            ];
-        }
-
-        // All validations passed, proceed with reordering
-        DB::transaction(static function () use ($navigation, $input): void {
-            foreach ($input['item_ids'] as $order => $itemId) {
+        DB::transaction(static function () use ($navigation, $itemIds): void {
+            foreach ($itemIds as $order => $itemId) {
                 $navigation->items()->where('id', $itemId)->update(['order' => $order]);
             }
         });
 
         return [
             'success' => true,
-            'message' => count($input['item_ids']) . ' items reordered',
+            'message' => count($itemIds) . ' items reordered',
         ];
     }
 }
