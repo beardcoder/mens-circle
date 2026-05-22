@@ -21,12 +21,12 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 ```
 app/
 ├── Console/Commands/        # SendEventReminders, GenerateSitemap
-├── Enums/                   # RegistrationStatus, NewsletterStatus, SocialLinkType, Heroicon
+├── Enums/                   # RegistrationStatus, NewsletterStatus, SocialLinkType, NavigationType, Heroicon
 ├── Filament/
 │   ├── Forms/               # Reusable form schemas (ParticipantForms)
 │   ├── Pages/               # SendNewsletter, ManageGeneralSettings, ClearCache
 │   ├── Resources/           # Event, User, Participant, Registration, Newsletter,
-│   │                        #   NewsletterSubscription, Testimonial, Page
+│   │                        #   NewsletterSubscription, Testimonial, Page, Navigation
 │   └── Widgets/             # StatsOverview, RecentEvents, UpcomingEventRegistrations
 ├── Http/
 │   ├── Controllers/         # Event, Page, Newsletter, TestimonialSubmission, Socialite, Llms
@@ -37,7 +37,8 @@ app/
 ├── Mail/                    # EventRegistrationConfirmation, EventReminder,
 │                            #   AdminEventRegistrationNotification, NewsletterMail, NewsletterWelcome
 ├── Models/                  # User, Event, Registration, Participant, Newsletter,
-│                            #   NewsletterSubscription, Testimonial, Page, ContentBlock
+│                            #   NewsletterSubscription, Testimonial, Page, ContentBlock,
+│                            #   Navigation, NavigationItem
 ├── Observers/               # RegistrationObserver
 ├── Providers/               # AppServiceProvider, AdminPanelProvider
 ├── Services/                # EventNotificationService (email + SMS via Seven.io)
@@ -60,6 +61,10 @@ Newsletter (subject, content, status)
 NewsletterSubscription ──belongsTo──> Participant
 Page ──hasMany──> ContentBlock
 Testimonial (standalone, moderated)
+Navigation ──hasMany──> NavigationItem ──belongsTo──> NavigationItem (parent)
+  │                      │
+  └─ type: Header/Footer/Legal
+                         └─ attrs: computed_url (route + anchor), data_attributes_string
 ```
 
 ## Key Workflows
@@ -69,6 +74,13 @@ Testimonial (standalone, moderated)
 **Newsletter:** `NewsletterController::subscribe()` → creates subscription with random token → sends welcome email. Sending: `SendNewsletter` Filament page → `SendNewsletterJob` (chunked in 100s).
 
 **Event Reminders:** Scheduled command `events:send-reminders` runs daily at 10:00 → finds events in 24h window → sends email + SMS via `EventNotificationService`.
+
+**Navigation Management:** Dynamic navigation system with Filament admin interface. Each Navigation has a type (Header/Footer/Legal) and contains ordered NavigationItems. Items support:
+- Direct URLs or Laravel route names with parameters
+- Anchor links (Sprungmarken) for in-page navigation (#faq, #ueber)
+- Data attributes for analytics tracking (umami-event)
+- Parent-child relationships for nested menus
+- Response cache auto-clears on navigation changes
 
 ## Routes
 
@@ -140,6 +152,8 @@ tests/
 | Newsletter             | `draft()`, `sending()`, `sent()`                                                            |
 | NewsletterSubscription | `active()`, `unconfirmed()`, `unsubscribed()`, `forParticipant()`                           |
 | Testimonial            | `unpublished()`, `anonymous()`                                                              |
+| Navigation             | `header()`, `footer()`, `legal()`, `inactive()`                                             |
+| NavigationItem         | `forNavigation()`, `withRoute()`, `withAnchor()`, `withParent()`, `inactive()`, `withAnalytics()`, `atOrder()` |
 
 ## Code Quality Commands
 
