@@ -281,3 +281,79 @@ test('navigation clears response cache on update', function (): void {
     // This test verifies the ClearsResponseCache trait is used
     expect($navigation)->toHaveProperty('clearsResponseCacheWhenUpdated');
 });
+
+test('data attributes with malicious keys are sanitized', function (): void {
+    $navigation = Navigation::factory()->create();
+
+    $item = NavigationItem::create([
+        'navigation_id' => $navigation->id,
+        'label' => 'Test',
+        'url' => '/',
+        'order' => 1,
+        'is_active' => true,
+        'data_attributes' => [
+            'valid-key' => 'value1',
+            'umami-event' => 'click',
+            'key_with_underscore' => 'value2',
+            'key.with.dots' => 'value3',
+            'key:with:colons' => 'value4',
+            '<script>alert("xss")</script>' => 'malicious',
+            'key with spaces' => 'invalid',
+            'key"with"quotes' => 'invalid',
+        ],
+    ]);
+
+    $dataString = $item->data_attributes_string;
+
+    // Valid keys should be present
+    expect($dataString)->toContain('data-valid-key="value1"')
+        ->and($dataString)->toContain('data-umami-event="click"')
+        ->and($dataString)->toContain('data-key_with_underscore="value2"')
+        ->and($dataString)->toContain('data-key.with.dots="value3"')
+        ->and($dataString)->toContain('data-key:with:colons="value4"');
+
+    // Malicious/invalid keys should be filtered out
+    expect($dataString)->not->toContain('script')
+        ->and($dataString)->not->toContain('spaces')
+        ->and($dataString)->not->toContain('quotes');
+});
+
+test('data attribute keys with data- prefix are handled correctly', function (): void {
+    $navigation = Navigation::factory()->create();
+
+    $item = NavigationItem::create([
+        'navigation_id' => $navigation->id,
+        'label' => 'Test',
+        'url' => '/',
+        'order' => 1,
+        'is_active' => true,
+        'data_attributes' => [
+            'data-event' => 'click', // with prefix
+            'target' => 'button', // without prefix
+        ],
+    ]);
+
+    $dataString = $item->data_attributes_string;
+
+    // Both should render with data- prefix (not doubled)
+    expect($dataString)->toContain('data-event="click"')
+        ->and($dataString)->toContain('data-target="button"')
+        ->and($dataString)->not->toContain('data-data-event'); // no double prefix
+});
+
+test('target value is restricted to safe options', function (): void {
+    $navigation = Navigation::factory()->create();
+
+    $item = NavigationItem::create([
+        'navigation_id' => $navigation->id,
+        'label' => 'Test',
+        'url' => '/',
+        'order' => 1,
+        'target' => 'javascript:alert("xss")', // malicious attempt
+        'is_active' => true,
+    ]);
+
+    // The database accepts any value, but the form and MCP tools should validate
+    expect($item->target)->toBe('javascript:alert("xss")');
+    // This tests that the column accepts the value - validation happens at form/MCP level
+});

@@ -185,3 +185,108 @@ test('can search navigations by name', function (): void {
         ->assertCanSeeTableRecords(Navigation::where('name', 'Main Navigation')->get())
         ->assertCanNotSeeTableRecords(Navigation::where('name', 'Footer Links')->get());
 });
+
+test('cannot create duplicate active navigation of same type', function (): void {
+    $existing = Navigation::factory()->create([
+        'name' => 'Existing Header',
+        'type' => NavigationType::Header,
+        'is_active' => true,
+    ]);
+
+    livewire(CreateNavigation::class)
+        ->fillForm([
+            'name' => 'New Header',
+            'type' => NavigationType::Header->value,
+            'is_active' => true,
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['type']);
+});
+
+test('can create navigation of same type if existing is inactive', function (): void {
+    $existing = Navigation::factory()->create([
+        'name' => 'Inactive Header',
+        'type' => NavigationType::Header,
+        'is_active' => false,
+    ]);
+
+    livewire(CreateNavigation::class)
+        ->fillForm([
+            'name' => 'New Active Header',
+            'type' => NavigationType::Header->value,
+            'is_active' => true,
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors()
+        ->assertRedirect();
+
+    assertDatabaseHas(Navigation::class, [
+        'name' => 'New Active Header',
+        'type' => NavigationType::Header->value,
+        'is_active' => true,
+    ]);
+});
+
+test('can create navigation of same type if existing is soft deleted', function (): void {
+    $existing = Navigation::factory()->create([
+        'name' => 'Deleted Header',
+        'type' => NavigationType::Header,
+        'is_active' => true,
+    ]);
+    $existing->delete(); // Soft delete
+
+    livewire(CreateNavigation::class)
+        ->fillForm([
+            'name' => 'New Header',
+            'type' => NavigationType::Header->value,
+            'is_active' => true,
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors()
+        ->assertRedirect();
+
+    assertDatabaseHas(Navigation::class, [
+        'name' => 'New Header',
+        'type' => NavigationType::Header->value,
+        'is_active' => true,
+        'deleted_at' => null,
+    ]);
+});
+
+test('can edit navigation to different type if no conflict', function (): void {
+    $navigation = Navigation::factory()->create([
+        'name' => 'Header Nav',
+        'type' => NavigationType::Header,
+    ]);
+
+    livewire(EditNavigation::class, ['record' => $navigation->id])
+        ->fillForm([
+            'type' => NavigationType::Footer->value,
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    $navigation->refresh();
+    expect($navigation->type)->toBe(NavigationType::Footer);
+});
+
+test('cannot edit navigation to type that already has active navigation', function (): void {
+    $footer = Navigation::factory()->create([
+        'name' => 'Existing Footer',
+        'type' => NavigationType::Footer,
+        'is_active' => true,
+    ]);
+
+    $header = Navigation::factory()->create([
+        'name' => 'Header Nav',
+        'type' => NavigationType::Header,
+        'is_active' => true,
+    ]);
+
+    livewire(EditNavigation::class, ['record' => $header->id])
+        ->fillForm([
+            'type' => NavigationType::Footer->value,
+        ])
+        ->call('save')
+        ->assertHasFormErrors(['type']);
+});
