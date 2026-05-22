@@ -22,7 +22,7 @@ class NavigationResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Bars3;
 
-    protected static UnitEnum|string|null $navigationGroup = 'Inhalt';
+    protected static string|UnitEnum|null $navigationGroup = 'Inhalt';
 
     protected static ?string $modelLabel = 'Navigation';
 

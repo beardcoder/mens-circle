@@ -9,7 +9,6 @@ use App\Mcp\Tools\UpdateNavigation;
 use App\Models\Navigation;
 use App\Models\NavigationItem;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Str;
 
 test('CreateNavigationItem rejects parent from different navigation', function (): void {
     $nav1 = Navigation::factory()->create(['name' => 'Navigation 1']);
@@ -259,7 +258,6 @@ test('UpdateNavigation prefers parent_temp_id over parent_id when both are provi
         'navigation_id' => $navigation->id,
         'items' => [
             [
-                'id' => (string) Str::uuid(),
                 'temp_id' => 'parent-temp',
                 'label' => 'Parent Item',
                 'url' => '/parent',
