@@ -32,38 +32,17 @@
           :class="{ open: isNavOpen }"
           :aria-expanded="isNavOpen"
         >
-          <a
-            href="{{ route('home') }}#ueber"
-            class="nav__link"
-            @click="closeNavImmediate()"
-            data-umami-event="nav-click"
-            data-umami-event-target="ueber"
-            >Über</a
-          >
-          <a
-            href="{{ route('home') }}#reise"
-            class="nav__link"
-            @click="closeNavImmediate()"
-            data-umami-event="nav-click"
-            data-umami-event-target="reise"
-            >Die Reise</a
-          >
-          <a
-            href="{{ route('home') }}#faq"
-            class="nav__link"
-            @click="closeNavImmediate()"
-            data-umami-event="nav-click"
-            data-umami-event-target="faq"
-            >Fragen</a
-          >
-          <a
-            href="{{ route('breathing.show') }}"
-            class="nav__link"
-            @click="closeNavImmediate()"
-            data-umami-event="nav-click"
-            data-umami-event-target="atemuebung"
-            >Atemübung</a
-          >
+          @if ($headerNavigation)
+            @foreach ($headerNavigation->activeItems()->rootItems()->get() as $item)
+              <a
+                href="{{ $item->computed_url }}"
+                class="nav__link"
+                @click="closeNavImmediate()"
+                {!! $item->data_attributes_string !!}
+                >{{ $item->label }}</a
+              >
+            @endforeach
+          @endif
           @if ($hasNextEvent)
             <a
               href="{{ $nextEventUrl }}"
@@ -130,50 +109,25 @@
 
         <div class="footer__nav">
           <h3 class="footer__heading">Navigation</h3>
-          <ul class="footer__links">
-            <li>
-              <a
-                href="{{ route('home') }}#ueber"
-                data-umami-event="footer-link"
-                data-umami-event-target="ueber"
-                >Über uns</a
-              >
-            </li>
-            <li>
-              <a
-                href="{{ route('home') }}#reise"
-                data-umami-event="footer-link"
-                data-umami-event-target="reise"
-                >Die Reise</a
-              >
-            </li>
-            <li>
-              <a
-                href="{{ route('home') }}#faq"
-                data-umami-event="footer-link"
-                data-umami-event-target="faq"
-                >FAQ</a
-              >
-            </li>
-            <li>
-              <a
-                href="{{ route('breathing.show') }}"
-                data-umami-event="footer-link"
-                data-umami-event-target="atemuebung"
-                >Atemübung</a
-              >
-            </li>
-            @if ($hasNextEvent)
-              <li>
-                <a
-                  href="{{ $nextEventUrl }}"
-                  data-umami-event="footer-link"
-                  data-umami-event-target="event"
-                  >Nächster Termin</a
-                >
-              </li>
-            @endif
-          </ul>
+          @if ($footerNavigation)
+            <ul class="footer__links">
+              @foreach ($footerNavigation->activeItems()->rootItems()->get() as $item)
+                <li>
+                  <a href="{{ $item->computed_url }}" {!! $item->data_attributes_string !!}>{{ $item->label }}</a>
+                </li>
+              @endforeach
+              @if ($hasNextEvent)
+                <li>
+                  <a
+                    href="{{ $nextEventUrl }}"
+                    data-umami-event="footer-link"
+                    data-umami-event-target="event"
+                    >Nächster Termin</a
+                  >
+                </li>
+              @endif
+            </ul>
+          @endif
         </div>
 
         <div class="footer__contact">
@@ -215,20 +169,13 @@
         <p class="footer__copyright">
           {{ $settings?->footer_text ?? '© 2024 Männerkreis Niederbayern' }}
         </p>
-        <div class="footer__legal">
-          <a
-            href="{{ route('page.show', 'impressum') }}"
-            data-umami-event="footer-link"
-            data-umami-event-target="impressum"
-            >Impressum</a
-          >
-          <a
-            href="{{ route('page.show', 'datenschutz') }}"
-            data-umami-event="footer-link"
-            data-umami-event-target="datenschutz"
-            >Datenschutz</a
-          >
-        </div>
+        @if ($legalNavigation)
+          <div class="footer__legal">
+            @foreach ($legalNavigation->activeItems()->rootItems()->get() as $item)
+              <a href="{{ $item->computed_url }}" {!! $item->data_attributes_string !!}>{{ $item->label }}</a>
+            @endforeach
+          </div>
+        @endif
       </div>
     </div>
   </footer>

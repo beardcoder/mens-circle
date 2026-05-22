@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Enums\NavigationType;
 use App\Models\Event;
+use App\Models\Navigation;
 use App\Seo\Schemas\LocalBusinessSchema;
 use App\Seo\Schemas\OrganizationSchema;
 use App\Seo\Schemas\WebSiteSchema;
@@ -72,6 +74,26 @@ class AppServiceProvider extends ServiceProvider
                 $view->with([
                     'hasNextEvent' => false,
                     'nextEventUrl' => route('event.show'),
+                ]);
+            }
+        });
+
+        View::composer(['layouts.app'], static function (ViewContract $view): void {
+            try {
+                $headerNavigation = once(static fn() => Navigation::with('items')->active()->ofType(NavigationType::Header)->first());
+                $footerNavigation = once(static fn() => Navigation::with('items')->active()->ofType(NavigationType::Footer)->first());
+                $legalNavigation = once(static fn() => Navigation::with('items')->active()->ofType(NavigationType::Legal)->first());
+
+                $view->with([
+                    'headerNavigation' => $headerNavigation,
+                    'footerNavigation' => $footerNavigation,
+                    'legalNavigation' => $legalNavigation,
+                ]);
+            } catch (Throwable) {
+                $view->with([
+                    'headerNavigation' => null,
+                    'footerNavigation' => null,
+                    'legalNavigation' => null,
                 ]);
             }
         });
