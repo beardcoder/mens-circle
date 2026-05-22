@@ -13,7 +13,6 @@ use Filament\Pages\Dashboard;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Platform;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\View\Factory;
@@ -33,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->login(Login::class)
             ->spa()
             ->databaseTransactions()
@@ -48,7 +48,19 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('40px')
             ->renderHook('panels::auth.login.form.after', static fn(): Factory|View => view('filament.components.auth.socialite.github'))
             ->colors([
-                'primary' => Color::Orange,
+                'primary' => [
+                    50 => '248 236 228',
+                    100 => '241 218 200',
+                    200 => '226 183 155',
+                    300 => '208 143 102',
+                    400 => '200 120 65',
+                    500 => '192 98 42',
+                    600 => '160 78 30',
+                    700 => '128 61 22',
+                    800 => '100 47 17',
+                    900 => '76 35 12',
+                    950 => '48 22 8',
+                ],
             ])
             ->renderHook(PanelsRenderHook::TOPBAR_END, static fn(): Factory|View => view('filament.components.go-to-website'))
             ->renderHook(PanelsRenderHook::HEAD_END, static fn(): Factory|View => view('filament.components.apple-touch-icons'))
