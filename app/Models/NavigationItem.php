@@ -47,10 +47,12 @@ class NavigationItem extends Model
 
     /**
      * @param Builder<NavigationItem> $query
+     *
+     * @return Builder<NavigationItem>
      */
     public function scopeForLocation(Builder $query, NavigationLocation $location): Builder
     {
-        return $query->where('location', $location)->where('is_visible', true)->orderBy('sort')->orderBy('id');
+        return $query->where('location', $location->value)->where('is_visible', true)->orderBy('sort')->orderBy('id');
     }
 
     #[Override]

@@ -50,13 +50,9 @@ final class NavigationBuilder
                 continue;
             }
 
-            $navigation->add(
-                $item->label,
-                $resolvedUrl,
-                function (Section $section) use ($item): void {
-                    $section->attributes($this->buildAttributes($item));
-                },
-            );
+            $navigation->add($item->label, $resolvedUrl, function (Section $section) use ($item): void {
+                $section->attributes($this->buildAttributes($item));
+            });
         }
 
         return $navigation;
@@ -78,13 +74,7 @@ final class NavigationBuilder
     private function resolveUrl(NavigationItem $item): ?string
     {
         if ($item->condition === NavigationCondition::NextEvent) {
-            $url = $this->nextEventUrl();
-
-            if ($url === null) {
-                return null;
-            }
-
-            return $url;
+            return $this->nextEventUrl();
         }
 
         return $this->expandPlaceholders($item->url);
