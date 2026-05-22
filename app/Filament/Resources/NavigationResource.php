@@ -35,7 +35,7 @@ class NavigationResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-                Section::make('Navigation Details')
+            Section::make('Navigation Details')
                     ->schema([
                         Grid::make(2)
                             ->schema([
