@@ -9,8 +9,10 @@ use App\Filament\Resources\NavigationResource\Pages;
 use App\Models\Navigation;
 use BackedEnum;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -30,13 +32,12 @@ class NavigationResource extends Resource
 
     protected static ?int $navigationSort = 5;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Navigation Details')
+        return $schema->components([
+                Section::make('Navigation Details')
                     ->schema([
-                        Forms\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Forms\Components\TextInput::make('name')
                                     ->label('Name')
@@ -72,12 +73,12 @@ class NavigationResource extends Resource
                             ->default(true),
                     ]),
 
-                Forms\Components\Section::make('Navigation Items')
+                Section::make('Navigation Items')
                     ->schema([
                         Forms\Components\Repeater::make('items')
                             ->relationship()
                             ->schema([
-                                Forms\Components\Grid::make(3)
+                                Grid::make(3)
                                     ->schema([
                                         Forms\Components\TextInput::make('label')
                                             ->label('Label')
@@ -95,7 +96,7 @@ class NavigationResource extends Resource
                                             ->columnSpan(1),
                                     ]),
 
-                                Forms\Components\Grid::make(3)
+                                Grid::make(3)
                                     ->schema([
                                         Forms\Components\TextInput::make('anchor')
                                             ->label('Anker')
@@ -120,7 +121,7 @@ class NavigationResource extends Resource
                                             ->columnSpan(1),
                                     ]),
 
-                                Forms\Components\Grid::make(2)
+                                Grid::make(2)
                                     ->schema([
                                         Forms\Components\TextInput::make('css_class')
                                             ->label('CSS Klasse')
@@ -145,7 +146,7 @@ class NavigationResource extends Resource
                             ->reorderable('order')
                             ->orderColumn('order')
                             ->collapsible()
-                            ->itemLabel(fn(array $state): ?string => $state['label'] ?? null)
+                            ->itemLabel(fn (array $state): ?string => $state['label'] ?? null)
                             ->addActionLabel('Navigation Item hinzufügen'),
                     ]),
             ]);

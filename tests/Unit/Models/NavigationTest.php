@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Enums\NavigationType;
 use App\Models\Navigation;
 use App\Models\NavigationItem;
-use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
 use function Pest\Laravel\assertDatabaseHas;
 
 test('can create navigation with items', function (): void {
@@ -366,7 +366,7 @@ test('database rejects duplicate active navigation of the same type', function (
 
     expect(fn() => Navigation::factory()->header()->create([
         'is_active' => true,
-    ]))->toThrow(QueryException::class);
+    ]))->toThrow(ValidationException::class);
 });
 
 test('database allows inactive navigation with same type as active', function (): void {
@@ -391,4 +391,16 @@ test('database allows creating active navigation when previous one is soft delet
 
     expect($new->exists)->toBeTrue()
         ->and($new->id)->not->toBe($active->id);
+});
+
+test('direct model update to active fails when another active navigation of same type exists', function (): void {
+    Navigation::factory()->header()->create([
+        'is_active' => true,
+    ]);
+
+    $inactiveNavigation = Navigation::factory()->header()->inactive()->create();
+
+    expect(fn() => $inactiveNavigation->update([
+        'is_active' => true,
+    ]))->toThrow(ValidationException::class);
 });

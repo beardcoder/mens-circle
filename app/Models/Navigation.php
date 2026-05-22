@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Validation\ValidationException;
 
 class Navigation extends Model
 {
@@ -24,6 +25,27 @@ class Navigation extends Model
         'type',
         'is_active',
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(static function (self $navigation): void {
+            if (! $navigation->is_active) {
+                return;
+            }
+
+            $hasConflict = self::query()
+                ->where('type', $navigation->type)
+                ->where('is_active', true)
+                ->when($navigation->exists, fn($query) => $query->whereKeyNot($navigation->getKey()))
+                ->exists();
+
+            if ($hasConflict) {
+                throw ValidationException::withMessages([
+                    'type' => ['Only one active navigation per type is allowed.'],
+                ]);
+            }
+        });
+    }
 
     protected function casts(): array
     {
