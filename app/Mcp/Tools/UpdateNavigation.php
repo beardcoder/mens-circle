@@ -66,7 +66,7 @@ class UpdateNavigation extends Tool implements HasInput
 
                 if (isset($knownReferences[$itemReference])) {
                     throw ValidationException::withMessages([
-                        'items' => ["Duplicate item reference provided: {$itemReference}."],
+                        'items' => ['Duplicate item detected in the provided list.'],
                     ]);
                 }
 
@@ -156,6 +156,8 @@ class UpdateNavigation extends Tool implements HasInput
 
     /**
      * @param array{parent_id?: ?string, parent_temp_id?: ?string} $itemData
+     *
+     * parent_temp_id takes precedence over parent_id when both are provided.
      */
     private function resolveParentReference(array $itemData): ?string
     {

@@ -21,6 +21,8 @@ return new class extends Migration {
             $table->index(['type', 'is_active', 'deleted_at']);
         });
 
+        // SQLite supports partial unique indexes directly; this enforces one active non-deleted navigation per type.
+        // Other drivers fall back to application-level validation in write paths.
         if (Schema::getConnection()->getDriverName() === 'sqlite') {
             DB::statement('CREATE UNIQUE INDEX navigations_unique_active_type ON navigations (type) WHERE deleted_at IS NULL AND is_active = 1');
         }
