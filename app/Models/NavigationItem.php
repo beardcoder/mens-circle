@@ -103,6 +103,7 @@ class NavigationItem extends Model
 
     /**
      * Get data attributes as string for HTML output
+     * Validates and sanitizes attribute keys to prevent malicious input
      */
     public function getDataAttributesStringAttribute(): string
     {
@@ -112,7 +113,15 @@ class NavigationItem extends Model
 
         $attributes = [];
         foreach ($this->data_attributes as $key => $value) {
-            $attributes[] = sprintf('data-%s="%s"', e($key), e($value));
+            // Sanitize key: remove data- prefix if present, then validate format
+            $sanitizedKey = preg_replace('/^data-/', '', $key);
+
+            // Only allow safe characters: letters, numbers, underscores, dots, colons, hyphens
+            if (!preg_match('/^[a-zA-Z0-9_.:-]+$/', $sanitizedKey)) {
+                continue; // Skip invalid keys
+            }
+
+            $attributes[] = sprintf('data-%s="%s"', e($sanitizedKey), e($value));
         }
 
         return implode(' ', $attributes);

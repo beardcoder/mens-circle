@@ -35,6 +35,31 @@ class CreateNavigationItem extends Tool implements HasInput
     {
         $navigation = Navigation::findOrFail($input['navigation_id']);
 
+        // Validate parent_id if provided
+        if (!empty($input['parent_id'])) {
+            $parent = NavigationItem::find($input['parent_id']);
+
+            if (!$parent) {
+                return [
+                    'success' => false,
+                    'error' => "Parent item with ID '{$input['parent_id']}' not found",
+                ];
+            }
+
+            if ($parent->navigation_id !== $navigation->id) {
+                return [
+                    'success' => false,
+                    'error' => "Parent item belongs to a different navigation. Parent is in navigation '{$parent->navigation->name}', but you're trying to add to '{$navigation->name}'",
+                ];
+            }
+        }
+
+        // Validate and restrict target value
+        $target = $input['target'] ?? '_self';
+        if (!in_array($target, ['_self', '_blank', '_parent', '_top'])) {
+            $target = '_self';
+        }
+
         // Get the max order for proper positioning
         $maxOrder = $navigation->items()->max('order') ?? -1;
 
@@ -46,7 +71,7 @@ class CreateNavigationItem extends Tool implements HasInput
             'route_name' => $input['route_name'] ?? null,
             'route_params' => $input['route_params'] ?? null,
             'anchor' => $input['anchor'] ?? null,
-            'target' => $input['target'] ?? '_self',
+            'target' => $target,
             'order' => $maxOrder + 1,
             'is_active' => $input['is_active'] ?? true,
             'icon' => $input['icon'] ?? null,

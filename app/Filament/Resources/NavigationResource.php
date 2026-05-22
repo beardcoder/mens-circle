@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Validation\Rule;
 
 class NavigationResource extends Resource
 {
@@ -20,7 +21,7 @@ class NavigationResource extends Resource
 
     protected static string|Heroicon|null $navigationIcon = Heroicon::Bars3;
 
-    protected static ?string $navigationGroup = 'Inhalt';
+    protected static string|\UnitEnum|null $navigationGroup = 'Inhalt';
 
     protected static ?string $modelLabel = 'Navigation';
 
@@ -46,6 +47,18 @@ class NavigationResource extends Resource
                                     ->label('Typ')
                                     ->options(NavigationType::class)
                                     ->required()
+                                    ->rules([
+                                        fn (Forms\Get $get, ?Navigation $record): \Closure => function (string $attribute, $value, \Closure $fail) use ($get, $record) {
+                                            $existingNav = Navigation::where('type', $value)
+                                                ->where('is_active', true)
+                                                ->when($record, fn($query) => $query->where('id', '!=', $record->id))
+                                                ->first();
+
+                                            if ($existingNav) {
+                                                $fail("Eine aktive Navigation vom Typ '{$value}' existiert bereits: {$existingNav->name}");
+                                            }
+                                        },
+                                    ])
                                     ->columnSpan(1),
                             ]),
 
@@ -89,8 +102,11 @@ class NavigationResource extends Resource
                                             ->options([
                                                 '_self' => 'Gleiches Fenster',
                                                 '_blank' => 'Neues Fenster',
+                                                '_parent' => 'Eltern-Frame',
+                                                '_top' => 'Oberstes Frame',
                                             ])
                                             ->default('_self')
+                                            ->in(['_self', '_blank', '_parent', '_top'])
                                             ->columnSpan(1),
 
                                         Forms\Components\TextInput::make('icon')
