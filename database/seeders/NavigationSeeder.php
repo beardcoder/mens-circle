@@ -172,7 +172,7 @@ class NavigationSeeder extends Seeder
      */
     private function replaceNavigationItems(Navigation $navigation, array $items): void
     {
-        $navigation->items()->delete();
+        $navigation->items()->withTrashed()->forceDelete();
 
         foreach ($items as $item) {
             NavigationItem::create([

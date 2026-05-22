@@ -34,10 +34,6 @@ class Navigation extends Model
                 return;
             }
 
-            if ($navigation->exists && ! $navigation->isDirty(['type', 'is_active'])) {
-                return;
-            }
-
             $hasConflict = self::query()
                 ->where('type', $navigation->type)
                 ->where('is_active', true)
