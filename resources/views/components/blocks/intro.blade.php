@@ -2,9 +2,10 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? 'ueber';
 @endphp
 
-<section class="intro-section" id="ueber" aria-labelledby="intro-title">
+<section class="intro-section" id="{{ $anchor }}" aria-labelledby="intro-title">
   <div class="intro__layout">
     <div class="intro__left">
       @if (!empty($data['eyebrow']))

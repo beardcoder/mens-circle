@@ -20,6 +20,7 @@ use Override;
  * @property NavigationLocation $location
  * @property string $label
  * @property string $url
+ * @property ?string $anchor
  * @property ?NavigationCondition $condition
  * @property bool $open_in_new_tab
  * @property bool $is_cta
@@ -31,6 +32,7 @@ use Override;
     'location',
     'label',
     'url',
+    'anchor',
     'condition',
     'open_in_new_tab',
     'is_cta',

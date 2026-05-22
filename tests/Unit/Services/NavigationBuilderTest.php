@@ -70,6 +70,62 @@ class NavigationBuilderTest extends TestCase
     }
 
     #[Test]
+    public function it_appends_a_separate_anchor_to_the_resolved_url(): void
+    {
+        NavigationItem::factory()->header()->create([
+            'label' => 'Über uns',
+            'url' => '/atemuebung',
+            'anchor' => 'ueber',
+        ]);
+
+        $navigation = app(NavigationBuilder::class)->build(NavigationLocation::Header);
+
+        self::assertSame('/atemuebung#ueber', $navigation->children[0]->url);
+    }
+
+    #[Test]
+    public function it_appends_anchor_to_home_when_url_is_empty(): void
+    {
+        NavigationItem::factory()->header()->create([
+            'label' => 'Stimmen',
+            'url' => '',
+            'anchor' => 'stimmen',
+        ]);
+
+        $navigation = app(NavigationBuilder::class)->build(NavigationLocation::Header);
+
+        self::assertSame('/#stimmen', $navigation->children[0]->url);
+    }
+
+    #[Test]
+    public function it_replaces_an_existing_fragment_when_anchor_is_set(): void
+    {
+        NavigationItem::factory()->header()->create([
+            'label' => 'Über',
+            'url' => '#legacy',
+            'anchor' => 'ueber',
+        ]);
+
+        $navigation = app(NavigationBuilder::class)->build(NavigationLocation::Header);
+
+        self::assertSame(route('home') . '#ueber', $navigation->children[0]->url);
+    }
+
+    #[Test]
+    public function it_treats_empty_anchor_string_as_no_anchor(): void
+    {
+        NavigationItem::factory()->header()->create([
+            'label' => 'Atemübung',
+            'url' => '/atemuebung',
+            'anchor' => '',
+        ]);
+
+        $navigation = app(NavigationBuilder::class)->build(NavigationLocation::Header);
+
+        self::assertSame('/atemuebung', $navigation->children[0]->url);
+    }
+
+    #[Test]
     public function it_preserves_absolute_urls(): void
     {
         NavigationItem::factory()->footerPrimary()->create([

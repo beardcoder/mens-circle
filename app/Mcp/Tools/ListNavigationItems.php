@@ -47,6 +47,7 @@ class ListNavigationItems extends Tool
                 'location' => $item->location->value,
                 'label' => $item->label,
                 'url' => $item->url,
+                'anchor' => $item->anchor,
                 'condition' => $item->condition?->value,
                 'open_in_new_tab' => $item->open_in_new_tab,
                 'is_cta' => $item->is_cta,

@@ -2,6 +2,7 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? 'archetypen';
     $items = $data['items'] ?? [];
     $detectIcon = static function (array $item): string {
         $title = mb_strtolower((string) ($item['title'] ?? ''));
@@ -20,7 +21,7 @@
 @if (!empty($items) && is_array($items))
   <section
     class="section section--large archetypes-section"
-    id="archetypen"
+    id="{{ $anchor }}"
     aria-labelledby="archetypes-title"
   >
     <div class="container">

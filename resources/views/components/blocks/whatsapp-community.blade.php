@@ -1,4 +1,11 @@
-<section class="section whatsapp-section" id="whatsapp-community">
+@props (['block' => null])
+
+@php
+    $blockData = $block?->data ?? [];
+    $anchor = $blockData['anchor'] ?? 'whatsapp-community';
+@endphp
+
+<section class="section whatsapp-section" id="{{ $anchor }}">
   <div class="container">
     <div class="whatsapp__layout">
       <div class="whatsapp__content">

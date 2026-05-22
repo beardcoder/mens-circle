@@ -1,4 +1,12 @@
-@props (['testimonials'])
+@props ([
+    'testimonials',
+    'block' => null,
+])
+
+@php
+    $blockData = $block?->data ?? [];
+    $anchor = $blockData['anchor'] ?? 'stimmen';
+@endphp
 
 @push ('structured_data')
   <script type="application/ld+json">
@@ -31,7 +39,7 @@
 
 <section
   class="section section--large testimonials-section"
-  id="stimmen"
+  id="{{ $anchor }}"
   aria-labelledby="testimonials-title"
 >
   <div class="container">

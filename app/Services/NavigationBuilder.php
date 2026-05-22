@@ -73,11 +73,15 @@ final class NavigationBuilder
 
     private function resolveUrl(NavigationItem $item): ?string
     {
-        if ($item->condition === NavigationCondition::NextEvent) {
-            return $this->nextEventUrl();
+        $base = $item->condition === NavigationCondition::NextEvent
+            ? $this->nextEventUrl()
+            : $this->expandPlaceholders($item->url);
+
+        if ($base === null) {
+            return null;
         }
 
-        return $this->expandPlaceholders($item->url);
+        return $this->appendAnchor($base, $item->anchor);
     }
 
     private function expandPlaceholders(string $url): string
@@ -92,6 +96,23 @@ final class NavigationBuilder
         }
 
         return $url;
+    }
+
+    private function appendAnchor(string $url, ?string $anchor): string
+    {
+        if ($anchor === null || $anchor === '') {
+            return $url;
+        }
+
+        $fragment = '#' . ltrim($anchor, '#');
+
+        // If the URL already contains a fragment, replace it.
+        $hashPosition = strpos($url, '#');
+        if ($hashPosition !== false) {
+            return substr($url, 0, $hashPosition) . $fragment;
+        }
+
+        return $url . $fragment;
     }
 
     private function homeUrl(): string

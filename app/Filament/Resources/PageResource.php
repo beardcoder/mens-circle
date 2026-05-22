@@ -192,6 +192,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedSparkles)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(),
                 TextInput::make('label')->label('Label (klein)'),
                 self::titleTextarea(),
                 Textarea::make('description')->label('Beschreibung')->rows(3),
@@ -211,6 +212,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedFlag)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(),
                 self::eyebrowField(),
                 self::titleTextarea(),
                 Textarea::make('lead')->label('Lead-Text')->rows(3)->helperText('Kurzer Einleitungstext unter dem Titel.'),
@@ -231,6 +233,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedInformationCircle)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(default: 'ueber'),
                 self::eyebrowField(),
                 self::titleTextarea(),
                 Textarea::make('text')->label('Text')->rows(3),
@@ -246,6 +249,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedDocumentText)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(),
                 self::eyebrowField(),
                 TextInput::make('title')->label('Titel')->required(),
                 RichEditor::make('content')->label('Inhalt')->required(),
@@ -259,6 +263,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedRectangleStack)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(),
                 self::eyebrowField(),
                 TextInput::make('title')->label('Titel'),
                 self::numberTitleDescriptionRepeater('items', 'Werte'),
@@ -272,6 +277,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedRectangleStack)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(default: 'archetypen'),
                 self::eyebrowField(),
                 TextInput::make('title')->label('Titel')->required(),
                 Textarea::make('intro')->label('Intro Text')->rows(2),
@@ -286,6 +292,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedUserCircle)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(default: 'moderator'),
                 self::eyebrowField(),
                 Textarea::make('name')->label('Name (HTML erlaubt für <span class="light">)')->required()->rows(2),
                 RichEditor::make('bio')->label('Biografie')->required(),
@@ -301,6 +308,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedMap)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(default: 'reise'),
                 self::eyebrowField(),
                 self::titleTextarea(required: false),
                 Textarea::make('subtitle')->label('Untertitel')->rows(2),
@@ -315,6 +323,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedChatBubbleLeftRight)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(default: 'stimmen'),
                 TextEntry::make('testimonials_info')
                     ->label('Automatische Anzeige')
                     ->state(
@@ -330,6 +339,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedQuestionMarkCircle)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(default: 'faq'),
                 self::eyebrowField(),
                 self::titleTextarea(required: false),
                 Textarea::make('intro')->label('Intro Text')->rows(2),
@@ -351,6 +361,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedEnvelope)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(default: 'newsletter'),
                 self::eyebrowField(),
                 self::titleTextarea(),
                 Textarea::make('text')->label('Text')->rows(2),
@@ -364,6 +375,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedCursorArrowRipple)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(),
                 self::eyebrowField(),
                 self::titleTextarea(),
                 Textarea::make('text')->label('Text')->rows(2),
@@ -378,6 +390,7 @@ class PageResource extends Resource
             ->icon(Heroicon::OutlinedDevicePhoneMobile)
             ->schema([
                 self::blockIdField(),
+                self::anchorField(default: 'whatsapp-community'),
                 TextEntry::make('whatsapp_info')
                     ->label('Automatische Anzeige')
                     ->state(
@@ -389,6 +402,43 @@ class PageResource extends Resource
     private static function blockIdField(): Hidden
     {
         return Hidden::make('block_id')->default(static fn(): string => (string) Str::uuid());
+    }
+
+    /**
+     * Optional anchor used as the rendered section id and target for
+     * NavigationItem links. Stored inside the block's data array.
+     */
+    private static function anchorField(?string $default = null): TextInput
+    {
+        $field = TextInput::make('anchor')
+            ->label('Anker (ID)')
+            ->maxLength(255)
+            ->placeholder('ueber, faq, stimmen, ...')
+            ->dehydrateStateUsing(static fn(?string $state): ?string => self::normaliseAnchor($state))
+            ->helperText(
+                'Optionaler Anker für die Sektion. Wird als id-Attribut gesetzt und kann in der Navigation verlinkt werden. Ohne führendes "#" eingeben.',
+            );
+
+        return $default === null ? $field : $field->default($default);
+    }
+
+    /**
+     * Normalise anchor input: strip whitespace, leading "#" and slugify
+     * to a safe HTML id. Returns null for empty values.
+     */
+    private static function normaliseAnchor(?string $state): ?string
+    {
+        if ($state === null) {
+            return null;
+        }
+
+        $value = ltrim(trim($state), '#');
+
+        if ($value === '') {
+            return null;
+        }
+
+        return Str::slug($value);
     }
 
     private static function eyebrowField(): TextInput

@@ -2,11 +2,12 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? 'newsletter';
 @endphp
 
 <section
   class="section newsletter-section"
-  id="newsletter"
+  id="{{ $anchor }}"
   aria-labelledby="newsletter-title"
 >
   <div class="container">

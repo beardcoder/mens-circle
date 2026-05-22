@@ -2,9 +2,10 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? Str::slug($data['title'] ?? '');
 @endphp
 
-<section class="section" id="{{ Str::slug($data['title'] ?? '') }}">
+<section class="section" @if ($anchor) id="{{ $anchor }}" @endif>
   <div class="container--narrow container">
     <div class="section-header section-header--start">
       @if (!empty($data['eyebrow']))

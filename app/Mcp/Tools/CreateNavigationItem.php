@@ -16,7 +16,7 @@ use Laravel\Mcp\Server\Tool;
 use Override;
 
 #[Description(
-    'Create a new navigation item in the given location. URL accepts absolute URLs, internal paths ("/atemuebung") or anchors that expand to the home page (e.g. "#ueber"). Use condition="next_event" together with an empty url to render a dynamic link to the next upcoming event.',
+    'Create a new navigation item in the given location. URL accepts absolute URLs or internal paths ("/atemuebung"). Use the separate "anchor" field to link to a content block anchor (e.g. anchor="ueber" appends "#ueber" to the resolved URL). Use condition="next_event" together with an empty url to render a dynamic link to the next upcoming event.',
 )]
 class CreateNavigationItem extends Tool
 {
@@ -29,6 +29,7 @@ class CreateNavigationItem extends Tool
             'location' => ['required', 'string', 'in:' . $locationValues],
             'label' => ['required', 'string', 'max:255'],
             'url' => ['nullable', 'string', 'max:2048'],
+            'anchor' => ['nullable', 'string', 'max:255'],
             'condition' => ['nullable', 'string', 'in:' . $conditionValues],
             'open_in_new_tab' => ['nullable', 'boolean'],
             'is_cta' => ['nullable', 'boolean'],
@@ -41,7 +42,7 @@ class CreateNavigationItem extends Tool
             return Response::error('Invalid input: ' . $validator->errors()->toJson());
         }
 
-        /** @var array{location: string, label: string, url?: ?string, condition?: ?string, open_in_new_tab?: ?bool, is_cta?: ?bool, is_visible?: ?bool, umami_event_target?: ?string, sort?: ?int} $data */
+        /** @var array{location: string, label: string, url?: ?string, anchor?: ?string, condition?: ?string, open_in_new_tab?: ?bool, is_cta?: ?bool, is_visible?: ?bool, umami_event_target?: ?string, sort?: ?int} $data */
         $data = $validator->validated();
 
         $condition = ($data['condition'] ?? '') !== '' ? NavigationCondition::from((string) $data['condition']) : null;
@@ -50,6 +51,7 @@ class CreateNavigationItem extends Tool
             'location' => NavigationLocation::from($data['location']),
             'label' => $data['label'],
             'url' => $data['url'] ?? '',
+            'anchor' => self::normaliseAnchor($data['anchor'] ?? null),
             'condition' => $condition,
             'open_in_new_tab' => $data['open_in_new_tab'] ?? false,
             'is_cta' => $data['is_cta'] ?? false,
@@ -63,6 +65,7 @@ class CreateNavigationItem extends Tool
             'location' => $item->location->value,
             'label' => $item->label,
             'url' => $item->url,
+            'anchor' => $item->anchor,
             'condition' => $item->condition?->value,
             'sort' => $item->sort,
         ]);
@@ -83,7 +86,12 @@ class CreateNavigationItem extends Tool
             'label' => $schema->string()->description('Visible link text (max 255 chars).')->required(),
             'url' => $schema
                 ->string()
-                ->description('Target URL/path/anchor (max 2048 chars). Leave empty when using condition="next_event".'),
+                ->description('Target URL/path (max 2048 chars). Leave empty for the home page or when using condition="next_event".'),
+            'anchor' => $schema
+                ->string()
+                ->description(
+                    'Optional anchor name without leading "#" (max 255 chars). Appended to the resolved URL as fragment, e.g. anchor="ueber" => "/#ueber" or "/atemuebung#ueber". Must match the anchor set on a content block to scroll to it.',
+                ),
             'condition' => $schema
                 ->string()
                 ->description('Optional dynamic condition. Allowed: next_event. Empty string clears the condition.'),
@@ -99,5 +107,19 @@ class CreateNavigationItem extends Tool
         ];
 
         return $properties;
+    }
+
+    /**
+     * Strip whitespace and any leading "#" from an anchor value.
+     */
+    private static function normaliseAnchor(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $normalised = ltrim(trim($value), '#');
+
+        return $normalised === '' ? null : $normalised;
     }
 }
