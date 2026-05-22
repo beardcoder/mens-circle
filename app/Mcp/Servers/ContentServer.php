@@ -30,7 +30,9 @@ use Laravel\Mcp\Server\Attributes\Version;
     blocks; each block has a type (e.g. hero, intro, faq, cta) and a free-form
     data object. Use get-page first to inspect the current shape of a page
     before calling update-page-content — update-page-content REPLACES the full
-    block list, so blocks you omit will be removed.
+    block list, so blocks you omit will be removed. Set data["anchor"] on a
+    block (e.g. "ueber") to expose it as a navigation target — the slug is
+    rendered as the section id and matches NavigationItem.anchor.
 
     Events have a date, time window (start/end), location, capacity and an
     optional cost notice. Drafts are created with is_published=false. Once an
@@ -38,11 +40,13 @@ use Laravel\Mcp\Server\Attributes\Version;
 
     Navigation items power the header and footer menus. Each item belongs to
     exactly one location: header, footer_primary, footer_contact or
-    footer_legal. URLs may be absolute, an internal path ("/atemuebung") or a
-    fragment ("#ueber") that expands to the home page. Use condition=next_event
-    for items that should link to the next upcoming event and hide themselves
-    when no event is scheduled. The navigation is intentionally flat (no
-    nesting); use ReorderNavigationItems to change the order within a location.
+    footer_legal. URLs may be absolute or an internal path ("/atemuebung");
+    leave empty for the home page. The separate "anchor" field is appended as
+    a fragment (e.g. url="/atemuebung", anchor="ueber" => "/atemuebung#ueber").
+    Use condition=next_event for items that should link to the next upcoming
+    event and hide themselves when no event is scheduled. The navigation is
+    intentionally flat (no nesting); use ReorderNavigationItems to change the
+    order within a location.
 
     German is the user-facing language: prefer German text for titles,
     descriptions and CTAs unless the user asks otherwise.

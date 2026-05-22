@@ -29,6 +29,7 @@ class NavigationItemFactory extends Factory
             'location' => NavigationLocation::Header,
             'label' => $faker->words(2, true),
             'url' => '/' . $faker->slug(),
+            'anchor' => null,
             'condition' => null,
             'open_in_new_tab' => false,
             'is_cta' => false,

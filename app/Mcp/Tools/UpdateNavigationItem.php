@@ -15,7 +15,9 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 use Override;
 
-#[Description('Update a navigation item by id. Only provided fields are changed. Pass condition="" (empty string) to clear the condition.')]
+#[Description(
+    'Update a navigation item by id. Only provided fields are changed. Pass condition="" (empty string) to clear the condition. Pass anchor="" (empty string) to clear the anchor.',
+)]
 class UpdateNavigationItem extends Tool
 {
     public function handle(Request $request): Response
@@ -28,6 +30,7 @@ class UpdateNavigationItem extends Tool
             'location' => ['sometimes', 'string', 'in:' . implode(',', $locationValues)],
             'label' => ['sometimes', 'string', 'max:255'],
             'url' => ['sometimes', 'nullable', 'string', 'max:2048'],
+            'anchor' => ['sometimes', 'nullable', 'string', 'max:255'],
             'condition' => ['sometimes', 'nullable', 'string', 'in:,' . implode(',', $conditionValues)],
             'open_in_new_tab' => ['sometimes', 'boolean'],
             'is_cta' => ['sometimes', 'boolean'],
@@ -58,6 +61,10 @@ class UpdateNavigationItem extends Tool
 
         if (array_key_exists('url', $data)) {
             $item->url = (string) ($data['url'] ?? '');
+        }
+
+        if (array_key_exists('anchor', $data)) {
+            $item->anchor = self::normaliseAnchor($data['anchor']);
         }
 
         if (array_key_exists('condition', $data)) {
@@ -94,7 +101,12 @@ class UpdateNavigationItem extends Tool
             'id' => $schema->integer()->description('ID of the navigation item to update.')->required(),
             'location' => $schema->string()->description('Navigation area: header, footer_primary, footer_contact, footer_legal.'),
             'label' => $schema->string()->description('Visible link text (max 255 chars).'),
-            'url' => $schema->string()->description('Target URL/path/anchor (max 2048 chars).'),
+            'url' => $schema->string()->description('Target URL/path (max 2048 chars). Empty for home page.'),
+            'anchor' => $schema
+                ->string()
+                ->description(
+                    'Anchor name without leading "#" (max 255 chars). Appended to the URL as fragment. Empty string clears the anchor.',
+                ),
             'condition' => $schema->string()->description('Dynamic condition (allowed: next_event) or empty string to clear.'),
             'open_in_new_tab' => $schema->boolean()->description('Open link in new tab.'),
             'is_cta' => $schema->boolean()->description('Render as primary CTA button.'),
@@ -102,5 +114,19 @@ class UpdateNavigationItem extends Tool
             'umami_event_target' => $schema->string()->description('Value for data-umami-event-target (max 255 chars).'),
             'sort' => $schema->integer()->description('Sort order within the location (must be >= 0).'),
         ];
+    }
+
+    /**
+     * Strip whitespace and any leading "#" from an anchor value.
+     */
+    private static function normaliseAnchor(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $normalised = ltrim(trim($value), '#');
+
+        return $normalised === '' ? null : $normalised;
     }
 }

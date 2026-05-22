@@ -13,11 +13,11 @@
       @break
     @case ('testimonials')
       @if ($testimonials && $testimonials->isNotEmpty())
-        <x-blocks.testimonials :testimonials="$testimonials" />
+        <x-blocks.testimonials :testimonials="$testimonials" :block="$block" />
       @endif
       @break
     @case ('whatsapp_community')
-      <x-blocks.whatsapp-community />
+      <x-blocks.whatsapp-community :block="$block" />
       @break
     @default
       @php

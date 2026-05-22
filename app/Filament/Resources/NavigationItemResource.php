@@ -25,6 +25,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 use Override;
 use UnitEnum;
 
@@ -62,12 +63,19 @@ class NavigationItemResource extends Resource
                     TextInput::make('label')->label('Beschriftung')->required()->maxLength(255),
 
                     TextInput::make('url')
-                        ->label('URL / Pfad / Anker')
+                        ->label('URL / Pfad')
                         ->maxLength(2048)
-                        ->placeholder('/atemuebung, #ueber oder https://...')
+                        ->placeholder('/atemuebung oder https://...')
                         ->helperText(
-                            'Beginnt mit "#": Anker auf der Startseite (z.B. "#ueber"). Beginnt mit "/": interner Pfad. Sonst absolute URL. Bei Bedingung "Nächster Termin" wird die URL automatisch gesetzt.',
+                            'Beginnt mit "/": interner Pfad. Sonst absolute URL. Leer lassen für die Startseite. Bei Bedingung "Nächster Termin" wird die URL automatisch gesetzt.',
                         ),
+
+                    TextInput::make('anchor')
+                        ->label('Anker')
+                        ->maxLength(255)
+                        ->placeholder('ueber, stimmen, faq, ...')
+                        ->dehydrateStateUsing(static fn(?string $state): ?string => self::normaliseAnchor($state))
+                        ->helperText('Optionaler Anker (z.B. "ueber"). Wird an die URL angehängt: /pfad#anker. Ohne führendes "#" eingeben.'),
 
                     Select::make('condition')
                         ->label('Bedingung')
@@ -107,6 +115,7 @@ class NavigationItemResource extends Resource
                 TextColumn::make('location')->label('Bereich')->badge()->sortable(),
                 TextColumn::make('label')->label('Beschriftung')->searchable()->sortable(),
                 TextColumn::make('url')->label('URL')->limit(40)->toggleable(),
+                TextColumn::make('anchor')->label('Anker')->badge()->toggleable(),
                 TextColumn::make('condition')->label('Bedingung')->badge()->toggleable(),
                 IconColumn::make('is_cta')->label('CTA')->boolean()->sortable()->toggleable(),
                 IconColumn::make('is_visible')->label('Sichtbar')->boolean()->sortable(),
@@ -123,6 +132,25 @@ class NavigationItemResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
+    }
+
+    /**
+     * Normalise anchor input: strip whitespace, a leading "#" and slugify
+     * to match the slug-cased anchors written by PageResource.
+     */
+    private static function normaliseAnchor(?string $state): ?string
+    {
+        if ($state === null) {
+            return null;
+        }
+
+        $value = ltrim(trim($state), '#');
+
+        if ($value === '') {
+            return null;
+        }
+
+        return Str::slug($value);
     }
 
     #[Override]

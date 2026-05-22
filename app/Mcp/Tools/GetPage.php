@@ -13,7 +13,9 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tool;
 use Override;
 
-#[Description('Fetch a single CMS page by slug, including title, SEO meta and ordered content blocks (with block_id, type, data).')]
+#[Description(
+    'Fetch a single CMS page by slug, including title, SEO meta and ordered content blocks (with block_id, type, data). Block anchors live inside data["anchor"] and can be linked from NavigationItem.anchor.',
+)]
 class GetPage extends Tool
 {
     public function handle(Request $request): Response
@@ -38,6 +40,7 @@ class GetPage extends Tool
                 'block_id' => $block->block_id,
                 'type' => $block->type,
                 'order' => $block->order,
+                'anchor' => $block->data['anchor'] ?? null,
                 'data' => $block->data,
             ])->all(),
         ]);

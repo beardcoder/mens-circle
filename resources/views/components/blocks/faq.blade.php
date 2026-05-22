@@ -2,6 +2,7 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? 'faq';
     $faqItems = $data['items'] ?? [];
 @endphp
 
@@ -22,7 +23,7 @@
   @endpush
 @endif
 
-<section class="section section--large faq-section" id="faq">
+<section class="section section--large faq-section" id="{{ $anchor }}">
   <div class="container">
     <div class="section-header section-header--start faq__header">
       @if (!empty($data['eyebrow']))

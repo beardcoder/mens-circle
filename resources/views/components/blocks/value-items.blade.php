@@ -2,9 +2,10 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? null;
 @endphp
 
-<section class="section values-section">
+<section class="section values-section" @if ($anchor) id="{{ $anchor }}" @endif>
   <div class="container">
     <div class="section-header">
       @if (!empty($data['eyebrow']))

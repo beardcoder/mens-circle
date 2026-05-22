@@ -2,6 +2,7 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? 'reise';
     $steps = $data['steps'] ?? [];
 @endphp
 
@@ -30,7 +31,7 @@
 
 <section
   class="section section--large journey-section"
-  id="reise"
+  id="{{ $anchor }}"
   aria-labelledby="journey-title"
 >
   <div class="container">

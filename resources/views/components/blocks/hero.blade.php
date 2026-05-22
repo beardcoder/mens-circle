@@ -5,6 +5,7 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? null;
     $media = $block->getFieldMedia('background_image');
 
     if ($media) {
@@ -12,7 +13,7 @@
     }
 @endphp
 
-<section class="hero">
+<section class="hero" @if ($anchor) id="{{ $anchor }}" @endif>
   <div class="hero__bg">
     @if ($media)
       {{ $media->img()->attributes([

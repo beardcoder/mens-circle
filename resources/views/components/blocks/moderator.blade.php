@@ -5,6 +5,7 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? 'moderator';
     $media = $block->getFieldMedia('photo');
 
     if ($media) {
@@ -12,7 +13,7 @@
     }
 @endphp
 
-<section class="section moderator-section" id="moderator">
+<section class="section moderator-section" id="{{ $anchor }}">
   <div class="container">
     <div class="moderator__layout">
       <div class="moderator__photo-wrapper">

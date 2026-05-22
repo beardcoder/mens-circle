@@ -5,6 +5,7 @@
 
 @php
     $data = $block->data;
+    $anchor = $data['anchor'] ?? null;
     $media = $block->getFieldMedia('image');
     $align = ($data['align'] ?? 'center') === 'left' ? 'left' : 'center';
     $hasImage = $media !== null;
@@ -24,6 +25,7 @@
 
 <section
   class="page-hero page-hero--{{ $align }} @if ($hasImage) page-hero--with-image @endif"
+  @if ($anchor) id="{{ $anchor }}" @endif
 >
   <div class="page-hero__ornaments" aria-hidden="true">
     <span class="page-hero__ornament page-hero__ornament--1"></span>
