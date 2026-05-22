@@ -31,6 +31,7 @@
           id="nav"
           :class="{ open: isNavOpen }"
           :aria-expanded="isNavOpen"
+          style="--nav-count: {{ count($headerNavigation?->children ?? []) }}"
         >
           @foreach (($headerNavigation?->children ?? []) as $section)
             @php
@@ -44,12 +45,14 @@
             <a
               href="{{ $section->url }}"
               class="{{ $linkClass }}"
+              style="--nav-i: {{ $loop->index }}"
               @click="closeNavImmediate()"
               @if ($openInNewTab) target="_blank" rel="noopener noreferrer" @endif
               data-umami-event="{{ $umamiEvent }}"
               @if ($isCta) data-umami-event-location="header" @endif
               @if ($umamiTarget) data-umami-event-target="{{ $umamiTarget }}" @endif
-              >{{ $section->title }}</a
+            >
+              {{ $section->title }}</a
             >
           @endforeach
         </nav>
@@ -120,7 +123,8 @@
                   @if ($openInNewTab) target="_blank" rel="noopener noreferrer" @endif
                   data-umami-event="footer-link"
                   @if ($umamiTarget) data-umami-event-target="{{ $umamiTarget }}" @endif
-                  >{{ $section->title }}</a
+                >
+                  {{ $section->title }}</a
                 >
               </li>
             @endforeach
@@ -162,7 +166,8 @@
                   @if ($openInNewTab) target="_blank" rel="noopener noreferrer" @endif
                   data-umami-event="footer-link"
                   @if ($umamiTarget) data-umami-event-target="{{ $umamiTarget }}" @endif
-                  >{{ $section->title }}</a
+                >
+                  {{ $section->title }}</a
                 >
               </li>
             @endforeach
@@ -186,7 +191,8 @@
               @if ($openInNewTab) target="_blank" rel="noopener noreferrer" @endif
               data-umami-event="footer-link"
               @if ($umamiTarget) data-umami-event-target="{{ $umamiTarget }}" @endif
-              >{{ $section->title }}</a
+            >
+              {{ $section->title }}</a
             >
           @endforeach
         </div>

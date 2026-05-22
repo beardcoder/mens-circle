@@ -21,6 +21,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -167,6 +168,7 @@ class PageResource extends Resource
             })
             ->blocks([
                 self::heroBlock(),
+                self::pageHeroBlock(),
                 self::introBlock(),
                 self::textSectionBlock(),
                 self::valueItemsBlock(),
@@ -195,6 +197,30 @@ class PageResource extends Resource
                 Textarea::make('description')->label('Beschreibung')->rows(3),
                 ...self::buttonFields(),
                 self::blockImageUpload('background_image', 'Hintergrundbild'),
+            ]);
+    }
+
+    /**
+     * Compact hero variant for subpages: H1, optional eyebrow, optional
+     * lead paragraph, optional accent image and optional CTA button.
+     */
+    private static function pageHeroBlock(): Block
+    {
+        return Block::make('page_hero')
+            ->label('Unterseiten-Hero')
+            ->icon(Heroicon::OutlinedFlag)
+            ->schema([
+                self::blockIdField(),
+                self::eyebrowField(),
+                self::titleTextarea(),
+                Textarea::make('lead')->label('Lead-Text')->rows(3)->helperText('Kurzer Einleitungstext unter dem Titel.'),
+                Select::make('align')
+                    ->label('Ausrichtung')
+                    ->options(['center' => 'Zentriert', 'left' => 'Links'])
+                    ->default('center')
+                    ->native(false),
+                ...self::buttonFields(),
+                self::blockImageUpload('image', 'Bild (optional)'),
             ]);
     }
 

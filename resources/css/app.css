@@ -46,6 +46,7 @@
 @import url('components/_modal.css') layer(components);
 @import url('components/_toast.css') layer(components);
 @import url('sections/_hero.css') layer(sections);
+@import url('sections/_page-hero.css') layer(sections);
 @import url('sections/_intro.css') layer(sections);
 @import url('sections/_moderator.css') layer(sections);
 @import url('sections/_journey.css') layer(sections);

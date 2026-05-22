@@ -17,10 +17,7 @@
         @endif
 
         @if (!empty($data['title']))
-          <h2
-            class="section-title newsletter__title"
-            id="newsletter-title"
-          >
+          <h2 class="section-title newsletter__title" id="newsletter-title">
             {!! $data['title'] !!}
           </h2>
         @endif

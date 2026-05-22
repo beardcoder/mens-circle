@@ -65,7 +65,7 @@ class UpdatePageContent extends Tool
                     'type' => $schema
                         ->string()
                         ->description(
-                            'Block type. One of: hero, intro, text_section, value_items, archetypes, moderator, journey_steps, testimonials, faq, newsletter, cta, whatsapp_community.',
+                            'Block type. One of: hero, page_hero, intro, text_section, value_items, archetypes, moderator, journey_steps, testimonials, faq, newsletter, cta, whatsapp_community.',
                         )
                         ->required(),
                     'block_id' => $schema->string()->description('Optional UUID preserved across edits; auto-generated when omitted.'),

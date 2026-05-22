@@ -52,10 +52,7 @@
           @endphp
           @if ($button->shouldShow)
             <div class="hero__cta">
-              <a
-                href="{{ $button->href }}"
-                class="btn btn--primary btn--large"
-              >
+              <a href="{{ $button->href }}" class="btn btn--primary btn--large">
                 {{ $data['button_text'] }}
               </a>
               <span class="hero__scroll" aria-hidden="true">Entdecken</span>
