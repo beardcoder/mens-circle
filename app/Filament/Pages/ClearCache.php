@@ -8,15 +8,26 @@ use BackedEnum;
 use Closure;
 use Exception;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
-class ClearCache extends Page
+class ClearCache extends Page implements HasActions, HasForms
 {
+    use InteractsWithActions;
+    use InteractsWithForms;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Bolt;
 
     protected string $view = 'filament.pages.clear-cache';
@@ -27,39 +38,77 @@ class ClearCache extends Page
 
     protected static ?int $navigationSort = 100;
 
-    /**
-     * @return array<int, array{label: string, value: string, hint: string, color: string}>
-     */
-    public function getStatusItems(): array
+    public function mount(): void
+    {
+        $this->form->fill();
+    }
+
+    public function form(Schema $schema): Schema
     {
         $isResponseCacheEnabled = Config::boolean('responsecache.enabled', true);
         $lifetimeSeconds = Config::integer('responsecache.cache.lifetime_in_seconds', 604_800);
 
+        return $schema->components([
+            Section::make('Cache-Status')
+                ->columns(4)
+                ->schema([
+                    TextEntry::make('response_cache')
+                        ->label('Response-Cache')
+                        ->hint('Gecachte HTTP-Antworten')
+                        ->state($isResponseCacheEnabled ? 'Aktiv' : 'Deaktiviert')
+                        ->badge()
+                        ->color($isResponseCacheEnabled ? 'success' : 'gray'),
+
+                    TextEntry::make('lifetime')
+                        ->label('Cache-Lebensdauer')
+                        ->hint('Max. TTL für Response-Cache')
+                        ->state($this->formatDuration($lifetimeSeconds))
+                        ->badge()
+                        ->color('info'),
+
+                    TextEntry::make('cache_driver')
+                        ->label('Cache-Treiber')
+                        ->hint('Response-Cache Speicher')
+                        ->state(Config::string('responsecache.cache.store', 'file'))
+                        ->badge()
+                        ->color('gray'),
+
+                    TextEntry::make('app_cache')
+                        ->label('App-Cache')
+                        ->hint('Allgemeiner Cache-Treiber')
+                        ->state(Config::string('cache.default', 'file'))
+                        ->badge()
+                        ->color('gray'),
+                ]),
+        ]);
+    }
+
+    protected function getHeaderActions(): array
+    {
         return [
-            [
-                'label' => 'Response-Cache',
-                'value' => $isResponseCacheEnabled ? 'Aktiv' : 'Deaktiviert',
-                'hint' => 'Cached HTTP-Antworten',
-                'color' => $isResponseCacheEnabled ? 'success' : 'gray',
-            ],
-            [
-                'label' => 'Lebensdauer',
-                'value' => $this->formatDuration($lifetimeSeconds),
-                'hint' => 'Maximaler Response-Cache',
-                'color' => 'info',
-            ],
-            [
-                'label' => 'Cache-Treiber',
-                'value' => Config::string('responsecache.cache.store', 'file'),
-                'hint' => 'Speicher für Antworten',
-                'color' => 'info',
-            ],
-            [
-                'label' => 'App-Cache',
-                'value' => Config::string('cache.default', 'file'),
-                'hint' => 'Allgemeiner Anwendungs-Cache',
-                'color' => 'info',
-            ],
+            $this->clearResponseCacheAction(),
+
+            ActionGroup::make([
+                $this->clearApplicationCacheAction(),
+                $this->clearConfigCacheAction(),
+                $this->clearRouteCacheAction(),
+                $this->clearViewCacheAction(),
+            ])
+                ->label('System-Caches')
+                ->icon(Heroicon::Cog6Tooth)
+                ->button()
+                ->color('gray'),
+
+            ActionGroup::make([
+                $this->optimizeAction(),
+                $this->clearOptimizationAction(),
+            ])
+                ->label('Optimierung')
+                ->icon(Heroicon::RocketLaunch)
+                ->button()
+                ->color('success'),
+
+            $this->clearAllAction(),
         ];
     }
 
@@ -84,7 +133,7 @@ class ClearCache extends Page
             name: 'clearApplicationCache',
             label: 'Anwendungs-Cache leeren',
             icon: Heroicon::CircleStack,
-            color: 'primary',
+            color: 'gray',
             modalHeading: 'Anwendungs-Cache leeren?',
             modalDescription: 'Löscht den allgemeinen Anwendungs-Cache (cache:clear).',
             successTitle: 'Anwendungs-Cache geleert',
