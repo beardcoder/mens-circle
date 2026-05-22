@@ -8,6 +8,7 @@ use App\Enums\NavigationType;
 use App\Traits\ClearsResponseCache;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,7 +37,7 @@ class Navigation extends Model
             $hasConflict = self::query()
                 ->where('type', $navigation->type)
                 ->where('is_active', true)
-                ->when($navigation->exists, fn($query) => $query->whereKeyNot($navigation->getKey()))
+                ->when($navigation->exists, fn (Builder $query) => $query->whereKeyNot($navigation->getKey()))
                 ->exists();
 
             if ($hasConflict) {
