@@ -5,59 +5,23 @@
 @source '../../../../resources/views/filament/**/*';
 
 /* ── Typography ───────────────────────────────────────────────────────────────
-   Use the same DM Sans Variable the frontend uses, so the admin panel
-   reads as part of the same brand family.
+   DM Sans Variable — same font as the public-facing site so the admin
+   reads as part of the same brand family. The @theme block overrides
+   Tailwind v4's --font-sans token, which Filament uses for all UI text.
    ──────────────────────────────────────────────────────────────────────────── */
 @theme {
     --font-sans: 'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+    /* Slightly tighter corners than Tailwind defaults — more structured,
+       less "bubbly". Filament uses xl/2xl on cards, modals, and dropdowns. */
+    --radius-xl: 0.625rem;
+    --radius-2xl: 0.75rem;
+    --radius-3xl: 1rem;
 }
 
-/* ── Sidebar ──────────────────────────────────────────────────────────────────
-   Light: clean white with a warm sand border.
-   Dark:  deep earth tone to match the frontend's dark-bg palette.
-   ──────────────────────────────────────────────────────────────────────────── */
-.fi-sidebar {
-    border-inline-end-color: oklch(90% 0.01 75deg);
-}
-
-.dark .fi-sidebar {
-    background-color: oklch(16% 0.028 68deg);
-    border-inline-end-color: oklch(24% 0.034 68deg);
-}
-
-/* ── Top bar ──────────────────────────────────────────────────────────────────
-   Dark mode: match the sidebar depth so the chrome feels unified.
-   ──────────────────────────────────────────────────────────────────────────── */
-.dark .fi-topbar {
-    background-color: oklch(16% 0.028 68deg);
-    border-block-end-color: oklch(24% 0.034 68deg);
-}
-
-/* ── Focus ring ───────────────────────────────────────────────────────────────
-   Use the terracotta primary instead of the default blue/indigo ring.
-   ──────────────────────────────────────────────────────────────────────────── */
-*:focus-visible {
-    outline-color: rgb(var(--primary-500) / 0.65);
-}
-
-/* ── Tables ───────────────────────────────────────────────────────────────────
-   Slightly warmer stripped rows; tighter column header weight.
+/* ── Table headers ────────────────────────────────────────────────────────────
+   Loosen tracking on column headers so they read as labels, not body copy.
    ──────────────────────────────────────────────────────────────────────────── */
 .fi-ta-header-cell {
-    letter-spacing: 0.01em;
-}
-
-/* ── Inputs ───────────────────────────────────────────────────────────────────
-   Bump the placeholder opacity a touch so it reads clearly in both modes.
-   ──────────────────────────────────────────────────────────────────────────── */
-.fi-input::placeholder {
-    opacity: 0.5;
-}
-
-/* ── Branding ─────────────────────────────────────────────────────────────────
-   Slightly more generous line-height on the brand name so it doesn't crowd
-   the adjacent icons.
-   ──────────────────────────────────────────────────────────────────────────── */
-.fi-logo {
-    line-height: 1.3;
+    letter-spacing: 0.025em;
 }
