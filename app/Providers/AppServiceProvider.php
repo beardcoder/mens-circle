@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Enums\NavigationLocation;
 use App\Models\Event;
 use App\Seo\Schemas\LocalBusinessSchema;
 use App\Seo\Schemas\OrganizationSchema;
 use App\Seo\Schemas\WebSiteSchema;
+use App\Services\NavigationBuilder;
 use App\Settings\GeneralSettings;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Support\Facades\View;
@@ -72,6 +74,26 @@ class AppServiceProvider extends ServiceProvider
                 $view->with([
                     'hasNextEvent' => false,
                     'nextEventUrl' => route('event.show'),
+                ]);
+            }
+        });
+
+        View::composer(['layouts.app', 'errors.404'], static function (ViewContract $view): void {
+            try {
+                $builder = app(NavigationBuilder::class);
+
+                $view->with([
+                    'headerNavigation' => $builder->build(NavigationLocation::Header),
+                    'footerPrimaryNavigation' => $builder->build(NavigationLocation::FooterPrimary),
+                    'footerContactNavigation' => $builder->build(NavigationLocation::FooterContact),
+                    'footerLegalNavigation' => $builder->build(NavigationLocation::FooterLegal),
+                ]);
+            } catch (Throwable) {
+                $view->with([
+                    'headerNavigation' => null,
+                    'footerPrimaryNavigation' => null,
+                    'footerContactNavigation' => null,
+                    'footerLegalNavigation' => null,
                 ]);
             }
         });
