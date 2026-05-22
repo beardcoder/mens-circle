@@ -48,36 +48,31 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('40px')
             ->renderHook('panels::auth.login.form.after', static fn(): Factory|View => view('filament.components.auth.socialite.github'))
             ->colors([
-                // Terracotta — matches --color-terracotta from the frontend design system
                 'primary' => [
-                    50 => '248 236 228',
-                    100 => '241 218 200',
-                    200 => '226 183 155',
-                    300 => '208 143 102',
-                    400 => '200 120 65',
-                    500 => '192 98 42',
-                    600 => '160 78 30',
-                    700 => '128 61 22',
-                    800 => '100 47 17',
-                    900 => '76 35 12',
-                    950 => '48 22 8',
+                    50  => '#f8ece4',
+                    100 => '#f1dac8',
+                    200 => '#e2b79b',
+                    300 => '#d08f66',
+                    400 => '#c87841',
+                    500 => '#c0622a',
+                    600 => '#a04e1e',
+                    700 => '#803d16',
+                    800 => '#642f11',
+                    900 => '#4c230c',
+                    950 => '#301608',
                 ],
-                // Warm gray — subtle earthy undertone so panel chrome (sidebar, topbar,
-                // tables, inputs) reads as warm-neutral in both light and dark mode.
-                // Filament wires this to every bg-gray-* / text-gray-* / border-gray-*
-                // utility, so text contrast is always correct without CSS overrides.
                 'gray' => [
-                    50 => '250 249 247',
-                    100 => '244 242 238',
-                    200 => '232 229 222',
-                    300 => '212 208 200',
-                    400 => '161 155 146',
-                    500 => '113 108 99',
-                    600 => '82 77 69',
-                    700 => '63 58 51',
-                    800 => '44 41 35',
-                    900 => '30 28 23',
-                    950 => '18 17 12',
+                    50  => '#faf9f7',
+                    100 => '#f4f2ee',
+                    200 => '#e8e5de',
+                    300 => '#d4d0c8',
+                    400 => '#a19b92',
+                    500 => '#716c63',
+                    600 => '#524d45',
+                    700 => '#3f3a33',
+                    800 => '#2c2923',
+                    900 => '#1e1c17',
+                    950 => '#12110c',
                 ],
             ])
             ->renderHook(PanelsRenderHook::TOPBAR_END, static fn(): Factory|View => view('filament.components.go-to-website'))
