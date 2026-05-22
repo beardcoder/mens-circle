@@ -190,6 +190,9 @@ class DatabaseSeeder extends Seeder
         // Create legal pages
         $this->call(PageSeeder::class);
 
+        // Seed default navigation items
+        $this->call(NavigationItemSeeder::class);
+
         // Create sample event
         Event::create([
             'title' => 'Männerkreis Niederbayern/ Straubing – Januar 2025',

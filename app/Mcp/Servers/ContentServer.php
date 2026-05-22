@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace App\Mcp\Servers;
 
 use App\Mcp\Tools\CreateEvent;
+use App\Mcp\Tools\CreateNavigationItem;
+use App\Mcp\Tools\DeleteNavigationItem;
 use App\Mcp\Tools\GetPage;
 use App\Mcp\Tools\ListEvents;
+use App\Mcp\Tools\ListNavigationItems;
 use App\Mcp\Tools\ListPages;
 use App\Mcp\Tools\PublishPage;
+use App\Mcp\Tools\ReorderNavigationItems;
 use App\Mcp\Tools\UpdateEvent;
+use App\Mcp\Tools\UpdateNavigationItem;
 use App\Mcp\Tools\UpdatePageContent;
 use Laravel\Mcp\Server;
 use Laravel\Mcp\Server\Attributes\Instructions;
@@ -31,6 +36,14 @@ use Laravel\Mcp\Server\Attributes\Version;
     optional cost notice. Drafts are created with is_published=false. Once an
     event date passes, it appears in past-event listings automatically.
 
+    Navigation items power the header and footer menus. Each item belongs to
+    exactly one location: header, footer_primary, footer_contact or
+    footer_legal. URLs may be absolute, an internal path ("/atemuebung") or a
+    fragment ("#ueber") that expands to the home page. Use condition=next_event
+    for items that should link to the next upcoming event and hide themselves
+    when no event is scheduled. The navigation is intentionally flat (no
+    nesting); use ReorderNavigationItems to change the order within a location.
+
     German is the user-facing language: prefer German text for titles,
     descriptions and CTAs unless the user asks otherwise.
     TXT)]
@@ -47,6 +60,11 @@ class ContentServer extends Server
         ListEvents::class,
         CreateEvent::class,
         UpdateEvent::class,
+        ListNavigationItems::class,
+        CreateNavigationItem::class,
+        UpdateNavigationItem::class,
+        DeleteNavigationItem::class,
+        ReorderNavigationItems::class,
     ];
 
     /**
