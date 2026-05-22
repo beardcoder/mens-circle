@@ -36,14 +36,14 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Run PHP-CS-Fixer (check only)
+      - name: Run Mago Format (check only)
         run: composer format:check
 
-      - name: Run PHPStan (Level 9)
+      - name: Run Mago Lint
         run: composer lint
 
-      - name: Run Rector (check only)
-        run: composer rector:check
+      - name: Run Mago Analyze
+        run: composer analyze
 
   javascript-checks:
     name: JavaScript Code Quality
