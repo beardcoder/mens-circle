@@ -8,9 +8,6 @@ use App\Models\NavigationItem;
 use Database\Seeders\NavigationSeeder;
 
 test('navigation seeder is idempotent', function (): void {
-    NavigationItem::query()->withTrashed()->forceDelete();
-    Navigation::query()->withTrashed()->forceDelete();
-
     $seeder = new NavigationSeeder();
     $seeder->run();
     $seeder->run();
