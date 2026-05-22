@@ -26,15 +26,10 @@
           @foreach ($data['values'] as $value)
             <div class="value-item">
               @if (!empty($value['number']))
-                <span
-                  class="value-item__number"
-                  >{{ $value['number'] }}</span
-                >
+                <span class="value-item__number">{{ $value['number'] }}</span>
               @endif
               @if (!empty($value['title']))
-                <h3 class="value-item__title">
-                  {{ $value['title'] }}
-                </h3>
+                <h3 class="value-item__title">{{ $value['title'] }}</h3>
               @endif
               @if (!empty($value['description']))
                 <p class="value-item__description">{{ $value['description'] }}</p>

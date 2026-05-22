@@ -53,9 +53,7 @@
 
             <div class="archetype-card__content">
               @if (!empty($item['title']))
-                <h3 class="archetype-card__title">
-                  {{ $item['title'] }}
-                </h3>
+                <h3 class="archetype-card__title">{{ $item['title'] }}</h3>
               @endif
 
               @if (!empty($item['description']))

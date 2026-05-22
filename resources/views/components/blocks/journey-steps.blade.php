@@ -59,9 +59,7 @@
             @endif
 
             @if (!empty($step['title']))
-              <h3 class="journey__step-title">
-                {{ $step['title'] }}
-              </h3>
+              <h3 class="journey__step-title">{{ $step['title'] }}</h3>
             @endif
 
             @if (!empty($step['description']))

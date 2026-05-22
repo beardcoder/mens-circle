@@ -74,7 +74,6 @@
   border: none;
   transition: color var(--motion-quick);
 
-
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       color: var(--_accent);
@@ -185,6 +184,5 @@
     text-decoration: underline;
     text-underline-offset: 3px;
     transition: color var(--motion-quick);
-
   }
 }

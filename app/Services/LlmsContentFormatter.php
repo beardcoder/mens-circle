@@ -26,6 +26,7 @@ final readonly class LlmsContentFormatter
 
         return match ($block->type) {
             'hero' => $this->formatHeroBlock($data),
+            'page_hero' => $this->formatPageHeroBlock($data),
             'text_section' => $this->formatTextSectionBlock($data),
             'intro' => $this->formatIntroBlock($data),
             'value_items', 'archetypes', 'journey_steps' => $this->formatItemsBlock($data),
@@ -105,6 +106,20 @@ final readonly class LlmsContentFormatter
         $lines = $this->appendEyebrow([], $data, 'label');
         $lines = $this->appendHeading($lines, $data, 'title');
         $lines = $this->appendParagraph($lines, $data, 'description');
+
+        return $this->appendLinkAction($lines, $data, 'button_text', 'button_link', 'Call-to-Action');
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<int, string>
+     */
+    private function formatPageHeroBlock(array $data): array
+    {
+        $lines = $this->appendEyebrow([], $data, 'eyebrow');
+        $lines = $this->appendHeading($lines, $data, 'title');
+        $lines = $this->appendParagraph($lines, $data, 'lead');
 
         return $this->appendLinkAction($lines, $data, 'button_text', 'button_link', 'Call-to-Action');
     }
