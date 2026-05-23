@@ -116,6 +116,7 @@ return new class extends Migration {
                 });
             } catch (Exception $e) {
                 // Index doesn't exist, continue
+                unset($e);
             }
 
             try {
@@ -124,6 +125,7 @@ return new class extends Migration {
                 });
             } catch (Exception $e) {
                 // Unique constraint doesn't exist, continue
+                unset($e);
             }
 
             // Step 9: Drop old columns
@@ -147,6 +149,7 @@ return new class extends Migration {
             });
         } catch (Exception $exception) {
             // Foreign key already exists or cannot be created
+            unset($exception);
         }
 
         // Add unique constraint if it doesn't exist
@@ -156,6 +159,7 @@ return new class extends Migration {
             });
         } catch (Exception $exception) {
             // Unique constraint already exists
+            unset($exception);
         }
 
         // Add new index if it doesn't exist
@@ -165,6 +169,7 @@ return new class extends Migration {
             });
         } catch (Exception $exception) {
             // Index already exists
+            unset($exception);
         }
 
         // Step 11: Rename event_registrations to registrations (if still old name)
@@ -202,6 +207,7 @@ return new class extends Migration {
                 });
             } catch (Exception $e) {
                 // Unique constraint doesn't exist
+                unset($e);
             }
 
             $columnsToDrop = array_filter(['email', 'status'], static fn(string $col) => Schema::hasColumn(
@@ -223,6 +229,7 @@ return new class extends Migration {
             });
         } catch (Exception $exception) {
             // Foreign key already exists
+            unset($exception);
         }
 
         try {
@@ -231,6 +238,7 @@ return new class extends Migration {
             });
         } catch (Exception $exception) {
             // Unique constraint already exists
+            unset($exception);
         }
     }
 

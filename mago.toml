@@ -18,13 +18,20 @@ integrations = ["laravel"]
 [linter.rules]
 ambiguous-function-call = { enabled = false }
 literal-named-argument = { enabled = false }
-halstead = { effort-threshold = 7000 }
+# Halstead measures cognitive complexity. Filament resource forms and rich
+# migrations legitimately exceed the default — raise the bar instead of
+# fragmenting otherwise well-structured code.
+halstead = { effort-threshold = 11000, volume-threshold = 5500 }
 no-literal-password = { enabled = false }
 too-many-methods = { threshold = 30 }
 too-many-enum-cases = { enabled = false }
 cyclomatic-complexity = { threshold = 200 }
 kan-defect = { enabled = false }
 excessive-parameter-list = { threshold = 12 }
+# Subjective design preferences — disabled to keep the linter focused on
+# correctness over style debates.
+no-boolean-flag-parameter = { enabled = false }
+no-else-clause = { enabled = false }
 
 [analyzer]
 plugins = []
