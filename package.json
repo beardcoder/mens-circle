@@ -2,7 +2,6 @@
   "name": "mens-circle",
   "$schema": "https://www.schemastore.org/package.json",
   "dependencies": {
-    "@alpinejs/collapse": "^3.15.12",
     "@tailwindcss/vite": "^4.3.0",
     "alpinejs": "^3.15.12",
     "leaflet": "^1.9.4",

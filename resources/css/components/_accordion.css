@@ -1,16 +1,27 @@
 /**
- * Accordion Component
+ * Accordion Component — native <details>/<summary>
  *
- * Alpine.js + @alpinejs/collapse pattern:
- *   <div class="accordion-item" :class="{ 'open': active }">
- *     <button class="accordion-item__trigger" @click="...">
+ * Uses the platform: each item is a `<details class="accordion-item">` and
+ * the trigger is `<summary class="accordion-item__trigger">`. Browsers
+ * give us keyboard navigation, ARIA semantics, find-in-page (Chrome 122+)
+ * and screen-reader announcement for free.
+ *
+ * Smooth height animation uses the modern `interpolate-size: allow-keywords`
+ * (enabled globally on :root in _variables.css) combined with
+ * `transition-behavior: allow-discrete` on the content. Browsers without
+ * those features fall back to the native snap behaviour — still works,
+ * still accessible.
+ *
+ *   <details class="accordion-item" name="faq">
+ *     <summary class="accordion-item__trigger">
  *       <span>Question</span>
  *       <span class="accordion-item__icon" aria-hidden="true"></span>
- *     </button>
- *     <div class="accordion-item__content" x-show="active" x-collapse>
- *       <div class="accordion-item__body">Answer</div>
- *     </div>
- *   </div>
+ *     </summary>
+ *     <div class="accordion-item__body">Answer</div>
+ *   </details>
+ *
+ * Sharing the same `name` attribute across siblings turns the accordion
+ * into an exclusive group — only one open at a time, free of JS.
  */
 
 .accordion-item {
@@ -46,14 +57,14 @@
       transform var(--motion-standard);
   }
 
-  &.open::before {
+  &[open]::before {
     opacity: 1;
     transform: scaleY(1);
   }
 }
 
 /* ============================================
-   Trigger (button)
+   Trigger — <summary>
    ============================================ */
 .accordion-item__trigger {
   display: flex;
@@ -73,6 +84,17 @@
   background: none;
   border: none;
   transition: color var(--motion-quick);
+
+  /* Hide the default disclosure triangle — we render our own glyph */
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::marker {
+    content: '';
+  }
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
@@ -133,7 +155,7 @@
   }
 }
 
-.accordion-item.open {
+.accordion-item[open] {
   background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
   border-block-end-color: color-mix(
     in oklch,
@@ -161,12 +183,34 @@
 }
 
 /* ============================================
-   Content — height managed by x-collapse
+   Smooth height transition — modern browsers only.
+   Chrome 131+, Safari 18.2+. Older browsers snap, which is fine.
    ============================================ */
-.accordion-item__content {
-  overflow: hidden;
+@supports (interpolate-size: allow-keywords) {
+  .accordion-item {
+    interpolate-size: allow-keywords;
+  }
+
+  .accordion-item::details-content {
+    block-size: 0;
+    overflow: clip;
+    opacity: 0;
+    transition:
+      block-size var(--duration-normal) var(--ease-settle),
+      opacity var(--duration-normal) var(--ease-settle),
+      content-visibility var(--duration-normal) var(--ease-settle)
+        allow-discrete;
+  }
+
+  .accordion-item[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
 }
 
+/* ============================================
+   Body
+   ============================================ */
 .accordion-item__body {
   padding-block: var(--space-md);
   padding-inline: var(--space-md);

@@ -40,35 +40,24 @@
     </div>
 
     @if (!empty($faqItems) && is_array($faqItems))
-      <div class="faq__list" x-data="{ activeId: null }">
+      <div class="faq__list">
         @foreach ($faqItems as $index => $item)
           @if (!empty($item['question']) && !empty($item['answer']))
-            <div
+            <details
               class="accordion-item"
-              :class="{ 'open': activeId === {{ $index }} }"
+              name="{{ $anchor }}"
+              id="faq-item-{{ $index }}"
             >
-              <button
+              <summary
                 class="accordion-item__trigger"
-                type="button"
-                @click="activeId = activeId === {{ $index }} ? null : {{ $index }}"
-                :aria-expanded="activeId === {{ $index }}"
-                aria-controls="faq-item-{{ $index }}"
                 data-umami-event="faq-expand"
                 data-umami-event-question="{{ Str::limit($item['question'], 50) }}"
               >
                 <span>{{ $item['question'] }}</span>
                 <span class="accordion-item__icon" aria-hidden="true"></span>
-              </button>
-
-              <div
-                id="faq-item-{{ $index }}"
-                class="accordion-item__content"
-                x-show="activeId === {{ $index }}"
-                x-collapse
-              >
-                <div class="accordion-item__body">{!! $item['answer'] !!}</div>
-              </div>
-            </div>
+              </summary>
+              <div class="accordion-item__body">{!! $item['answer'] !!}</div>
+            </details>
           @endif
         @endforeach
       </div>

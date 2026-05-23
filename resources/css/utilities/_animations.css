@@ -36,7 +36,7 @@
     background-color var(--motion-quick);
 }
 
-.scroll-to-top.visible {
+.scroll-to-top--visible {
   pointer-events: auto;
   opacity: 1;
   transform: translateY(0);

@@ -8,9 +8,8 @@
 
 import './types';
 import Alpine from 'alpinejs';
-import collapse from '@alpinejs/collapse';
 
-import { scrollToTop, siteHeader } from '@/components/navigation';
+import { siteHeader } from '@/components/navigation';
 import {
   newsletterForm,
   registrationForm,
@@ -19,12 +18,10 @@ import {
 import { calendarIntegration } from '@/components/calendar';
 import { eventMap } from '@/components/event-map';
 import { breathingApp } from '@/components/breathing';
+import { setupScrollToTop } from '@/components/scroll-to-top';
 import { initUmamiKit } from '@/utils/umami-kit';
 
-Alpine.plugin(collapse);
-
 Alpine.data('siteHeader', siteHeader);
-Alpine.data('scrollToTop', scrollToTop);
 Alpine.data('newsletterForm', newsletterForm);
 Alpine.data('registrationForm', registrationForm);
 Alpine.data('testimonialForm', testimonialForm);
@@ -33,6 +30,9 @@ Alpine.data('eventMap', eventMap);
 Alpine.data('breathingApp', breathingApp);
 
 Alpine.start();
+
+// Wire DOM-only enhancements that don't need Alpine.
+setupScrollToTop();
 
 // Analytics: defer until the document is ready so the tracker never blocks
 // first paint or competes with critical JS during page-load.

@@ -202,14 +202,10 @@
 
   <!-- Scroll to Top Button -->
   <button
+    type="button"
     class="scroll-to-top"
-    id="scrollToTop"
-    x-data="scrollToTop"
-    x-show="isVisible"
-    @click="scrollUp()"
     aria-label="Nach oben scrollen"
     title="Nach oben"
-    style="display: none"
   >
     <svg
       viewBox="0 0 24 24"
