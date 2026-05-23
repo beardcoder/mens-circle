@@ -20,6 +20,7 @@ class PageFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         $faker = FakerFactory::create();
@@ -37,7 +38,7 @@ class PageFactory extends Factory
 
     public function published(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'is_published' => true,
             'published_at' => now(),
         ]);
@@ -45,7 +46,7 @@ class PageFactory extends Factory
 
     public function unpublished(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'is_published' => false,
             'published_at' => null,
         ]);

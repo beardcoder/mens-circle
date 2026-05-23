@@ -8,6 +8,7 @@ use Filament\Auth\Pages\Login as BasePage;
 
 final class Login extends BasePage
 {
+    #[\Override]
     public function mount(): void
     {
         parent::mount();

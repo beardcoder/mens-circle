@@ -39,6 +39,7 @@ class NewsletterResource extends Resource
 
     protected static ?int $navigationSort = 60;
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -51,6 +52,7 @@ class NewsletterResource extends Resource
         ]);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return $table
@@ -71,11 +73,13 @@ class NewsletterResource extends Resource
             ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [

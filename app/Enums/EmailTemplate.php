@@ -12,6 +12,7 @@ enum EmailTemplate: string implements HasLabel
     case NewsletterEventReminder = 'newsletter_event_reminder';
     case ParticipantPreEvent = 'participant_pre_event';
 
+    #[\Override]
     public function getLabel(): string
     {
         return match ($this) {

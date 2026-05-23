@@ -21,6 +21,7 @@ class NewsletterSubscriptionFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         return [
@@ -34,28 +35,28 @@ class NewsletterSubscriptionFactory extends Factory
 
     public function forParticipant(Participant $participant): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'participant_id' => $participant->id,
         ]);
     }
 
     public function unconfirmed(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'confirmed_at' => null,
         ]);
     }
 
     public function unsubscribed(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'unsubscribed_at' => now(),
         ]);
     }
 
     public function active(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'confirmed_at' => now(),
             'unsubscribed_at' => null,
         ]);

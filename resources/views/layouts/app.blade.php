@@ -8,12 +8,7 @@
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
   <!-- Header -->
-  <header
-    class="header"
-    id="header"
-    x-data="siteHeader"
-    :class="{ scrolled: isScrolled, 'header--on-hero': isOnHero }"
-  >
+  <header class="header" id="header" data-component="site-header">
     <div class="container">
       <div class="header__inner">
         <a
@@ -29,8 +24,7 @@
         <nav
           class="nav"
           id="nav"
-          :class="{ open: isNavOpen }"
-          :aria-expanded="isNavOpen"
+          aria-expanded="false"
           style="--nav-count: {{ count($headerNavigation?->children ?? []) }}"
         >
           @foreach (($headerNavigation?->children ?? []) as $section)
@@ -46,7 +40,6 @@
               href="{{ $section->url }}"
               class="{{ $linkClass }}"
               style="--nav-i: {{ $loop->index }}"
-              @click="closeNavImmediate()"
               @if ($openInNewTab) target="_blank" rel="noopener noreferrer" @endif
               data-umami-event="{{ $umamiEvent }}"
               @if ($isCta) data-umami-event-location="header" @endif
@@ -60,11 +53,9 @@
         <button
           class="nav-toggle"
           id="navToggle"
-          @click="toggleNav()"
-          :class="{ active: isNavOpen }"
-          :aria-expanded="isNavOpen"
-          :aria-label="isNavOpen ? 'Menü schließen' : 'Menü öffnen'"
           type="button"
+          aria-expanded="false"
+          aria-label="Menü öffnen"
         >
           <span></span>
           <span></span>

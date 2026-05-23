@@ -56,6 +56,7 @@ class PageResource extends Resource
 
     protected static ?int $navigationSort = 40;
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -70,6 +71,7 @@ class PageResource extends Resource
         ]);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return $table
@@ -100,11 +102,13 @@ class PageResource extends Resource
             ]);
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [
@@ -114,6 +118,7 @@ class PageResource extends Resource
         ];
     }
 
+    #[\Override]
     public static function getRecordRouteBindingEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
@@ -414,7 +419,7 @@ class PageResource extends Resource
             ->label('Anker (ID)')
             ->maxLength(255)
             ->placeholder('ueber, faq, stimmen, ...')
-            ->dehydrateStateUsing(static fn(?string $state): ?string => self::normaliseAnchor($state))
+            ->dehydrateStateUsing(self::normaliseAnchor(...))
             ->helperText(
                 'Optionaler Anker für die Sektion. Wird als id-Attribut gesetzt und kann in der Navigation verlinkt werden. Ohne führendes "#" eingeben.',
             );

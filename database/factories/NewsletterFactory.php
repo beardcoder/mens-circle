@@ -20,11 +20,12 @@ class NewsletterFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         return [
-            'subject' => $this->faker->sentence(),
-            'content' => $this->faker->paragraphs(3, true),
+            'subject' => fake()->sentence(),
+            'content' => fake()->paragraphs(3, true),
             'status' => NewsletterStatus::Draft,
             'sent_at' => null,
             'recipient_count' => null,
@@ -33,7 +34,7 @@ class NewsletterFactory extends Factory
 
     public function draft(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'status' => NewsletterStatus::Draft,
             'sent_at' => null,
             'recipient_count' => null,
@@ -42,7 +43,7 @@ class NewsletterFactory extends Factory
 
     public function sending(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'status' => NewsletterStatus::Sending,
             'sent_at' => null,
             'recipient_count' => null,
@@ -51,10 +52,10 @@ class NewsletterFactory extends Factory
 
     public function sent(): static
     {
-        return $this->state(fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'status' => NewsletterStatus::Sent,
             'sent_at' => now(),
-            'recipient_count' => $this->faker->numberBetween(10, 100),
+            'recipient_count' => fake()->numberBetween(10, 100),
         ]);
     }
 }

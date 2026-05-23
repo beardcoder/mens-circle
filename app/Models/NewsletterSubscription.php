@@ -37,8 +37,8 @@ class NewsletterSubscription extends Model
     protected static function booted(): void
     {
         static::creating(static function (self $subscription): void {
-            $subscription->token ??= Str::random(64);
-            $subscription->subscribed_at ??= now();
+            $subscription->token;
+            $subscription->subscribed_at;
         });
     }
 

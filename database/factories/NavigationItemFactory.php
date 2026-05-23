@@ -41,31 +41,31 @@ class NavigationItemFactory extends Factory
 
     public function header(): static
     {
-        return $this->state(fn(): array => ['location' => NavigationLocation::Header]);
+        return $this->state(static fn(): array => ['location' => NavigationLocation::Header]);
     }
 
     public function footerPrimary(): static
     {
-        return $this->state(fn(): array => ['location' => NavigationLocation::FooterPrimary]);
+        return $this->state(static fn(): array => ['location' => NavigationLocation::FooterPrimary]);
     }
 
     public function footerContact(): static
     {
-        return $this->state(fn(): array => ['location' => NavigationLocation::FooterContact]);
+        return $this->state(static fn(): array => ['location' => NavigationLocation::FooterContact]);
     }
 
     public function footerLegal(): static
     {
-        return $this->state(fn(): array => ['location' => NavigationLocation::FooterLegal]);
+        return $this->state(static fn(): array => ['location' => NavigationLocation::FooterLegal]);
     }
 
     public function cta(): static
     {
-        return $this->state(fn(): array => ['is_cta' => true]);
+        return $this->state(static fn(): array => ['is_cta' => true]);
     }
 
     public function hidden(): static
     {
-        return $this->state(fn(): array => ['is_visible' => false]);
+        return $this->state(static fn(): array => ['is_visible' => false]);
     }
 }

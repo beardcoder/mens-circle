@@ -45,7 +45,7 @@ final class EventRegistrationConfirmed extends Notification implements ShouldQue
         )); // @phpstan-ignore method.notFound
     }
 
-    public function toSevenIo(object $notifiable): SevenIoMessage
+    public function toSevenIo(object $_notifiable): SevenIoMessage
     {
         $eventDate = $this->event->event_date->format('d.m.Y');
         $eventTime = $this->event->start_time->format('H:i');

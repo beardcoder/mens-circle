@@ -78,7 +78,7 @@ class CreateNavigationItem extends Tool
     public function schema(JsonSchema $schema): array
     {
         /** @var array<string, JsonSchema> $properties */
-        $properties = [
+        return [
             'location' => $schema
                 ->string()
                 ->description('Navigation area: header, footer_primary, footer_contact, footer_legal.')
@@ -105,8 +105,6 @@ class CreateNavigationItem extends Tool
                 ->integer()
                 ->description('Sort order within the location (lower numbers come first, must be >= 0). Defaults to 0.'),
         ];
-
-        return $properties;
     }
 
     /**

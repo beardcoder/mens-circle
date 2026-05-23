@@ -74,8 +74,10 @@ class NavigationItemResource extends Resource
                         ->label('Anker')
                         ->maxLength(255)
                         ->placeholder('ueber, stimmen, faq, ...')
-                        ->dehydrateStateUsing(static fn(?string $state): ?string => self::normaliseAnchor($state))
-                        ->helperText('Optionaler Anker (z.B. "ueber"). Wird an die URL angehängt: /pfad#anker. Ohne führendes "#" eingeben.'),
+                        ->dehydrateStateUsing(self::normaliseAnchor(...))
+                        ->helperText(
+                            'Optionaler Anker (z.B. "ueber"). Wird an die URL angehängt: /pfad#anker. Ohne führendes "#" eingeben.',
+                        ),
 
                     Select::make('condition')
                         ->label('Bedingung')

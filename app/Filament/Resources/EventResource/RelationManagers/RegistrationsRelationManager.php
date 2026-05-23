@@ -32,6 +32,7 @@ class RegistrationsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'participant.email';
 
+    #[\Override]
     public function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -79,6 +80,7 @@ class RegistrationsRelationManager extends RelationManager
         ]);
     }
 
+    #[\Override]
     public function table(Table $table): Table
     {
         return $table

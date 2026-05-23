@@ -56,6 +56,7 @@ class EventResource extends Resource
 
     protected static ?int $navigationSort = 10;
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -68,7 +69,7 @@ class EventResource extends Resource
                         ->maxLength(255)
                         ->placeholder('z.B. Männerabend im Januar')
                         ->live(onBlur: true)
-                        ->afterStateUpdated(static fn($state, Set $set): mixed => $set('slug', null)),
+                        ->afterStateUpdated(static fn($_state, Set $set): mixed => $set('slug', null)),
                     TextInput::make('slug')
                         ->label('URL-Slug')
                         ->maxLength(255)
@@ -234,6 +235,7 @@ class EventResource extends Resource
         ]);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return $table
@@ -351,11 +353,13 @@ class EventResource extends Resource
             ->successRedirectUrl(static fn(Event $replica): string => EventResource::getUrl('edit', ['record' => $replica]));
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [RegistrationsRelationManager::class];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [
@@ -365,6 +369,7 @@ class EventResource extends Resource
         ];
     }
 
+    #[\Override]
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);

@@ -43,7 +43,7 @@ final readonly class RegisterForEvent
 
     private function createOrRestoreRegistration(Event $event, Participant $participant, bool $isWaitlist): Registration
     {
-        $existing = Registration::withTrashed()->where('event_id', $event->id)->where('participant_id', $participant->id)->first();
+        $existing = Registration::query()->withTrashed()->where('event_id', $event->id)->where('participant_id', $participant->id)->first();
 
         if ($existing && !$existing->trashed()) {
             throw new RuntimeException(

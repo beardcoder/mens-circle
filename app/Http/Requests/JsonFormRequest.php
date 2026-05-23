@@ -15,6 +15,7 @@ abstract class JsonFormRequest extends FormRequest
         return true;
     }
 
+    #[\Override]
     protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(response()->json([

@@ -16,6 +16,7 @@ class CreatePage extends CreateRecord
     /**
      * Save ContentBlocks after Page creation
      */
+    #[\Override]
     protected function handleRecordCreation(array $data): Model
     {
         /** @var array<int, array<string, mixed>> $contentBlocksData */

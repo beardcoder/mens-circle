@@ -25,6 +25,7 @@ final class NewsletterSubscriptionRequest extends JsonFormRequest
      *
      * @return array<string, string>
      */
+    #[\Override]
     public function messages(): array
     {
         return [

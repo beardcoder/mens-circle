@@ -16,11 +16,13 @@ class UpcomingEventRegistrations extends TableWidget
 
     protected int|string|array $columnSpan = 'full';
 
+    #[\Override]
     public static function canView(): bool
     {
         return Event::published()->upcoming()->has('activeRegistrations')->exists();
     }
 
+    #[\Override]
     public function table(Table $table): Table
     {
         $nextEvent = Event::nextEvent();

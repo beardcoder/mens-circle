@@ -57,12 +57,12 @@ class Participant extends Model
         return Attribute::make(get: fn(): string => trim("{$this->first_name} {$this->last_name}"));
     }
 
-    public function routeNotificationForMail(Notification $notification): string
+    public function routeNotificationForMail(Notification $_notification): string
     {
         return $this->email;
     }
 
-    public function routeNotificationForSevenIo(Notification $notification): ?string
+    public function routeNotificationForSevenIo(Notification $_notification): ?string
     {
         return $this->phone;
     }

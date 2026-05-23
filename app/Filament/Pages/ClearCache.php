@@ -83,6 +83,7 @@ class ClearCache extends Page implements HasActions, HasForms
         ]);
     }
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [

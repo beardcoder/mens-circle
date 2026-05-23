@@ -36,6 +36,7 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 100;
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -72,6 +73,7 @@ class UserResource extends Resource
         ]);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return $table->columns([
@@ -90,11 +92,13 @@ class UserResource extends Resource
         ])->defaultSort('created_at', 'desc');
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [

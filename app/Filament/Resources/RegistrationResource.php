@@ -45,6 +45,7 @@ class RegistrationResource extends Resource
 
     protected static ?int $navigationSort = 20;
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -104,6 +105,7 @@ class RegistrationResource extends Resource
         ]);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return $table
@@ -161,11 +163,13 @@ class RegistrationResource extends Resource
             ->defaultSort('event.event_date', 'desc');
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [

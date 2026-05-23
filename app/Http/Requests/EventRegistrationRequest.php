@@ -31,6 +31,7 @@ final class EventRegistrationRequest extends JsonFormRequest
      *
      * @return array<string, string>
      */
+    #[\Override]
     public function messages(): array
     {
         return [

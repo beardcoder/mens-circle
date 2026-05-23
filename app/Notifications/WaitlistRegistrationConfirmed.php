@@ -24,7 +24,7 @@ final class WaitlistRegistrationConfirmed extends Notification implements Should
     /**
      * @return array<int, string>
      */
-    public function via(object $notifiable): array
+    public function via(object $_notifiable): array
     {
         return ['mail'];
     }

@@ -14,6 +14,7 @@ enum RegistrationStatus: string implements HasColor, HasLabel
     case Cancelled = 'cancelled';
     case Attended = 'attended';
 
+    #[\Override]
     public function getLabel(): string
     {
         return match ($this) {
@@ -24,6 +25,7 @@ enum RegistrationStatus: string implements HasColor, HasLabel
         };
     }
 
+    #[\Override]
     public function getColor(): string
     {
         return match ($this) {

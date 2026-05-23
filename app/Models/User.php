@@ -50,7 +50,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         ];
     }
 
-    public function routeNotificationForPushover(mixed $notification): PushoverReceiver
+    public function routeNotificationForPushover(mixed $_notification): PushoverReceiver
     {
         /** @var string $userKey */
         $userKey = config('services.pushover.user_key');
