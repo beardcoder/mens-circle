@@ -1,8 +1,13 @@
 /**
  * Calendar Integration Alpine Component
+ *
+ * Generates a local ICS blob URL plus a Google Calendar deep link so the
+ * "Add to calendar" modal can offer both options without a network round
+ * trip. Tracks user choice via Umami.
  */
 
 import type { EventData } from '@/types';
+import type { AlpineMagics } from '@/types/alpine';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 
 function formatICSDate(date: string, time: string): string {
@@ -17,27 +22,29 @@ function formatICSDate(date: string, time: string): string {
 function generateICS(event: EventData): string {
   const start = formatICSDate(event.startDate, event.startTime);
   const end = formatICSDate(event.endDate, event.endTime);
-  const now = formatICSDate(
+  const stamp = formatICSDate(
     new Date().toISOString().slice(0, 10),
     new Date().toISOString().slice(11, 16)
   );
 
-  return `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Männerkreis Niederbayern/ Straubing//DE
-CALSCALE:GREGORIAN
-METHOD:PUBLISH
-BEGIN:VEVENT
-DTSTART:${start}
-DTEND:${end}
-DTSTAMP:${now}
-UID:${Date.now()}@maennerkreis-straubing.de
-SUMMARY:${event.title}
-DESCRIPTION:${event.description.replace(/\n/g, '\\n')}
-LOCATION:${event.location}
-STATUS:CONFIRMED
-END:VEVENT
-END:VCALENDAR`;
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Männerkreis Niederbayern/ Straubing//DE',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `DTSTART:${start}`,
+    `DTEND:${end}`,
+    `DTSTAMP:${stamp}`,
+    `UID:${Date.now()}@maennerkreis-straubing.de`,
+    `SUMMARY:${event.title}`,
+    `DESCRIPTION:${event.description.replace(/\n/g, '\\n')}`,
+    `LOCATION:${event.location}`,
+    'STATUS:CONFIRMED',
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\n');
 }
 
 function generateGoogleCalendarUrl(event: EventData): string {
@@ -67,67 +74,71 @@ const FALLBACK_EVENT: EventData = {
   endTime: '21:30',
 };
 
+function readEventFromDataset(el: HTMLElement): EventData {
+  const ds = el.dataset;
+
+  if (ds.eventTitle) {
+    return {
+      title: ds.eventTitle,
+      description: ds.eventDescription ?? '',
+      location: ds.eventLocation ?? '',
+      startDate: ds.eventStartDate ?? '',
+      startTime: ds.eventStartTime ?? '',
+      endDate: ds.eventEndDate ?? '',
+      endTime: ds.eventEndTime ?? '',
+    };
+  }
+
+  return window.eventData ?? FALLBACK_EVENT;
+}
+
 export function calendarIntegration() {
   return {
     isOpen: false,
     icsUrl: '',
     googleUrl: '',
     eventTitle: '',
-    _icsBlob: null as string | null,
+    _icsBlobUrl: null as string | null,
 
-    init() {
-      const el = (this as unknown as { $el: HTMLElement }).$el;
-      const ds = el.dataset;
+    init(this: AlpineMagics & { [k: string]: unknown }) {
+      const event = readEventFromDataset(this.$el);
 
-      const eventData: EventData = ds.eventTitle
-        ? {
-            title: ds.eventTitle,
-            description: ds.eventDescription ?? '',
-            location: ds.eventLocation ?? '',
-            startDate: ds.eventStartDate ?? '',
-            startTime: ds.eventStartTime ?? '',
-            endDate: ds.eventEndDate ?? '',
-            endTime: ds.eventEndTime ?? '',
-          }
-        : (window.eventData ?? FALLBACK_EVENT);
+      this.eventTitle = event.title;
 
-      this.eventTitle = eventData.title;
-
-      const icsContent = generateICS(eventData);
-      const blob = new Blob([icsContent], {
+      const blob = new Blob([generateICS(event)], {
         type: 'text/calendar;charset=utf-8',
       });
 
-      this._icsBlob = URL.createObjectURL(blob);
-      this.icsUrl = this._icsBlob;
-      this.googleUrl = generateGoogleCalendarUrl(eventData);
+      this._icsBlobUrl = URL.createObjectURL(blob);
+      this.icsUrl = this._icsBlobUrl;
+      this.googleUrl = generateGoogleCalendarUrl(event);
     },
 
-    openModal(): void {
+    openModal(this: { isOpen: boolean; eventTitle: string }) {
       this.isOpen = true;
       trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, { event: this.eventTitle });
     },
 
-    closeModal(): void {
+    closeModal(this: { isOpen: boolean }) {
       this.isOpen = false;
     },
 
-    trackICS(): void {
+    trackICS(this: { eventTitle: string }) {
       trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
         event: this.eventTitle,
       });
     },
 
-    trackGoogle(): void {
+    trackGoogle(this: { eventTitle: string }) {
       trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
         event: this.eventTitle,
       });
     },
 
-    destroy(): void {
-      if (this._icsBlob) {
-        URL.revokeObjectURL(this._icsBlob);
-        this._icsBlob = null;
+    destroy(this: { _icsBlobUrl: string | null }) {
+      if (this._icsBlobUrl) {
+        URL.revokeObjectURL(this._icsBlobUrl);
+        this._icsBlobUrl = null;
       }
     },
   };

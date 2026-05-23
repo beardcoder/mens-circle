@@ -420,51 +420,10 @@
   min-block-size: 52px;
 }
 
-/* Icon-only primary start button — reuses .btn .btn--primary but
-   collapses to a circle and hosts a play glyph. */
-.breathing-app__start {
-  inline-size: 72px;
-  min-inline-size: 72px;
-  block-size: 72px;
-  min-block-size: 72px;
-  aspect-ratio: 1;
-  padding: 0;
-  border-radius: var(--radius-full);
-}
-
+/* The play button hosts a glyph that needs a small visual offset.
+   All other geometry (size, radius) is driven by `.btn--icon`. */
 .breathing-app__start svg {
-  inline-size: 28px;
-  block-size: 28px;
   margin-inline-start: 3px;
-}
-
-.breathing-app__controls .btn--secondary {
-  color: var(--text-on-dark);
-  background: color-mix(in oklch, var(--color-sand) 8%, transparent);
-  border: 1px solid color-mix(in oklch, var(--color-sand) 20%, transparent);
-  backdrop-filter: blur(8px);
-}
-
-.breathing-app__controls .btn--secondary:hover {
-  color: var(--text-on-dark);
-  background: color-mix(in oklch, var(--color-sand) 14%, transparent);
-  border-color: color-mix(in oklch, var(--color-sand) 30%, transparent);
-}
-
-.breathing-app__controls .btn--ghost {
-  padding-inline: var(--space-sm);
-  font-size: 0.75rem;
-  color: color-mix(in oklch, var(--text-on-dark) 60%, transparent);
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-.breathing-app__controls .btn--ghost:hover {
-  color: var(--text-on-dark);
-  background: transparent;
-  box-shadow: none;
-  transform: none;
 }
 
 /* ============================================
@@ -709,9 +668,6 @@
   }
 
   .breathing-app__start {
-    inline-size: 64px;
-    min-inline-size: 64px;
-    block-size: 64px;
-    min-block-size: 64px;
+    --btn-size: 64px;
   }
 }

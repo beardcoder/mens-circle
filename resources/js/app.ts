@@ -1,11 +1,16 @@
 /**
  * Männerkreis Niederbayern / Straubing — Application Entry Point
+ *
+ * Registers Alpine data factories for declarative components and wires up
+ * the analytics kit. Heavy components (forms, breathing app, map) live in
+ * their own files; this entry stays thin.
  */
 
 import './types';
 import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse';
-import { siteHeader, scrollToTop } from '@/components/navigation';
+
+import { scrollToTop, siteHeader } from '@/components/navigation';
 import {
   newsletterForm,
   registrationForm,
@@ -16,10 +21,8 @@ import { eventMap } from '@/components/event-map';
 import { breathingApp } from '@/components/breathing';
 import { initUmamiKit } from '@/utils/umami-kit';
 
-// Install plugins
 Alpine.plugin(collapse);
 
-// Register all data components
 Alpine.data('siteHeader', siteHeader);
 Alpine.data('scrollToTop', scrollToTop);
 Alpine.data('newsletterForm', newsletterForm);
@@ -29,10 +32,10 @@ Alpine.data('calendarIntegration', calendarIntegration);
 Alpine.data('eventMap', eventMap);
 Alpine.data('breathingApp', breathingApp);
 
-// Start Alpine
 Alpine.start();
 
-// Analytics tracking
+// Analytics: defer until the document is ready so the tracker never blocks
+// first paint or competes with critical JS during page-load.
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => initUmamiKit(), {
     once: true,
@@ -41,16 +44,13 @@ if (document.readyState === 'loading') {
   initUmamiKit();
 }
 
-// LCP monitoring in development
 if (import.meta.env.DEV && 'PerformanceObserver' in globalThis) {
-  const perfObserver = new PerformanceObserver((list) => {
-    list.getEntries().forEach((entry) => {
+  new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
       if (entry.entryType === 'largest-contentful-paint') {
         // eslint-disable-next-line no-console
         console.debug('LCP:', entry.startTime);
       }
-    });
-  });
-
-  perfObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+    }
+  }).observe({ entryTypes: ['largest-contentful-paint'] });
 }

@@ -7,7 +7,8 @@
    WhatsApp Section Base
    ============================================ */
 .whatsapp-section {
-  /* Component-scoped color tokens — sage-green palette for WhatsApp branding */
+  /* Component-scoped color tokens — sage-green palette for WhatsApp branding.
+     Button colours live with `.btn--whatsapp` in components/_buttons.css. */
   --wa-bg-start: oklch(35% 0.08 145deg);
   --wa-bg-end: oklch(28% 0.06 150deg);
   --wa-glow: oklch(50% 0.15 145deg);
@@ -15,9 +16,6 @@
   --wa-text-accent: oklch(75% 0.15 145deg);
   --wa-text-body: oklch(85% 0.03 145deg);
   --wa-text-hint: oklch(70% 0.05 145deg);
-  --wa-btn-bg: oklch(60% 0.15 145deg);
-  --wa-btn-hover: oklch(55% 0.16 145deg);
-  --wa-btn-shadow-base: oklch(40% 0.1 145deg);
   --_surface-noise-opacity: 0.03;
   --_surface-glow-color: var(--wa-glow);
   --_surface-glow-strength: 20%;
@@ -105,39 +103,9 @@
   }
 }
 
-.whatsapp__button {
-  display: inline-flex;
-  gap: var(--space-xs);
-  align-items: center;
-  padding: var(--space-sm) var(--space-md);
-  font-family: var(--font-body);
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--color-bone);
-  text-decoration: none;
-  background: var(--wa-btn-bg);
-  border-radius: var(--radius-full);
-  box-shadow:
-    0 4px 14px color-mix(in oklch, var(--wa-btn-shadow-base) 30%, transparent),
-    0 2px 6px color-mix(in oklch, var(--wa-btn-shadow-base) 20%, transparent);
-  transition:
-    background-color var(--motion-standard),
-    box-shadow var(--motion-standard),
-    transform var(--motion-quick);
-}
-
-.whatsapp__button:hover {
-  background: var(--wa-btn-hover);
-  box-shadow:
-    0 6px 20px color-mix(in oklch, var(--wa-btn-shadow-base) 40%, transparent),
-    0 4px 10px color-mix(in oklch, var(--wa-btn-shadow-base) 30%, transparent);
-  transform: translateY(-2px);
-}
-
-.whatsapp__button:active {
-  transform: translateY(0);
-}
-
+/* Geometry, colour and motion now live in `.btn` / `.btn--whatsapp`.
+   Only the larger inline icon needs adjusting here. */
+.whatsapp__button .whatsapp__icon,
 .whatsapp__icon {
   flex-shrink: 0;
   inline-size: 1.5rem;
