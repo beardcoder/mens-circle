@@ -11,7 +11,6 @@
 import type { AlpineMagics } from '@/types/alpine';
 
 const SCROLL_THRESHOLD = 50;
-const SCROLL_TOP_THRESHOLD = 400;
 
 export function siteHeader() {
   const controller = new AbortController();
@@ -124,32 +123,4 @@ interface SiteHeaderState {
   scrollPosition: number;
   closeNav: () => void;
   openNav: () => void;
-}
-
-export function scrollToTop() {
-  const controller = new AbortController();
-
-  return {
-    isVisible: false,
-
-    init(this: { isVisible: boolean }) {
-      const update = (): void => {
-        this.isVisible = window.scrollY > SCROLL_TOP_THRESHOLD;
-      };
-
-      update();
-      window.addEventListener('scroll', update, {
-        passive: true,
-        signal: controller.signal,
-      });
-    },
-
-    scrollUp() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    },
-
-    destroy() {
-      controller.abort();
-    },
-  };
 }
