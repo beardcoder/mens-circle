@@ -11,7 +11,6 @@ A Laravel 12 community platform for organizing men's circle events, managing reg
 | Frontend    | Blade templates, vanilla TypeScript, Vite 7              |
 | Styling     | Custom CSS (OKLCH color system) + Tailwind CSS v4        |
 | Database    | SQLite (local/production), migrations via Eloquent       |
-| Testing     | Pest v4                                                  |
 | QA          | Mago (format, lint, analyze) for PHP; ESLint + Prettier (TS/Blade), Stylelint (CSS) |
 | Auth        | Laravel Socialite (GitHub OAuth for admin)               |
 | Deployment  | Docker with FrankenPHP, `serversideup/php:8.5-frankenphp` |
@@ -94,53 +93,6 @@ Scheduled commands in `routes/console.php`:
 - `events:send-reminders` — daily at 10:00
 - `sitemap:generate` — daily at 02:00
 
-## Testing
-
-Tests use Pest v4 with `expect()` syntax. All tests use in-memory SQLite (`RefreshDatabase`).
-
-```bash
-# Run all tests
-php artisan test --compact
-
-# Run specific test file
-php artisan test --compact tests/Feature/Controllers/EventControllerTest.php
-
-# Run by filter
-php artisan test --compact --filter="can register for event"
-```
-
-### Test Structure
-
-```
-tests/
-├── Feature/
-│   ├── Api/                 # API route tests
-│   ├── Commands/            # SendEventReminders
-│   ├── Controllers/         # EventController, NewsletterController, AnalyticsProxy
-│   ├── Mail/                # AdminEventRegistrationNotification, EventParticipantMessage
-│   ├── Middleware/           # CompressHtml
-│   ├── ClearsResponseCacheTest.php
-│   ├── LlmControllerArchetypesTest.php
-│   └── SeoIndexingSignalsTest.php
-└── Unit/
-    ├── Enums/               # EmailTemplate
-    ├── Models/              # Event, Participant, Registration
-    └── Services/            # EmailTemplateService
-```
-
-### Factory States
-
-| Factory                | Key States                                                                                  |
-| ---------------------- | ------------------------------------------------------------------------------------------- |
-| Event                  | `published()`, `unpublished()`, `tomorrow()`, `past()`, `onDate()`                          |
-| Registration           | `registered()`, `waitlist()`, `cancelled()`, `attended()`, `forEvent()`, `forParticipant()` |
-| Participant            | `withPhone()`                                                                               |
-| Page                   | `published()`, `unpublished()`                                                              |
-| ContentBlock           | `hero()`, `text()`, `forPage()`                                                             |
-| Newsletter             | `draft()`, `sending()`, `sent()`                                                            |
-| NewsletterSubscription | `active()`, `unconfirmed()`, `unsubscribed()`, `forParticipant()`                           |
-| Testimonial            | `unpublished()`, `anonymous()`                                                              |
-
 ## Code Quality Commands
 
 PHP QA is handled by [Mago](https://github.com/carthage-software/mago). Install via `brew install carthage-software/tap/mago`, `cargo install mago`, or the install script from the project README. Config lives in `mago.toml`.
@@ -167,7 +119,7 @@ composer run qa
 # Fix all auto-fixable QA issues
 composer run qa:fix
 
-# Full review (QA + tests)
+# Full review (alias of qa)
 composer run review
 
 # Frontend lint + format + typecheck
