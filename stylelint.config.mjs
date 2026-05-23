@@ -15,5 +15,13 @@ export default {
           'Custom properties should be kebab-case; component-private may start with `--_`.',
       },
     ],
+    // Tailwind v4 at-rules are intentional and well-known.
+    'at-rule-no-unknown': [
+      true,
+      { ignoreAtRules: ['source', 'theme', 'utility', 'variant', 'apply'] },
+    ],
+    // Filament's theme entry uses bare `@import` for Tailwind v4 plugin
+    // resolution; the `url(...)` form is not always needed there.
+    'import-notation': null,
   },
 };

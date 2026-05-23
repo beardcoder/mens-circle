@@ -23,7 +23,7 @@ final class NewsletterController
         try {
             $participant = Participant::findOrCreateByEmail($email);
 
-            $subscription = NewsletterSubscription::withTrashed()->where('participant_id', $participant->id)->first();
+            $subscription = NewsletterSubscription::query()->withTrashed()->where('participant_id', $participant->id)->first();
 
             if ($subscription?->isActive()) {
                 throw new RuntimeException('Diese E-Mail-Adresse ist bereits für den Newsletter angemeldet.');
@@ -54,7 +54,7 @@ final class NewsletterController
 
     public function unsubscribe(#[SensitiveParameter] string $token): View
     {
-        $subscription = NewsletterSubscription::where('token', $token)->firstOrFail();
+        $subscription = NewsletterSubscription::query()->where('token', $token)->firstOrFail();
 
         if (!$subscription->isActive()) {
             return view('newsletter.unsubscribed', [

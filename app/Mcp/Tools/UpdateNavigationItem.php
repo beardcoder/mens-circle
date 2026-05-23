@@ -73,9 +73,11 @@ class UpdateNavigationItem extends Tool
         }
 
         foreach (['open_in_new_tab', 'is_cta', 'is_visible'] as $boolField) {
-            if (array_key_exists($boolField, $data)) {
-                $item->{$boolField} = (bool) $data[$boolField];
+            if (!array_key_exists($boolField, $data)) {
+                continue;
             }
+
+            $item->{$boolField} = (bool) $data[$boolField];
         }
 
         if (array_key_exists('umami_event_target', $data)) {

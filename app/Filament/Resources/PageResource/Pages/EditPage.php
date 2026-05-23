@@ -31,9 +31,10 @@ class EditPage extends EditRecord
     /**
      * Load ContentBlocks into form format
      */
+    #[\Override]
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        $this->record->contentBlocks->each(function ($blockItem): void {
+        $this->record?->contentBlocks->each(function ($blockItem): void {
             /** @var ContentBlock $blockItem */
             $blockItem
                 ->getMedia('page_blocks')
@@ -41,7 +42,7 @@ class EditPage extends EditRecord
                     /** @var Media $mediaItem */
                     $mediaItem->update([
                         'model_type' => \get_class($this->record),
-                        'model_id' => $this->record->id,
+                        'model_id' => $this->record?->id,
                     ]);
                 });
         });
@@ -71,6 +72,7 @@ class EditPage extends EditRecord
     /**
      * Save ContentBlocks from form
      */
+    #[\Override]
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         /** @var array<int, array<string, mixed>> $contentBlocksData */

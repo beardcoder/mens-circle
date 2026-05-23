@@ -1,13 +1,13 @@
 /**
- * Form Components — Alpine.js data factories
+ * Form Components
  *
  * Three forms (newsletter, registration, testimonial) share the same
- * lifecycle: abandon tracking, JSON submission, toast feedback, retryable
- * cleanup. `createFormHandler` is the shared factory; each export below is
- * a thin adapter that supplies form-specific validation and tracking.
+ * lifecycle: abandon tracking, JSON submission, toast feedback. A single
+ * `FormHandler` class drives all three; each `setup*Forms()` exports
+ * wires it up with a form-specific config object.
  *
- * Listeners are managed with a single `AbortController` so Alpine's
- * `destroy()` releases everything in one call — no manual bookkeeping.
+ * Listeners are managed via the shared `ReactiveHost` AbortController so
+ * tearing down releases everything in one call.
  */
 
 import { isValidEmail } from '@/utils/helpers';
@@ -17,8 +17,8 @@ import {
   trackEvent,
   type UmamiEventData,
 } from '@/utils/umami';
+import { mountAll, ReactiveHost } from '@/lib/reactive-host';
 import type { ApiResponse } from '@/types';
-import type { AlpineMagics } from '@/types/alpine';
 
 type FormFieldElement =
   | HTMLInputElement
@@ -32,17 +32,12 @@ interface FormCompletionState {
   totalFields: number;
 }
 
-interface AbandonTrackingOptions {
-  form: HTMLFormElement;
-  eventName: string;
+interface FormHandlerConfig<TPayload extends Record<string, unknown>> {
+  /** Logical form name used in tracking metadata */
   formType: string;
-  signal: AbortSignal;
-}
-
-interface FormHandlerConfig<TPayload> {
-  /** Where to POST */
+  /** Where to POST — may depend on the form element (e.g. data-submit-url) */
   url: string | ((form: HTMLFormElement) => string);
-  /** Build the JSON body. Return `null` to abort submission (after surfacing a toast). */
+  /** Build the JSON body. Return `null` to abort submission. */
   buildPayload: (form: HTMLFormElement) => TPayload | null;
   /** Tracking events fired around submission */
   events: {
@@ -51,18 +46,8 @@ interface FormHandlerConfig<TPayload> {
     success: string;
     error: string;
   };
-  /** Logical form name used in tracking metadata */
-  formType: string;
   /** Optional submit-time tracking metadata derived from the payload */
   submitMeta?: (payload: TPayload) => UmamiEventData;
-  /** Side-effects on success (e.g. reset counters) */
-  onSuccess?: () => void;
-}
-
-interface FormHandlerInstance {
-  charCount?: number;
-  init(): void;
-  destroy(): void;
 }
 
 const SUBMIT_LABEL = 'Wird gesendet...';
@@ -109,28 +94,60 @@ function getFormCompletionState(form: HTMLFormElement): FormCompletionState {
   };
 }
 
-function setupAbandonTracking({
-  form,
-  eventName,
-  formType,
-  signal,
-}: AbandonTrackingOptions): { markSubmitted: () => void } {
-  let hasSubmitted = false;
-  let hasTracked = false;
-  let firstInteractionAt: number | null = null;
+class FormHandler<
+  TPayload extends Record<string, unknown>,
+> extends ReactiveHost {
+  private readonly form: HTMLFormElement;
+  private readonly config: FormHandlerConfig<TPayload>;
+  private hasSubmitted = false;
+  private hasTrackedAbandon = false;
+  private firstInteractionAt: number | null = null;
 
-  const markInteraction = (): void => {
-    firstInteractionAt ??= Date.now();
-  };
+  public constructor(
+    form: HTMLFormElement,
+    config: FormHandlerConfig<TPayload>
+  ) {
+    super(form);
+    this.form = form;
+    this.config = config;
+  }
 
-  const markSubmitted = (): void => {
-    hasSubmitted = true;
-  };
+  protected setup(): void {
+    const submitButton = this.query<HTMLButtonElement>('[type="submit"]');
 
-  const trackAbandonIfFilled = (): void => {
-    if (hasTracked || hasSubmitted || firstInteractionAt === null) return;
+    this.on(this.form, 'input', () => this.markInteraction());
+    this.on(this.form, 'change', () => this.markInteraction());
+    this.on(
+      this.form,
+      'submit',
+      (event) => {
+        void this.handleSubmit(event, submitButton);
+      },
+      { capture: true }
+    );
 
-    const completion = getFormCompletionState(form);
+    this.onWindow('pagehide', () => this.trackAbandonIfFilled(), {
+      capture: true,
+    });
+    this.onWindow('beforeunload', () => this.trackAbandonIfFilled(), {
+      capture: true,
+    });
+  }
+
+  private markInteraction(): void {
+    this.firstInteractionAt ??= Date.now();
+  }
+
+  private trackAbandonIfFilled(): void {
+    if (
+      this.hasTrackedAbandon ||
+      this.hasSubmitted ||
+      this.firstInteractionAt === null
+    ) {
+      return;
+    }
+
+    const completion = getFormCompletionState(this.form);
 
     if (
       completion.requiredTotal === 0 ||
@@ -139,10 +156,10 @@ function setupAbandonTracking({
       return;
     }
 
-    hasTracked = true;
+    this.hasTrackedAbandon = true;
 
-    trackEvent(eventName, {
-      form: formType,
+    trackEvent(this.config.events.abandonFilled, {
+      form: this.config.formType,
       required_filled: completion.requiredFilled,
       required_total: completion.requiredTotal,
       required_completion_pct: Math.round(
@@ -151,137 +168,87 @@ function setupAbandonTracking({
       filled_fields: completion.filledFields,
       total_fields: completion.totalFields,
       seconds_since_first_input: Math.round(
-        (Date.now() - firstInteractionAt) / 1000
+        (Date.now() - this.firstInteractionAt) / 1000
       ),
       page: window.location.pathname,
     });
-  };
+  }
 
-  form.addEventListener('input', markInteraction, { signal });
-  form.addEventListener('change', markInteraction, { signal });
-  form.addEventListener('submit', markSubmitted, { capture: true, signal });
-  window.addEventListener('pagehide', trackAbandonIfFilled, {
-    capture: true,
-    signal,
-  });
-  window.addEventListener('beforeunload', trackAbandonIfFilled, {
-    capture: true,
-    signal,
-  });
+  private async handleSubmit(
+    event: SubmitEvent,
+    submitButton: HTMLButtonElement | null
+  ): Promise<void> {
+    event.preventDefault();
 
-  return { markSubmitted };
-}
+    this.hasSubmitted = true;
 
-async function postJson(
-  url: string,
-  body: Record<string, unknown>,
-  signal: AbortSignal
-): Promise<ApiResponse> {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(body),
-    signal,
-  });
+    const payload = this.config.buildPayload(this.form);
 
-  return (await response.json()) as ApiResponse;
-}
+    if (payload === null) return;
 
-function createFormHandler<TPayload extends Record<string, unknown>>(
-  config: FormHandlerConfig<TPayload>
-): () => FormHandlerInstance {
-  return function handler(): FormHandlerInstance {
-    const controller = new AbortController();
+    trackEvent(this.config.events.submit, this.config.submitMeta?.(payload));
 
-    return {
-      init(this: AlpineMagics): void {
-        const form = this.$el;
+    const originalLabel = submitButton?.textContent ?? '';
 
-        if (!(form instanceof HTMLFormElement)) return;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = SUBMIT_LABEL;
+    }
 
-        const { signal } = controller;
+    try {
+      const url =
+        typeof this.config.url === 'function'
+          ? this.config.url(this.form)
+          : this.config.url;
 
-        setupAbandonTracking({
-          form,
-          eventName: config.events.abandonFilled,
-          formType: config.formType,
-          signal,
-        });
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(payload),
+        signal: this.signal,
+      });
 
-        const submitButton =
-          form.querySelector<HTMLButtonElement>('[type="submit"]');
+      const data = (await response.json()) as ApiResponse;
 
-        form.addEventListener(
-          'submit',
-          async (event) => {
-            event.preventDefault();
+      if (data.success) {
+        this.form.reset();
+        showToast('success', data.message);
+        trackEvent(this.config.events.success);
+        this.onSuccess?.();
+      } else {
+        showToast('error', data.message);
+        trackEvent(this.config.events.error, { error: data.message });
+      }
+    } catch (error) {
+      if (this.signal.aborted) return;
 
-            const payload = config.buildPayload(form);
+      const message = error instanceof Error ? error.message : 'Network error';
 
-            if (payload === null) return;
+      showToast(
+        'error',
+        'Ein Fehler ist aufgetreten. Bitte versuche es erneut.'
+      );
+      trackEvent(this.config.events.error, { error: message });
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalLabel;
+      }
+    }
+  }
 
-            trackEvent(config.events.submit, config.submitMeta?.(payload));
-
-            const originalLabel = submitButton?.textContent ?? '';
-
-            if (submitButton) {
-              submitButton.disabled = true;
-              submitButton.textContent = SUBMIT_LABEL;
-            }
-
-            try {
-              const url =
-                typeof config.url === 'function'
-                  ? config.url(form)
-                  : config.url;
-              const data = await postJson(url, payload, signal);
-
-              if (data.success) {
-                form.reset();
-                showToast('success', data.message);
-                trackEvent(config.events.success);
-                config.onSuccess?.();
-              } else {
-                showToast('error', data.message);
-                trackEvent(config.events.error, { error: data.message });
-              }
-            } catch (error) {
-              if (signal.aborted) return;
-
-              const message =
-                error instanceof Error ? error.message : 'Network error';
-
-              showToast(
-                'error',
-                'Ein Fehler ist aufgetreten. Bitte versuche es erneut.'
-              );
-              trackEvent(config.events.error, { error: message });
-            } finally {
-              if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.textContent = originalLabel;
-              }
-            }
-          },
-          { signal }
-        );
-      },
-
-      destroy(): void {
-        controller.abort();
-      },
-    };
-  };
+  /** Subclasses override to react after a successful submission. */
+  protected onSuccess?(): void;
 }
 
 /* ============================================
    Newsletter
    ============================================ */
 
-export const newsletterForm = createFormHandler<{ email: string }>({
+const newsletterConfig: FormHandlerConfig<{ email: string }> = {
   formType: 'newsletter',
   url: () => window.routes.newsletter,
   events: {
@@ -301,7 +268,14 @@ export const newsletterForm = createFormHandler<{ email: string }>({
 
     return { email };
   },
-});
+};
+
+export function setupNewsletterForms(): void {
+  mountAll(
+    '[data-component="newsletter-form"]',
+    (el) => new FormHandler(el as HTMLFormElement, newsletterConfig)
+  );
+}
 
 /* ============================================
    Event registration
@@ -316,7 +290,7 @@ interface RegistrationPayload extends Record<string, unknown> {
   privacy: 0 | 1;
 }
 
-export const registrationForm = createFormHandler<RegistrationPayload>({
+const registrationConfig: FormHandlerConfig<RegistrationPayload> = {
   formType: 'event-registration',
   url: () => window.routes.eventRegister,
   events: {
@@ -367,10 +341,17 @@ export const registrationForm = createFormHandler<RegistrationPayload>({
       privacy: 1,
     };
   },
-});
+};
+
+export function setupRegistrationForms(): void {
+  mountAll(
+    '[data-component="registration-form"]',
+    (el) => new FormHandler(el as HTMLFormElement, registrationConfig)
+  );
+}
 
 /* ============================================
-   Testimonial
+   Testimonial — extends the base with a live char counter
    ============================================ */
 
 interface TestimonialPayload extends Record<string, unknown> {
@@ -381,7 +362,7 @@ interface TestimonialPayload extends Record<string, unknown> {
   privacy: 0 | 1;
 }
 
-const baseTestimonial = createFormHandler<TestimonialPayload>({
+const testimonialConfig: FormHandlerConfig<TestimonialPayload> = {
   formType: 'testimonial',
   url: (form) => form.dataset.submitUrl ?? '',
   events: {
@@ -434,36 +415,41 @@ const baseTestimonial = createFormHandler<TestimonialPayload>({
       privacy: 1,
     };
   },
-});
+};
 
-/**
- * Wraps the base testimonial factory to expose a reactive char counter and
- * bind the quote textarea's `input` event to keep it in sync.
- */
-export function testimonialForm(): FormHandlerInstance & { charCount: number } {
-  const base = baseTestimonial();
-  const counterController = new AbortController();
+class TestimonialFormHandler extends FormHandler<TestimonialPayload> {
+  private counterEl: HTMLElement | null = null;
+  private textarea: HTMLTextAreaElement | null = null;
 
-  return {
-    ...base,
-    charCount: 0,
-    init(this: AlpineMagics & { charCount: number }) {
-      base.init.call(this);
+  public constructor(form: HTMLFormElement) {
+    super(form, testimonialConfig);
+  }
 
-      const textarea = this.$el.querySelector<HTMLTextAreaElement>('#quote');
+  protected override setup(): void {
+    super.setup();
 
-      textarea?.addEventListener(
-        'input',
-        () => {
-          this.charCount = textarea.value.length;
-        },
-        { signal: counterController.signal }
-      );
-    },
-    destroy(this: { charCount: number }) {
-      counterController.abort();
-      base.destroy();
-      this.charCount = 0;
-    },
-  };
+    this.counterEl = this.query('[data-ref="char-count"]');
+    this.textarea = this.query<HTMLTextAreaElement>('#quote');
+
+    if (this.textarea) {
+      this.on(this.textarea, 'input', () => this.updateCount());
+      this.updateCount();
+    }
+  }
+
+  protected override onSuccess(): void {
+    this.updateCount();
+  }
+
+  private updateCount(): void {
+    if (!this.counterEl || !this.textarea) return;
+    this.counterEl.textContent = String(this.textarea.value.length);
+  }
+}
+
+export function setupTestimonialForms(): void {
+  mountAll(
+    '[data-component="testimonial-form"]',
+    (el) => new TestimonialFormHandler(el as HTMLFormElement)
+  );
 }

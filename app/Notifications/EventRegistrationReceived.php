@@ -29,7 +29,7 @@ final class EventRegistrationReceived extends Notification implements ShouldQueu
     /**
      * @return array<int, string|class-string>
      */
-    public function via(object $notifiable): array
+    public function via(object $_notifiable): array
     {
         $channels = ['mail'];
 
@@ -48,7 +48,7 @@ final class EventRegistrationReceived extends Notification implements ShouldQueu
         )); // @phpstan-ignore method.notFound
     }
 
-    public function toPushover(object $notifiable): PushoverMessage
+    public function toPushover(object $_notifiable): PushoverMessage
     {
         $name = "{$this->participant->first_name} {$this->participant->last_name}";
 

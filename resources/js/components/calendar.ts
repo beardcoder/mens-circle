@@ -1,14 +1,14 @@
 /**
- * Calendar Integration Alpine Component
+ * Calendar Integration
  *
  * Generates a local ICS blob URL plus a Google Calendar deep link so the
  * "Add to calendar" modal can offer both options without a network round
- * trip. Tracks user choice via Umami.
+ * trip. Tracks user choice via Umami. Vanilla TS, no framework.
  */
 
-import type { EventData } from '@/types';
-import type { AlpineMagics } from '@/types/alpine';
+import { mountAll, ReactiveHost } from '@/lib/reactive-host';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
+import type { EventData } from '@/types';
 
 function formatICSDate(date: string, time: string): string {
   const d = new Date(`${date}T${time}:00`);
@@ -92,54 +92,81 @@ function readEventFromDataset(el: HTMLElement): EventData {
   return window.eventData ?? FALLBACK_EVENT;
 }
 
-export function calendarIntegration() {
-  return {
-    isOpen: false,
-    icsUrl: '',
-    googleUrl: '',
-    eventTitle: '',
-    _icsBlobUrl: null as string | null,
+class Calendar extends ReactiveHost {
+  private isOpen = false;
+  private eventTitle = '';
+  private modal: HTMLElement | null = null;
+  private openButton: HTMLButtonElement | null = null;
+  private icsBlobUrl: string | null = null;
 
-    init(this: AlpineMagics & { [k: string]: unknown }) {
-      const event = readEventFromDataset(this.$el);
+  protected setup(): void {
+    const event = readEventFromDataset(this.root);
 
-      this.eventTitle = event.title;
+    this.eventTitle = event.title;
 
-      const blob = new Blob([generateICS(event)], {
-        type: 'text/calendar;charset=utf-8',
-      });
+    const blob = new Blob([generateICS(event)], {
+      type: 'text/calendar;charset=utf-8',
+    });
 
-      this._icsBlobUrl = URL.createObjectURL(blob);
-      this.icsUrl = this._icsBlobUrl;
-      this.googleUrl = generateGoogleCalendarUrl(event);
-    },
+    this.icsBlobUrl = URL.createObjectURL(blob);
 
-    openModal(this: { isOpen: boolean; eventTitle: string }) {
+    const googleUrl = generateGoogleCalendarUrl(event);
+    const googleLink = this.query<HTMLAnchorElement>('[data-ref="google-url"]');
+    const icsLink = this.query<HTMLAnchorElement>('[data-ref="ics-url"]');
+
+    if (googleLink) googleLink.href = googleUrl;
+    if (icsLink) icsLink.href = this.icsBlobUrl;
+
+    this.modal = this.query('[data-ref="modal"]');
+    this.openButton = this.query<HTMLButtonElement>('[data-action="open"]');
+
+    this.on(this.openButton, 'click', () => {
       this.isOpen = true;
       trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, { event: this.eventTitle });
-    },
+      this.render();
+    });
 
-    closeModal(this: { isOpen: boolean }) {
-      this.isOpen = false;
-    },
+    this.on(this.modal, 'click', (event) => {
+      if (event.target === this.modal) this.close();
+    });
 
-    trackICS(this: { eventTitle: string }) {
-      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
-        event: this.eventTitle,
-      });
-    },
+    this.onWindow('keydown', (event) => {
+      if (event.key === 'Escape' && this.isOpen) this.close();
+    });
 
-    trackGoogle(this: { eventTitle: string }) {
+    this.on(googleLink, 'click', () =>
       trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
         event: this.eventTitle,
-      });
-    },
+      })
+    );
 
-    destroy(this: { _icsBlobUrl: string | null }) {
-      if (this._icsBlobUrl) {
-        URL.revokeObjectURL(this._icsBlobUrl);
-        this._icsBlobUrl = null;
-      }
-    },
-  };
+    this.on(icsLink, 'click', () =>
+      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
+        event: this.eventTitle,
+      })
+    );
+  }
+
+  protected render(): void {
+    if (!this.modal) return;
+
+    this.modal.classList.toggle('open', this.isOpen);
+    this.modal.style.display = this.isOpen ? 'flex' : 'none';
+  }
+
+  protected teardown(): void {
+    if (this.icsBlobUrl) {
+      URL.revokeObjectURL(this.icsBlobUrl);
+      this.icsBlobUrl = null;
+    }
+  }
+
+  private close(): void {
+    this.isOpen = false;
+    this.render();
+  }
+}
+
+export function setupCalendar(): void {
+  mountAll('[data-component="calendar"]', (el) => new Calendar(el));
 }

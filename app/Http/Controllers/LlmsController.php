@@ -29,7 +29,7 @@ final class LlmsController
 
     private function generateLlmsTxt(): string
     {
-        $publishedPages = Page::with('contentBlocks')->published()->orderBy('title')->get();
+        $publishedPages = Page::query()->with('contentBlocks')->published()->orderBy('title')->get();
 
         $lines = [
             ...$this->generateHeader(),
@@ -109,7 +109,7 @@ final class LlmsController
             foreach ($socialLinks as $platform => $data) {
                 /** @var array<string, mixed> $data */
                 $url = $data['url'] ?? $data['link'] ?? null;
-                $platformName = $data['platform'] ?? $data['name'] ?? ucfirst((string) $platform);
+                $platformName = $data['platform'] ?? $data['name'] ?? ucfirst($platform);
 
                 if ($url && \is_string($url) && \is_string($platformName)) {
                     $lines[] = "- **{$platformName}:** {$url}";

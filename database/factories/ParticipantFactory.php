@@ -19,20 +19,21 @@ class ParticipantFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         return [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
-            'email' => $this->faker->unique()->safeEmail(),
-            'phone' => $this->faker->optional(0.3)->phoneNumber(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'email' => fake()->unique()->safeEmail(),
+            'phone' => fake()->optional(0.3)->phoneNumber(),
         ];
     }
 
     public function withPhone(): static
     {
-        return $this->state(fn(array $attributes): array => [
-            'phone' => $this->faker->phoneNumber(),
+        return $this->state(static fn(array $_attributes): array => [
+            'phone' => fake()->phoneNumber(),
         ]);
     }
 }

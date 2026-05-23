@@ -144,7 +144,7 @@
             id="registrationForm"
             class="event-register__form"
             autocomplete="on"
-            x-data="registrationForm"
+            data-component="registration-form"
           >
             <input type="hidden" name="event_id" value="{{ $event->id }}" />
 
@@ -275,7 +275,7 @@
 
       <div
         class="event-info__calendar"
-        x-data="calendarIntegration"
+        data-component="calendar"
         data-event-title="{{ $event->title }}"
         data-event-description="{{ strip_tags($event->description) }}"
         data-event-location="{{ $event->location }}"
@@ -288,7 +288,7 @@
           type="button"
           class="btn btn--secondary"
           id="addToCalendar"
-          @click="openModal()"
+          data-action="open"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -304,9 +304,7 @@
         <!-- Calendar Modal (inline with component) -->
         <div
           class="calendar-modal"
-          x-show="isOpen"
-          @click.self="closeModal()"
-          @keydown.escape.window="closeModal()"
+          data-ref="modal"
           style="display: none"
           role="dialog"
           aria-modal="true"
@@ -317,19 +315,19 @@
             <p>Wähle deinen Kalender:</p>
             <div class="calendar-modal__buttons">
               <a
-                :href="googleUrl"
+                href="#"
+                data-ref="google-url"
                 class="btn btn--secondary"
                 target="_blank"
                 rel="noopener"
-                @click="trackGoogle()"
               >
                 Google Calendar
               </a>
               <a
-                :href="icsUrl"
+                href="#"
+                data-ref="ics-url"
                 class="btn btn--secondary"
                 download="maennerkreis-straubing.ics"
-                @click="trackICS()"
               >
                 Apple/Outlook (.ics)
               </a>
@@ -357,7 +355,7 @@
 
         <div
           class="event-map"
-          x-data="eventMap"
+          data-component="event-map"
           data-state="idle"
           data-lat="{{ $event->latitude }}"
           data-lng="{{ $event->longitude }}"

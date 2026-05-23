@@ -209,8 +209,8 @@
 /* ============================================
    Soft-rise — for state-triggered surface entry
    ============================================
-   Drop-in for elements that appear via Alpine state (`x-show`,
-   `x-transition`, modal mounting). Not for scroll. */
+   Drop-in for elements that appear via JS state (visibility toggles,
+   modal mounting). Not for scroll. */
 
 [data-motion='rise'] {
   animation: surface-rise var(--motion-enter) both;

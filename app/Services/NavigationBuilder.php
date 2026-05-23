@@ -73,9 +73,7 @@ final class NavigationBuilder
 
     private function resolveUrl(NavigationItem $item): ?string
     {
-        $base = $item->condition === NavigationCondition::NextEvent
-            ? $this->nextEventUrl()
-            : $this->expandPlaceholders($item->url);
+        $base = $item->condition === NavigationCondition::NextEvent ? $this->nextEventUrl() : $this->expandPlaceholders($item->url);
 
         if ($base === null) {
             return null;

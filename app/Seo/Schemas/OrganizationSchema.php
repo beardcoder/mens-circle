@@ -21,7 +21,7 @@ final readonly class OrganizationSchema
                 continue;
             }
 
-            $value = $link['value'] ?? null;
+            $value = $link['value'];
             if (!is_string($value)) {
                 continue;
             }

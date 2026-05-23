@@ -45,6 +45,7 @@ class TestimonialResource extends Resource
 
     protected static ?int $navigationSort = 50;
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -115,6 +116,7 @@ class TestimonialResource extends Resource
         ]);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return $table
@@ -143,11 +145,13 @@ class TestimonialResource extends Resource
             ->defaultSort('sort_order', 'asc');
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [
@@ -157,6 +161,7 @@ class TestimonialResource extends Resource
         ];
     }
 
+    #[\Override]
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);

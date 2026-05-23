@@ -13,6 +13,7 @@ enum NewsletterStatus: string implements HasColor, HasLabel
     case Sending = 'sending';
     case Sent = 'sent';
 
+    #[\Override]
     public function getLabel(): string
     {
         return match ($this) {
@@ -22,6 +23,7 @@ enum NewsletterStatus: string implements HasColor, HasLabel
         };
     }
 
+    #[\Override]
     public function getColor(): string
     {
         return match ($this) {

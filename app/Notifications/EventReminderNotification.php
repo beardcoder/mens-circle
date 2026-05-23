@@ -46,7 +46,7 @@ final class EventReminderNotification extends Notification implements ShouldQueu
         )); // @phpstan-ignore method.notFound
     }
 
-    public function toSevenIo(object $notifiable): SevenIoMessage
+    public function toSevenIo(object $_notifiable): SevenIoMessage
     {
         $timeWord = $this->isToday ? 'heute' : 'morgen';
         $eventTime = $this->event->start_time->format('H:i');

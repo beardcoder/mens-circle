@@ -40,6 +40,7 @@ class ParticipantResource extends Resource
 
     protected static ?int $navigationSort = 30;
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -83,6 +84,7 @@ class ParticipantResource extends Resource
         ]);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return $table
@@ -118,11 +120,13 @@ class ParticipantResource extends Resource
             ->defaultSort('created_at', 'desc');
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [

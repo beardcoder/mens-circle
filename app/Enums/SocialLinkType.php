@@ -20,6 +20,7 @@ enum SocialLinkType: string implements HasLabel
     case Website = 'website';
     case Other = 'other';
 
+    #[\Override]
     public function getLabel(): string
     {
         return match ($this) {

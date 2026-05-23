@@ -19,6 +19,7 @@ class TestimonialFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
         $quotes = [
@@ -33,10 +34,10 @@ class TestimonialFactory extends Factory
         ];
 
         return [
-            'quote' => $this->faker->randomElement($quotes),
-            'author_name' => $this->faker->boolean(60) ? $this->faker->firstName() : null,
-            'email' => $this->faker->safeEmail(),
-            'role' => $this->faker->boolean(70) ? 'Teilnehmer seit ' . $this->faker->year() : null,
+            'quote' => fake()->randomElement($quotes),
+            'author_name' => fake()->boolean(60) ? fake()->firstName() : null,
+            'email' => fake()->safeEmail(),
+            'role' => fake()->boolean(70) ? 'Teilnehmer seit ' . fake()->year() : null,
             'is_published' => true,
             'published_at' => now(),
             'sort_order' => 0,
@@ -48,7 +49,7 @@ class TestimonialFactory extends Factory
      */
     public function unpublished(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'is_published' => false,
             'published_at' => null,
         ]);
@@ -59,7 +60,7 @@ class TestimonialFactory extends Factory
      */
     public function anonymous(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'author_name' => null,
             'role' => null,
         ]);

@@ -35,7 +35,7 @@ class GetPage extends Tool
             'title' => $page->title,
             'is_published' => $page->is_published,
             'published_at' => $page->published_at?->toIso8601String(),
-            'meta' => $page->meta ?? [],
+            'meta' => $page->meta,
             'content_blocks' => $page->contentBlocks->map(static fn(ContentBlock $block): array => [
                 'block_id' => $block->block_id,
                 'type' => $block->type,

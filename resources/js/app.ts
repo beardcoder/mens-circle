@@ -1,47 +1,44 @@
 /**
  * Männerkreis Niederbayern / Straubing — Application Entry Point
  *
- * Registers Alpine data factories for declarative components and wires up
- * the analytics kit. Heavy components (forms, breathing app, map) live in
- * their own files; this entry stays thin.
+ * The frontend uses no UI framework. Each component is a small vanilla TS
+ * class (extending `ReactiveHost`) that targets `[data-component="…"]`
+ * roots in the server-rendered Blade output.
+ *
+ * Filament keeps its own Alpine integration for the admin panel — that
+ * lives outside this bundle and is unaffected.
  */
 
 import './types';
-import Alpine from 'alpinejs';
 
-import { siteHeader } from '@/components/navigation';
-import {
-  newsletterForm,
-  registrationForm,
-  testimonialForm,
-} from '@/components/forms';
-import { calendarIntegration } from '@/components/calendar';
-import { eventMap } from '@/components/event-map';
-import { breathingApp } from '@/components/breathing';
+import { setupSiteHeader } from '@/components/site-header';
 import { setupScrollToTop } from '@/components/scroll-to-top';
+import { setupCalendar } from '@/components/calendar';
+import { setupEventMap } from '@/components/event-map';
+import { setupBreathing } from '@/components/breathing';
+import {
+  setupNewsletterForms,
+  setupRegistrationForms,
+  setupTestimonialForms,
+} from '@/components/forms';
 import { initUmamiKit } from '@/utils/umami-kit';
 
-Alpine.data('siteHeader', siteHeader);
-Alpine.data('newsletterForm', newsletterForm);
-Alpine.data('registrationForm', registrationForm);
-Alpine.data('testimonialForm', testimonialForm);
-Alpine.data('calendarIntegration', calendarIntegration);
-Alpine.data('eventMap', eventMap);
-Alpine.data('breathingApp', breathingApp);
-
-Alpine.start();
-
-// Wire DOM-only enhancements that don't need Alpine.
-setupScrollToTop();
-
-// Analytics: defer until the document is ready so the tracker never blocks
-// first paint or competes with critical JS during page-load.
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => initUmamiKit(), {
-    once: true,
-  });
-} else {
+function bootstrap(): void {
+  setupSiteHeader();
+  setupScrollToTop();
+  setupNewsletterForms();
+  setupRegistrationForms();
+  setupTestimonialForms();
+  setupCalendar();
+  setupEventMap();
+  setupBreathing();
   initUmamiKit();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrap, { once: true });
+} else {
+  bootstrap();
 }
 
 if (import.meta.env.DEV && 'PerformanceObserver' in globalThis) {

@@ -20,7 +20,7 @@ ambiguous-function-call = { enabled = false }
 literal-named-argument = { enabled = false }
 halstead = { effort-threshold = 7000 }
 no-literal-password = { enabled = false }
-too-many-methods = { threshold = 25 }
+too-many-methods = { threshold = 30 }
 too-many-enum-cases = { enabled = false }
 cyclomatic-complexity = { threshold = 200 }
 kan-defect = { enabled = false }

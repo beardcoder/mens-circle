@@ -21,20 +21,21 @@ class EventFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function definition(): array
     {
-        $eventDate = $this->faker->dateTimeBetween('+1 week', '+3 months');
-        $startTime = $this->faker->dateTimeBetween('18:00', '19:00');
+        $eventDate = fake()->dateTimeBetween('+1 week', '+3 months');
+        $startTime = fake()->dateTimeBetween('18:00', '19:00');
         $endTime = (clone $startTime)->modify('+2 hours');
 
         return [
-            'title' => 'Männerkreis ' . $this->faker->city(),
-            'description' => $this->faker->paragraphs(3, true),
+            'title' => 'Männerkreis ' . fake()->city(),
+            'description' => fake()->paragraphs(3, true),
             'event_date' => $eventDate,
             'start_time' => $startTime,
             'end_time' => $endTime,
-            'location' => $this->faker->city(),
-            'location_details' => $this->faker->address(),
+            'location' => fake()->city(),
+            'location_details' => fake()->address(),
             'max_participants' => 8,
             'cost_basis' => 'Auf Spendenbasis',
             'is_published' => false,
@@ -46,7 +47,7 @@ class EventFactory extends Factory
      */
     public function published(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'is_published' => true,
         ]);
     }
@@ -56,7 +57,7 @@ class EventFactory extends Factory
      */
     public function unpublished(): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'is_published' => false,
         ]);
     }
@@ -68,7 +69,7 @@ class EventFactory extends Factory
     {
         $tomorrow = now()->addDay();
 
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'event_date' => $tomorrow,
             'start_time' => $tomorrow->copy()->setTime(19, 0),
             'end_time' => $tomorrow->copy()->setTime(21, 0),
@@ -80,7 +81,7 @@ class EventFactory extends Factory
      */
     public function onDate(DateTime|DateTimeInterface $date): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'event_date' => $date,
         ]);
     }
@@ -92,7 +93,7 @@ class EventFactory extends Factory
     {
         $yesterday = now()->subDay();
 
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'event_date' => $yesterday,
             'start_time' => $yesterday->copy()->setTime(19, 0),
             'end_time' => $yesterday->copy()->setTime(21, 0),
@@ -104,7 +105,7 @@ class EventFactory extends Factory
      */
     public function withCoordinates(float $latitude = 48.8767, float $longitude = 12.5719): static
     {
-        return $this->state(static fn(array $attributes): array => [
+        return $this->state(static fn(array $_attributes): array => [
             'latitude' => $latitude,
             'longitude' => $longitude,
         ]);

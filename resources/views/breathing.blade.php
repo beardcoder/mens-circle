@@ -62,17 +62,12 @@
         <div
           id="breathingApp"
           class="breathing-app"
+          data-component="breathing-app"
           data-motion-essential
           data-phase="idle"
-          x-data="breathingApp"
-          :data-phase="phase"
         >
           <div class="breathing-app__stage" aria-live="polite">
-            <div
-              class="breathing-app__circle"
-              :data-motion="circleMotion"
-              @click="handleCircleClick"
-            >
+            <div class="breathing-app__circle" data-ref="circle">
               <span
                 class="breathing-app__ring breathing-app__ring--1"
                 aria-hidden="true"
@@ -87,10 +82,10 @@
               ></span>
               <span class="breathing-app__core" aria-hidden="true"></span>
               <span class="breathing-app__label">
-                <span class="breathing-app__phase" x-text="phaseLabel"
+                <span class="breathing-app__phase" data-ref="phase-label"
                   >Bereit</span
                 >
-                <span class="breathing-app__counter" x-text="counter"
+                <span class="breathing-app__counter" data-ref="counter"
                   >3 Runden · 35 Atemzüge</span
                 >
               </span>
@@ -100,23 +95,19 @@
           <div class="breathing-app__meta">
             <div class="breathing-app__meta-item">
               <span class="breathing-app__meta-label">Runde</span>
-              <span
-                class="breathing-app__meta-value"
-                x-text="round + '\u00a0/\u00a0' + sessionRounds"
-                >0&nbsp;/&nbsp;3</span
+              <span class="breathing-app__meta-value" data-ref="meta-round"
+                >0 / 3</span
               >
             </div>
             <div class="breathing-app__meta-item">
               <span class="breathing-app__meta-label">Atemzug</span>
-              <span
-                class="breathing-app__meta-value"
-                x-text="breath + '\u00a0/\u00a0' + sessionBreaths"
-                >0&nbsp;/&nbsp;35</span
+              <span class="breathing-app__meta-value" data-ref="meta-breath"
+                >0 / 35</span
               >
             </div>
             <div class="breathing-app__meta-item">
               <span class="breathing-app__meta-label">Zeit</span>
-              <span class="breathing-app__meta-value" x-text="formattedTimer"
+              <span class="breathing-app__meta-value" data-ref="meta-timer"
                 >00:00</span
               >
             </div>
@@ -126,10 +117,9 @@
             <button
               type="button"
               class="btn btn--primary btn--icon breathing-app__start"
-              x-show="showStartButton"
-              :aria-label="startButtonLabel"
-              :title="startButtonLabel"
-              @click="handleStart"
+              data-ref="start"
+              aria-label="Atemübung starten"
+              title="Atemübung starten"
               data-umami-event="breathing-start"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -139,16 +129,16 @@
             <button
               type="button"
               class="btn btn--outline"
-              x-show="showHoldButton"
-              x-cloak
-              x-text="holdButtonText"
-              @click="handleHold"
+              data-ref="hold"
+              hidden
               data-umami-event="breathing-resume"
-            ></button>
+            >
+              Atem freigeben
+            </button>
             <button
               type="button"
               class="btn btn--ghost"
-              @click="handleReset"
+              data-ref="reset"
               data-umami-event="breathing-reset"
             >
               Zurücksetzen
@@ -162,20 +152,22 @@
               >
               <div
                 class="breathing-picker"
-                x-ref="breathsPicker"
+                data-ref="picker"
                 role="slider"
                 tabindex="0"
                 aria-label="Atemzüge je Runde"
                 aria-valuemin="10"
                 aria-valuemax="60"
-                :aria-valuenow="settingBreaths"
-                :aria-disabled="isActive ? 'true' : null"
+                aria-valuenow="35"
               >
                 <div
                   class="breathing-picker__indicator"
                   aria-hidden="true"
                 ></div>
-                <div class="breathing-picker__track" x-ref="breathsTrack"></div>
+                <div
+                  class="breathing-picker__track"
+                  data-ref="picker-track"
+                ></div>
                 <div
                   class="breathing-picker__fade breathing-picker__fade--start"
                   aria-hidden="true"
@@ -192,26 +184,24 @@
                 <button
                   type="button"
                   class="breathing-stepper__btn"
-                  :disabled="isActive || settingRounds <= 1"
-                  @click="adjustRounds(-1)"
+                  data-ref="rounds-minus"
                   aria-label="Eine Runde weniger"
                 >
                   −
                 </button>
                 <span
                   class="breathing-stepper__value"
+                  data-ref="rounds-value"
                   role="spinbutton"
                   aria-valuemin="1"
                   aria-valuemax="6"
-                  :aria-valuenow="settingRounds"
-                  x-text="settingRounds"
+                  aria-valuenow="3"
                   >3</span
                 >
                 <button
                   type="button"
                   class="breathing-stepper__btn"
-                  :disabled="isActive || settingRounds >= 6"
-                  @click="adjustRounds(1)"
+                  data-ref="rounds-plus"
                   aria-label="Eine Runde mehr"
                 >
                   +
@@ -226,26 +216,24 @@
                 <button
                   type="button"
                   class="breathing-stepper__btn"
-                  :disabled="isActive || settingRecovery <= 5"
-                  @click="adjustRecovery(-1)"
+                  data-ref="recovery-minus"
                   aria-label="Erholungs-Halt verringern"
                 >
                   −
                 </button>
                 <span
                   class="breathing-stepper__value"
+                  data-ref="recovery-value"
                   role="spinbutton"
                   aria-valuemin="5"
                   aria-valuemax="30"
-                  :aria-valuenow="settingRecovery"
-                  x-text="settingRecovery"
+                  aria-valuenow="15"
                   >15</span
                 >
                 <button
                   type="button"
                   class="breathing-stepper__btn"
-                  :disabled="isActive || settingRecovery >= 30"
-                  @click="adjustRecovery(1)"
+                  data-ref="recovery-plus"
                   aria-label="Erholungs-Halt erhöhen"
                 >
                   +

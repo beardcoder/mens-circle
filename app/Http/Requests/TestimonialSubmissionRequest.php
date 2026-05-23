@@ -29,6 +29,7 @@ final class TestimonialSubmissionRequest extends JsonFormRequest
      *
      * @return array<string, string>
      */
+    #[\Override]
     public function messages(): array
     {
         return [
