@@ -2,25 +2,29 @@
  * Männerkreis Niederbayern / Straubing — Main Stylesheet
  * =======================================================
  *
- * Cascade architecture. Every stylesheet is loaded into a named layer so the
- * cascade order is explicit and predictable. Un-layered styles beat all layers,
- * so we keep the top-level file clean of loose rules.
+ * Cascade architecture. Every stylesheet is loaded into a named layer so
+ * the cascade order is explicit and predictable. Un-layered styles beat
+ * all layers, so we keep the top-level file clean of loose rules.
  *
- *   reset     — normalize browser defaults
- *   tokens    — design tokens (colors, spacing, type, motion)
- *   base      — element defaults (typography, fonts)
- *   layout    — page-level layout utilities
- *   components— reusable UI (buttons, header, footer, accordion, forms, modal)
- *   sections  — page sections (hero, intro, faq, etc.)
- *   utilities — single-purpose helpers, animations, print
+ *   reset      — normalize browser defaults
+ *   tokens     — design tokens (colors, spacing, type, motion)
+ *   base       — element defaults (typography, fonts)
+ *   layout     — page-level layout utilities
+ *   components — reusable UI (buttons, header, footer, accordion, forms, modal)
+ *   sections   — page sections (hero, intro, faq, etc.)
+ *   utilities  — single-purpose helpers, animations, reveal, print
  *
- * Features in use across the codebase:
- *   - OKLCH color space for perceptually uniform colors
- *   - Logical properties for internationalization
+ * Modern features in use across the codebase:
+ *   - OKLCH color space (perceptually uniform)
+ *   - Logical properties for internationalisation
+ *   - @property with animatable custom properties
+ *   - color-mix(in oklch, …) for blending
  *   - Native CSS nesting
- *   - Container queries where helpful
- *   - Scroll-driven animations (animation-timeline)
- *   - prefers-color-scheme
+ *   - @starting-style + transition-behavior: allow-discrete (toast entry/exit)
+ *   - animation-timeline: view() / scroll(root) (eyebrow lines, parallax, reveal)
+ *   - View Transitions API (cross-document fade)
+ *   - prefers-color-scheme, prefers-reduced-motion
+ *   - :has(), :focus-visible
  */
 
 @layer reset, tokens, base, layout, components, sections, utilities;
@@ -28,9 +32,9 @@
 @import url('@fontsource-variable/playfair-display');
 @import url('@fontsource-variable/dm-sans');
 
-/* Global @keyframes — kept unlayered so the animation lookup never has
-   to cross cascade layer boundaries. Used by ambient breathing circles
-   in hero / intro / cta / newsletter / whatsapp / event sections. */
+/* Global @keyframes — kept unlayered so the animation lookup never has to
+   cross cascade layer boundaries. Used by ambient breathing circles in
+   hero / intro / cta / newsletter / whatsapp / event sections. */
 @import url('base/_keyframes.css');
 @import url('base/_reset.css') layer(reset);
 @import url('base/_variables.css') layer(tokens);
@@ -68,6 +72,7 @@
 @import url('utilities/_animations.css') layer(utilities);
 @import url('utilities/_micro-animations.css') layer(utilities);
 @import url('utilities/_motion.css') layer(utilities);
+@import url('utilities/_reveal.css') layer(utilities);
 @import url('utilities/_visual.css') layer(utilities);
 @import url('utilities/_view-transitions.css') layer(utilities);
 @import url('utilities/_print.css') layer(utilities);

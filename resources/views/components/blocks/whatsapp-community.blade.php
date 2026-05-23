@@ -22,7 +22,7 @@
           href="{{ $settings->whatsapp_community_link }}"
           target="_blank"
           rel="noopener noreferrer"
-          class="whatsapp__button"
+          class="btn btn--whatsapp whatsapp__button"
           data-umami-event="whatsapp-click"
           data-umami-event-type="community-join"
         >

@@ -12,6 +12,7 @@
  * Template binds via x-text / x-show / :data-* / @click — no querySelector.
  */
 
+import { clamp } from '@/utils/helpers';
 import type { AlpineMagics } from '@/types/alpine';
 
 type Phase = 'idle' | 'breathing' | 'retention' | 'recovery' | 'complete';
@@ -32,16 +33,16 @@ const PHASE_LABEL: Record<Phase, string> = {
 };
 
 const PICKER_ITEM_WIDTH = 72;
+const PICKER_MIN = 10;
+const PICKER_MAX = 60;
+const PICKER_STEP = 5;
+const DRAG_THRESHOLD_PX = 4;
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
 
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max);
 }
 
 export function breathingApp() {
@@ -72,7 +73,7 @@ export function breathingApp() {
     _breathHandle: null as number | null,
     _rafHandle: null as number | null,
     _retentionStart: 0,
-    _pickerCleanup: null as (() => void) | null,
+    _pickerController: new AbortController(),
 
     // ─── Computed getters (Alpine-reactive) ────────────────────────────
 
@@ -171,7 +172,7 @@ export function breathingApp() {
 
     destroy(): void {
       this._clearScheduled();
-      this._pickerCleanup?.();
+      this._pickerController.abort();
     },
 
     // ─── Public actions (bound in the template) ────────────────────────
@@ -373,33 +374,32 @@ export function breathingApp() {
 
       if (!pickerEl || !trackEl) return;
 
-      const min = 10;
-      const max = 60;
-      const stepSize = 5;
       const values: number[] = [];
 
-      for (let v = min; v <= max; v += stepSize) values.push(v);
-
-      // Build picker item buttons
-      trackEl.textContent = '';
-
-      for (const value of values) {
-        const item = document.createElement('button');
-
-        item.type = 'button';
-        item.className = 'breathing-picker__item';
-        item.dataset.value = String(value);
-        item.textContent = String(value);
-        item.setAttribute('aria-label', `${value} Atemzüge`);
-        trackEl.appendChild(item);
+      for (let v = PICKER_MIN; v <= PICKER_MAX; v += PICKER_STEP) {
+        values.push(v);
       }
+
+      trackEl.replaceChildren(
+        ...values.map((value) => {
+          const item = document.createElement('button');
+
+          item.type = 'button';
+          item.className = 'breathing-picker__item';
+          item.dataset.value = String(value);
+          item.textContent = String(value);
+          item.setAttribute('aria-label', `${value} Atemzüge`);
+
+          return item;
+        })
+      );
 
       const items = Array.from(
         trackEl.querySelectorAll<HTMLElement>('.breathing-picker__item')
       );
 
       const indexOfValue = (v: number): number =>
-        clamp(Math.round((v - min) / stepSize), 0, values.length - 1);
+        clamp(Math.round((v - PICKER_MIN) / PICKER_STEP), 0, values.length - 1);
 
       let currentIndex = indexOfValue(this.settingBreaths);
       let dragOffset = 0;
@@ -429,28 +429,38 @@ export function breathingApp() {
         applyTransform(animated);
       };
 
-      const onPointerDown = (e: PointerEvent): void => {
-        if (this.isActive) return;
-        if (e.pointerType === 'mouse' && e.button !== 0) return;
+      const { signal } = this._pickerController;
 
-        pointerId = e.pointerId;
-        dragStartX = e.clientX;
-        dragStartIndex = currentIndex;
-        dragged = false;
-        trackEl.setPointerCapture(e.pointerId);
-        pickerEl.classList.add('is-dragging');
-      };
+      trackEl.addEventListener(
+        'pointerdown',
+        (e: PointerEvent) => {
+          if (this.isActive) return;
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
 
-      const onPointerMove = (e: PointerEvent): void => {
-        if (pointerId !== e.pointerId) return;
+          pointerId = e.pointerId;
+          dragStartX = e.clientX;
+          dragStartIndex = currentIndex;
+          dragged = false;
+          trackEl.setPointerCapture(e.pointerId);
+          pickerEl.classList.add('is-dragging');
+        },
+        { signal }
+      );
 
-        const delta = e.clientX - dragStartX;
+      trackEl.addEventListener(
+        'pointermove',
+        (e: PointerEvent) => {
+          if (pointerId !== e.pointerId) return;
 
-        if (!dragged && Math.abs(delta) > 4) dragged = true;
+          const delta = e.clientX - dragStartX;
 
-        dragOffset = delta;
-        applyTransform(false);
-      };
+          if (!dragged && Math.abs(delta) > DRAG_THRESHOLD_PX) dragged = true;
+
+          dragOffset = delta;
+          applyTransform(false);
+        },
+        { signal }
+      );
 
       const onPointerEnd = (e: PointerEvent): void => {
         if (pointerId !== e.pointerId) return;
@@ -468,57 +478,72 @@ export function breathingApp() {
         }
       };
 
-      trackEl.addEventListener('pointerdown', onPointerDown);
-      trackEl.addEventListener('pointermove', onPointerMove);
-      trackEl.addEventListener('pointerup', onPointerEnd);
-      trackEl.addEventListener('pointercancel', onPointerEnd);
+      trackEl.addEventListener('pointerup', onPointerEnd, { signal });
+      trackEl.addEventListener('pointercancel', onPointerEnd, { signal });
 
-      trackEl.addEventListener('click', (e) => {
-        // Block item-click while a session is active.
-        if (this.isActive) {
-          e.preventDefault();
+      trackEl.addEventListener(
+        'click',
+        (e: MouseEvent) => {
+          if (this.isActive) {
+            e.preventDefault();
 
-          return;
-        }
+            return;
+          }
 
-        if (dragged) {
-          e.preventDefault();
-          e.stopPropagation();
-          dragged = false;
+          if (dragged) {
+            e.preventDefault();
+            e.stopPropagation();
+            dragged = false;
 
-          return;
-        }
+            return;
+          }
 
-        const target = (e.target as HTMLElement).closest<HTMLElement>(
-          '.breathing-picker__item'
-        );
+          const target = (e.target as HTMLElement).closest<HTMLElement>(
+            '.breathing-picker__item'
+          );
 
-        if (!target?.dataset.value) return;
+          if (!target?.dataset.value) return;
 
-        setIndex(indexOfValue(Number.parseInt(target.dataset.value, 10)), true);
-      });
+          setIndex(
+            indexOfValue(Number.parseInt(target.dataset.value, 10)),
+            true
+          );
+        },
+        { signal }
+      );
 
-      pickerEl.addEventListener('keydown', (e) => {
-        if (this.isActive) return;
+      pickerEl.addEventListener(
+        'keydown',
+        (e: KeyboardEvent) => {
+          if (this.isActive) return;
 
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
-          e.preventDefault();
-          setIndex(currentIndex - 1);
-        } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
-          e.preventDefault();
-          setIndex(currentIndex + 1);
-        } else if (e.key === 'Home') {
-          e.preventDefault();
-          setIndex(0);
-        } else if (e.key === 'End') {
-          e.preventDefault();
-          setIndex(values.length - 1);
-        }
-      });
+          switch (e.key) {
+            case 'ArrowLeft':
+            case 'ArrowDown':
+              e.preventDefault();
+              setIndex(currentIndex - 1);
+              break;
+            case 'ArrowRight':
+            case 'ArrowUp':
+              e.preventDefault();
+              setIndex(currentIndex + 1);
+              break;
+            case 'Home':
+              e.preventDefault();
+              setIndex(0);
+              break;
+            case 'End':
+              e.preventDefault();
+              setIndex(values.length - 1);
+              break;
+          }
+        },
+        { signal }
+      );
 
       pickerEl.addEventListener(
         'wheel',
-        (e) => {
+        (e: WheelEvent) => {
           if (this.isActive) return;
           if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
 
@@ -527,18 +552,10 @@ export function breathingApp() {
           if (e.deltaX > 10) setIndex(currentIndex + 1);
           else if (e.deltaX < -10) setIndex(currentIndex - 1);
         },
-        { passive: false }
+        { passive: false, signal }
       );
 
-      // Set initial position without animation
       setIndex(currentIndex, false);
-
-      this._pickerCleanup = (): void => {
-        trackEl.removeEventListener('pointerdown', onPointerDown);
-        trackEl.removeEventListener('pointermove', onPointerMove);
-        trackEl.removeEventListener('pointerup', onPointerEnd);
-        trackEl.removeEventListener('pointercancel', onPointerEnd);
-      };
     },
   };
 }

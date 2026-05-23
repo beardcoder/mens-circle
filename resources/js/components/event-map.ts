@@ -5,6 +5,9 @@
  * scrolls into view. No-op if lat/lng data attributes are missing.
  */
 
+import { isCoarsePointer } from '@/utils/helpers';
+import type { AlpineMagics } from '@/types/alpine';
+
 interface MapDataset {
   lat: number;
   lng: number;
@@ -16,9 +19,7 @@ function readDataset(el: HTMLElement): MapDataset | null {
   const lat = Number.parseFloat(el.dataset.lat ?? '');
   const lng = Number.parseFloat(el.dataset.lng ?? '');
 
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-    return null;
-  }
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
 
   return {
     lat,
@@ -29,11 +30,7 @@ function readDataset(el: HTMLElement): MapDataset | null {
 }
 
 function buildDirectionsUrl(data: MapDataset): string {
-  const isCoarsePointer =
-    typeof globalThis.matchMedia === 'function' &&
-    globalThis.matchMedia('(pointer: coarse)').matches;
-
-  if (isCoarsePointer) {
+  if (isCoarsePointer()) {
     const label = encodeURIComponent(data.address || data.title);
 
     return `geo:${data.lat},${data.lng}?q=${data.lat},${data.lng}(${label})`;
@@ -52,11 +49,12 @@ function escapeHtml(value: string): string {
 }
 
 export function eventMap() {
-  return {
-    _cleanup: [] as Array<() => void>,
+  const controller = new AbortController();
+  let map: import('leaflet').Map | null = null;
 
-    init() {
-      const el = (this as unknown as { $el: HTMLElement }).$el;
+  return {
+    init(this: AlpineMagics) {
+      const el = this.$el;
       const data = readDataset(el);
 
       if (!data) {
@@ -68,7 +66,7 @@ export function eventMap() {
       let initialized = false;
 
       const initMap = async (): Promise<void> => {
-        if (initialized) return;
+        if (initialized || controller.signal.aborted) return;
 
         initialized = true;
         el.dataset.state = 'loading';
@@ -78,11 +76,13 @@ export function eventMap() {
           import('leaflet/dist/leaflet.css'),
         ]);
 
+        if (controller.signal.aborted) return;
+
         const container = el.querySelector<HTMLElement>('.event-map__canvas');
 
         if (!container) return;
 
-        const map = L.map(container, {
+        map = L.map(container, {
           scrollWheelZoom: false,
           zoomControl: true,
           attributionControl: true,
@@ -117,21 +117,18 @@ export function eventMap() {
 
         L.marker([data.lat, data.lng], { icon }).addTo(map).bindPopup(popup);
 
-        const enableWheel = (): void => {
-          map.scrollWheelZoom.enable();
-        };
-        const disableWheel = (): void => {
-          map.scrollWheelZoom.disable();
-        };
+        const { signal } = controller;
 
-        container.addEventListener('click', enableWheel);
-        container.addEventListener('mouseleave', disableWheel);
-
-        this._cleanup.push(() => {
-          container.removeEventListener('click', enableWheel);
-          container.removeEventListener('mouseleave', disableWheel);
-          map.remove();
-        });
+        container.addEventListener(
+          'click',
+          () => map?.scrollWheelZoom.enable(),
+          { signal }
+        );
+        container.addEventListener(
+          'mouseleave',
+          () => map?.scrollWheelZoom.disable(),
+          { signal }
+        );
 
         el.dataset.state = 'ready';
       };
@@ -156,12 +153,15 @@ export function eventMap() {
       );
 
       observer.observe(el);
-      this._cleanup.push(() => observer.disconnect());
+      controller.signal.addEventListener('abort', () => observer.disconnect(), {
+        once: true,
+      });
     },
 
-    destroy(): void {
-      this._cleanup.forEach((fn) => fn());
-      this._cleanup = [];
+    destroy() {
+      controller.abort();
+      map?.remove();
+      map = null;
     },
   };
 }

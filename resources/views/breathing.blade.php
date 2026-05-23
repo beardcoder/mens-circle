@@ -125,7 +125,7 @@
           <div class="breathing-app__controls">
             <button
               type="button"
-              class="btn btn--primary breathing-app__start"
+              class="btn btn--primary btn--icon breathing-app__start"
               x-show="showStartButton"
               :aria-label="startButtonLabel"
               :title="startButtonLabel"
@@ -138,7 +138,7 @@
             </button>
             <button
               type="button"
-              class="btn btn--secondary"
+              class="btn btn--outline"
               x-show="showHoldButton"
               x-cloak
               x-text="holdButtonText"

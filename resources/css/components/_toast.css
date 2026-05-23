@@ -1,4 +1,12 @@
-/* Toast notifications */
+/**
+ * Toast Notifications
+ *
+ * Entry + exit animations are pure CSS. JS appends the element and removes
+ * it after the lifetime expires — `@starting-style` handles the rise-in,
+ * `transition-behavior: allow-discrete` and `.toast--hiding` handle the
+ * fall-out without a single requestAnimationFrame in JS.
+ */
+
 .toast {
   position: fixed;
   inset-block-start: var(--space-md);
@@ -15,30 +23,29 @@
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2xl);
-  opacity: 0;
-  backdrop-filter: blur(12px);
-  transform: translateY(-12px) scale(0.98);
-  transition:
-    opacity var(--motion-quick),
-    transform var(--motion-quick),
-    box-shadow var(--motion-quick);
-}
-
-.toast--visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  backdrop-filter: blur(12px);
+  scale: 1;
+  translate: 0 0;
+  transition:
+    opacity 320ms var(--ease-settle),
+    translate 320ms var(--ease-settle),
+    scale 320ms var(--ease-settle),
+    box-shadow 320ms var(--ease-settle);
 
-  /* Bleeding-edge: @starting-style for entry animation */
+  /* Enter: animates from the @starting-style snapshot to the rules above */
   @starting-style {
     opacity: 0;
-    transform: translateY(-16px) scale(0.96);
+    scale: 0.96;
+    translate: 0 -16px;
   }
 }
 
 .toast--hiding {
   pointer-events: none;
   opacity: 0;
-  transform: translateY(-12px) scale(0.98);
+  scale: 0.98;
+  translate: 0 -12px;
 }
 
 .toast__icon {
@@ -74,7 +81,10 @@
   opacity: 0.9;
 }
 
-/* Success Toast */
+/* ============================================
+   Type variants
+   ============================================ */
+
 .toast--success {
   color: var(--text-primary);
   background: color-mix(
@@ -94,7 +104,6 @@
   color: var(--color-sage);
 }
 
-/* Error Toast */
 .toast--error {
   color: var(--text-primary);
   background: color-mix(in oklch, var(--color-error) 12%, var(--bg-elevated));
@@ -110,7 +119,6 @@
   color: var(--color-error);
 }
 
-/* Info Toast */
 .toast--info {
   color: var(--text-primary);
   background: color-mix(in oklch, var(--color-info) 10%, var(--bg-elevated));
@@ -126,7 +134,6 @@
   color: var(--color-terracotta);
 }
 
-/* Warning Toast */
 .toast--warning {
   color: var(--text-primary);
   background: color-mix(in oklch, var(--color-warning) 12%, var(--bg-elevated));
@@ -142,7 +149,6 @@
   color: color-mix(in oklch, var(--color-warning) 85%, var(--color-ink));
 }
 
-/* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   .toast {
     background: color-mix(in oklch, var(--bg-elevated) 95%, transparent);
@@ -194,12 +200,27 @@
   }
 }
 
-/* Mobile responsive */
 @media (width <= 768px) {
   .toast {
     inset-block-start: var(--space-sm);
     inset-inline: var(--space-sm);
     min-inline-size: auto;
     max-inline-size: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: opacity 120ms linear;
+
+    @starting-style {
+      scale: 1;
+      translate: 0;
+    }
+  }
+
+  .toast--hiding {
+    scale: 1;
+    translate: 0;
   }
 }

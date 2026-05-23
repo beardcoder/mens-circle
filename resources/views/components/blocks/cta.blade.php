@@ -5,7 +5,10 @@
     $anchor = $data['anchor'] ?? null;
 @endphp
 
-<section class="section section--large cta-section" @if ($anchor) id="{{ $anchor }}" @endif>
+<section
+  class="section section--large cta-section"
+  @if ($anchor) id="{{ $anchor }}" @endif
+>
   <div class="container">
     <div class="cta__content">
       @if (!empty($data['eyebrow']))

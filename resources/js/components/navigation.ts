@@ -1,82 +1,88 @@
 /**
- * Site Header Alpine Component
- * Manages mobile navigation and scroll-based header state.
+ * Navigation Alpine Components
+ *
+ * `siteHeader` drives the fixed navigation: open/close drawer, scroll-state
+ * toggle, hero-overlap detection. `scrollToTop` powers the floating button.
+ *
+ * Both share a single AbortController per instance — calling `destroy()`
+ * aborts every listener and observer in one shot.
  */
 
+import type { AlpineMagics } from '@/types/alpine';
+
+const SCROLL_THRESHOLD = 50;
+const SCROLL_TOP_THRESHOLD = 400;
+
 export function siteHeader() {
+  const controller = new AbortController();
+  let heroObserver: IntersectionObserver | null = null;
+
   return {
     isNavOpen: false,
     isScrolled: false,
     isOnHero: false,
     scrollPosition: 0,
-    _cleanup: [] as Array<() => void>,
 
-    init() {
-      const scrollThreshold = 50;
+    init(this: AlpineMagics & SiteHeaderState) {
       const heroEl = document.querySelector<HTMLElement>('.hero');
 
       document.body.classList.toggle('has-hero', !!heroEl);
       document.body.classList.toggle('no-hero', !heroEl);
 
       const updateScroll = (): void => {
-        this.isScrolled = window.scrollY > scrollThreshold || !heroEl;
+        this.isScrolled = window.scrollY > SCROLL_THRESHOLD || !heroEl;
       };
 
       updateScroll();
-      window.addEventListener('scroll', updateScroll, { passive: true });
-      this._cleanup.push(() =>
-        window.removeEventListener('scroll', updateScroll)
-      );
+
+      const { signal } = controller;
+
+      window.addEventListener('scroll', updateScroll, {
+        passive: true,
+        signal,
+      });
 
       if (heroEl) {
-        const observer = new IntersectionObserver(
+        heroObserver = new IntersectionObserver(
           (entries) => {
-            entries.forEach((entry) => {
+            for (const entry of entries) {
               this.isOnHero =
                 entry.isIntersecting && entry.intersectionRatio > 0.15;
-            });
+            }
           },
           { threshold: [0, 0.15, 0.35, 0.5], rootMargin: '-10% 0px 0px 0px' }
         );
 
-        observer.observe(heroEl);
-        this._cleanup.push(() => observer.disconnect());
+        heroObserver.observe(heroEl);
       }
 
-      const handleOutsideClick = (e: MouseEvent): void => {
-        if (
-          this.isNavOpen &&
-          !(this as unknown as { $el: HTMLElement }).$el.contains(
-            e.target as Node
-          )
-        ) {
-          this.closeNav();
-        }
-      };
+      document.addEventListener(
+        'click',
+        (event: MouseEvent) => {
+          if (this.isNavOpen && !this.$el.contains(event.target as Node)) {
+            this.closeNav();
+          }
+        },
+        { signal }
+      );
 
-      const handleEscape = (e: KeyboardEvent): void => {
-        if (e.key === 'Escape' && this.isNavOpen) {
-          this.closeNav();
-        }
-      };
-
-      document.addEventListener('click', handleOutsideClick);
-      document.addEventListener('keydown', handleEscape);
-
-      this._cleanup.push(() => {
-        document.removeEventListener('click', handleOutsideClick);
-        document.removeEventListener('keydown', handleEscape);
-      });
+      document.addEventListener(
+        'keydown',
+        (event: KeyboardEvent) => {
+          if (event.key === 'Escape' && this.isNavOpen) this.closeNav();
+        },
+        { signal }
+      );
     },
 
-    openNav(): void {
+    openNav(this: SiteHeaderState) {
       this.scrollPosition = window.scrollY;
       this.isNavOpen = true;
       document.body.classList.add('nav-open');
       document.body.style.top = `-${this.scrollPosition}px`;
     },
 
-    closeNav(): void {
+    closeNav(this: SiteHeaderState) {
       if (!this.isNavOpen) return;
 
       this.isNavOpen = false;
@@ -90,7 +96,7 @@ export function siteHeader() {
       });
     },
 
-    closeNavImmediate(): void {
+    closeNavImmediate(this: SiteHeaderState) {
       if (!this.isNavOpen) return;
 
       this.isNavOpen = false;
@@ -98,48 +104,52 @@ export function siteHeader() {
       document.body.style.top = '';
     },
 
-    toggleNav(): void {
-      if (this.isNavOpen) {
-        this.closeNav();
-      } else {
-        this.openNav();
-      }
+    toggleNav(this: SiteHeaderState) {
+      if (this.isNavOpen) this.closeNav();
+      else this.openNav();
     },
 
-    destroy(): void {
-      this._cleanup.forEach((fn) => fn());
-      this._cleanup = [];
+    destroy() {
+      controller.abort();
+      heroObserver?.disconnect();
+      heroObserver = null;
     },
   };
 }
 
-/**
- * Scroll-to-top button Alpine component.
- */
+interface SiteHeaderState {
+  isNavOpen: boolean;
+  isScrolled: boolean;
+  isOnHero: boolean;
+  scrollPosition: number;
+  closeNav: () => void;
+  openNav: () => void;
+}
+
 export function scrollToTop() {
+  const controller = new AbortController();
+
   return {
     isVisible: false,
-    _cleanup: [] as Array<() => void>,
 
-    init() {
-      const threshold = 400;
-
+    init(this: { isVisible: boolean }) {
       const update = (): void => {
-        this.isVisible = window.scrollY > threshold;
+        this.isVisible = window.scrollY > SCROLL_TOP_THRESHOLD;
       };
 
       update();
-      window.addEventListener('scroll', update, { passive: true });
-      this._cleanup.push(() => window.removeEventListener('scroll', update));
+      window.addEventListener('scroll', update, {
+        passive: true,
+        signal: controller.signal,
+      });
     },
 
-    scrollUp(): void {
+    scrollUp() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    destroy(): void {
-      this._cleanup.forEach((fn) => fn());
-      this._cleanup = [];
+    destroy() {
+      controller.abort();
     },
   };
 }
