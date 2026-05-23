@@ -56,13 +56,15 @@ FROM ${FRANKENPHP_IMAGE} AS production
 # Install required PHP extensions:
 # - intl:    required by Filament
 # - gd:      image driver for Spatie Media Library (default)
-# - exif:    EXIF data extraction from images
+# - exif:    EXIF data extraction (Spatie Media Library requirement)
+# - zip:     archive support (Spatie Media Library requirement)
 # - opcache: bytecode cache for production performance
 # - pcntl:   signal handling for Octane (SIGINT/SIGTERM)
 RUN install-php-extensions \
     intl \
     gd \
     exif \
+    zip \
     opcache \
     pcntl
 
