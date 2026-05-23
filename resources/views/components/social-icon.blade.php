@@ -37,7 +37,7 @@ $iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
   data-umami-event-platform="{{ $socialType->value }}"
   {{ $attributes->merge(['class' => $linkClass]) }}
 >
-  <x-icon :name="$iconName" class="{{ $iconClass }}" />
+  <x-sprite :name="$iconName" class="{{ $iconClass }}" />
   @if ($isTextVariant)
     <span class="social-link__label">{{ $title }}</span>
   @else

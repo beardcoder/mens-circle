@@ -290,7 +290,7 @@
           id="addToCalendar"
           data-action="open"
         >
-          <x-icon name="calendar" :size="18" />
+          <x-sprite name="calendar" :size="18" />
           In Kalender speichern
         </button>
 

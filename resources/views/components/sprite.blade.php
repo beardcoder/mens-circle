@@ -5,10 +5,13 @@
   the layout. Outputs only `<svg><use/></svg>` — two DOM nodes per icon
   regardless of path complexity.
 
+  Named `<x-sprite>` (not `<x-icon>`) to avoid collision with the
+  `blade-ui-kit/blade-icons` component shipped by Filament.
+
   Usage:
-    <x-icon name="play" />
-    <x-icon name="calendar" :size="18" class="event-info__icon" />
-    <x-icon name="logo" title="Männerkreis" />
+    <x-sprite name="play" />
+    <x-sprite name="calendar" :size="18" class="event-info__icon" />
+    <x-sprite name="logo" title="Männerkreis" />
 --}}
 
 <svg

@@ -4,7 +4,7 @@
   @include ('partials.seo-head')
 </head>
 <body>
-  <x-icon-sprite />
+  <x-sprite-defs />
 
   <!-- Skip Link -->
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
@@ -200,7 +200,7 @@
     aria-label="Nach oben scrollen"
     title="Nach oben"
   >
-    <x-icon name="chevron-up" />
+    <x-sprite name="chevron-up" />
   </button>
 
   <!-- JavaScript -->

@@ -26,7 +26,7 @@
           data-umami-event="whatsapp-click"
           data-umami-event-type="community-join"
         >
-          <x-icon name="social-whatsapp" class="whatsapp__icon" />
+          <x-sprite name="social-whatsapp" class="whatsapp__icon" />
           <span>Community beitreten</span>
         </a>
         <p class="whatsapp__hint">Kostenlos und unverbindlich</p>

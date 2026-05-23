@@ -25,7 +25,7 @@
                         ]) }}
           @else
             <div class="moderator__photo-placeholder">
-              <x-icon name="user" />
+              <x-sprite name="user" />
               <span>Foto</span>
             </div>
           @endif

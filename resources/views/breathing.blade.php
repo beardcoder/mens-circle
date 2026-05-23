@@ -122,7 +122,7 @@
               title="Atemübung starten"
               data-umami-event="breathing-start"
             >
-              <x-icon name="play" />
+              <x-sprite name="play" />
             </button>
             <button
               type="button"
