@@ -1,11 +1,11 @@
 {{--
   Inline SVG sprite — defines every icon used by the public frontend as a
   reusable `<symbol>`. Mounted once near the top of `<body>` (see
-  layouts/app.blade.php). All `<x-icon name="…" />` references resolve to
-  these symbols via `<use href="#icon-…" />`.
+  layouts/app.blade.php). All `<x-sprite name="…" />` references resolve
+  to these symbols via `<use href="#icon-…" />`.
 
   Adding a new icon: add a `<symbol id="icon-…">` here, pick a sensible
-  viewBox, and consume it via `<x-icon name="…">` anywhere in the views.
+  viewBox, and consume it via `<x-sprite name="…">` anywhere in the views.
 --}}
 
 <svg
