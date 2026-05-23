@@ -38,6 +38,32 @@ enum SocialLinkType: string implements HasLabel
         };
     }
 
+    /**
+     * Sprite symbol id used by `<x-icon :name="…" />` for the public site.
+     * The full inline SVG returned by `getIcon()` below is reserved for
+     * email templates where external `<use>` references are not safe.
+     */
+    public function getIconName(): string
+    {
+        return match ($this) {
+            self::Email => 'social-email',
+            self::Phone => 'social-phone',
+            self::Website => 'social-website',
+            self::Instagram => 'social-instagram',
+            self::Facebook => 'social-facebook',
+            self::Twitter => 'social-twitter',
+            self::LinkedIn => 'social-linkedin',
+            self::YouTube => 'social-youtube',
+            self::WhatsApp => 'social-whatsapp',
+            self::Telegram => 'social-telegram',
+            self::Other => 'social-other',
+        };
+    }
+
+    /**
+     * Inline SVG string — used by email templates. The public frontend
+     * should reference the sprite via `getIconName()` instead.
+     */
     public function getIcon(int $size = 24): string
     {
         return match ($this) {

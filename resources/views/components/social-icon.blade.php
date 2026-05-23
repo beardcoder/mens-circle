@@ -4,7 +4,7 @@
 use App\Enums\SocialLinkType;
 
 $socialType = $type instanceof SocialLinkType ? $type : SocialLinkType::tryFrom($type ?? '') ?? SocialLinkType::Other;
-$iconSvg = $socialType->getIcon(24);
+$iconName = $socialType->getIconName();
 $title = $label ?: $socialType->getLabel();
 
 $isInternal = str_starts_with($url, 'mailto:') || str_starts_with($url, 'tel:');
@@ -37,7 +37,7 @@ $iconClass = $isTextVariant ? 'social-link__icon' : 'social-icon__svg';
   data-umami-event-platform="{{ $socialType->value }}"
   {{ $attributes->merge(['class' => $linkClass]) }}
 >
-  <span class="{{ $iconClass }}">{!! $iconSvg !!}</span>
+  <x-icon :name="$iconName" class="{{ $iconClass }}" />
   @if ($isTextVariant)
     <span class="social-link__label">{{ $title }}</span>
   @else

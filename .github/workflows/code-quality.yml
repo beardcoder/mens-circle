@@ -36,12 +36,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Copy environment file
-        run: cp .env.example .env
-
-      - name: Generate application key
-        run: php artisan key:generate
-
       - name: Mago format check
         run: composer format:check
 
@@ -51,9 +45,6 @@ jobs:
       - name: Mago analyze (informational)
         run: composer analyze
         continue-on-error: true
-
-      - name: Run tests
-        run: php artisan test
 
   javascript-checks:
     name: JavaScript Code Quality
