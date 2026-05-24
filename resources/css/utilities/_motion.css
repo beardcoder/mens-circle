@@ -2,13 +2,15 @@
  * Motion System
  * ─────────────────────────────────────────────────────────────
  *
- * The site's central motion vocabulary. Three concerns live here:
+ * The site's central motion vocabulary. Two concerns live here:
  *
  *   1. Hero page-load entrance — one signature moment, then silence.
- *   2. Scroll-anchored ornament motion — eyebrow lines, ambient drift.
- *   3. Section background depth — slow parallax on decorative layers.
+ *   2. Scroll-anchored ornament motion — eyebrow lines + section titles
+ *      settle in as they enter the viewport.
  *
- * Deliberate omission: there is no generic "fade-in on scroll" pattern.
+ * Deliberate omissions: no parallax (decorative layers stay anchored to
+ * their blocks instead of drifting within them), and no generic
+ * "fade-in on scroll" pattern — body content is visible at rest.
  * Body content is visible at rest. Motion is reserved for ornament and
  * interaction — never to gate readability.
  *
@@ -103,43 +105,6 @@
   to {
     letter-spacing: -0.05em;
     transform: translate3d(0, 0, 0);
-  }
-}
-
-/* ============================================
-   Section depth — slow parallax on dark/colored sections
-   ============================================
-   Decorative ::after gradients drift up as the section enters view.
-   Adds atmosphere without disturbing content. Limited to sections
-   that already paint a radial glow. */
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .journey-section::after,
-    .moderator-section::before,
-    .testimonials-section::before {
-      animation: section-depth linear both;
-      animation-timeline: view();
-      animation-range: entry 0% exit 100%;
-      will-change: transform, opacity;
-    }
-  }
-}
-
-@keyframes section-depth {
-  0% {
-    opacity: 0.55;
-    transform: translate3d(0, 4%, 0);
-  }
-
-  50% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-
-  100% {
-    opacity: 0.7;
-    transform: translate3d(0, -3%, 0);
   }
 }
 
@@ -244,9 +209,6 @@
   .hero__scroll,
   .eyebrow::before,
   .section-title,
-  .journey-section::after,
-  .moderator-section::before,
-  .testimonials-section::before,
   [data-motion='rise'] {
     animation: none;
   }
