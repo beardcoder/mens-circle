@@ -2,13 +2,20 @@
  * Site Header
  *
  * Mobile nav drawer + scroll-state toggle + hero-overlap detection.
- * Vanilla TS, no framework. Driven by the `[data-component="site-header"]`
- * attribute on the `<header>` element.
+ * Vanilla TS, no framework. Driven by `[data-component="site-header"]`
+ * on the `<header>` element.
+ *
+ * The drawer's open/close animation lives entirely in CSS (clip-path +
+ * opacity + transition-delay stagger). This class just toggles the
+ * `.open` class and manages body scroll lock, focus restoration, and
+ * the close-on-link/outside-click/escape interactions.
  */
 
+import { prefersReducedMotion } from '@/utils/helpers';
 import { mountAll, ReactiveHost } from '@/lib/reactive-host';
 
 const SCROLL_THRESHOLD_PX = 50;
+const CLOSE_ANIMATION_MS = 620;
 
 class SiteHeader extends ReactiveHost {
   private isNavOpen = false;
@@ -19,6 +26,7 @@ class SiteHeader extends ReactiveHost {
   private nav: HTMLElement | null = null;
   private toggle: HTMLButtonElement | null = null;
   private heroObserver: IntersectionObserver | null = null;
+  private closeTimer: number | null = null;
 
   protected setup(): void {
     this.heroEl = document.querySelector<HTMLElement>('.hero');
@@ -36,7 +44,7 @@ class SiteHeader extends ReactiveHost {
         if (next === this.isScrolled) return;
 
         this.isScrolled = next;
-        this.render();
+        this.renderScrollState();
       },
       { passive: true }
     );
@@ -52,7 +60,7 @@ class SiteHeader extends ReactiveHost {
             if (next === this.isOnHero) continue;
 
             this.isOnHero = next;
-            this.render();
+            this.renderScrollState();
           }
         },
         { threshold: [0, 0.15, 0.35, 0.5], rootMargin: '-10% 0px 0px 0px' }
@@ -63,9 +71,10 @@ class SiteHeader extends ReactiveHost {
 
     this.on(this.toggle, 'click', () => this.toggleNav());
 
-    // Close drawer on any nav link tap immediately (no animation lag).
+    // Close drawer when a link is tapped. The drawer animates out
+    // before the navigation happens so the transition is visible.
     for (const link of this.queryAll<HTMLAnchorElement>('.nav a')) {
-      this.on(link, 'click', () => this.closeImmediate());
+      this.on(link, 'click', () => this.close());
     }
 
     this.onDocument('click', (event) => {
@@ -77,12 +86,27 @@ class SiteHeader extends ReactiveHost {
     this.onDocument('keydown', (event) => {
       if (event.key === 'Escape' && this.isNavOpen) this.close();
     });
+
+    this.renderScrollState();
+    this.renderNavState();
   }
 
-  protected render(): void {
+  protected teardown(): void {
+    this.heroObserver?.disconnect();
+    this.heroObserver = null;
+
+    if (this.closeTimer !== null) {
+      window.clearTimeout(this.closeTimer);
+      this.closeTimer = null;
+    }
+  }
+
+  private renderScrollState(): void {
     this.root.classList.toggle('scrolled', this.isScrolled);
     this.root.classList.toggle('header--on-hero', this.isOnHero);
+  }
 
+  private renderNavState(): void {
     if (this.nav) {
       this.nav.classList.toggle('open', this.isNavOpen);
       this.nav.setAttribute('aria-expanded', String(this.isNavOpen));
@@ -98,36 +122,47 @@ class SiteHeader extends ReactiveHost {
     }
   }
 
-  protected teardown(): void {
-    this.heroObserver?.disconnect();
-    this.heroObserver = null;
-  }
-
   private open(): void {
+    if (this.isNavOpen) return;
+
+    if (this.closeTimer !== null) {
+      window.clearTimeout(this.closeTimer);
+      this.closeTimer = null;
+    }
+
     this.scrollPosition = window.scrollY;
     this.isNavOpen = true;
     document.body.classList.add('nav-open');
     document.body.style.top = `-${this.scrollPosition}px`;
-    this.render();
+    this.renderNavState();
   }
 
   private close(): void {
     if (!this.isNavOpen) return;
 
     this.isNavOpen = false;
-    document.body.classList.remove('nav-open');
-    document.body.style.top = '';
-    window.scrollTo({ top: this.scrollPosition, left: 0, behavior: 'instant' });
-    this.render();
-  }
+    this.renderNavState();
 
-  private closeImmediate(): void {
-    if (!this.isNavOpen) return;
+    // Hold the scroll lock until the drawer animation has fully run so
+    // the page doesn't snap behind the closing menu.
+    const restore = (): void => {
+      document.body.classList.remove('nav-open');
+      document.body.style.top = '';
+      window.scrollTo({
+        top: this.scrollPosition,
+        left: 0,
+        behavior: 'instant',
+      });
+      this.closeTimer = null;
+    };
 
-    this.isNavOpen = false;
-    document.body.classList.remove('nav-open');
-    document.body.style.top = '';
-    this.render();
+    if (prefersReducedMotion()) {
+      restore();
+
+      return;
+    }
+
+    this.closeTimer = window.setTimeout(restore, CLOSE_ANIMATION_MS);
   }
 
   private toggleNav(): void {
