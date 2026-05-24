@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use Override;
 
 /**
@@ -36,8 +37,8 @@ class NewsletterSubscription extends Model
     protected static function booted(): void
     {
         static::creating(static function (self $subscription): void {
-            $subscription->token;
-            $subscription->subscribed_at;
+            $subscription->token ??= Str::random(64);
+            $subscription->subscribed_at ??= now();
         });
     }
 
