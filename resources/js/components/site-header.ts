@@ -1,159 +1,87 @@
 /**
  * Site Header
  *
- * Mobile nav drawer + scroll-state toggle + hero-overlap detection.
- * Vanilla TS, no framework. Driven by `[data-component="site-header"]`
- * on the `<header>` element.
+ * Mobile nav drawer + scroll-state class + hero-overlap detection.
+ * Factory style — composes `createHost` for listener cleanup, holds
+ * state in closure variables, and exposes a minimal `{ destroy }` API.
  *
- * The drawer's open/close animation lives entirely in CSS (clip-path +
- * opacity + transition-delay stagger). This class just toggles the
- * `.open` class and manages body scroll lock, focus restoration, and
- * the close-on-link/outside-click/escape interactions.
+ * The drawer's open/close visuals live in CSS (clip-path + opacity +
+ * stagger). This module just toggles `.open` / `.scrolled` /
+ * `.header--on-hero` classes and manages body scroll lock + focus.
  */
 
 import { prefersReducedMotion } from '@/utils/helpers';
-import { mountAll, ReactiveHost } from '@/lib/reactive-host';
+import { createHost, mountAll, type Component } from '@/lib/host';
 
 const SCROLL_THRESHOLD_PX = 50;
 const CLOSE_ANIMATION_MS = 620;
 
-class SiteHeader extends ReactiveHost {
-  private isNavOpen = false;
-  private isScrolled = false;
-  private isOnHero = false;
-  private scrollPosition = 0;
-  private heroEl: HTMLElement | null = null;
-  private nav: HTMLElement | null = null;
-  private toggle: HTMLButtonElement | null = null;
-  private heroObserver: IntersectionObserver | null = null;
-  private closeTimer: number | null = null;
+function createSiteHeader(root: HTMLElement): Component {
+  const host = createHost(root);
+  const heroEl = document.querySelector<HTMLElement>('.hero');
+  const nav = host.query<HTMLElement>('.nav');
+  const toggle = host.query<HTMLButtonElement>('.nav-toggle');
 
-  protected setup(): void {
-    this.heroEl = document.querySelector<HTMLElement>('.hero');
-    this.nav = this.query('.nav');
-    this.toggle = this.query<HTMLButtonElement>('.nav-toggle');
+  let isNavOpen = false;
+  let isScrolled = window.scrollY > SCROLL_THRESHOLD_PX || !heroEl;
+  let isOnHero = false;
+  let scrollPosition = 0;
+  let closeTimer: number | null = null;
 
-    document.body.classList.toggle('has-hero', !!this.heroEl);
-    document.body.classList.toggle('no-hero', !this.heroEl);
+  document.body.classList.toggle('has-hero', !!heroEl);
+  document.body.classList.toggle('no-hero', !heroEl);
 
-    this.onWindow(
-      'scroll',
-      () => {
-        const next = window.scrollY > SCROLL_THRESHOLD_PX || !this.heroEl;
+  const renderScrollState = (): void => {
+    root.classList.toggle('scrolled', isScrolled);
+    root.classList.toggle('header--on-hero', isOnHero);
+  };
 
-        if (next === this.isScrolled) return;
-
-        this.isScrolled = next;
-        this.renderScrollState();
-      },
-      { passive: true }
-    );
-
-    this.isScrolled = window.scrollY > SCROLL_THRESHOLD_PX || !this.heroEl;
-
-    if (this.heroEl) {
-      this.heroObserver = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            const next = entry.isIntersecting && entry.intersectionRatio > 0.15;
-
-            if (next === this.isOnHero) continue;
-
-            this.isOnHero = next;
-            this.renderScrollState();
-          }
-        },
-        { threshold: [0, 0.15, 0.35, 0.5], rootMargin: '-10% 0px 0px 0px' }
-      );
-
-      this.heroObserver.observe(this.heroEl);
+  const renderNavState = (): void => {
+    if (nav) {
+      nav.classList.toggle('open', isNavOpen);
+      nav.setAttribute('aria-expanded', String(isNavOpen));
     }
 
-    this.on(this.toggle, 'click', () => this.toggleNav());
-
-    // Close drawer when a link is tapped. The drawer animates out
-    // before the navigation happens so the transition is visible.
-    for (const link of this.queryAll<HTMLAnchorElement>('.nav a')) {
-      this.on(link, 'click', () => this.close());
-    }
-
-    this.onDocument('click', (event) => {
-      if (this.isNavOpen && !this.root.contains(event.target as Node | null)) {
-        this.close();
-      }
-    });
-
-    this.onDocument('keydown', (event) => {
-      if (event.key === 'Escape' && this.isNavOpen) this.close();
-    });
-
-    this.renderScrollState();
-    this.renderNavState();
-  }
-
-  protected teardown(): void {
-    this.heroObserver?.disconnect();
-    this.heroObserver = null;
-
-    if (this.closeTimer !== null) {
-      window.clearTimeout(this.closeTimer);
-      this.closeTimer = null;
-    }
-  }
-
-  private renderScrollState(): void {
-    this.root.classList.toggle('scrolled', this.isScrolled);
-    this.root.classList.toggle('header--on-hero', this.isOnHero);
-  }
-
-  private renderNavState(): void {
-    if (this.nav) {
-      this.nav.classList.toggle('open', this.isNavOpen);
-      this.nav.setAttribute('aria-expanded', String(this.isNavOpen));
-    }
-
-    if (this.toggle) {
-      this.toggle.classList.toggle('active', this.isNavOpen);
-      this.toggle.setAttribute('aria-expanded', String(this.isNavOpen));
-      this.toggle.setAttribute(
+    if (toggle) {
+      toggle.classList.toggle('active', isNavOpen);
+      toggle.setAttribute('aria-expanded', String(isNavOpen));
+      toggle.setAttribute(
         'aria-label',
-        this.isNavOpen ? 'Menü schließen' : 'Menü öffnen'
+        isNavOpen ? 'Menü schließen' : 'Menü öffnen'
       );
     }
-  }
+  };
 
-  private open(): void {
-    if (this.isNavOpen) return;
+  const openNav = (): void => {
+    if (isNavOpen) return;
 
-    if (this.closeTimer !== null) {
-      window.clearTimeout(this.closeTimer);
-      this.closeTimer = null;
+    if (closeTimer !== null) {
+      window.clearTimeout(closeTimer);
+      closeTimer = null;
     }
 
-    this.scrollPosition = window.scrollY;
-    this.isNavOpen = true;
+    scrollPosition = window.scrollY;
+    isNavOpen = true;
     document.body.classList.add('nav-open');
-    document.body.style.top = `-${this.scrollPosition}px`;
-    this.renderNavState();
-  }
+    document.body.style.top = `-${scrollPosition}px`;
+    renderNavState();
+  };
 
-  private close(): void {
-    if (!this.isNavOpen) return;
+  const closeNav = (): void => {
+    if (!isNavOpen) return;
 
-    this.isNavOpen = false;
-    this.renderNavState();
+    isNavOpen = false;
+    renderNavState();
 
-    // Hold the scroll lock until the drawer animation has fully run so
-    // the page doesn't snap behind the closing menu.
     const restore = (): void => {
       document.body.classList.remove('nav-open');
       document.body.style.top = '';
       window.scrollTo({
-        top: this.scrollPosition,
+        top: scrollPosition,
         left: 0,
         behavior: 'instant',
       });
-      this.closeTimer = null;
+      closeTimer = null;
     };
 
     if (prefersReducedMotion()) {
@@ -162,15 +90,79 @@ class SiteHeader extends ReactiveHost {
       return;
     }
 
-    this.closeTimer = window.setTimeout(restore, CLOSE_ANIMATION_MS);
+    closeTimer = window.setTimeout(restore, CLOSE_ANIMATION_MS);
+  };
+
+  // ─── Scroll state ──────────────────────────────────────────────────
+  host.onWindow(
+    'scroll',
+    () => {
+      const next = window.scrollY > SCROLL_THRESHOLD_PX || !heroEl;
+
+      if (next === isScrolled) return;
+
+      isScrolled = next;
+      renderScrollState();
+    },
+    { passive: true }
+  );
+
+  // ─── Hero overlap ──────────────────────────────────────────────────
+  let heroObserver: IntersectionObserver | null = null;
+
+  if (heroEl) {
+    heroObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const next = entry.isIntersecting && entry.intersectionRatio > 0.15;
+
+          if (next === isOnHero) continue;
+
+          isOnHero = next;
+          renderScrollState();
+        }
+      },
+      { threshold: [0, 0.15, 0.35, 0.5], rootMargin: '-10% 0px 0px 0px' }
+    );
+
+    heroObserver.observe(heroEl);
+    host.signal.addEventListener('abort', () => heroObserver?.disconnect(), {
+      once: true,
+    });
   }
 
-  private toggleNav(): void {
-    if (this.isNavOpen) this.close();
-    else this.open();
+  // ─── Interactions ──────────────────────────────────────────────────
+  host.on(toggle, 'click', () => {
+    if (isNavOpen) closeNav();
+    else openNav();
+  });
+
+  for (const link of host.queryAll<HTMLAnchorElement>('.nav a')) {
+    host.on(link, 'click', closeNav);
   }
+
+  host.onDocument('click', (event) => {
+    if (isNavOpen && !root.contains(event.target as Node | null)) {
+      closeNav();
+    }
+  });
+
+  host.onDocument('keydown', (event) => {
+    if (event.key === 'Escape' && isNavOpen) closeNav();
+  });
+
+  // ─── Initial paint ─────────────────────────────────────────────────
+  renderScrollState();
+  renderNavState();
+
+  return {
+    destroy(): void {
+      if (closeTimer !== null) window.clearTimeout(closeTimer);
+      host.destroy();
+    },
+  };
 }
 
 export function setupSiteHeader(): void {
-  mountAll('[data-component="site-header"]', (el) => new SiteHeader(el));
+  mountAll('[data-component="site-header"]', createSiteHeader);
 }

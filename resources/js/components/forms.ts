@@ -1,13 +1,14 @@
 /**
  * Form Components
  *
- * Three forms (newsletter, registration, testimonial) share the same
- * lifecycle: abandon tracking, JSON submission, toast feedback. A single
- * `FormHandler` class drives all three; each `setup*Forms()` exports
- * wires it up with a form-specific config object.
+ * Three forms — newsletter, registration, testimonial — share a single
+ * `createFormHandler` factory. Each `setup*Forms()` export wires that
+ * factory up with a form-specific config (URL, payload builder,
+ * tracking events).
  *
- * Listeners are managed via the shared `ReactiveHost` AbortController so
- * tearing down releases everything in one call.
+ * Composition over inheritance: the form handler doesn't extend the
+ * host, it owns one. State lives in closure variables; cleanup is
+ * driven by the host's `AbortController`.
  */
 
 import { isValidEmail } from '@/utils/helpers';
@@ -17,7 +18,7 @@ import {
   trackEvent,
   type UmamiEventData,
 } from '@/utils/umami';
-import { mountAll, ReactiveHost } from '@/lib/reactive-host';
+import { createHost, mountAll, type Component } from '@/lib/host';
 import type { ApiResponse } from '@/types';
 
 type FormFieldElement =
@@ -33,21 +34,17 @@ interface FormCompletionState {
 }
 
 interface FormHandlerConfig<TPayload extends Record<string, unknown>> {
-  /** Logical form name used in tracking metadata */
   formType: string;
-  /** Where to POST — may depend on the form element (e.g. data-submit-url) */
   url: string | ((form: HTMLFormElement) => string);
-  /** Build the JSON body. Return `null` to abort submission. */
   buildPayload: (form: HTMLFormElement) => TPayload | null;
-  /** Tracking events fired around submission */
   events: {
     abandonFilled: string;
     submit: string;
     success: string;
     error: string;
   };
-  /** Optional submit-time tracking metadata derived from the payload */
   submitMeta?: (payload: TPayload) => UmamiEventData;
+  onSuccess?: (form: HTMLFormElement) => void;
 }
 
 const SUBMIT_LABEL = 'Wird gesendet...';
@@ -94,60 +91,30 @@ function getFormCompletionState(form: HTMLFormElement): FormCompletionState {
   };
 }
 
-class FormHandler<
-  TPayload extends Record<string, unknown>,
-> extends ReactiveHost {
-  private readonly form: HTMLFormElement;
-  private readonly config: FormHandlerConfig<TPayload>;
-  private hasSubmitted = false;
-  private hasTrackedAbandon = false;
-  private firstInteractionAt: number | null = null;
+function createFormHandler<TPayload extends Record<string, unknown>>(
+  root: HTMLElement,
+  config: FormHandlerConfig<TPayload>
+): Component | null {
+  if (!(root instanceof HTMLFormElement)) return null;
 
-  public constructor(
-    form: HTMLFormElement,
-    config: FormHandlerConfig<TPayload>
-  ) {
-    super(form);
-    this.form = form;
-    this.config = config;
-  }
+  const form = root;
+  const host = createHost(root);
+  const submitButton = host.query<HTMLButtonElement>('[type="submit"]');
 
-  protected setup(): void {
-    const submitButton = this.query<HTMLButtonElement>('[type="submit"]');
+  let hasSubmitted = false;
+  let hasTrackedAbandon = false;
+  let firstInteractionAt: number | null = null;
 
-    this.on(this.form, 'input', () => this.markInteraction());
-    this.on(this.form, 'change', () => this.markInteraction());
-    this.on(
-      this.form,
-      'submit',
-      (event) => {
-        void this.handleSubmit(event, submitButton);
-      },
-      { capture: true }
-    );
+  const markInteraction = (): void => {
+    firstInteractionAt ??= Date.now();
+  };
 
-    this.onWindow('pagehide', () => this.trackAbandonIfFilled(), {
-      capture: true,
-    });
-    this.onWindow('beforeunload', () => this.trackAbandonIfFilled(), {
-      capture: true,
-    });
-  }
-
-  private markInteraction(): void {
-    this.firstInteractionAt ??= Date.now();
-  }
-
-  private trackAbandonIfFilled(): void {
-    if (
-      this.hasTrackedAbandon ||
-      this.hasSubmitted ||
-      this.firstInteractionAt === null
-    ) {
+  const trackAbandonIfFilled = (): void => {
+    if (hasTrackedAbandon || hasSubmitted || firstInteractionAt === null) {
       return;
     }
 
-    const completion = getFormCompletionState(this.form);
+    const completion = getFormCompletionState(form);
 
     if (
       completion.requiredTotal === 0 ||
@@ -156,10 +123,10 @@ class FormHandler<
       return;
     }
 
-    this.hasTrackedAbandon = true;
+    hasTrackedAbandon = true;
 
-    trackEvent(this.config.events.abandonFilled, {
-      form: this.config.formType,
+    trackEvent(config.events.abandonFilled, {
+      form: config.formType,
       required_filled: completion.requiredFilled,
       required_total: completion.requiredTotal,
       required_completion_pct: Math.round(
@@ -168,25 +135,21 @@ class FormHandler<
       filled_fields: completion.filledFields,
       total_fields: completion.totalFields,
       seconds_since_first_input: Math.round(
-        (Date.now() - this.firstInteractionAt) / 1000
+        (Date.now() - firstInteractionAt) / 1000
       ),
       page: window.location.pathname,
     });
-  }
+  };
 
-  private async handleSubmit(
-    event: SubmitEvent,
-    submitButton: HTMLButtonElement | null
-  ): Promise<void> {
+  const handleSubmit = async (event: SubmitEvent): Promise<void> => {
     event.preventDefault();
+    hasSubmitted = true;
 
-    this.hasSubmitted = true;
-
-    const payload = this.config.buildPayload(this.form);
+    const payload = config.buildPayload(form);
 
     if (payload === null) return;
 
-    trackEvent(this.config.events.submit, this.config.submitMeta?.(payload));
+    trackEvent(config.events.submit, config.submitMeta?.(payload));
 
     const originalLabel = submitButton?.textContent ?? '';
 
@@ -197,9 +160,7 @@ class FormHandler<
 
     try {
       const url =
-        typeof this.config.url === 'function'
-          ? this.config.url(this.form)
-          : this.config.url;
+        typeof config.url === 'function' ? config.url(form) : config.url;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -208,22 +169,22 @@ class FormHandler<
           Accept: 'application/json',
         },
         body: JSON.stringify(payload),
-        signal: this.signal,
+        signal: host.signal,
       });
 
       const data = (await response.json()) as ApiResponse;
 
       if (data.success) {
-        this.form.reset();
+        form.reset();
         showToast('success', data.message);
-        trackEvent(this.config.events.success);
-        this.onSuccess?.();
+        trackEvent(config.events.success);
+        config.onSuccess?.(form);
       } else {
         showToast('error', data.message);
-        trackEvent(this.config.events.error, { error: data.message });
+        trackEvent(config.events.error, { error: data.message });
       }
     } catch (error) {
-      if (this.signal.aborted) return;
+      if (host.signal.aborted) return;
 
       const message = error instanceof Error ? error.message : 'Network error';
 
@@ -231,17 +192,24 @@ class FormHandler<
         'error',
         'Ein Fehler ist aufgetreten. Bitte versuche es erneut.'
       );
-      trackEvent(this.config.events.error, { error: message });
+      trackEvent(config.events.error, { error: message });
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
         submitButton.textContent = originalLabel;
       }
     }
-  }
+  };
 
-  /** Subclasses override to react after a successful submission. */
-  protected onSuccess?(): void;
+  host.on(form, 'input', markInteraction);
+  host.on(form, 'change', markInteraction);
+  host.on(form, 'submit', (event) => void handleSubmit(event), {
+    capture: true,
+  });
+  host.onWindow('pagehide', trackAbandonIfFilled, { capture: true });
+  host.onWindow('beforeunload', trackAbandonIfFilled, { capture: true });
+
+  return { destroy: host.destroy };
 }
 
 /* ============================================
@@ -271,9 +239,8 @@ const newsletterConfig: FormHandlerConfig<{ email: string }> = {
 };
 
 export function setupNewsletterForms(): void {
-  mountAll(
-    '[data-component="newsletter-form"]',
-    (el) => new FormHandler(el as HTMLFormElement, newsletterConfig)
+  mountAll('[data-component="newsletter-form"]', (root) =>
+    createFormHandler(root, newsletterConfig)
   );
 }
 
@@ -344,14 +311,13 @@ const registrationConfig: FormHandlerConfig<RegistrationPayload> = {
 };
 
 export function setupRegistrationForms(): void {
-  mountAll(
-    '[data-component="registration-form"]',
-    (el) => new FormHandler(el as HTMLFormElement, registrationConfig)
+  mountAll('[data-component="registration-form"]', (root) =>
+    createFormHandler(root, registrationConfig)
   );
 }
 
 /* ============================================
-   Testimonial — extends the base with a live char counter
+   Testimonial — with live char counter binding
    ============================================ */
 
 interface TestimonialPayload extends Record<string, unknown> {
@@ -417,39 +383,43 @@ const testimonialConfig: FormHandlerConfig<TestimonialPayload> = {
   },
 };
 
-class TestimonialFormHandler extends FormHandler<TestimonialPayload> {
-  private counterEl: HTMLElement | null = null;
-  private textarea: HTMLTextAreaElement | null = null;
+function createTestimonialForm(root: HTMLElement): Component | null {
+  if (!(root instanceof HTMLFormElement)) return null;
 
-  public constructor(form: HTMLFormElement) {
-    super(form, testimonialConfig);
-  }
+  const handler = createFormHandler(root, testimonialConfig);
 
-  protected override setup(): void {
-    super.setup();
+  if (!handler) return null;
 
-    this.counterEl = this.query('[data-ref="char-count"]');
-    this.textarea = this.query<HTMLTextAreaElement>('#quote');
+  // Attach a live char-counter binding on top of the base handler.
+  // It shares the same lifecycle: when the base host aborts via
+  // destroy(), the counter listener is removed too because it's
+  // registered with its own scoped host that aborts in tandem.
+  const counterHost = createHost(root);
+  const counterEl = counterHost.query<HTMLElement>('[data-ref="char-count"]');
+  const textarea = counterHost.query<HTMLTextAreaElement>('#quote');
 
-    if (this.textarea) {
-      this.on(this.textarea, 'input', () => this.updateCount());
-      this.updateCount();
+  const update = (): void => {
+    if (counterEl && textarea) {
+      counterEl.textContent = String(textarea.value.length);
     }
+  };
+
+  if (textarea) {
+    counterHost.on(textarea, 'input', update);
+    // The form reset that runs after a successful submit fires AFTER
+    // the input is cleared, so we listen for it to zero out the counter.
+    counterHost.on(root, 'reset', () => window.setTimeout(update, 0));
+    update();
   }
 
-  protected override onSuccess(): void {
-    this.updateCount();
-  }
-
-  private updateCount(): void {
-    if (!this.counterEl || !this.textarea) return;
-    this.counterEl.textContent = String(this.textarea.value.length);
-  }
+  return {
+    destroy(): void {
+      counterHost.destroy();
+      handler.destroy();
+    },
+  };
 }
 
 export function setupTestimonialForms(): void {
-  mountAll(
-    '[data-component="testimonial-form"]',
-    (el) => new TestimonialFormHandler(el as HTMLFormElement)
-  );
+  mountAll('[data-component="testimonial-form"]', createTestimonialForm);
 }

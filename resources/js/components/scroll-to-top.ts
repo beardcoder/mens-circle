@@ -1,43 +1,37 @@
 /**
  * Scroll-to-Top Button
  *
- * Plain DOM enhancement — no framework. Looks for `<button class="scroll-to-top">`
- * elements in the document, drives a `.scroll-to-top--visible` class based on
- * scroll position, and binds the click to a smooth scroll to the top.
+ * Toggles `.scroll-to-top--visible` based on scroll position; clicking
+ * the button smooth-scrolls back to the top. Factory style — no class.
  */
+
+import { createHost, mountAll, type Component } from '@/lib/host';
 
 const VISIBILITY_THRESHOLD_PX = 400;
 const VISIBLE_CLASS = 'scroll-to-top--visible';
 
-export function setupScrollToTop(): () => void {
-  const buttons = Array.from(
-    document.querySelectorAll<HTMLButtonElement>('.scroll-to-top')
-  );
+function createScrollToTop(root: HTMLElement): Component | null {
+  if (!(root instanceof HTMLButtonElement)) return null;
 
-  if (buttons.length === 0) return () => {};
-
-  const controller = new AbortController();
-  const { signal } = controller;
+  const host = createHost(root);
 
   const update = (): void => {
-    const visible = window.scrollY > VISIBILITY_THRESHOLD_PX;
-
-    for (const button of buttons) {
-      button.classList.toggle(VISIBLE_CLASS, visible);
-    }
+    root.classList.toggle(
+      VISIBLE_CLASS,
+      window.scrollY > VISIBILITY_THRESHOLD_PX
+    );
   };
 
-  for (const button of buttons) {
-    button.style.removeProperty('display');
-    button.addEventListener(
-      'click',
-      () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-      { signal }
-    );
-  }
+  root.style.removeProperty('display');
 
-  window.addEventListener('scroll', update, { passive: true, signal });
+  host.on(root, 'click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  host.onWindow('scroll', update, { passive: true });
   update();
 
-  return () => controller.abort();
+  return { destroy: host.destroy };
+}
+
+export function setupScrollToTop(): void {
+  mountAll('.scroll-to-top', createScrollToTop);
 }

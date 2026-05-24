@@ -1,12 +1,13 @@
 /**
- * Event Map
+ * Event Map — lazy-loaded Leaflet map
  *
- * Lazy-loaded Leaflet map. Only fetches Leaflet (~150KB) when the element
- * scrolls into view. No-op if lat/lng data attributes are missing.
+ * Only fetches Leaflet (~150 KB) once the element scrolls into view.
+ * Factory style; aborts the in-flight load if the component is
+ * destroyed before Leaflet finishes loading.
  */
 
 import { isCoarsePointer } from '@/utils/helpers';
-import { mountAll, ReactiveHost } from '@/lib/reactive-host';
+import { createHost, mountAll, type Component } from '@/lib/host';
 
 interface MapDataset {
   lat: number;
@@ -48,67 +49,37 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
-class EventMap extends ReactiveHost {
-  private map: import('leaflet').Map | null = null;
-  private initialized = false;
+function createEventMap(root: HTMLElement): Component {
+  const host = createHost(root);
+  const data = readDataset(root);
 
-  protected setup(): void {
-    const data = readDataset(this.root);
+  let map: import('leaflet').Map | null = null;
+  let initialized = false;
 
-    if (!data) {
-      this.root.hidden = true;
+  if (!data) {
+    root.hidden = true;
 
-      return;
-    }
-
-    if (typeof IntersectionObserver === 'undefined') {
-      void this.initMap(data);
-
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            obs.disconnect();
-            void this.initMap(data);
-            break;
-          }
-        }
-      },
-      { rootMargin: '200px' }
-    );
-
-    observer.observe(this.root);
-    this.signal.addEventListener('abort', () => observer.disconnect(), {
-      once: true,
-    });
+    return { destroy: host.destroy };
   }
 
-  protected teardown(): void {
-    this.map?.remove();
-    this.map = null;
-  }
+  const initMap = async (): Promise<void> => {
+    if (initialized || host.signal.aborted) return;
 
-  private async initMap(data: MapDataset): Promise<void> {
-    if (this.initialized || this.signal.aborted) return;
-
-    this.initialized = true;
-    this.root.dataset.state = 'loading';
+    initialized = true;
+    root.dataset.state = 'loading';
 
     const [{ default: L }] = await Promise.all([
       import('leaflet'),
       import('leaflet/dist/leaflet.css'),
     ]);
 
-    if (this.signal.aborted) return;
+    if (host.signal.aborted) return;
 
-    const container = this.query<HTMLElement>('.event-map__canvas');
+    const container = host.query<HTMLElement>('.event-map__canvas');
 
     if (!container) return;
 
-    this.map = L.map(container, {
+    map = L.map(container, {
       scrollWheelZoom: false,
       zoomControl: true,
       attributionControl: true,
@@ -118,7 +89,7 @@ class EventMap extends ReactiveHost {
       maxZoom: 19,
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(this.map);
+    }).addTo(map);
 
     const icon = L.divIcon({
       className: 'event-map__marker',
@@ -141,15 +112,45 @@ class EventMap extends ReactiveHost {
       buildDirectionsUrl(data) +
       '" target="_blank" rel="noopener">Route planen</a>';
 
-    L.marker([data.lat, data.lng], { icon }).addTo(this.map).bindPopup(popup);
+    L.marker([data.lat, data.lng], { icon }).addTo(map).bindPopup(popup);
 
-    this.on(container, 'click', () => this.map?.scrollWheelZoom.enable());
-    this.on(container, 'mouseleave', () => this.map?.scrollWheelZoom.disable());
+    host.on(container, 'click', () => map?.scrollWheelZoom.enable());
+    host.on(container, 'mouseleave', () => map?.scrollWheelZoom.disable());
 
-    this.root.dataset.state = 'ready';
+    root.dataset.state = 'ready';
+  };
+
+  if (typeof IntersectionObserver === 'undefined') {
+    void initMap();
+  } else {
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            obs.disconnect();
+            void initMap();
+            break;
+          }
+        }
+      },
+      { rootMargin: '200px' }
+    );
+
+    observer.observe(root);
+    host.signal.addEventListener('abort', () => observer.disconnect(), {
+      once: true,
+    });
   }
+
+  return {
+    destroy(): void {
+      map?.remove();
+      map = null;
+      host.destroy();
+    },
+  };
 }
 
 export function setupEventMap(): void {
-  mountAll('[data-component="event-map"]', (el) => new EventMap(el));
+  mountAll('[data-component="event-map"]', createEventMap);
 }
