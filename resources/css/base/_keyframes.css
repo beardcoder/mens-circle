@@ -40,17 +40,6 @@
   }
 }
 
-/* ============================================
-   Hero parallax mid layer — decorative circles drift up gently.
-   Driven from `_hero.css` via `animation-timeline: scroll(root)`.
-   ============================================ */
-@keyframes hero-parallax-mid {
-  to {
-    opacity: 0.55;
-    transform: translate3d(0, -8%, 0);
-  }
-}
-
 /* Ambient thread — slow horizontal pulse for decorative section
    lines (e.g. journey divider). */
 @keyframes thread-drift {
