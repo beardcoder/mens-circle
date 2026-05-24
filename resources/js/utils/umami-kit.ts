@@ -1,14 +1,15 @@
 /**
  * Umami Kit
  *
- * Page-level engagement tracking layered on top of the bare `umami.track`
- * call. Drives: scroll-depth checkpoints, time-on-page heartbeat, idle/
- * active transitions, external-link clicks, section visibility and page
- * exit. Every listener is registered with the same `AbortSignal` so
- * `destroy()` releases everything in a single `controller.abort()`.
+ * Page-level engagement tracking on top of the bare `umami.track` call.
+ * Drives: scroll-depth checkpoints, time-on-page heartbeat, idle/active
+ * transitions, external-link clicks, section visibility and page exit.
  *
- * Based on https://github.com/rhelmer/umami-kit, adapted to preserve the
- * project's named event constants and to avoid duplicate tracking.
+ * Factory style. Every listener is registered against a single
+ * `AbortController` so `destroy()` releases everything in one call.
+ *
+ * Based on https://github.com/rhelmer/umami-kit, adapted to preserve
+ * the project's named event constants and avoid duplicate tracking.
  */
 
 import {
@@ -39,6 +40,17 @@ interface UmamiKitState {
   visibleElementsCount: number;
 }
 
+export interface UmamiKit {
+  destroy(): void;
+  getStats(): {
+    timeOnPageSeconds: number;
+    maxScrollDepth: number;
+    scrollDepthsReached: number[];
+    isIdle: boolean;
+    visibleElementsCount: number;
+  };
+}
+
 const DEFAULTS: ResolvedOptions = {
   scrollDepthThresholds: [25, 50, 75, 90, 100],
   scrollDebounceMs: 120,
@@ -62,282 +74,107 @@ const ACTIVITY_EVENTS = [
 
 const MAX_UMAMI_WAIT_ATTEMPTS = 80;
 
-export class UmamiKit {
-  private readonly options: ResolvedOptions;
-  private readonly state: UmamiKitState;
-  private readonly controller = new AbortController();
-  private scrollDebounceTimer: number | null = null;
-  private heartbeatTimer: number | null = null;
-  private idleTimer: number | null = null;
-  private visibilityObserver: IntersectionObserver | null = null;
-  private readonly seenVisibleElements = new WeakSet<Element>();
-  private pageExitTracked = false;
-  private initialized = false;
+function waitForUmami(callback: () => void, attempts = 0): void {
+  if (typeof window.umami?.track === 'function') {
+    callback();
 
-  public constructor(options: UmamiKitOptions = {}) {
-    this.options = { ...DEFAULTS, ...options };
-    this.state = {
-      startTime: Date.now(),
-      lastActivityAt: Date.now(),
-      isIdle: false,
-      trackedScrollDepths: new Set<number>(),
-      visibleElementsCount: 0,
-    };
+    return;
   }
 
-  public init(): void {
-    if (this.initialized) return;
+  if (attempts >= MAX_UMAMI_WAIT_ATTEMPTS) {
+    callback();
 
-    this.initialized = true;
-
-    this.waitForUmami(() => {
-      this.setupScrollTracking();
-      this.setupTimeTracking();
-      this.setupIdleTracking();
-      this.setupClickTracking();
-      this.setupVisibilityTracking();
-      this.setupPageExitTracking();
-      this.log('Initialized');
-    });
+    return;
   }
 
-  public destroy(): void {
-    this.controller.abort();
+  window.setTimeout(() => waitForUmami(callback, attempts + 1), 100);
+}
 
-    if (this.scrollDebounceTimer !== null) {
-      window.clearTimeout(this.scrollDebounceTimer);
-      this.scrollDebounceTimer = null;
-    }
+function collectElementData(element: HTMLElement): UmamiEventData {
+  const eventData: UmamiEventData = {};
 
-    if (this.heartbeatTimer !== null) {
-      window.clearInterval(this.heartbeatTimer);
-      this.heartbeatTimer = null;
-    }
+  for (const [key, value] of Object.entries(element.dataset)) {
+    if (!key.startsWith('umamiData') || !value) continue;
 
-    if (this.idleTimer !== null) {
-      window.clearInterval(this.idleTimer);
-      this.idleTimer = null;
-    }
+    const rawKey = key.slice('umamiData'.length);
 
-    this.visibilityObserver?.disconnect();
-    this.visibilityObserver = null;
+    if (!rawKey) continue;
+
+    const normalizedKey = rawKey.charAt(0).toLowerCase() + rawKey.slice(1);
+
+    eventData[normalizedKey] = value;
   }
 
-  public getStats(): {
-    timeOnPageSeconds: number;
-    maxScrollDepth: number;
-    scrollDepthsReached: number[];
-    isIdle: boolean;
-    visibleElementsCount: number;
-  } {
-    const reached = Array.from(this.state.trackedScrollDepths);
+  eventData.element = element.tagName.toLowerCase();
 
-    return {
-      timeOnPageSeconds: this.getTimeOnPageSeconds(),
-      maxScrollDepth: reached.length > 0 ? Math.max(...reached) : 0,
-      scrollDepthsReached: reached.sort((a, b) => a - b),
-      isIdle: this.state.isIdle,
-      visibleElementsCount: this.state.visibleElementsCount,
-    };
+  if (element.id) eventData.element_id = element.id;
+
+  if (element.className) {
+    eventData.element_classes = String(element.className).slice(0, 120);
   }
 
-  // ─── Wiring ────────────────────────────────────────────────────────────
+  const text = (element.textContent ?? '').trim();
 
-  private get signal(): AbortSignal {
-    return this.controller.signal;
+  if (text) eventData.text = text.slice(0, 80);
+
+  if (element instanceof HTMLAnchorElement && element.href) {
+    eventData.href = element.href;
   }
 
-  private setupScrollTracking(): void {
-    window.addEventListener(
-      'scroll',
-      () => {
-        if (this.scrollDebounceTimer !== null) {
-          window.clearTimeout(this.scrollDebounceTimer);
-        }
+  return eventData;
+}
 
-        this.scrollDebounceTimer = window.setTimeout(
-          () => this.checkScrollDepth(),
-          this.options.scrollDebounceMs
-        );
-      },
-      { passive: true, signal: this.signal }
-    );
+function isExternalLink(url: string): boolean {
+  try {
+    const parsed = new URL(url, window.location.origin);
 
-    this.checkScrollDepth();
+    return parsed.hostname !== window.location.hostname;
+  } catch {
+    return false;
   }
+}
 
-  private setupTimeTracking(): void {
-    this.heartbeatTimer = window.setInterval(() => {
-      if (this.state.isIdle) return;
+export function createUmamiKit(options: UmamiKitOptions = {}): UmamiKit {
+  const opts: ResolvedOptions = { ...DEFAULTS, ...options };
+  const controller = new AbortController();
+  const signal = controller.signal;
 
-      const seconds = this.getTimeOnPageSeconds();
+  const state: UmamiKitState = {
+    startTime: Date.now(),
+    lastActivityAt: Date.now(),
+    isIdle: false,
+    trackedScrollDepths: new Set<number>(),
+    visibleElementsCount: 0,
+  };
 
-      trackEvent(TRACKING_EVENTS.TIME_ON_PAGE, {
-        seconds,
-        minutes: Math.round(seconds / 60),
-        page: window.location.pathname,
-      });
-    }, this.options.heartbeatIntervalMs);
-  }
+  const seenVisible = new WeakSet<Element>();
 
-  private setupIdleTracking(): void {
-    const onActivity = (): void => {
-      const now = Date.now();
+  let scrollDebounceTimer: number | null = null;
+  let heartbeatTimer: number | null = null;
+  let idleTimer: number | null = null;
+  let visibilityObserver: IntersectionObserver | null = null;
+  let pageExitTracked = false;
 
-      if (this.state.isIdle) {
-        const idleDurationSeconds = Math.max(
-          1,
-          Math.round((now - this.state.lastActivityAt) / 1000)
-        );
+  const log = (...args: unknown[]): void => {
+    if (!opts.debug || !import.meta.env.DEV) return;
 
-        this.state.isIdle = false;
+    // eslint-disable-next-line no-console
+    console.debug('[UmamiKit]', ...args);
+  };
 
-        trackEvent(TRACKING_EVENTS.USER_ACTIVE, {
-          idle_duration_seconds: idleDurationSeconds,
-          page: window.location.pathname,
-        });
-      }
+  const timeOnPageSeconds = (): number =>
+    Math.max(1, Math.round((Date.now() - state.startTime) / 1000));
 
-      this.state.lastActivityAt = now;
-    };
+  const checkScrollDepth = (): void => {
+    const range = document.documentElement.scrollHeight - window.innerHeight;
 
-    for (const eventName of ACTIVITY_EVENTS) {
-      document.addEventListener(eventName, onActivity, {
-        passive: true,
-        signal: this.signal,
-      });
-    }
+    if (range <= 0) return;
 
-    this.idleTimer = window.setInterval(() => {
-      if (this.state.isIdle) return;
+    const percent = Math.min(100, Math.round((window.scrollY / range) * 100));
 
-      const idleDuration = Date.now() - this.state.lastActivityAt;
-
-      if (idleDuration < this.options.idleTimeoutMs) return;
-
-      this.state.isIdle = true;
-
-      trackEvent(TRACKING_EVENTS.USER_IDLE, {
-        active_before_idle_seconds: Math.round(
-          this.options.idleTimeoutMs / 1000
-        ),
-        page: window.location.pathname,
-      });
-    }, 30_000);
-  }
-
-  private setupClickTracking(): void {
-    document.addEventListener(
-      'click',
-      (event: MouseEvent) => {
-        if (!(event.target instanceof Element)) return;
-
-        if (this.options.autoTrackClicks) {
-          const trackedElement = event.target.closest<HTMLElement>(
-            this.options.clickSelector
-          );
-
-          if (trackedElement) {
-            const eventName =
-              trackedElement.dataset.umamiTrack ?? TRACKING_EVENTS.CLICK;
-
-            trackEvent(eventName, this.collectElementData(trackedElement));
-          }
-        }
-
-        const link = event.target.closest<HTMLAnchorElement>('a[href]');
-
-        if (
-          !link ||
-          !this.isExternalLink(link.href) ||
-          link.hasAttribute('data-umami-event')
-        ) {
-          return;
-        }
-
-        trackEvent(TRACKING_EVENTS.EXTERNAL_LINK, {
-          ...this.collectElementData(link),
-          url: link.href,
-          text: (link.textContent ?? '').trim().slice(0, 80),
-          page: window.location.pathname,
-        });
-      },
-      { passive: true, signal: this.signal }
-    );
-  }
-
-  private setupVisibilityTracking(): void {
-    if (!('IntersectionObserver' in window)) return;
-
-    const elements = document.querySelectorAll<HTMLElement>(
-      this.options.visibilitySelector
-    );
-
-    if (elements.length === 0) return;
-
-    this.visibilityObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-
-          const element = entry.target as HTMLElement;
-
-          if (this.seenVisibleElements.has(element)) continue;
-
-          this.seenVisibleElements.add(element);
-          this.state.visibleElementsCount += 1;
-
-          const eventName =
-            element.dataset.umamiVisible ?? TRACKING_EVENTS.SECTION_VISIBLE;
-
-          trackEvent(eventName, {
-            ...this.collectElementData(element),
-            element_id: element.id || 'unknown',
-            visibility_ratio: Math.round(entry.intersectionRatio * 100),
-            page: window.location.pathname,
-          });
-        }
-      },
-      { threshold: this.options.visibilityThreshold }
-    );
-
-    for (const element of elements) {
-      this.visibilityObserver.observe(element);
-    }
-  }
-
-  private setupPageExitTracking(): void {
-    const onExit = (): void => this.trackPageExit();
-
-    window.addEventListener('pagehide', onExit, {
-      capture: true,
-      signal: this.signal,
-    });
-    window.addEventListener('beforeunload', onExit, {
-      capture: true,
-      signal: this.signal,
-    });
-  }
-
-  // ─── Internals ─────────────────────────────────────────────────────────
-
-  private checkScrollDepth(): void {
-    const scrollRange =
-      document.documentElement.scrollHeight - window.innerHeight;
-
-    if (scrollRange <= 0) return;
-
-    const scrollPercent = Math.min(
-      100,
-      Math.round((window.scrollY / scrollRange) * 100)
-    );
-
-    for (const threshold of this.options.scrollDepthThresholds) {
-      if (
-        scrollPercent >= threshold &&
-        !this.state.trackedScrollDepths.has(threshold)
-      ) {
-        this.state.trackedScrollDepths.add(threshold);
+    for (const threshold of opts.scrollDepthThresholds) {
+      if (percent >= threshold && !state.trackedScrollDepths.has(threshold)) {
+        state.trackedScrollDepths.add(threshold);
 
         trackEvent(TRACKING_EVENTS.SCROLL_DEPTH, {
           depth: threshold,
@@ -347,97 +184,220 @@ export class UmamiKit {
         });
       }
     }
-  }
+  };
 
-  private trackPageExit(): void {
-    if (this.pageExitTracked) return;
+  const trackPageExit = (): void => {
+    if (pageExitTracked) return;
 
-    this.pageExitTracked = true;
+    pageExitTracked = true;
 
-    const reachedDepths = Array.from(this.state.trackedScrollDepths);
+    const reached = Array.from(state.trackedScrollDepths);
 
     trackEvent(TRACKING_EVENTS.PAGE_EXIT, {
-      total_time_seconds: this.getTimeOnPageSeconds(),
-      max_scroll_depth:
-        reachedDepths.length > 0 ? Math.max(...reachedDepths) : 0,
-      scroll_depth_count: reachedDepths.length,
+      total_time_seconds: timeOnPageSeconds(),
+      max_scroll_depth: reached.length > 0 ? Math.max(...reached) : 0,
+      scroll_depth_count: reached.length,
       page: window.location.pathname,
     });
-  }
+  };
 
-  private collectElementData(element: HTMLElement): UmamiEventData {
-    const eventData: UmamiEventData = {};
+  const setupScrollTracking = (): void => {
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (scrollDebounceTimer !== null) {
+          window.clearTimeout(scrollDebounceTimer);
+        }
 
-    for (const [key, value] of Object.entries(element.dataset)) {
-      if (!key.startsWith('umamiData') || !value) continue;
+        scrollDebounceTimer = window.setTimeout(
+          checkScrollDepth,
+          opts.scrollDebounceMs
+        );
+      },
+      { passive: true, signal }
+    );
 
-      const rawKey = key.slice('umamiData'.length);
+    checkScrollDepth();
+  };
 
-      if (!rawKey) continue;
+  const setupTimeTracking = (): void => {
+    heartbeatTimer = window.setInterval(() => {
+      if (state.isIdle) return;
 
-      const normalizedKey = rawKey.charAt(0).toLowerCase() + rawKey.slice(1);
+      const seconds = timeOnPageSeconds();
 
-      eventData[normalizedKey] = value;
+      trackEvent(TRACKING_EVENTS.TIME_ON_PAGE, {
+        seconds,
+        minutes: Math.round(seconds / 60),
+        page: window.location.pathname,
+      });
+    }, opts.heartbeatIntervalMs);
+  };
+
+  const setupIdleTracking = (): void => {
+    const onActivity = (): void => {
+      const now = Date.now();
+
+      if (state.isIdle) {
+        const idleDurationSeconds = Math.max(
+          1,
+          Math.round((now - state.lastActivityAt) / 1000)
+        );
+
+        state.isIdle = false;
+
+        trackEvent(TRACKING_EVENTS.USER_ACTIVE, {
+          idle_duration_seconds: idleDurationSeconds,
+          page: window.location.pathname,
+        });
+      }
+
+      state.lastActivityAt = now;
+    };
+
+    for (const eventName of ACTIVITY_EVENTS) {
+      document.addEventListener(eventName, onActivity, {
+        passive: true,
+        signal,
+      });
     }
 
-    eventData.element = element.tagName.toLowerCase();
+    idleTimer = window.setInterval(() => {
+      if (state.isIdle) return;
 
-    if (element.id) eventData.element_id = element.id;
+      const idleDuration = Date.now() - state.lastActivityAt;
 
-    if (element.className) {
-      eventData.element_classes = String(element.className).slice(0, 120);
-    }
+      if (idleDuration < opts.idleTimeoutMs) return;
 
-    const text = (element.textContent ?? '').trim();
+      state.isIdle = true;
 
-    if (text) eventData.text = text.slice(0, 80);
+      trackEvent(TRACKING_EVENTS.USER_IDLE, {
+        active_before_idle_seconds: Math.round(opts.idleTimeoutMs / 1000),
+        page: window.location.pathname,
+      });
+    }, 30_000);
+  };
 
-    if (element instanceof HTMLAnchorElement && element.href) {
-      eventData.href = element.href;
-    }
+  const setupClickTracking = (): void => {
+    document.addEventListener(
+      'click',
+      (event: MouseEvent) => {
+        if (!(event.target instanceof Element)) return;
 
-    return eventData;
-  }
+        if (opts.autoTrackClicks) {
+          const tracked = event.target.closest<HTMLElement>(opts.clickSelector);
 
-  private isExternalLink(url: string): boolean {
-    try {
-      const parsedUrl = new URL(url, window.location.origin);
+          if (tracked) {
+            const name = tracked.dataset.umamiTrack ?? TRACKING_EVENTS.CLICK;
 
-      return parsedUrl.hostname !== window.location.hostname;
-    } catch {
-      return false;
-    }
-  }
+            trackEvent(name, collectElementData(tracked));
+          }
+        }
 
-  private getTimeOnPageSeconds(): number {
-    return Math.max(1, Math.round((Date.now() - this.state.startTime) / 1000));
-  }
+        const link = event.target.closest<HTMLAnchorElement>('a[href]');
 
-  private waitForUmami(callback: () => void, attempts = 0): void {
-    if (typeof window.umami?.track === 'function') {
-      callback();
+        if (
+          !link ||
+          !isExternalLink(link.href) ||
+          link.hasAttribute('data-umami-event')
+        ) {
+          return;
+        }
 
-      return;
-    }
+        trackEvent(TRACKING_EVENTS.EXTERNAL_LINK, {
+          ...collectElementData(link),
+          url: link.href,
+          text: (link.textContent ?? '').trim().slice(0, 80),
+          page: window.location.pathname,
+        });
+      },
+      { passive: true, signal }
+    );
+  };
 
-    if (attempts >= MAX_UMAMI_WAIT_ATTEMPTS) {
-      this.log(
-        'Umami script not detected in time, continuing and tracking when available'
-      );
-      callback();
+  const setupVisibilityTracking = (): void => {
+    if (!('IntersectionObserver' in window)) return;
 
-      return;
-    }
+    const elements = document.querySelectorAll<HTMLElement>(
+      opts.visibilitySelector
+    );
 
-    window.setTimeout(() => this.waitForUmami(callback, attempts + 1), 100);
-  }
+    if (elements.length === 0) return;
 
-  private log(...args: unknown[]): void {
-    if (!this.options.debug || !import.meta.env.DEV) return;
+    visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
 
-    // eslint-disable-next-line no-console
-    console.debug('[UmamiKit]', ...args);
-  }
+          const element = entry.target as HTMLElement;
+
+          if (seenVisible.has(element)) continue;
+
+          seenVisible.add(element);
+          state.visibleElementsCount += 1;
+
+          const name =
+            element.dataset.umamiVisible ?? TRACKING_EVENTS.SECTION_VISIBLE;
+
+          trackEvent(name, {
+            ...collectElementData(element),
+            element_id: element.id || 'unknown',
+            visibility_ratio: Math.round(entry.intersectionRatio * 100),
+            page: window.location.pathname,
+          });
+        }
+      },
+      { threshold: opts.visibilityThreshold }
+    );
+
+    for (const element of elements) visibilityObserver.observe(element);
+  };
+
+  const setupPageExitTracking = (): void => {
+    window.addEventListener('pagehide', trackPageExit, {
+      capture: true,
+      signal,
+    });
+    window.addEventListener('beforeunload', trackPageExit, {
+      capture: true,
+      signal,
+    });
+  };
+
+  waitForUmami(() => {
+    setupScrollTracking();
+    setupTimeTracking();
+    setupIdleTracking();
+    setupClickTracking();
+    setupVisibilityTracking();
+    setupPageExitTracking();
+    log('Initialized');
+  });
+
+  return {
+    destroy(): void {
+      controller.abort();
+
+      if (scrollDebounceTimer !== null)
+        window.clearTimeout(scrollDebounceTimer);
+      if (heartbeatTimer !== null) window.clearInterval(heartbeatTimer);
+      if (idleTimer !== null) window.clearInterval(idleTimer);
+
+      visibilityObserver?.disconnect();
+      visibilityObserver = null;
+    },
+    getStats() {
+      const reached = Array.from(state.trackedScrollDepths);
+
+      return {
+        timeOnPageSeconds: timeOnPageSeconds(),
+        maxScrollDepth: reached.length > 0 ? Math.max(...reached) : 0,
+        scrollDepthsReached: reached.sort((a, b) => a - b),
+        isIdle: state.isIdle,
+        visibleElementsCount: state.visibleElementsCount,
+      };
+    },
+  };
 }
 
 declare global {
@@ -447,9 +407,8 @@ declare global {
 }
 
 export function initUmamiKit(options: UmamiKitOptions = {}): UmamiKit {
-  const tracker = new UmamiKit(options);
+  const tracker = createUmamiKit(options);
 
-  tracker.init();
   window.umamiTracker = tracker;
 
   return tracker;

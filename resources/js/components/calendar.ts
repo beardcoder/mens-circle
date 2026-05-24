@@ -1,12 +1,12 @@
 /**
  * Calendar Integration
  *
- * Generates a local ICS blob URL plus a Google Calendar deep link so the
- * "Add to calendar" modal can offer both options without a network round
- * trip. Tracks user choice via Umami. Vanilla TS, no framework.
+ * Generates an ICS blob URL + Google Calendar deep link from event data
+ * attributes on the root element, then wires the "Add to calendar"
+ * button + modal to expose both options. Factory style.
  */
 
-import { mountAll, ReactiveHost } from '@/lib/reactive-host';
+import { createHost, mountAll, type Component } from '@/lib/host';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
 import type { EventData } from '@/types';
 
@@ -92,81 +92,66 @@ function readEventFromDataset(el: HTMLElement): EventData {
   return window.eventData ?? FALLBACK_EVENT;
 }
 
-class Calendar extends ReactiveHost {
-  private isOpen = false;
-  private eventTitle = '';
-  private modal: HTMLElement | null = null;
-  private openButton: HTMLButtonElement | null = null;
-  private icsBlobUrl: string | null = null;
+function createCalendar(root: HTMLElement): Component {
+  const host = createHost(root);
+  const event = readEventFromDataset(root);
+  const blob = new Blob([generateICS(event)], {
+    type: 'text/calendar;charset=utf-8',
+  });
+  const icsBlobUrl = URL.createObjectURL(blob);
+  const googleUrl = generateGoogleCalendarUrl(event);
 
-  protected setup(): void {
-    const event = readEventFromDataset(this.root);
+  const modal = host.query<HTMLElement>('[data-ref="modal"]');
+  const openBtn = host.query<HTMLButtonElement>('[data-action="open"]');
+  const googleLink = host.query<HTMLAnchorElement>('[data-ref="google-url"]');
+  const icsLink = host.query<HTMLAnchorElement>('[data-ref="ics-url"]');
 
-    this.eventTitle = event.title;
+  if (googleLink) googleLink.href = googleUrl;
+  if (icsLink) icsLink.href = icsBlobUrl;
 
-    const blob = new Blob([generateICS(event)], {
-      type: 'text/calendar;charset=utf-8',
-    });
+  let isOpen = false;
 
-    this.icsBlobUrl = URL.createObjectURL(blob);
+  const render = (): void => {
+    if (!modal) return;
+    modal.classList.toggle('open', isOpen);
+    modal.style.display = isOpen ? 'flex' : 'none';
+  };
 
-    const googleUrl = generateGoogleCalendarUrl(event);
-    const googleLink = this.query<HTMLAnchorElement>('[data-ref="google-url"]');
-    const icsLink = this.query<HTMLAnchorElement>('[data-ref="ics-url"]');
+  const close = (): void => {
+    isOpen = false;
+    render();
+  };
 
-    if (googleLink) googleLink.href = googleUrl;
-    if (icsLink) icsLink.href = this.icsBlobUrl;
+  host.on(openBtn, 'click', () => {
+    isOpen = true;
+    trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, { event: event.title });
+    render();
+  });
 
-    this.modal = this.query('[data-ref="modal"]');
-    this.openButton = this.query<HTMLButtonElement>('[data-action="open"]');
+  host.on(modal, 'click', (e) => {
+    if (e.target === modal) close();
+  });
 
-    this.on(this.openButton, 'click', () => {
-      this.isOpen = true;
-      trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, { event: this.eventTitle });
-      this.render();
-    });
+  host.onWindow('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) close();
+  });
 
-    this.on(this.modal, 'click', (event) => {
-      if (event.target === this.modal) this.close();
-    });
+  host.on(googleLink, 'click', () =>
+    trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, { event: event.title })
+  );
 
-    this.onWindow('keydown', (event) => {
-      if (event.key === 'Escape' && this.isOpen) this.close();
-    });
+  host.on(icsLink, 'click', () =>
+    trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, { event: event.title })
+  );
 
-    this.on(googleLink, 'click', () =>
-      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
-        event: this.eventTitle,
-      })
-    );
-
-    this.on(icsLink, 'click', () =>
-      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, {
-        event: this.eventTitle,
-      })
-    );
-  }
-
-  protected render(): void {
-    if (!this.modal) return;
-
-    this.modal.classList.toggle('open', this.isOpen);
-    this.modal.style.display = this.isOpen ? 'flex' : 'none';
-  }
-
-  protected teardown(): void {
-    if (this.icsBlobUrl) {
-      URL.revokeObjectURL(this.icsBlobUrl);
-      this.icsBlobUrl = null;
-    }
-  }
-
-  private close(): void {
-    this.isOpen = false;
-    this.render();
-  }
+  return {
+    destroy(): void {
+      URL.revokeObjectURL(icsBlobUrl);
+      host.destroy();
+    },
+  };
 }
 
 export function setupCalendar(): void {
-  mountAll('[data-component="calendar"]', (el) => new Calendar(el));
+  mountAll('[data-component="calendar"]', createCalendar);
 }
