@@ -183,30 +183,14 @@
 }
 
 /* ============================================
-   Smooth height transition — modern browsers only.
-   Chrome 131+, Safari 18.2+. Older browsers snap, which is fine.
+   Smooth height transition is driven by `setupAccordion` in
+   resources/js/components/accordion.ts via the Web Animations API.
+   Works in every browser that supports `<details>` (i.e. all of them).
+   The body just needs to keep its overflow clipped while JS animates
+   the height — set as an inline style only during the animation.
+
+   Browsers without JS still get the native open/close behaviour.
    ============================================ */
-@supports (interpolate-size: allow-keywords) {
-  .accordion-item {
-    interpolate-size: allow-keywords;
-  }
-
-  .accordion-item::details-content {
-    block-size: 0;
-    overflow: clip;
-    opacity: 0;
-    transition:
-      block-size var(--duration-normal) var(--ease-settle),
-      opacity var(--duration-normal) var(--ease-settle),
-      content-visibility var(--duration-normal) var(--ease-settle)
-        allow-discrete;
-  }
-
-  .accordion-item[open]::details-content {
-    block-size: auto;
-    opacity: 1;
-  }
-}
 
 /* ============================================
    Body
