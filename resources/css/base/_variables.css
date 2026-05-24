@@ -23,19 +23,6 @@
   inherits: false;
 }
 
-/* Hero radial glow position — drifts as the user scrolls.
-   Drives `.hero__bg::after` via animation-timeline: scroll(root). */
-@property --hero-glow-x {
-  syntax: '<percentage>';
-  initial-value: 70%;
-  inherits: false;
-}
-
-@property --hero-glow-y {
-  syntax: '<percentage>';
-  initial-value: 30%;
-  inherits: false;
-}
 
 :root {
   /* ============================================

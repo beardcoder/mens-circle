@@ -44,7 +44,7 @@
   content: '';
   background:
     radial-gradient(
-      ellipse 80% 60% at var(--hero-glow-x) var(--hero-glow-y),
+      ellipse 80% 60% at 70% 30%,
       color-mix(in oklch, var(--accent-primary) 22%, transparent) 0%,
       transparent 50%
     ),
@@ -53,23 +53,6 @@
       color-mix(in oklch, var(--accent-primary) 12%, transparent) 0%,
       transparent 40%
     );
-}
-
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .hero__bg::after {
-      animation: hero-glow-drift linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 100vh;
-    }
-  }
-}
-
-@keyframes hero-glow-drift {
-  to {
-    --hero-glow-x: 35%;
-    --hero-glow-y: 60%;
-  }
 }
 
 /* ============================================
@@ -320,18 +303,4 @@
   inset: 0;
   inline-size: 100%;
   block-size: 100%;
-}
-
-/* ============================================
-   Hero parallax — decorative circles drift gently as the user scrolls.
-   ============================================ */
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .hero__circles {
-      animation: hero-parallax-mid linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 100vh;
-      will-change: transform, opacity;
-    }
-  }
 }

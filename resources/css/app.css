@@ -21,7 +21,7 @@
  *   - color-mix(in oklch, …) for blending
  *   - Native CSS nesting
  *   - @starting-style + transition-behavior: allow-discrete (toast entry/exit)
- *   - animation-timeline: view() / scroll(root) (eyebrow lines, parallax, reveal)
+ *   - animation-timeline: view() (eyebrow lines, scroll-reveal entrances)
  *   - View Transitions API (cross-document fade)
  *   - prefers-color-scheme, prefers-reduced-motion
  *   - :has(), :focus-visible
