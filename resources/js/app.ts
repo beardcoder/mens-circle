@@ -13,6 +13,7 @@ import './types';
 
 import { setupSiteHeader } from '@/components/site-header';
 import { setupScrollToTop } from '@/components/scroll-to-top';
+import { setupAccordion } from '@/components/accordion';
 import { setupCalendar } from '@/components/calendar';
 import { setupEventMap } from '@/components/event-map';
 import { setupBreathing } from '@/components/breathing';
@@ -26,6 +27,7 @@ import { initUmamiKit } from '@/utils/umami-kit';
 function bootstrap(): void {
   setupSiteHeader();
   setupScrollToTop();
+  setupAccordion();
   setupNewsletterForms();
   setupRegistrationForms();
   setupTestimonialForms();
