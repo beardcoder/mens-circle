@@ -262,7 +262,18 @@ body:not(:has(.hero)) .header::before {
 }
 
 /* ============================================
-   Mobile Navigation
+   Mobile Navigation Drawer
+
+   Full-viewport drawer that reveals from the top via `clip-path` —
+   gives a clean "unfold" feeling that's robust across browsers
+   (Safari included, no `::details-content` or experimental APIs in
+   play). Items are vertically + horizontally centered with grid
+   `place-content` and fade up with a staggered transition delay
+   driven by the `--nav-i` index on each link.
+
+   Visibility is part of the transition list so the drawer is fully
+   removed from accessibility / focus after the close animation
+   completes, without snapping.
    ============================================ */
 @media (width <= 960px) {
   .nav-toggle {
@@ -273,86 +284,97 @@ body:not(:has(.hero)) .header::before {
     position: fixed;
     inset: 0;
     z-index: calc(var(--z-header) + 1);
+    display: grid;
     visibility: hidden;
-    flex-direction: column;
-    gap: clamp(0.875rem, 2.5vh, var(--space-md));
-    align-items: center;
-    justify-content: flex-start;
+    grid-auto-rows: max-content;
+    gap: clamp(0.75rem, 2vh, var(--space-md));
+    place-content: center;
+    place-items: center;
+    inline-size: 100%;
     min-block-size: 100dvh;
-    padding-block: clamp(var(--space-xl), 16vh, calc(var(--space-xl) * 1.5))
-      var(--space-xl);
+    padding-block: var(--space-xl);
     padding-inline: var(--space-md);
     overflow-y: auto;
     overscroll-behavior: contain;
+    color: var(--text-on-dark);
     pointer-events: none;
-    background: color-mix(in oklch, var(--bg-dark) 90%, transparent);
+    background:
+      radial-gradient(
+        ellipse at 50% 15%,
+        color-mix(in oklch, var(--color-terracotta) 18%, transparent),
+        transparent 55%
+      ),
+      linear-gradient(
+        155deg,
+        var(--color-earth-deep) 0%,
+        var(--color-earth-dark) 60%,
+        var(--color-earth-mid) 100%
+      );
     opacity: 0;
-    backdrop-filter: blur(0);
-    transform: translateY(-12px) scale(0.98);
+    clip-path: inset(0 0 100% 0);
     transition:
-      opacity var(--motion-slow),
-      transform var(--motion-slow),
-      backdrop-filter var(--motion-slow);
-  }
-
-  /* Gradient background */
-  .nav::before {
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    content: '';
-    background: linear-gradient(
-      135deg,
-      var(--color-earth-deep) 0%,
-      var(--color-earth-dark) 50%,
-      var(--color-earth-mid) 100%
-    );
-    opacity: 0;
-    transform: scale(0.95);
-    transition:
-      opacity var(--motion-standard),
-      transform var(--motion-slow);
-  }
-
-  /* Decorative circle */
-  .nav::after {
-    position: fixed;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    z-index: -1;
-    inline-size: 80vw;
-    block-size: 80vw;
-    content: '';
-    border: 1px solid var(--border-on-dark);
-    border-radius: 50%;
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.6);
-    transition:
-      transform var(--motion-slow),
-      opacity var(--motion-standard);
+      clip-path 520ms var(--ease-emphasised),
+      opacity 280ms var(--ease-settle),
+      visibility 520ms step-end;
   }
 
   .nav.open {
     visibility: visible;
     pointer-events: auto;
     opacity: 1;
-    backdrop-filter: blur(16px);
-    transform: translateY(0) scale(1);
+    clip-path: inset(0);
+    transition:
+      clip-path 620ms var(--ease-emphasised),
+      opacity 320ms var(--ease-settle),
+      visibility 0s;
   }
 
-  .nav.open::before {
-    opacity: 1;
-    transform: scale(1);
+  /* Decorative thread — a quiet horizontal line that draws in once the
+     drawer has settled, anchoring the menu without distracting from it. */
+  .nav::after {
+    inline-size: clamp(120px, 30vw, 200px);
+    block-size: 1px;
+    margin-block: var(--space-md) 0;
+    content: '';
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklch, var(--color-sand) 50%, transparent) 50%,
+      transparent 100%
+    );
+    opacity: 0;
+    transform: scaleX(0.3);
+    transform-origin: center;
+    transition:
+      opacity 400ms var(--ease-settle) 220ms,
+      transform 560ms var(--ease-settle) 220ms;
   }
 
   .nav.open::after {
-    opacity: 0.4;
-    transform: translate(-50%, -50%) scale(1);
-    animation: nav-pulse 1600ms var(--ease-settle) forwards;
+    opacity: 1;
+    transform: scaleX(1);
   }
 
-  /* Font size adapts to item count so long menus stay on a single
-     screen. `--nav-count` is set inline on the <nav> element. */
+  /* Links + CTA share the same entrance choreography so the stagger
+     reads as one continuous motion. */
+  .nav__link,
+  .nav .nav__cta {
+    opacity: 0;
+    translate: 0 24px;
+    transition:
+      opacity 500ms var(--ease-settle),
+      translate 540ms var(--ease-settle);
+    transition-delay: calc(120ms + 60ms * var(--nav-i, 0));
+  }
+
+  .nav.open .nav__link,
+  .nav.open .nav__cta {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  /* Font sizing adapts to item count so long menus stay on screen —
+     `--nav-count` is set inline on the <nav>. */
   .nav__link {
     font-family: var(--font-display);
     font-size: clamp(
@@ -364,28 +386,13 @@ body:not(:has(.hero)) .header::before {
     color: var(--text-on-dark);
     text-align: center;
     letter-spacing: -0.02em;
-    opacity: 0;
-    filter: blur(2px);
-    transform: translateY(24px) scale(0.98);
-    transition:
-      opacity var(--motion-slow),
-      transform var(--motion-slow),
-      filter var(--motion-standard);
-    will-change: opacity, transform, filter;
-  }
-
-  .nav__link:hover {
-    opacity: 0.8;
   }
 
   .nav__link::after {
     inset-block-end: -8px;
     inset-inline-start: 50%;
+    inline-size: 60%;
     transform: translateX(-50%);
-  }
-
-  .nav__link:hover::after {
-    inline-size: 70%;
   }
 
   .nav .nav__cta {
@@ -393,29 +400,29 @@ body:not(:has(.hero)) .header::before {
     padding-inline: var(--space-md);
     margin-block-start: var(--space-xs);
     font-size: 1rem;
-    opacity: 0;
-    transform: translateY(32px) scale(0.96);
-    transition:
-      opacity var(--motion-slow),
-      transform var(--motion-slow);
   }
 
-  /* Staggered entrance — `--nav-i` is set inline on each link so the
-     stagger keeps working for any number of items, not just the first
-     four. */
-  .nav.open .nav__link,
-  .nav.open .nav__cta {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    transition-delay: calc(80ms + 70ms * var(--nav-i, 0));
+  @media (hover: hover) and (pointer: fine) {
+    .nav__link:hover {
+      opacity: 0.85;
+    }
   }
+}
 
-  .nav.open .nav__link {
-    filter: blur(0);
-  }
+/* Reduced motion: kill the slide-in choreography, fade only. */
+@media (prefers-reduced-motion: reduce) {
+  @media (width <= 960px) {
+    .nav,
+    .nav__link,
+    .nav .nav__cta,
+    .nav::after {
+      transition-delay: 0ms !important;
+      transition-duration: 120ms;
+    }
 
-  .nav.open .nav__cta:hover {
-    transform: translateY(0) scale(1.05);
+    .nav {
+      clip-path: none;
+    }
   }
 }
 
