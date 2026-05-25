@@ -1,5 +1,5 @@
-@import '../../../../vendor/filament/filament/resources/css/theme.css';
 @import url('@fontsource-variable/dm-sans');
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
 
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
@@ -10,18 +10,19 @@
    Tailwind v4's --font-sans token, which Filament uses for all UI text.
    ──────────────────────────────────────────────────────────────────────────── */
 @theme {
-    --font-sans: 'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 
-    /* Slightly tighter corners than Tailwind defaults — more structured,
+  /* Slightly tighter corners than Tailwind defaults — more structured,
        less "bubbly". Filament uses xl/2xl on cards, modals, and dropdowns. */
-    --radius-xl: 0.625rem;
-    --radius-2xl: 0.75rem;
-    --radius-3xl: 1rem;
+  --radius-xl: 0.625rem;
+  --radius-2xl: 0.75rem;
+  --radius-3xl: 1rem;
 }
 
 /* ── Table headers ────────────────────────────────────────────────────────────
    Loosen tracking on column headers so they read as labels, not body copy.
    ──────────────────────────────────────────────────────────────────────────── */
 .fi-ta-header-cell {
-    letter-spacing: 0.025em;
+  letter-spacing: 0.025em;
 }
