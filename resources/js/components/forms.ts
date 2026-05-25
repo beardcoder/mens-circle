@@ -6,9 +6,8 @@
  * factory up with a form-specific config (URL, payload builder,
  * tracking events).
  *
- * Composition over inheritance: the form handler doesn't extend the
- * host, it owns one. State lives in closure variables; cleanup is
- * driven by the host's `AbortController`.
+ * State lives in closure variables; listeners and in-flight requests
+ * are cleaned up by Lume when the component unmounts.
  */
 
 import { isValidEmail } from '@/utils/helpers';
@@ -18,7 +17,7 @@ import {
   trackEvent,
   type UmamiEventData,
 } from '@/utils/umami';
-import { createHost, mountAll, type Component } from '@/lib/host';
+import { defineComponent, type ComponentContext } from '@beardcoder/lume';
 import type { ApiResponse } from '@/types';
 
 type FormFieldElement =
@@ -46,6 +45,8 @@ interface FormHandlerConfig<TPayload extends Record<string, unknown>> {
   submitMeta?: (payload: TPayload) => UmamiEventData;
   onSuccess?: (form: HTMLFormElement) => void;
 }
+
+type LumeBindings = Pick<ComponentContext, 'cleanup' | 'on'>;
 
 const SUBMIT_LABEL = 'Wird gesendet...';
 
@@ -93,13 +94,14 @@ function getFormCompletionState(form: HTMLFormElement): FormCompletionState {
 
 function createFormHandler<TPayload extends Record<string, unknown>>(
   root: HTMLElement,
-  config: FormHandlerConfig<TPayload>
-): Component | null {
-  if (!(root instanceof HTMLFormElement)) return null;
+  config: FormHandlerConfig<TPayload>,
+  { cleanup, on }: LumeBindings
+): boolean {
+  if (!(root instanceof HTMLFormElement)) return false;
 
   const form = root;
-  const host = createHost(root);
-  const submitButton = host.query<HTMLButtonElement>('[type="submit"]');
+  const submitButton = form.querySelector<HTMLButtonElement>('[type="submit"]');
+  const requestController = new AbortController();
 
   let hasSubmitted = false;
   let hasTrackedAbandon = false;
@@ -169,7 +171,7 @@ function createFormHandler<TPayload extends Record<string, unknown>>(
           Accept: 'application/json',
         },
         body: JSON.stringify(payload),
-        signal: host.signal,
+        signal: requestController.signal,
       });
 
       const data = (await response.json()) as ApiResponse;
@@ -184,7 +186,7 @@ function createFormHandler<TPayload extends Record<string, unknown>>(
         trackEvent(config.events.error, { error: data.message });
       }
     } catch (error) {
-      if (host.signal.aborted) return;
+      if (requestController.signal.aborted) return;
 
       const message = error instanceof Error ? error.message : 'Network error';
 
@@ -201,15 +203,17 @@ function createFormHandler<TPayload extends Record<string, unknown>>(
     }
   };
 
-  host.on(form, 'input', markInteraction);
-  host.on(form, 'change', markInteraction);
-  host.on(form, 'submit', (event) => void handleSubmit(event), {
+  on(form, 'input', markInteraction);
+  on(form, 'change', markInteraction);
+  on(form, 'submit', (event) => void handleSubmit(event as SubmitEvent), {
     capture: true,
   });
-  host.onWindow('pagehide', trackAbandonIfFilled, { capture: true });
-  host.onWindow('beforeunload', trackAbandonIfFilled, { capture: true });
+  on(window, 'pagehide', trackAbandonIfFilled, { capture: true });
+  on(window, 'beforeunload', trackAbandonIfFilled, { capture: true });
 
-  return { destroy: host.destroy };
+  cleanup(() => requestController.abort());
+
+  return true;
 }
 
 /* ============================================
@@ -238,11 +242,11 @@ const newsletterConfig: FormHandlerConfig<{ email: string }> = {
   },
 };
 
-export function setupNewsletterForms(): void {
-  mountAll('[data-component="newsletter-form"]', (root) =>
-    createFormHandler(root, newsletterConfig)
-  );
-}
+export const newsletterForm = defineComponent((ctx) => {
+  createFormHandler(ctx.root, newsletterConfig, ctx);
+
+  return {};
+});
 
 /* ============================================
    Event registration
@@ -310,11 +314,11 @@ const registrationConfig: FormHandlerConfig<RegistrationPayload> = {
   },
 };
 
-export function setupRegistrationForms(): void {
-  mountAll('[data-component="registration-form"]', (root) =>
-    createFormHandler(root, registrationConfig)
-  );
-}
+export const registrationForm = defineComponent((ctx) => {
+  createFormHandler(ctx.root, registrationConfig, ctx);
+
+  return {};
+});
 
 /* ============================================
    Testimonial — with live char counter binding
@@ -383,20 +387,17 @@ const testimonialConfig: FormHandlerConfig<TestimonialPayload> = {
   },
 };
 
-function createTestimonialForm(root: HTMLElement): Component | null {
-  if (!(root instanceof HTMLFormElement)) return null;
+export const testimonialForm = defineComponent((ctx) => {
+  const { root, on } = ctx;
 
-  const handler = createFormHandler(root, testimonialConfig);
+  if (!(root instanceof HTMLFormElement)) return {};
 
-  if (!handler) return null;
+  if (!createFormHandler(root, testimonialConfig, ctx)) return {};
 
-  // Attach a live char-counter binding on top of the base handler.
-  // It shares the same lifecycle: when the base host aborts via
-  // destroy(), the counter listener is removed too because it's
-  // registered with its own scoped host that aborts in tandem.
-  const counterHost = createHost(root);
-  const counterEl = counterHost.query<HTMLElement>('[data-ref="char-count"]');
-  const textarea = counterHost.query<HTMLTextAreaElement>('#quote');
+  const counterEl = root.querySelector<HTMLElement>(
+    '[data-lume-part="char-count"]'
+  );
+  const textarea = root.querySelector<HTMLTextAreaElement>('#quote');
 
   const update = (): void => {
     if (counterEl && textarea) {
@@ -405,21 +406,12 @@ function createTestimonialForm(root: HTMLElement): Component | null {
   };
 
   if (textarea) {
-    counterHost.on(textarea, 'input', update);
+    on(textarea, 'input', update);
     // The form reset that runs after a successful submit fires AFTER
     // the input is cleared, so we listen for it to zero out the counter.
-    counterHost.on(root, 'reset', () => window.setTimeout(update, 0));
+    on(root, 'reset', () => window.setTimeout(update, 0));
     update();
   }
 
-  return {
-    destroy(): void {
-      counterHost.destroy();
-      handler.destroy();
-    },
-  };
-}
-
-export function setupTestimonialForms(): void {
-  mountAll('[data-component="testimonial-form"]', createTestimonialForm);
-}
+  return {};
+});

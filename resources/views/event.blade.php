@@ -144,7 +144,7 @@
             id="registrationForm"
             class="event-register__form"
             autocomplete="on"
-            data-component="registration-form"
+            data-lume="registration-form"
           >
             <input type="hidden" name="event_id" value="{{ $event->id }}" />
 
@@ -275,7 +275,7 @@
 
       <div
         class="event-info__calendar"
-        data-component="calendar"
+        data-lume="calendar"
         data-event-title="{{ $event->title }}"
         data-event-description="{{ strip_tags($event->description) }}"
         data-event-location="{{ $event->location }}"
@@ -297,7 +297,7 @@
         <!-- Calendar Modal (inline with component) -->
         <div
           class="calendar-modal"
-          data-ref="modal"
+          data-lume-part="modal"
           style="display: none"
           role="dialog"
           aria-modal="true"
@@ -309,7 +309,7 @@
             <div class="calendar-modal__buttons">
               <a
                 href="#"
-                data-ref="google-url"
+                data-lume-part="google-url"
                 class="btn btn--secondary"
                 target="_blank"
                 rel="noopener"
@@ -318,7 +318,7 @@
               </a>
               <a
                 href="#"
-                data-ref="ics-url"
+                data-lume-part="ics-url"
                 class="btn btn--secondary"
                 download="maennerkreis-straubing.ics"
               >
@@ -348,7 +348,7 @@
 
         <div
           class="event-map"
-          data-component="event-map"
+          data-lume="event-map"
           data-state="idle"
           data-lat="{{ $event->latitude }}"
           data-lng="{{ $event->longitude }}"

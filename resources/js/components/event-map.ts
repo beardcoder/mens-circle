@@ -7,7 +7,7 @@
  */
 
 import { isCoarsePointer } from '@/utils/helpers';
-import { createHost, mountAll, type Component } from '@/lib/host';
+import { defineComponent } from '@beardcoder/lume';
 
 interface MapDataset {
   lat: number;
@@ -49,21 +49,21 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
-function createEventMap(root: HTMLElement): Component {
-  const host = createHost(root);
+export default defineComponent(({ root, on, cleanup }) => {
   const data = readDataset(root);
 
   let map: import('leaflet').Map | null = null;
   let initialized = false;
+  let disposed = false;
 
   if (!data) {
     root.hidden = true;
 
-    return { destroy: host.destroy };
+    return {};
   }
 
   const initMap = async (): Promise<void> => {
-    if (initialized || host.signal.aborted) return;
+    if (initialized || disposed) return;
 
     initialized = true;
     root.dataset.state = 'loading';
@@ -73,9 +73,9 @@ function createEventMap(root: HTMLElement): Component {
       import('leaflet/dist/leaflet.css'),
     ]);
 
-    if (host.signal.aborted) return;
+    if (disposed) return;
 
-    const container = host.query<HTMLElement>('.event-map__canvas');
+    const container = root.querySelector<HTMLElement>('.event-map__canvas');
 
     if (!container) return;
 
@@ -114,8 +114,8 @@ function createEventMap(root: HTMLElement): Component {
 
     L.marker([data.lat, data.lng], { icon }).addTo(map).bindPopup(popup);
 
-    host.on(container, 'click', () => map?.scrollWheelZoom.enable());
-    host.on(container, 'mouseleave', () => map?.scrollWheelZoom.disable());
+    on(container, 'click', () => map?.scrollWheelZoom.enable());
+    on(container, 'mouseleave', () => map?.scrollWheelZoom.disable());
 
     root.dataset.state = 'ready';
   };
@@ -137,20 +137,14 @@ function createEventMap(root: HTMLElement): Component {
     );
 
     observer.observe(root);
-    host.signal.addEventListener('abort', () => observer.disconnect(), {
-      once: true,
-    });
+    cleanup(() => observer.disconnect());
   }
 
-  return {
-    destroy(): void {
-      map?.remove();
-      map = null;
-      host.destroy();
-    },
-  };
-}
+  cleanup(() => {
+    disposed = true;
+    map?.remove();
+    map = null;
+  });
 
-export function setupEventMap(): void {
-  mountAll('[data-component="event-map"]', createEventMap);
-}
+  return {};
+});

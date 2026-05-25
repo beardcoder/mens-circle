@@ -48,7 +48,7 @@
         <form
           id="testimonialForm"
           class="testimonial-form"
-          data-component="testimonial-form"
+          data-lume="testimonial-form"
           data-submit-url="{{ route('testimonial.submit') }}"
         >
           @csrf
@@ -71,7 +71,7 @@
               >Mindestens 10 Zeichen, maximal 1000 Zeichen</span
             >
             <span class="testimonial-form__counter">
-              <span id="charCount" data-ref="char-count">0</span>/1000
+              <span id="charCount" data-lume-part="char-count">0</span>/1000
             </span>
           </div>
 

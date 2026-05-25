@@ -2,8 +2,7 @@
  * Site Header
  *
  * Mobile nav drawer + scroll-state class + hero-overlap detection.
- * Factory style — composes `createHost` for listener cleanup, holds
- * state in closure variables, and exposes a minimal `{ destroy }` API.
+ * Lume handles listener cleanup; component state stays in closure variables.
  *
  * The drawer's open/close visuals live in CSS (clip-path + opacity +
  * stagger). This module just toggles `.open` / `.scrolled` /
@@ -11,16 +10,15 @@
  */
 
 import { prefersReducedMotion } from '@/utils/helpers';
-import { createHost, mountAll, type Component } from '@/lib/host';
+import { defineComponent } from '@beardcoder/lume';
 
 const SCROLL_THRESHOLD_PX = 50;
 const CLOSE_ANIMATION_MS = 620;
 
-function createSiteHeader(root: HTMLElement): Component {
-  const host = createHost(root);
+export default defineComponent(({ root, on, cleanup }) => {
   const heroEl = document.querySelector<HTMLElement>('.hero');
-  const nav = host.query<HTMLElement>('.nav');
-  const toggle = host.query<HTMLButtonElement>('.nav-toggle');
+  const nav = root.querySelector<HTMLElement>('.nav');
+  const toggle = root.querySelector<HTMLButtonElement>('.nav-toggle');
 
   let isNavOpen = false;
   let isScrolled = window.scrollY > SCROLL_THRESHOLD_PX || !heroEl;
@@ -94,7 +92,8 @@ function createSiteHeader(root: HTMLElement): Component {
   };
 
   // ─── Scroll state ──────────────────────────────────────────────────
-  host.onWindow(
+  on(
+    window,
     'scroll',
     () => {
       const next = window.scrollY > SCROLL_THRESHOLD_PX || !heroEl;
@@ -126,43 +125,38 @@ function createSiteHeader(root: HTMLElement): Component {
     );
 
     heroObserver.observe(heroEl);
-    host.signal.addEventListener('abort', () => heroObserver?.disconnect(), {
-      once: true,
-    });
+    cleanup(() => heroObserver?.disconnect());
   }
 
   // ─── Interactions ──────────────────────────────────────────────────
-  host.on(toggle, 'click', () => {
-    if (isNavOpen) closeNav();
-    else openNav();
-  });
-
-  for (const link of host.queryAll<HTMLAnchorElement>('.nav a')) {
-    host.on(link, 'click', closeNav);
+  if (toggle) {
+    on(toggle, 'click', () => {
+      if (isNavOpen) closeNav();
+      else openNav();
+    });
   }
 
-  host.onDocument('click', (event) => {
+  for (const link of root.querySelectorAll<HTMLAnchorElement>('.nav a')) {
+    on(link, 'click', closeNav);
+  }
+
+  on(document, 'click', (event) => {
     if (isNavOpen && !root.contains(event.target as Node | null)) {
       closeNav();
     }
   });
 
-  host.onDocument('keydown', (event) => {
-    if (event.key === 'Escape' && isNavOpen) closeNav();
+  on(document, 'keydown', (event) => {
+    if ((event as KeyboardEvent).key === 'Escape' && isNavOpen) closeNav();
   });
 
   // ─── Initial paint ─────────────────────────────────────────────────
   renderScrollState();
   renderNavState();
 
-  return {
-    destroy(): void {
-      if (closeTimer !== null) window.clearTimeout(closeTimer);
-      host.destroy();
-    },
-  };
-}
+  cleanup(() => {
+    if (closeTimer !== null) window.clearTimeout(closeTimer);
+  });
 
-export function setupSiteHeader(): void {
-  mountAll('[data-component="site-header"]', createSiteHeader);
-}
+  return {};
+});

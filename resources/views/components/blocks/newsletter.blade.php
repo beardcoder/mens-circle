@@ -33,7 +33,7 @@
           id="newsletterForm"
           class="newsletter__form"
           aria-label="Newsletter-Anmeldung"
-          data-component="newsletter-form"
+          data-lume="newsletter-form"
         >
           <label for="newsletter-email" class="sr-only">E-Mail-Adresse</label>
           <input

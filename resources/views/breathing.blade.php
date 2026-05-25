@@ -62,12 +62,12 @@
         <div
           id="breathingApp"
           class="breathing-app"
-          data-component="breathing-app"
+          data-lume="breathing-app"
           data-motion-essential
           data-phase="idle"
         >
           <div class="breathing-app__stage" aria-live="polite">
-            <div class="breathing-app__circle" data-ref="circle">
+            <div class="breathing-app__circle" data-lume-part="circle">
               <span
                 class="breathing-app__ring breathing-app__ring--1"
                 aria-hidden="true"
@@ -82,10 +82,10 @@
               ></span>
               <span class="breathing-app__core" aria-hidden="true"></span>
               <span class="breathing-app__label">
-                <span class="breathing-app__phase" data-ref="phase-label"
+                <span class="breathing-app__phase" data-lume-part="phase-label"
                   >Bereit</span
                 >
-                <span class="breathing-app__counter" data-ref="counter"
+                <span class="breathing-app__counter" data-lume-part="counter"
                   >3 Runden · 35 Atemzüge</span
                 >
               </span>
@@ -95,19 +95,25 @@
           <div class="breathing-app__meta">
             <div class="breathing-app__meta-item">
               <span class="breathing-app__meta-label">Runde</span>
-              <span class="breathing-app__meta-value" data-ref="meta-round"
+              <span
+                class="breathing-app__meta-value"
+                data-lume-part="meta-round"
                 >0 / 3</span
               >
             </div>
             <div class="breathing-app__meta-item">
               <span class="breathing-app__meta-label">Atemzug</span>
-              <span class="breathing-app__meta-value" data-ref="meta-breath"
+              <span
+                class="breathing-app__meta-value"
+                data-lume-part="meta-breath"
                 >0 / 35</span
               >
             </div>
             <div class="breathing-app__meta-item">
               <span class="breathing-app__meta-label">Zeit</span>
-              <span class="breathing-app__meta-value" data-ref="meta-timer"
+              <span
+                class="breathing-app__meta-value"
+                data-lume-part="meta-timer"
                 >00:00</span
               >
             </div>
@@ -117,7 +123,7 @@
             <button
               type="button"
               class="btn btn--primary btn--icon breathing-app__start"
-              data-ref="start"
+              data-lume-part="start"
               aria-label="Atemübung starten"
               title="Atemübung starten"
               data-umami-event="breathing-start"
@@ -127,7 +133,7 @@
             <button
               type="button"
               class="btn btn--outline"
-              data-ref="hold"
+              data-lume-part="hold"
               hidden
               data-umami-event="breathing-resume"
             >
@@ -136,7 +142,7 @@
             <button
               type="button"
               class="btn btn--ghost"
-              data-ref="reset"
+              data-lume-part="reset"
               data-umami-event="breathing-reset"
             >
               Zurücksetzen
@@ -150,7 +156,7 @@
               >
               <div
                 class="breathing-picker"
-                data-ref="picker"
+                data-lume-part="picker"
                 role="slider"
                 tabindex="0"
                 aria-label="Atemzüge je Runde"
@@ -164,7 +170,7 @@
                 ></div>
                 <div
                   class="breathing-picker__track"
-                  data-ref="picker-track"
+                  data-lume-part="picker-track"
                 ></div>
                 <div
                   class="breathing-picker__fade breathing-picker__fade--start"
@@ -182,14 +188,14 @@
                 <button
                   type="button"
                   class="breathing-stepper__btn"
-                  data-ref="rounds-minus"
+                  data-lume-part="rounds-minus"
                   aria-label="Eine Runde weniger"
                 >
                   −
                 </button>
                 <span
                   class="breathing-stepper__value"
-                  data-ref="rounds-value"
+                  data-lume-part="rounds-value"
                   role="spinbutton"
                   aria-valuemin="1"
                   aria-valuemax="6"
@@ -199,7 +205,7 @@
                 <button
                   type="button"
                   class="breathing-stepper__btn"
-                  data-ref="rounds-plus"
+                  data-lume-part="rounds-plus"
                   aria-label="Eine Runde mehr"
                 >
                   +
@@ -214,14 +220,14 @@
                 <button
                   type="button"
                   class="breathing-stepper__btn"
-                  data-ref="recovery-minus"
+                  data-lume-part="recovery-minus"
                   aria-label="Erholungs-Halt verringern"
                 >
                   −
                 </button>
                 <span
                   class="breathing-stepper__value"
-                  data-ref="recovery-value"
+                  data-lume-part="recovery-value"
                   role="spinbutton"
                   aria-valuemin="5"
                   aria-valuemax="30"
@@ -231,7 +237,7 @@
                 <button
                   type="button"
                   class="breathing-stepper__btn"
-                  data-ref="recovery-plus"
+                  data-lume-part="recovery-plus"
                   aria-label="Erholungs-Halt erhöhen"
                 >
                   +

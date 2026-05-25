@@ -6,8 +6,8 @@
  * button + modal to expose both options. Factory style.
  */
 
-import { createHost, mountAll, type Component } from '@/lib/host';
 import { TRACKING_EVENTS, trackEvent } from '@/utils/umami';
+import { defineComponent } from '@beardcoder/lume';
 import type { EventData } from '@/types';
 
 function formatICSDate(date: string, time: string): string {
@@ -92,66 +92,63 @@ function readEventFromDataset(el: HTMLElement): EventData {
   return window.eventData ?? FALLBACK_EVENT;
 }
 
-function createCalendar(root: HTMLElement): Component {
-  const host = createHost(root);
-  const event = readEventFromDataset(root);
-  const blob = new Blob([generateICS(event)], {
-    type: 'text/calendar;charset=utf-8',
-  });
-  const icsBlobUrl = URL.createObjectURL(blob);
-  const googleUrl = generateGoogleCalendarUrl(event);
+export default defineComponent(
+  ({ root, on, part, signal, effect, cleanup }) => {
+    const event = readEventFromDataset(root);
+    const blob = new Blob([generateICS(event)], {
+      type: 'text/calendar;charset=utf-8',
+    });
+    const icsBlobUrl = URL.createObjectURL(blob);
+    const googleUrl = generateGoogleCalendarUrl(event);
 
-  const modal = host.query<HTMLElement>('[data-ref="modal"]');
-  const openBtn = host.query<HTMLButtonElement>('[data-action="open"]');
-  const googleLink = host.query<HTMLAnchorElement>('[data-ref="google-url"]');
-  const icsLink = host.query<HTMLAnchorElement>('[data-ref="ics-url"]');
+    const modal = part('modal');
+    const openBtn = root.querySelector<HTMLButtonElement>(
+      '[data-action="open"]'
+    );
+    const googleLink = part('google-url') as HTMLAnchorElement;
+    const icsLink = part('ics-url') as HTMLAnchorElement;
 
-  if (googleLink) googleLink.href = googleUrl;
-  if (icsLink) icsLink.href = icsBlobUrl;
+    googleLink.href = googleUrl;
+    icsLink.href = icsBlobUrl;
 
-  let isOpen = false;
+    const isOpen = signal(false);
 
-  const render = (): void => {
-    if (!modal) return;
-    modal.classList.toggle('open', isOpen);
-    modal.style.display = isOpen ? 'flex' : 'none';
-  };
+    effect(() => {
+      modal.classList.toggle('open', isOpen());
+      modal.style.display = isOpen() ? 'flex' : 'none';
+    });
 
-  const close = (): void => {
-    isOpen = false;
-    render();
-  };
+    const close = (): void => {
+      isOpen.set(false);
+    };
 
-  host.on(openBtn, 'click', () => {
-    isOpen = true;
-    trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, { event: event.title });
-    render();
-  });
+    if (openBtn) {
+      on(openBtn, 'click', () => {
+        isOpen.set(true);
+        trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, { event: event.title });
+      });
+    }
 
-  host.on(modal, 'click', (e) => {
-    if (e.target === modal) close();
-  });
+    on(modal, 'click', (e) => {
+      if (e.target === modal) close();
+    });
 
-  host.onWindow('keydown', (e) => {
-    if (e.key === 'Escape' && isOpen) close();
-  });
+    on(window, 'keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Escape' && isOpen()) close();
+    });
 
-  host.on(googleLink, 'click', () =>
-    trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, { event: event.title })
-  );
+    on(googleLink, 'click', () =>
+      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_GOOGLE, {
+        event: event.title,
+      })
+    );
 
-  host.on(icsLink, 'click', () =>
-    trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, { event: event.title })
-  );
+    on(icsLink, 'click', () =>
+      trackEvent(TRACKING_EVENTS.CALENDAR_DOWNLOAD_ICS, { event: event.title })
+    );
 
-  return {
-    destroy(): void {
-      URL.revokeObjectURL(icsBlobUrl);
-      host.destroy();
-    },
-  };
-}
+    cleanup(() => URL.revokeObjectURL(icsBlobUrl));
 
-export function setupCalendar(): void {
-  mountAll('[data-component="calendar"]', createCalendar);
-}
+    return {};
+  }
+);

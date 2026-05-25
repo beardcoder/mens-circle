@@ -10,7 +10,7 @@
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
   <!-- Header -->
-  <header class="header" id="header" data-component="site-header">
+  <header class="header" id="header" data-lume="site-header">
     <div class="container">
       <div class="header__inner">
         <a
@@ -197,6 +197,7 @@
   <button
     type="button"
     class="scroll-to-top"
+    data-lume="scroll-to-top"
     aria-label="Nach oben scrollen"
     title="Nach oben"
   >

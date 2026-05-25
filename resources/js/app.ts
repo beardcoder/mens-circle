@@ -1,9 +1,8 @@
 /**
  * Männerkreis Niederbayern / Straubing — Application Entry Point
  *
- * The frontend uses no UI framework. Each component is a small vanilla TS
- * class (extending `ReactiveHost`) that targets `[data-component="…"]`
- * roots in the server-rendered Blade output.
+ * The frontend uses Lume for small reactive components on top of
+ * server-rendered Blade output.
  *
  * Filament keeps its own Alpine integration for the admin panel — that
  * lives outside this bundle and is unaffected.
@@ -11,29 +10,34 @@
 
 import './types';
 
-import { setupSiteHeader } from '@/components/site-header';
-import { setupScrollToTop } from '@/components/scroll-to-top';
-import { setupAccordion } from '@/components/accordion';
-import { setupCalendar } from '@/components/calendar';
-import { setupEventMap } from '@/components/event-map';
-import { setupBreathing } from '@/components/breathing';
+import { createLume } from '@beardcoder/lume';
+
+import accordion from '@/components/accordion';
+import breathing from '@/components/breathing';
+import calendar from '@/components/calendar';
+import eventMap from '@/components/event-map';
 import {
-  setupNewsletterForms,
-  setupRegistrationForms,
-  setupTestimonialForms,
+  newsletterForm,
+  registrationForm,
+  testimonialForm,
 } from '@/components/forms';
+import scrollToTop from '@/components/scroll-to-top';
+import siteHeader from '@/components/site-header';
 import { initUmamiKit } from '@/utils/umami-kit';
 
 function bootstrap(): void {
-  setupSiteHeader();
-  setupScrollToTop();
-  setupAccordion();
-  setupNewsletterForms();
-  setupRegistrationForms();
-  setupTestimonialForms();
-  setupCalendar();
-  setupEventMap();
-  setupBreathing();
+  createLume()
+    .component('site-header', siteHeader)
+    .component('scroll-to-top', scrollToTop)
+    .component('accordion', accordion)
+    .component('newsletter-form', newsletterForm)
+    .component('registration-form', registrationForm)
+    .component('testimonial-form', testimonialForm)
+    .component('calendar', calendar)
+    .component('event-map', eventMap)
+    .component('breathing-app', breathing)
+    .mount();
+
   initUmamiKit();
 }
 

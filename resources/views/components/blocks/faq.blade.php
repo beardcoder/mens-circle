@@ -45,6 +45,7 @@
           @if (!empty($item['question']) && !empty($item['answer']))
             <details
               class="accordion-item"
+              data-lume="accordion"
               name="{{ $anchor }}"
               id="faq-item-{{ $index }}"
             >

@@ -4,10 +4,9 @@
  * Three-phase guided breathing: power breaths → retention → recovery hold.
  * State machine: idle → breathing → retention → recovery → [next | complete]
  *
- * Factory style with signal-based reactivity. Each piece of session
+ * Lume component with signal-based reactivity. Each piece of session
  * state is a `signal()`; DOM bindings are `effect()`s that re-run
- * automatically when their dependencies change. The host's
- * `AbortSignal` disposes every effect on destroy.
+ * automatically when their dependencies change.
  *
  * Settings are snapshotted into `session` when a session starts so
  * adjusting the picker / steppers mid-session has no effect on the
@@ -15,8 +14,11 @@
  */
 
 import { clamp } from '@/utils/helpers';
-import { createHost, mountAll, type Component } from '@/lib/host';
-import { effect, signal, type Signal } from '@/lib/signal';
+import {
+  defineComponent,
+  type ComponentContext,
+  type SignalGetter,
+} from '@beardcoder/lume';
 
 type Phase = 'idle' | 'breathing' | 'retention' | 'recovery' | 'complete';
 
@@ -50,13 +52,13 @@ function formatTime(seconds: number): string {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
-function requireRef<T extends HTMLElement>(
-  scope: HTMLElement,
+type LumeBindings = Pick<ComponentContext, 'on'>;
+
+function requirePart<T extends HTMLElement>(
+  part: ComponentContext['part'],
   name: string
 ): T {
-  const el = scope.querySelector<T>(`[data-ref="${name}"]`);
-
-  if (!el) throw new Error(`[breathing] missing [data-ref="${name}"]`);
+  const el = part(name) as T;
 
   return el;
 }
@@ -69,327 +71,329 @@ function circleMotion(phase: Phase): string | null {
   return null;
 }
 
-function createBreathing(root: HTMLElement): Component {
-  const host = createHost(root);
+export default defineComponent(
+  ({ root, part, signal, effect, on, cleanup }) => {
+    root.style.setProperty('--breathing-cycle-ms', `${CYCLE_MS}ms`);
 
-  root.style.setProperty('--breathing-cycle-ms', `${CYCLE_MS}ms`);
+    // ─── DOM refs ──────────────────────────────────────────────────────
+    const $circle = requirePart<HTMLElement>(part, 'circle');
+    const $phaseLabel = requirePart<HTMLElement>(part, 'phase-label');
+    const $counter = requirePart<HTMLElement>(part, 'counter');
+    const $metaRound = requirePart<HTMLElement>(part, 'meta-round');
+    const $metaBreath = requirePart<HTMLElement>(part, 'meta-breath');
+    const $metaTimer = requirePart<HTMLElement>(part, 'meta-timer');
+    const $startBtn = requirePart<HTMLButtonElement>(part, 'start');
+    const $holdBtn = requirePart<HTMLButtonElement>(part, 'hold');
+    const $resetBtn = requirePart<HTMLButtonElement>(part, 'reset');
+    const $picker = requirePart<HTMLElement>(part, 'picker');
+    const $pickerTrack = requirePart<HTMLElement>(part, 'picker-track');
+    const $roundsValue = requirePart<HTMLElement>(part, 'rounds-value');
+    const $roundsMinus = requirePart<HTMLButtonElement>(part, 'rounds-minus');
+    const $roundsPlus = requirePart<HTMLButtonElement>(part, 'rounds-plus');
+    const $recoveryValue = requirePart<HTMLElement>(part, 'recovery-value');
+    const $recoveryMinus = requirePart<HTMLButtonElement>(
+      part,
+      'recovery-minus'
+    );
+    const $recoveryPlus = requirePart<HTMLButtonElement>(part, 'recovery-plus');
 
-  // ─── DOM refs ──────────────────────────────────────────────────────
-  const $circle = requireRef<HTMLElement>(root, 'circle');
-  const $phaseLabel = requireRef<HTMLElement>(root, 'phase-label');
-  const $counter = requireRef<HTMLElement>(root, 'counter');
-  const $metaRound = requireRef<HTMLElement>(root, 'meta-round');
-  const $metaBreath = requireRef<HTMLElement>(root, 'meta-breath');
-  const $metaTimer = requireRef<HTMLElement>(root, 'meta-timer');
-  const $startBtn = requireRef<HTMLButtonElement>(root, 'start');
-  const $holdBtn = requireRef<HTMLButtonElement>(root, 'hold');
-  const $resetBtn = requireRef<HTMLButtonElement>(root, 'reset');
-  const $picker = requireRef<HTMLElement>(root, 'picker');
-  const $pickerTrack = requireRef<HTMLElement>(root, 'picker-track');
-  const $roundsValue = requireRef<HTMLElement>(root, 'rounds-value');
-  const $roundsMinus = requireRef<HTMLButtonElement>(root, 'rounds-minus');
-  const $roundsPlus = requireRef<HTMLButtonElement>(root, 'rounds-plus');
-  const $recoveryValue = requireRef<HTMLElement>(root, 'recovery-value');
-  const $recoveryMinus = requireRef<HTMLButtonElement>(root, 'recovery-minus');
-  const $recoveryPlus = requireRef<HTMLButtonElement>(root, 'recovery-plus');
+    // ─── Reactive state ────────────────────────────────────────────────
+    const phase = signal<Phase>('idle');
+    const round = signal(0);
+    const breath = signal(0);
+    const timerSeconds = signal(0);
+    const settingBreaths = signal(35);
+    const settingRounds = signal(3);
+    const settingRecovery = signal(15);
+    const session = signal<SessionConfig | null>(null);
 
-  // ─── Reactive state ────────────────────────────────────────────────
-  const phase = signal<Phase>('idle');
-  const round = signal(0);
-  const breath = signal(0);
-  const timerSeconds = signal(0);
-  const settingBreaths = signal(35);
-  const settingRounds = signal(3);
-  const settingRecovery = signal(15);
-  const session = signal<SessionConfig | null>(null);
+    const isActive = (): boolean => {
+      const p = phase();
 
-  const isActive = (): boolean => {
-    const p = phase();
+      return p === 'breathing' || p === 'retention' || p === 'recovery';
+    };
 
-    return p === 'breathing' || p === 'retention' || p === 'recovery';
-  };
+    const sessionRoundsFn = (): number => session()?.rounds ?? settingRounds();
+    const sessionBreathsFn = (): number =>
+      session()?.breaths ?? settingBreaths();
 
-  const sessionRoundsFn = (): number => session()?.rounds ?? settingRounds();
-  const sessionBreathsFn = (): number => session()?.breaths ?? settingBreaths();
+    const counterText = (): string => {
+      switch (phase()) {
+        case 'idle':
+          return `${settingRounds()} Runden · ${settingBreaths()} Atemzüge`;
+        case 'breathing':
+          return `Atemzug ${breath()}`;
+        case 'retention':
+          return `Halten · ${formatTime(timerSeconds())}`;
+        case 'recovery':
+          return `Halten · ${timerSeconds()}s`;
+        case 'complete':
+          return 'Nimm dir einen Moment, spüre nach.';
+      }
+    };
 
-  const counterText = (): string => {
-    switch (phase()) {
-      case 'idle':
-        return `${settingRounds()} Runden · ${settingBreaths()} Atemzüge`;
-      case 'breathing':
-        return `Atemzug ${breath()}`;
-      case 'retention':
-        return `Halten · ${formatTime(timerSeconds())}`;
-      case 'recovery':
-        return `Halten · ${timerSeconds()}s`;
-      case 'complete':
-        return 'Nimm dir einen Moment, spüre nach.';
-    }
-  };
+    // ─── DOM bindings ──────────────────────────────────────────────────
+    effect(() => {
+      root.dataset.phase = phase();
+    });
 
-  // ─── DOM bindings ──────────────────────────────────────────────────
-  effect(() => {
-    root.dataset.phase = phase();
-  }, host.signal);
+    effect(() => {
+      const motion = circleMotion(phase());
 
-  effect(() => {
-    const motion = circleMotion(phase());
+      if (motion) $circle.dataset.motion = motion;
+      else delete $circle.dataset.motion;
+    });
 
-    if (motion) $circle.dataset.motion = motion;
-    else delete $circle.dataset.motion;
-  }, host.signal);
+    effect(() => {
+      $phaseLabel.textContent = PHASE_LABEL[phase()];
+    });
 
-  effect(() => {
-    $phaseLabel.textContent = PHASE_LABEL[phase()];
-  }, host.signal);
+    effect(() => {
+      $counter.textContent = counterText();
+    });
 
-  effect(() => {
-    $counter.textContent = counterText();
-  }, host.signal);
+    effect(() => {
+      $metaRound.textContent = `${round()} / ${sessionRoundsFn()}`;
+    });
 
-  effect(() => {
-    $metaRound.textContent = `${round()} / ${sessionRoundsFn()}`;
-  }, host.signal);
+    effect(() => {
+      $metaBreath.textContent = `${breath()} / ${sessionBreathsFn()}`;
+    });
 
-  effect(() => {
-    $metaBreath.textContent = `${breath()} / ${sessionBreathsFn()}`;
-  }, host.signal);
+    effect(() => {
+      $metaTimer.textContent = formatTime(timerSeconds());
+    });
 
-  effect(() => {
-    $metaTimer.textContent = formatTime(timerSeconds());
-  }, host.signal);
+    effect(() => {
+      const p = phase();
 
-  effect(() => {
-    const p = phase();
+      $startBtn.hidden = !(p === 'idle' || p === 'complete');
+      $holdBtn.hidden = !(p === 'retention' || p === 'recovery');
 
-    $startBtn.hidden = !(p === 'idle' || p === 'complete');
-    $holdBtn.hidden = !(p === 'retention' || p === 'recovery');
+      const startLabel =
+        p === 'complete' ? 'Erneut starten' : 'Atemübung starten';
 
-    const startLabel =
-      p === 'complete' ? 'Erneut starten' : 'Atemübung starten';
+      $startBtn.setAttribute('aria-label', startLabel);
+      $startBtn.title = startLabel;
 
-    $startBtn.setAttribute('aria-label', startLabel);
-    $startBtn.title = startLabel;
+      $holdBtn.textContent =
+        p === 'recovery' ? 'Weiteratmen' : 'Atem freigeben';
+    });
 
-    $holdBtn.textContent = p === 'recovery' ? 'Weiteratmen' : 'Atem freigeben';
-  }, host.signal);
+    effect(() => {
+      $picker.setAttribute('aria-valuenow', String(settingBreaths()));
 
-  effect(() => {
-    $picker.setAttribute('aria-valuenow', String(settingBreaths()));
+      if (isActive()) $picker.setAttribute('aria-disabled', 'true');
+      else $picker.removeAttribute('aria-disabled');
+    });
 
-    if (isActive()) $picker.setAttribute('aria-disabled', 'true');
-    else $picker.removeAttribute('aria-disabled');
-  }, host.signal);
+    effect(() => {
+      $roundsValue.textContent = String(settingRounds());
+      $roundsValue.setAttribute('aria-valuenow', String(settingRounds()));
+      $roundsMinus.disabled = isActive() || settingRounds() <= 1;
+      $roundsPlus.disabled = isActive() || settingRounds() >= 6;
+    });
 
-  effect(() => {
-    $roundsValue.textContent = String(settingRounds());
-    $roundsValue.setAttribute('aria-valuenow', String(settingRounds()));
-    $roundsMinus.disabled = isActive() || settingRounds() <= 1;
-    $roundsPlus.disabled = isActive() || settingRounds() >= 6;
-  }, host.signal);
+    effect(() => {
+      $recoveryValue.textContent = String(settingRecovery());
+      $recoveryValue.setAttribute('aria-valuenow', String(settingRecovery()));
+      $recoveryMinus.disabled = isActive() || settingRecovery() <= 5;
+      $recoveryPlus.disabled = isActive() || settingRecovery() >= 30;
+    });
 
-  effect(() => {
-    $recoveryValue.textContent = String(settingRecovery());
-    $recoveryValue.setAttribute('aria-valuenow', String(settingRecovery()));
-    $recoveryMinus.disabled = isActive() || settingRecovery() <= 5;
-    $recoveryPlus.disabled = isActive() || settingRecovery() >= 30;
-  }, host.signal);
+    // ─── Scheduling ────────────────────────────────────────────────────
+    let timerHandle: number | null = null;
+    let breathHandle: number | null = null;
+    let rafHandle: number | null = null;
 
-  // ─── Scheduling ────────────────────────────────────────────────────
-  let timerHandle: number | null = null;
-  let breathHandle: number | null = null;
-  let rafHandle: number | null = null;
+    const clearScheduled = (): void => {
+      if (breathHandle !== null) {
+        window.clearInterval(breathHandle);
+        breathHandle = null;
+      }
 
-  const clearScheduled = (): void => {
-    if (breathHandle !== null) {
-      window.clearInterval(breathHandle);
-      breathHandle = null;
-    }
+      if (timerHandle !== null) {
+        window.clearTimeout(timerHandle);
+        timerHandle = null;
+      }
 
-    if (timerHandle !== null) {
-      window.clearTimeout(timerHandle);
-      timerHandle = null;
-    }
+      if (rafHandle !== null) {
+        cancelAnimationFrame(rafHandle);
+        rafHandle = null;
+      }
+    };
 
-    if (rafHandle !== null) {
-      cancelAnimationFrame(rafHandle);
-      rafHandle = null;
-    }
-  };
+    // ─── Phase transitions ─────────────────────────────────────────────
+    const enterIdle = (): void => {
+      clearScheduled();
+      phase.set('idle');
+      round.set(0);
+      breath.set(0);
+      timerSeconds.set(0);
+      session.set(null);
+    };
 
-  // ─── Phase transitions ─────────────────────────────────────────────
-  const enterIdle = (): void => {
-    clearScheduled();
-    phase.set('idle');
-    round.set(0);
-    breath.set(0);
-    timerSeconds.set(0);
-    session.set(null);
-  };
+    const finishSession = (): void => {
+      clearScheduled();
+      phase.set('complete');
+    };
 
-  const finishSession = (): void => {
-    clearScheduled();
-    phase.set('complete');
-  };
+    const startBreathing = (): void => {
+      clearScheduled();
+      phase.set('breathing');
+      round.update((r) => r + 1);
+      breath.set(1);
+      timerSeconds.set(0);
 
-  const startBreathing = (): void => {
-    clearScheduled();
-    phase.set('breathing');
-    round.update((r) => r + 1);
-    breath.set(1);
-    timerSeconds.set(0);
+      const startedAt = performance.now();
+      const breathLimit = session()?.breaths ?? settingBreaths();
 
-    const startedAt = performance.now();
-    const breathLimit = session()?.breaths ?? settingBreaths();
+      breathHandle = window.setInterval(() => {
+        if (phase() !== 'breathing') return;
 
-    breathHandle = window.setInterval(() => {
-      if (phase() !== 'breathing') return;
+        breath.update((b) => b + 1);
 
-      breath.update((b) => b + 1);
+        if (breath() > breathLimit) startRetention();
+      }, CYCLE_MS);
 
-      if (breath() > breathLimit) startRetention();
-    }, CYCLE_MS);
+      const tick = (): void => {
+        if (phase() !== 'breathing') return;
 
-    const tick = (): void => {
-      if (phase() !== 'breathing') return;
+        timerSeconds.set(Math.floor((performance.now() - startedAt) / 1000));
+        timerHandle = window.setTimeout(tick, 1000);
+      };
 
-      timerSeconds.set(Math.floor((performance.now() - startedAt) / 1000));
       timerHandle = window.setTimeout(tick, 1000);
     };
 
-    timerHandle = window.setTimeout(tick, 1000);
-  };
+    const startRetention = (): void => {
+      clearScheduled();
+      phase.set('retention');
+      timerSeconds.set(0);
 
-  const startRetention = (): void => {
-    clearScheduled();
-    phase.set('retention');
-    timerSeconds.set(0);
+      const startedAt = performance.now();
+      let lastSecond = -1;
 
-    const startedAt = performance.now();
-    let lastSecond = -1;
+      const loop = (): void => {
+        if (phase() !== 'retention') return;
 
-    const loop = (): void => {
-      if (phase() !== 'retention') return;
+        const elapsed = Math.floor((performance.now() - startedAt) / 1000);
 
-      const elapsed = Math.floor((performance.now() - startedAt) / 1000);
+        if (elapsed !== lastSecond) {
+          lastSecond = elapsed;
+          timerSeconds.set(elapsed);
+        }
 
-      if (elapsed !== lastSecond) {
-        lastSecond = elapsed;
-        timerSeconds.set(elapsed);
-      }
+        rafHandle = requestAnimationFrame(loop);
+      };
 
       rafHandle = requestAnimationFrame(loop);
     };
 
-    rafHandle = requestAnimationFrame(loop);
-  };
+    const startRecovery = (): void => {
+      clearScheduled();
+      phase.set('recovery');
 
-  const startRecovery = (): void => {
-    clearScheduled();
-    phase.set('recovery');
+      let remaining = session()?.recoveryHold ?? settingRecovery();
 
-    let remaining = session()?.recoveryHold ?? settingRecovery();
-
-    timerSeconds.set(remaining);
-
-    const tick = (): void => {
-      remaining -= 1;
       timerSeconds.set(remaining);
 
-      if (remaining <= 0) {
-        const limit = session()?.rounds ?? settingRounds();
+      const tick = (): void => {
+        remaining -= 1;
+        timerSeconds.set(remaining);
 
-        if (round() >= limit) finishSession();
-        else startBreathing();
+        if (remaining <= 0) {
+          const limit = session()?.rounds ?? settingRounds();
 
-        return;
-      }
+          if (round() >= limit) finishSession();
+          else startBreathing();
+
+          return;
+        }
+
+        timerHandle = window.setTimeout(tick, 1000);
+      };
 
       timerHandle = window.setTimeout(tick, 1000);
     };
 
-    timerHandle = window.setTimeout(tick, 1000);
-  };
+    const beginSession = (): void => {
+      session.set({
+        breaths: settingBreaths(),
+        rounds: settingRounds(),
+        recoveryHold: settingRecovery(),
+      });
+      round.set(0);
+      breath.set(0);
+      timerSeconds.set(0);
+      startBreathing();
+    };
 
-  const beginSession = (): void => {
-    session.set({
-      breaths: settingBreaths(),
-      rounds: settingRounds(),
-      recoveryHold: settingRecovery(),
+    // ─── Actions ───────────────────────────────────────────────────────
+    on($circle, 'click', () => {
+      if (phase() === 'idle' || phase() === 'complete') beginSession();
     });
-    round.set(0);
-    breath.set(0);
-    timerSeconds.set(0);
-    startBreathing();
-  };
 
-  // ─── Actions ───────────────────────────────────────────────────────
-  host.on($circle, 'click', () => {
-    if (phase() === 'idle' || phase() === 'complete') beginSession();
-  });
+    on($startBtn, 'click', beginSession);
 
-  host.on($startBtn, 'click', beginSession);
+    on($holdBtn, 'click', () => {
+      if (phase() === 'retention') {
+        startRecovery();
 
-  host.on($holdBtn, 'click', () => {
-    if (phase() === 'retention') {
-      startRecovery();
+        return;
+      }
 
-      return;
-    }
+      if (phase() === 'recovery') {
+        const limit = session()?.rounds ?? settingRounds();
 
-    if (phase() === 'recovery') {
-      const limit = session()?.rounds ?? settingRounds();
+        if (round() >= limit) finishSession();
+        else startBreathing();
+      }
+    });
 
-      if (round() >= limit) finishSession();
-      else startBreathing();
-    }
-  });
+    on($resetBtn, 'click', enterIdle);
 
-  host.on($resetBtn, 'click', enterIdle);
+    on($roundsMinus, 'click', () => {
+      if (!isActive()) settingRounds.update((n) => clamp(n - 1, 1, 6));
+    });
 
-  host.on($roundsMinus, 'click', () => {
-    if (!isActive()) settingRounds.update((n) => clamp(n - 1, 1, 6));
-  });
+    on($roundsPlus, 'click', () => {
+      if (!isActive()) settingRounds.update((n) => clamp(n + 1, 1, 6));
+    });
 
-  host.on($roundsPlus, 'click', () => {
-    if (!isActive()) settingRounds.update((n) => clamp(n + 1, 1, 6));
-  });
+    on($recoveryMinus, 'click', () => {
+      if (!isActive()) settingRecovery.update((n) => clamp(n - 1, 5, 30));
+    });
 
-  host.on($recoveryMinus, 'click', () => {
-    if (!isActive()) settingRecovery.update((n) => clamp(n - 1, 5, 30));
-  });
+    on($recoveryPlus, 'click', () => {
+      if (!isActive()) settingRecovery.update((n) => clamp(n + 1, 5, 30));
+    });
 
-  host.on($recoveryPlus, 'click', () => {
-    if (!isActive()) settingRecovery.update((n) => clamp(n + 1, 5, 30));
-  });
+    // ─── iOS-style swipe picker ────────────────────────────────────────
+    setupPicker({
+      on,
+      picker: $picker,
+      track: $pickerTrack,
+      isActive,
+      breaths: settingBreaths,
+    });
 
-  // ─── iOS-style swipe picker ────────────────────────────────────────
-  setupPicker({
-    host,
-    picker: $picker,
-    track: $pickerTrack,
-    isActive,
-    breaths: settingBreaths,
-  });
+    cleanup(clearScheduled);
 
-  return {
-    destroy(): void {
-      clearScheduled();
-      host.destroy();
-    },
-  };
-}
+    return {};
+  }
+);
 
 interface PickerArgs {
-  host: ReturnType<typeof createHost>;
+  on: LumeBindings['on'];
   picker: HTMLElement;
   track: HTMLElement;
   isActive: () => boolean;
-  breaths: Signal<number>;
+  breaths: SignalGetter<number>;
 }
 
 function setupPicker({
-  host,
+  on,
   picker,
   track,
   isActive,
@@ -450,7 +454,9 @@ function setupPicker({
     applyTransform(animated);
   };
 
-  host.on(track, 'pointerdown', (e) => {
+  on(track, 'pointerdown', (event) => {
+    const e = event as PointerEvent;
+
     if (isActive()) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
 
@@ -462,7 +468,9 @@ function setupPicker({
     picker.classList.add('is-dragging');
   });
 
-  host.on(track, 'pointermove', (e) => {
+  on(track, 'pointermove', (event) => {
+    const e = event as PointerEvent;
+
     if (pointerId !== e.pointerId) return;
 
     const delta = e.clientX - dragStartX;
@@ -486,10 +494,10 @@ function setupPicker({
     else applyTransform(true);
   };
 
-  host.on(track, 'pointerup', onPointerEnd);
-  host.on(track, 'pointercancel', onPointerEnd);
+  on(track, 'pointerup', (event) => onPointerEnd(event as PointerEvent));
+  on(track, 'pointercancel', (event) => onPointerEnd(event as PointerEvent));
 
-  host.on(track, 'click', (e) => {
+  on(track, 'click', (e) => {
     if (isActive()) {
       e.preventDefault();
 
@@ -513,7 +521,9 @@ function setupPicker({
     setIndex(indexOfValue(Number.parseInt(target.dataset.value, 10)), true);
   });
 
-  host.on(picker, 'keydown', (e) => {
+  on(picker, 'keydown', (event) => {
+    const e = event as KeyboardEvent;
+
     if (isActive()) return;
 
     switch (e.key) {
@@ -538,10 +548,12 @@ function setupPicker({
     }
   });
 
-  host.on(
+  on(
     picker,
     'wheel',
-    (e) => {
+    (event) => {
+      const e = event as WheelEvent;
+
       if (isActive()) return;
       if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
 
@@ -554,8 +566,4 @@ function setupPicker({
   );
 
   setIndex(currentIndex, false);
-}
-
-export function setupBreathing(): void {
-  mountAll('[data-component="breathing-app"]', createBreathing);
 }

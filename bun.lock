@@ -4,6 +4,7 @@
   "workspaces": {
     "": {
       "dependencies": {
+        "@beardcoder/lume": "^0.3.0",
         "@tailwindcss/vite": "^4.3.0",
         "leaflet": "^1.9.4",
         "tailwindcss": "^4.3.0",
@@ -41,6 +42,8 @@
     "@babel/code-frame": ["@babel/code-frame@7.27.1", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.27.1", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg=="],
 
     "@babel/helper-validator-identifier": ["@babel/helper-validator-identifier@7.28.5", "", {}, "sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q=="],
+
+    "@beardcoder/lume": ["@beardcoder/lume@0.3.0", "", {}, "sha512-HjSv0GJC+qX5GzrS06r5Usu4b64soZrz+8I+5kA3/jeeAPPLn+7jQct6yBEk/9hk0rZkiGjO9bfuiPQGPCGaHw=="],
 
     "@cacheable/memory": ["@cacheable/memory@2.0.9", "", { "dependencies": { "@cacheable/utils": "^2.4.1", "@keyv/bigmap": "^1.3.1", "hookified": "^1.15.1", "keyv": "^5.6.0" } }, "sha512-HdMx6DoGywB30vacDbBsITbIX4pgFqj1zsrV58jZBUw3klzkNoXhj7qOqAgledhxG7YZI5rBSJg7Zp8/VG0DuA=="],
 
