@@ -118,22 +118,6 @@
   overflow: clip;
 }
 
-[data-motion='image'] > img,
-[data-motion='image'] > picture > img {
-  transition:
-    transform var(--motion-cinematic),
-    filter var(--motion-slow);
-  will-change: transform;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  [data-motion='image']:hover > img,
-  [data-motion='image']:hover > picture > img {
-    filter: saturate(1.08);
-    transform: scale(1.04);
-  }
-}
-
 /* ============================================
    Magnetic link — subtle accent shift on hover
    ============================================
