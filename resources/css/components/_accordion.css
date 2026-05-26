@@ -74,7 +74,6 @@
   inline-size: 100%;
   padding-block: var(--space-md);
   padding-inline: var(--space-sm);
-  font-family: var(--font-display);
   font-size: var(--text-lg);
   color: var(--text-primary);
   text-align: start;
@@ -87,14 +86,6 @@
   background: none;
   border: none;
   transition: color var(--motion-quick);
-
-  &::-webkit-details-marker {
-    display: none;
-  }
-
-  &::marker {
-    content: '';
-  }
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
@@ -155,7 +146,7 @@
   }
 }
 
-.accordion-item[open] {
+.accordion-item--open {
   background: color-mix(in oklch, var(--accent-primary) 4%, transparent);
   border-block-end-color: color-mix(
     in oklch,
@@ -182,35 +173,25 @@
   }
 }
 
-/* ============================================
-   Smooth height transition is driven by `setupAccordion` in
-   resources/js/components/accordion.ts via the Web Animations API.
-   Works in every browser that supports `<details>` (i.e. all of them).
-   The body just needs to keep its overflow clipped while JS animates
-   the height — set as an inline style only during the animation.
+:root {
+  interpolate-size: allow-keywords; /* 👈 */
+}
 
-   Browsers without JS still get the native open/close behaviour.
-   ============================================ */
-
-/* ============================================
-   Body
-   ============================================ */
 .accordion-item__body {
-  padding-block: var(--space-md);
-  padding-inline: var(--space-md);
-  font-size: 1rem;
+  max-block-size: 0;
+  overflow: hidden;
+  font-size: 0.95em;
   line-height: var(--leading-relaxed);
   color: var(--text-secondary);
-  opacity: 0.82;
+  transition: max-block-size 0.35s ease;
+  will-change: max-block-size;
 
   p:last-child {
     margin-block-end: 0;
   }
+}
 
-  a {
-    color: var(--_accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color var(--motion-quick);
-  }
+.accordion-item__content {
+  padding-block-end: var(--space-md);
+  padding-inline: var(--space-sm);
 }

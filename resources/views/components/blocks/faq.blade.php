@@ -43,22 +43,25 @@
       <div class="faq__list">
         @foreach ($faqItems as $index => $item)
           @if (!empty($item['question']) && !empty($item['answer']))
-            <details
+            <div
               class="accordion-item"
               data-lume="accordion"
-              name="{{ $anchor }}"
-              id="faq-item-{{ $index }}"
             >
-              <summary
+              <button
                 class="accordion-item__trigger"
                 data-umami-event="faq-expand"
+                data-lume-part="control"
                 data-umami-event-question="{{ Str::limit($item['question'], 50) }}"
+                aria-expanded="true"
+                aria-controls="faq-item-{{ $index }}"
               >
                 <span>{{ $item['question'] }}</span>
                 <span class="accordion-item__icon" aria-hidden="true"></span>
-              </summary>
-              <div class="accordion-item__body">{!! $item['answer'] !!}</div>
-            </details>
+              </button>
+              <div class="accordion-item__body" id="faq-item-{{ $index }}" data-lume-part="body" data-open="false">
+                  <div class="accordion-item__content">{!! $item['answer'] !!}</div>
+              </div>
+            </div>
           @endif
         @endforeach
       </div>
