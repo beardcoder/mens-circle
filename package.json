@@ -2,7 +2,7 @@
   "name": "mens-circle",
   "$schema": "https://www.schemastore.org/package.json",
   "dependencies": {
-    "@beardcoder/lume": "^0.3.0",
+    "@beardcoder/lume": "0.4.0",
     "@tailwindcss/vite": "^4.3.0",
     "leaflet": "^1.9.4",
     "tailwindcss": "^4.3.0"
