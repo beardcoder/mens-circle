@@ -9,6 +9,8 @@
   class="section section--large cta-section"
   @if ($anchor) id="{{ $anchor }}" @endif
 >
+  <div class="cta__ornament cta__ornament--outer" aria-hidden="true"></div>
+  <div class="cta__ornament cta__ornament--inner" aria-hidden="true"></div>
   <div class="container">
     <div class="cta__content">
       @if (!empty($data['eyebrow']))

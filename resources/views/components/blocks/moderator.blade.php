@@ -14,6 +14,7 @@
 @endphp
 
 <section class="section moderator-section" id="{{ $anchor }}">
+  <span class="moderator__ornament" aria-hidden="true">BEGLEITER</span>
   <div class="container">
     <div class="moderator__layout">
       <div class="moderator__photo-wrapper">

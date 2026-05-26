@@ -42,7 +42,10 @@
     </div>
 
     <div class="intro__image-area">
-      <div class="intro__image-circles" aria-hidden="true"></div>
+      <div class="intro__image-circles" aria-hidden="true">
+        <div class="intro__image-ring intro__image-ring--outer"></div>
+        <div class="intro__image-ring intro__image-ring--inner"></div>
+      </div>
       @if (!empty($data['quote']))
         <p class="intro__image-text">{!! $data['quote'] !!}</p>
       @endif

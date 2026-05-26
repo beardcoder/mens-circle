@@ -31,15 +31,13 @@
   opacity: var(--_ornament-opacity, 0.2);
 }
 
-.intro__image-circles::before,
-.intro__image-circles::after {
+.intro__image-ring {
   position: absolute;
-  content: '';
   border: 1px solid var(--_ornament-ring-color, var(--color-sand));
   border-radius: var(--radius-full);
 }
 
-.intro__image-circles::before {
+.intro__image-ring--outer {
   inset-block-start: -20%;
   inset-inline-start: -20%;
   inline-size: 140%;
@@ -47,7 +45,7 @@
   animation: breathe-slow 26s var(--ease-ambient) infinite;
 }
 
-.intro__image-circles::after {
+.intro__image-ring--inner {
   inset-block-start: 50%;
   inset-inline-start: 50%;
   inline-size: 80%;

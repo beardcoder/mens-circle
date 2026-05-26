@@ -191,6 +191,7 @@
   .hero__title,
   .hero__bottom,
   .hero__scroll,
+  .hero__scroll-line,
   .eyebrow::before,
   .section-title,
   [data-motion='rise'] {

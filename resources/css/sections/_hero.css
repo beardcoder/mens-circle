@@ -38,10 +38,10 @@
 
 /* Warm glow — the primary radial drifts as you scroll, animated via
    `@property` so the gradient can interpolate smoothly. */
-.hero__bg::after {
+.hero__bg-glow {
   position: absolute;
   inset: 0;
-  content: '';
+  pointer-events: none;
   background:
     radial-gradient(
       ellipse 80% 60% at 70% 30%,
@@ -202,22 +202,17 @@
   writing-mode: vertical-rl;
 }
 
-.hero__scroll::after {
+.hero__scroll-line {
+  display: block;
   inline-size: 1px;
   block-size: 80px;
-  content: '';
+  pointer-events: none;
   background: linear-gradient(to bottom, var(--accent-primary), transparent);
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hero__scroll::after {
+  .hero__scroll-line {
     animation: scroll-line-sweep 2s var(--ease-settle) infinite;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__scroll::after {
-    animation: none;
   }
 }
 

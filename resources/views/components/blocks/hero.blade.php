@@ -23,6 +23,7 @@
                 'aria-hidden' => 'true',
             ]) }}
     @endif
+    <div class="hero__bg-glow" aria-hidden="true"></div>
   </div>
 
   <div class="hero__circles" aria-hidden="true">
@@ -56,7 +57,7 @@
               <a href="{{ $button->href }}" class="btn btn--primary btn--large">
                 {{ $data['button_text'] }}
               </a>
-              <span class="hero__scroll" aria-hidden="true">Entdecken</span>
+              <span class="hero__scroll" aria-hidden="true">Entdecken<span class="hero__scroll-line" aria-hidden="true"></span></span>
             </div>
           @endif
         @endif

@@ -34,6 +34,7 @@
   id="{{ $anchor }}"
   aria-labelledby="journey-title"
 >
+  <div class="journey__glow" aria-hidden="true"></div>
   <div class="container">
     <div class="section-header section-header--on-dark">
       @if (!empty($data['eyebrow']))
@@ -51,6 +52,7 @@
 
     @if (!empty($steps) && is_array($steps))
       <div class="journey__steps">
+        <div class="journey__thread" aria-hidden="true"></div>
         @foreach ($steps as $step)
           <div class="journey__step">
             @if (!empty($step['number']))

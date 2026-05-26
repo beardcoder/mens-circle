@@ -16,7 +16,7 @@
 }
 
 /* Decorative text */
-.moderator-section::before {
+.moderator__ornament {
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: -5%;
@@ -26,13 +26,13 @@
   letter-spacing: 0.1em;
   white-space: nowrap;
   pointer-events: none;
-  content: 'BEGLEITER';
+  user-select: none;
   opacity: 0.5;
   transform: translateY(-50%) rotate(-90deg);
 }
 
 @media (width <= 900px) {
-  .moderator-section::before {
+  .moderator__ornament {
     display: none;
   }
 }

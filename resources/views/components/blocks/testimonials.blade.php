@@ -42,6 +42,7 @@
   id="{{ $anchor }}"
   aria-labelledby="testimonials-title"
 >
+  <div class="testimonials__pattern" aria-hidden="true"></div>
   <div class="container">
     <div class="section-header">
       <p class="eyebrow">Community Stimmen</p>
