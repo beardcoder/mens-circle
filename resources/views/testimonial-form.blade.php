@@ -61,6 +61,7 @@
               id="quote"
               name="quote"
               class="form-control form-control--light"
+              data-lume-part="quote-input"
               rows="6"
               placeholder='z.B. "Hier kann ich endlich ich selbst sein, ohne Maske und ohne Leistungsdruck..."'
               required

@@ -15,10 +15,11 @@ import { defineComponent } from '@beardcoder/lume';
 const SCROLL_THRESHOLD_PX = 50;
 const CLOSE_ANIMATION_MS = 620;
 
-export default defineComponent(({ root, on, cleanup }) => {
+export default defineComponent(({ root, part, parts, on, cleanup }) => {
   const heroEl = document.querySelector<HTMLElement>('.hero');
-  const nav = root.querySelector<HTMLElement>('.nav');
-  const toggle = root.querySelector<HTMLButtonElement>('.nav-toggle');
+  const nav = part<HTMLElement>('nav');
+  const toggle = part<HTMLButtonElement>('toggle');
+  const navLinks = parts<HTMLAnchorElement>('nav-link');
 
   let isNavOpen = false;
   let isScrolled = window.scrollY > SCROLL_THRESHOLD_PX || !heroEl;
@@ -35,19 +36,14 @@ export default defineComponent(({ root, on, cleanup }) => {
   };
 
   const renderNavState = (): void => {
-    if (nav) {
-      nav.classList.toggle('open', isNavOpen);
-      nav.setAttribute('aria-expanded', String(isNavOpen));
-    }
-
-    if (toggle) {
-      toggle.classList.toggle('active', isNavOpen);
-      toggle.setAttribute('aria-expanded', String(isNavOpen));
-      toggle.setAttribute(
-        'aria-label',
-        isNavOpen ? 'Menü schließen' : 'Menü öffnen'
-      );
-    }
+    nav.classList.toggle('open', isNavOpen);
+    nav.setAttribute('aria-expanded', String(isNavOpen));
+    toggle.classList.toggle('active', isNavOpen);
+    toggle.setAttribute('aria-expanded', String(isNavOpen));
+    toggle.setAttribute(
+      'aria-label',
+      isNavOpen ? 'Menü schließen' : 'Menü öffnen'
+    );
   };
 
   const openNav = (): void => {
@@ -74,11 +70,7 @@ export default defineComponent(({ root, on, cleanup }) => {
     const restore = (): void => {
       document.body.classList.remove('nav-open');
       document.body.style.top = '';
-      window.scrollTo({
-        top: scrollPosition,
-        left: 0,
-        behavior: 'instant',
-      });
+      window.scrollTo({ top: scrollPosition, left: 0, behavior: 'instant' });
       closeTimer = null;
     };
 
@@ -99,7 +91,6 @@ export default defineComponent(({ root, on, cleanup }) => {
       const next = window.scrollY > SCROLL_THRESHOLD_PX || !heroEl;
 
       if (next === isScrolled) return;
-
       isScrolled = next;
       renderScrollState();
     },
@@ -107,16 +98,13 @@ export default defineComponent(({ root, on, cleanup }) => {
   );
 
   // ─── Hero overlap ──────────────────────────────────────────────────
-  let heroObserver: IntersectionObserver | null = null;
-
   if (heroEl) {
-    heroObserver = new IntersectionObserver(
+    const heroObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           const next = entry.isIntersecting && entry.intersectionRatio > 0.15;
 
           if (next === isOnHero) continue;
-
           isOnHero = next;
           renderScrollState();
         }
@@ -125,25 +113,21 @@ export default defineComponent(({ root, on, cleanup }) => {
     );
 
     heroObserver.observe(heroEl);
-    cleanup(() => heroObserver?.disconnect());
+    cleanup(() => heroObserver.disconnect());
   }
 
   // ─── Interactions ──────────────────────────────────────────────────
-  if (toggle) {
-    on(toggle, 'click', () => {
-      if (isNavOpen) closeNav();
-      else openNav();
-    });
-  }
+  on(toggle, 'click', () => {
+    if (isNavOpen) closeNav();
+    else openNav();
+  });
 
-  for (const link of root.querySelectorAll<HTMLAnchorElement>('.nav a')) {
+  for (const link of navLinks) {
     on(link, 'click', closeNav);
   }
 
   on(document, 'click', (event) => {
-    if (isNavOpen && !root.contains(event.target as Node | null)) {
-      closeNav();
-    }
+    if (isNavOpen && !root.contains(event.target as Node | null)) closeNav();
   });
 
   on(document, 'keydown', (event) => {

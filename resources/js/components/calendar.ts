@@ -102,11 +102,9 @@ export default defineComponent(
     const googleUrl = generateGoogleCalendarUrl(event);
 
     const modal = part('modal');
-    const openBtn = root.querySelector<HTMLButtonElement>(
-      '[data-action="open"]'
-    );
-    const googleLink = part('google-url') as HTMLAnchorElement;
-    const icsLink = part('ics-url') as HTMLAnchorElement;
+    const openBtn = part<HTMLButtonElement>('trigger');
+    const googleLink = part<HTMLAnchorElement>('google-url');
+    const icsLink = part<HTMLAnchorElement>('ics-url');
 
     googleLink.href = googleUrl;
     icsLink.href = icsBlobUrl;
@@ -122,12 +120,10 @@ export default defineComponent(
       isOpen.set(false);
     };
 
-    if (openBtn) {
-      on(openBtn, 'click', () => {
-        isOpen.set(true);
-        trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, { event: event.title });
-      });
-    }
+    on(openBtn, 'click', () => {
+      isOpen.set(true);
+      trackEvent(TRACKING_EVENTS.CALENDAR_OPEN, { event: event.title });
+    });
 
     on(modal, 'click', (e) => {
       if (e.target === modal) close();

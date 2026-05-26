@@ -388,30 +388,24 @@ const testimonialConfig: FormHandlerConfig<TestimonialPayload> = {
 };
 
 export const testimonialForm = defineComponent((ctx) => {
-  const { root, on } = ctx;
+  const { root, part, on } = ctx;
 
   if (!(root instanceof HTMLFormElement)) return {};
 
   if (!createFormHandler(root, testimonialConfig, ctx)) return {};
 
-  const counterEl = root.querySelector<HTMLElement>(
-    '[data-lume-part="char-count"]'
-  );
-  const textarea = root.querySelector<HTMLTextAreaElement>('#quote');
+  const counterEl = part('char-count');
+  const textarea = part<HTMLTextAreaElement>('quote-input');
 
   const update = (): void => {
-    if (counterEl && textarea) {
-      counterEl.textContent = String(textarea.value.length);
-    }
+    counterEl.textContent = String(textarea.value.length);
   };
 
-  if (textarea) {
-    on(textarea, 'input', update);
-    // The form reset that runs after a successful submit fires AFTER
-    // the input is cleared, so we listen for it to zero out the counter.
-    on(root, 'reset', () => window.setTimeout(update, 0));
-    update();
-  }
+  on(textarea, 'input', update);
+  // Form reset fires after the input is cleared — delay one tick to read the
+  // cleared value and zero out the counter.
+  on(root, 'reset', () => window.setTimeout(update, 0));
+  update();
 
   return {};
 });

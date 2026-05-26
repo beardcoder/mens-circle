@@ -288,7 +288,7 @@
           type="button"
           class="btn btn--secondary"
           id="addToCalendar"
-          data-action="open"
+          data-lume-part="trigger"
         >
           <x-sprite name="calendar" :size="18" />
           In Kalender speichern

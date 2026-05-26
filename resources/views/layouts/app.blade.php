@@ -26,6 +26,7 @@
         <nav
           class="nav"
           id="nav"
+          data-lume-part="nav"
           aria-expanded="false"
           style="--nav-count: {{ count($headerNavigation?->children ?? []) }}"
         >
@@ -42,6 +43,7 @@
               href="{{ $section->url }}"
               class="{{ $linkClass }}"
               style="--nav-i: {{ $loop->index }}"
+              data-lume-part="nav-link"
               @if ($openInNewTab) target="_blank" rel="noopener noreferrer" @endif
               data-umami-event="{{ $umamiEvent }}"
               @if ($isCta) data-umami-event-location="header" @endif
@@ -56,6 +58,7 @@
           class="nav-toggle"
           id="navToggle"
           type="button"
+          data-lume-part="toggle"
           aria-expanded="false"
           aria-label="Menü öffnen"
         >

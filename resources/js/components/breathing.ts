@@ -14,11 +14,7 @@
  */
 
 import { clamp } from '@/utils/helpers';
-import {
-  defineComponent,
-  type ComponentContext,
-  type SignalGetter,
-} from '@beardcoder/lume';
+import { defineComponent, type SignalGetter } from '@beardcoder/lume';
 
 type Phase = 'idle' | 'breathing' | 'retention' | 'recovery' | 'complete';
 
@@ -52,16 +48,12 @@ function formatTime(seconds: number): string {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
-type LumeBindings = Pick<ComponentContext, 'on'>;
-
-function requirePart<T extends HTMLElement>(
-  part: ComponentContext['part'],
-  name: string
-): T {
-  const el = part(name) as T;
-
-  return el;
-}
+type LumeOn = (
+  target: EventTarget,
+  event: string,
+  handler: EventListener,
+  options?: AddEventListenerOptions
+) => void;
 
 function circleMotion(phase: Phase): string | null {
   if (phase === 'breathing') return 'wave';
@@ -76,26 +68,23 @@ export default defineComponent(
     root.style.setProperty('--breathing-cycle-ms', `${CYCLE_MS}ms`);
 
     // ─── DOM refs ──────────────────────────────────────────────────────
-    const $circle = requirePart<HTMLElement>(part, 'circle');
-    const $phaseLabel = requirePart<HTMLElement>(part, 'phase-label');
-    const $counter = requirePart<HTMLElement>(part, 'counter');
-    const $metaRound = requirePart<HTMLElement>(part, 'meta-round');
-    const $metaBreath = requirePart<HTMLElement>(part, 'meta-breath');
-    const $metaTimer = requirePart<HTMLElement>(part, 'meta-timer');
-    const $startBtn = requirePart<HTMLButtonElement>(part, 'start');
-    const $holdBtn = requirePart<HTMLButtonElement>(part, 'hold');
-    const $resetBtn = requirePart<HTMLButtonElement>(part, 'reset');
-    const $picker = requirePart<HTMLElement>(part, 'picker');
-    const $pickerTrack = requirePart<HTMLElement>(part, 'picker-track');
-    const $roundsValue = requirePart<HTMLElement>(part, 'rounds-value');
-    const $roundsMinus = requirePart<HTMLButtonElement>(part, 'rounds-minus');
-    const $roundsPlus = requirePart<HTMLButtonElement>(part, 'rounds-plus');
-    const $recoveryValue = requirePart<HTMLElement>(part, 'recovery-value');
-    const $recoveryMinus = requirePart<HTMLButtonElement>(
-      part,
-      'recovery-minus'
-    );
-    const $recoveryPlus = requirePart<HTMLButtonElement>(part, 'recovery-plus');
+    const $circle = part('circle');
+    const $phaseLabel = part('phase-label');
+    const $counter = part('counter');
+    const $metaRound = part('meta-round');
+    const $metaBreath = part('meta-breath');
+    const $metaTimer = part('meta-timer');
+    const $startBtn = part<HTMLButtonElement>('start');
+    const $holdBtn = part<HTMLButtonElement>('hold');
+    const $resetBtn = part<HTMLButtonElement>('reset');
+    const $picker = part('picker');
+    const $pickerTrack = part('picker-track');
+    const $roundsValue = part('rounds-value');
+    const $roundsMinus = part<HTMLButtonElement>('rounds-minus');
+    const $roundsPlus = part<HTMLButtonElement>('rounds-plus');
+    const $recoveryValue = part('recovery-value');
+    const $recoveryMinus = part<HTMLButtonElement>('recovery-minus');
+    const $recoveryPlus = part<HTMLButtonElement>('recovery-plus');
 
     // ─── Reactive state ────────────────────────────────────────────────
     const phase = signal<Phase>('idle');
@@ -385,7 +374,7 @@ export default defineComponent(
 );
 
 interface PickerArgs {
-  on: LumeBindings['on'];
+  on: LumeOn;
   picker: HTMLElement;
   track: HTMLElement;
   isActive: () => boolean;
