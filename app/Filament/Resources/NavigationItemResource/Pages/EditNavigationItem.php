@@ -9,7 +9,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Override;
 
-class EditNavigationItem extends EditRecord
+final class EditNavigationItem extends EditRecord
 {
     protected static string $resource = NavigationItemResource::class;
 

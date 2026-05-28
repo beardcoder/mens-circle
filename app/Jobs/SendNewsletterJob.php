@@ -24,7 +24,7 @@ use Throwable;
 #[Tries(3)]
 #[Backoff(60)]
 #[Timeout(3600)]
-class SendNewsletterJob implements ShouldBeUnique, ShouldQueue
+final class SendNewsletterJob implements ShouldBeUnique, ShouldQueue
 {
     use Queueable;
 

@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
-class ClearCache extends Page implements HasActions, HasForms
+final class ClearCache extends Page implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
@@ -45,7 +45,7 @@ class ClearCache extends Page implements HasActions, HasForms
 
     public function form(Schema $schema): Schema
     {
-        $isResponseCacheEnabled = Config::boolean('responsecache.enabled', true);
+        $enabled = Config::boolean('responsecache.enabled', true);
         $lifetimeSeconds = Config::integer('responsecache.cache.lifetime_in_seconds', 604_800);
 
         return $schema->components([
@@ -55,9 +55,9 @@ class ClearCache extends Page implements HasActions, HasForms
                     TextEntry::make('response_cache')
                         ->label('Response-Cache')
                         ->hint('Gecachte HTTP-Antworten')
-                        ->state($isResponseCacheEnabled ? 'Aktiv' : 'Deaktiviert')
+                        ->state($enabled ? 'Aktiv' : 'Deaktiviert')
                         ->badge()
-                        ->color($isResponseCacheEnabled ? 'success' : 'gray'),
+                        ->color($enabled ? 'success' : 'gray'),
 
                     TextEntry::make('lifetime')
                         ->label('Cache-Lebensdauer')
@@ -87,13 +87,13 @@ class ClearCache extends Page implements HasActions, HasForms
     protected function getHeaderActions(): array
     {
         return [
-            $this->clearResponseCacheAction(),
+            $this->action('clearResponseCache'),
 
             ActionGroup::make([
-                $this->clearApplicationCacheAction(),
-                $this->clearConfigCacheAction(),
-                $this->clearRouteCacheAction(),
-                $this->clearViewCacheAction(),
+                $this->action('clearApplicationCache'),
+                $this->action('clearConfigCache'),
+                $this->action('clearRouteCache'),
+                $this->action('clearViewCache'),
             ])
                 ->label('System-Caches')
                 ->icon(Heroicon::Cog6Tooth)
@@ -101,181 +101,134 @@ class ClearCache extends Page implements HasActions, HasForms
                 ->color('gray'),
 
             ActionGroup::make([
-                $this->optimizeAction(),
-                $this->clearOptimizationAction(),
+                $this->action('optimize'),
+                $this->action('clearOptimization'),
             ])
                 ->label('Optimierung')
                 ->icon(Heroicon::RocketLaunch)
                 ->button()
                 ->color('success'),
 
-            $this->clearAllAction(),
+            $this->action('clearAll'),
         ];
     }
 
-    public function clearResponseCacheAction(): Action
+    /**
+     * @return array<string, array{label: string, icon: Heroicon, color: string, heading: string, description: string, success: string, run: Closure, submit?: string}>
+     */
+    private function definitions(): array
     {
-        return $this->makeCacheAction(
-            name: 'clearResponseCache',
-            label: 'Response-Cache leeren',
-            icon: Heroicon::GlobeAlt,
-            color: 'primary',
-            modalHeading: 'Response-Cache leeren?',
-            modalDescription: 'Alle gecachten HTTP-Antworten werden verworfen. Seiten werden beim nächsten Aufruf neu generiert.',
-            successTitle: 'Response-Cache geleert',
-            successBody: 'Alle gecachten HTTP-Antworten wurden entfernt.',
-            action: ResponseCache::clear(...),
-        );
+        return [
+            'clearResponseCache' => [
+                'label' => 'Response-Cache leeren',
+                'icon' => Heroicon::GlobeAlt,
+                'color' => 'primary',
+                'heading' => 'Response-Cache leeren?',
+                'description' => 'Alle gecachten HTTP-Antworten werden verworfen. Seiten werden beim nächsten Aufruf neu generiert.',
+                'success' => 'Alle gecachten HTTP-Antworten wurden entfernt.',
+                'run' => ResponseCache::clear(...),
+            ],
+            'clearApplicationCache' => [
+                'label' => 'Anwendungs-Cache leeren',
+                'icon' => Heroicon::CircleStack,
+                'color' => 'gray',
+                'heading' => 'Anwendungs-Cache leeren?',
+                'description' => 'Löscht den allgemeinen Anwendungs-Cache (cache:clear).',
+                'success' => 'Der Anwendungs-Cache wurde erfolgreich geleert.',
+                'run' => static fn() => Artisan::call('cache:clear'),
+            ],
+            'clearConfigCache' => [
+                'label' => 'Config-Cache leeren',
+                'icon' => Heroicon::Cog6Tooth,
+                'color' => 'gray',
+                'heading' => 'Config-Cache leeren?',
+                'description' => 'Entfernt den gecachten Konfigurations-Container (config:clear).',
+                'success' => 'Der Konfigurations-Cache wurde geleert.',
+                'run' => static fn() => Artisan::call('config:clear'),
+            ],
+            'clearRouteCache' => [
+                'label' => 'Routen-Cache leeren',
+                'icon' => Heroicon::Map,
+                'color' => 'gray',
+                'heading' => 'Routen-Cache leeren?',
+                'description' => 'Löscht den Routen-Cache und baut ihn neu auf (route:clear → route:cache).',
+                'success' => 'Die Routen wurden frisch gecached.',
+                'run' => static function (): void {
+                    Artisan::call('route:clear');
+                    Artisan::call('route:cache');
+                },
+            ],
+            'clearViewCache' => [
+                'label' => 'View-Cache leeren',
+                'icon' => Heroicon::Eye,
+                'color' => 'gray',
+                'heading' => 'View-Cache leeren?',
+                'description' => 'Verwirft kompilierte Blade-Templates und baut sie neu auf (view:clear → view:cache).',
+                'success' => 'Die Blade-Views wurden frisch kompiliert.',
+                'run' => static function (): void {
+                    Artisan::call('view:clear');
+                    Artisan::call('view:cache');
+                },
+            ],
+            'optimize' => [
+                'label' => 'Optimieren',
+                'icon' => Heroicon::RocketLaunch,
+                'color' => 'success',
+                'heading' => 'Anwendung optimieren?',
+                'description' => 'Cached Konfiguration, Routen, Views und Events für maximale Performance (artisan optimize).',
+                'success' => 'Die Optimierungs-Caches wurden aufgebaut.',
+                'submit' => 'Jetzt optimieren',
+                'run' => static fn() => Artisan::call('optimize'),
+            ],
+            'clearOptimization' => [
+                'label' => 'Optimierung zurücksetzen',
+                'icon' => Heroicon::ArrowUturnLeft,
+                'color' => 'gray',
+                'heading' => 'Optimierung zurücksetzen?',
+                'description' => 'Entfernt alle durch optimize erstellten Caches (artisan optimize:clear).',
+                'success' => 'Alle Optimierungs-Caches wurden entfernt.',
+                'submit' => 'Zurücksetzen',
+                'run' => static fn() => Artisan::call('optimize:clear'),
+            ],
+            'clearAll' => [
+                'label' => 'Alles leeren',
+                'icon' => Heroicon::Trash,
+                'color' => 'danger',
+                'heading' => 'Alle Caches leeren?',
+                'description' => 'Leert Anwendungs-, Response-, Config-, Routen- und View-Cache und baut Routen sowie Views neu auf. Diese Aktion kann nicht rückgängig gemacht werden.',
+                'success' => 'Sämtliche Caches wurden entfernt und Routen/Views neu aufgebaut.',
+                'submit' => 'Alles leeren',
+                'run' => static function (): void {
+                    Artisan::call('cache:clear');
+                    ResponseCache::clear();
+                    Artisan::call('config:clear');
+                    Artisan::call('route:clear');
+                    Artisan::call('view:clear');
+                    Artisan::call('route:cache');
+                    Artisan::call('view:cache');
+                },
+            ],
+        ];
     }
 
-    public function clearApplicationCacheAction(): Action
+    private function action(string $name): Action
     {
-        return $this->makeCacheAction(
-            name: 'clearApplicationCache',
-            label: 'Anwendungs-Cache leeren',
-            icon: Heroicon::CircleStack,
-            color: 'gray',
-            modalHeading: 'Anwendungs-Cache leeren?',
-            modalDescription: 'Löscht den allgemeinen Anwendungs-Cache (cache:clear).',
-            successTitle: 'Anwendungs-Cache geleert',
-            successBody: 'Der Anwendungs-Cache wurde erfolgreich geleert.',
-            action: static fn() => Artisan::call('cache:clear'),
-        );
-    }
+        $config = $this->definitions()[$name];
 
-    public function clearConfigCacheAction(): Action
-    {
-        return $this->makeCacheAction(
-            name: 'clearConfigCache',
-            label: 'Config-Cache leeren',
-            icon: Heroicon::Cog6Tooth,
-            color: 'gray',
-            modalHeading: 'Config-Cache leeren?',
-            modalDescription: 'Entfernt den gecachten Konfigurations-Container (config:clear).',
-            successTitle: 'Config-Cache geleert',
-            successBody: 'Der Konfigurations-Cache wurde geleert.',
-            action: static fn() => Artisan::call('config:clear'),
-        );
-    }
-
-    public function clearRouteCacheAction(): Action
-    {
-        return $this->makeCacheAction(
-            name: 'clearRouteCache',
-            label: 'Routen-Cache leeren',
-            icon: Heroicon::Map,
-            color: 'gray',
-            modalHeading: 'Routen-Cache leeren?',
-            modalDescription: 'Löscht den Routen-Cache und baut ihn neu auf (route:clear → route:cache).',
-            successTitle: 'Routen-Cache neu aufgebaut',
-            successBody: 'Die Routen wurden frisch gecached.',
-            action: static function (): void {
-                Artisan::call('route:clear');
-                Artisan::call('route:cache');
-            },
-        );
-    }
-
-    public function clearViewCacheAction(): Action
-    {
-        return $this->makeCacheAction(
-            name: 'clearViewCache',
-            label: 'View-Cache leeren',
-            icon: Heroicon::Eye,
-            color: 'gray',
-            modalHeading: 'View-Cache leeren?',
-            modalDescription: 'Verwirft kompilierte Blade-Templates und baut sie neu auf (view:clear → view:cache).',
-            successTitle: 'View-Cache neu aufgebaut',
-            successBody: 'Die Blade-Views wurden frisch kompiliert.',
-            action: static function (): void {
-                Artisan::call('view:clear');
-                Artisan::call('view:cache');
-            },
-        );
-    }
-
-    public function optimizeAction(): Action
-    {
-        return $this->makeCacheAction(
-            name: 'optimize',
-            label: 'Optimieren',
-            icon: Heroicon::RocketLaunch,
-            color: 'success',
-            modalHeading: 'Anwendung optimieren?',
-            modalDescription: 'Cached Konfiguration, Routen, Views und Events für maximale Performance (artisan optimize).',
-            successTitle: 'Anwendung optimiert',
-            successBody: 'Die Optimierungs-Caches wurden aufgebaut.',
-            action: static fn() => Artisan::call('optimize'),
-            submitLabel: 'Jetzt optimieren',
-        );
-    }
-
-    public function clearOptimizationAction(): Action
-    {
-        return $this->makeCacheAction(
-            name: 'clearOptimization',
-            label: 'Optimierung zurücksetzen',
-            icon: Heroicon::ArrowUturnLeft,
-            color: 'gray',
-            modalHeading: 'Optimierung zurücksetzen?',
-            modalDescription: 'Entfernt alle durch optimize erstellten Caches (artisan optimize:clear).',
-            successTitle: 'Optimierung zurückgesetzt',
-            successBody: 'Alle Optimierungs-Caches wurden entfernt.',
-            action: static fn() => Artisan::call('optimize:clear'),
-            submitLabel: 'Zurücksetzen',
-        );
-    }
-
-    public function clearAllAction(): Action
-    {
-        return $this->makeCacheAction(
-            name: 'clearAll',
-            label: 'Alles leeren',
-            icon: Heroicon::Trash,
-            color: 'danger',
-            modalHeading: 'Alle Caches leeren?',
-            modalDescription: 'Leert Anwendungs-, Response-, Config-, Routen- und View-Cache und baut Routen sowie Views neu auf. Diese Aktion kann nicht rückgängig gemacht werden.',
-            successTitle: 'Alle Caches geleert',
-            successBody: 'Sämtliche Caches wurden entfernt und Routen/Views neu aufgebaut.',
-            action: static function (): void {
-                Artisan::call('cache:clear');
-                ResponseCache::clear();
-                Artisan::call('config:clear');
-                Artisan::call('route:clear');
-                Artisan::call('view:clear');
-                Artisan::call('route:cache');
-                Artisan::call('view:cache');
-            },
-            submitLabel: 'Alles leeren',
-        );
-    }
-
-    private function makeCacheAction(
-        string $name,
-        string $label,
-        Heroicon $icon,
-        string $color,
-        string $modalHeading,
-        string $modalDescription,
-        string $successTitle,
-        string $successBody,
-        Closure $action,
-        string $submitLabel = 'Jetzt leeren',
-    ): Action {
         return Action::make($name)
-            ->label($label)
-            ->icon($icon)
-            ->color($color)
+            ->label($config['label'])
+            ->icon($config['icon'])
+            ->color($config['color'])
             ->requiresConfirmation()
-            ->modalIcon($icon)
-            ->modalHeading($modalHeading)
-            ->modalDescription($modalDescription)
-            ->modalSubmitActionLabel($submitLabel)
-            ->action(static function () use ($action, $successTitle, $successBody): void {
+            ->modalIcon($config['icon'])
+            ->modalHeading($config['heading'])
+            ->modalDescription($config['description'])
+            ->modalSubmitActionLabel($config['submit'] ?? 'Jetzt leeren')
+            ->action(static function () use ($config): void {
                 try {
-                    $action();
+                    $config['run']();
 
-                    Notification::make()->title($successTitle)->body($successBody)->success()->send();
+                    Notification::make()->title($config['label'])->body($config['success'])->success()->send();
                 } catch (Exception $exception) {
                     Notification::make()->title('Fehler beim Leeren des Caches')->body($exception->getMessage())->danger()->send();
                 }

@@ -9,6 +9,7 @@ use App\Enums\NavigationLocation;
 use App\Filament\Resources\NavigationItemResource\Pages\CreateNavigationItem;
 use App\Filament\Resources\NavigationItemResource\Pages\EditNavigationItem;
 use App\Filament\Resources\NavigationItemResource\Pages\ListNavigationItems;
+use App\Filament\Support\Anchor;
 use App\Models\NavigationItem;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -25,7 +26,6 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 use Override;
 use UnitEnum;
 
@@ -74,7 +74,7 @@ class NavigationItemResource extends Resource
                         ->label('Anker')
                         ->maxLength(255)
                         ->placeholder('ueber, stimmen, faq, ...')
-                        ->dehydrateStateUsing(self::normaliseAnchor(...))
+                        ->dehydrateStateUsing(Anchor::normalise(...))
                         ->helperText(
                             'Optionaler Anker (z.B. "ueber"). Wird an die URL angehängt: /pfad#anker. Ohne führendes "#" eingeben.',
                         ),
@@ -134,25 +134,6 @@ class NavigationItemResource extends Resource
             ->toolbarActions([
                 BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
-    }
-
-    /**
-     * Normalise anchor input: strip whitespace, a leading "#" and slugify
-     * to match the slug-cased anchors written by PageResource.
-     */
-    private static function normaliseAnchor(?string $state): ?string
-    {
-        if ($state === null) {
-            return null;
-        }
-
-        $value = ltrim(trim($state), '#');
-
-        if ($value === '') {
-            return null;
-        }
-
-        return Str::slug($value);
     }
 
     #[Override]

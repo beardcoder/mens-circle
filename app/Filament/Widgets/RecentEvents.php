@@ -9,7 +9,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 
-class RecentEvents extends TableWidget
+final class RecentEvents extends TableWidget
 {
     protected static ?int $sort = 2;
 

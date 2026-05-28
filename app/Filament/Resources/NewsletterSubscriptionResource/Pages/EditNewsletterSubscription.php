@@ -9,7 +9,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Override;
 
-class EditNewsletterSubscription extends EditRecord
+final class EditNewsletterSubscription extends EditRecord
 {
     protected static string $resource = NewsletterSubscriptionResource::class;
 

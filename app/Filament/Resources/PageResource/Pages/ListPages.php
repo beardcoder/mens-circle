@@ -9,7 +9,7 @@ use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Override;
 
-class ListPages extends ListRecords
+final class ListPages extends ListRecords
 {
     protected static string $resource = PageResource::class;
 

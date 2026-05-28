@@ -9,7 +9,7 @@ use App\Models\Page;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 
-class CreatePage extends CreateRecord
+final class CreatePage extends CreateRecord
 {
     protected static string $resource = PageResource::class;
 

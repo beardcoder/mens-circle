@@ -9,10 +9,9 @@ use App\Filament\Resources\EventResource\Pages\CreateEvent;
 use App\Filament\Resources\EventResource\Pages\EditEvent;
 use App\Filament\Resources\EventResource\Pages\ListEvents;
 use App\Filament\Resources\EventResource\RelationManagers\RegistrationsRelationManager;
+use App\Filament\Support\GeocodeAction;
 use App\Models\Event;
-use App\Services\GeocodingService;
 use BackedEnum;
-use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -26,10 +25,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Toggle;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -142,59 +139,7 @@ class EventResource extends Resource
                         ->minValue(-180)
                         ->maxValue(180)
                         ->placeholder('z.B. 12.5719')
-                        ->suffixAction(Action::make('geocode')
-                            ->label('Adresse zu Koordinaten umwandeln')
-                            ->icon(Heroicon::OutlinedMapPin)
-                            ->color('primary')
-                            ->action(static function (Get $get, Set $set, GeocodingService $geocoder): void {
-                                $toString = static fn(mixed $value): string => is_string($value) ? $value : '';
-
-                                $street = $toString($get('street'));
-                                $postalCode = $toString($get('postal_code'));
-                                $city = $toString($get('city'));
-
-                                $parts = array_filter(
-                                    [
-                                        $street,
-                                        trim($postalCode . ' ' . $city),
-                                        'Deutschland',
-                                    ],
-                                    static fn(string $part): bool => trim($part) !== '',
-                                );
-
-                                $address = trim(implode(', ', $parts));
-
-                                if ($address === '' || $address === 'Deutschland') {
-                                    Notification::make()
-                                        ->title('Keine Adresse vorhanden')
-                                        ->body('Bitte trage zuerst eine Straße, PLZ oder Stadt ein.')
-                                        ->warning()
-                                        ->send();
-
-                                    return;
-                                }
-
-                                $coords = $geocoder->geocode($address);
-
-                                if ($coords === null) {
-                                    Notification::make()
-                                        ->title('Adresse nicht gefunden')
-                                        ->body('Die Adresse konnte nicht in Koordinaten umgewandelt werden. Bitte manuell eintragen.')
-                                        ->danger()
-                                        ->send();
-
-                                    return;
-                                }
-
-                                $set('latitude', $coords['latitude']);
-                                $set('longitude', $coords['longitude']);
-
-                                Notification::make()
-                                    ->title('Koordinaten gefunden')
-                                    ->body('Die Adresse wurde erfolgreich umgewandelt.')
-                                    ->success()
-                                    ->send();
-                            })),
+                        ->suffixAction(GeocodeAction::make()),
                     Textarea::make('location_details')
                         ->label('Ortsdetails für Teilnehmer')
                         ->rows(3)

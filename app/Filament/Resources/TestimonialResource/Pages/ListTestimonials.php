@@ -9,7 +9,7 @@ use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Override;
 
-class ListTestimonials extends ListRecords
+final class ListTestimonials extends ListRecords
 {
     protected static string $resource = TestimonialResource::class;
 

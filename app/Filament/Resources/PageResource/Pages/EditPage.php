@@ -18,7 +18,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * @property Page $record
  */
-class EditPage extends EditRecord
+final class EditPage extends EditRecord
 {
     protected static string $resource = PageResource::class;
 

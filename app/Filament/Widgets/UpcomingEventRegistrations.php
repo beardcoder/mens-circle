@@ -10,7 +10,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 
-class UpcomingEventRegistrations extends TableWidget
+final class UpcomingEventRegistrations extends TableWidget
 {
     protected static ?int $sort = 3;
 

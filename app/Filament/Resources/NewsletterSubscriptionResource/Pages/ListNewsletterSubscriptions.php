@@ -9,7 +9,7 @@ use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Override;
 
-class ListNewsletterSubscriptions extends ListRecords
+final class ListNewsletterSubscriptions extends ListRecords
 {
     protected static string $resource = NewsletterSubscriptionResource::class;
 

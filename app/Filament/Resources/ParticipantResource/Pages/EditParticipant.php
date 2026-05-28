@@ -9,7 +9,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Override;
 
-class EditParticipant extends EditRecord
+final class EditParticipant extends EditRecord
 {
     protected static string $resource = ParticipantResource::class;
 

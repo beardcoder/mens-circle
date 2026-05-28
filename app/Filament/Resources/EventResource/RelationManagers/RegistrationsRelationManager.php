@@ -24,7 +24,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class RegistrationsRelationManager extends RelationManager
+final class RegistrationsRelationManager extends RelationManager
 {
     protected static string $relationship = 'registrations';
 

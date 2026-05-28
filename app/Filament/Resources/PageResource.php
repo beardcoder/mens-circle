@@ -7,6 +7,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PageResource\Pages\CreatePage;
 use App\Filament\Resources\PageResource\Pages\EditPage;
 use App\Filament\Resources\PageResource\Pages\ListPages;
+use App\Filament\Support\Anchor;
 use App\Models\Page;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -419,31 +420,12 @@ class PageResource extends Resource
             ->label('Anker (ID)')
             ->maxLength(255)
             ->placeholder('ueber, faq, stimmen, ...')
-            ->dehydrateStateUsing(self::normaliseAnchor(...))
+            ->dehydrateStateUsing(Anchor::normalise(...))
             ->helperText(
                 'Optionaler Anker für die Sektion. Wird als id-Attribut gesetzt und kann in der Navigation verlinkt werden. Ohne führendes "#" eingeben.',
             );
 
         return $default === null ? $field : $field->default($default);
-    }
-
-    /**
-     * Normalise anchor input: strip whitespace, leading "#" and slugify
-     * to a safe HTML id. Returns null for empty values.
-     */
-    private static function normaliseAnchor(?string $state): ?string
-    {
-        if ($state === null) {
-            return null;
-        }
-
-        $value = ltrim(trim($state), '#');
-
-        if ($value === '') {
-            return null;
-        }
-
-        return Str::slug($value);
     }
 
     private static function eyebrowField(): TextInput

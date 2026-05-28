@@ -9,7 +9,7 @@ use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Override;
 
-class ListNavigationItems extends ListRecords
+final class ListNavigationItems extends ListRecords
 {
     protected static string $resource = NavigationItemResource::class;
 

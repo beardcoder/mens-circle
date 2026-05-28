@@ -58,26 +58,27 @@ class Registration extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function cancel(): void
+    public function transitionTo(RegistrationStatus $status): void
     {
         $this->update([
-            'status' => RegistrationStatus::Cancelled,
-            'cancelled_at' => now(),
+            'status' => $status,
+            'cancelled_at' => $status === RegistrationStatus::Cancelled ? now() : $this->cancelled_at,
         ]);
+    }
+
+    public function cancel(): void
+    {
+        $this->transitionTo(RegistrationStatus::Cancelled);
     }
 
     public function promote(): void
     {
-        $this->update([
-            'status' => RegistrationStatus::Registered,
-        ]);
+        $this->transitionTo(RegistrationStatus::Registered);
     }
 
     public function markAsAttended(): void
     {
-        $this->update([
-            'status' => RegistrationStatus::Attended,
-        ]);
+        $this->transitionTo(RegistrationStatus::Attended);
     }
 
     /**

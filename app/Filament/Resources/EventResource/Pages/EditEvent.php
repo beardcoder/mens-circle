@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\EventResource\Pages;
 
+use App\Actions\SendMessageToEventParticipants;
 use App\Enums\EmailTemplate;
 use App\Enums\MessengerTemplate;
-use App\Enums\RegistrationStatus;
 use App\Filament\Resources\EventResource;
-use App\Mail\EventParticipantMessage;
 use App\Models\Event;
 use App\Services\EmailTemplateService;
-use Exception;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
@@ -26,11 +24,9 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Override;
 
-class EditEvent extends EditRecord
+final class EditEvent extends EditRecord
 {
     protected static string $resource = EventResource::class;
 
@@ -98,8 +94,7 @@ class EditEvent extends EditRecord
 
                                 /** @var Event $event */
                                 $event = $this->record;
-                                $template = EmailTemplate::from($state);
-                                $resolved = app(EmailTemplateService::class)->resolve($template, $event);
+                                $resolved = app(EmailTemplateService::class)->resolve(EmailTemplate::from($state), $event);
 
                                 $set('subject', $resolved['subject']);
                                 $set('content', $resolved['content']);
@@ -116,66 +111,32 @@ class EditEvent extends EditRecord
                 RichEditor::make('content')
                     ->label('Nachricht')
                     ->required()
-                    ->toolbarButtons([
-                        'bold',
-                        'italic',
-                        'link',
-                        'h2',
-                        'h3',
-                        'bulletList',
-                        'orderedList',
-                        'undo',
-                        'redo',
-                    ])
+                    ->toolbarButtons(['bold', 'italic', 'link', 'h2', 'h3', 'bulletList', 'orderedList', 'undo', 'redo'])
                     ->placeholder('Nachricht an die Teilnehmer...'),
             ])
             ->modalHeading('Nachricht an angemeldete Teilnehmer')
             ->modalDescription(function (): string {
                 /** @var Event $event */
                 $event = $this->record;
-                $count = $event
-                    ->registrations()
-                    ->whereIn('status', [RegistrationStatus::Registered, RegistrationStatus::Attended])
-                    ->count();
 
-                return 'Die Nachricht wird an ' . $count . ' angemeldete Teilnehmer von „' . $event->title . '" gesendet.';
+                return (
+                    'Die Nachricht wird an '
+                    . $event->activeRegistrations()->count()
+                    . ' angemeldete Teilnehmer von „'
+                    . $event->title
+                    . '" gesendet.'
+                );
             })
             ->modalSubmitActionLabel('Nachricht senden')
-            ->action(function (array $data): void {
+            ->action(function (array $data, SendMessageToEventParticipants $sender): void {
                 /** @var Event $event */
                 $event = $this->record;
 
-                $registrations = $event
-                    ->registrations()
-                    ->whereIn('status', [RegistrationStatus::Registered, RegistrationStatus::Attended])
-                    ->with('participant')
-                    ->get();
+                $result = $sender->execute($event, $data['subject'], $data['content']);
 
-                $sentCount = 0;
-                $failedCount = 0;
-
-                foreach ($registrations as $registration) {
-                    try {
-                        Mail::to($registration->participant->email)->queue(new EventParticipantMessage(
-                            mailSubject: $data['subject'],
-                            mailContent: $data['content'],
-                            event: $event,
-                            participantName: $registration->participant->first_name,
-                        ));
-                        $sentCount++;
-                    } catch (Exception $exception) {
-                        Log::error('Failed to send participant message', [
-                            'event_id' => $event->id,
-                            'participant_id' => $registration->participant->id,
-                            'error' => $exception->getMessage(),
-                        ]);
-                        $failedCount++;
-                    }
-                }
-
-                $body = "Nachricht wurde an {$sentCount} Teilnehmer gesendet.";
-                if ($failedCount > 0) {
-                    $body .= " {$failedCount} Zustellungen fehlgeschlagen.";
+                $body = "Nachricht wurde an {$result['sent']} Teilnehmer gesendet.";
+                if ($result['failed'] > 0) {
+                    $body .= " {$result['failed']} Zustellungen fehlgeschlagen.";
                 }
 
                 Notification::make()->title('Nachricht versendet')->body($body)->success()->send();

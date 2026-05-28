@@ -11,7 +11,7 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Override;
 
-class StatsOverview extends StatsOverviewWidget
+final class StatsOverview extends StatsOverviewWidget
 {
     #[Override]
     protected function getStats(): array

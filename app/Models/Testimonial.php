@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Scopes\OrderedTestimonialScope;
 use App\Traits\ClearsResponseCache;
 use Carbon\CarbonImmutable;
 use Database\Factories\TestimonialFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,12 +28,14 @@ use Override;
  * @property int $sort_order
  */
 #[Fillable(['quote', 'author_name', 'email', 'role', 'is_published', 'published_at', 'sort_order'])]
+#[ScopedBy(OrderedTestimonialScope::class)]
 #[UseFactory(TestimonialFactory::class)]
 class Testimonial extends Model
 {
+    use ClearsResponseCache;
+
     /** @use HasFactory<TestimonialFactory> */
     use HasFactory;
-    use ClearsResponseCache;
     use SoftDeletes;
 
     #[Override]
@@ -52,13 +56,5 @@ class Testimonial extends Model
     protected function published(Builder $query): Builder
     {
         return $query->where('is_published', true);
-    }
-
-    #[Override]
-    protected static function booted(): void
-    {
-        static::addGlobalScope('order', static function (Builder $builder): void {
-            $builder->orderBy('sort_order', 'asc')->orderBy('created_at', 'desc');
-        });
     }
 }

@@ -11,7 +11,7 @@ use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 use Override;
 
-class EditTestimonial extends EditRecord
+final class EditTestimonial extends EditRecord
 {
     protected static string $resource = TestimonialResource::class;
 

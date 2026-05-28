@@ -16,7 +16,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Override;
 
-class ManageGeneralSettings extends SettingsPage
+final class ManageGeneralSettings extends SettingsPage
 {
     protected static string $settings = GeneralSettings::class;
 

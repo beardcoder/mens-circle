@@ -29,7 +29,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Override;
 
-class SendNewsletter extends Page implements HasActions, HasForms
+final class SendNewsletter extends Page implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;

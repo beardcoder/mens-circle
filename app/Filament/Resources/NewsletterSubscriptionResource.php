@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Filament\Forms\ParticipantSelect;
 use App\Filament\Resources\NewsletterSubscriptionResource\Pages\CreateNewsletterSubscription;
 use App\Filament\Resources\NewsletterSubscriptionResource\Pages\EditNewsletterSubscription;
 use App\Filament\Resources\NewsletterSubscriptionResource\Pages\ListNewsletterSubscriptions;
 use App\Models\NewsletterSubscription;
-use App\Models\Participant;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -49,29 +47,7 @@ class NewsletterSubscriptionResource extends Resource
         return $schema->components([
             Section::make('Teilnehmer')
                 ->description('Wähle einen bestehenden Teilnehmer oder erstelle einen neuen')
-                ->schema([
-                    Select::make('participant_id')
-                        ->label('Teilnehmer')
-                        ->relationship('participant', 'email')
-                        ->getOptionLabelFromRecordUsing(static fn(Participant $record): string => $record->fullName
-                            ? "{$record->fullName} ({$record->email})"
-                            : $record->email)
-                        ->required()
-                        ->searchable(['first_name', 'last_name', 'email'])
-                        ->preload()
-                        ->createOptionForm([
-                            TextInput::make('first_name')->label('Vorname')->maxLength(255),
-                            TextInput::make('last_name')->label('Nachname')->maxLength(255),
-                            TextInput::make('email')
-                                ->label('E-Mail-Adresse')
-                                ->email()
-                                ->required()
-                                ->unique()
-                                ->maxLength(255),
-                            TextInput::make('phone')->label('Telefonnummer')->tel()->maxLength(30),
-                        ])
-                        ->native(false),
-                ]),
+                ->schema([ParticipantSelect::make()]),
 
             Section::make('Abonnement-Status')
                 ->description('Zeitstempel des Abonnements')
