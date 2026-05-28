@@ -35,12 +35,4 @@ enum RegistrationStatus: string implements HasColor, HasLabel
             self::Attended => 'success',
         };
     }
-
-    /**
-     * @return array<int, self>
-     */
-    public static function activeStatuses(): array
-    {
-        return [self::Registered, self::Attended];
-    }
 }

@@ -115,14 +115,6 @@ class Event extends Model implements HasMedia
     }
 
     /**
-     * @return HasMany<Registration, $this>
-     */
-    public function waitlistRegistrations(): HasMany
-    {
-        return $this->registrations()->waitlisted()->orderBy('registered_at');
-    }
-
-    /**
      * @return Attribute<int, never>
      */
     protected function activeRegistrationsCount(): Attribute

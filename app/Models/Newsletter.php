@@ -35,14 +35,4 @@ class Newsletter extends Model
             'status' => NewsletterStatus::class,
         ];
     }
-
-    public function isSent(): bool
-    {
-        return $this->status === NewsletterStatus::Sent;
-    }
-
-    public function isDraft(): bool
-    {
-        return $this->status === NewsletterStatus::Draft;
-    }
 }
