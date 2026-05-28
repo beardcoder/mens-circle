@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\SocialLinkType;
 use App\Models\Event;
 use App\Models\NewsletterSubscription;
 use App\Models\Page;
@@ -106,10 +107,10 @@ final class LlmsController
         if ($socialLinks !== []) {
             $lines[] = '### Social Media';
             $lines[] = '';
-            foreach ($socialLinks as $platform => $data) {
+            foreach ($socialLinks as $data) {
                 /** @var array<string, mixed> $data */
-                $url = $data['url'] ?? $data['link'] ?? null;
-                $platformName = $data['platform'] ?? $data['name'] ?? ucfirst($platform);
+                $url = $data['value'] ?? null;
+                $platformName = $data['label'] ?? SocialLinkType::tryFrom((string) ($data['type'] ?? ''))?->getLabel() ?? null;
 
                 if ($url && \is_string($url) && \is_string($platformName)) {
                     $lines[] = "- **{$platformName}:** {$url}";
