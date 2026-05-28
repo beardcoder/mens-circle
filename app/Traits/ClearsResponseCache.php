@@ -10,9 +10,7 @@ trait ClearsResponseCache
 {
     public static function bootClearsResponseCache(): void
     {
-        $clear = ResponseCache::clear(...);
-
-        static::saved($clear);
-        static::deleted($clear);
+        static::saved(fn () => ResponseCache::clear());
+        static::deleted(fn () => ResponseCache::clear());
     }
 }
