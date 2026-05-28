@@ -7,7 +7,6 @@
 :where(
   .hero__bg,
   .breathing-section,
-  .intro__image-area,
   .moderator__photo,
   .journey-section,
   .newsletter-section,
@@ -29,7 +28,6 @@
 :where(
   .hero__bg,
   .breathing-section,
-  .intro__image-area,
   .event-about__quote-area
 )::before {
   mix-blend-mode: overlay;
