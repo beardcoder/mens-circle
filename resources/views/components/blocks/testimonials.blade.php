@@ -58,7 +58,7 @@
       style="--reveal-step: 100ms"
     >
       @foreach ($testimonials as $testimonial)
-        <article class="testimonial-item" data-reveal="up" data-hover="lift">
+        <article class="testimonial-item" data-reveal="up">
           <blockquote class="testimonial-item__quote">
             {{ $testimonial->quote }}
           </blockquote>

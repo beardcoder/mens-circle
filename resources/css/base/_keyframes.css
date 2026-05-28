@@ -254,17 +254,33 @@
 }
 
 /* ============================================
-   Animated gradient text — a soft accent highlight glides across
-   emphasised words (`.highlight`). Drives a registered `--text-shine`
-   percentage so the background-position interpolates smoothly.
+   Headline highlight sweep — the bright stop of the accent gradient
+   travels across the emphasised word once, driven by the scroll
+   timeline as the title enters the viewport (see _typography.css).
    ============================================ */
-@keyframes text-shine {
-  0% {
-    --text-shine: -25%;
+@keyframes text-shine-sweep {
+  from {
+    --text-shine: 115%;
   }
 
-  100% {
-    --text-shine: 125%;
+  to {
+    --text-shine: -15%;
+  }
+}
+
+/* ============================================
+   Eyebrow settle — the label lifts and fades in as it enters view,
+   coordinated with the line draw on its ::before (see _motion.css).
+   ============================================ */
+@keyframes eyebrow-settle {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 

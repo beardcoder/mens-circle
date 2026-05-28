@@ -52,7 +52,6 @@
   padding: var(--space-lg) var(--space-md);
   overflow: clip;
   border-inline-start: 1px solid var(--border-light);
-  transition: border-color var(--motion-standard);
 }
 
 /* Oversized watermark quotation glyph in the corner. Sits behind the
@@ -80,12 +79,6 @@
       animation-timeline: view();
       animation-range: entry 5% cover 30%;
     }
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .testimonial-item:hover {
-    border-inline-start-color: var(--accent-primary);
   }
 }
 

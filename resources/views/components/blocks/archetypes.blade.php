@@ -51,7 +51,6 @@
           <article
             class="archetype-card archetype-card--{{ $icon }}"
             data-reveal="up"
-            data-hover="tilt"
           >
             <div class="archetype-card__background-icon" aria-hidden="true">
               @php $svgPath = public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg'); @endphp

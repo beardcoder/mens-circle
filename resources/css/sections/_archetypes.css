@@ -19,7 +19,6 @@
   padding: var(--space-lg) var(--space-md);
   overflow: hidden;
   border-inline-start: 1px solid var(--border-light);
-  transition: border-color var(--motion-standard);
 }
 
 .archetype-card__content {
@@ -37,40 +36,12 @@
   z-index: 1;
   pointer-events: none;
   opacity: 0.16;
-  transition:
-    opacity var(--motion-slow),
-    scale var(--motion-slow);
 }
 
 .archetype-card__background-icon svg {
   inline-size: clamp(16rem, 32vw, 22rem);
   block-size: clamp(16rem, 32vw, 22rem);
   transform: translateY(-50%) rotate(-8deg);
-  transition: rotate var(--motion-slow) var(--ease-settle);
-}
-
-/* The inline-start rule warms to the accent and the watermark icon
-   surges forward as the card is engaged. */
-@media (hover: hover) and (pointer: fine) {
-  .archetype-card:hover {
-    border-inline-start-color: var(--accent-primary);
-  }
-
-  .archetype-card:hover .archetype-card__background-icon {
-    opacity: 0.26;
-    scale: 1.08;
-  }
-
-  .archetype-card:hover .archetype-card__background-icon svg {
-    rotate: -2deg;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .archetype-card__background-icon,
-  .archetype-card__background-icon svg {
-    transition: none;
-  }
 }
 
 .archetype-card__title {

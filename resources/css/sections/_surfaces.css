@@ -25,11 +25,7 @@
   opacity: var(--_surface-noise-opacity, var(--surface-noise-opacity));
 }
 
-:where(
-  .hero__bg,
-  .breathing-section,
-  .event-about__quote-area
-)::before {
+:where(.hero__bg, .breathing-section, .event-about__quote-area)::before {
   mix-blend-mode: overlay;
 }
 

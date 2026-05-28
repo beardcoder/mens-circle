@@ -91,7 +91,7 @@
       animation: title-settle linear both;
       animation-timeline: view();
       animation-range: cover 0% cover 40%;
-      will-change: transform, letter-spacing;
+      will-change: transform, letter-spacing, filter;
     }
   }
 }
@@ -99,12 +99,31 @@
 @keyframes title-settle {
   from {
     letter-spacing: -0.035em;
-    transform: translate3d(0, 6px, 0);
+    filter: blur(3px);
+    transform: translate3d(0, 10px, 0);
   }
 
   to {
     letter-spacing: -0.05em;
+    filter: blur(0);
     transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ============================================
+   Eyebrow — scroll-anchored settle
+   ============================================
+   The label group lifts and fades as it enters view, in concert with
+   the `::before` line draw above. Quiet, compositor-only, one pass. */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .eyebrow {
+      animation: eyebrow-settle linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 32%;
+      will-change: transform, opacity;
+    }
   }
 }
 
@@ -192,6 +211,7 @@
   .hero__bottom,
   .hero__scroll,
   .hero__scroll-line,
+  .eyebrow,
   .eyebrow::before,
   .section-title,
   [data-motion='rise'] {
