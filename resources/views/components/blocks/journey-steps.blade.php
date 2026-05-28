@@ -51,11 +51,7 @@
     </div>
 
     @if (!empty($steps) && is_array($steps))
-      <div
-        class="journey__steps"
-        data-reveal-stagger
-        style="--reveal-step: 110ms"
-      >
+      <div class="journey__steps" data-reveal-stagger>
         <div class="journey__thread" aria-hidden="true"></div>
         @foreach ($steps as $step)
           <div class="journey__step" data-reveal="up">

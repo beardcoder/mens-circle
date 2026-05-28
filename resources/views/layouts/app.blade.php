@@ -4,6 +4,11 @@
   @include ('partials.seo-head')
 </head>
 <body>
+  {{-- Top sentinel: a static, in-flow target at position 0 so the
+       scroll-to-top link reliably scrolls to the top. (The header is
+       position:fixed, so an anchor to it never scrolls.) --}}
+  <span id="top" aria-hidden="true"></span>
+
   <x-sprite-defs />
 
   <!-- Skip Link -->
@@ -198,7 +203,7 @@
 
   <!-- Scroll to Top — CSS-only via scroll-driven animation timeline -->
   <a
-    href="#header"
+    href="#top"
     class="scroll-to-top"
     aria-label="Nach oben scrollen"
     title="Nach oben"

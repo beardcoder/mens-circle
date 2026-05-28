@@ -46,7 +46,7 @@
       transform-origin: left center;
       animation: number-pop both var(--ease-settle);
       animation-timeline: view();
-      animation-range: entry 8% cover 34%;
+      animation-range: entry 8% entry 100%;
     }
   }
 }

@@ -41,7 +41,7 @@
       @endif
     </div>
 
-    <div class="intro__image-area" data-reveal="zoom">
+    <div class="intro__image-area">
       <div class="intro__image-circles" aria-hidden="true">
         <div class="intro__image-ring intro__image-ring--outer"></div>
         <div class="intro__image-ring intro__image-ring--inner"></div>

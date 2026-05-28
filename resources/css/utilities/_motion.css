@@ -56,11 +56,10 @@
 /* ============================================
    Eyebrow lines — scroll-anchored draw-in
    ============================================
-   The `.eyebrow::before` rule is a 1.5px line. It draws while the
-   element travels through the lower half of the viewport — a quiet
-   typographic gesture timed to where the user is actually reading.
-   Range uses the `cover` phase so it scales with viewport height
-   on mobile (where `entry` is too short to be perceptible). */
+   The `.eyebrow::before` rule is a 1.5px line. It draws as the label
+   enters view — a quiet typographic gesture. The range ends at
+   `entry 100%` so it always completes, including for the last section
+   above the footer (a `cover`-based end can't be reached there). */
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -69,9 +68,8 @@
       transform: scaleX(0.3);
       transform-origin: right;
       animation: eyebrow-line-grow linear both;
-      will-change: transform, opacity;
       animation-timeline: view();
-      animation-range: cover 5% cover 45%;
+      animation-range: entry 10% entry 100%;
     }
   }
 }
@@ -90,8 +88,7 @@
     .section-title {
       animation: title-settle linear both;
       animation-timeline: view();
-      animation-range: cover 0% cover 40%;
-      will-change: transform, letter-spacing, filter;
+      animation-range: entry 15% entry 100%;
     }
   }
 }
@@ -99,13 +96,11 @@
 @keyframes title-settle {
   from {
     letter-spacing: -0.035em;
-    filter: blur(3px);
-    transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 8px, 0);
   }
 
   to {
     letter-spacing: -0.05em;
-    filter: blur(0);
     transform: translate3d(0, 0, 0);
   }
 }
@@ -114,15 +109,15 @@
    Eyebrow — scroll-anchored settle
    ============================================
    The label group lifts and fades as it enters view, in concert with
-   the `::before` line draw above. Quiet, compositor-only, one pass. */
+   the `::before` line draw above. Quiet, compositor-only, one pass. The
+   range ends at `entry 100%` so it always completes — even at page end. */
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .eyebrow {
       animation: eyebrow-settle linear both;
       animation-timeline: view();
-      animation-range: entry 0% cover 32%;
-      will-change: transform, opacity;
+      animation-range: entry 0% entry 100%;
     }
   }
 }

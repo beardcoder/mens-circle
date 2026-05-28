@@ -174,7 +174,7 @@ p:last-child {
       background-clip: text;
       animation: text-shine-sweep linear both;
       animation-timeline: view();
-      animation-range: entry 8% cover 55%;
+      animation-range: entry 10% entry 100%;
     }
 
     .section-title--light .highlight {

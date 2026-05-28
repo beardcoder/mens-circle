@@ -52,11 +52,7 @@
       <p class="testimonials__subtitle">Authentische Einblicke von Männern, die den Kreis erleben</p>
     </div>
 
-    <div
-      class="testimonials__grid"
-      data-reveal-stagger
-      style="--reveal-step: 100ms"
-    >
+    <div class="testimonials__grid" data-reveal-stagger>
       @foreach ($testimonials as $testimonial)
         <article class="testimonial-item" data-reveal="up">
           <blockquote class="testimonial-item__quote">

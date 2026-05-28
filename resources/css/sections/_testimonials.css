@@ -77,7 +77,7 @@
       transform-origin: top right;
       animation: quote-mark-in both var(--ease-settle);
       animation-timeline: view();
-      animation-range: entry 5% cover 30%;
+      animation-range: entry 5% entry 100%;
     }
   }
 }

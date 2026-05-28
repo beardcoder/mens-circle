@@ -41,11 +41,7 @@
         @endif
       </div>
 
-      <div
-        class="archetypes__grid"
-        data-reveal-stagger
-        style="--reveal-step: 90ms"
-      >
+      <div class="archetypes__grid" data-reveal-stagger>
         @foreach ($items as $item)
           @php $icon = $detectIcon($item); @endphp
           <article
