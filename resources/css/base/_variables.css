@@ -23,6 +23,23 @@
   inherits: false;
 }
 
+/* Drives the rotating conic sheen on the primary CTA and animated
+   gradient text. Registering the angle lets it interpolate/loop smoothly
+   instead of snapping. */
+@property --sheen-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Horizontal position (0–100%) of the moving highlight in animated
+   gradient text. */
+@property --text-shine {
+  syntax: '<percentage>';
+  initial-value: 0%;
+  inherits: false;
+}
+
 :root {
   /* ============================================
      Color Palette - Using OKLCH for 2025

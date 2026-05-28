@@ -52,9 +52,13 @@
       <p class="testimonials__subtitle">Authentische Einblicke von Männern, die den Kreis erleben</p>
     </div>
 
-    <div class="testimonials__grid">
+    <div
+      class="testimonials__grid"
+      data-reveal-stagger
+      style="--reveal-step: 100ms"
+    >
       @foreach ($testimonials as $testimonial)
-        <article class="testimonial-item">
+        <article class="testimonial-item" data-reveal="up" data-hover="lift">
           <blockquote class="testimonial-item__quote">
             {{ $testimonial->quote }}
           </blockquote>

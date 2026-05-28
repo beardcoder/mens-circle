@@ -254,6 +254,69 @@
 }
 
 /* ============================================
+   Animated gradient text — a soft accent highlight glides across
+   emphasised words (`.highlight`). Drives a registered `--text-shine`
+   percentage so the background-position interpolates smoothly.
+   ============================================ */
+@keyframes text-shine {
+  0% {
+    --text-shine: -25%;
+  }
+
+  100% {
+    --text-shine: 125%;
+  }
+}
+
+/* ============================================
+   Conic sheen — a slow rotating light sweep registered via
+   `--sheen-angle`. Used as a halo behind the primary CTA and on
+   focal media frames.
+   ============================================ */
+@keyframes sheen-rotate {
+  to {
+    --sheen-angle: 360deg;
+  }
+}
+
+/* ============================================
+   Number pop — focal numerals (value items, journey steps) spring in
+   when revealed: scale overshoot + opacity, compositor-only.
+   ============================================ */
+@keyframes number-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translate3d(0, 8px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.08) translate3d(0, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+/* ============================================
+   Quote-mark draw — testimonial cards grow an oversized opening
+   quotation glyph as they settle into view.
+   ============================================ */
+@keyframes quote-mark-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.15em, 0) scale(0.8) rotate(-6deg);
+  }
+
+  to {
+    opacity: 0.18;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+}
+
+/* ============================================
    View transitions — root crossfade and directional variants.
    ============================================ */
 @keyframes vt-fade-out {

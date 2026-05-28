@@ -23,9 +23,9 @@
       @endif
 
       @if (!empty($data['values']) && is_array($data['values']))
-        <div class="intro__values">
+        <div class="intro__values" data-reveal-stagger>
           @foreach ($data['values'] as $value)
-            <div class="value-item">
+            <div class="value-item" data-reveal="left">
               @if (!empty($value['number']))
                 <span class="value-item__number">{{ $value['number'] }}</span>
               @endif
@@ -41,7 +41,7 @@
       @endif
     </div>
 
-    <div class="intro__image-area">
+    <div class="intro__image-area" data-reveal="zoom">
       <div class="intro__image-circles" aria-hidden="true">
         <div class="intro__image-ring intro__image-ring--outer"></div>
         <div class="intro__image-ring intro__image-ring--inner"></div>

@@ -50,7 +50,48 @@
   flex-direction: column;
   min-block-size: 16rem;
   padding: var(--space-lg) var(--space-md);
+  overflow: clip;
   border-inline-start: 1px solid var(--border-light);
+  transition: border-color var(--motion-standard);
+}
+
+/* Oversized watermark quotation glyph in the corner. Sits behind the
+   content and draws itself in on its own view-timeline. */
+.testimonial-item::after {
+  position: absolute;
+  inset-block-start: -0.35em;
+  inset-inline-end: 0.1em;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-size: clamp(7rem, 14vw, 11rem);
+  line-height: 1;
+  color: var(--accent-primary);
+  pointer-events: none;
+  content: '”';
+  opacity: 0.1;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .testimonial-item::after {
+      opacity: 0;
+      transform-origin: top right;
+      animation: quote-mark-in both var(--ease-settle);
+      animation-timeline: view();
+      animation-range: entry 5% cover 30%;
+    }
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .testimonial-item:hover {
+    border-inline-start-color: var(--accent-primary);
+  }
+}
+
+.testimonial-item > * {
+  position: relative;
+  z-index: 1;
 }
 
 .testimonial-item__quote {

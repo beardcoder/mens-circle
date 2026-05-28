@@ -18,9 +18,9 @@
     </div>
 
     @if (!empty($data['items']) && is_array($data['items']))
-      <div class="intro__values">
+      <div class="intro__values" data-reveal-stagger>
         @foreach ($data['items'] as $item)
-          <div class="value-item">
+          <div class="value-item" data-reveal="left">
             @if (!empty($item['number']))
               <span class="value-item__number">{{ $item['number'] }}</span>
             @endif

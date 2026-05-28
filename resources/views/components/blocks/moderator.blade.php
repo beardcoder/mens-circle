@@ -17,7 +17,7 @@
   <span class="moderator__ornament" aria-hidden="true">BEGLEITER</span>
   <div class="container">
     <div class="moderator__layout">
-      <div class="moderator__photo-wrapper">
+      <div class="moderator__photo-wrapper" data-reveal="clip">
         <div class="moderator__photo" data-motion="image">
           @if ($media)
             {{ $media->img()->attributes([
@@ -34,7 +34,7 @@
         <div class="moderator__photo-accent"></div>
       </div>
 
-      <div class="moderator__content">
+      <div class="moderator__content" data-reveal="right">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow">{{ $data['eyebrow'] }}</p>
         @endif

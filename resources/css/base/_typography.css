@@ -155,6 +155,36 @@ p:last-child {
   color: var(--accent-secondary);
 }
 
+/* Animated gradient highlight — a warm sand sheen drifts through the
+   emphasised word. Solid `color` above stays the fallback; this only
+   activates where text-clipping backgrounds and motion are welcome. */
+@supports (background-clip: text) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section-title .highlight {
+      color: transparent;
+      background-image: linear-gradient(
+        100deg,
+        var(--accent-primary) 0%,
+        color-mix(in oklch, var(--accent-primary) 45%, var(--color-sand))
+          var(--text-shine, 50%),
+        var(--accent-primary) 100%
+      );
+      background-clip: text;
+      animation: text-shine 7s var(--ease-precise) infinite;
+    }
+
+    .section-title--light .highlight {
+      background-image: linear-gradient(
+        100deg,
+        var(--accent-secondary) 0%,
+        color-mix(in oklch, var(--accent-secondary) 50%, var(--color-bone))
+          var(--text-shine, 50%),
+        var(--accent-secondary) 100%
+      );
+    }
+  }
+}
+
 /* Intro paragraph sitting under a .section-title — drops the trailing
    1.5em from the typography reset so the header's own block margin
    owns the rhythm to the body. */
