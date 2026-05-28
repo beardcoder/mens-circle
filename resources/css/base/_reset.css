@@ -17,6 +17,10 @@ html {
   /* Base font size for rem calculations */
   font-size: 16px;
   text-size-adjust: none;
+
+  /* Offset anchored navigation so the fixed header doesn't cover the target
+     (applies to on-load fragments, back/forward, and cross-page anchors). */
+  scroll-padding-top: var(--header-clearance);
 }
 
 /* Smooth scroll only for users who haven't requested reduced motion.
