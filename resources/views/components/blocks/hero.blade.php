@@ -57,7 +57,12 @@
               <a href="{{ $button->href }}" class="btn btn--primary btn--large">
                 {{ $data['button_text'] }}
               </a>
-              <span class="hero__scroll" aria-hidden="true">Entdecken<span class="hero__scroll-line" aria-hidden="true"></span></span>
+              <span class="hero__scroll" aria-hidden="true"
+                >Entdecken<span
+                  class="hero__scroll-line"
+                  aria-hidden="true"
+                ></span
+              ></span>
             </div>
           @endif
         @endif

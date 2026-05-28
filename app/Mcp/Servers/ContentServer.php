@@ -51,7 +51,7 @@ use Laravel\Mcp\Server\Attributes\Version;
     German is the user-facing language: prefer German text for titles,
     descriptions and CTAs unless the user asks otherwise.
     TXT)]
-class ContentServer extends Server
+final class ContentServer extends Server
 {
     /**
      * @var array<int, class-string<\Laravel\Mcp\Server\Tool>>

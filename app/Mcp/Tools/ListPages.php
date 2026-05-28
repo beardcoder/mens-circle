@@ -13,7 +13,7 @@ use Laravel\Mcp\Server\Tool;
 use Override;
 
 #[Description('List CMS pages with id, slug, title, publish state and content block summary.')]
-class ListPages extends Tool
+final class ListPages extends Tool
 {
     public function handle(Request $_request): Response
     {

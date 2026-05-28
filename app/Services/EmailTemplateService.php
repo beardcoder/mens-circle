@@ -7,7 +7,7 @@ namespace App\Services;
 use App\Enums\EmailTemplate;
 use App\Models\Event;
 
-class EmailTemplateService
+final class EmailTemplateService
 {
     /**
      * Resolve all placeholders in a template for the given event.

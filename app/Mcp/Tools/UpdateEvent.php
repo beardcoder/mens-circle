@@ -13,7 +13,7 @@ use Laravel\Mcp\Server\Tool;
 use Override;
 
 #[Description('Update an existing event by slug. Only provided fields are changed.')]
-class UpdateEvent extends Tool
+final class UpdateEvent extends Tool
 {
     public function handle(Request $request): Response
     {

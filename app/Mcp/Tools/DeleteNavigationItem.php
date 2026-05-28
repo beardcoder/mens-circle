@@ -13,7 +13,7 @@ use Laravel\Mcp\Server\Tool;
 use Override;
 
 #[Description('Delete a navigation item by id.')]
-class DeleteNavigationItem extends Tool
+final class DeleteNavigationItem extends Tool
 {
     public function handle(Request $request): Response
     {

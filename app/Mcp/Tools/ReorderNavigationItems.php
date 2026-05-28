@@ -18,7 +18,7 @@ use Override;
 #[Description(
     'Reorder navigation items within one location. Pass the full ordered list of item ids that belong to that location; the sort field is rewritten as 10, 20, 30, ... to leave room for inserts. All ids must exist and belong to the selected location, and duplicates are rejected. Items belonging to the location but missing from the list are pushed to the end with preserved relative order.',
 )]
-class ReorderNavigationItems extends Tool
+final class ReorderNavigationItems extends Tool
 {
     public function handle(Request $request): Response
     {

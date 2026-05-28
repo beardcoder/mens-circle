@@ -12,7 +12,7 @@ use Illuminate\Console\Command;
 
 #[Signature('events:send-reminders')]
 #[Description('Send reminder emails and SMS to participants for events happening today or tomorrow')]
-class SendEventReminders extends Command
+final class SendEventReminders extends Command
 {
     public function handle(): int
     {

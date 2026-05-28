@@ -12,7 +12,6 @@ import './types';
 
 import { createLume } from '@beardcoder/lume';
 
-import accordion from '@/components/accordion';
 import breathing from '@/components/breathing';
 import calendar from '@/components/calendar';
 import eventMap from '@/components/event-map';
@@ -21,15 +20,12 @@ import {
   registrationForm,
   testimonialForm,
 } from '@/components/forms';
-import scrollToTop from '@/components/scroll-to-top';
 import siteHeader from '@/components/site-header';
 import { initUmamiKit } from '@/utils/umami-kit';
 
 function bootstrap(): void {
   createLume()
     .component('site-header', siteHeader)
-    .component('scroll-to-top', scrollToTop)
-    .component('accordion', accordion)
     .component('newsletter-form', newsletterForm)
     .component('registration-form', registrationForm)
     .component('testimonial-form', testimonialForm)

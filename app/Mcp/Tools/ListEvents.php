@@ -13,7 +13,7 @@ use Laravel\Mcp\Server\Tool;
 use Override;
 
 #[Description('List events with id, slug, title, date and publish state. Filter by scope: "upcoming" (default), "past" or "all".')]
-class ListEvents extends Tool
+final class ListEvents extends Tool
 {
     public function handle(Request $request): Response
     {

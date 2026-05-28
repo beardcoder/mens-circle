@@ -16,7 +16,7 @@ use Override;
 #[Description(
     'Fetch a single CMS page by slug, including title, SEO meta and ordered content blocks (with block_id, type, data). Block anchors live inside data["anchor"] and can be linked from NavigationItem.anchor.',
 )]
-class GetPage extends Tool
+final class GetPage extends Tool
 {
     public function handle(Request $request): Response
     {

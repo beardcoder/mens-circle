@@ -16,7 +16,7 @@ use Override;
 #[Description(
     'List navigation items grouped by location (header, footer_primary, footer_contact, footer_legal). Optionally filter by location.',
 )]
-class ListNavigationItems extends Tool
+final class ListNavigationItems extends Tool
 {
     public function handle(Request $request): Response
     {

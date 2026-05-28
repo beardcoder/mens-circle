@@ -196,16 +196,15 @@
     </div>
   </footer>
 
-  <!-- Scroll to Top Button -->
-  <button
-    type="button"
+  <!-- Scroll to Top — CSS-only via scroll-driven animation timeline -->
+  <a
+    href="#header"
     class="scroll-to-top"
-    data-lume="scroll-to-top"
     aria-label="Nach oben scrollen"
     title="Nach oben"
   >
     <x-sprite name="chevron-up" />
-  </button>
+  </a>
 
   <!-- JavaScript -->
   <script>

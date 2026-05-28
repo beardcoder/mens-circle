@@ -14,7 +14,7 @@ use Spatie\Sitemap\Tags\Url;
 
 #[Signature('sitemap:generate')]
 #[Description('Generate the sitemap for the website')]
-class GenerateSitemap extends Command
+final class GenerateSitemap extends Command
 {
     public function handle(): int
     {

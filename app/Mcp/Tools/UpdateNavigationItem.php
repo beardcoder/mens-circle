@@ -18,7 +18,7 @@ use Override;
 #[Description(
     'Update a navigation item by id. Only provided fields are changed. Pass condition="" (empty string) to clear the condition. Pass anchor="" (empty string) to clear the anchor.',
 )]
-class UpdateNavigationItem extends Tool
+final class UpdateNavigationItem extends Tool
 {
     public function handle(Request $request): Response
     {

@@ -13,7 +13,7 @@ use Laravel\Mcp\Server\Tool;
 use Override;
 
 #[Description('Toggle publish state of a page. Sets is_published and stamps published_at when publishing.')]
-class PublishPage extends Tool
+final class PublishPage extends Tool
 {
     public function handle(Request $request): Response
     {

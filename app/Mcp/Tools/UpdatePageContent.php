@@ -15,7 +15,7 @@ use Override;
 #[Description(
     'Replace the content blocks of a page. Accepts the full ordered list of blocks; blocks omitted from the list are deleted. Each block needs a type and a data object; block_id is preserved across edits or generated on insert. To make a block linkable from the navigation, set data["anchor"] to a slug (e.g. "ueber") - it will be rendered as the section id and matches NavigationItem.anchor.',
 )]
-class UpdatePageContent extends Tool
+final class UpdatePageContent extends Tool
 {
     public function handle(Request $request): Response
     {

@@ -13,7 +13,7 @@ use Laravel\Mcp\Server\Tool;
 use Override;
 
 #[Description('Create a new event. Times are 24h "HH:MM"; event_date is YYYY-MM-DD; slug is auto-generated from the date if omitted.')]
-class CreateEvent extends Tool
+final class CreateEvent extends Tool
 {
     public function handle(Request $request): Response
     {

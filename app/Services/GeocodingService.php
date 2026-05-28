@@ -8,7 +8,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class GeocodingService
+final class GeocodingService
 {
     private const string NOMINATIM_ENDPOINT = 'https://nominatim.openstreetmap.org/search';
 

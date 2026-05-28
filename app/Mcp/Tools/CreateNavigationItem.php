@@ -18,7 +18,7 @@ use Override;
 #[Description(
     'Create a new navigation item in the given location. URL accepts absolute URLs or internal paths ("/atemuebung"). Use the separate "anchor" field to link to a content block anchor (e.g. anchor="ueber" appends "#ueber" to the resolved URL). Use condition="next_event" together with an empty url to render a dynamic link to the next upcoming event.',
 )]
-class CreateNavigationItem extends Tool
+final class CreateNavigationItem extends Tool
 {
     public function handle(Request $request): Response
     {

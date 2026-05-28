@@ -1,23 +1,21 @@
 @props (['block'])
 
 @php
-    $data = $block->data;
-    $anchor = $data['anchor'] ?? 'faq';
-    $faqItems = $data['items'] ?? [];
-@endphp
-
-@php
     use App\Seo\Data\FaqItem;
     use App\Seo\Schemas\FaqPageSchema;
 
+    $data = $block->data;
+    $anchor = $data['anchor'] ?? 'faq';
+    $faqItems = is_array($data['items'] ?? null) ? $data['items'] : [];
+
     $schemaItems = collect($faqItems)
-        ->filter(static fn($item): bool => !empty($item['question']) && !empty($item['answer']))
-        ->map(static fn($item): FaqItem => new FaqItem($item['question'], $item['answer']))
+        ->filter(static fn(array $item): bool => !empty($item['question']) && !empty($item['answer']))
+        ->map(static fn(array $item): FaqItem => new FaqItem($item['question'], $item['answer']))
         ->values()
         ->all();
 @endphp
 
-@if (count($schemaItems) > 0)
+@if ($schemaItems !== [])
   @push ('structured_data')
     {!! (new FaqPageSchema($schemaItems))->toScript() !!}
   @endpush
@@ -39,29 +37,25 @@
       @endif
     </div>
 
-    @if (!empty($faqItems) && is_array($faqItems))
+    @if ($faqItems !== [])
       <div class="faq__list">
         @foreach ($faqItems as $index => $item)
           @if (!empty($item['question']) && !empty($item['answer']))
-            <div
-              class="accordion-item"
-              data-lume="accordion"
-            >
-              <button
+            <details class="accordion-item" name="{{ $anchor }}">
+              <summary
                 class="accordion-item__trigger"
                 data-umami-event="faq-expand"
-                data-lume-part="control"
                 data-umami-event-question="{{ Str::limit($item['question'], 50) }}"
-                aria-expanded="true"
-                aria-controls="faq-item-{{ $index }}"
               >
                 <span>{{ $item['question'] }}</span>
                 <span class="accordion-item__icon" aria-hidden="true"></span>
-              </button>
-              <div class="accordion-item__body" id="faq-item-{{ $index }}" data-lume-part="body" data-open="false">
-                  <div class="accordion-item__content">{!! $item['answer'] !!}</div>
+              </summary>
+              <div class="accordion-item__body">
+                <div class="accordion-item__content">
+                  {!! $item['answer'] !!}
+                </div>
               </div>
-            </div>
+            </details>
           @endif
         @endforeach
       </div>
