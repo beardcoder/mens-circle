@@ -110,9 +110,9 @@
   .motion-ready [data-reveal] {
     --reveal-shift: 1.5rem;
     --reveal-zoom: 0.94;
-    --reveal-step: 90ms;
-    --reveal-duration: 720ms;
-    --reveal-ease: var(--ease-emphasised);
+    --reveal-step: 110ms;
+    --reveal-duration: 880ms;
+    --reveal-ease: var(--ease-reveal);
     --reveal-delay: calc(
       var(--reveal-index, 0) * var(--reveal-step) + var(--reveal-base, 0ms)
     );
@@ -154,7 +154,7 @@
   /* Headline burn-in — a slower rise with a focus-pull blur. Reserved for
      titles so the eye settles on the words as they sharpen. */
   .motion-ready [data-reveal='blur'] {
-    --reveal-duration: 1000ms;
+    --reveal-duration: 1150ms;
 
     filter: blur(12px);
     translate: 0 0.6rem;
@@ -167,12 +167,12 @@
   @media (width < 640px) {
     .motion-ready [data-reveal] {
       --reveal-shift: 0.75rem;
-      --reveal-duration: 540ms;
-      --reveal-step: 64ms;
+      --reveal-duration: 700ms;
+      --reveal-step: 80ms;
     }
 
     .motion-ready [data-reveal='blur'] {
-      --reveal-duration: 600ms;
+      --reveal-duration: 760ms;
 
       filter: none;
       translate: 0 0.75rem;

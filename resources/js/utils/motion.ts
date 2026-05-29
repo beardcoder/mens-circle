@@ -130,5 +130,5 @@ function reveal(el: HTMLElement): void {
 
   el.addEventListener('transitionend', onEnd);
   // Safety net if no transition runs (e.g. element already at rest state).
-  const fallback = globalThis.setTimeout(release, 1600);
+  const fallback = globalThis.setTimeout(release, 2400);
 }
