@@ -18,9 +18,23 @@ html {
   font-size: 16px;
   text-size-adjust: none;
 
+  /* Kill the grey tap-flash on every element (the property inherits) so
+     touch interactions read as deliberate, app-like states rather than a
+     browser default. */
+  -webkit-tap-highlight-color: transparent;
+
   /* Offset anchored navigation so the fixed header doesn't cover the target
      (applies to on-load fragments, back/forward, and cross-page anchors). */
   scroll-padding-top: var(--header-clearance);
+}
+
+/* Drop the 300ms tap delay and double-tap zoom on controls — taps register
+   instantly, the way they do in a native app. */
+button,
+summary,
+.btn,
+[role='button'] {
+  touch-action: manipulation;
 }
 
 /* Smooth scroll only for users who haven't requested reduced motion.
