@@ -1,27 +1,29 @@
 /**
  * Header / Navigation Component
- * Modern header styling
+ *
+ * Layout is a balanced three-zone grid — logo (start), navigation
+ * (center), actions (end) — so the bar reads as deliberately composed
+ * rather than left-weighted. The primary CTA lives in the actions zone
+ * and stays visible at every breakpoint; the hamburger only governs the
+ * link list, which becomes a full-screen drawer on small screens.
+ *
+ * Two coordinated scroll-linked layers give the bar its depth:
+ *   1. An isolated `::before` paints the "scrolled" background (blur +
+ *      tinted fill + hairline). On hero pages it fades in with scroll;
+ *      off-hero pages pin it opaque.
+ *   2. A `color` tone shift on the header itself — children inherit via
+ *      `currentColor`, so logo, nav, and toggle move together.
  */
 
 /* ============================================
    Header Base
-
-   The header runs two coordinated scroll-linked layers:
-   1. An isolated `::before` that paints the "scrolled" background
-      (blur + tinted fill + shadow). On hero pages it fades in with
-      scroll; off-hero pages pin it opaque. Keeping this on a
-      pseudo-element means we can interpolate its opacity cleanly
-      without fighting `backdrop-filter` rendering quirks.
-   2. A `color`-based tone shift on the header itself — children
-      inherit via `currentColor`, so nav, logo, and toggle move
-      together as a single unit.
    ============================================ */
 .header {
   position: fixed;
   inset-block-start: 0;
   inset-inline: 0;
   z-index: var(--z-header);
-  padding-block: var(--space-md);
+  padding-block: clamp(0.875rem, 0.65rem + 0.7vw, 1.25rem);
   color: var(--text-primary);
   transition:
     padding-block var(--motion-standard),
@@ -32,8 +34,8 @@
    independently of the header's own color/padding morph).
 
    The fill is deliberately thin (~55%): the heavy lifting is done by
-   `backdrop-filter`, which frosts the content below. A solid tint
-   would read as a flash against colorful hero imagery. */
+   `backdrop-filter`, which frosts the content below. A solid tint would
+   read as a flash against colorful hero imagery. */
 .header::before {
   position: absolute;
   inset: 0;
@@ -51,17 +53,45 @@
   transition: opacity var(--motion-standard);
 }
 
+/* Three-zone grid: the middle column flexes so the nav cluster sits
+   optically centered between the logo and the actions. */
 .header__inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-md);
   align-items: center;
-  justify-content: space-between;
+}
+
+/* Logo + actions stay above the drawer so the top bar reads as one
+   persistent layer over the full-screen menu. */
+.header__logo,
+.header__actions {
+  position: relative;
+  z-index: calc(var(--z-header) + 2);
+}
+
+.header__logo {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.nav {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.header__actions {
+  display: flex;
+  grid-column: 3;
+  gap: var(--space-sm);
+  align-items: center;
+  justify-self: end;
 }
 
 /* ============================================
    Logo
    ============================================ */
 .logo {
-  z-index: calc(var(--z-header) + 2);
   display: flex;
   gap: var(--space-sm);
   align-items: center;
@@ -76,10 +106,16 @@
   opacity: 0.9;
 }
 
+.logo:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 6px;
+  border-radius: var(--radius-sm);
+}
+
 .logo__icon {
   flex-shrink: 0;
-  inline-size: 44px;
-  block-size: 44px;
+  inline-size: 42px;
+  block-size: 42px;
 }
 
 .logo__text {
@@ -89,16 +125,24 @@
 }
 
 /* ============================================
-   Navigation
+   Navigation (desktop row)
    ============================================ */
-.nav {
+.nav__list {
   display: flex;
-  gap: clamp(var(--space-sm), 1.8vw, var(--space-lg));
+  gap: clamp(var(--space-sm), 1.6vw, var(--space-lg));
   align-items: center;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nav__item {
+  display: flex;
 }
 
 .nav__link {
   position: relative;
+  display: inline-flex;
   font-size: clamp(0.8125rem, 0.75rem + 0.2vw, 0.9375rem);
   font-weight: 500;
   color: inherit;
@@ -121,40 +165,41 @@
   border-radius: var(--radius-sm);
 }
 
-/* Inline CTA scales down to match the slim text links it sits next to.
-   The component still keeps its own larger sizing on standalone pages. */
-.nav .nav__cta {
-  padding-block: 0.55rem;
-  padding-inline: clamp(1rem, 1.6vw, 1.5rem);
-  font-size: clamp(0.8125rem, 0.75rem + 0.2vw, 0.9375rem);
-  white-space: nowrap;
-}
-
-/* Underline effect — clip-path is compositor-only (no layout recalc),
-   `inline-size: 0 → 100%` triggers layout on every frame so it's avoided. */
+/* Underline grows from the center on hover.
+   `transform: scaleX` is compositor-only — no per-frame layout. */
 .nav__link::after {
   position: absolute;
-  inset-block-end: -4px;
-  inset-inline-start: 0;
-  inline-size: 100%;
-  block-size: 1px;
+  inset-block-end: -6px;
+  inset-inline: 0;
+  block-size: 2px;
   content: '';
   background: var(--accent-primary);
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 350ms var(--ease-settle);
+  border-radius: var(--radius-full);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 320ms var(--ease-precise);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .nav__link:hover::after {
-    clip-path: inset(0 0% 0 0);
+    transform: scaleX(1);
   }
+}
+
+/* Header CTA — the shared `.btn` geometry, sized down to sit comfortably
+   beside the slim nav links and the toggle. */
+.nav__cta {
+  --btn-padding-block: 0.7rem;
+  --btn-padding-inline: clamp(1.1rem, 1.6vw, 1.6rem);
+  --btn-font-size: var(--text-caption);
+
+  white-space: nowrap;
 }
 
 /* ============================================
    Mobile Navigation Toggle
    ============================================ */
 .nav-toggle {
-  z-index: calc(var(--z-header) + 2);
   display: none;
   flex-direction: column;
   gap: 6px;
@@ -181,12 +226,25 @@
     opacity var(--motion-standard);
 }
 
+.nav-toggle.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.nav-toggle.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
 /* ============================================
    Hero-page initial tone
 
    On pages that start with a hero image, the header sits on top of a
-   dark visual — text flips to bone until the page has scrolled.
-   Without a hero, the header is always in its resting (solid) state.
+   dark visual — text flips to bone until the page has scrolled. Without
+   a hero, the header is always in its resting (solid) state.
    ============================================ */
 body:has(.hero) .header {
   color: var(--color-bone);
@@ -196,8 +254,8 @@ body:not(:has(.hero)) .header::before {
   opacity: 1;
 }
 
-/* Fallback for browsers without :has() — requires the scroll-header
-   JS component to tag the body with has-hero / no-hero. */
+/* Fallback for browsers without :has() — the scroll-header JS component
+   tags the body with has-hero / no-hero. */
 @supports not selector(body:has(.hero)) {
   body.has-hero .header {
     color: var(--color-bone);
@@ -211,13 +269,13 @@ body:not(:has(.hero)) .header::before {
 /* ============================================
    Scroll-linked morph (native scroll-timeline)
 
-   On hero pages: as the user scrolls the first ~180px, the header
-   continuously morphs from "transparent over hero" to "solid with
-   blur + dark text". Runs on the compositor — no JS scroll listener,
-   no binary snap.
+   On hero pages: across the first ~180px of scroll the header
+   continuously morphs from "transparent over hero" to "solid with blur
+   + dark text". Runs on the compositor — no JS scroll listener, no
+   binary snap.
 
-   Fallback (below) covers browsers without scroll-timeline support
-   by using the JS-added `.scrolled` class for a non-animated swap.
+   Fallback (below) covers browsers without scroll-timeline support via
+   the JS-added `.scrolled` class.
    ============================================ */
 @supports (animation-timeline: scroll()) {
   body:has(.hero) .header {
@@ -233,8 +291,6 @@ body:not(:has(.hero)) .header::before {
   }
 }
 
-/* Fallback: non-animated swap when scroll-timeline isn't supported.
-   The JS sets `.scrolled` past 50px of scroll. */
 @supports not (animation-timeline: scroll()) {
   body:has(.hero) .header.scrolled {
     color: var(--text-primary);
@@ -246,34 +302,15 @@ body:not(:has(.hero)) .header::before {
 }
 
 /* ============================================
-   Navigation Toggle Active State
-   ============================================ */
-.nav-toggle.active span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-}
-
-.nav-toggle.active span:nth-child(2) {
-  opacity: 0;
-  transform: scaleX(0);
-}
-
-.nav-toggle.active span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
-}
-
-/* ============================================
    Mobile Navigation Drawer
 
-   Full-viewport drawer that reveals from the top via `clip-path` —
-   gives a clean "unfold" feeling that's robust across browsers
-   (Safari included, no `::details-content` or experimental APIs in
-   play). Items are vertically + horizontally centered with grid
-   `place-content` and fade up with a staggered transition delay
-   driven by the `--nav-i` index on each link.
+   Below 960px the link list detaches into a full-viewport drawer that
+   reveals from the top via `clip-path` — a clean "unfold" that's robust
+   across browsers. Links are centered with grid `place-content` and fade
+   up on a stagger driven by the `--nav-i` index inherited from each item.
 
-   Visibility is part of the transition list so the drawer is fully
-   removed from accessibility / focus after the close animation
-   completes, without snapping.
+   `visibility` is part of the transition so the drawer leaves the
+   accessibility / focus tree once the close animation finishes.
    ============================================ */
 @media (width <= 960px) {
   .nav-toggle {
@@ -286,8 +323,6 @@ body:not(:has(.hero)) .header::before {
     z-index: calc(var(--z-header) + 1);
     display: grid;
     visibility: hidden;
-    grid-auto-rows: max-content;
-    gap: clamp(0.75rem, 2vh, var(--space-md));
     place-content: center;
     place-items: center;
     inline-size: 100%;
@@ -329,12 +364,22 @@ body:not(:has(.hero)) .header::before {
       visibility 0s;
   }
 
-  /* Decorative thread — a quiet horizontal line that draws in once the
-     drawer has settled, anchoring the menu without distracting from it. */
+  .nav__list {
+    flex-direction: column;
+    gap: clamp(0.75rem, 2vh, var(--space-md));
+    text-align: center;
+  }
+
+  .nav__item {
+    justify-content: center;
+  }
+
+  /* Decorative thread — a quiet line that draws in once the drawer has
+     settled, anchoring the menu without distracting from it. */
   .nav::after {
     inline-size: clamp(120px, 30vw, 200px);
     block-size: 1px;
-    margin-block: var(--space-md) 0;
+    margin-block-start: var(--space-md);
     content: '';
     background: linear-gradient(
       90deg,
@@ -355,26 +400,10 @@ body:not(:has(.hero)) .header::before {
     transform: scaleX(1);
   }
 
-  /* Links + CTA share the same entrance choreography so the stagger
-     reads as one continuous motion. */
-  .nav__link,
-  .nav .nav__cta {
-    opacity: 0;
-    translate: 0 24px;
-    transition:
-      opacity 500ms var(--ease-settle),
-      translate 540ms var(--ease-settle);
-    transition-delay: calc(120ms + 60ms * var(--nav-i, 0));
-  }
-
-  .nav.open .nav__link,
-  .nav.open .nav__cta {
-    opacity: 1;
-    translate: 0 0;
-  }
-
-  /* Font sizing adapts to item count so long menus stay on screen —
-     `--nav-count` is set inline on the <nav>. */
+  /* Display type scales down as the item count grows so long menus stay
+     on screen — `--nav-count` is set inline on the <nav>. Each link also
+     carries the staggered entrance, with `--nav-i` inherited from its
+     parent item. */
   .nav__link {
     font-family: var(--font-display);
     font-size: clamp(
@@ -384,22 +413,29 @@ body:not(:has(.hero)) .header::before {
     );
     line-height: 1.15;
     color: var(--text-on-dark);
-    text-align: center;
     letter-spacing: -0.02em;
+    opacity: 0;
+    translate: 0 24px;
+    transition:
+      opacity 500ms var(--ease-settle),
+      translate 540ms var(--ease-settle);
+    transition-delay: calc(120ms + 60ms * var(--nav-i, 0));
+  }
+
+  .nav.open .nav__link {
+    opacity: 1;
+    translate: 0 0;
   }
 
   .nav__link::after {
     inset-block-end: -8px;
-    inset-inline-start: 50%;
+    inset-inline: 50%;
     inline-size: 60%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scaleX(0);
   }
 
-  .nav .nav__cta {
-    padding-block: 0.85rem;
-    padding-inline: var(--space-md);
-    margin-block-start: var(--space-xs);
-    font-size: 1rem;
+  .nav__link:hover::after {
+    transform: translateX(-50%) scaleX(1);
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -407,6 +443,37 @@ body:not(:has(.hero)) .header::before {
       opacity: 0.85;
     }
   }
+
+  /* The persistent CTA shrinks on phones so the top bar never crowds. */
+  .nav__cta {
+    --btn-padding-block: 0.6rem;
+    --btn-padding-inline: 1rem;
+    --btn-font-size: var(--text-xs);
+  }
+}
+
+/* Reclaim horizontal room on the smallest screens. */
+@media (width <= 480px) {
+  .logo__text {
+    display: none;
+  }
+}
+
+/* ============================================
+   Open-drawer top bar
+
+   The drawer paints a dark earth surface; force the persistent top bar
+   (logo + actions) to its light tone so it never disappears against the
+   menu — overriding the scroll-timeline color morph on hero pages.
+   ============================================ */
+body.nav-open .header {
+  color: var(--color-bone) !important;
+  animation: none !important;
+}
+
+body.nav-open .header::before {
+  opacity: 0 !important;
+  animation: none !important;
 }
 
 /* Reduced motion: kill the slide-in choreography, fade only. */
@@ -414,7 +481,6 @@ body:not(:has(.hero)) .header::before {
   @media (width <= 960px) {
     .nav,
     .nav__link,
-    .nav .nav__cta,
     .nav::after {
       transition-delay: 0ms !important;
       transition-duration: 120ms;

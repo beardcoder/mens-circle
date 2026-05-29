@@ -21,12 +21,17 @@
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
 
   <!-- Header -->
+  @php
+    $headerItems = collect($headerNavigation?->children ?? []);
+    $headerNavLinks = $headerItems->reject(fn ($section) => (bool) ($section->attributes['is_cta'] ?? false))->values();
+    $headerCtaLinks = $headerItems->filter(fn ($section) => (bool) ($section->attributes['is_cta'] ?? false))->values();
+  @endphp
   <header class="header" id="header" data-lume="site-header">
     <div class="container">
       <div class="header__inner">
         <a
           href="{{ route('home') }}"
-          class="logo"
+          class="header__logo logo"
           aria-label="{{ $settings?->site_name ?? 'Männerkreis' }} - Startseite"
         >
           <x-logo class="logo__icon" />
@@ -38,45 +43,68 @@
           class="nav"
           id="nav"
           data-lume-part="nav"
+          aria-label="Hauptnavigation"
           aria-expanded="false"
-          style="--nav-count: {{ count($headerNavigation?->children ?? []) }}"
+          style="--nav-count: {{ $headerNavLinks->count() }}"
         >
-          @foreach (($headerNavigation?->children ?? []) as $section)
+          <ul class="nav__list">
+            @foreach ($headerNavLinks as $section)
+              @php
+                $attrs = $section->attributes ?? [];
+                $umamiEvent = $attrs['umami_event'] ?? 'nav-click';
+                $umamiTarget = $attrs['umami_event_target'] ?? null;
+                $openInNewTab = (bool) ($attrs['open_in_new_tab'] ?? false);
+              @endphp
+              <li class="nav__item" style="--nav-i: {{ $loop->index }}">
+                <a
+                  href="{{ $section->url }}"
+                  class="nav__link"
+                  data-lume-part="nav-link"
+                  @if ($openInNewTab) target="_blank" rel="noopener noreferrer" @endif
+                  data-umami-event="{{ $umamiEvent }}"
+                  @if ($umamiTarget) data-umami-event-target="{{ $umamiTarget }}" @endif
+                >
+                  {{ $section->title }}</a
+                >
+              </li>
+            @endforeach
+          </ul>
+        </nav>
+
+        <div class="header__actions">
+          @foreach ($headerCtaLinks as $section)
             @php
               $attrs = $section->attributes ?? [];
-              $isCta = (bool) ($attrs['is_cta'] ?? false);
-              $umamiEvent = $isCta ? 'cta-click' : ($attrs['umami_event'] ?? 'nav-click');
               $umamiTarget = $attrs['umami_event_target'] ?? null;
               $openInNewTab = (bool) ($attrs['open_in_new_tab'] ?? false);
-              $linkClass = $isCta ? 'btn btn--primary btn--large nav__cta' : 'nav__link';
             @endphp
             <a
               href="{{ $section->url }}"
-              class="{{ $linkClass }}"
-              style="--nav-i: {{ $loop->index }}"
+              class="btn btn--primary nav__cta"
               data-lume-part="nav-link"
               @if ($openInNewTab) target="_blank" rel="noopener noreferrer" @endif
-              data-umami-event="{{ $umamiEvent }}"
-              @if ($isCta) data-umami-event-location="header" @endif
+              data-umami-event="cta-click"
+              data-umami-event-location="header"
               @if ($umamiTarget) data-umami-event-target="{{ $umamiTarget }}" @endif
             >
               {{ $section->title }}</a
             >
           @endforeach
-        </nav>
 
-        <button
-          class="nav-toggle"
-          id="navToggle"
-          type="button"
-          data-lume-part="toggle"
-          aria-expanded="false"
-          aria-label="Menü öffnen"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+          <button
+            class="nav-toggle"
+            id="navToggle"
+            type="button"
+            data-lume-part="toggle"
+            aria-controls="nav"
+            aria-expanded="false"
+            aria-label="Menü öffnen"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
