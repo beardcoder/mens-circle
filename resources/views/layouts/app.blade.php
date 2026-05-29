@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
 <head>
+  {{-- Flag JS synchronously so AOS reveals only hide their elements when
+       JavaScript is available — without JS, all [data-aos] content stays
+       visible. Render-blocking + ahead of <body> = no flash of hidden content. --}}
+  <script>
+    document.documentElement.classList.add('aos-on');
+  </script>
   @include ('partials.seo-head')
 </head>
 <body>

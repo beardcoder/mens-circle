@@ -7,7 +7,7 @@
 
 <section class="section values-section" @if ($anchor) id="{{ $anchor }}" @endif>
   <div class="container">
-    <div class="section-header">
+    <div class="section-header" data-aos="fade-up">
       @if (!empty($data['eyebrow']))
         <p class="eyebrow">{{ $data['eyebrow'] }}</p>
       @endif
@@ -18,9 +18,9 @@
     </div>
 
     @if (!empty($data['items']) && is_array($data['items']))
-      <div class="intro__values" data-reveal-stagger>
+      <div class="intro__values" data-aos-stagger="90">
         @foreach ($data['items'] as $item)
-          <div class="value-item" data-reveal="left">
+          <div class="value-item" data-aos="fade-up">
             @if (!empty($item['number']))
               <span class="value-item__number">{{ $item['number'] }}</span>
             @endif

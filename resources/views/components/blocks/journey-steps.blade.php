@@ -36,7 +36,7 @@
 >
   <div class="journey__glow" aria-hidden="true"></div>
   <div class="container">
-    <div class="section-header section-header--on-dark">
+    <div class="section-header section-header--on-dark" data-aos="fade-up">
       @if (!empty($data['eyebrow']))
         <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>
       @endif
@@ -51,10 +51,10 @@
     </div>
 
     @if (!empty($steps) && is_array($steps))
-      <div class="journey__steps" data-reveal-stagger>
+      <div class="journey__steps" data-aos-stagger="110">
         <div class="journey__thread" aria-hidden="true"></div>
         @foreach ($steps as $step)
-          <div class="journey__step" data-reveal="up">
+          <div class="journey__step" data-aos="fade-up">
             @if (!empty($step['number']))
               <div class="journey__step-number" aria-hidden="true">
                 {{ $step['number'] }}

@@ -25,7 +25,7 @@
     aria-labelledby="archetypes-title"
   >
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" data-aos="fade-up">
         @if (!empty($data['eyebrow']))
           <p class="eyebrow">{{ $data['eyebrow'] }}</p>
         @endif
@@ -41,12 +41,12 @@
         @endif
       </div>
 
-      <div class="archetypes__grid" data-reveal-stagger>
+      <div class="archetypes__grid" data-aos-stagger="90">
         @foreach ($items as $item)
           @php $icon = $detectIcon($item); @endphp
           <article
             class="archetype-card archetype-card--{{ $icon }}"
-            data-reveal="up"
+            data-aos="fade-up"
           >
             <div class="archetype-card__background-icon" aria-hidden="true">
               @php $svgPath = public_path('images/archetypes/' . (in_array($icon, ['warrior', 'lover', 'magician', 'king', 'father'], true) ? $icon : 'neutral') . '.svg'); @endphp

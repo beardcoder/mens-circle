@@ -72,7 +72,7 @@
 @import url('utilities/_animations.css') layer(utilities);
 @import url('utilities/_micro-animations.css') layer(utilities);
 @import url('utilities/_motion.css') layer(utilities);
-@import url('utilities/_reveal.css') layer(utilities);
+@import url('utilities/_aos.css') layer(utilities);
 @import url('utilities/_visual.css') layer(utilities);
 @import url('utilities/_view-transitions.css') layer(utilities);
 @import url('utilities/_print.css') layer(utilities);

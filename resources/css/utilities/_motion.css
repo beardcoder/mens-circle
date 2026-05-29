@@ -54,75 +54,6 @@
 }
 
 /* ============================================
-   Eyebrow lines — scroll-anchored draw-in
-   ============================================
-   The `.eyebrow::before` rule is a 1.5px line. It draws as the label
-   enters view — a quiet typographic gesture. The range ends at
-   `entry 100%` so it always completes, including for the last section
-   above the footer (a `cover`-based end can't be reached there). */
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .eyebrow::before {
-      opacity: 0.55;
-      transform: scaleX(0.3);
-      transform-origin: right;
-      animation: eyebrow-line-grow linear both;
-      animation-timeline: view();
-      animation-range: entry 10% entry 100%;
-    }
-  }
-}
-
-/* ============================================
-   Section title — scroll-driven micro-rise
-   ============================================
-   A 6px translate + letter-spacing condensation that resolves as
-   the title moves through the lower-to-middle of the viewport.
-   Compositor-only, never disappears: starts visible-and-slightly-low,
-   settles to rest. Using `cover` keeps the perceived timing identical
-   on mobile and desktop. */
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .section-title {
-      animation: title-settle linear both;
-      animation-timeline: view();
-      animation-range: entry 15% entry 100%;
-    }
-  }
-}
-
-@keyframes title-settle {
-  from {
-    letter-spacing: -0.035em;
-    transform: translate3d(0, 8px, 0);
-  }
-
-  to {
-    letter-spacing: -0.05em;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-/* ============================================
-   Eyebrow — scroll-anchored settle
-   ============================================
-   The label group lifts and fades as it enters view, in concert with
-   the `::before` line draw above. Quiet, compositor-only, one pass. The
-   range ends at `entry 100%` so it always completes — even at page end. */
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .eyebrow {
-      animation: eyebrow-settle linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 100%;
-    }
-  }
-}
-
-/* ============================================
    Image surfaces — calm scale-on-hover
    ============================================
    Reusable utility for any image that lives inside a clipped frame:
@@ -206,9 +137,6 @@
   .hero__bottom,
   .hero__scroll,
   .hero__scroll-line,
-  .eyebrow,
-  .eyebrow::before,
-  .section-title,
   [data-motion='rise'] {
     animation: none;
   }

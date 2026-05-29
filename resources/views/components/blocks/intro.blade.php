@@ -13,19 +13,23 @@
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title intro__title" id="intro-title">
+        <h2
+          class="section-title intro__title"
+          id="intro-title"
+          data-aos="fade-up"
+        >
           {!! $data['title'] !!}
         </h2>
       @endif
 
       @if (!empty($data['text']))
-        <p class="intro__text">{{ $data['text'] }}</p>
+        <p class="intro__text" data-aos="fade-up" data-aos-delay="80">{{ $data['text'] }}</p>
       @endif
 
       @if (!empty($data['values']) && is_array($data['values']))
-        <div class="intro__values" data-reveal-stagger>
+        <div class="intro__values" data-aos-stagger="90">
           @foreach ($data['values'] as $value)
-            <div class="value-item" data-reveal="left">
+            <div class="value-item" data-aos="fade-up">
               @if (!empty($value['number']))
                 <span class="value-item__number">{{ $value['number'] }}</span>
               @endif

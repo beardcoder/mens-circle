@@ -23,22 +23,6 @@
   inherits: false;
 }
 
-/* Drives the rotating conic sheen behind the primary CTA label.
-   Registering the angle lets it loop smoothly instead of snapping. */
-@property --sheen-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-
-/* Position (0–100%) of the bright stop in the highlighted headline word.
-   Swept once by the scroll timeline as the title enters view. */
-@property --text-shine {
-  syntax: '<percentage>';
-  initial-value: 50%;
-  inherits: false;
-}
-
 :root {
   /* ============================================
      Color Palette - Using OKLCH for 2025

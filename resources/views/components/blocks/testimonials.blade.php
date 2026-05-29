@@ -44,7 +44,7 @@
 >
   <div class="testimonials__pattern" aria-hidden="true"></div>
   <div class="container">
-    <div class="section-header">
+    <div class="section-header" data-aos="fade-up">
       <p class="eyebrow">Community Stimmen</p>
       <h2 class="section-title" id="testimonials-title">
         Was <span class="highlight">Teilnehmer</span> sagen
@@ -52,9 +52,9 @@
       <p class="testimonials__subtitle">Authentische Einblicke von Männern, die den Kreis erleben</p>
     </div>
 
-    <div class="testimonials__grid" data-reveal-stagger>
+    <div class="testimonials__grid" data-aos-stagger="100">
       @foreach ($testimonials as $testimonial)
-        <article class="testimonial-item" data-reveal="up">
+        <article class="testimonial-item" data-aos="fade-up">
           <blockquote class="testimonial-item__quote">
             {{ $testimonial->quote }}
           </blockquote>

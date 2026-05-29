@@ -21,6 +21,7 @@ import {
   testimonialForm,
 } from '@/components/forms';
 import siteHeader from '@/components/site-header';
+import { initAos } from '@/utils/aos';
 import { initUmamiKit } from '@/utils/umami-kit';
 
 function bootstrap(): void {
@@ -34,6 +35,7 @@ function bootstrap(): void {
     .component('breathing-app', breathing)
     .mount();
 
+  initAos();
   initUmamiKit();
 }
 

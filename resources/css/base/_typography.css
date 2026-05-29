@@ -155,40 +155,6 @@ p:last-child {
   color: var(--accent-secondary);
 }
 
-/* Highlight sheen — a warm sand stop sweeps across the emphasised word
-   exactly once, driven by the scroll timeline as the title enters view.
-   Scroll-anchored (not a loop) keeps it premium and undistracting. The
-   solid `color` above is the fallback wherever text-clipping, @property
-   or view-timelines aren't supported, or motion is reduced. */
-@supports (background-clip: text) and (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .section-title .highlight {
-      color: transparent;
-      background-image: linear-gradient(
-        100deg,
-        var(--accent-primary) 0%,
-        color-mix(in oklch, var(--accent-primary) 35%, var(--color-sand))
-          var(--text-shine, 50%),
-        var(--accent-primary) 100%
-      );
-      background-clip: text;
-      animation: text-shine-sweep linear both;
-      animation-timeline: view();
-      animation-range: entry 10% entry 100%;
-    }
-
-    .section-title--light .highlight {
-      background-image: linear-gradient(
-        100deg,
-        var(--accent-secondary) 0%,
-        color-mix(in oklch, var(--accent-secondary) 45%, var(--color-bone))
-          var(--text-shine, 50%),
-        var(--accent-secondary) 100%
-      );
-    }
-  }
-}
-
 /* Intro paragraph sitting under a .section-title — drops the trailing
    1.5em from the typography reset so the header's own block margin
    owns the rhythm to the body. */
