@@ -36,25 +36,27 @@
 >
   <div class="journey__glow" aria-hidden="true"></div>
   <div class="container">
-    <div class="section-header section-header--on-dark" data-aos="fade-up">
+    <div class="section-header section-header--on-dark" data-reveal-group>
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow eyebrow--secondary" data-reveal="up">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title" id="journey-title">{!! $data['title'] !!}</h2>
+        <h2 class="section-title" id="journey-title" data-reveal="blur">
+          {!! $data['title'] !!}
+        </h2>
       @endif
 
       @if (!empty($data['subtitle']))
-        <p class="journey__subtitle">{{ $data['subtitle'] }}</p>
+        <p class="journey__subtitle" data-reveal="up">{{ $data['subtitle'] }}</p>
       @endif
     </div>
 
     @if (!empty($steps) && is_array($steps))
-      <div class="journey__steps" data-aos-stagger="110">
+      <div class="journey__steps" data-reveal-group="110">
         <div class="journey__thread" aria-hidden="true"></div>
         @foreach ($steps as $step)
-          <div class="journey__step" data-aos="fade-up">
+          <div class="journey__step" data-reveal="up">
             @if (!empty($step['number']))
               <div class="journey__step-number" aria-hidden="true">
                 {{ $step['number'] }}

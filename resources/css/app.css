@@ -21,7 +21,8 @@
  *   - color-mix(in oklch, …) for blending
  *   - Native CSS nesting
  *   - @starting-style + transition-behavior: allow-discrete (toast entry/exit)
- *   - animation-timeline: view() (eyebrow lines, scroll-reveal entrances)
+ *   - animation-timeline: scroll() (scroll-to-top reveal)
+ *   - IntersectionObserver-driven reveals (utilities/_motion.css)
  *   - View Transitions API (cross-document fade)
  *   - prefers-color-scheme, prefers-reduced-motion
  *   - :has(), :focus-visible
@@ -70,9 +71,7 @@
 @import url('sections/_surfaces.css') layer(sections);
 @import url('sections/_ornaments.css') layer(sections);
 @import url('utilities/_animations.css') layer(utilities);
-@import url('utilities/_micro-animations.css') layer(utilities);
 @import url('utilities/_motion.css') layer(utilities);
-@import url('utilities/_aos.css') layer(utilities);
 @import url('utilities/_visual.css') layer(utilities);
 @import url('utilities/_view-transitions.css') layer(utilities);
 @import url('utilities/_print.css') layer(utilities);

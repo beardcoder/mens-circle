@@ -12,17 +12,19 @@
   <div class="cta__ornament cta__ornament--outer" aria-hidden="true"></div>
   <div class="cta__ornament cta__ornament--inner" aria-hidden="true"></div>
   <div class="container">
-    <div class="cta__content">
+    <div class="cta__content" data-reveal-group="100">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-reveal="up">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title cta__title">{!! $data['title'] !!}</h2>
+        <h2 class="section-title cta__title" data-reveal="blur">
+          {!! $data['title'] !!}
+        </h2>
       @endif
 
       @if (!empty($data['text']))
-        <p class="cta__text">{{ $data['text'] }}</p>
+        <p class="cta__text" data-reveal="up">{{ $data['text'] }}</p>
       @endif
 
       @if (!empty($data['button_text']) && !empty($data['button_link']))
@@ -33,6 +35,7 @@
           <a
             href="{{ $button->href }}"
             class="btn btn--primary btn--large"
+            data-reveal="up"
             data-umami-event="cta-click"
             data-umami-event-location="cta-block"
             data-umami-event-text="{{ $data['button_text'] }}"
