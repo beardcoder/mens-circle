@@ -124,7 +124,9 @@
       translate var(--reveal-duration) var(--reveal-ease) var(--reveal-delay),
       scale var(--reveal-duration) var(--reveal-ease) var(--reveal-delay),
       filter var(--reveal-duration) var(--reveal-ease) var(--reveal-delay);
-    will-change: opacity, transform, filter;
+
+    /* `will-change` is promoted by JS only while the transition runs, then
+       dropped — see utils/motion.ts. Keeps the compositor lean on mobile. */
   }
 
   .motion-ready [data-reveal='down'] {
@@ -158,10 +160,22 @@
     translate: 0 0.6rem;
   }
 
-  /* Smaller travel on phones — keeps motion subtle and the layout calm. */
+  /* Phones — smaller travel, quicker beats, tighter stagger so a whole
+     sequence resolves inside a single thumb-flick. Crucially the headline
+     burn-in drops its `filter: blur()`: animating blur on large display
+     type is the classic source of mobile scroll jank. */
   @media (width < 640px) {
     .motion-ready [data-reveal] {
       --reveal-shift: 0.75rem;
+      --reveal-duration: 540ms;
+      --reveal-step: 64ms;
+    }
+
+    .motion-ready [data-reveal='blur'] {
+      --reveal-duration: 600ms;
+
+      filter: none;
+      translate: 0 0.75rem;
     }
   }
 
@@ -170,7 +184,6 @@
     filter: blur(0);
     scale: 1;
     translate: 0;
-    will-change: auto;
   }
 }
 
@@ -296,6 +309,18 @@
 [data-hover='press']:active {
   scale: 0.95;
   transition-duration: var(--duration-fast);
+}
+
+/* Touch feedback — on devices without hover, the lift/glow/scale surfaces
+   would otherwise give no response at all. A subtle press-in on `:active`
+   makes every interactive card feel tappable, the way a native app does. */
+@media (hover: none) {
+  [data-hover='lift']:active,
+  [data-hover='glow']:active,
+  [data-hover='scale']:active {
+    scale: 0.97;
+    transition: scale var(--duration-fast) var(--ease-precise);
+  }
 }
 
 /* ============================================

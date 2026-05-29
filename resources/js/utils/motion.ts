@@ -83,7 +83,7 @@ export function initMotion(): void {
         const el = entry.target as HTMLElement;
 
         if (entry.isIntersecting) {
-          el.classList.add('is-in');
+          reveal(el);
 
           if (el.dataset.revealRepeat === undefined) {
             observer.unobserve(el);
@@ -99,4 +99,36 @@ export function initMotion(): void {
   for (const el of elements) {
     observer.observe(el);
   }
+}
+
+/**
+ * Reveal a single element. `will-change` is promoted only for the duration
+ * of the transition and dropped on completion — keeping the compositor lean
+ * on mobile, where dozens of permanently-promoted layers cost real memory.
+ */
+function reveal(el: HTMLElement): void {
+  el.style.willChange = 'transform, opacity';
+  el.classList.add('is-in');
+
+  let settled = false;
+  const release = (): void => {
+    if (settled) {
+      return;
+    }
+
+    settled = true;
+    el.style.willChange = '';
+    el.removeEventListener('transitionend', onEnd);
+    clearTimeout(fallback);
+  };
+
+  const onEnd = (event: TransitionEvent): void => {
+    if (event.target === el && event.propertyName === 'opacity') {
+      release();
+    }
+  };
+
+  el.addEventListener('transitionend', onEnd);
+  // Safety net if no transition runs (e.g. element already at rest state).
+  const fallback = globalThis.setTimeout(release, 1600);
 }
