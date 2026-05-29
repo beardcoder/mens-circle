@@ -228,6 +228,14 @@
     1
   ); /* Signature hero entrance: long, deep, confident */
 
+  --ease-reveal: cubic-bezier(
+    0.33,
+    0,
+    0.2,
+    1
+  ); /* Scroll reveals: soft start so motion reads across its full duration,
+        not the front-loaded snap of --ease-emphasised */
+
   /* Duration scale */
   --duration-instant: 90ms;
   --duration-fast: 150ms;
