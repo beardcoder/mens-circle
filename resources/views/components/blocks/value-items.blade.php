@@ -7,20 +7,20 @@
 
 <section class="section values-section" @if ($anchor) id="{{ $anchor }}" @endif>
   <div class="container">
-    <div class="section-header" data-aos="fade-up">
+    <div class="section-header" data-reveal-group>
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-reveal="up">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title">{{ $data['title'] }}</h2>
+        <h2 class="section-title" data-reveal="blur">{{ $data['title'] }}</h2>
       @endif
     </div>
 
     @if (!empty($data['items']) && is_array($data['items']))
-      <div class="intro__values" data-aos-stagger="90">
+      <div class="intro__values" data-reveal-group="90">
         @foreach ($data['items'] as $item)
-          <div class="value-item" data-aos="fade-up">
+          <div class="value-item" data-reveal="up">
             @if (!empty($item['number']))
               <span class="value-item__number">{{ $item['number'] }}</span>
             @endif

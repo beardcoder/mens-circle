@@ -12,23 +12,31 @@
 >
   <div class="container">
     <div class="newsletter__layout">
-      <div class="newsletter__content">
+      <div class="newsletter__content" data-reveal-group="100">
         @if (!empty($data['eyebrow']))
-          <p class="eyebrow eyebrow--secondary">{{ $data['eyebrow'] }}</p>
+          <p class="eyebrow eyebrow--secondary" data-reveal="up">{{ $data['eyebrow'] }}</p>
         @endif
 
         @if (!empty($data['title']))
-          <h2 class="section-title newsletter__title" id="newsletter-title">
+          <h2
+            class="section-title newsletter__title"
+            id="newsletter-title"
+            data-reveal="blur"
+          >
             {!! $data['title'] !!}
           </h2>
         @endif
 
         @if (!empty($data['text']))
-          <p class="newsletter__text">{{ $data['text'] }}</p>
+          <p class="newsletter__text" data-reveal="up">{{ $data['text'] }}</p>
         @endif
       </div>
 
-      <div class="newsletter__form-wrapper">
+      <div
+        class="newsletter__form-wrapper"
+        data-reveal="left"
+        data-reveal-delay="120"
+      >
         <form
           id="newsletterForm"
           class="newsletter__form"

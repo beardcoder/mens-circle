@@ -9,27 +9,28 @@
   <div class="intro__layout">
     <div class="intro__left">
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-reveal="up">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
         <h2
           class="section-title intro__title"
           id="intro-title"
-          data-aos="fade-up"
+          data-reveal="blur"
+          data-reveal-delay="80"
         >
           {!! $data['title'] !!}
         </h2>
       @endif
 
       @if (!empty($data['text']))
-        <p class="intro__text" data-aos="fade-up" data-aos-delay="80">{{ $data['text'] }}</p>
+        <p class="intro__text" data-reveal="up" data-reveal-delay="180">{{ $data['text'] }}</p>
       @endif
 
       @if (!empty($data['values']) && is_array($data['values']))
-        <div class="intro__values" data-aos-stagger="90">
+        <div class="intro__values" data-reveal-group="90">
           @foreach ($data['values'] as $value)
-            <div class="value-item" data-aos="fade-up">
+            <div class="value-item" data-reveal="up">
               @if (!empty($value['number']))
                 <span class="value-item__number">{{ $value['number'] }}</span>
               @endif
@@ -45,7 +46,7 @@
       @endif
     </div>
 
-    <div class="intro__image-area">
+    <div class="intro__image-area" data-reveal="left" data-reveal-delay="120">
       <div class="intro__image-circles" aria-hidden="true">
         <div class="intro__image-ring intro__image-ring--outer"></div>
         <div class="intro__image-ring intro__image-ring--inner"></div>

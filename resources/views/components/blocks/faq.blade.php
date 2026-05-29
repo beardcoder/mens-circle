@@ -23,25 +23,32 @@
 
 <section class="section section--large faq-section" id="{{ $anchor }}">
   <div class="container">
-    <div class="section-header section-header--start faq__header">
+    <div
+      class="section-header section-header--start faq__header"
+      data-reveal-group
+    >
       @if (!empty($data['eyebrow']))
-        <p class="eyebrow">{{ $data['eyebrow'] }}</p>
+        <p class="eyebrow" data-reveal="up">{{ $data['eyebrow'] }}</p>
       @endif
 
       @if (!empty($data['title']))
-        <h2 class="section-title">{!! $data['title'] !!}</h2>
+        <h2 class="section-title" data-reveal="blur">{!! $data['title'] !!}</h2>
       @endif
 
       @if (!empty($data['intro']))
-        <p class="section-intro">{{ $data['intro'] }}</p>
+        <p class="section-intro" data-reveal="up">{{ $data['intro'] }}</p>
       @endif
     </div>
 
     @if ($faqItems !== [])
-      <div class="faq__list">
+      <div class="faq__list" data-reveal-group="80">
         @foreach ($faqItems as $index => $item)
           @if (!empty($item['question']) && !empty($item['answer']))
-            <details class="accordion-item" name="{{ $anchor }}">
+            <details
+              class="accordion-item"
+              name="{{ $anchor }}"
+              data-reveal="up"
+            >
               <summary
                 class="accordion-item__trigger"
                 data-umami-event="faq-expand"
