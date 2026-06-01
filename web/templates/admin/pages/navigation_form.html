@@ -1,0 +1,31 @@
+{{define "content"}}
+{{with .Data}}
+{{$item := .Item}}
+<header class="page-head">
+    <h1>{{if $item.ID}}Navigationspunkt bearbeiten{{else}}Neuer Navigationspunkt{{end}}</h1>
+    <a href="/admin/navigation" class="btn btn--ghost">Zurück</a>
+</header>
+<form method="post" action="{{if $item.ID}}/admin/navigation/{{$item.ID}}{{else}}/admin/navigation{{end}}" class="form-card">
+    <div class="form-grid">
+        <label>Bereich
+            <select name="location">
+                {{$current := $item.Location}}
+                {{range .Locations}}
+                    <option value="{{.}}" {{if eq . $current}}selected{{end}}>{{.Label}}</option>
+                {{end}}
+            </select>
+        </label>
+        <label>Label<input type="text" name="label" value="{{$item.Label}}" required></label>
+        <label>URL<input type="text" name="url" value="{{$item.URL}}"></label>
+        <label>Anker<input type="text" name="anchor" value="{{deref $item.Anchor}}"></label>
+        <label>Sortierung<input type="number" name="sort" value="{{$item.Sort}}"></label>
+        <label>Umami-Event-Ziel<input type="text" name="umami_event_target" value="{{deref $item.UmamiEventTarget}}"></label>
+    </div>
+    <label class="checkbox"><input type="checkbox" name="is_visible" value="1" {{if $item.IsVisible}}checked{{end}}> Sichtbar</label>
+    <label class="checkbox"><input type="checkbox" name="is_cta" value="1" {{if $item.IsCTA}}checked{{end}}> Als Button (CTA)</label>
+    <label class="checkbox"><input type="checkbox" name="open_in_new_tab" value="1" {{if $item.OpenInNewTab}}checked{{end}}> In neuem Tab öffnen</label>
+    <label class="checkbox"><input type="checkbox" name="condition" value="next_event" {{if $item.Condition}}checked{{end}}> Nur anzeigen, wenn ein nächster Termin existiert</label>
+    <div class="form-actions"><button type="submit" class="btn btn--primary">Speichern</button></div>
+</form>
+{{end}}
+{{end}}

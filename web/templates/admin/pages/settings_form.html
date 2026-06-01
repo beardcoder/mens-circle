@@ -1,0 +1,30 @@
+{{define "content"}}
+{{with .Data}}
+<header class="page-head"><h1>Einstellungen</h1></header>
+<form method="post" action="/admin/settings" class="form-card">
+    <fieldset class="form-fieldset">
+        <legend>Allgemein</legend>
+        <div class="form-grid">
+            <label class="col-span-2">Seitenname<input type="text" name="site_name" value="{{.SiteName}}"></label>
+            <label class="col-span-2">Slogan<input type="text" name="site_tagline" value="{{.SiteTagline}}"></label>
+            <label class="col-span-2">Beschreibung<textarea name="site_description" rows="3">{{.SiteDescription}}</textarea></label>
+            <label>Ort<input type="text" name="location" value="{{.Location}}"></label>
+            <label>Standard-Teilnehmerzahl<input type="number" name="event_default_max_participants" value="{{.EventDefaultMaxParticipants}}"></label>
+        </div>
+    </fieldset>
+    <fieldset class="form-fieldset">
+        <legend>Kontakt</legend>
+        <div class="form-grid">
+            <label>E-Mail<input type="email" name="contact_email" value="{{.ContactEmail}}"></label>
+            <label>Telefon<input type="text" name="contact_phone" value="{{deref .ContactPhone}}"></label>
+            <label class="col-span-2">WhatsApp-Community-Link<input type="url" name="whatsapp_community_link" value="{{deref .WhatsAppCommunityLink}}"></label>
+        </div>
+    </fieldset>
+    <fieldset class="form-fieldset">
+        <legend>Footer</legend>
+        <label>Footer-Text<input type="text" name="footer_text" value="{{.FooterText}}"></label>
+    </fieldset>
+    <div class="form-actions"><button type="submit" class="btn btn--primary">Speichern</button></div>
+</form>
+{{end}}
+{{end}}

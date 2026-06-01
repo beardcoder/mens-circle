@@ -1,0 +1,14 @@
+{{define "content"}}
+<section class="section no-event-section">
+    <div class="container container--narrow no-event__inner">
+        <h1 class="section-title">Aktuell ist kein Termin geplant</h1>
+        <p>Trage dich in den Newsletter ein und wir benachrichtigen dich, sobald der nächste Männerkreis ansteht.</p>
+        <form id="newsletterForm" class="newsletter__form" data-lume="newsletter-form" aria-label="Newsletter-Anmeldung">
+            <label for="newsletter-email" class="sr-only">E-Mail-Adresse</label>
+            <input type="email" id="newsletter-email" name="email" placeholder="Deine E-Mail-Adresse" required autocomplete="email">
+            <button type="submit" class="btn btn--primary">Benachrichtigen</button>
+            <div id="newsletterMessage" role="status" aria-live="polite" class="form-message"></div>
+        </form>
+    </div>
+</section>
+{{end}}

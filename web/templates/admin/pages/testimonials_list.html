@@ -1,0 +1,31 @@
+{{define "content"}}
+<header class="page-head">
+    <h1>Testimonials</h1>
+    <a href="/admin/testimonials/new" class="btn btn--primary">Neues Testimonial</a>
+</header>
+{{if .Data}}
+<table class="data-table">
+    <thead><tr><th>Zitat</th><th>Autor</th><th>Status</th><th>Reihenfolge</th><th></th></tr></thead>
+    <tbody>
+    {{range .Data}}
+        <tr>
+            <td class="cell-clamp">{{.Quote}}</td>
+            <td>{{deref .AuthorName}}{{if .Role}}<br><span class="muted">{{deref .Role}}</span>{{end}}</td>
+            <td>{{if .IsPublished}}<span class="badge badge--success">Veröffentlicht</span>{{else}}<span class="badge badge--gray">Ausstehend</span>{{end}}</td>
+            <td>{{.SortOrder}}</td>
+            <td class="row-actions">
+                <a href="/admin/testimonials/{{.ID}}/edit" class="btn btn--small">Bearbeiten</a>
+                <form method="post" action="/admin/testimonials/{{.ID}}/publish">
+                    <input type="hidden" name="publish" value="{{if .IsPublished}}0{{else}}1{{end}}">
+                    <button type="submit" class="btn btn--small">{{if .IsPublished}}Verbergen{{else}}Veröffentlichen{{end}}</button>
+                </form>
+                <form method="post" action="/admin/testimonials/{{.ID}}/delete" onsubmit="return confirm('Wirklich löschen?')">
+                    <button type="submit" class="btn btn--small btn--danger">Löschen</button>
+                </form>
+            </td>
+        </tr>
+    {{end}}
+    </tbody>
+</table>
+{{else}}<p class="muted">Noch keine Testimonials.</p>{{end}}
+{{end}}

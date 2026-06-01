@@ -1,0 +1,16 @@
+{{define "content"}}
+<div class="login-screen">
+    <form method="post" action="/admin/login" class="login-card">
+        <div class="login-brand"><span class="admin-brand__mark">MK</span></div>
+        <h1>Admin-Anmeldung</h1>
+        {{if .FlashMsg}}<div class="flash flash--{{.FlashKind}}">{{.FlashMsg}}</div>{{end}}
+        <label>E-Mail-Adresse
+            <input type="email" name="email" required autofocus autocomplete="username">
+        </label>
+        <label>Passwort
+            <input type="password" name="password" required autocomplete="current-password">
+        </label>
+        <button type="submit" class="btn btn--primary btn--block">Anmelden</button>
+    </form>
+</div>
+{{end}}

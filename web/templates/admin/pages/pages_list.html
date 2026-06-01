@@ -1,0 +1,19 @@
+{{define "content"}}
+<header class="page-head"><h1>Seiten</h1></header>
+{{if .Data}}
+<table class="data-table">
+    <thead><tr><th>Titel</th><th>Slug</th><th>Blöcke</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {{range .Data}}
+        <tr>
+            <td><strong>{{.Title}}</strong></td>
+            <td class="muted">/{{.Slug}}</td>
+            <td>{{len .ContentBlocks}}</td>
+            <td>{{if .IsPublished}}<span class="badge badge--success">Veröffentlicht</span>{{else}}<span class="badge badge--gray">Entwurf</span>{{end}}</td>
+            <td class="row-actions"><a href="/admin/pages/{{.ID}}/edit" class="btn btn--small">Bearbeiten</a></td>
+        </tr>
+    {{end}}
+    </tbody>
+</table>
+{{else}}<p class="muted">Noch keine Seiten.</p>{{end}}
+{{end}}

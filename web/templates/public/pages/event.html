@@ -1,0 +1,55 @@
+{{define "content"}}
+{{with .Event}}
+<section class="event-hero">
+    <div class="container">
+        <p class="eyebrow">{{germanWeekday .EventDate}}, {{germanDate .EventDate}}</p>
+        <h1 class="event-hero__title">{{.Title}}</h1>
+        <p class="event-hero__meta">{{.StartTime}}–{{.EndTime}} Uhr · {{.Location}}</p>
+        {{if not .IsPast}}
+            <p><a href="#anmeldung" class="btn btn--primary btn--large">Jetzt anmelden</a></p>
+        {{else}}
+            <p class="badge badge--gray">Diese Veranstaltung hat bereits stattgefunden.</p>
+        {{end}}
+    </div>
+</section>
+
+<section class="section event-info">
+    <div class="container event-info__grid">
+        <div class="event-info__card"><span class="muted">Datum</span><strong>{{germanDate .EventDate}}</strong></div>
+        <div class="event-info__card"><span class="muted">Uhrzeit</span><strong>{{.StartTime}}–{{.EndTime}} Uhr</strong></div>
+        <div class="event-info__card"><span class="muted">Ort</span><strong>{{.Location}}</strong>{{if .FullAddress}}<br><span class="muted">{{.FullAddress}}</span>{{end}}</div>
+        <div class="event-info__card"><span class="muted">Freie Plätze</span><strong>{{.AvailableSpots}} / {{.MaxParticipants}}</strong></div>
+    </div>
+    <div class="container">
+        <p><a href="/event/{{.Slug}}/ical" class="btn btn--ghost btn--small">Zum Kalender hinzufügen</a></p>
+    </div>
+</section>
+
+{{if .Description}}
+<section class="section">
+    <div class="container container--narrow prose">{{nl2br (deref .Description)}}</div>
+</section>
+{{end}}
+
+{{if not .IsPast}}
+<section class="section event-register-section" id="anmeldung">
+    <div class="container container--narrow">
+        <h2 class="section-title">Anmeldung</h2>
+        {{if .IsFull}}<p class="notice">Die Veranstaltung ist ausgebucht – du kannst dich auf die Warteliste setzen lassen.</p>{{end}}
+        <form id="eventRegisterForm" class="form-card" data-lume="event-register-form" data-event-id="{{.ID}}">
+            <input type="hidden" name="event_id" value="{{.ID}}">
+            <div class="form-grid">
+                <label>Vorname<input type="text" name="first_name" required></label>
+                <label>Nachname<input type="text" name="last_name" required></label>
+                <label>E-Mail<input type="email" name="email" required></label>
+                <label>Telefon (optional)<input type="tel" name="phone_number"></label>
+            </div>
+            <label class="checkbox"><input type="checkbox" name="privacy" value="1" required> Ich akzeptiere die Datenschutzerklärung.</label>
+            <div class="form-actions"><button type="submit" class="btn btn--primary">Verbindlich anmelden</button></div>
+            <div id="eventRegisterMessage" role="status" aria-live="polite" class="form-message"></div>
+        </form>
+    </div>
+</section>
+{{end}}
+{{end}}
+{{end}}

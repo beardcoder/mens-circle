@@ -32,3 +32,10 @@ public/sitemap.xml
 _ide_helper.php
 .php-cs-fixer.cache
 package-lock.json
+
+# Go application
+/data
+/bin/server
+*.db
+*.db-shm
+*.db-wal

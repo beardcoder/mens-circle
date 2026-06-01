@@ -1,0 +1,47 @@
+{{define "layout"}}<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="admin">
+{{if .User}}
+<div class="admin-shell">
+    <aside class="admin-sidebar">
+        <div class="admin-brand">
+            <span class="admin-brand__mark">MK</span>
+            <span class="admin-brand__name">Männerkreis<br><small>Admin</small></span>
+        </div>
+        <nav class="admin-nav">
+            <a href="/admin" class="{{if eq .Section "dashboard"}}is-active{{end}}">Dashboard</a>
+            <p class="admin-nav__label">Inhalte</p>
+            <a href="/admin/events" class="{{if eq .Section "events"}}is-active{{end}}">Veranstaltungen</a>
+            <a href="/admin/pages" class="{{if eq .Section "pages"}}is-active{{end}}">Seiten</a>
+            <a href="/admin/testimonials" class="{{if eq .Section "testimonials"}}is-active{{end}}">Testimonials</a>
+            <a href="/admin/navigation" class="{{if eq .Section "navigation"}}is-active{{end}}">Navigation</a>
+            <p class="admin-nav__label">Menschen</p>
+            <a href="/admin/registrations" class="{{if eq .Section "registrations"}}is-active{{end}}">Anmeldungen</a>
+            <a href="/admin/participants" class="{{if eq .Section "participants"}}is-active{{end}}">Teilnehmer</a>
+            <a href="/admin/subscriptions" class="{{if eq .Section "subscriptions"}}is-active{{end}}">Abonnenten</a>
+            <p class="admin-nav__label">Kommunikation</p>
+            <a href="/admin/newsletters" class="{{if eq .Section "newsletters"}}is-active{{end}}">Newsletter</a>
+            <p class="admin-nav__label">System</p>
+            <a href="/admin/settings" class="{{if eq .Section "settings"}}is-active{{end}}">Einstellungen</a>
+        </nav>
+        <form method="post" action="/admin/logout" class="admin-logout">
+            <button type="submit" class="btn btn--ghost btn--block">Abmelden</button>
+        </form>
+    </aside>
+    <main class="admin-main">
+        {{if .FlashMsg}}<div class="flash flash--{{.FlashKind}}">{{.FlashMsg}}</div>{{end}}
+        {{template "content" .}}
+    </main>
+</div>
+{{else}}
+    {{template "content" .}}
+{{end}}
+</body>
+</html>{{end}}

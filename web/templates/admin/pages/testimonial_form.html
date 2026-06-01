@@ -1,0 +1,23 @@
+{{define "content"}}
+{{with .Data}}
+<header class="page-head">
+    <h1>{{if .ID}}Testimonial bearbeiten{{else}}Neues Testimonial{{end}}</h1>
+    <a href="/admin/testimonials" class="btn btn--ghost">Zurück</a>
+</header>
+<form method="post" action="{{if .ID}}/admin/testimonials/{{.ID}}{{else}}/admin/testimonials{{end}}" class="form-card">
+    <label>Zitat
+        <textarea name="quote" rows="4" required>{{.Quote}}</textarea>
+    </label>
+    <div class="form-grid">
+        <label>Autor<input type="text" name="author_name" value="{{deref .AuthorName}}"></label>
+        <label>Rolle<input type="text" name="role" value="{{deref .Role}}"></label>
+        <label>E-Mail<input type="email" name="email" value="{{deref .Email}}"></label>
+        <label>Reihenfolge<input type="number" name="sort_order" value="{{.SortOrder}}"></label>
+    </div>
+    <label class="checkbox">
+        <input type="checkbox" name="is_published" value="1" {{if .IsPublished}}checked{{end}}> Veröffentlicht
+    </label>
+    <div class="form-actions"><button type="submit" class="btn btn--primary">Speichern</button></div>
+</form>
+{{end}}
+{{end}}

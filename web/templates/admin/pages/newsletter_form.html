@@ -1,0 +1,17 @@
+{{define "content"}}
+{{with .Data}}
+<header class="page-head">
+    <h1>{{if .ID}}Newsletter bearbeiten{{else}}Neuer Newsletter{{end}}</h1>
+    <a href="/admin/newsletters" class="btn btn--ghost">Zurück</a>
+</header>
+<form method="post" action="{{if .ID}}/admin/newsletters/{{.ID}}{{else}}/admin/newsletters{{end}}" class="form-card">
+    <label>Betreff
+        <input type="text" name="subject" value="{{.Subject}}" required>
+    </label>
+    <label>Inhalt <span class="hint">Platzhalter: {first_name}</span>
+        <textarea name="content" rows="14" required>{{.Content}}</textarea>
+    </label>
+    <div class="form-actions"><button type="submit" class="btn btn--primary">Speichern</button></div>
+</form>
+{{end}}
+{{end}}

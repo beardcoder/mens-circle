@@ -1,0 +1,33 @@
+{{define "content"}}
+<header class="page-head"><h1>Anmeldungen</h1></header>
+
+{{with .Data}}
+{{if .Registrations}}
+<table class="data-table">
+    <thead><tr><th>Teilnehmer</th><th>E-Mail</th><th>Veranstaltung</th><th>Status</th><th>Angemeldet</th><th></th></tr></thead>
+    <tbody>
+    {{range .Registrations}}
+        <tr>
+            <td>{{.Participant.DisplayName}}</td>
+            <td class="muted">{{.Participant.Email}}</td>
+            <td>{{.Event.Title}}<br><span class="muted">{{shortDate .Event.EventDate}}</span></td>
+            <td><span class="badge badge--{{.Status.Color}}">{{.Status.Label}}</span></td>
+            <td>{{derefTime .RegisteredAt}}</td>
+            <td class="row-actions">
+                <form method="post" action="/admin/registrations/{{.ID}}/status" class="inline-form">
+                    <select name="status">
+                        {{$current := .Status}}
+                        {{range $.Data.Statuses}}
+                            <option value="{{.}}" {{if eq . $current}}selected{{end}}>{{.Label}}</option>
+                        {{end}}
+                    </select>
+                    <button type="submit" class="btn btn--small">Setzen</button>
+                </form>
+            </td>
+        </tr>
+    {{end}}
+    </tbody>
+</table>
+{{else}}<p class="muted">Noch keine Anmeldungen.</p>{{end}}
+{{end}}
+{{end}}

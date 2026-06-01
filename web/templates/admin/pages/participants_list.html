@@ -1,0 +1,18 @@
+{{define "content"}}
+<header class="page-head"><h1>Teilnehmer</h1></header>
+{{if .Data}}
+<table class="data-table">
+    <thead><tr><th>Name</th><th>E-Mail</th><th>Telefon</th><th>Seit</th></tr></thead>
+    <tbody>
+    {{range .Data}}
+        <tr>
+            <td>{{.DisplayName}}</td>
+            <td class="muted">{{.Email}}</td>
+            <td>{{deref .Phone}}</td>
+            <td>{{shortDate .CreatedAt}}</td>
+        </tr>
+    {{end}}
+    </tbody>
+</table>
+{{else}}<p class="muted">Noch keine Teilnehmer.</p>{{end}}
+{{end}}

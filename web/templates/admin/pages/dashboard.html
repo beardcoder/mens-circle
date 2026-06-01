@@ -1,0 +1,36 @@
+{{define "content"}}
+<header class="page-head">
+    <h1>Dashboard</h1>
+    <p class="muted">Willkommen zurück, {{.User.Name}}.</p>
+</header>
+
+{{with .Data}}
+<div class="stat-grid">
+    <div class="stat-card"><span class="stat-card__value">{{.Upcoming}}</span><span class="stat-card__label">Kommende Termine</span></div>
+    <div class="stat-card"><span class="stat-card__value">{{.Events}}</span><span class="stat-card__label">Veranstaltungen gesamt</span></div>
+    <div class="stat-card"><span class="stat-card__value">{{.Registrations}}</span><span class="stat-card__label">Anmeldungen</span></div>
+    <div class="stat-card"><span class="stat-card__value">{{.Participants}}</span><span class="stat-card__label">Teilnehmer</span></div>
+    <div class="stat-card"><span class="stat-card__value">{{.Subscribers}}</span><span class="stat-card__label">Newsletter-Abonnenten</span></div>
+    <div class="stat-card"><span class="stat-card__value">{{.Testimonials}}</span><span class="stat-card__label">Testimonials</span></div>
+</div>
+
+<section class="panel">
+    <h2>Neueste Anmeldungen</h2>
+    {{if .Recent}}
+    <table class="data-table">
+        <thead><tr><th>Teilnehmer</th><th>Veranstaltung</th><th>Status</th><th>Datum</th></tr></thead>
+        <tbody>
+        {{range .Recent}}
+            <tr>
+                <td>{{.Participant.DisplayName}}</td>
+                <td>{{.Event.Title}}</td>
+                <td><span class="badge badge--{{.Status.Color}}">{{.Status.Label}}</span></td>
+                <td>{{datetime .CreatedAt}}</td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+    {{else}}<p class="muted">Noch keine Anmeldungen.</p>{{end}}
+</section>
+{{end}}
+{{end}}

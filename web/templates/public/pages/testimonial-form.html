@@ -1,0 +1,21 @@
+{{define "content"}}
+<section class="section testimonial-form-section">
+    <div class="container container--narrow">
+        <h1 class="section-title">Teile deine Erfahrung</h1>
+        <p>Dein Beitrag hilft anderen Männern, den ersten Schritt zu wagen. Nach einer kurzen Prüfung veröffentlichen wir ihn.</p>
+        <form id="testimonialForm" class="form-card" data-lume="testimonial-form">
+            <label>Deine Erfahrung
+                <textarea name="quote" rows="5" minlength="10" maxlength="1000" required></textarea>
+            </label>
+            <div class="form-grid">
+                <label>Name (optional)<input type="text" name="author_name"></label>
+                <label>Rolle (optional)<input type="text" name="role"></label>
+                <label class="col-span-2">E-Mail<input type="email" name="email" required></label>
+            </div>
+            <label class="checkbox"><input type="checkbox" name="privacy" value="1" required> Ich akzeptiere die Datenschutzerklärung.</label>
+            <div class="form-actions"><button type="submit" class="btn btn--primary">Absenden</button></div>
+            <div id="testimonialMessage" role="status" aria-live="polite" class="form-message"></div>
+        </form>
+    </div>
+</section>
+{{end}}

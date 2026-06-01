@@ -1,0 +1,59 @@
+{{define "content"}}
+{{with .Data}}
+<header class="page-head">
+    <h1>{{if .ID}}Veranstaltung bearbeiten{{else}}Neue Veranstaltung{{end}}</h1>
+    <a href="/admin/events" class="btn btn--ghost">Zurück</a>
+</header>
+
+<form method="post" action="{{if .ID}}/admin/events/{{.ID}}{{else}}/admin/events{{end}}" class="form-card">
+    <div class="form-grid">
+        <label class="col-span-2">Titel
+            <input type="text" name="title" value="{{.Title}}" required>
+        </label>
+        <label>Slug <span class="hint">(leer = automatisch)</span>
+            <input type="text" name="slug" value="{{.Slug}}">
+        </label>
+        <label>Datum
+            <input type="date" name="event_date" value="{{dateInput .EventDate}}" required>
+        </label>
+        <label>Beginn
+            <input type="time" name="start_time" value="{{.StartTime}}" required>
+        </label>
+        <label>Ende
+            <input type="time" name="end_time" value="{{.EndTime}}" required>
+        </label>
+        <label>Maximale Teilnehmer
+            <input type="number" name="max_participants" value="{{.MaxParticipants}}" min="1">
+        </label>
+        <label>Kostenbasis
+            <input type="text" name="cost_basis" value="{{.CostBasis}}">
+        </label>
+        <label class="col-span-2">Beschreibung
+            <textarea name="description" rows="5">{{deref .Description}}</textarea>
+        </label>
+    </div>
+
+    <fieldset class="form-fieldset">
+        <legend>Ort</legend>
+        <div class="form-grid">
+            <label>Ortsname<input type="text" name="location" value="{{.Location}}"></label>
+            <label>Straße<input type="text" name="street" value="{{deref .Street}}"></label>
+            <label>PLZ<input type="text" name="postal_code" value="{{deref .PostalCode}}"></label>
+            <label>Stadt<input type="text" name="city" value="{{deref .City}}"></label>
+            <label>Breitengrad<input type="text" name="latitude" value="{{if .Latitude}}{{.Latitude}}{{end}}"></label>
+            <label>Längengrad<input type="text" name="longitude" value="{{if .Longitude}}{{.Longitude}}{{end}}"></label>
+            <label class="col-span-2">Zusätzliche Ortsinfos<textarea name="location_details" rows="2">{{deref .LocationDetails}}</textarea></label>
+        </div>
+    </fieldset>
+
+    <label class="checkbox">
+        <input type="checkbox" name="is_published" value="1" {{if .IsPublished}}checked{{end}}>
+        Veröffentlicht
+    </label>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn--primary">Speichern</button>
+    </div>
+</form>
+{{end}}
+{{end}}

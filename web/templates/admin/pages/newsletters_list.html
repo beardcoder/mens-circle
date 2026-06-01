@@ -1,0 +1,29 @@
+{{define "content"}}
+<header class="page-head">
+    <h1>Newsletter</h1>
+    <a href="/admin/newsletters/new" class="btn btn--primary">Neuer Entwurf</a>
+</header>
+{{if .Data}}
+<table class="data-table">
+    <thead><tr><th>Betreff</th><th>Status</th><th>Empfänger</th><th>Versendet</th><th></th></tr></thead>
+    <tbody>
+    {{range .Data}}
+        <tr>
+            <td><strong>{{.Subject}}</strong></td>
+            <td><span class="badge badge--{{.Status.Color}}">{{.Status.Label}}</span></td>
+            <td>{{.RecipientCount}}</td>
+            <td>{{derefTime .SentAt}}</td>
+            <td class="row-actions">
+                {{if ne (str .Status) "sent"}}
+                    <a href="/admin/newsletters/{{.ID}}/edit" class="btn btn--small">Bearbeiten</a>
+                    <form method="post" action="/admin/newsletters/{{.ID}}/send" onsubmit="return confirm('Newsletter jetzt als versendet markieren?')">
+                        <button type="submit" class="btn btn--small btn--primary">Versenden</button>
+                    </form>
+                {{else}}<span class="muted">—</span>{{end}}
+            </td>
+        </tr>
+    {{end}}
+    </tbody>
+</table>
+{{else}}<p class="muted">Noch keine Newsletter.</p>{{end}}
+{{end}}

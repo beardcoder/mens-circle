@@ -1,0 +1,189 @@
+{{define "block"}}
+{{- $b := .Block -}}
+{{- $type := str $b.Type -}}
+{{- if eq $type "hero"}}{{template "block_hero" .}}
+{{- else if eq $type "intro"}}{{template "block_intro" .}}
+{{- else if eq $type "text_section"}}{{template "block_text" .}}
+{{- else if eq $type "value_items"}}{{template "block_values" .}}
+{{- else if eq $type "journey_steps"}}{{template "block_journey" .}}
+{{- else if eq $type "moderator"}}{{template "block_moderator" .}}
+{{- else if eq $type "cta"}}{{template "block_cta" .}}
+{{- else if eq $type "newsletter"}}{{template "block_newsletter" .}}
+{{- else if eq $type "whatsapp_community"}}{{template "block_whatsapp" .}}
+{{- else if eq $type "testimonials"}}{{template "block_testimonials" .}}
+{{- else if eq $type "faq"}}{{template "block_faq" .}}
+{{- end -}}
+{{end}}
+
+{{define "block_hero"}}{{$d := .Block.Data}}
+<section class="hero"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    <div class="container hero__content">
+        {{with index $d "label"}}<p class="hero__label">{{.}}</p>{{end}}
+        {{with index $d "title"}}<h1 class="hero__title">{{safeHTML (str .)}}</h1>{{end}}
+        {{with index $d "description"}}<p class="hero__description">{{.}}</p>{{end}}
+        {{$text := index $d "button_text"}}{{$link := index $d "button_link"}}
+        {{if and $text $link}}
+            {{$href := str $link}}
+            {{if eq $href "next-event"}}{{$href = .View.NextEventURL}}{{end}}
+            {{if or (ne (str $link) "next-event") .View.HasNextEvent}}
+                <p class="hero__cta"><a href="{{$href}}" class="btn btn--primary btn--large">{{$text}}</a></p>
+            {{end}}
+        {{end}}
+    </div>
+</section>
+{{end}}
+
+{{define "block_intro"}}{{$d := .Block.Data}}
+<section class="section intro-section"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    <div class="container intro__grid">
+        <div class="intro__content">
+            {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
+            {{with index $d "title"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
+            {{with index $d "text"}}<p>{{.}}</p>{{end}}
+        </div>
+        {{with index $d "quote"}}<blockquote class="intro__quote">{{safeHTML (str .)}}</blockquote>{{end}}
+    </div>
+</section>
+{{end}}
+
+{{define "block_text"}}{{$d := .Block.Data}}
+<section class="section text-section"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    <div class="container container--narrow">
+        {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
+        {{with index $d "title"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
+        {{with index $d "content"}}<div class="prose">{{safeHTML (str .)}}</div>{{end}}
+    </div>
+</section>
+{{end}}
+
+{{define "block_values"}}{{$d := .Block.Data}}
+<section class="section values-section"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    <div class="container">
+        {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
+        {{with index $d "title"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
+        <div class="value-grid">
+            {{range .Block.Items "items"}}
+                <article class="value-item">
+                    {{with index . "number"}}<span class="value-item__number">{{.}}</span>{{end}}
+                    {{with index . "title"}}<h3>{{.}}</h3>{{end}}
+                    {{with index . "description"}}<p>{{.}}</p>{{end}}
+                </article>
+            {{end}}
+        </div>
+    </div>
+</section>
+{{end}}
+
+{{define "block_journey"}}{{$d := .Block.Data}}
+<section class="section journey-section"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    <div class="container">
+        {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
+        {{with index $d "title"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
+        {{with index $d "subtitle"}}<p class="section-subtitle">{{.}}</p>{{end}}
+        <ol class="journey__steps">
+            {{range .Block.Items "steps"}}
+                <li class="journey__step">
+                    {{with index . "number"}}<span class="journey__step-number">{{.}}</span>{{end}}
+                    {{with index . "title"}}<h3>{{.}}</h3>{{end}}
+                    {{with index . "description"}}<p>{{.}}</p>{{end}}
+                </li>
+            {{end}}
+        </ol>
+    </div>
+</section>
+{{end}}
+
+{{define "block_moderator"}}{{$d := .Block.Data}}
+<section class="section moderator-section"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    <div class="container moderator__grid">
+        <div>
+            {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
+            {{with index $d "name"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
+            {{with index $d "bio"}}<div class="prose">{{safeHTML (str .)}}</div>{{end}}
+        </div>
+        {{with index $d "quote"}}<blockquote class="moderator__quote">{{.}}</blockquote>{{end}}
+    </div>
+</section>
+{{end}}
+
+{{define "block_cta"}}{{$d := .Block.Data}}
+<section class="section cta-section"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    <div class="container container--narrow cta__inner">
+        {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
+        {{with index $d "title"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
+        {{with index $d "text"}}<p>{{.}}</p>{{end}}
+        {{$text := index $d "button_text"}}{{$link := index $d "button_link"}}
+        {{if and $text $link}}<p><a href="{{$link}}" class="btn btn--primary btn--large">{{$text}}</a></p>{{end}}
+    </div>
+</section>
+{{end}}
+
+{{define "block_newsletter"}}{{$d := .Block.Data}}
+{{$anchor := index $d "anchor"}}
+<section class="section newsletter-section" id="{{if $anchor}}{{$anchor}}{{else}}newsletter{{end}}">
+    <div class="container newsletter__layout">
+        <div class="newsletter__content">
+            {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
+            {{with index $d "title"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
+            {{with index $d "text"}}<p>{{.}}</p>{{end}}
+        </div>
+        <form id="newsletterForm" class="newsletter__form" data-lume="newsletter-form" aria-label="Newsletter-Anmeldung">
+            <label for="newsletter-email" class="sr-only">E-Mail-Adresse</label>
+            <input type="email" id="newsletter-email" name="email" placeholder="Deine E-Mail-Adresse" required autocomplete="email">
+            <button type="submit" class="btn btn--primary">Anmelden</button>
+            <div id="newsletterMessage" role="status" aria-live="polite" class="form-message"></div>
+        </form>
+    </div>
+</section>
+{{end}}
+
+{{define "block_whatsapp"}}{{$d := .Block.Data}}
+{{$link := .View.Settings.WhatsAppCommunityLink}}
+{{if $link}}
+<section class="section whatsapp-section"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    <div class="container container--narrow whatsapp__inner">
+        <h2 class="section-title">WhatsApp-Community</h2>
+        <p>Tausche dich zwischen den Treffen mit anderen Männern aus.</p>
+        <a href="{{deref $link}}" class="btn btn--whatsapp" target="_blank" rel="noopener">Community beitreten</a>
+    </div>
+</section>
+{{end}}
+{{end}}
+
+{{define "block_testimonials"}}{{$d := .Block.Data}}
+<section class="section testimonials-section"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    <div class="container">
+        {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
+        {{with index $d "title"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
+        <div class="testimonial-grid">
+            {{range .View.Testimonials}}
+                <figure class="testimonial-item">
+                    <blockquote>{{.Quote}}</blockquote>
+                    {{if .AuthorName}}<figcaption>{{deref .AuthorName}}{{if .Role}}, <span class="muted">{{deref .Role}}</span>{{end}}</figcaption>{{end}}
+                </figure>
+            {{end}}
+        </div>
+    </div>
+</section>
+{{end}}
+
+{{define "block_faq"}}{{$d := .Block.Data}}
+{{$anchor := index $d "anchor"}}
+<section class="section faq-section" id="{{if $anchor}}{{$anchor}}{{else}}faq{{end}}">
+    <div class="container container--narrow">
+        {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
+        {{with index $d "title"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
+        <div class="faq__list">
+            {{range .Block.Items "items"}}
+                {{$q := index . "question"}}{{$a := index . "answer"}}
+                {{if and $q $a}}
+                    <details class="accordion-item">
+                        <summary>{{$q}}</summary>
+                        <div class="accordion-item__body">{{safeHTML (str $a)}}</div>
+                    </details>
+                {{end}}
+            {{end}}
+        </div>
+    </div>
+</section>
+{{end}}

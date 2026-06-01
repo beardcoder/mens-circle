@@ -1,0 +1,29 @@
+{{define "content"}}
+<header class="page-head">
+    <h1>Veranstaltungen</h1>
+    <a href="/admin/events/new" class="btn btn--primary">Neue Veranstaltung</a>
+</header>
+
+{{if .Data}}
+<table class="data-table">
+    <thead><tr><th>Titel</th><th>Datum</th><th>Ort</th><th>Anmeldungen</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {{range .Data}}
+        <tr>
+            <td><strong>{{.Title}}</strong><br><span class="muted">/{{.Slug}}</span></td>
+            <td>{{shortDate .EventDate}}<br><span class="muted">{{.StartTime}}–{{.EndTime}}</span></td>
+            <td>{{.Location}}</td>
+            <td>{{.ActiveRegistrations}} / {{.MaxParticipants}}</td>
+            <td>{{if .IsPublished}}<span class="badge badge--success">Veröffentlicht</span>{{else}}<span class="badge badge--gray">Entwurf</span>{{end}}</td>
+            <td class="row-actions">
+                <a href="/admin/events/{{.ID}}/edit" class="btn btn--small">Bearbeiten</a>
+                <form method="post" action="/admin/events/{{.ID}}/delete" onsubmit="return confirm('Veranstaltung wirklich löschen?')">
+                    <button type="submit" class="btn btn--small btn--danger">Löschen</button>
+                </form>
+            </td>
+        </tr>
+    {{end}}
+    </tbody>
+</table>
+{{else}}<p class="muted">Noch keine Veranstaltungen angelegt.</p>{{end}}
+{{end}}

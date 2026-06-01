@@ -1,0 +1,75 @@
+{{define "layout"}}<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{.Title}}</title>
+    <meta name="description" content="{{.MetaDescription}}">
+    <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+<a href="#main" class="skip-link">Zum Inhalt springen</a>
+
+<header class="site-header" data-lume="site-header">
+    <div class="container site-header__inner">
+        <a href="/" class="site-header__logo">{{.Settings.SiteName}}</a>
+        <button class="site-header__toggle" data-lume-part="toggle" aria-label="Menü" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="site-nav" data-lume-part="nav">
+            {{range .HeaderNav}}
+                {{if not .IsCTA}}
+                    <a href="{{.Href}}" class="site-nav__link"{{if .OpenInNewTab}} target="_blank" rel="noopener"{{end}}>{{.Label}}</a>
+                {{end}}
+            {{end}}
+            {{range .HeaderNav}}
+                {{if .IsCTA}}
+                    {{if or (not .Condition) $.HasNextEvent}}
+                        <a href="{{.Href}}" class="btn btn--primary btn--small"{{if .OpenInNewTab}} target="_blank" rel="noopener"{{end}}>{{.Label}}</a>
+                    {{end}}
+                {{end}}
+            {{end}}
+        </nav>
+    </div>
+</header>
+
+<main id="main">
+    {{template "content" .}}
+</main>
+
+<footer class="site-footer">
+    <div class="container site-footer__grid">
+        <div class="site-footer__brand">
+            <p class="site-footer__name">{{.Settings.SiteName}}</p>
+            <p class="muted">{{.Settings.SiteTagline}}</p>
+        </div>
+        <nav class="site-footer__col">
+            <p class="site-footer__heading">Navigation</p>
+            {{range .FooterPrimary}}<a href="{{.Href}}">{{.Label}}</a>{{end}}
+        </nav>
+        <nav class="site-footer__col">
+            <p class="site-footer__heading">Kontakt</p>
+            <a href="mailto:{{.Settings.ContactEmail}}">{{.Settings.ContactEmail}}</a>
+            {{if .Settings.ContactPhone}}<a href="tel:{{deref .Settings.ContactPhone}}">{{deref .Settings.ContactPhone}}</a>{{end}}
+            {{range .FooterContact}}<a href="{{.Href}}">{{.Label}}</a>{{end}}
+        </nav>
+        <nav class="site-footer__col">
+            <p class="site-footer__heading">Rechtliches</p>
+            {{range .FooterLegal}}<a href="{{.Href}}">{{.Label}}</a>{{end}}
+        </nav>
+    </div>
+    <div class="container site-footer__bottom">
+        <p class="muted">&copy; {{.Settings.FooterText}}</p>
+    </div>
+</footer>
+
+<script>
+window.routes = {
+    newsletter: '/api/newsletter/subscribe',
+    eventRegister: '/api/event/register',
+    testimonial: '/api/testimonial/submit'
+};
+</script>
+<script src="/static/js/app.js" defer></script>
+</body>
+</html>{{end}}

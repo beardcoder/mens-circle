@@ -1,0 +1,9 @@
+{{define "content"}}
+<section class="section error-section">
+    <div class="container container--narrow text-center">
+        <h1 class="section-title">{{.Title}}</h1>
+        <p>{{if .Message}}{{.Message}}{{else}}Die angeforderte Seite konnte nicht gefunden werden.{{end}}</p>
+        <p><a href="/" class="btn btn--primary">Zur Startseite</a></p>
+    </div>
+</section>
+{{end}}

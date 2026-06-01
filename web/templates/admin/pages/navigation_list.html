@@ -1,0 +1,30 @@
+{{define "content"}}
+<header class="page-head">
+    <h1>Navigation</h1>
+    <a href="/admin/navigation/new" class="btn btn--primary">Neuer Punkt</a>
+</header>
+{{with .Data}}
+{{if .Items}}
+<table class="data-table">
+    <thead><tr><th>Bereich</th><th>Label</th><th>Ziel</th><th>Sichtbar</th><th>Sortierung</th><th></th></tr></thead>
+    <tbody>
+    {{range .Items}}
+        <tr>
+            <td>{{.Location.Label}}</td>
+            <td>{{.Label}}{{if .IsCTA}} <span class="badge badge--info">CTA</span>{{end}}</td>
+            <td class="muted">{{.Href}}</td>
+            <td>{{if .IsVisible}}Ja{{else}}Nein{{end}}</td>
+            <td>{{.Sort}}</td>
+            <td class="row-actions">
+                <a href="/admin/navigation/{{.ID}}/edit" class="btn btn--small">Bearbeiten</a>
+                <form method="post" action="/admin/navigation/{{.ID}}/delete" onsubmit="return confirm('Wirklich löschen?')">
+                    <button type="submit" class="btn btn--small btn--danger">Löschen</button>
+                </form>
+            </td>
+        </tr>
+    {{end}}
+    </tbody>
+</table>
+{{else}}<p class="muted">Noch keine Navigationspunkte.</p>{{end}}
+{{end}}
+{{end}}

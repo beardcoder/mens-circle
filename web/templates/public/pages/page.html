@@ -1,0 +1,6 @@
+{{define "content"}}
+{{$view := .}}
+{{range .Page.ContentBlocks}}
+    {{template "block" (dict "Block" . "View" $view)}}
+{{end}}
+{{end}}
