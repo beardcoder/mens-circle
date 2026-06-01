@@ -186,6 +186,39 @@ func (r *SubscriptionRepository) ActiveParticipants() ([]models.Participant, err
 	return out, rows.Err()
 }
 
+// NewsletterRecipient pairs an active subscriber with their unsubscribe token.
+type NewsletterRecipient struct {
+	Participant models.Participant
+	Token       string
+}
+
+// ActiveRecipients returns every active subscriber together with their token,
+// for bulk newsletter delivery.
+func (r *SubscriptionRepository) ActiveRecipients() ([]NewsletterRecipient, error) {
+	rows, err := r.db.Query(`SELECT p.id, p.first_name, p.last_name, p.email, p.phone, p.created_at, p.updated_at, s.token
+		FROM participants p
+		JOIN newsletter_subscriptions s ON s.participant_id = p.id
+		WHERE s.unsubscribed_at IS NULL AND s.deleted_at IS NULL`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []NewsletterRecipient
+	for rows.Next() {
+		var p models.Participant
+		var first, last, phone sql.NullString
+		var token string
+		if err := rows.Scan(&p.ID, &first, &last, &p.Email, &phone, &p.CreatedAt, &p.UpdatedAt, &token); err != nil {
+			return nil, err
+		}
+		p.FirstName = ptrString(first)
+		p.LastName = ptrString(last)
+		p.Phone = ptrString(phone)
+		out = append(out, NewsletterRecipient{Participant: p, Token: token})
+	}
+	return out, rows.Err()
+}
+
 // GenerateToken returns a 64-character random hex token.
 func GenerateToken() string {
 	b := make([]byte, 32)

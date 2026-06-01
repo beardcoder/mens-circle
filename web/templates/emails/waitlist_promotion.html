@@ -1,0 +1,7 @@
+{{define "waitlist_promotion"}}{{template "email_head" .}}
+<h1>Ein Platz ist frei geworden!</h1>
+<p>Hallo {{.FirstName}},</p>
+<p>gute Nachrichten: Für <strong>{{.Event.Title}}</strong> ist ein Platz frei geworden und du bist nachgerückt. Du bist jetzt fest angemeldet.</p>
+{{template "email_event_meta" .}}
+<p><a class="btn" href="{{.BaseURL}}/event/{{.Event.Slug}}">Zur Veranstaltung</a></p>
+{{template "email_foot" .}}{{end}}

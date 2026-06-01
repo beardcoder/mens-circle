@@ -15,6 +15,7 @@
             <td>{{derefTime .RegisteredAt}}</td>
             <td class="row-actions">
                 <form method="post" action="/admin/registrations/{{.ID}}/status" class="inline-form">
+                    <input type="hidden" name="event_id" value="{{.EventID}}">
                     <select name="status">
                         {{$current := .Status}}
                         {{range $.Data.Statuses}}

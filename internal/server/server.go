@@ -8,6 +8,7 @@ import (
 
 	"github.com/beardcoder/mens-circle/internal/media"
 	"github.com/beardcoder/mens-circle/internal/models"
+	"github.com/beardcoder/mens-circle/internal/notify"
 	"github.com/beardcoder/mens-circle/internal/repository"
 	"github.com/beardcoder/mens-circle/internal/web"
 )
@@ -17,6 +18,7 @@ type Server struct {
 	repos    *repository.Repositories
 	sessions *web.SessionManager
 	render   *web.Renderer
+	notify   *notify.Service
 	logger   *slog.Logger
 	staticFS fs.FS
 	media    *media.Store
@@ -24,11 +26,12 @@ type Server struct {
 }
 
 // New constructs a Server.
-func New(repos *repository.Repositories, sessions *web.SessionManager, render *web.Renderer, staticFS fs.FS, mediaStore *media.Store, baseURL string, logger *slog.Logger) *Server {
+func New(repos *repository.Repositories, sessions *web.SessionManager, render *web.Renderer, notifier *notify.Service, staticFS fs.FS, mediaStore *media.Store, baseURL string, logger *slog.Logger) *Server {
 	return &Server{
 		repos:    repos,
 		sessions: sessions,
 		render:   render,
+		notify:   notifier,
 		logger:   logger,
 		staticFS: staticFS,
 		media:    mediaStore,

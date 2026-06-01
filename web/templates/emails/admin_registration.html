@@ -1,0 +1,11 @@
+{{define "admin_registration"}}{{template "email_head" .}}
+<h1>Neue {{if .IsWaitlist}}Wartelisten-{{end}}Anmeldung</h1>
+<p>Für <strong>{{.Event.Title}}</strong> ist eine neue {{if .IsWaitlist}}Wartelisten-{{end}}Anmeldung eingegangen:</p>
+<div class="meta">
+  <p><strong>Name</strong> {{.Participant.DisplayName}}</p>
+  <p><strong>E-Mail</strong> {{.Participant.Email}}</p>
+  {{if .Participant.Phone}}<p><strong>Telefon</strong> {{deref .Participant.Phone}}</p>{{end}}
+  <p><strong>Anmeldungen</strong> {{.Event.ActiveRegistrations}} / {{.Event.MaxParticipants}}</p>
+</div>
+<p><a class="btn" href="{{.BaseURL}}/admin/registrations">Anmeldungen verwalten</a></p>
+{{template "email_foot" .}}{{end}}

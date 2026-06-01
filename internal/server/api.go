@@ -114,6 +114,7 @@ func (s *Server) apiRegisterEvent(w http.ResponseWriter, r *http.Request) {
 
 	fn := firstName(first + " " + last)
 	if status == models.RegistrationWaitlist {
+		s.notify.Waitlisted(participant, event)
 		writeJSON(w, http.StatusOK, jsonResponse{
 			Success:  true,
 			Waitlist: true,
@@ -121,6 +122,7 @@ func (s *Server) apiRegisterEvent(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	s.notify.RegistrationConfirmed(participant, event)
 	writeJSON(w, http.StatusOK, jsonResponse{
 		Success: true,
 		Message: "Vielen Dank " + fn + "! Deine Anmeldung war erfolgreich. Du erhältst in Kürze eine Bestätigung per E-Mail.",
@@ -154,15 +156,18 @@ func (s *Server) apiNewsletterSubscribe(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 	case errors.Is(err, repository.ErrNotFound):
-		if err := s.repos.Subscriptions.Create(&models.NewsletterSubscription{ParticipantID: participant.ID}); err != nil {
+		newSub := &models.NewsletterSubscription{ParticipantID: participant.ID}
+		if err := s.repos.Subscriptions.Create(newSub); err != nil {
 			writeJSON(w, http.StatusInternalServerError, jsonResponse{Message: "Es ist ein Fehler aufgetreten."})
 			return
 		}
+		sub = newSub
 	default:
 		writeJSON(w, http.StatusInternalServerError, jsonResponse{Message: "Es ist ein Fehler aufgetreten."})
 		return
 	}
 
+	s.notify.NewsletterWelcome(participant, sub.Token)
 	writeJSON(w, http.StatusOK, jsonResponse{Success: true, Message: "Vielen Dank! Du wurdest erfolgreich für den Newsletter angemeldet."})
 }
 

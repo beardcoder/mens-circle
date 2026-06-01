@@ -1,0 +1,8 @@
+{{define "registration_confirmation"}}{{template "email_head" .}}
+<h1>Deine Anmeldung ist bestätigt</h1>
+<p>Hallo {{.FirstName}},</p>
+<p>schön, dass du dabei bist! Deine Anmeldung für <strong>{{.Event.Title}}</strong> ist eingegangen.</p>
+{{template "email_event_meta" .}}
+<p>Wir freuen uns auf einen Abend voller echter Begegnung.</p>
+<p><a class="btn" href="{{.BaseURL}}/event/{{.Event.Slug}}">Zur Veranstaltung</a></p>
+{{template "email_foot" .}}{{end}}

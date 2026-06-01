@@ -11,6 +11,7 @@ import (
 
 	"github.com/beardcoder/mens-circle/internal/blocks"
 	"github.com/beardcoder/mens-circle/internal/models"
+	"github.com/beardcoder/mens-circle/internal/repository"
 )
 
 // --- Registrations ---
@@ -32,11 +33,37 @@ func (s *Server) adminRegistrationsList(w http.ResponseWriter, r *http.Request) 
 func (s *Server) adminRegistrationStatus(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.ParseInt(r.PathValue("id"), 10, 64)
 	status := models.RegistrationStatus(r.FormValue("status"))
+	eventID, _ := strconv.ParseInt(r.FormValue("event_id"), 10, 64)
+
 	if err := s.repos.Registrations.TransitionTo(id, status); err != nil {
 		s.serverError(w, r, err)
 		return
 	}
+
+	// Cancelling a confirmed seat frees a spot: promote the next person on the
+	// waitlist and let them know.
+	if status == models.RegistrationCancelled && eventID > 0 {
+		s.promoteFromWaitlist(eventID)
+	}
 	s.flashRedirect(w, r, "success", "Status wurde aktualisiert.", "/admin/registrations")
+}
+
+// promoteFromWaitlist promotes the next waitlisted registration for an event
+// and sends the promotion email.
+func (s *Server) promoteFromWaitlist(eventID int64) {
+	promoted, err := s.repos.Registrations.PromoteNextWaitlisted(eventID)
+	if err != nil {
+		return // empty waitlist or lookup error — nothing to do
+	}
+	participant, err := s.repos.Participants.FindByID(promoted.ParticipantID)
+	if err != nil {
+		return
+	}
+	event, err := s.repos.Events.FindByID(eventID)
+	if err != nil {
+		return
+	}
+	s.notify.WaitlistPromoted(participant, event)
 }
 
 // --- Participants ---
@@ -216,12 +243,24 @@ func (s *Server) adminNewsletterSend(w http.ResponseWriter, r *http.Request) {
 		s.flashRedirect(w, r, "error", "Dieser Newsletter wurde bereits versendet.", "/admin/newsletters")
 		return
 	}
-	recipients, _ := s.repos.Subscriptions.ActiveCount()
-	if err := s.repos.Newsletters.MarkSent(id, recipients); err != nil {
+
+	recipients, err := s.repos.Subscriptions.ActiveRecipients()
+	if err != nil {
 		s.serverError(w, r, err)
 		return
 	}
-	s.flashRedirect(w, r, "success", fmt.Sprintf("Newsletter wurde als versendet markiert (%d Empfänger).", recipients), "/admin/newsletters")
+	_ = s.repos.Newsletters.SetStatus(id, models.NewsletterSending)
+
+	// Deliver in the background so the request returns promptly; the status
+	// transitions to "sent" with the final recipient count when done.
+	go func(newsletter models.Newsletter, rcpts []repository.NewsletterRecipient) {
+		sent := s.notify.SendNewsletter(&newsletter, rcpts)
+		if err := s.repos.Newsletters.MarkSent(newsletter.ID, sent); err != nil {
+			s.logger.Error("mark newsletter sent", "id", newsletter.ID, "err", err)
+		}
+	}(*n, recipients)
+
+	s.flashRedirect(w, r, "success", fmt.Sprintf("Newsletter wird an %d Empfänger versendet.", len(recipients)), "/admin/newsletters")
 }
 
 // --- Subscriptions ---

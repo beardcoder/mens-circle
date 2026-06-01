@@ -1,0 +1,7 @@
+{{define "event_reminder"}}{{template "email_head" .}}
+<h1>Erinnerung: {{.Event.Title}} ist {{if .IsToday}}heute{{else}}morgen{{end}}</h1>
+<p>Hallo {{.FirstName}},</p>
+<p>wir möchten dich daran erinnern, dass <strong>{{.Event.Title}}</strong> {{if .IsToday}}heute{{else}}morgen{{end}} stattfindet. Wir freuen uns auf dich!</p>
+{{template "email_event_meta" .}}
+<p><a class="btn" href="{{.BaseURL}}/event/{{.Event.Slug}}">Zur Veranstaltung</a></p>
+{{template "email_foot" .}}{{end}}

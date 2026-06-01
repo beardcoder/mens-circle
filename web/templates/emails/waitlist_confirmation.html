@@ -1,0 +1,7 @@
+{{define "waitlist_confirmation"}}{{template "email_head" .}}
+<h1>Du stehst auf der Warteliste</h1>
+<p>Hallo {{.FirstName}},</p>
+<p>die Veranstaltung <strong>{{.Event.Title}}</strong> ist aktuell ausgebucht. Wir haben dich auf die Warteliste gesetzt und melden uns sofort, wenn ein Platz frei wird.</p>
+{{template "email_event_meta" .}}
+<p>Danke für dein Interesse und deine Geduld.</p>
+{{template "email_foot" .}}{{end}}

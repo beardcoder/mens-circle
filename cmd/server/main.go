@@ -14,8 +14,11 @@ import (
 
 	mensapp "github.com/beardcoder/mens-circle"
 	"github.com/beardcoder/mens-circle/internal/database"
+	"github.com/beardcoder/mens-circle/internal/mailer"
 	"github.com/beardcoder/mens-circle/internal/media"
+	"github.com/beardcoder/mens-circle/internal/notify"
 	"github.com/beardcoder/mens-circle/internal/repository"
+	"github.com/beardcoder/mens-circle/internal/scheduler"
 	"github.com/beardcoder/mens-circle/internal/seed"
 	"github.com/beardcoder/mens-circle/internal/server"
 	"github.com/beardcoder/mens-circle/internal/web"
@@ -72,9 +75,25 @@ func run(logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
+	emailRenderer, err := web.NewEmailRenderer(webFS)
+	if err != nil {
+		return err
+	}
+
+	mailClient := mailer.New(mailer.Config{
+		Host:        os.Getenv("MAIL_HOST"),
+		Port:        os.Getenv("MAIL_PORT"),
+		Username:    os.Getenv("MAIL_USERNAME"),
+		Password:    os.Getenv("MAIL_PASSWORD"),
+		Encryption:  os.Getenv("MAIL_ENCRYPTION"),
+		FromAddress: env("MAIL_FROM_ADDRESS", "hallo@mens-circle.de"),
+		FromName:    env("MAIL_FROM_NAME", "Männerkreis Niederbayern / Straubing"),
+	}, logger)
+	adminAddress := env("MAIL_ADMIN_ADDRESS", "hallo@mens-circle.de")
+	notifier := notify.New(mailClient, emailRenderer, repos, baseURL, adminAddress, logger)
 
 	sessions := web.NewSessionManager(repos.Users)
-	srv := server.New(repos, sessions, renderer, staticFS, mediaStore, baseURL, logger)
+	srv := server.New(repos, sessions, renderer, notifier, staticFS, mediaStore, baseURL, logger)
 
 	httpServer := &http.Server{
 		Addr:              addr,
@@ -84,12 +103,18 @@ func run(logger *slog.Logger) error {
 		IdleTimeout:       120 * time.Second,
 	}
 
+	// Background reminder scheduler.
+	schedulerCtx, stopScheduler := context.WithCancel(context.Background())
+	defer stopScheduler()
+	go scheduler.New(repos, notifier, logger, time.Hour).Start(schedulerCtx)
+
 	// Graceful shutdown on SIGINT/SIGTERM.
 	go func() {
 		stop := make(chan os.Signal, 1)
 		signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 		<-stop
 		logger.Info("shutting down")
+		stopScheduler()
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 		_ = httpServer.Shutdown(ctx)

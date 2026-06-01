@@ -1,0 +1,6 @@
+{{define "newsletter_welcome"}}{{template "email_head" .}}
+<h1>Willkommen beim Newsletter</h1>
+<p>Hallo,</p>
+<p>danke für deine Anmeldung zum Newsletter von <strong>{{.Settings.SiteName}}</strong>. Du erhältst ab jetzt Einladungen zu neuen Terminen und Neuigkeiten aus dem Männerkreis.</p>
+{{if .UnsubscribeURL}}<p style="font-size:12px;color:#6f6a60;">Du möchtest keine E-Mails mehr erhalten? <a href="{{.UnsubscribeURL}}">Hier abmelden</a>.</p>{{end}}
+{{template "email_foot" .}}{{end}}

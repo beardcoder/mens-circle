@@ -1,0 +1,41 @@
+{{define "email_head"}}<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{.Subject}}</title>
+<style>
+  body { margin: 0; background: #f3efe7; font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #21201c; line-height: 1.6; }
+  .wrap { max-width: 600px; margin: 0 auto; padding: 24px; }
+  .card { background: #ffffff; border-radius: 14px; padding: 32px; border: 1px solid #e4ddd0; }
+  .brand { font-weight: 800; font-size: 18px; color: #8f6a2b; margin-bottom: 8px; }
+  h1 { font-size: 22px; margin: 0 0 16px; }
+  p { margin: 0 0 14px; }
+  .btn { display: inline-block; background: #b8893b; color: #ffffff !important; text-decoration: none; padding: 12px 22px; border-radius: 999px; font-weight: 600; }
+  .meta { background: #f7f4ee; border-radius: 10px; padding: 16px; margin: 16px 0; }
+  .meta strong { display: inline-block; min-width: 90px; color: #6f6a60; }
+  .footer { color: #6f6a60; font-size: 12px; text-align: center; padding: 18px 0; }
+  blockquote { border-left: 3px solid #b8893b; margin: 0; padding-left: 14px; color: #2f3a36; font-style: italic; }
+</style>
+</head>
+<body><div class="wrap"><div class="card">
+<p class="brand">{{.Settings.SiteName}}</p>
+{{end}}
+
+{{define "email_foot"}}
+</div>
+<div class="footer">
+  <p>{{.Settings.SiteName}}{{if .Settings.ContactEmail}} · <a href="mailto:{{.Settings.ContactEmail}}">{{.Settings.ContactEmail}}</a>{{end}}</p>
+</div>
+</div></body>
+</html>
+{{end}}
+
+{{define "email_event_meta"}}
+<div class="meta">
+  <p><strong>Datum</strong> {{germanWeekday .Event.EventDate}}, {{germanDate .Event.EventDate}}</p>
+  <p><strong>Uhrzeit</strong> {{.Event.StartTime}}–{{.Event.EndTime}} Uhr</p>
+  <p><strong>Ort</strong> {{.Event.Location}}{{if .Event.FullAddress}}, {{.Event.FullAddress}}{{end}}</p>
+  <p><strong>Kosten</strong> {{.Event.CostBasis}}</p>
+</div>
+{{end}}
