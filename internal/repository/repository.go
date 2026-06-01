@@ -23,6 +23,7 @@ type Repositories struct {
 	Pages         *PageRepository
 	Navigation    *NavigationRepository
 	Settings      *SettingsRepository
+	Media         *MediaRepository
 }
 
 // New wires up every repository against the shared database connection.
@@ -39,6 +40,7 @@ func New(db *database.DB) *Repositories {
 		Pages:         &PageRepository{db},
 		Navigation:    &NavigationRepository{db},
 		Settings:      &SettingsRepository{db},
+		Media:         &MediaRepository{db},
 	}
 }
 

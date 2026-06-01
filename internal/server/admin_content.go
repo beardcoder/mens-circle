@@ -1,12 +1,15 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/beardcoder/mens-circle/internal/blocks"
 	"github.com/beardcoder/mens-circle/internal/models"
 )
 
@@ -254,9 +257,53 @@ func (s *Server) adminPageForm(w http.ResponseWriter, r *http.Request) {
 		s.notFound(w, r)
 		return
 	}
+
+	// The block editor is a small client-side app driven by the schema and the
+	// current blocks, both passed as JSON.
+	schemaJSON, _ := json.Marshal(blocks.Definitions())
+	blocksJSON, _ := json.Marshal(blockEditorData(page.ContentBlocks))
+	mediaItems, _ := s.repos.Media.All()
+	mediaJSON, _ := json.Marshal(mediaURLs(mediaItems))
+
 	view := s.adminBase(r, "Seite bearbeiten", "pages")
-	view.Data = page
+	view.Data = struct {
+		Page       *models.Page
+		SchemaJSON template.JS
+		BlocksJSON template.JS
+		MediaJSON  template.JS
+	}{
+		Page:       page,
+		SchemaJSON: template.JS(schemaJSON),
+		BlocksJSON: template.JS(blocksJSON),
+		MediaJSON:  template.JS(mediaJSON),
+	}
 	s.renderAdmin(w, r, "page_form", view)
+}
+
+// blockEditorData shapes content blocks for the editor (id, block_id, type, data).
+func blockEditorData(blocksIn []models.ContentBlock) []map[string]any {
+	out := make([]map[string]any, 0, len(blocksIn))
+	for _, b := range blocksIn {
+		data := b.Data
+		if data == nil {
+			data = map[string]any{}
+		}
+		out = append(out, map[string]any{
+			"id":       b.ID,
+			"block_id": b.BlockID,
+			"type":     string(b.Type),
+			"data":     data,
+		})
+	}
+	return out
+}
+
+func mediaURLs(items []models.Media) []map[string]string {
+	out := make([]map[string]string, 0, len(items))
+	for _, m := range items {
+		out = append(out, map[string]string{"url": m.URL(), "name": m.Name})
+	}
+	return out
 }
 
 func (s *Server) adminPageUpdate(w http.ResponseWriter, r *http.Request) {

@@ -1,0 +1,27 @@
+{{define "content"}}
+<header class="page-head"><h1>Medien</h1></header>
+
+<form method="post" action="/admin/media" enctype="multipart/form-data" class="form-card upload-card">
+    <label>Bild hochladen <span class="hint">jpg, png, webp, gif, svg, avif · max. 10 MB</span>
+        <input type="file" name="file" accept="image/*" required>
+    </label>
+    <div class="form-actions"><button type="submit" class="btn btn--primary">Hochladen</button></div>
+</form>
+
+{{if .Data}}
+<div class="media-grid">
+    {{range .Data}}
+        <figure class="media-tile">
+            {{if .IsImage}}<img src="{{.URL}}" alt="{{.Name}}" loading="lazy">{{else}}<div class="media-tile__file">Datei</div>{{end}}
+            <figcaption>
+                <span class="media-tile__name" title="{{.Name}}">{{.Name}}</span>
+                <input type="text" class="media-tile__url" value="{{.URL}}" readonly onclick="this.select()">
+            </figcaption>
+            <form method="post" action="/admin/media/{{.ID}}/delete" onsubmit="return confirm('Datei wirklich löschen?')">
+                <button type="submit" class="btn btn--small btn--danger">Löschen</button>
+            </form>
+        </figure>
+    {{end}}
+</div>
+{{else}}<p class="muted">Noch keine Medien hochgeladen.</p>{{end}}
+{{end}}

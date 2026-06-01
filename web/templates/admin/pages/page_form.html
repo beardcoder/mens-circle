@@ -1,29 +1,47 @@
 {{define "content"}}
 {{with .Data}}
+{{$page := .Page}}
 <header class="page-head">
     <h1>Seite bearbeiten</h1>
-    <a href="/admin/pages" class="btn btn--ghost">Zurück</a>
+    <div class="row-actions">
+        <a href="/{{$page.Slug}}" target="_blank" class="btn btn--ghost btn--small">Vorschau</a>
+        <a href="/admin/pages" class="btn btn--ghost">Zurück</a>
+    </div>
 </header>
-<form method="post" action="/admin/pages/{{.ID}}" class="form-card">
+
+<form method="post" action="/admin/pages/{{$page.ID}}" class="form-card">
     <div class="form-grid">
-        <label>Titel<input type="text" name="title" value="{{.Title}}" required></label>
-        <label>Slug<input type="text" name="slug" value="{{.Slug}}" required></label>
-        <label class="col-span-2">Meta-Beschreibung<textarea name="meta_description" rows="2">{{.MetaString "description"}}</textarea></label>
+        <label>Titel<input type="text" name="title" value="{{$page.Title}}" required></label>
+        <label>Slug<input type="text" name="slug" value="{{$page.Slug}}" required></label>
+        <label class="col-span-2">Meta-Beschreibung<textarea name="meta_description" rows="2">{{$page.MetaString "description"}}</textarea></label>
     </div>
     <label class="checkbox">
-        <input type="checkbox" name="is_published" value="1" {{if .IsPublished}}checked{{end}}> Veröffentlicht
+        <input type="checkbox" name="is_published" value="1" {{if $page.IsPublished}}checked{{end}}> Veröffentlicht
     </label>
-    <div class="form-actions"><button type="submit" class="btn btn--primary">Speichern</button></div>
+    <div class="form-actions"><button type="submit" class="btn btn--primary">Seiteneinstellungen speichern</button></div>
 </form>
 
 <section class="panel">
-    <h2>Inhaltsblöcke</h2>
-    <p class="muted">Diese Seite besteht aus {{len .ContentBlocks}} Blöcken.</p>
-    <ol class="block-list">
-        {{range .ContentBlocks}}
-            <li><span class="badge badge--gray">{{.Type}}</span> <span class="muted">Reihenfolge {{.Order}}</span></li>
-        {{end}}
-    </ol>
+    <div class="page-head">
+        <h2>Inhaltsblöcke</h2>
+        <div class="block-toolbar">
+            <select id="blockTypeSelect"></select>
+            <button type="button" id="addBlockBtn" class="btn btn--small">Block hinzufügen</button>
+        </div>
+    </div>
+
+    <form method="post" action="/admin/pages/{{$page.ID}}/blocks" id="blockEditorForm">
+        <input type="hidden" name="blocks" id="blocksInput">
+        <div id="blockEditor" class="block-editor"></div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn--primary">Inhaltsblöcke speichern</button>
+        </div>
+    </form>
 </section>
+
+<script type="application/json" id="blocksData">{{.BlocksJSON}}</script>
+<script type="application/json" id="blocksSchema">{{.SchemaJSON}}</script>
+<script type="application/json" id="mediaData">{{.MediaJSON}}</script>
+<script src="/static/js/admin-blocks.js" defer></script>
 {{end}}
 {{end}}

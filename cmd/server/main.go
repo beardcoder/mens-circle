@@ -14,6 +14,7 @@ import (
 
 	mensapp "github.com/beardcoder/mens-circle"
 	"github.com/beardcoder/mens-circle/internal/database"
+	"github.com/beardcoder/mens-circle/internal/media"
 	"github.com/beardcoder/mens-circle/internal/repository"
 	"github.com/beardcoder/mens-circle/internal/seed"
 	"github.com/beardcoder/mens-circle/internal/server"
@@ -31,10 +32,16 @@ func main() {
 
 func run(logger *slog.Logger) error {
 	dbPath := env("DATABASE_PATH", "data/mens-circle.db")
+	mediaPath := env("MEDIA_PATH", "data/media")
 	addr := env("LISTEN_ADDR", ":8080")
 	baseURL := env("APP_URL", "http://localhost:8080")
 
 	if err := os.MkdirAll("data", 0o755); err != nil {
+		return err
+	}
+
+	mediaStore, err := media.NewStore(mediaPath)
+	if err != nil {
 		return err
 	}
 
@@ -67,7 +74,7 @@ func run(logger *slog.Logger) error {
 	}
 
 	sessions := web.NewSessionManager(repos.Users)
-	srv := server.New(repos, sessions, renderer, staticFS, baseURL, logger)
+	srv := server.New(repos, sessions, renderer, staticFS, mediaStore, baseURL, logger)
 
 	httpServer := &http.Server{
 		Addr:              addr,

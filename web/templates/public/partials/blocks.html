@@ -17,6 +17,7 @@
 
 {{define "block_hero"}}{{$d := .Block.Data}}
 <section class="hero"{{with index $d "anchor"}} id="{{.}}"{{end}}>
+    {{with index $d "background_image"}}<div class="hero__bg"><img src="{{.}}" alt="" loading="eager" fetchpriority="high"></div>{{end}}
     <div class="container hero__content">
         {{with index $d "label"}}<p class="hero__label">{{.}}</p>{{end}}
         {{with index $d "title"}}<h1 class="hero__title">{{safeHTML (str .)}}</h1>{{end}}
@@ -100,8 +101,9 @@
             {{with index $d "eyebrow"}}<p class="eyebrow">{{.}}</p>{{end}}
             {{with index $d "name"}}<h2 class="section-title">{{safeHTML (str .)}}</h2>{{end}}
             {{with index $d "bio"}}<div class="prose">{{safeHTML (str .)}}</div>{{end}}
+            {{with index $d "quote"}}<blockquote class="moderator__quote">{{.}}</blockquote>{{end}}
         </div>
-        {{with index $d "quote"}}<blockquote class="moderator__quote">{{.}}</blockquote>{{end}}
+        {{with index $d "photo"}}<div class="moderator__photo"><img src="{{.}}" alt="" loading="lazy"></div>{{end}}
     </div>
 </section>
 {{end}}

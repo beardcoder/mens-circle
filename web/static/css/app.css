@@ -54,7 +54,11 @@ h1, h2, h3 { line-height: 1.15; font-weight: 700; }
 .site-header__toggle span { width: 24px; height: 2px; background: var(--ink); border-radius: 2px; }
 
 /* Hero */
-.hero { padding: clamp(4rem, 12vw, 9rem) 0; background: radial-gradient(120% 120% at 50% 0%, color-mix(in srgb, var(--primary) 14%, var(--bg)), var(--bg)); text-align: center; }
+.hero { position: relative; padding: clamp(4rem, 12vw, 9rem) 0; background: radial-gradient(120% 120% at 50% 0%, color-mix(in srgb, var(--primary) 14%, var(--bg)), var(--bg)); text-align: center; overflow: hidden; }
+.hero__bg { position: absolute; inset: 0; z-index: 0; }
+.hero__bg img { width: 100%; height: 100%; object-fit: cover; }
+.hero__bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, color-mix(in srgb, var(--bg) 55%, transparent), color-mix(in srgb, var(--bg) 80%, transparent)); }
+.hero__content { position: relative; z-index: 1; }
 .hero__label { text-transform: uppercase; letter-spacing: .16em; font-size: .82rem; font-weight: 700; color: var(--primary-dark); }
 .hero__title { font-size: clamp(2.4rem, 6vw, 4.2rem); margin: .5rem 0 1.25rem; }
 .hero__description { font-size: 1.2rem; max-width: 620px; margin: 0 auto 2rem; color: var(--muted); }
@@ -76,6 +80,7 @@ h1, h2, h3 { line-height: 1.15; font-weight: 700; }
 /* Moderator */
 .moderator__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: center; }
 .moderator__quote { font-size: 1.25rem; font-style: italic; color: var(--accent); }
+.moderator__photo img { width: 100%; border-radius: var(--radius); object-fit: cover; }
 
 /* CTA */
 .cta-section { background: var(--accent); color: #fff; text-align: center; border-radius: 0; }

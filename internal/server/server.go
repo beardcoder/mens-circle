@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/beardcoder/mens-circle/internal/media"
 	"github.com/beardcoder/mens-circle/internal/models"
 	"github.com/beardcoder/mens-circle/internal/repository"
 	"github.com/beardcoder/mens-circle/internal/web"
@@ -18,17 +19,19 @@ type Server struct {
 	render   *web.Renderer
 	logger   *slog.Logger
 	staticFS fs.FS
+	media    *media.Store
 	baseURL  string
 }
 
 // New constructs a Server.
-func New(repos *repository.Repositories, sessions *web.SessionManager, render *web.Renderer, staticFS fs.FS, baseURL string, logger *slog.Logger) *Server {
+func New(repos *repository.Repositories, sessions *web.SessionManager, render *web.Renderer, staticFS fs.FS, mediaStore *media.Store, baseURL string, logger *slog.Logger) *Server {
 	return &Server{
 		repos:    repos,
 		sessions: sessions,
 		render:   render,
 		logger:   logger,
 		staticFS: staticFS,
+		media:    mediaStore,
 		baseURL:  baseURL,
 	}
 }
@@ -37,8 +40,9 @@ func New(repos *repository.Repositories, sessions *web.SessionManager, render *w
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 
-	// Static assets.
+	// Static assets and uploaded media.
 	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.FS(s.staticFS))))
+	mux.Handle("GET /media/", http.StripPrefix("/media/", http.FileServer(http.Dir(s.media.Dir()))))
 
 	// Public JSON API.
 	mux.HandleFunc("POST /api/event/register", s.apiRegisterEvent)
@@ -97,6 +101,11 @@ func (s *Server) Handler() http.Handler {
 	admin("GET /admin/pages", s.adminPagesList)
 	admin("GET /admin/pages/{id}/edit", s.adminPageForm)
 	admin("POST /admin/pages/{id}", s.adminPageUpdate)
+	admin("POST /admin/pages/{id}/blocks", s.adminPageSaveBlocks)
+
+	admin("GET /admin/media", s.adminMediaList)
+	admin("POST /admin/media", s.adminMediaUpload)
+	admin("POST /admin/media/{id}/delete", s.adminMediaDelete)
 
 	admin("GET /admin/navigation", s.adminNavigationList)
 	admin("GET /admin/navigation/new", s.adminNavigationForm)
