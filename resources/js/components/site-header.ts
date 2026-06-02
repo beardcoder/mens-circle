@@ -1,24 +1,41 @@
 /**
- * Site Header
+ * Site Header — navigation with a breathing, circle-reveal menu.
  *
- * Mobile nav drawer + scroll-state class + hero-overlap detection.
- * Lume handles listener cleanup; component state stays in closure variables.
+ * The mobile menu is the signature surface. Tapping the toggle *breathes*
+ * a full-screen earth panel open: a `clip-path` circle expands from the
+ * button itself (Motion drives the radius), the concentric rings behind
+ * the links pulse, and the links rise on a calm stagger. Closing inhales
+ * the circle back down to the button.
  *
- * The drawer's open/close visuals live in CSS (clip-path + opacity +
- * stagger). This module just toggles `.open` / `.scrolled` /
- * `.header--on-hero` classes and manages body scroll lock + focus.
+ * Every *transition* (open / close / link cascade / the toggle morphing
+ * into an X) is driven by Motion Mini's `animate()` — WAAPI under the
+ * hood, so we get JS-precise easing, clean interruption when the user
+ * taps mid-animation, and a `finished` promise to drop `will-change` the
+ * instant a move settles. The endless, ambient "breathing" (rings, the
+ * idle toggle ring) lives in CSS so it costs nothing here and pauses
+ * itself under reduced motion.
+ *
+ * Lume owns listener teardown; all component state is closure-local.
  */
 
 import { prefersReducedMotion } from '@/utils/helpers';
 import { defineComponent } from '@beardcoder/lume';
+import { animate } from 'motion/mini';
 
-const SCROLL_THRESHOLD_PX = 50;
-const CLOSE_ANIMATION_MS = 620;
-const FALLBACK_HEADER_OFFSET_PX = 100;
+const SCROLL_THRESHOLD_PX = 48;
+const FALLBACK_HEADER_OFFSET_PX = 120;
+
+/** Cubic-bézier easings, mirrored from `_variables.css`. `animate()` wants
+ *  the four control points as a tuple. */
+const EASE_EMPHASISED: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const EASE_SETTLE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const EASE_INHALE: [number, number, number, number] = [0.7, 0, 0.84, 0];
+
+type Controls = ReturnType<typeof animate>;
 
 /**
- * Resolve the offset (in px) that anchored scrolling must leave below the
- * fixed header, derived from the `--header-clearance` custom property.
+ * Offset (px) that anchored scrolling must clear below the fixed header,
+ * read from the `--header-clearance` custom property.
  */
 const headerOffset = (): number => {
   const raw = getComputedStyle(document.documentElement).getPropertyValue(
@@ -30,9 +47,9 @@ const headerOffset = (): number => {
 };
 
 /**
- * Return the fragment of a link that points to an anchor on the current
- * page, or `null` when the link navigates elsewhere (different origin or
- * path, opens in a new tab, or has no fragment).
+ * The fragment of a link that targets an anchor on the *current* page, or
+ * `null` when it navigates elsewhere (other origin/path, new tab, or no
+ * fragment).
  */
 const samePageHash = (link: HTMLAnchorElement): string | null => {
   if (link.target && link.target !== '_self') return null;
@@ -52,17 +69,38 @@ const samePageHash = (link: HTMLAnchorElement): string | null => {
   return url.hash;
 };
 
+/**
+ * Radius a circle centred at (`ox`, `oy`) needs to cover the whole
+ * viewport — the distance to the farthest corner.
+ */
+const coverRadius = (ox: number, oy: number): number => {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+
+  return Math.hypot(Math.max(ox, w - ox), Math.max(oy, h - oy));
+};
+
 export default defineComponent(({ root, part, parts, on, cleanup }) => {
-  const heroEl = document.querySelector<HTMLElement>('.hero');
   const nav = part<HTMLElement>('nav');
   const toggle = part<HTMLButtonElement>('toggle');
   const navLinks = parts<HTMLAnchorElement>('nav-link');
+  const heroEl = document.querySelector<HTMLElement>('.hero');
 
-  /**
-   * Smoothly scroll the in-page element matching `hash` into view, offset
-   * for the fixed header, and sync the URL fragment. Returns whether a
-   * matching target was found.
-   */
+  const bars = Array.from(
+    toggle.querySelectorAll<HTMLElement>('.nav-toggle__bar')
+  );
+
+  // Everything that cascades into / out of the open panel.
+  const revealItems = [
+    ...Array.from(nav.querySelectorAll<HTMLElement>('.nav__item')),
+    ...Array.from(nav.querySelectorAll<HTMLElement>('.nav__meta')),
+  ];
+
+  let isOpen = false;
+  let scrollPosition = 0;
+  let panelAnim: Controls | null = null;
+
+  // ─── In-page anchor scrolling ──────────────────────────────────────
   const scrollToAnchor = (hash: string): boolean => {
     const id = decodeURIComponent(hash.replace(/^#/, ''));
     const target = id === '' ? null : document.getElementById(id);
@@ -83,81 +121,196 @@ export default defineComponent(({ root, part, parts, on, cleanup }) => {
     return true;
   };
 
-  let isNavOpen = false;
-  let isScrolled = window.scrollY > SCROLL_THRESHOLD_PX || !heroEl;
-  let isOnHero = false;
-  let scrollPosition = 0;
-  let closeTimer: number | null = null;
+  // ─── Toggle ⇄ X morph ──────────────────────────────────────────────
+  const renderToggle = (open: boolean): void => {
+    toggle.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
 
-  document.body.classList.toggle('has-hero', !!heroEl);
-  document.body.classList.toggle('no-hero', !heroEl);
+    const [top, mid, bottom] = bars;
 
-  const renderScrollState = (): void => {
-    root.classList.toggle('scrolled', isScrolled);
-    root.classList.toggle('header--on-hero', isOnHero);
-  };
-
-  const renderNavState = (): void => {
-    nav.classList.toggle('open', isNavOpen);
-    nav.setAttribute('aria-expanded', String(isNavOpen));
-    toggle.classList.toggle('active', isNavOpen);
-    toggle.setAttribute('aria-expanded', String(isNavOpen));
-    toggle.setAttribute(
-      'aria-label',
-      isNavOpen ? 'Menü schließen' : 'Menü öffnen'
-    );
-  };
-
-  const openNav = (): void => {
-    if (isNavOpen) return;
-
-    if (closeTimer !== null) {
-      window.clearTimeout(closeTimer);
-      closeTimer = null;
-    }
-
-    scrollPosition = window.scrollY;
-    isNavOpen = true;
-    document.body.classList.add('nav-open');
-    document.body.style.top = `-${scrollPosition}px`;
-    renderNavState();
-  };
-
-  /**
-   * Close the drawer. When `targetHash` points to an in-page anchor, scroll
-   * to it once the body scroll lock is released instead of restoring the
-   * pre-open scroll position.
-   */
-  const closeNav = (targetHash: string | null = null): void => {
-    if (!isNavOpen) return;
-
-    isNavOpen = false;
-    renderNavState();
-
-    const restore = (): void => {
-      document.body.classList.remove('nav-open');
-      document.body.style.top = '';
-
-      if (targetHash !== null && scrollToAnchor(targetHash)) {
-        closeTimer = null;
-
-        return;
-      }
-
-      window.scrollTo({ top: scrollPosition, left: 0, behavior: 'instant' });
-      closeTimer = null;
-    };
+    if (!top || !mid || !bottom) return;
 
     if (prefersReducedMotion()) {
-      restore();
+      const x = open ? '1' : '';
+
+      top.style.transform = open ? 'translateY(8px) rotate(45deg)' : '';
+      bottom.style.transform = open ? 'translateY(-8px) rotate(-45deg)' : '';
+      mid.style.opacity = x;
 
       return;
     }
 
-    closeTimer = window.setTimeout(restore, CLOSE_ANIMATION_MS);
+    const ease = open ? EASE_EMPHASISED : EASE_INHALE;
+
+    animate(
+      top,
+      {
+        transform: open
+          ? 'translateY(8px) rotate(45deg)'
+          : 'translateY(0px) rotate(0deg)',
+      },
+      { duration: 0.42, ease }
+    );
+    animate(
+      mid,
+      { opacity: open ? 0 : 1, transform: open ? 'scaleX(0.3)' : 'scaleX(1)' },
+      { duration: open ? 0.22 : 0.34, ease }
+    );
+    animate(
+      bottom,
+      {
+        transform: open
+          ? 'translateY(-8px) rotate(-45deg)'
+          : 'translateY(0px) rotate(0deg)',
+      },
+      { duration: 0.42, ease }
+    );
   };
 
-  // ─── Scroll state ──────────────────────────────────────────────────
+  // ─── Link cascade ──────────────────────────────────────────────────
+  const cascadeLinks = (show: boolean): void => {
+    if (prefersReducedMotion()) {
+      for (const el of revealItems) {
+        el.style.opacity = show ? '1' : '0';
+        el.style.transform = '';
+      }
+
+      return;
+    }
+
+    revealItems.forEach((el, index) => {
+      if (show) {
+        el.style.willChange = 'transform, opacity';
+
+        const controls = animate(
+          el,
+          {
+            opacity: [0, 1],
+            transform: ['translateY(28px)', 'translateY(0px)'],
+          },
+          { duration: 0.62, delay: 0.14 + index * 0.06, ease: EASE_SETTLE }
+        );
+
+        controls.finished
+          .then(() => (el.style.willChange = ''))
+          .catch(() => (el.style.willChange = ''));
+      } else {
+        animate(
+          el,
+          { opacity: 0, transform: 'translateY(18px)' },
+          { duration: 0.26, ease: EASE_INHALE }
+        );
+      }
+    });
+  };
+
+  // ─── Open / close ──────────────────────────────────────────────────
+  const openMenu = (): void => {
+    if (isOpen) return;
+    isOpen = true;
+
+    scrollPosition = window.scrollY;
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.classList.add('nav-open');
+    renderToggle(true);
+
+    const rect = toggle.getBoundingClientRect();
+    const ox = rect.left + rect.width / 2;
+    const oy = rect.top + rect.height / 2;
+
+    if (prefersReducedMotion()) {
+      nav.style.clipPath = 'none';
+      nav.classList.add('is-open');
+      cascadeLinks(true);
+
+      return;
+    }
+
+    const from = `circle(0px at ${ox}px ${oy}px)`;
+    const to = `circle(${coverRadius(ox, oy)}px at ${ox}px ${oy}px)`;
+
+    // Set the closed clip synchronously, *then* reveal — so nothing flashes
+    // between the panel becoming visible and Motion taking over the radius.
+    nav.style.clipPath = from;
+    nav.classList.add('is-open');
+    nav.style.willChange = 'clip-path';
+
+    panelAnim?.stop();
+    panelAnim = animate(
+      nav,
+      { clipPath: [from, to] },
+      {
+        duration: 0.72,
+        ease: EASE_EMPHASISED,
+      }
+    );
+    panelAnim.finished
+      .then(() => (nav.style.willChange = ''))
+      .catch(() => (nav.style.willChange = ''));
+
+    cascadeLinks(true);
+  };
+
+  /**
+   * Inhale the circle back to the toggle. When `targetHash` points at an
+   * in-page anchor, scroll there once the body lock is released instead of
+   * restoring the pre-open position.
+   */
+  const closeMenu = (targetHash: string | null = null): void => {
+    if (!isOpen) return;
+    isOpen = false;
+
+    renderToggle(false);
+    cascadeLinks(false);
+
+    const finalize = (): void => {
+      nav.classList.remove('is-open');
+      nav.style.clipPath = '';
+      nav.style.willChange = '';
+      document.body.classList.remove('nav-open');
+      document.body.style.top = '';
+
+      if (targetHash !== null && scrollToAnchor(targetHash)) return;
+
+      window.scrollTo({ top: scrollPosition, left: 0, behavior: 'instant' });
+    };
+
+    if (prefersReducedMotion()) {
+      finalize();
+
+      return;
+    }
+
+    const rect = toggle.getBoundingClientRect();
+    const ox = rect.left + rect.width / 2;
+    const oy = rect.top + rect.height / 2;
+    const from = `circle(${coverRadius(ox, oy)}px at ${ox}px ${oy}px)`;
+    const to = `circle(0px at ${ox}px ${oy}px)`;
+
+    nav.style.willChange = 'clip-path';
+    panelAnim?.stop();
+    panelAnim = animate(
+      nav,
+      { clipPath: [from, to] },
+      {
+        duration: 0.5,
+        delay: 0.05,
+        ease: EASE_INHALE,
+      }
+    );
+    panelAnim.finished.then(finalize).catch(finalize);
+  };
+
+  // ─── Scroll state (header background fallback + hero tone) ──────────
+  document.body.classList.toggle('has-hero', !!heroEl);
+  document.body.classList.toggle('no-hero', !heroEl);
+
+  let isScrolled = window.scrollY > SCROLL_THRESHOLD_PX || !heroEl;
+  const renderScroll = (): void => {
+    root.classList.toggle('is-scrolled', isScrolled);
+  };
+
   on(
     window,
     'scroll',
@@ -166,74 +319,46 @@ export default defineComponent(({ root, part, parts, on, cleanup }) => {
 
       if (next === isScrolled) return;
       isScrolled = next;
-      renderScrollState();
+      renderScroll();
     },
     { passive: true }
   );
 
-  // ─── Hero overlap ──────────────────────────────────────────────────
-  if (heroEl) {
-    const heroObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const next = entry.isIntersecting && entry.intersectionRatio > 0.15;
-
-          if (next === isOnHero) continue;
-          isOnHero = next;
-          renderScrollState();
-        }
-      },
-      { threshold: [0, 0.15, 0.35, 0.5], rootMargin: '-10% 0px 0px 0px' }
-    );
-
-    heroObserver.observe(heroEl);
-    cleanup(() => heroObserver.disconnect());
-  }
-
   // ─── Interactions ──────────────────────────────────────────────────
   on(toggle, 'click', () => {
-    if (isNavOpen) closeNav();
-    else openNav();
+    if (isOpen) closeMenu();
+    else openMenu();
   });
 
   for (const link of navLinks) {
     on(link, 'click', (event) => {
       const hash = samePageHash(link);
 
-      // Non-anchor links navigate normally; just dismiss an open drawer.
+      // Plain links navigate normally; just dismiss an open menu.
       if (hash === null) {
-        closeNav();
+        closeMenu();
 
         return;
       }
 
       // Own the scroll for in-page anchors so the fixed header is cleared
-      // and the mobile drawer's scroll-lock restore doesn't snap us back.
+      // and the close animation doesn't snap us back to the saved position.
       (event as MouseEvent).preventDefault();
 
-      if (isNavOpen) {
-        closeNav(hash);
-      } else {
-        scrollToAnchor(hash);
-      }
+      if (isOpen) closeMenu(hash);
+      else scrollToAnchor(hash);
     });
   }
 
-  on(document, 'click', (event) => {
-    if (isNavOpen && !root.contains(event.target as Node | null)) closeNav();
-  });
-
   on(document, 'keydown', (event) => {
-    if ((event as KeyboardEvent).key === 'Escape' && isNavOpen) closeNav();
+    if ((event as KeyboardEvent).key === 'Escape' && isOpen) closeMenu();
   });
 
   // ─── Initial paint ─────────────────────────────────────────────────
-  renderScrollState();
-  renderNavState();
+  renderScroll();
+  renderToggle(false);
 
-  cleanup(() => {
-    if (closeTimer !== null) window.clearTimeout(closeTimer);
-  });
+  cleanup(() => panelAnim?.stop());
 
   return {};
 });
