@@ -1,12 +1,18 @@
 /**
  * Motion — scroll-triggered reveals (Motion Mini)
  *
- * A dependency-free IntersectionObserver decides *when* an element enters the
- * viewport; Motion One's mini `animate()` carries the motion itself, driving
- * the Web Animations API directly. This keeps the bundle tiny (mini ships only
- * the WAAPI path — no spring/layout engine) while giving us JS-precise easing,
- * stagger and a `finished` promise we use to drop `will-change` the instant a
- * transition settles — keeping the compositor lean on mobile.
+ * Motion's `inView()` runs a single shared IntersectionObserver that decides
+ * *when* an element enters the viewport; Motion One's mini `animate()` carries
+ * the motion itself, driving the Web Animations API directly. This keeps the
+ * bundle tiny (mini ships only the WAAPI path — no spring/layout engine) while
+ * giving us JS-precise easing, stagger and a `finished` promise we use to drop
+ * `will-change` the instant a transition settles — keeping the compositor lean
+ * on mobile.
+ *
+ * `inView` also folds away the bookkeeping we'd otherwise hand-roll: returning
+ * nothing from the enter callback auto-unobserves the element (reveal once),
+ * while returning a handler keeps it observed and replays on every entry
+ * (`data-reveal-repeat`).
  *
  * The hidden start state lives in CSS (utilities/_motion.css), gated behind
  * `.motion-ready` on <html>, so nothing flashes before this script runs and —
@@ -28,6 +34,7 @@
  *   </ul>
  */
 
+import { inView } from 'motion';
 import { animate } from 'motion/mini';
 
 /** The keyframe-definition type `animate()` accepts, drawn from its own
@@ -197,14 +204,6 @@ function defaultDuration(variant: Variant, t: Tuning): number {
 }
 
 export function initMotion(): void {
-  const all = Array.from(
-    document.querySelectorAll<HTMLElement>('[data-reveal]')
-  );
-
-  if (all.length === 0) {
-    return;
-  }
-
   // Reduced motion: the hidden start state never applies (it is gated behind
   // `prefers-reduced-motion: no-preference` in CSS), so content is already
   // visible — there is nothing to animate or observe.
@@ -217,33 +216,31 @@ export function initMotion(): void {
     : DESKTOP;
   const configs = collect(tuning);
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        const el = entry.target as HTMLElement;
-        const config = configs.get(el);
-
-        if (config === undefined) {
-          continue;
-        }
-
-        if (entry.isIntersecting) {
-          reveal(el, config);
-
-          if (!config.repeat) {
-            observer.unobserve(el);
-          }
-        } else if (config.repeat) {
-          hide(el, config);
-        }
-      }
-    },
-    { rootMargin: '0px 0px -12% 0px', threshold: 0 }
-  );
-
-  for (const el of configs.keys()) {
-    observer.observe(el);
+  if (configs.size === 0) {
+    return;
   }
+
+  // A single shared observer for every reveal. Firing a touch before the
+  // element is fully in view (the `-12%` bottom margin) lets the entrance read
+  // as the eye arrives, rather than after.
+  inView(
+    Array.from(configs.keys()),
+    (element) => {
+      const el = element as HTMLElement;
+      const config = configs.get(el);
+
+      if (config === undefined) {
+        return;
+      }
+
+      reveal(el, config);
+
+      // Repeat elements stay observed and replay on each re-entry; everything
+      // else returns nothing, so `inView` unobserves it after the first play.
+      return config.repeat ? () => hide(el, config) : undefined;
+    },
+    { margin: '0px 0px -12% 0px', amount: 'some' }
+  );
 }
 
 /**
