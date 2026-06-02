@@ -91,14 +91,20 @@
 /* ============================================
    Reveal-on-scroll — the entrance vocabulary
    ============================================
-   JS (utils/motion.ts) adds `.is-in` via IntersectionObserver as an
-   element enters the viewport; CSS owns the motion through `transition`.
+   JS (utils/motion.ts) drives the motion through Motion One's mini
+   `animate()`, triggered by an IntersectionObserver as the element enters
+   the viewport. CSS owns only the *hidden start state* below — a flat
+   `opacity: 0` — so nothing flashes before the script runs. Motion owns the
+   `transform` and `filter` keyframes entirely, so this stylesheet must NOT
+   set `translate` / `scale` / `filter` here (they would compose with the
+   shorthand Motion animates and double the offset).
 
-   Elements only hide once JS confirms itself by adding `.motion-ready`
-   to <html> (a render-blocking snippet in <head>). Without JS — and under
-   reduced motion — every element stays visible and still.
+   The start state is gated behind `.motion-ready` (added synchronously to
+   <html> in the <head>) *and* `prefers-reduced-motion: no-preference`.
+   Without JS — and under reduced motion — every element stays visible and
+   still, with no animation at all.
 
-     data-reveal                  fade + rise (default)
+     data-reveal                  fade + rise (default = "up")
      data-reveal="up|down|left|right|zoom|fade|blur"
      data-reveal-delay="120"      ms, individual offset
      data-reveal-duration="900"   ms, override
@@ -108,82 +114,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .motion-ready [data-reveal] {
-    --reveal-shift: 1.5rem;
-    --reveal-zoom: 0.94;
-    --reveal-step: 110ms;
-    --reveal-duration: 880ms;
-    --reveal-ease: var(--ease-reveal);
-    --reveal-delay: calc(
-      var(--reveal-index, 0) * var(--reveal-step) + var(--reveal-base, 0ms)
-    );
-
     opacity: 0;
-    translate: 0 var(--reveal-shift);
-    transition:
-      opacity var(--reveal-duration) var(--reveal-ease) var(--reveal-delay),
-      translate var(--reveal-duration) var(--reveal-ease) var(--reveal-delay),
-      scale var(--reveal-duration) var(--reveal-ease) var(--reveal-delay),
-      filter var(--reveal-duration) var(--reveal-ease) var(--reveal-delay);
-
-    /* `will-change` is promoted by JS only while the transition runs, then
-       dropped — see utils/motion.ts. Keeps the compositor lean on mobile. */
-  }
-
-  .motion-ready [data-reveal='down'] {
-    translate: 0 calc(var(--reveal-shift) * -1);
-  }
-
-  /* "right" travels in from the inline-start edge; "left" from the end. */
-  .motion-ready [data-reveal='right'] {
-    translate: calc(var(--reveal-shift) * -1) 0;
-  }
-
-  .motion-ready [data-reveal='left'] {
-    translate: var(--reveal-shift) 0;
-  }
-
-  .motion-ready [data-reveal='fade'] {
-    translate: 0;
-  }
-
-  .motion-ready [data-reveal='zoom'] {
-    scale: var(--reveal-zoom);
-    translate: 0;
-  }
-
-  /* Headline burn-in — a slower rise with a focus-pull blur. Reserved for
-     titles so the eye settles on the words as they sharpen. */
-  .motion-ready [data-reveal='blur'] {
-    --reveal-duration: 1150ms;
-
-    filter: blur(12px);
-    translate: 0 0.6rem;
-  }
-
-  /* Phones — smaller travel, quicker beats, tighter stagger so a whole
-     sequence resolves inside a single thumb-flick. Crucially the headline
-     burn-in drops its `filter: blur()`: animating blur on large display
-     type is the classic source of mobile scroll jank. */
-  @media (width < 640px) {
-    .motion-ready [data-reveal] {
-      --reveal-shift: 0.75rem;
-      --reveal-duration: 700ms;
-      --reveal-step: 80ms;
-    }
-
-    .motion-ready [data-reveal='blur'] {
-      --reveal-duration: 760ms;
-
-      filter: none;
-      translate: 0 0.75rem;
-    }
-  }
-
-  .motion-ready [data-reveal].is-in {
-    opacity: 1;
-    filter: blur(0);
-    scale: 1;
-    translate: 0;
   }
 }
 
