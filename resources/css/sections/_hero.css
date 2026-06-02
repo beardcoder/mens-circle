@@ -243,6 +243,17 @@
   }
 }
 
+@media (width <= 600px) {
+  /* The shared `.btn--large` size is tuned for desktop CTAs; on phones its
+     padding makes the hero pill feel oversized for its short label. Scale it
+     down to a compact, proportionate size while keeping a ≥44px tap target. */
+  .hero__cta .btn--large {
+    --btn-padding-block: 0.95rem;
+    --btn-padding-inline: 1.85rem;
+    --btn-font-size: var(--text-caption);
+  }
+}
+
 @media (width <= 480px) {
   .hero__title {
     font-size: clamp(3rem, 14vw, 5rem);
