@@ -1,18 +1,21 @@
 /**
- * Header / Navigation Component
+ * Header / Navigation — "the circle breathes open"
  *
  * Layout is a balanced three-zone grid — logo (start), navigation
- * (center), actions (end) — so the bar reads as deliberately composed
- * rather than left-weighted. The primary CTA lives in the actions zone
- * and stays visible at every breakpoint; the hamburger only governs the
- * link list, which becomes a full-screen drawer on small screens.
+ * (center), actions (end). The primary CTA and the toggle live in the
+ * actions zone and stay above the menu at every breakpoint.
  *
- * Two coordinated scroll-linked layers give the bar its depth:
- *   1. An isolated `::before` paints the "scrolled" background (blur +
- *      tinted fill + hairline). On hero pages it fades in with scroll;
- *      off-hero pages pin it opaque.
- *   2. A `color` tone shift on the header itself — children inherit via
- *      `currentColor`, so logo, nav, and toggle move together.
+ * On desktop the nav is a quiet inline row. Below 960px it becomes the
+ * signature surface: the toggle breathes a full-viewport earth panel open
+ * via a `clip-path` circle that grows out of the button (driven by Motion
+ * in site-header.ts), concentric rings pulse behind the links, and each
+ * link rises on a stagger. The endless breathing is CSS; the open/close
+ * transition is JS.
+ *
+ * Division of labour:
+ *   - CSS owns resting states, the scrolled-background morph, and every
+ *     looping/ambient animation (rings, idle toggle ring, hover underline).
+ *   - JS (Motion) owns the open/close choreography and link cascade.
  */
 
 /* ============================================
@@ -30,12 +33,10 @@
     color var(--motion-standard);
 }
 
-/* Scrolled-state overlay (rendered via ::before so we can fade it
-   independently of the header's own color/padding morph).
-
-   The fill is deliberately thin (~55%): the heavy lifting is done by
-   `backdrop-filter`, which frosts the content below. A solid tint would
-   read as a flash against colorful hero imagery. */
+/* Scrolled-state overlay, rendered via ::before so it fades independently
+   of the header's own colour/padding morph. The fill is deliberately thin
+   (~55%) — `backdrop-filter` does the heavy lifting so the bar frosts the
+   content below instead of flashing a solid block over hero imagery. */
 .header::before {
   position: absolute;
   inset: 0;
@@ -62,8 +63,8 @@
   align-items: center;
 }
 
-/* Logo + actions stay above the drawer so the top bar reads as one
-   persistent layer over the full-screen menu. */
+/* Logo + actions stay above the menu so the top bar reads as one
+   persistent layer over the full-screen panel. */
 .header__logo,
 .header__actions {
   position: relative;
@@ -125,7 +126,7 @@
 }
 
 /* ============================================
-   Navigation (desktop row)
+   Navigation (desktop inline row)
    ============================================ */
 .nav__list {
   display: flex;
@@ -143,6 +144,7 @@
 .nav__link {
   position: relative;
   display: inline-flex;
+  align-items: baseline;
   font-size: clamp(0.8125rem, 0.75rem + 0.2vw, 0.9375rem);
   font-weight: 500;
   color: inherit;
@@ -165,8 +167,13 @@
   border-radius: var(--radius-sm);
 }
 
-/* Underline grows from the center on hover.
-   `transform: scaleX` is compositor-only — no per-frame layout. */
+/* The editorial index numeral is part of the breathing menu only — it has
+   no place in the slim desktop row. */
+.nav__index {
+  display: none;
+}
+
+/* Center-growing underline. `transform: scaleX` is compositor-only. */
 .nav__link::after {
   position: absolute;
   inset-block-end: -6px;
@@ -186,8 +193,14 @@
   }
 }
 
-/* Header CTA — the shared `.btn` geometry, sized down to sit comfortably
-   beside the slim nav links and the toggle. */
+/* The ambient rings + breathing meta line belong to the mobile panel. */
+.nav__ambient,
+.nav__meta {
+  display: none;
+}
+
+/* Header CTA — shared `.btn` geometry, sized down to sit beside the slim
+   nav links and the toggle. */
 .nav__cta {
   --btn-padding-block: 0.7rem;
   --btn-padding-inline: clamp(1.1rem, 1.6vw, 1.6rem);
@@ -197,17 +210,19 @@
 }
 
 /* ============================================
-   Mobile Navigation Toggle
+   Menu Toggle
    ============================================ */
 .nav-toggle {
+  position: relative;
   display: none;
-  flex-direction: column;
-  gap: 6px;
-  padding: 0.5rem;
+  place-items: center;
+  inline-size: 48px;
+  block-size: 48px;
+  padding: 0;
   cursor: pointer;
   background: none;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
 }
 
 .nav-toggle:focus-visible {
@@ -215,36 +230,41 @@
   outline-offset: 2px;
 }
 
-.nav-toggle span {
+/* Idle breathing ring — a soft pulse that invites the tap. Lives entirely
+   in CSS so it costs nothing in JS and stills itself under reduced motion
+   or once the menu is open. */
+.nav-toggle::before {
+  position: absolute;
+  inset: 2px;
+  content: '';
+  border: 1px solid color-mix(in oklch, currentcolor 30%, transparent);
+  border-radius: var(--radius-full);
+  opacity: 0;
+}
+
+.nav-toggle__bars {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.nav-toggle__bar {
   display: block;
-  inline-size: 28px;
+  inline-size: 26px;
   block-size: 2px;
   background: currentcolor;
+  border-radius: var(--radius-full);
   transform-origin: center;
-  transition:
-    transform var(--motion-standard),
-    opacity var(--motion-standard);
-}
-
-.nav-toggle.active span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-}
-
-.nav-toggle.active span:nth-child(2) {
-  opacity: 0;
-  transform: scaleX(0);
-}
-
-.nav-toggle.active span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* ============================================
    Hero-page initial tone
 
-   On pages that start with a hero image, the header sits on top of a
-   dark visual — text flips to bone until the page has scrolled. Without
-   a hero, the header is always in its resting (solid) state.
+   On pages that open with a hero image the header floats over a dark
+   visual — text flips to bone until the page scrolls. Without a hero the
+   header rests in its solid state from the start.
    ============================================ */
 body:has(.hero) .header {
   color: var(--color-bone);
@@ -254,8 +274,7 @@ body:not(:has(.hero)) .header::before {
   opacity: 1;
 }
 
-/* Fallback for browsers without :has() — the scroll-header JS component
-   tags the body with has-hero / no-hero. */
+/* Fallback for browsers without :has() — site-header.ts tags the body. */
 @supports not selector(body:has(.hero)) {
   body.has-hero .header {
     color: var(--color-bone);
@@ -269,13 +288,11 @@ body:not(:has(.hero)) .header::before {
 /* ============================================
    Scroll-linked morph (native scroll-timeline)
 
-   On hero pages: across the first ~180px of scroll the header
-   continuously morphs from "transparent over hero" to "solid with blur
-   + dark text". Runs on the compositor — no JS scroll listener, no
-   binary snap.
-
-   Fallback (below) covers browsers without scroll-timeline support via
-   the JS-added `.scrolled` class.
+   On hero pages: across the first ~180px of scroll the header continuously
+   morphs from "transparent over hero" to "solid with blur + dark text".
+   Runs on the compositor — no JS scroll listener, no binary snap. The
+   `.is-scrolled` fallback (added by site-header.ts) covers browsers
+   without scroll-timeline support.
    ============================================ */
 @supports (animation-timeline: scroll()) {
   body:has(.hero) .header {
@@ -292,29 +309,33 @@ body:not(:has(.hero)) .header::before {
 }
 
 @supports not (animation-timeline: scroll()) {
-  body:has(.hero) .header.scrolled {
+  body:has(.hero) .header.is-scrolled {
     color: var(--text-primary);
   }
 
-  body:has(.hero) .header.scrolled::before {
+  body:has(.hero) .header.is-scrolled::before {
     opacity: 1;
   }
 }
 
 /* ============================================
-   Mobile Navigation Drawer
+   Breathing Menu (≤960px)
 
-   Below 960px the link list detaches into a full-viewport drawer that
-   reveals from the top via `clip-path` — a clean "unfold" that's robust
-   across browsers. Links are centered with grid `place-content` and fade
-   up on a stagger driven by the `--nav-i` index inherited from each item.
-
-   `visibility` is part of the transition so the drawer leaves the
-   accessibility / focus tree once the close animation finishes.
+   The link list detaches into a full-viewport panel. JS sets the
+   `clip-path` circle and the link cascade; the panel only declares its
+   resting (closed) and revealed (open) surface here. `visibility` keeps
+   the closed panel out of the focus / accessibility tree without any JS.
    ============================================ */
 @media (width <= 960px) {
   .nav-toggle {
-    display: flex;
+    display: grid;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-toggle:not(.is-open)::before {
+      opacity: 1;
+      animation: toggle-breath 4.5s var(--ease-ambient) infinite;
+    }
   }
 
   .nav {
@@ -323,11 +344,11 @@ body:not(:has(.hero)) .header::before {
     z-index: calc(var(--z-header) + 1);
     display: grid;
     visibility: hidden;
-    place-content: center;
+    grid-auto-rows: 1fr auto;
     place-items: center;
     inline-size: 100%;
     min-block-size: 100dvh;
-    padding-block: var(--space-xl);
+    padding-block: calc(var(--header-clearance) + var(--space-md)) var(--space-xl);
     padding-inline: var(--space-md);
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -335,38 +356,89 @@ body:not(:has(.hero)) .header::before {
     pointer-events: none;
     background:
       radial-gradient(
-        ellipse at 50% 15%,
-        color-mix(in oklch, var(--color-terracotta) 18%, transparent),
+        ellipse at 50% 32%,
+        color-mix(in oklch, var(--color-terracotta) 20%, transparent),
+        transparent 58%
+      ),
+      radial-gradient(
+        ellipse at 85% 90%,
+        color-mix(in oklch, var(--color-sand) 10%, transparent),
         transparent 55%
       ),
       linear-gradient(
         155deg,
         var(--color-earth-deep) 0%,
-        var(--color-earth-dark) 60%,
+        var(--color-earth-dark) 58%,
         var(--color-earth-mid) 100%
       );
-    opacity: 0;
-    clip-path: inset(0 0 100% 0);
-    transition:
-      clip-path 520ms var(--ease-emphasised),
-      opacity 280ms var(--ease-settle),
-      visibility 520ms step-end;
+
+    /* Closed resting clip — JS overrides this with its origin-accurate
+       circle the instant the menu opens. */
+    clip-path: circle(0 at 100% 0);
   }
 
-  .nav.open {
+  .nav.is-open {
     visibility: visible;
     pointer-events: auto;
-    opacity: 1;
-    clip-path: inset(0);
-    transition:
-      clip-path 620ms var(--ease-emphasised),
-      opacity 320ms var(--ease-settle),
-      visibility 0s;
   }
 
+  /* ── Ambient breathing rings — the "circle" the menu is named for ── */
+  .nav__ambient {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+
+  .nav__ring {
+    grid-area: 1 / 1;
+    aspect-ratio: 1;
+    border: 1px solid color-mix(in oklch, var(--color-sand) 22%, transparent);
+    border-radius: var(--radius-full);
+  }
+
+  .nav__ring:nth-child(1) {
+    inline-size: min(78vmin, 30rem);
+  }
+
+  .nav__ring:nth-child(2) {
+    inline-size: min(54vmin, 21rem);
+    border-color: color-mix(in oklch, var(--color-terracotta) 26%, transparent);
+  }
+
+  .nav__ring:nth-child(3) {
+    inline-size: min(32vmin, 13rem);
+    background: radial-gradient(
+      circle,
+      color-mix(in oklch, var(--color-terracotta) 14%, transparent),
+      transparent 70%
+    );
+    border-color: color-mix(in oklch, var(--color-terracotta) 18%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nav.is-open .nav__ring {
+      animation: ring-breath 7s var(--ease-ambient) infinite;
+    }
+
+    .nav.is-open .nav__ring:nth-child(2) {
+      animation-delay: -0.9s;
+    }
+
+    .nav.is-open .nav__ring:nth-child(3) {
+      animation-delay: -1.8s;
+    }
+  }
+
+  /* ── Links ── */
   .nav__list {
+    position: relative;
+    z-index: 1;
     flex-direction: column;
-    gap: clamp(0.75rem, 2vh, var(--space-md));
+    gap: clamp(0.85rem, 2.4vh, 1.5rem);
+    place-self: center;
     text-align: center;
   }
 
@@ -374,74 +446,51 @@ body:not(:has(.hero)) .header::before {
     justify-content: center;
   }
 
-  /* Decorative thread — a quiet line that draws in once the drawer has
-     settled, anchoring the menu without distracting from it. */
-  .nav::after {
-    inline-size: clamp(120px, 30vw, 200px);
-    block-size: 1px;
-    margin-block-start: var(--space-md);
-    content: '';
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      color-mix(in oklch, var(--color-sand) 50%, transparent) 50%,
-      transparent 100%
-    );
-    opacity: 0;
-    transform: scaleX(0.3);
-    transform-origin: center;
-    transition:
-      opacity 400ms var(--ease-settle) 220ms,
-      transform 560ms var(--ease-settle) 220ms;
-  }
-
-  .nav.open::after {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-
-  /* Display type scales down as the item count grows so long menus stay
-     on screen — `--nav-count` is set inline on the <nav>. Each link also
-     carries the staggered entrance, with `--nav-i` inherited from its
-     parent item. */
   .nav__link {
+    gap: 0.7rem;
+    align-items: baseline;
     font-family: var(--font-display);
-    font-size: clamp(
-      1.25rem,
-      calc(2.2rem - 0.1rem * var(--nav-count, 5)),
-      2rem
-    );
-    line-height: 1.15;
+    font-size: clamp(1.6rem, 8vw, 2.5rem);
+    font-weight: 500;
+    line-height: 1.1;
     color: var(--text-on-dark);
     letter-spacing: -0.02em;
-    opacity: 0;
-    translate: 0 24px;
-    transition:
-      opacity 500ms var(--ease-settle),
-      translate 540ms var(--ease-settle);
-    transition-delay: calc(120ms + 60ms * var(--nav-i, 0));
   }
 
-  .nav.open .nav__link {
-    opacity: 1;
-    translate: 0 0;
+  .nav__index {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent-secondary);
+    letter-spacing: 0.18em;
+    translate: 0 -0.6em;
   }
 
   .nav__link::after {
-    inset-block-end: -8px;
+    inset-block-end: -6px;
     inset-inline: 50%;
-    inline-size: 60%;
+    inline-size: 64%;
     transform: translateX(-50%) scaleX(0);
   }
 
-  .nav__link:hover::after {
+  .nav__link:hover::after,
+  .nav__link:focus-visible::after {
     transform: translateX(-50%) scaleX(1);
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    .nav__link:hover {
-      opacity: 0.85;
-    }
+  /* ── Breathing meta line ── */
+  .nav__meta {
+    position: relative;
+    z-index: 1;
+    place-self: center;
+    margin: 0;
+    font-size: var(--text-caption);
+    color: color-mix(in oklch, var(--color-sand) 75%, transparent);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
   }
 
   /* The persistent CTA shrinks on phones so the top bar never crowds. */
@@ -449,6 +498,16 @@ body:not(:has(.hero)) .header::before {
     --btn-padding-block: 0.6rem;
     --btn-padding-inline: 1rem;
     --btn-font-size: var(--text-xs);
+  }
+
+  /* Hidden start state for the link cascade — only when JS is present
+     (`.motion-ready`) and motion is welcome, so without JS or under
+     reduced motion the items stay visible. */
+  @media (prefers-reduced-motion: no-preference) {
+    .motion-ready .nav__item,
+    .motion-ready .nav__meta {
+      opacity: 0;
+    }
   }
 }
 
@@ -460,11 +519,11 @@ body:not(:has(.hero)) .header::before {
 }
 
 /* ============================================
-   Open-drawer top bar
+   Open-menu top bar
 
-   The drawer paints a dark earth surface; force the persistent top bar
+   The panel paints a dark earth surface; force the persistent top bar
    (logo + actions) to its light tone so it never disappears against the
-   menu — overriding the scroll-timeline color morph on hero pages.
+   menu — overriding the scroll-timeline colour morph on hero pages.
    ============================================ */
 body.nav-open .header {
   color: var(--color-bone) !important;
@@ -476,26 +535,39 @@ body.nav-open .header::before {
   animation: none !important;
 }
 
-/* Reduced motion: kill the slide-in choreography, fade only. */
-@media (prefers-reduced-motion: reduce) {
-  @media (width <= 960px) {
-    .nav,
-    .nav__link,
-    .nav::after {
-      transition-delay: 0ms !important;
-      transition-duration: 120ms;
-    }
-
-    .nav {
-      clip-path: none;
-    }
-  }
-}
-
-/* Body scroll lock when nav is open */
+/* Body scroll lock while the menu is open. */
 body.nav-open {
   position: fixed;
   inline-size: 100%;
   block-size: 100%;
   overflow: hidden;
+}
+
+/* ============================================
+   Ambient keyframes
+   ============================================ */
+@keyframes ring-breath {
+  0%,
+  100% {
+    opacity: 0.45;
+    scale: 1;
+  }
+
+  50% {
+    opacity: 0.85;
+    scale: 1.08;
+  }
+}
+
+@keyframes toggle-breath {
+  0%,
+  100% {
+    opacity: 0;
+    scale: 0.7;
+  }
+
+  50% {
+    opacity: 0.9;
+    scale: 1;
+  }
 }

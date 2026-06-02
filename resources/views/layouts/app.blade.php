@@ -44,9 +44,15 @@
           id="nav"
           data-lume-part="nav"
           aria-label="Hauptnavigation"
-          aria-expanded="false"
-          style="--nav-count: {{ $headerNavLinks->count() }}"
         >
+          {{-- Ambient "circle" — concentric rings that breathe behind the
+               menu (mobile only). Decorative, so hidden from assistive tech. --}}
+          <span class="nav__ambient" aria-hidden="true">
+            <span class="nav__ring"></span>
+            <span class="nav__ring"></span>
+            <span class="nav__ring"></span>
+          </span>
+
           <ul class="nav__list">
             @foreach ($headerNavLinks as $section)
               @php
@@ -55,7 +61,7 @@
                 $umamiTarget = $attrs['umami_event_target'] ?? null;
                 $openInNewTab = (bool) ($attrs['open_in_new_tab'] ?? false);
               @endphp
-              <li class="nav__item" style="--nav-i: {{ $loop->index }}">
+              <li class="nav__item">
                 <a
                   href="{{ $section->url }}"
                   class="nav__link"
@@ -64,11 +70,18 @@
                   data-umami-event="{{ $umamiEvent }}"
                   @if ($umamiTarget) data-umami-event-target="{{ $umamiTarget }}" @endif
                 >
-                  {{ $section->title }}</a
-                >
+                  <span
+                    class="nav__index"
+                    aria-hidden="true"
+                    >{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</span
+                  >
+                  <span class="nav__label">{{ $section->title }}</span>
+                </a>
               </li>
             @endforeach
           </ul>
+
+          <p class="nav__meta">Atme durch. Du bist angekommen.</p>
         </nav>
 
         <div class="header__actions">
@@ -100,9 +113,11 @@
             aria-expanded="false"
             aria-label="Menü öffnen"
           >
-            <span></span>
-            <span></span>
-            <span></span>
+            <span class="nav-toggle__bars" aria-hidden="true">
+              <span class="nav-toggle__bar"></span>
+              <span class="nav-toggle__bar"></span>
+              <span class="nav-toggle__bar"></span>
+            </span>
           </button>
         </div>
       </div>
