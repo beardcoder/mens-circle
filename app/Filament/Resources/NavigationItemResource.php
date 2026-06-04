@@ -6,13 +6,12 @@ namespace App\Filament\Resources;
 
 use App\Enums\NavigationCondition;
 use App\Enums\NavigationLocation;
-use App\Filament\Resources\NavigationItemResource\Pages\CreateNavigationItem;
-use App\Filament\Resources\NavigationItemResource\Pages\EditNavigationItem;
 use App\Filament\Resources\NavigationItemResource\Pages\ListNavigationItems;
 use App\Filament\Support\Anchor;
 use App\Models\NavigationItem;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
@@ -22,9 +21,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Override;
 use UnitEnum;
@@ -58,6 +56,10 @@ class NavigationItemResource extends Resource
                         ->options(NavigationLocation::class)
                         ->required()
                         ->native(false)
+                        ->default(static fn(mixed $livewire): ?string => $livewire instanceof ListNavigationItems
+                            && is_string($livewire->activeTab)
+                                ? $livewire->activeTab
+                                : null)
                         ->helperText('In welchem Navigationsbereich der Link erscheint.'),
 
                     TextInput::make('label')->label('Beschriftung')->required()->maxLength(255),
@@ -85,13 +87,6 @@ class NavigationItemResource extends Resource
                         ->native(false)
                         ->placeholder('Keine')
                         ->helperText('Optional: Sichtbarkeit & URL dynamisch steuern.'),
-
-                    TextInput::make('sort')
-                        ->label('Sortierung')
-                        ->numeric()
-                        ->default(0)
-                        ->required()
-                        ->helperText('Kleinere Werte erscheinen zuerst.'),
                 ])
                 ->columns(2),
 
@@ -114,32 +109,23 @@ class NavigationItemResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('location')->label('Bereich')->badge()->sortable(),
-                TextColumn::make('label')->label('Beschriftung')->searchable()->sortable(),
+                TextColumn::make('label')->label('Beschriftung')->searchable(),
                 TextColumn::make('url')->label('URL')->limit(40)->toggleable(),
                 TextColumn::make('anchor')->label('Anker')->badge()->toggleable(),
                 TextColumn::make('condition')->label('Bedingung')->badge()->toggleable(),
-                IconColumn::make('is_cta')->label('CTA')->boolean()->sortable()->toggleable(),
-                IconColumn::make('is_visible')->label('Sichtbar')->boolean()->sortable(),
-                TextColumn::make('sort')->label('Sortierung')->sortable(),
+                ToggleColumn::make('is_visible')->label('Sichtbar'),
+                ToggleColumn::make('is_cta')->label('CTA'),
             ])
-            ->defaultSort('location')
-            ->defaultGroup('location')
+            ->defaultSort('sort')
             ->reorderable('sort')
             ->defaultPaginationPageOption(50)
-            ->filters([
-                SelectFilter::make('location')->label('Bereich')->options(NavigationLocation::class),
+            ->recordActions([
+                EditAction::make()->slideOver(),
+                DeleteAction::make(),
             ])
-            ->recordActions([EditAction::make()])
             ->toolbarActions([
                 BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
-    }
-
-    #[Override]
-    public static function getRelations(): array
-    {
-        return [];
     }
 
     #[Override]
@@ -147,8 +133,6 @@ class NavigationItemResource extends Resource
     {
         return [
             'index' => ListNavigationItems::route('/'),
-            'create' => CreateNavigationItem::route('/create'),
-            'edit' => EditNavigationItem::route('/{record}/edit'),
         ];
     }
 }
