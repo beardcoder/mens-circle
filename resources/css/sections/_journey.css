@@ -99,10 +99,44 @@
   position: relative;
   padding: var(--space-lg) var(--space-md);
   border-inline-start: 1px solid var(--border-on-dark);
+  transition: background-color var(--motion-standard);
 }
 
 .journey__step:first-child {
   border-inline-start: none;
+}
+
+/* Soft glow that pools up from the base of the step on hover, echoing the
+   section's own bottom glow at the scale of a single column. */
+.journey__step::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: '';
+  background: radial-gradient(
+    ellipse 90% 70% at 50% 100%,
+    color-mix(in oklch, var(--accent-primary) 14%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--motion-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .journey__step:hover::after {
+    opacity: 1;
+  }
+
+  .journey__step:hover .journey__step-number {
+    color: var(--accent-secondary);
+    opacity: 0.55;
+    translate: 0 -6px;
+  }
+
+  .journey__step:hover .journey__step-title {
+    color: var(--accent-secondary);
+  }
 }
 
 @media (width <= 1000px) {
@@ -134,6 +168,10 @@
   color: var(--accent-primary);
   letter-spacing: -0.05em;
   opacity: 0.3;
+  transition:
+    color var(--motion-standard),
+    opacity var(--motion-standard),
+    translate 420ms var(--ease-settle);
 }
 
 .journey__step-title {
@@ -142,6 +180,7 @@
   font-size: clamp(1.6rem, 2.2vw, 2.25rem);
   color: var(--text-on-dark);
   letter-spacing: -0.025em;
+  transition: color var(--motion-standard);
 }
 
 .journey__step-text {

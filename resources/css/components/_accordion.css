@@ -116,6 +116,20 @@
   color: var(--_accent);
 }
 
+/* Keep the plus glyph in step with the trigger text it sits beside — on a
+   closed item, hovering the row warms the icon toward the accent too. */
+@media (hover: hover) and (pointer: fine) {
+  .accordion-item:not([open]) > .accordion-item__trigger:hover .accordion-item__icon {
+    background: color-mix(in oklch, var(--_accent) 12%, transparent);
+    border-color: var(--_accent);
+
+    &::before,
+    &::after {
+      background: var(--_accent);
+    }
+  }
+}
+
 /* ============================================
    Icon (plus → minus by rotating the vertical stroke)
    ============================================ */
