@@ -272,9 +272,7 @@
   color: color-mix(in oklch, var(--accent-secondary) 60%, transparent);
   text-indent: 0.32em;
   letter-spacing: 0.32em;
-  transition:
-    color var(--motion-standard),
-    letter-spacing 360ms var(--ease-precise);
+  transition: color var(--motion-standard);
 }
 
 .nav__label {
@@ -289,7 +287,6 @@
 
   .nav__link:hover .nav__index {
     color: var(--accent-secondary);
-    letter-spacing: 0.4em;
   }
 }
 

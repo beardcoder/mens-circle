@@ -36,7 +36,7 @@
   --btn-gap: var(--space-xs);
   --btn-font-size: var(--text-caption);
   --btn-tracking: 0.12em;
-  --btn-tracking-hover: 0.14em;
+  --btn-tracking-hover: 0.12em;
   --btn-radius: var(--radius-full);
   --btn-border-width: 1.5px;
   --btn-lift: -2px;
