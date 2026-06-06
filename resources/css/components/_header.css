@@ -348,7 +348,8 @@
   content: '';
   background: var(--accent-secondary);
   border-radius: var(--radius-full);
-  box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent-secondary) 50%, transparent);
+  box-shadow: 0 0 0 0
+    color-mix(in oklch, var(--accent-secondary) 50%, transparent);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -572,12 +573,14 @@ body.nav-open {
 @keyframes meta-ember {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent-secondary) 45%, transparent);
+    box-shadow: 0 0 0 0
+      color-mix(in oklch, var(--accent-secondary) 45%, transparent);
     opacity: 0.5;
   }
 
   50% {
-    box-shadow: 0 0 0 6px color-mix(in oklch, var(--accent-secondary) 0%, transparent);
+    box-shadow: 0 0 0 6px
+      color-mix(in oklch, var(--accent-secondary) 0%, transparent);
     opacity: 1;
   }
 }
