@@ -46,7 +46,11 @@
 
 @media (hover: hover) and (pointer: fine) {
   .value-item:hover {
-    background-color: color-mix(in oklch, var(--accent-primary) 4%, transparent);
+    background-color: color-mix(
+      in oklch,
+      var(--accent-primary) 4%,
+      transparent
+    );
   }
 
   .value-item:hover .value-item__number {
