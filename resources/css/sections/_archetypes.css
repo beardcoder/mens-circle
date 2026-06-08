@@ -4,6 +4,8 @@
  */
 
 .archetypes-section {
+  position: relative;
+
   /* `clip` keeps decorative bleed contained without establishing a
      scroll container that would freeze descendant view-timelines. */
   overflow: clip;
@@ -19,6 +21,17 @@
   padding: var(--space-lg) var(--space-md);
   overflow: hidden;
   border-inline-start: 1px solid var(--border-light);
+  transition: background-color var(--motion-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .archetype-card:hover {
+    background-color: color-mix(in oklch, var(--accent-primary) 5%, var(--bg-secondary));
+  }
+
+  .archetype-card:hover .archetype-card__title {
+    color: var(--accent-primary);
+  }
 }
 
 .archetype-card__content {
@@ -51,6 +64,7 @@
   line-height: 1.1;
   color: var(--text-primary);
   letter-spacing: -0.025em;
+  transition: color var(--motion-standard);
 }
 
 .archetype-card__description {

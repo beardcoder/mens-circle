@@ -17,6 +17,14 @@
 
   <x-sprite-defs />
 
+  {{-- Editorial side rails — decorative magazine framing, hidden on small screens --}}
+  <aside class="side-rail side-rail--left" aria-hidden="true">
+    <span class="side-rail__text">Männerkreis · Niederbayern</span>
+  </aside>
+  <aside class="side-rail side-rail--right" aria-hidden="true">
+    <span class="side-rail__text">Straubing · Bayern</span>
+  </aside>
+
   <!-- Skip Link -->
   <a href="#main" class="skip-link">Zum Inhalt springen</a>
 

@@ -7,6 +7,8 @@
    Intro Section Base
    ============================================ */
 .intro-section {
+  position: relative;
+
   /* `clip` (not `hidden`) keeps decorative bleed clipped without
      establishing a scroll container — which would otherwise anchor
      descendant `animation-timeline: view()` and freeze the progress. */
