@@ -2511,16 +2511,16 @@
         },
         {
             "name": "laravel-notification-channels/pushover",
-            "version": "5.0.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-notification-channels/pushover.git",
-                "reference": "a276d3cdbfede11bb5f4013c24ad1ef2a06bcb39"
+                "reference": "74e4b870e41b65c220be81d85e3b481591cfb2ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-notification-channels/pushover/zipball/a276d3cdbfede11bb5f4013c24ad1ef2a06bcb39",
-                "reference": "a276d3cdbfede11bb5f4013c24ad1ef2a06bcb39",
+                "url": "https://api.github.com/repos/laravel-notification-channels/pushover/zipball/74e4b870e41b65c220be81d85e3b481591cfb2ea",
+                "reference": "74e4b870e41b65c220be81d85e3b481591cfb2ea",
                 "shasum": ""
             },
             "require": {
@@ -2572,9 +2572,9 @@
             "homepage": "https://github.com/laravel-notification-channels/pushover",
             "support": {
                 "issues": "https://github.com/laravel-notification-channels/pushover/issues",
-                "source": "https://github.com/laravel-notification-channels/pushover/tree/5.0.0"
+                "source": "https://github.com/laravel-notification-channels/pushover/tree/5.0.1"
             },
-            "time": "2026-03-18T11:30:33+00:00"
+            "time": "2026-05-31T17:09:07+00:00"
         },
         {
             "name": "laravel/framework",
