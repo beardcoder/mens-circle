@@ -7262,16 +7262,16 @@
         },
         {
             "name": "spatie/crawler",
-            "version": "9.3.1",
+            "version": "9.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/crawler.git",
-                "reference": "0c0b6e4928040d90c1d0508fd6e5655e8a51067c"
+                "reference": "3b3a9a1a8c750b0240c2b7c9e2ef22e84092416e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/crawler/zipball/0c0b6e4928040d90c1d0508fd6e5655e8a51067c",
-                "reference": "0c0b6e4928040d90c1d0508fd6e5655e8a51067c",
+                "url": "https://api.github.com/repos/spatie/crawler/zipball/3b3a9a1a8c750b0240c2b7c9e2ef22e84092416e",
+                "reference": "3b3a9a1a8c750b0240c2b7c9e2ef22e84092416e",
                 "shasum": ""
             },
             "require": {
@@ -7325,7 +7325,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/crawler/issues",
-                "source": "https://github.com/spatie/crawler/tree/9.3.1"
+                "source": "https://github.com/spatie/crawler/tree/9.3.2"
             },
             "funding": [
                 {
@@ -7337,7 +7337,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-18T13:26:09+00:00"
+            "time": "2026-06-12T15:45:15+00:00"
         },
         {
             "name": "spatie/image",
@@ -7945,16 +7945,16 @@
         },
         {
             "name": "spatie/laravel-sitemap",
-            "version": "8.1.0",
+            "version": "8.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-sitemap.git",
-                "reference": "5a8d3467f670d4dbe277c00bf960617912c97fb1"
+                "reference": "51f52030ab22abf5e95ed037fea5f8073114e784"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-sitemap/zipball/5a8d3467f670d4dbe277c00bf960617912c97fb1",
-                "reference": "5a8d3467f670d4dbe277c00bf960617912c97fb1",
+                "url": "https://api.github.com/repos/spatie/laravel-sitemap/zipball/51f52030ab22abf5e95ed037fea5f8073114e784",
+                "reference": "51f52030ab22abf5e95ed037fea5f8073114e784",
                 "shasum": ""
             },
             "require": {
@@ -8007,7 +8007,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/laravel-sitemap/tree/8.1.0"
+                "source": "https://github.com/spatie/laravel-sitemap/tree/8.2.0"
             },
             "funding": [
                 {
@@ -8015,7 +8015,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-03-12T09:30:40+00:00"
+            "time": "2026-06-24T07:59:14+00:00"
         },
         {
             "name": "spatie/laravel-sluggable",
@@ -8844,16 +8844,16 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v8.1.0",
+            "version": "v8.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "77ca351474ea018daba5f2e473cbf1b9b8e72ac6"
+                "reference": "1dfadd25537c8fcb6752cce5775f24647d976bdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/77ca351474ea018daba5f2e473cbf1b9b8e72ac6",
-                "reference": "77ca351474ea018daba5f2e473cbf1b9b8e72ac6",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/1dfadd25537c8fcb6752cce5775f24647d976bdc",
+                "reference": "1dfadd25537c8fcb6752cce5775f24647d976bdc",
                 "shasum": ""
             },
             "require": {
@@ -8890,7 +8890,7 @@
             "description": "Eases DOM navigation for HTML and XML documents",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dom-crawler/tree/v8.1.0"
+                "source": "https://github.com/symfony/dom-crawler/tree/v8.1.1"
             },
             "funding": [
                 {
@@ -8910,7 +8910,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-29T05:06:50+00:00"
+            "time": "2026-06-05T06:23:12+00:00"
         },
         {
             "name": "symfony/error-handler",
