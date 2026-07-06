@@ -3,7 +3,7 @@
   "$schema": "https://www.schemastore.org/package.json",
   "dependencies": {
     "@beardcoder/lume": "0.9.0",
-    "@tailwindcss/vite": "^4.3.1",
+    "@tailwindcss/vite": "^4.3.2",
     "leaflet": "^1.9.4",
     "motion": "^12.40.0",
     "tailwindcss": "^4.3.2"
