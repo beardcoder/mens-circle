@@ -14,7 +14,7 @@
         "@eslint/compat": "^2.1.0",
         "@eslint/css": "^1.4.0",
         "@eslint/js": "^10.0.1",
-        "@fontsource-variable/dm-sans": "^5.2.8",
+        "@fontsource-variable/dm-sans": "^5.3.0",
         "@fontsource-variable/playfair-display": "^5.2.8",
         "@stylistic/eslint-plugin": "^5.10.0",
         "@types/leaflet": "^1.9.21",
@@ -92,7 +92,7 @@
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.7.2", "", { "dependencies": { "@eslint/core": "^1.2.1", "levn": "^0.4.1" } }, "sha512-+CNAzxglkrpNf/kKywqQfk74QjtceuOE7Qm+AF8miRvPF/wmmK5+OJOgVh3AVTT3RP2mH3+FOaxlE5v72owk0A=="],
 
-    "@fontsource-variable/dm-sans": ["@fontsource-variable/dm-sans@5.2.8", "", {}, "sha512-AxkvMTvNWgfrmlyjiV05vlHYJa+nRQCf1EfvIrQAPBpFJW0O9VTz7oAFr9S3lvbWdmnFoBk7yFqQL86u64nl2g=="],
+    "@fontsource-variable/dm-sans": ["@fontsource-variable/dm-sans@5.3.0", "", {}, "sha512-BpUG5bqePiDFMBM4ZtLSlPdAIOM990uB1dlXzIf4aw21yQR7BmykedLXXXMqGWsR18aMLOsbWccwJNh3ztTQaA=="],
 
     "@fontsource-variable/playfair-display": ["@fontsource-variable/playfair-display@5.2.8", "", {}, "sha512-ZzVIXPOrL85yyOvZYoBzUszIJM+xKkHqni4IYn2CVLaGQQdJR8sBeC8yFNgjxSJ7ludTwta8qpULeOFuk5X75A=="],
 
