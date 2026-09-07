@@ -217,16 +217,16 @@
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
-            "version": "3.2.0",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon-doctrine-types.git",
-                "reference": "18ba5ddfec8976260ead6e866180bd5d2f71aa1d"
+                "reference": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon-doctrine-types/zipball/18ba5ddfec8976260ead6e866180bd5d2f71aa1d",
-                "reference": "18ba5ddfec8976260ead6e866180bd5d2f71aa1d",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon-doctrine-types/zipball/5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc",
+                "reference": "5fa5eacafd9ef47c8c6ab9143fc901ba0194d3dc",
                 "shasum": ""
             },
             "require": {
@@ -241,6 +241,11 @@
                 "phpunit/phpunit": "^10.3"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "3.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Carbon\\Doctrine\\": "src/Carbon/Doctrine/"
@@ -266,7 +271,7 @@
             ],
             "support": {
                 "issues": "https://github.com/CarbonPHP/carbon-doctrine-types/issues",
-                "source": "https://github.com/CarbonPHP/carbon-doctrine-types/tree/3.2.0"
+                "source": "https://github.com/CarbonPHP/carbon-doctrine-types/tree/3.2.1"
             },
             "funding": [
                 {
@@ -282,7 +287,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-09T16:56:22+00:00"
+            "time": "2026-09-06T14:11:38+00:00"
         },
         {
             "name": "chillerlan/php-qrcode",
@@ -7281,16 +7286,16 @@
         },
         {
             "name": "spatie/image",
-            "version": "3.9.5",
+            "version": "3.9.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/image.git",
-                "reference": "7ac0b9dab1100ddfc0c98afd12720f5b9fc0cd65"
+                "reference": "f6f2c785fb6e2f27cf05e48d6fe0e3feea0b421f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/image/zipball/7ac0b9dab1100ddfc0c98afd12720f5b9fc0cd65",
-                "reference": "7ac0b9dab1100ddfc0c98afd12720f5b9fc0cd65",
+                "url": "https://api.github.com/repos/spatie/image/zipball/f6f2c785fb6e2f27cf05e48d6fe0e3feea0b421f",
+                "reference": "f6f2c785fb6e2f27cf05e48d6fe0e3feea0b421f",
                 "shasum": ""
             },
             "require": {
@@ -7340,7 +7345,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/image/tree/3.9.5"
+                "source": "https://github.com/spatie/image/tree/3.9.6"
             },
             "funding": [
                 {
@@ -7352,7 +7357,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-19T07:40:17+00:00"
+            "time": "2026-08-18T08:48:32+00:00"
         },
         {
             "name": "spatie/image-optimizer",
@@ -7470,16 +7475,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "11.23.5",
+            "version": "11.23.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "8ca16954d607de1853c9609e88eb91eab43d67b9"
+                "reference": "94b11766ea5e10b1e2a88159b24937eae89a5d5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/8ca16954d607de1853c9609e88eb91eab43d67b9",
-                "reference": "8ca16954d607de1853c9609e88eb91eab43d67b9",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/94b11766ea5e10b1e2a88159b24937eae89a5d5f",
+                "reference": "94b11766ea5e10b1e2a88159b24937eae89a5d5f",
                 "shasum": ""
             },
             "require": {
@@ -7564,7 +7569,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-medialibrary/issues",
-                "source": "https://github.com/spatie/laravel-medialibrary/tree/11.23.5"
+                "source": "https://github.com/spatie/laravel-medialibrary/tree/11.23.7"
             },
             "funding": [
                 {
@@ -7576,7 +7581,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-10T08:15:27+00:00"
+            "time": "2026-09-03T13:52:57+00:00"
         },
         {
             "name": "spatie/laravel-navigation",
@@ -7654,16 +7659,16 @@
         },
         {
             "name": "spatie/laravel-package-tools",
-            "version": "1.93.1",
+            "version": "1.93.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-package-tools.git",
-                "reference": "d5552849801f2642aea710557463234b59ef65eb"
+                "reference": "e927d5b5b05e9fecae098e559e51918aa608ad02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/d5552849801f2642aea710557463234b59ef65eb",
-                "reference": "d5552849801f2642aea710557463234b59ef65eb",
+                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/e927d5b5b05e9fecae098e559e51918aa608ad02",
+                "reference": "e927d5b5b05e9fecae098e559e51918aa608ad02",
                 "shasum": ""
             },
             "require": {
@@ -7703,7 +7708,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-package-tools/issues",
-                "source": "https://github.com/spatie/laravel-package-tools/tree/1.93.1"
+                "source": "https://github.com/spatie/laravel-package-tools/tree/1.93.2"
             },
             "funding": [
                 {
@@ -7711,7 +7716,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-19T14:06:37+00:00"
+            "time": "2026-08-26T09:13:25+00:00"
         },
         {
             "name": "spatie/laravel-responsecache",
