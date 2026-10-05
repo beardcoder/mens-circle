@@ -8218,16 +8218,16 @@
         },
         {
             "name": "spatie/schema-org",
-            "version": "5.0.1",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/schema-org.git",
-                "reference": "7026582d4a57decdcd66a91b4649abc20c064010"
+                "reference": "8c4fe7ed874a1f8bb4de62c70d41bed0b9e3114a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/schema-org/zipball/7026582d4a57decdcd66a91b4649abc20c064010",
-                "reference": "7026582d4a57decdcd66a91b4649abc20c064010",
+                "url": "https://api.github.com/repos/spatie/schema-org/zipball/8c4fe7ed874a1f8bb4de62c70d41bed0b9e3114a",
+                "reference": "8c4fe7ed874a1f8bb4de62c70d41bed0b9e3114a",
                 "shasum": ""
             },
             "require": {
@@ -8275,7 +8275,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/schema-org/issues",
-                "source": "https://github.com/spatie/schema-org/tree/5.0.1"
+                "source": "https://github.com/spatie/schema-org/tree/5.0.2"
             },
             "funding": [
                 {
@@ -8287,7 +8287,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-08T12:17:41+00:00"
+            "time": "2026-09-30T06:09:48+00:00"
         },
         {
             "name": "spatie/shiki-php",
