@@ -12003,16 +12003,16 @@
         },
         {
             "name": "carthage-software/mago",
-            "version": "1.51.0",
+            "version": "1.54.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "9a62f0a1829490dcff31f62808589f7ab86779b5"
+                "reference": "9a86b1847d12f4f2fe073ecbb2614eb7b2b1614c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/9a62f0a1829490dcff31f62808589f7ab86779b5",
-                "reference": "9a62f0a1829490dcff31f62808589f7ab86779b5",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/9a86b1847d12f4f2fe073ecbb2614eb7b2b1614c",
+                "reference": "9a86b1847d12f4f2fe073ecbb2614eb7b2b1614c",
                 "shasum": ""
             },
             "require": {
@@ -12054,7 +12054,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.51.0"
+                "source": "https://github.com/carthage-software/mago/tree/1.54.0"
             },
             "funding": [
                 {
@@ -12062,7 +12062,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-01T20:37:34+00:00"
+            "time": "2026-10-08T18:27:19+00:00"
         },
         {
             "name": "composer/class-map-generator",
