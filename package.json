@@ -27,7 +27,7 @@
     "prettier-plugin-blade": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "stylelint": "^17.16.0",
-    "stylelint-config-recess-order": "^7.8.0",
+    "stylelint-config-recess-order": "^7.8.2",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-order": "^8.1.2",
     "stylelint-use-logical": "^2.1.3",
