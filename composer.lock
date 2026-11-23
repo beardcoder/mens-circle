@@ -7739,16 +7739,16 @@
         },
         {
             "name": "spatie/laravel-responsecache",
-            "version": "8.6.2",
+            "version": "8.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-responsecache.git",
-                "reference": "13f4291ceb7fd7275d0751bbaf7c695a8d150828"
+                "reference": "0773a95751172f1a1c4f0410f60fb7e16bc099ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/13f4291ceb7fd7275d0751bbaf7c695a8d150828",
-                "reference": "13f4291ceb7fd7275d0751bbaf7c695a8d150828",
+                "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/0773a95751172f1a1c4f0410f60fb7e16bc099ed",
+                "reference": "0773a95751172f1a1c4f0410f60fb7e16bc099ed",
                 "shasum": ""
             },
             "require": {
@@ -7811,7 +7811,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-responsecache/issues",
-                "source": "https://github.com/spatie/laravel-responsecache/tree/8.6.2"
+                "source": "https://github.com/spatie/laravel-responsecache/tree/8.7.0"
             },
             "funding": [
                 {
@@ -7823,7 +7823,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-11-09T08:51:50+00:00"
+            "time": "2026-11-13T09:29:57+00:00"
         },
         {
             "name": "spatie/laravel-settings",
