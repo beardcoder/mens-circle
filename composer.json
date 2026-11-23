@@ -22,7 +22,7 @@
     "spatie/laravel-responsecache": "^8.3.0",
     "spatie/laravel-settings": "^3.7",
     "spatie/laravel-sitemap": "^8.1.0",
-    "spatie/laravel-sluggable": "^4.0.2",
+    "spatie/laravel-sluggable": "^6.0.0",
     "spatie/schema-org": "^5.0",
     "voku/html-min": "^5.0.0"
   },
